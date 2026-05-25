@@ -15,14 +15,12 @@
         body {
             margin: 0;
             padding: 0;
-            /* Using Comic Neue for a handwritten, friendly feel */
             font-family: 'Comic Neue', cursive, sans-serif; 
             background-color: #fafafa;
             color: var(--text-dark);
-            overflow-x: hidden; /* Prevents horizontal scrolling from the blobs */
+            overflow-x: hidden; 
         }
 
-        /* Recreating the cyan wave/blob at the top of the poster */
         .blob-top {
             position: absolute;
             top: -100px;
@@ -34,7 +32,6 @@
             z-index: -1;
         }
 
-        /* Recreating the yellow blob at the bottom right */
         .blob-bottom {
             position: fixed;
             bottom: -150px;
@@ -49,11 +46,10 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px 20px 40px 20px;
             position: relative;
         }
 
-        /* Matching the "Learn cube 4 fun" light blue text with dark outline */
         h1.main-title {
             font-family: 'DynaPuff', cursive;
             font-size: 4em;
@@ -61,11 +57,33 @@
             text-align: center;
             -webkit-text-stroke: 2px #555;
             text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+            margin-top: 20px;
             line-height: 1.1;
         }
 
-        /* Matching the "Info" black bubbly text */
+        /* --- NEW BANNER STYLING --- */
+        .announcement-banner {
+            background-color: #FF1493; /* Bright Pink */
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 4px dashed white;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            animation: gentle-bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes gentle-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        /* ------------------------- */
+
         h2.black-bubbly {
             font-family: 'DynaPuff', cursive;
             font-size: 3em;
@@ -75,7 +93,6 @@
             letter-spacing: 2px;
         }
 
-        /* Matching the "What cubes to buy" purple/pink outline text */
         h2.pink-outline {
             font-family: 'DynaPuff', cursive;
             font-size: 2.2em;
@@ -91,7 +108,6 @@
             font-weight: bold;
         }
 
-        /* Layout for the text content */
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -104,9 +120,9 @@
                 grid-template-columns: 1fr;
             }
             h1.main-title { font-size: 3em; }
+            .announcement-banner { font-size: 1.3em; }
         }
 
-        /* Soft styling for the text areas so they are readable over the background */
         .text-section {
             background: rgba(255, 255, 255, 0.85);
             padding: 20px;
@@ -140,7 +156,6 @@
             margin-top: 10px;
         }
 
-        /* Dynamic Schedule Box */
         .schedule-box {
             max-height: 180px;
             overflow-y: auto;
@@ -148,7 +163,7 @@
             border: 3px dashed #ccc;
             border-radius: 15px;
             padding: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
         }
 
@@ -170,7 +185,6 @@
             border-bottom: none;
         }
 
-        /* Dedicated full-width container for the Poster */
         .poster-container {
             width: 100%;
             text-align: center;
@@ -184,7 +198,7 @@
 
         .poster-img {
             max-width: 100%;
-            height: auto; /* Ensures the landscape aspect ratio is perfectly maintained */
+            height: auto; 
             border-radius: 10px;
             border: 4px solid #333;
             display: block;
@@ -200,6 +214,10 @@
     <div class="container">
         
         <h1 class="main-title">Learn cube 4 fun</h1>
+
+        <div id="top-banner" class="announcement-banner">
+            Loading schedule...
+        </div>
 
         <div class="content-grid">
             
@@ -224,7 +242,7 @@
                 <p style="font-size: 1.1em; color: #555; font-style: italic;">Could practice at home for a bit of homework</p>
 
                 <h2 class="black-bubbly" style="font-size: 2em; margin-top: 30px;">2026 Schedule</h2>
-                <p style="font-size: 1.1em; margin: 0; color: #666;">Starts June 3rd (Excludes Summer Break)</p>
+                <p style="font-size: 1em; margin: 0; color: #666;">Starts June 3rd<br><i>(Excludes Summer & Winter Break)</i></p>
                 
                 <div class="schedule-box">
                     <ul id="schedule-list">
@@ -243,36 +261,79 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            
+            // ==========================================
+            // HOW TO EDIT THE BANNER MESSAGE MANUALLY:
+            // ==========================================
+            // If this is set to "", the site will automatically find the next scheduled date.
+            // If you want to force a custom message, type it inside the quotes below!
+            // Example: const MANUAL_MESSAGE = "Class canceled this week due to a cold. See you next week!";
+            
+            const MANUAL_MESSAGE = ""; 
+            
+            // ==========================================
+
             const scheduleList = document.getElementById('schedule-list');
             const totalClassesElem = document.getElementById('total-classes');
+            const topBanner = document.getElementById('top-banner');
             
-            // Set initial start date to June 3, 2026 (using noon to avoid timezone shift anomalies)
+            // Start and End dates for the year
             const startDate = new Date('2026-06-03T12:00:00'); 
             const endDate = new Date('2026-12-31T12:00:00');
             
             let currentDate = new Date(startDate);
-            let classCount = 0;
+            let validClassDates = [];
 
-            // Loop through the rest of the year, advancing 7 days at a time
+            // Loop to calculate all valid class dates
             while(currentDate <= endDate) {
-                let month = currentDate.getMonth(); // 0-indexed: 5 is June, 6 is July, 7 is August
+                let month = currentDate.getMonth(); // 5=Jun, 6=Jul, 7=Aug, 11=Dec
+                let dayOfMonth = currentDate.getDate();
                 
-                // Exclude July and August
-                if (month !== 6 && month !== 7) {
-                    let li = document.createElement('li');
+                // Exclude July(6) and August(7)
+                let isSummerBreak = (month === 6 || month === 7);
+                // Exclude Dec 23 and Dec 30
+                let isWinterBreak = (month === 11 && (dayOfMonth === 23 || dayOfMonth === 30));
+
+                if (!isSummerBreak && !isWinterBreak) {
+                    // Save to our array and add to the HTML list
+                    validClassDates.push(new Date(currentDate));
                     
-                    // Format output: e.g., "Wed, Jun 3, 2026"
+                    let li = document.createElement('li');
                     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
                     li.textContent = currentDate.toLocaleDateString('en-US', options);
                     scheduleList.appendChild(li);
-                    classCount++; 
                 }
                 
-                // Add exactly 7 days to reach the next Wednesday
+                // Advance exactly 7 days
                 currentDate.setDate(currentDate.getDate() + 7);
             }
 
-            totalClassesElem.textContent = `Total sessions remaining: ${classCount}`;
+            totalClassesElem.textContent = `Total sessions remaining: ${validClassDates.length}`;
+
+            // --- BANNER LOGIC ---
+            if (MANUAL_MESSAGE !== "") {
+                // If you typed a manual message, show it
+                topBanner.innerHTML = "📣 " + MANUAL_MESSAGE;
+            } else {
+                // Otherwise, calculate the next upcoming date automatically
+                let today = new Date();
+                today.setHours(0, 0, 0, 0); // Reset time to start of day so we don't skip a class on the day-of
+
+                let nextClassDate = null;
+                for (let i = 0; i < validClassDates.length; i++) {
+                    if (validClassDates[i] >= today) {
+                        nextClassDate = validClassDates[i];
+                        break;
+                    }
+                }
+
+                if (nextClassDate) {
+                    const options = { weekday: 'long', month: 'short', day: 'numeric' };
+                    topBanner.innerHTML = "📣 Next Class: <strong>" + nextClassDate.toLocaleDateString('en-US', options) + " @ 7:00 PM</strong>";
+                } else {
+                    topBanner.innerHTML = "🎉 2026 Sessions are complete! Check back next year!";
+                }
+            }
         });
     </script>
 </body>
