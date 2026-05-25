@@ -1,1 +1,237 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Cube 4 Fun!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS variables based on standard Rubik's cube colors */
+        :root {
+            --c-red: #D50000;
+            --c-blue: #2962FF;
+            --c-orange: #FF6D00;
+            --c-green: #00C853;
+            --c-yellow: #FFD600;
+            --c-white: #FAFAFA;
+            --c-black: #212121;
+        }
+        
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--c-black);
+            color: var(--c-black);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            color: var(--c-white);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 0px var(--c-blue), -3px -3px 0px var(--c-red);
+            font-size: 3.5em;
+            letter-spacing: 2px;
+        }
+
+        /* 3x3 Grid layout simulating a cube face */
+        .cube-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1px));
+            gap: 15px;
+            max-width: 1000px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Keep it as a 3x3 grid on standard desktop screens */
+        @media (min-width: 950px) {
+            .cube-grid {
+                grid-template-columns: repeat(3, 300px);
+                grid-auto-rows: minmax(300px, auto);
+            }
+        }
+
+        /* Styling each "sticker" block of the cube */
+        .cube-piece {
+            background-color: var(--c-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: inset 0 0 0 10px var(--c-black), 0 8px 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            font-size: 1.15em;
+            line-height: 1.5;
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .cube-piece:hover {
+            transform: scale(1.02);
+        }
+
+        /* Standard cube color assignments */
+        .piece-red { background-color: var(--c-red); color: white; }
+        .piece-blue { background-color: var(--c-blue); color: white; }
+        .piece-orange { background-color: var(--c-orange); color: white; }
+        .piece-green { background-color: var(--c-green); color: white; }
+        .piece-yellow { background-color: var(--c-yellow); }
+
+        h2 { 
+            margin-top: 0; 
+            font-size: 1.8em; 
+            text-transform: uppercase; 
+            border-bottom: 3px dashed rgba(0,0,0,0.2);
+            padding-bottom: 10px;
+        }
+        
+        .piece-red h2, .piece-blue h2, .piece-orange h2, .piece-green h2 {
+            border-bottom: 3px dashed rgba(255,255,255,0.4);
+        }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+
+        /* Scrollable container for the dynamic script-generated schedule */
+        .schedule-container {
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.9);
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            border: 2px solid var(--c-black);
+        }
+
+        .schedule-container ul { 
+            list-style-type: none; 
+            padding: 0; 
+            margin: 0;
+        }
+
+        .schedule-container li {
+            padding: 5px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .schedule-container li:last-child {
+            border-bottom: none;
+        }
+
+        /* CSS for the uploaded user image */
+        .poster-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 4px solid var(--c-black);
+            margin-top: auto;
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: var(--c-white);
+            text-align: center;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="header">Learn Cube 4 Fun!</h1>
+
+    <div class="cube-grid">
+        <div class="cube-piece piece-yellow">
+            <h2>About Me</h2>
+            <p>I'm in grade 4. I know how to solve cubes from 3x3 all the way to 8x8.</p>
+            <p>My 3x3 record is <strong>9 seconds</strong>! I'm here to teach people the LBL method for Rubik's cube.</p>
+            <p>My mom will also help teach you guys to solve a cube.</p>
+        </div>
+
+        <div class="cube-piece piece-green">
+            <h2>Logistics</h2>
+            <ul>
+                <li><strong>Location:</strong> Wesbrook Community Centre lounge</li>
+                <li><strong>Time:</strong> 7:00 PM - 8:00 PM every Wednesday</li>
+                <li><strong>Age:</strong> 5 - 10 years old</li>
+                <li><strong>Cost:</strong> $0 (Free!)</li>
+            </ul>
+            <p style="font-weight: bold; text-align: center; background: var(--c-white); color: var(--c-black); padding: 5px; border-radius: 5px;">Adults need to also come!</p>
+        </div>
+
+        <div class="cube-piece piece-blue">
+            <h2>What to Buy</h2>
+            <p>Search for a <strong>3x3 cube</strong>.</p>
+            <p>It's best to buy <strong>Gan</strong> or <strong>Moyu</strong> cubes.</p>
+            <p style="margin-top: auto; font-style: italic;">Could practice at home for a bit of homework!</p>
+        </div>
+
+        <div class="cube-piece piece-orange">
+            <h2>2026 Schedule</h2>
+            <p style="font-size: 0.9em; margin-top: 0;">Starts June 3rd (Excludes July & Aug)</p>
+            <div class="schedule-container">
+                <ul id="schedule-list">
+                    </ul>
+            </div>
+            <p id="total-classes" style="font-size: 0.85em; margin-top: 10px; font-weight: bold; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 5px;"></p>
+        </div>
+
+        <div class="cube-piece piece-red">
+            <h2>Original Poster</h2>
+            <p style="font-size: 0.9em; margin-top: 0;">Check out my flyer:</p>
+            <img src="poster.jpg" alt="Learn Cube 4 Fun Poster" class="poster-img">
+        </div>
+
+        <div class="cube-piece">
+            <h2 style="border-bottom: 3px dashed var(--c-red);">Ready to solve?</h2>
+            <p>Bring your cube, bring your parents, and let's have some fun learning how to master the 3x3!</p>
+            <div style="display: flex; justify-content: center; align-items: center; height: 100%; font-size: 5em;">
+                🧊
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Hosted on GitHub Pages</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const scheduleList = document.getElementById('schedule-list');
+            const totalClassesElem = document.getElementById('total-classes');
+            
+            // Set initial start date to June 3, 2026 (using noon to avoid timezone shift anomalies)
+            const startDate = new Date('2026-06-03T12:00:00'); 
+            const endDate = new Date('2026-12-31T12:00:00');
+            
+            let currentDate = new Date(startDate);
+            let classCount = 0;
+
+            // Loop through the rest of the year, advancing 7 days at a time
+            while(currentDate <= endDate) {
+                let month = currentDate.getMonth(); // 0-indexed: 5 is June, 6 is July, 7 is August
+                
+                // Exclude July and August
+                if (month !== 6 && month !== 7) {
+                    let li = document.createElement('li');
+                    
+                    // Format output: e.g., "Wed, Jun 3, 2026"
+                    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                    li.textContent = currentDate.toLocaleDateString('en-US', options);
+                    scheduleList.appendChild(li);
+                    classCount++; // Track total number of classes
+                }
+                
+                // Add exactly 7 days to reach the next Wednesday
+                currentDate.setDate(currentDate.getDate() + 7);
+            }
+
+            // Display the aggregated count metric
+            totalClassesElem.textContent = `Total sessions remaining for 2026: ${classCount}`;
+        });
+    </script>
+</body>
+</html>
