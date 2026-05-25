@@ -4,198 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn Cube 4 Fun!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* CSS variables based on standard Rubik's cube colors */
         :root {
-            --c-red: #D50000;
-            --c-blue: #2962FF;
-            --c-orange: #FF6D00;
-            --c-green: #00C853;
-            --c-yellow: #FFD600;
-            --c-white: #FAFAFA;
-            --c-black: #212121;
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --text-dark: #1a1a1a;
         }
         
         body {
-            font-family: 'Fredoka', sans-serif;
-            background-color: var(--c-black);
-            color: var(--c-black);
             margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0;
+            /* Using Comic Neue for a handwritten, friendly feel */
+            font-family: 'Comic Neue', cursive, sans-serif; 
+            background-color: #fafafa;
+            color: var(--text-dark);
+            overflow-x: hidden; /* Prevents horizontal scrolling from the blobs */
         }
 
-        .header {
-            color: var(--c-white);
+        /* Recreating the cyan wave/blob at the top of the poster */
+        .blob-top {
+            position: absolute;
+            top: -100px;
+            left: -5%;
+            width: 110%;
+            height: 250px;
+            background-color: var(--cyan-blob);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* Recreating the yellow blob at the bottom right */
+        .blob-bottom {
+            position: fixed;
+            bottom: -150px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background-color: var(--yellow-blob);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Matching the "Learn cube 4 fun" light blue text with dark outline */
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 4em;
+            color: #87CEEB; 
             text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 3px 3px 0px var(--c-blue), -3px -3px 0px var(--c-red);
-            font-size: 3.5em;
+            -webkit-text-stroke: 2px #555;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            line-height: 1.1;
+        }
+
+        /* Matching the "Info" black bubbly text */
+        h2.black-bubbly {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3em;
+            color: #000;
+            margin-top: 0;
+            margin-bottom: 15px;
             letter-spacing: 2px;
         }
 
-        /* 3x3 Grid layout simulating a cube face */
-        .cube-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1px));
-            gap: 15px;
-            max-width: 1000px;
-            width: 100%;
-            justify-content: center;
+        /* Matching the "What cubes to buy" purple/pink outline text */
+        h2.pink-outline {
+            font-family: 'DynaPuff', cursive;
+            font-size: 2.2em;
+            color: transparent;
+            -webkit-text-stroke: 2px #C71585;
+            margin-top: 0;
+            margin-bottom: 15px;
         }
 
-        /* Keep it as a 3x3 grid on standard desktop screens */
-        @media (min-width: 950px) {
-            .cube-grid {
-                grid-template-columns: repeat(3, 300px);
-                grid-auto-rows: minmax(300px, auto);
-            }
-        }
-
-        /* Styling each "sticker" block of the cube */
-        .cube-piece {
-            background-color: var(--c-white);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: inset 0 0 0 10px var(--c-black), 0 8px 15px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            font-size: 1.15em;
+        p {
+            font-size: 1.4em;
             line-height: 1.5;
-            transition: transform 0.2s ease-in-out;
+            font-weight: bold;
+        }
+
+        /* Layout for the text content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            h1.main-title { font-size: 3em; }
+        }
+
+        /* Soft styling for the text areas so they are readable over the background */
+        .text-section {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        ul.info-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul.info-list li {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
         
-        .cube-piece:hover {
-            transform: scale(1.02);
-        }
-
-        /* Standard cube color assignments */
-        .piece-red { background-color: var(--c-red); color: white; }
-        .piece-blue { background-color: var(--c-blue); color: white; }
-        .piece-orange { background-color: var(--c-orange); color: white; }
-        .piece-green { background-color: var(--c-green); color: white; }
-        .piece-yellow { background-color: var(--c-yellow); }
-
-        h2 { 
-            margin-top: 0; 
-            font-size: 1.8em; 
-            text-transform: uppercase; 
-            border-bottom: 3px dashed rgba(0,0,0,0.2);
-            padding-bottom: 10px;
-        }
-        
-        .piece-red h2, .piece-blue h2, .piece-orange h2, .piece-green h2 {
-            border-bottom: 3px dashed rgba(255,255,255,0.4);
-        }
-
-        ul { padding-left: 20px; }
-        li { margin-bottom: 10px; }
-
-        /* Scrollable container for the dynamic script-generated schedule */
-        .schedule-container {
-            max-height: 150px;
-            overflow-y: auto;
-            background: rgba(255,255,255,0.9);
+        ul.info-list li::before {
+            content: "• ";
             color: black;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            border: 2px solid var(--c-black);
+            font-size: 1.5em;
+            vertical-align: middle;
         }
 
-        .schedule-container ul { 
-            list-style-type: none; 
-            padding: 0; 
+        .highlight-yellow {
+            background-color: var(--yellow-blob);
+            padding: 5px 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Dynamic Schedule Box */
+        .schedule-box {
+            max-height: 180px;
+            overflow-y: auto;
+            background: #fff;
+            border: 3px dashed #ccc;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .schedule-box ul {
+            list-style-type: none;
+            padding: 0;
             margin: 0;
         }
 
-        .schedule-container li {
-            padding: 5px;
-            border-bottom: 1px dashed #ccc;
+        .schedule-box li {
+            font-size: 1.2em;
+            font-weight: bold;
+            border-bottom: 2px dotted #eee;
+            padding: 8px 0;
+            color: #333;
         }
 
-        .schedule-container li:last-child {
+        .schedule-box li:last-child {
             border-bottom: none;
         }
 
-        /* CSS for the uploaded user image */
-        .poster-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            border: 4px solid var(--c-black);
-            margin-top: auto;
+        /* Dedicated full-width container for the Poster */
+        .poster-container {
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
-        .footer {
-            margin-top: 40px;
-            color: var(--c-white);
-            text-align: center;
-            opacity: 0.7;
+        .poster-img {
+            max-width: 100%;
+            height: auto; /* Ensures the landscape aspect ratio is perfectly maintained */
+            border-radius: 10px;
+            border: 4px solid #333;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
 
-    <h1 class="header">Learn Cube 4 Fun!</h1>
+    <div class="blob-top"></div>
+    <div class="blob-bottom"></div>
 
-    <div class="cube-grid">
-        <div class="cube-piece piece-yellow">
-            <h2>About Me</h2>
-            <p>I'm in grade 4. I know how to solve cubes from 3x3 all the way to 8x8.</p>
-            <p>My 3x3 record is <strong>9 seconds</strong>! I'm here to teach people the LBL method for Rubik's cube.</p>
-            <p>My mom will also help teach you guys to solve a cube.</p>
-        </div>
+    <div class="container">
+        
+        <h1 class="main-title">Learn cube 4 fun</h1>
 
-        <div class="cube-piece piece-green">
-            <h2>Logistics</h2>
-            <ul>
-                <li><strong>Location:</strong> Wesbrook Community Centre lounge</li>
-                <li><strong>Time:</strong> 7:00 PM - 8:00 PM every Wednesday</li>
-                <li><strong>Age:</strong> 5 - 10 years old</li>
-                <li><strong>Cost:</strong> $0 (Free!)</li>
-            </ul>
-            <p style="font-weight: bold; text-align: center; background: var(--c-white); color: var(--c-black); padding: 5px; border-radius: 5px;">Adults need to also come!</p>
-        </div>
-
-        <div class="cube-piece piece-blue">
-            <h2>What to Buy</h2>
-            <p>Search for a <strong>3x3 cube</strong>.</p>
-            <p>It's best to buy <strong>Gan</strong> or <strong>Moyu</strong> cubes.</p>
-            <p style="margin-top: auto; font-style: italic;">Could practice at home for a bit of homework!</p>
-        </div>
-
-        <div class="cube-piece piece-orange">
-            <h2>2026 Schedule</h2>
-            <p style="font-size: 0.9em; margin-top: 0;">Starts June 3rd (Excludes July & Aug)</p>
-            <div class="schedule-container">
-                <ul id="schedule-list">
-                    </ul>
+        <div class="content-grid">
+            
+            <div class="text-section">
+                <p>I'm grade 4. I know how to solve cubes from 3 by 3 all the way to 8 by 8. My 3 by 3 record is 9 seconds and I'm here to teach people the LBL method for Rubik's cube. My mom will also help teach you guys to solve a cube.</p>
+                
+                <h2 class="black-bubbly" style="margin-top: 30px;">Info</h2>
+                <ul class="info-list">
+                    <li>Wesbrook Community Centre lounge</li>
+                    <li>7pm-8pm On every Wednesday</li>
+                    <li>Age: 5–10</li>
+                </ul>
+                <div class="highlight-yellow">
+                    <p style="margin: 0; color: #000;">Adults need to also come</p>
+                </div>
             </div>
-            <p id="total-classes" style="font-size: 0.85em; margin-top: 10px; font-weight: bold; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 5px;"></p>
-        </div>
 
-        <div class="cube-piece piece-red">
-            <h2>Original Poster</h2>
-            <p style="font-size: 0.9em; margin-top: 0;">Check out my flyer:</p>
-            <img src="poster.jpg" alt="Learn Cube 4 Fun Poster" class="poster-img">
-        </div>
+            <div class="text-section">
+                <h2 class="pink-outline">What cubes to buy</h2>
+                <p style="margin-bottom: 5px;">Search 3x3 cube</p>
+                <p style="margin-top: 0;">It's best to buy <strong>Gan</strong> or <strong>moyu</strong> cubes</p>
+                <p style="font-size: 1.1em; color: #555; font-style: italic;">Could practice at home for a bit of homework</p>
 
-        <div class="cube-piece">
-            <h2 style="border-bottom: 3px dashed var(--c-red);">Ready to solve?</h2>
-            <p>Bring your cube, bring your parents, and let's have some fun learning how to master the 3x3!</p>
-            <div style="display: flex; justify-content: center; align-items: center; height: 100%; font-size: 5em;">
-                🧊
+                <h2 class="black-bubbly" style="font-size: 2em; margin-top: 30px;">2026 Schedule</h2>
+                <p style="font-size: 1.1em; margin: 0; color: #666;">Starts June 3rd (Excludes Summer Break)</p>
+                
+                <div class="schedule-box">
+                    <ul id="schedule-list">
+                        </ul>
+                </div>
+                <p id="total-classes" style="font-size: 1em; text-align: center; color: #666;"></p>
             </div>
         </div>
-    </div>
 
-    <div class="footer">
-        <p>Hosted on GitHub Pages</p>
+        <div class="poster-container">
+            <h2 class="black-bubbly" style="font-size: 2.2em;">Original Flyer</h2>
+            <img src="./poster.jpg" alt="Learn Cube 4 Fun Poster" class="poster-img">
+        </div>
+
     </div>
 
     <script>
@@ -222,15 +265,14 @@
                     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
                     li.textContent = currentDate.toLocaleDateString('en-US', options);
                     scheduleList.appendChild(li);
-                    classCount++; // Track total number of classes
+                    classCount++; 
                 }
                 
                 // Add exactly 7 days to reach the next Wednesday
                 currentDate.setDate(currentDate.getDate() + 7);
             }
 
-            // Display the aggregated count metric
-            totalClassesElem.textContent = `Total sessions remaining for 2026: ${classCount}`;
+            totalClassesElem.textContent = `Total sessions remaining: ${classCount}`;
         });
     </script>
 </body>
