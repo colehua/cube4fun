@@ -204,7 +204,53 @@
             display: block;
             margin: 0 auto;
         }
+
+        .cube-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #FF6B6B;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.8em;
+            border: 4px solid #333;
+            box-shadow: 0px 8px 0px #333;
+            transition: all 0.1s ease-in-out;
+            position: relative;
+            top: 0;
+        }
+
+        .cube-button:hover {
+            top: 4px;
+            box-shadow: 0px 4px 0px #333;
+            background-color: #FF8787;
+        }
+
+        .cube-button:active {
+            top: 8px;
+            box-shadow: 0px 0px 0px #333;
+            background-color: #FF5252;
+        }
+
+        .cube-icon {
+            font-size: 1.4em;
+            margin-right: 10px;
+            display: inline-block;
+            animation: cube-spin 3s infinite linear;
+        }
+
+        @keyframes cube-spin {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-15deg); }
+            100% { transform: rotate(0deg); }
+        }
     </style>
+
 </head>
 <body>
 
@@ -217,6 +263,13 @@
 
         <div id="top-banner" class="announcement-banner">
             Loading schedule...
+        </div>
+
+        <!-- NEW CUTE TUTORIAL BUTTON -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <a href="tutorial.html" class="cube-button">
+                <span class="cube-icon">🧊</span> 3x3 Tutorial
+            </a>
         </div>
 
         <div class="content-grid">
@@ -260,8 +313,10 @@
         <!-- SPONSOR SECTION -->
         <div class="text-section" style="margin-top: 40px; text-align: center;">
             <h2 class="black-bubbly" style="font-size: 1.8em;">Project funded by:</h2>
-            <img src="./sponsor_logo.png" alt="UBC Inspiring Community Grant Logo" style="max-width: 100%; height: auto; border-radius: 10px; margin: 15px 0;">
-            <p style="font-size: 1.2em; font-weight: normal; margin-top: 10px;">We gratefully acknowledge UBC Inspiring Community Grant for their financial support of our project.</p>
+            <a href="https://inspired.ubc.ca/" target="_blank" style="text-decoration: none; color: inherit; display: block;">
+                <img src="./sponsor_logo.png" alt="UBC Inspiring Community Grant Logo" style="max-width: 100%; height: auto; border-radius: 10px; margin: 15px 0; border: 2px solid transparent; transition: border 0.3s;" onmouseover="this.style.border='2px dashed #FF1493'" onmouseout="this.style.border='2px solid transparent'">
+                <p style="font-size: 1.2em; font-weight: normal; margin-top: 10px;">We gratefully acknowledge <span style="color: #FF1493; text-decoration: underline;">UBC Inspiring Community Grant</span> for their financial support of our project.</p>
+            </a>
         </div>
 
     </div>
