@@ -3,7 +3,7 @@
 **Target Audience:** AI Agents / LLMs (like Gemini CLI).
 **Purpose:** This document is the exact, end-to-end workflow to convert a user-provided Rubik's Cube `.pptx` presentation into a fully semantic, responsive HTML tutorial for the `cube4fun` website. 
 
-When the user provides a new `.pptx` file (e.g., "Here is the 2x2 tutorial pptx"), you must autonomously execute the following steps without requiring step-by-step guidance.
+When the user provides a new tutorial, they will provide BOTH a `.pptx` file and an exported `.pdf` file. You must autonomously execute the following steps without requiring step-by-step guidance.
 
 ---
 
@@ -21,26 +21,21 @@ Browsers require standard web formats. The PPTX often contains `.MOV` files.
 4. Delete the original `.MOV` files from the website's `media/` folder after successful conversion.
 
 ## Step 3: Raw Semantic Data Extraction (JSON Dump)
-Do not attempt to blindly sort the slide XML using basic regex. You must extract the raw data into a JSON file so you can read and understand the true contents.
 1. Write a Python script to parse `slide*.xml` and their corresponding `_rels/*.rels` files.
-2. For each `<p:sp>` (text box):
-   - Extract the full concatenated text from `<a:t>`.
-   - Extract the `x` and `y` coordinates from the `<a:off>` tag.
-3. For each `<p:pic>` (media):
-   - Check for `<a:videoFile>` vs `<a:blip>` to determine if it is a video or image.
-   - Use the `r:link` or `r:embed` ID to look up the actual filename in the `.rels` dictionary. (Remember to change `.MOV` to `.mp4` in your mapped output).
-   - Extract the `x` and `y` coordinates.
-4. Dump this data into a temporary `slides_dump.json`, ordered roughly by slide number, and element `y`, then `x`.
+2. Extract the text, media filenames (changing `.MOV` to `.mp4`), and the `x`/`y` coordinates.
+3. Dump this data into a temporary `slides_dump.json`.
 
 ## Step 4: Intelligent LLM Semantic Layout (Core Task)
-**You (the LLM) must now read `slides_dump.json` and manually write a `build_semantic_html.py` script to generate `tutorial-{type}.html`.**
-1. **Analyze Context:** Read the text. If you see "Case 1", "Case 2", "Case 3", "Case 4", group them into a `<div class="grid-4">`. If you see an algorithm paired with a video, group them tightly inside a `<div class="card">`.
-2. **Handle Arrows:** If an image is just a small directional arrow, apply the `.arrow-icon` CSS class to remove borders and shadows.
-3. **Generate HTML:** Use the established CSS theme (variables `--cyan-blob`, `--yellow-blob`, fonts `DynaPuff`, `Comic Neue`). 
-   - Base structure includes `.container`, `.slide`, `.slide-title`, `.text-block`, `.media-container`, `.card`, `.grid-2`, `.grid-3`, `.grid-4`.
+**You (the LLM) must now read the provided `.pdf` file visually (or via OCR) to understand the TRUE layout, logic, and grouping. DO NOT rely blindly on the JSON coordinates.**
+1. **Analyze PDF Context:** Use the `.pdf` to see which text belongs to which image/video. If you see "Case 1", "Case 2", group them into a `<div class="grid-4">`. If you see an algorithm paired with a video, group them tightly inside a `<div class="card">`.
+2. **Grammar & Proofreading:** While transcribing the text from the slides to HTML, you MUST fix minor grammar mistakes automatically (e.g., fixing "peace" to "piece", adding missing "is" or "that", correcting awkward phrasing like "most easy" to "easiest"). Do not change the core meaning, just polish the English.
+3. **Keep the Cute Vibe:** Inject relevant, cute emojis into the headings or text blocks (e.g., 🌼, 🧩, 🧠, 🍔, 🎉) to maintain the fun, kid-friendly design.
+4. **Mobile Video Thumbnails:** You MUST append `#t=0.001` to the end of EVERY `<video>` source URL (e.g., `src="./media/media1.mp4#t=0.001"`). This forces mobile browsers (like Chrome on Android/iOS) to fetch the first frame and display a thumbnail instead of a grey box.
+5. **Handle Arrows:** If an image is just a small directional arrow, apply the `.arrow-icon` CSS class to remove borders and shadows.
+6. **Generate HTML:** Write a `build_semantic_html.py` script to generate the final `tutorial-{type}.html` using the established CSS theme (variables `--cyan-blob`, `--yellow-blob`, fonts `DynaPuff`, `Comic Neue`).
 
 ## Step 5: PPTX File Size Check & Header Buttons
-You must provide buttons at the top of the `tutorial-{type}.html` page so users can access the original presentation.
+Provide buttons at the top of the `tutorial-{type}.html` page so users can access the original presentation.
 1. **Check File Size:** Check the exact file size of the original `.pptx` file.
 2. **If File Size is < 100MB:**
    - Include **BOTH** a Live Viewer button AND a Download button:
