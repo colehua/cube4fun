@@ -9,17 +9,21 @@
         :root { --cyan-blob: #00E5FF; --yellow-blob: #FAED27; --text-dark: #1a1a1a; }
         body { margin: 0; padding: 0; font-family: 'Comic Neue', cursive, sans-serif; background-color: #fafafa; color: var(--text-dark); overflow-x: hidden; }
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .slide { background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 50px; border: 4px dashed #FF1493; }
+        .slide { background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 50px; border: 4px dashed #FF1493; display: flex; flex-direction: column; gap: 20px;}
         .slide-title { font-family: 'DynaPuff', cursive; color: #C71585; text-align: center; font-size: 2.5em; margin: 0 0 15px 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
-        .text-block { font-size: 1.4em; font-weight: bold; line-height: 1.4; margin-bottom: 10px; background: #fff; padding: 15px; border-radius: 12px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
-        .vbox { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-bottom: 10px; }
-        .hbox { display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: stretch; width: 100%; margin-bottom: 10px; }
-        .hbox > * { flex: 1 1 200px; min-width: 0; }
-        .cluster { display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; }
-        .media-container { text-align: center; display: flex; align-items: center; justify-content: center; height: 100%; }
-        .media-container img, .media-container video { max-width: 100%; max-height: 400px; border-radius: 10px; border: 3px solid #333; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); }
-        .small-icon img { border: none !important; box-shadow: none !important; background: transparent; max-height: 120px; }
+        .text-block { font-size: 1.4em; font-weight: bold; line-height: 1.4; margin: 0; background: #fff; padding: 15px; border-radius: 12px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;}
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: start;}
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; align-items: start;}
+        .card { background: #fafafa; border: 3px solid #eee; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;}
+        .media-container { text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+        .media-container img, .media-container video { max-width: 100%; max-height: 350px; border-radius: 10px; border: 3px solid #333; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); }
+        .arrow-icon { max-height: 100px !important; border: none !important; box-shadow: none !important; }
         .nav-button { display: inline-block; background-color: var(--cyan-blob); color: var(--text-dark); padding: 10px 20px; border-radius: 15px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.2em; border: 3px solid #333; margin-bottom: 20px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+        .center-text { text-align: center; }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -31,325 +35,336 @@
                 📊 View Original PowerPoint (in Browser)
             </a>
         </div>
-<div class="slide" id="slide1.xml">
-<div class="cluster">
-<div class='media-container'><img src='./media/image1.jpeg' alt='Graphic'></div>
-<h2 class='slide-title'>By Cole</h2>
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class='text-block'>With the LBL(layer by layer) method!</div>
-<div class='media-container small-icon'><img src='./media/image5.png' alt='Graphic'></div>
-<div class='text-block'>The first step to solving a Rubik’s cube is to make a white daisy</div>
-<div class='media-container'><video controls src='./media/media1.mp4' preload='metadata'></video></div>
-<div class='media-container'><img src='./media/image2.jpeg' alt='Graphic'></div>
-<div class='text-block'>All you have to do is to try put the white edges to the yellow centre</div>
-<div class='text-block'>If the peace is in the right spot but flipped you could use this algorithm to fix it</div>
-<div class='media-container'><img src='./media/image3.jpeg' alt='Graphic'></div>
-<div class='text-block'>Like this!</div>
-</div>
-</div>
-<div class="slide" id="slide2.xml">
-<div class="hbox">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="cluster">
-<div class='text-block'>After we finish the first step we will start making the cross</div>
-<div class='text-block'>If we want to make the cross we first need to find a white petal and there should be two colour on it one should be white and the other shouldn’t be yellow. once you find the white piece you should see the colour that is not white and match it to it’s centre then bring it down to the white side like this</div>
-</div>
-</div>
-<div class="vbox">
-<div class='media-container'><video controls src='./media/media2.mp4' preload='metadata'></video></div>
-<div class="hbox">
-<div class='text-block'>When you finish it should look like this</div>
-<div class='media-container small-icon'><img src='./media/image5.jpeg' alt='Graphic'></div>
-</div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide3.xml">
-<div class="vbox">
-<div class="hbox">
-<div class='text-block'>If you followed all of that correctly your cross should be accomplished.</div>
-<div class="cluster">
-<div class='text-block'>The first thing to do is to find a white corner on the top, after we look at what colours there are on the corner instead of white for example my corner had blue, red, and white on it, then I would bring the corner between the blue and red centre then hold it like this</div>
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-</div>
-</div>
-<div class="hbox">
-<div class="vbox">
-<div class='text-block'>The next thing to make the first layer</div>
-<div class="cluster">
-<div class='text-block'>Right now you have to learn two new algorithms!</div>
-<div class='text-block'>The second algorithm is this, and also the second algorithm is just the first algorithm left handed</div>
-<div class='text-block'>The first algorithm that you have to learn is this</div>
-</div>
-</div>
-<div class='media-container'><img src='./media/image9.jpeg' alt='Graphic'></div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media3.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media4.mp4' preload='metadata'></video></div>
-<div class='text-block'>Keep learning first layer on the next page</div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide4.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class='text-block'>You could get 4 cases</div>
-<div class="hbox">
-<div class='text-block'>Case 1: white piece facing top. Put the white piece on the Right like this then do the 1st algorithm three times</div>
-<div class='text-block'>Case 2:white piece facing right. Put the white piece on the right then do the 1st algorithm 1 time</div>
-<div class='text-block'>Case 3:white piece facing left. Put the white piece on the left then do algorithm 2nd one time like this</div>
-<div class='text-block'>Case 4: If there are no corner piece on top then it must be stuck on the bottom, then you could put it on the right then do 1st algorithm like this then do the rest like normal</div>
-</div>
-<div class="hbox">
-<div class='media-container'><img src='./media/image10.jpeg' alt='Graphic'></div>
-<div class='media-container'><img src='./media/image11.png' alt='Graphic'></div>
-<div class='media-container'><img src='./media/image12.jpeg' alt='Graphic'></div>
-<div class='media-container'><video controls src='./media/media5.mp4' preload='metadata'></video></div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide5.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="hbox">
-<div class='text-block'>Right now we are going to do second layer this is probably basically the hardest part but if you know algorithm one and algorithm two it will be really easy I promise.</div>
-<div class='text-block'>This time there will be 2 cases for second layer and two algorithms for second layer but don’t get the algorithms mixed up because the algorithm are pretty similar</div>
-<div class='text-block'>For the first layer you had to find a white corner but for the second layer you have to find a edge that is not white or yellow on the top</div>
-</div>
-<div class="hbox">
-<div class="vbox">
-<div class='text-block'>For example I found this piece, right?</div>
-<div class='media-container'><img src='./media/image14.jpeg' alt='Graphic'></div>
-</div>
-<div class="vbox">
-<div class="hbox">
-<div class='text-block'>So now me see that this bottom piece is orange so I will connect the piece to it’s centre</div>
-<div class='text-block'>Now I see that it has to go to the left slot</div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media6.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media7.mp4' preload='metadata'></video></div>
-<div class='text-block'>See more of second layer on the next page</div>
-</div>
-</div>
-</div>
-<div class='text-block'>As you can see there is no yellow piece on it that means it’s correct</div>
-</div>
-</div>
-<div class="slide" id="slide6.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class='text-block'>These are the algorithms for the second layer</div>
-<div class="hbox">
-<div class='text-block'>So we want to put the piece in the left slot. This algorithm is basically taking out a second layer peace with the second algorithm then putting it back with the first algorithm</div>
-<div class='text-block'>The second case is a lot like the first case, but this time it’s right handed which is this</div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media8.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media9.mp4' preload='metadata'></video></div>
-</div>
-<div class="hbox">
-<div class='text-block'>and that piece is solved</div>
-<div class='text-block'>So this time we move the edge away then do the first algorithm the the second</div>
-<div class='text-block'>Keep learning second layer on next page</div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide7.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve Rubik’s cube</h2>
-<div class="hbox">
-<div class='text-block'>If you get this case where the edge is in the right place but flipped then replace it with a yellow edge and the edge should get rough out after that then you could do the rest normally</div>
-<div class='text-block'>There will be other cases that are similar so you could use the same way which is first taking it out then put it back in the correct spot</div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media10.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media11.mp4' preload='metadata'></video></div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide8.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class='text-block'>The next thing we have to do is to make the yellow cross, and this time there would be four cases</div>
-<div class="hbox">
-<div class='text-block'>First case is where the yellow side is only a dot</div>
-<div class='text-block'>The second case is where there is a L shape on the yellow side</div>
-<div class='text-block'>The third case is where there is a line on the yellow side</div>
-<div class='text-block'>The fourth case is where there is a full cross already on the yellow side and that means you already skipped this step</div>
-</div>
-<div class="hbox">
-<div class='media-container'><img src='./media/image24.jpeg' alt='Graphic'></div>
-<div class='media-container'><img src='./media/image21.jpeg' alt='Graphic'></div>
-<div class='media-container'><img src='./media/image22.jpeg' alt='Graphic'></div>
-<div class='media-container'><img src='./media/image23.jpeg' alt='Graphic'></div>
-</div>
-<div class='text-block'>Keep learning yellow cross on the ext page</div>
-</div>
-</div>
-<div class="slide" id="slide9.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="hbox">
-<div class='text-block'>You are gonna Learn another algorithm  that is super duper simple</div>
-<div class='text-block'>Now you have to learn another algorithm which is just the opposite of algorithm one and this algorithm will solve the L case</div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media12.mp4' preload='metadata'></video></div>
-<div class="vbox">
-<div class='text-block'>So for line we are gonna hold it like this then do the algorithm</div>
-<div class='media-container small-icon'><img src='./media/image26.png' alt='Graphic'></div>
-</div>
-<div class='media-container'><video controls src='./media/media13.mp4' preload='metadata'></video></div>
-</div>
-<div class='text-block'>Keep learning about yellow cross on the next page</div>
-</div>
-</div>
-<div class="slide" id="slide10.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve Rubik’s cube</h2>
-<div class="hbox">
-<div class='text-block'>Now finally the dot case where there is a dot on the yellow side, so now we could hold it from any direction and do the algorithm and that will make a L so then we do the L algorithm</div>
-<div class='text-block'>Empty because of some reason</div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media14.mp4' preload='metadata'></video></div>
-<div class='text-block'>Yay now we are only half way through🥳</div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide11.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="cluster">
-<div class='text-block'>Warning⚠️ this is the hardest part and the most easy part to mess up and if you mess up you gotta restart</div>
-<h2 class='slide-title'>⚠️</h2>
-<div class='text-block'>So now we have to solve the yellow side.</div>
-<div class='text-block'>Pls don’t mess up🙏</div>
-<div class='text-block'>If I wanted to solve this corner I will do the first algorithm four times</div>
-<div class='media-container'><img src='./media/image31.jpeg' alt='Graphic'></div>
-<div class='text-block'>If I wanted to solve this corner I will do the first algorithm two times</div>
-<div class='media-container'><img src='./media/image29.jpeg' alt='Graphic'></div>
-<div class='media-container small-icon'><img src='./media/image30.png' alt='Graphic'></div>
-</div>
-<div class='text-block'>Keep learning yellow side on the next page</div>
-</div>
-</div>
-<div class="slide" id="slide12.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class='text-block'>I’m gonna show you most of it in video since it’s too hard to explain.</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media15.mp4' preload='metadata'></video></div>
-<div class='text-block'>The yellow side is kind of hard so it’s best to practice it a lot!</div>
-</div>
-<div class='text-block'>When you finish a piece and want to move on to the next piece then don’t do a rotation, instead we should turn the bottom layer to find your next piece like what video said</div>
-</div>
-</div>
-<div class="slide" id="slide13.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="hbox">
-<div class='text-block'>These are the algorithms for last layer. There will be more on the next page</div>
-<div class='text-block'>Right now you have to learn two more algorithms. One has 11 moves and one has 9 moves.</div>
-</div>
-<div class='text-block'>This is the second way for the nine move algorithm.</div>
-<div class="hbox">
-<div class='text-block'>This it the 9 move algorithm</div>
-<div class='text-block'>(this is the way I use)</div>
-<div class='text-block'>This is the 11 move algorithm.</div>
-</div>
-<div class="hbox">
-<div class="vbox">
-<div class='text-block'>(two ways).</div>
-<div class='media-container'><video controls src='./media/media18.mp4' preload='metadata'></video></div>
-</div>
-<div class='media-container'><video controls src='./media/media17.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media16.mp4' preload='metadata'></video></div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide14.xml">
-<div class="vbox">
-<div class="cluster">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class='text-block'>If you wanted to do the first way then you should put the headlights in front of you then do a rotation making the yellow side facing you then we do the algorithm</div>
-<div class='text-block'>In order to do the last layer you need to know what’s a headlight</div>
-<div class='text-block'>When this happens you could do the first nine move solution or the second 9 move solution so you could make it into all the corners solved for the last layer so all we would have to do now would be solving the edges into the correct place.</div>
-<div class='media-container'><video controls src='./media/media19.mp4' preload='metadata'></video></div>
-<div class='text-block'>This is a headlight</div>
-<div class='media-container'><img src='./media/image36.jpeg' alt='Graphic'></div>
-<div class='media-container small-icon'><img src='./media/image39.png' alt='Graphic'></div>
-<div class='text-block'>If you wanted to do the second way then you should put the headlights on the right then rotate to make the white side facing you then we do the second nine move algorithm</div>
-<div class='text-block'>After you finish the algorithm the corners should be in the right place</div>
-</div>
-<div class="hbox">
-<div class='text-block'>A headlight is where there two of the same coloured corners around a random edge</div>
-<div class='media-container'><video controls src='./media/media20.mp4' preload='metadata'></video></div>
-<div class='text-block'>And that should also solve the corners for last layer</div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide15.xml">
-<div class="vbox">
-<div class="cluster">
-<h2 class='slide-title'>How to solve Rubik’s cube</h2>
-<h2 class='slide-title'>Case:4</h2>
-<div class='media-container'><video controls src='./media/media24.mp4' preload='metadata'></video></div>
-<div class='text-block'>There well be four cases after the corners are solved and if yours are not these four cases that might mean your cube is built wrong and you have to take out the pieces and put it back in the right place</div>
-<div class='text-block'>I know these four cases look different but you could use the same algorithm to solve it</div>
-<div class='text-block'>Case:1</div>
-<div class='text-block'>Case:2</div>
-<div class='text-block'>Case:3</div>
-<div class='media-container'><video controls src='./media/media21.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media22.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media23.mp4' preload='metadata'></video></div>
-</div>
-<div class='text-block'>Keep learning last layer on the next page</div>
-</div>
-</div>
-<div class="slide" id="slide16.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="hbox">
-<div class='text-block'>This is what to do for case one we basically just need to do the 1st algorithm two times but in the middle we need to do a rotation</div>
-<div class='text-block'>Same for case:2 but we rotate the other way, and we could start the algorithm from any direction</div>
-</div>
-<div class="hbox">
-<div class='media-container'><video controls src='./media/media25.mp4' preload='metadata'></video></div>
-<div class='media-container'><video controls src='./media/media26.mp4' preload='metadata'></video></div>
-</div>
-<div class='text-block'>Learn more about last layer on the next page</div>
-</div>
-</div>
-<div class="slide" id="slide17.xml">
-<div class="vbox">
-<h2 class='slide-title'>How to solve a Rubik’s cube</h2>
-<div class="hbox">
-<div class="vbox">
-<div class='text-block'>For case 3 there one side is solved and the others are not and the three pieces are turning counter clockwise then you put the solved side on the back and do 11 move algorithm once</div>
-<div class='media-container'><video controls src='./media/media27.mp4' preload='metadata'></video></div>
-</div>
-<div class="vbox">
-<div class='text-block'>For case:4 there is also one solved side except this time the three not solved ones are clockwise</div>
-<div class='media-container'><video controls src='./media/media28.mp4' preload='metadata'></video></div>
-</div>
-<div class='text-block'>Congratulations! Now you know how to solve a Rubik’s cube!!!🥳🥳🥳</div>
-</div>
-</div>
-</div>
-<div class="slide" id="slide18.xml">
-<div class="vbox">
-<div class='text-block'>Hope you liked my Rubik’s cube tutorial</div>
-<div class="cluster">
-<div class='media-container'><img src='./media/image48.jpeg' alt='Graphic'></div>
-<div class='text-block'>Hope you liked my tutorial</div>
-<div class='text-block'>Thank you</div>
-<div class='text-block'>By Cole</div>
-</div>
-</div>
+
+<!-- Slide 1 -->
+<div class="slide">
+    <h2 class="slide-title">How to solve a Rubik’s cube</h2>
+    <div class="text-block center-text" style="font-size: 1.8em;">By Cole</div>
+    <div class="text-block center-text">With the LBL(layer by layer) method!</div>
+    <div class="text-block center-text">The first step to solving a Rubik’s cube is to make a white daisy.</div>
+    <div class="media-container"><img src="./media/image5.png" class="arrow-icon"></div>
+    <div class="text-block center-text">Like this!</div>
+    
+    <div class="grid-3">
+        <div class="card">
+            <div class="text-block">Try put the white edges to the yellow centre.</div>
+            <div class="media-container"><video controls src="./media/media1.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">All you have to do is...</div>
+            <div class="media-container"><img src="./media/image2.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">If the piece is in the right spot but flipped, you could use this algorithm to fix it.</div>
+            <div class="media-container"><img src="./media/image3.jpeg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2 -->
+<div class="slide">
+    <h2 class="slide-title">Making the Cross</h2>
+    <div class="text-block">After we finish the first step we will start making the cross.</div>
+    
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">If we want to make the cross we first need to find a white petal and there should be two colours on it. One should be white and the other shouldn’t be yellow. Once you find the white piece you should see the colour that is not white and match it to its centre then bring it down to the white side like this.</div>
+            <div class="media-container"><video controls src="./media/media2.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">When you finish it should look like this:</div>
+            <div class="media-container"><img src="./media/image5.jpeg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide">
+    <h2 class="slide-title">First Layer</h2>
+    <div class="text-block">If you followed all of that correctly your cross should be accomplished.</div>
+    <div class="text-block">The first thing to do is to find a white corner on the top, after we look at what colours there are on the corner instead of white. For example my corner had blue, red, and white on it, then I would bring the corner between the blue and red centre then hold it like this.</div>
+    <div class="media-container"><img src="./media/image9.jpeg"></div>
+
+    <div class="text-block center-text">Right now you have to learn two new algorithms!</div>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">The first algorithm that you have to learn is this:</div>
+            <div class="media-container"><video controls src="./media/media3.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">The second algorithm is this, and also the second algorithm is just the first algorithm left handed:</div>
+            <div class="media-container"><video controls src="./media/media4.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4 -->
+<div class="slide">
+    <h2 class="slide-title">First Layer: 4 Cases</h2>
+    <div class="text-block center-text">You could get 4 cases:</div>
+    <div class="grid-4">
+        <div class="card">
+            <div class="text-block">Case 1: White piece facing top. Put the white piece on the Right like this then do the 1st algorithm three times.</div>
+            <div class="media-container"><img src="./media/image10.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Case 2: White piece facing right. Put the white piece on the right then do the 1st algorithm 1 time.</div>
+            <div class="media-container"><img src="./media/image11.png"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Case 3: White piece facing left. Put the white piece on the left then do algorithm 2nd one time like this.</div>
+            <div class="media-container"><img src="./media/image12.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Case 4: If there are no corner piece on top then it must be stuck on the bottom, put it on the right then do 1st algorithm then do the rest like normal.</div>
+            <div class="media-container"><video controls src="./media/media5.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5 -->
+<div class="slide">
+    <h2 class="slide-title">Second Layer</h2>
+    <div class="text-block">Right now we are going to do second layer. This is probably basically the hardest part but if you know algorithm one and algorithm two it will be really easy I promise.</div>
+    <div class="text-block">This time there will be 2 cases for second layer and two algorithms for second layer but don’t get the algorithms mixed up because the algorithm are pretty similar.</div>
+    <div class="text-block">For the first layer you had to find a white corner but for the second layer you have to find a edge that is not white or yellow on the top.</div>
+    
+    <div class="grid-3">
+        <div class="card">
+            <div class="text-block">For example I found this piece, right? As you can see there is no yellow piece on it that means it’s correct.</div>
+            <div class="media-container"><img src="./media/image14.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">So now me see that this bottom piece is orange so I will connect the piece to its centre.</div>
+            <div class="media-container"><video controls src="./media/media6.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Now I see that it has to go to the left slot.</div>
+            <div class="media-container"><video controls src="./media/media7.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6 -->
+<div class="slide">
+    <h2 class="slide-title">Second Layer Algorithms</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">So we want to put the piece in the left slot. This algorithm is basically taking out a second layer piece with the second algorithm then putting it back with the first algorithm. And that piece is solved!</div>
+            <div class="media-container"><video controls src="./media/media8.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">The second case is a lot like the first case, but this time it’s right handed which is this: So this time we move the edge away then do the first algorithm then the second.</div>
+            <div class="media-container"><video controls src="./media/media9.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7 -->
+<div class="slide">
+    <h2 class="slide-title">Second Layer: Special Cases</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">If you get this case where the edge is in the right place but flipped then replace it with a yellow edge and the edge should get taken out. Then you could do the rest normally.</div>
+            <div class="media-container"><video controls src="./media/media10.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">There will be other cases that are similar so you could use the same way which is first taking it out then put it back in the correct spot.</div>
+            <div class="media-container"><video controls src="./media/media11.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8 -->
+<div class="slide">
+    <h2 class="slide-title">Yellow Cross</h2>
+    <div class="text-block center-text">The next thing we have to do is to make the yellow cross, and this time there would be four cases.</div>
+    <div class="grid-4">
+        <div class="card">
+            <div class="text-block">First case is where the yellow side is only a dot.</div>
+            <div class="media-container"><img src="./media/image24.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">The second case is where there is a L shape on the yellow side.</div>
+            <div class="media-container"><img src="./media/image21.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">The third case is where there is a line on the yellow side.</div>
+            <div class="media-container"><img src="./media/image22.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">The fourth case is where there is a full cross already. You skipped this step!</div>
+            <div class="media-container"><img src="./media/image23.jpeg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9 -->
+<div class="slide">
+    <h2 class="slide-title">Yellow Cross Algorithms</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">You are gonna learn another algorithm that is super duper simple! So for line we are gonna hold it like this then do the algorithm.</div>
+            <div class="media-container"><img src="./media/image26.png" class="arrow-icon"></div>
+            <div class="media-container"><video controls src="./media/media12.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Now you have to learn another algorithm which is just the opposite of algorithm one and this algorithm will solve the L case.</div>
+            <div class="media-container"><video controls src="./media/media13.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10 -->
+<div class="slide">
+    <h2 class="slide-title">Yellow Cross: Dot Case</h2>
+    <div class="card">
+        <div class="text-block">Now finally the dot case where there is a dot on the yellow side. So now we could hold it from any direction and do the algorithm and that will make a L so then we do the L algorithm.</div>
+        <div class="media-container"><video controls src="./media/media14.mp4" preload="metadata"></video></div>
+        <div class="text-block center-text" style="font-size: 2em; color: #FF1493;">Yay now we are only half way through! 🥳</div>
+    </div>
+</div>
+
+<!-- Slide 11 -->
+<div class="slide">
+    <h2 class="slide-title">Yellow Side Corners</h2>
+    <div class="text-block center-text">So now we have to solve the yellow side.</div>
+    <div class="text-block center-text" style="color: red;">Warning ⚠️ this is the hardest part and the most easy part to mess up and if you mess up you gotta restart. Pls don’t mess up 🙏</div>
+    
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">If I wanted to solve this corner I will do the first algorithm four times.</div>
+            <div class="media-container"><img src="./media/image29.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="text-block">If I wanted to solve this corner I will do the first algorithm two times.</div>
+            <div class="media-container"><img src="./media/image31.jpeg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12 -->
+<div class="slide">
+    <h2 class="slide-title">Yellow Side Video</h2>
+    <div class="card">
+        <div class="text-block">I’m gonna show you most of it in video since it’s too hard to explain.</div>
+        <div class="text-block">When you finish a piece and want to move on to the next piece then don’t do a rotation, instead we should turn the bottom layer to find your next piece like what video said.</div>
+        <div class="media-container"><video controls src="./media/media15.mp4" preload="metadata"></video></div>
+        <div class="text-block">The yellow side is kind of hard so it’s best to practice it a lot!</div>
+    </div>
+</div>
+
+<!-- Slide 13 -->
+<div class="slide">
+    <h2 class="slide-title">Last Layer Algorithms</h2>
+    <div class="text-block center-text">Right now you have to learn two more algorithms. One has 11 moves and one has 9 moves.</div>
+    <div class="grid-3">
+        <div class="card">
+            <div class="text-block">This is the 9 move algorithm (Way 1).</div>
+            <div class="media-container"><video controls src="./media/media18.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">This is the second way for the nine move algorithm. (This is the way I use).</div>
+            <div class="media-container"><video controls src="./media/media17.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">This is the 11 move algorithm.</div>
+            <div class="media-container"><video controls src="./media/media16.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 14 -->
+<div class="slide">
+    <h2 class="slide-title">Headlights</h2>
+    <div class="text-block">In order to do the last layer you need to know what’s a headlight. A headlight is where there are two of the same coloured corners around a random edge.</div>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">This is a headlight:</div>
+            <div class="media-container"><img src="./media/image36.jpeg"></div>
+        </div>
+        <div class="card">
+            <div class="media-container"><img src="./media/image39.png" class="arrow-icon"></div>
+            <div class="text-block">When this happens you could do the first nine move solution or the second 9 move solution so you could make it into all the corners solved for the last layer!</div>
+        </div>
+    </div>
+    
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">If you wanted to do the first way then you should put the headlights in front of you then do a rotation making the yellow side facing you then we do the algorithm.</div>
+            <div class="media-container"><video controls src="./media/media19.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">If you wanted to do the second way then you should put the headlights on the right then rotate to make the white side facing you then we do the second nine move algorithm.</div>
+            <div class="media-container"><video controls src="./media/media20.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 15 -->
+<div class="slide">
+    <h2 class="slide-title">Last Layer Edges</h2>
+    <div class="text-block">There well be four cases after the corners are solved and if yours are not these four cases that might mean your cube is built wrong and you have to take out the pieces and put it back in the right place.</div>
+    <div class="text-block center-text">I know these four cases look different but you could use the same algorithm to solve it!</div>
+    
+    <div class="grid-4">
+        <div class="card">
+            <div class="text-block">Case 1</div>
+            <div class="media-container"><video controls src="./media/media21.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Case 2</div>
+            <div class="media-container"><video controls src="./media/media22.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Case 3</div>
+            <div class="media-container"><video controls src="./media/media23.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Case 4</div>
+            <div class="media-container"><video controls src="./media/media24.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 16 -->
+<div class="slide">
+    <h2 class="slide-title">Edge Cases 1 & 2</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">This is what to do for case one. We basically just need to do the 1st algorithm two times but in the middle we need to do a rotation.</div>
+            <div class="media-container"><video controls src="./media/media25.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">Same for case 2 but we rotate the other way, and we could start the algorithm from any direction.</div>
+            <div class="media-container"><video controls src="./media/media26.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 17 -->
+<div class="slide">
+    <h2 class="slide-title">Edge Cases 3 & 4</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="text-block">For case 3 there one side is solved and the others are not and the three pieces are turning counter clockwise. You put the solved side on the back and do 11 move algorithm once.</div>
+            <div class="media-container"><video controls src="./media/media27.mp4" preload="metadata"></video></div>
+        </div>
+        <div class="card">
+            <div class="text-block">For case 4 there is also one solved side except this time the three not solved ones are clockwise.</div>
+            <div class="media-container"><video controls src="./media/media28.mp4" preload="metadata"></video></div>
+        </div>
+    </div>
+    <div class="text-block center-text" style="font-size: 2.5em; color: #32CD32; margin-top: 20px;">Congratulations! Now you know how to solve a Rubik’s cube!!! 🥳🥳🥳</div>
+</div>
+
+<!-- Slide 18 -->
+<div class="slide">
+    <h2 class="slide-title">Thank you!</h2>
+    <div class="card" style="background: #111; color: white;">
+        <div class="text-block center-text" style="background: transparent; color: white;">Hope you liked my tutorial! By Cole.</div>
+        <div class="media-container"><img src="./media/image48.jpeg"></div>
+    </div>
 </div>
 
     </div>
