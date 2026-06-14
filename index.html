@@ -139,13 +139,9 @@
             font-size: 1.4em;
             font-weight: bold;
             margin-bottom: 15px;
-        }
-        
-        ul.info-list li::before {
-            content: "• ";
-            color: black;
-            font-size: 1.5em;
-            vertical-align: middle;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
 
         .highlight-yellow {
@@ -313,9 +309,21 @@
                 
                 <h2 class="black-bubbly" style="margin-top: 30px;">Info</h2>
                 <ul class="info-list">
-                    <li>Wesbrook Community Centre lounge</li>
-                    <li>7pm-8pm On every Wednesday</li>
-                    <li>Age: 5–10</li>
+                    <li>
+                        <span style="font-size: 1.2em; line-height: 1;">📍</span>
+                        <div>
+                            <strong>Wesbrook Community Centre</strong>
+                            <div style="font-size: 0.85em; color: #0066FF; font-weight: bold; margin-top: 2px;">Youth and Senior room OR Lounge</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span style="font-size: 1.2em; line-height: 1;">⏰</span>
+                        <div>7pm-8pm On every Wednesday</div>
+                    </li>
+                    <li>
+                        <span style="font-size: 1.2em; line-height: 1;">👦</span>
+                        <div>Age: 5–10</div>
+                    </li>
                 </ul>
                 <div class="highlight-yellow">
                     <p style="margin: 0; color: #000;">Adults need to also come</p>
