@@ -2,10 +2,12 @@
 
 Welcome to **Cube4Fun**! We host fun, interactive, and easy-to-follow Rubik's Cube tutorials created by Cole.
 
-📺 **[Subscribe to Cole's YouTube Channel! 🚀](https://www.youtube.com/@ColeHua)**
-🏆 **[Check out Cole's WCA Profile! ⚡](https://www.worldcubeassociation.org/persons/2026HUAC01)**
+📺 **[Subscribe to Cole's YouTube Channel! 🚀](https://www.youtube.com/@ColeHua)**  
+🏆 **[Check out the official Cole Hua WCA Profile (World Cube Association)! ⚡](https://www.worldcubeassociation.org/persons/2026HUAC01)**
 
 Check out our website and interactive tutorials here: **[colehua.github.io/cube4fun](https://colehua.github.io/cube4fun/)**
+
+*(Search terms: **Cole Hua WCA**, **Cole WCA**, **Cole Hua WorldCubeAssociation**, **Cole Hua WCA Profile**)*
 
 ## 📍 Session Info & Schedule
 Join us for our free weekly sessions!
