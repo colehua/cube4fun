@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cole's Speedcubing Timer - Playful Rubik's cube timer for 3x3 and 2x2 cubes. Solve scrambles, track your statistics, and beat Cole's WCA record!">
+    <title>Cole's Speedcubing Timer ⏱️ - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --text-dark: #1a1a1a;
+            --white-sticker: #ffffff;
+            --yellow-sticker: #ffee55;
+            --green-sticker: #2ecc71;
+            --blue-sticker: #3498db;
+            --orange-sticker: #e67e22;
+            --red-sticker: #e74c3c;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            background-color: #fafafa;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -100px;
+            left: -5%;
+            width: 110%;
+            height: 250px;
+            background-color: var(--cyan-blob);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2em;
+            border: 3px solid #333;
+            margin-bottom: 20px;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.5em;
+            color: #87CEEB;
+            text-align: center;
+            -webkit-text-stroke: 2px #555;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            margin-top: 0px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .timer-settings {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .select-style {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2em;
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 3px solid #333;
+            background-color: #fff;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .btn-action {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 3px solid #333;
+            background-color: var(--yellow-blob);
+            cursor: pointer;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        .scramble-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            border: 4px dashed #0066FF;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .scramble-text {
+            font-size: 1.8em;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            line-height: 1.4;
+            margin: 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        /* 2D CUBE PREVIEW NET */
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .preview-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .cube-net-3x3 {
+            display: grid;
+            grid-template-columns: repeat(4, 94px);
+            grid-template-rows: repeat(3, 94px);
+            gap: 12px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 15px;
+            border: 4px solid #333;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            width: max-content;
+        }
+
+        .cube-net-2x2 {
+            display: grid;
+            grid-template-columns: repeat(4, 64px);
+            grid-template-rows: repeat(3, 64px);
+            gap: 12px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 15px;
+            border: 4px solid #333;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            width: max-content;
+        }
+
+        .face-grid-3x3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            background: #111;
+            padding: 2px;
+            border-radius: 6px;
+            width: 90px;
+            height: 90px;
+        }
+
+        .face-grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 2px;
+            background: #111;
+            padding: 2px;
+            border-radius: 6px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sticker {
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        /* TIMER AREA */
+        .timer-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 4px dashed #FF6B6B;
+            text-align: center;
+            margin-bottom: 30px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.1s;
+        }
+
+        .timer-card:active {
+            background-color: #f6f6f6;
+        }
+
+        .timer-display {
+            font-family: 'DynaPuff', cursive;
+            font-size: 6.5em;
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            transition: color 0.1s;
+        }
+
+        .timer-display.ready {
+            color: #2ecc71;
+        }
+
+        .timer-display.hold {
+            color: #e74c3c;
+        }
+
+        .timer-instructions {
+            font-size: 1.3em;
+            color: #777;
+            margin-top: 15px;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+
+        /* GRID FOR STATS & HISTORY */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card-section {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 3px solid #eee;
+        }
+
+        .section-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 2.2em;
+            color: #000;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* SOLVES LOG TABLE */
+        .solves-container {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .solves-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.15em;
+            font-weight: bold;
+        }
+
+        .solves-table th, .solves-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .solves-table th {
+            background: #f7f7f7;
+            color: #555;
+            position: sticky;
+            top: 0;
+        }
+
+        .solves-table tr:hover {
+            background: #fafafa;
+        }
+
+        .btn-solve-action {
+            border: 2px solid #333;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 2px;
+            background: #fff;
+            transition: all 0.1s;
+        }
+
+        .btn-solve-action:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-solve-action.delete {
+            background: #ff8585;
+            color: white;
+        }
+
+        .btn-solve-action.active {
+            background: #333;
+            color: #fff;
+        }
+
+        .clear-btn-container {
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* STATS DISPLAY */
+        .stats-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .stats-item {
+            font-size: 1.4em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 2px dotted #ddd;
+        }
+
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+
+        .stats-value {
+            color: #0066FF;
+        }
+
+        /* ASSISTANT BUDDY */
+        .buddy-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px dashed #00E5FF;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.05);
+        }
+
+        .buddy-face {
+            font-size: 3em;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .buddy-bubble {
+            position: relative;
+            background: #f0faff;
+            border: 2px solid #bce1ec;
+            border-radius: 12px;
+            padding: 10px 15px;
+            font-size: 1.25em;
+            font-weight: bold;
+            flex-grow: 1;
+            color: #333;
+        }
+
+        .buddy-bubble::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent #f0faff transparent transparent;
+            display: block;
+            width: 0;
+        }
+
+        .buddy-bubble::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 12px 12px 12px 0;
+            border-style: solid;
+            border-color: transparent #bce1ec transparent transparent;
+            display: block;
+            width: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob-top"></div>
+
+    <div class="container">
+        
+        <a href="index.html" class="nav-button">🔙 Back to Home</a>
+        
+        <h1 class="main-title">Cole's Speedcubing Timer ⏱️</h1>
+
+        <!-- SETTINGS AND CONTROLS -->
+        <div class="timer-settings">
+            <select id="scramble-type-select" class="select-style">
+                <option value="3x3">3x3x3 Rubik's Cube</option>
+                <option value="2x2">2x2x2 Rubik's Cube</option>
+            </select>
+            <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
+            <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
+        </div>
+
+        <!-- SCRAMBLE DISPLAY -->
+        <div class="scramble-box">
+            <p id="scramble-display-text" class="scramble-text">Loading scramble...</p>
+        </div>
+
+        <!-- 2D SCRAMBLED CUBE PREVIEW -->
+        <div class="preview-section">
+            <div class="preview-title">Scrambled State Preview</div>
+            <div id="cube-net-container">
+                <!-- Net will be rendered here dynamically based on 2x2/3x3 -->
+            </div>
+        </div>
+
+        <!-- TIMER CONTAINER -->
+        <div id="timer-tap-zone" class="timer-card">
+            <div id="timer-val" class="timer-display">0.00</div>
+            <p id="timer-instructions" class="timer-instructions">
+                Hold Spacebar (Turns Green) and Release to Start! Press any key to stop.<br>
+                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box to ready, release to start, tap anywhere to stop!)</span>
+            </p>
+        </div>
+
+        <!-- GRID FOR SOLVES AND STATS -->
+        <div class="stats-grid">
+            
+            <!-- Solve History -->
+            <div class="card-section">
+                <h2 class="section-title">Solve History 📊</h2>
+                <div class="solves-container">
+                    <table class="solves-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="solves-tbody">
+                            <!-- Table entries generated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="clear-btn-container">
+                    <button id="btn-clear-session" class="btn-action" style="background-color: #ff8585; color: white;">Clear History 🗑️</button>
+                </div>
+            </div>
+
+            <!-- Stats & Buddy -->
+            <div class="card-section" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h2 class="section-title">Stats & Records 🏆</h2>
+                    <ul class="stats-list">
+                        <li class="stats-item">
+                            <span>Best Solve:</span>
+                            <span id="stat-best" class="stats-value">-</span>
+                        </li>
+                        <li class="stats-item">
+                            <span>Average of 5 (Ao5):</span>
+                            <span id="stat-ao5" class="stats-value">-</span>
+                        </li>
+                        <li class="stats-item">
+                            <span>Average of 12 (Ao12):</span>
+                            <span id="stat-ao12" class="stats-value">-</span>
+                        </li>
+                        <li class="stats-item">
+                            <span>Session Mean:</span>
+                            <span id="stat-mean" class="stats-value">-</span>
+                        </li>
+                        <li class="stats-item" style="border-top: 3px solid #ccc; margin-top: 15px; padding-top: 15px;">
+                            <span>Cole's Record:</span>
+                            <span style="color: #FF6B6B;">9.00 seconds ⚡</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Buddy Widget -->
+                <div class="buddy-container">
+                    <div class="buddy-face">🤖</div>
+                    <div id="buddy-bubble-text" class="buddy-bubble">
+                        Welcome to Cole's Timer! Can you beat my 9.00s record? ⚡
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // --- SPEEDCUBING TIMER LOGIC ---
+        let timerState = 'IDLE'; // IDLE, READYING, READY, RUNNING
+        let startTime = 0;
+        let timerInterval = null;
+        let currentScramble = "";
+        let spaceTimer = null;
+        let solves = []; // List of { time: num, scramble: str, dnf: bool, plusTwo: bool }
+
+        const timerDisplay = document.getElementById('timer-val');
+        const tapZone = document.getElementById('timer-tap-zone');
+        const scrambleTypeSelect = document.getElementById('scramble-type-select');
+        const scrambleDisplay = document.getElementById('scramble-display-text');
+        const newScrambleBtn = document.getElementById('btn-new-scramble');
+        const copyScrambleBtn = document.getElementById('btn-copy-scramble');
+        const solvesTbody = document.getElementById('solves-tbody');
+        const clearSessionBtn = document.getElementById('btn-clear-session');
+        
+        // Stats elements
+        const statBest = document.getElementById('stat-best');
+        const statMean = document.getElementById('stat-mean');
+        const statAo5 = document.getElementById('stat-ao5');
+        const statAo12 = document.getElementById('stat-ao12');
+        const buddyBubble = document.getElementById('buddy-bubble-text');
+
+        // Buddy Quotes
+        const buddyQuotes = [
+            "Nice solve! Keep turning! 🚀",
+            "GAN cubes make you faster! 🧠",
+            "Let's practice the cross during inspection! 🧱",
+            "Every solve makes you better! 🎯",
+            "Cole's official WCA average is super fast! ⚡",
+            "Did you know Cole does cubes up to 8x8? 🤯",
+            "Can you beat Cole's 9 seconds record? 😜",
+            "Smooth turning is key to fast times! 🧈",
+            "Look ahead to spot the next pairs! 👀",
+            "Fingertricks are your best friend! 🖐️"
+        ];
+
+        // --- CUBE REPRESENTATION STATE ---
+        let cube3 = {};
+        let cube2 = {};
+
+        const colorMap = {
+            'white': 'var(--white-sticker)',
+            'yellow': 'var(--yellow-sticker)',
+            'green': 'var(--green-sticker)',
+            'blue': 'var(--blue-sticker)',
+            'orange': 'var(--orange-sticker)',
+            'red': 'var(--red-sticker)'
+        };
+
+        function resetCubeState3x3() {
+            cube3 = {
+                U: Array(9).fill('white'),
+                D: Array(9).fill('yellow'),
+                F: Array(9).fill('green'),
+                B: Array(9).fill('blue'),
+                L: Array(9).fill('orange'),
+                R: Array(9).fill('red')
+            };
+        }
+
+        function resetCubeState2x2() {
+            cube2 = {
+                U: Array(4).fill('white'),
+                D: Array(4).fill('yellow'),
+                F: Array(4).fill('green'),
+                B: Array(4).fill('blue'),
+                L: Array(4).fill('orange'),
+                R: Array(4).fill('red')
+            };
+        }
+
+        function rotateFaceCW(face) {
+            let temp = [...face];
+            face[0] = temp[6]; face[1] = temp[3]; face[2] = temp[0];
+            face[3] = temp[7];                  face[5] = temp[1];
+            face[6] = temp[8]; face[7] = temp[5]; face[8] = temp[2];
+        }
+
+        function rotateFaceCW2(face) {
+            let temp = [...face];
+            face[0] = temp[2]; face[1] = temp[0];
+            face[2] = temp[3]; face[3] = temp[1];
+        }
+
+        function rotate3x3(face) {
+            if (face === 'U') {
+                rotateFaceCW(cube3.U);
+                let temp = [...cube3.L.slice(0, 3)];
+                cube3.L[0] = cube3.F[0]; cube3.L[1] = cube3.F[1]; cube3.L[2] = cube3.F[2];
+                cube3.F[0] = cube3.R[0]; cube3.F[1] = cube3.R[1]; cube3.F[2] = cube3.R[2];
+                cube3.R[0] = cube3.B[0]; cube3.R[1] = cube3.B[1]; cube3.R[2] = cube3.B[2];
+                cube3.B[0] = temp[0]; cube3.B[1] = temp[1]; cube3.B[2] = temp[2];
+            } else if (face === 'D') {
+                rotateFaceCW(cube3.D);
+                let temp = [...cube3.R.slice(6, 9)];
+                cube3.R[6] = cube3.F[6]; cube3.R[7] = cube3.F[7]; cube3.R[8] = cube3.F[8];
+                cube3.F[6] = cube3.L[6]; cube3.F[7] = cube3.L[7]; cube3.F[8] = cube3.L[8];
+                cube3.L[6] = cube3.B[6]; cube3.L[7] = cube3.B[7]; cube3.L[8] = cube3.B[8];
+                cube3.B[6] = temp[0]; cube3.B[7] = temp[1]; cube3.B[8] = temp[2];
+            } else if (face === 'F') {
+                rotateFaceCW(cube3.F);
+                let temp = [cube3.U[6], cube3.U[7], cube3.U[8]];
+                cube3.U[6] = cube3.L[8]; cube3.U[7] = cube3.L[5]; cube3.U[8] = cube3.L[2];
+                cube3.L[2] = cube3.D[0]; cube3.L[5] = cube3.D[1]; cube3.L[8] = cube3.D[2];
+                cube3.D[0] = cube3.R[6]; cube3.D[1] = cube3.R[3]; cube3.D[2] = cube3.R[0];
+                cube3.R[0] = temp[0]; cube3.R[3] = temp[1]; cube3.R[6] = temp[2];
+            } else if (face === 'B') {
+                rotateFaceCW(cube3.B);
+                let temp = [cube3.U[0], cube3.U[1], cube3.U[2]];
+                cube3.U[0] = cube3.R[8]; cube3.U[1] = cube3.R[5]; cube3.U[2] = cube3.R[2];
+                cube3.R[2] = cube3.D[8]; cube3.R[5] = cube3.D[7]; cube3.R[8] = cube3.D[6];
+                cube3.D[6] = cube3.L[0]; cube3.D[7] = cube3.L[3]; cube3.D[8] = cube3.L[6];
+                cube3.L[0] = temp[2]; cube3.L[3] = temp[1]; cube3.L[6] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCW(cube3.L);
+                let temp = [cube3.U[0], cube3.U[3], cube3.U[6]];
+                cube3.U[0] = cube3.B[8]; cube3.U[3] = cube3.B[5]; cube3.U[6] = cube3.B[2];
+                cube3.B[2] = cube3.D[6]; cube3.B[5] = cube3.D[3]; cube3.B[8] = cube3.D[0];
+                cube3.D[0] = cube3.F[0]; cube3.D[3] = cube3.F[3]; cube3.D[6] = cube3.F[6];
+                cube3.F[0] = temp[0]; cube3.F[3] = temp[1]; cube3.F[6] = temp[2];
+            } else if (face === 'R') {
+                rotateFaceCW(cube3.R);
+                let temp = [cube3.U[2], cube3.U[5], cube3.U[8]];
+                cube3.U[2] = cube3.F[2]; cube3.U[5] = cube3.F[5]; cube3.U[8] = cube3.F[8];
+                cube3.F[2] = cube3.D[2]; cube3.F[5] = cube3.D[5]; cube3.F[8] = cube3.D[8];
+                cube3.D[2] = cube3.B[6]; cube3.D[5] = cube3.B[3]; cube3.D[8] = cube3.B[0];
+                cube3.B[0] = temp[2]; cube3.B[3] = temp[1]; cube3.B[6] = temp[0];
+            }
+        }
+
+        function rotate2x2(face) {
+            if (face === 'U') {
+                rotateFaceCW2(cube2.U);
+                let temp = [...cube2.L.slice(0, 2)];
+                cube2.L[0] = cube2.F[0]; cube2.L[1] = cube2.F[1];
+                cube2.F[0] = cube2.R[0]; cube2.F[1] = cube2.R[1];
+                cube2.R[0] = cube2.B[0]; cube2.R[1] = cube2.B[1];
+                cube2.B[0] = temp[0]; cube2.B[1] = temp[1];
+            } else if (face === 'D') {
+                rotateFaceCW2(cube2.D);
+                let temp = [...cube2.R.slice(2, 4)];
+                cube2.R[2] = cube2.F[2]; cube2.R[3] = cube2.F[3];
+                cube2.F[2] = cube2.L[2]; cube2.F[3] = cube2.L[3];
+                cube2.L[2] = cube2.B[2]; cube2.L[3] = cube2.B[3];
+                cube2.B[2] = temp[0]; cube2.B[3] = temp[1];
+            } else if (face === 'F') {
+                rotateFaceCW2(cube2.F);
+                let temp = [cube2.U[2], cube2.U[3]];
+                cube2.U[2] = cube2.L[3]; cube2.U[3] = cube2.L[1];
+                cube2.L[1] = cube2.D[0]; cube2.L[3] = cube2.D[1];
+                cube2.D[0] = cube2.R[2]; cube2.D[1] = cube2.R[0];
+                cube2.R[0] = temp[0]; cube2.R[2] = temp[1];
+            } else if (face === 'B') {
+                rotateFaceCW2(cube2.B);
+                let temp = [cube2.U[0], cube2.U[1]];
+                cube2.U[0] = cube2.R[3]; cube2.U[1] = cube2.R[1];
+                cube2.R[1] = cube2.D[3]; cube2.R[3] = cube2.D[2];
+                cube2.D[2] = cube2.L[0]; cube2.D[3] = cube2.L[2];
+                cube2.L[0] = temp[1]; cube2.L[2] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCW2(cube2.L);
+                let temp = [cube2.U[0], cube2.U[2]];
+                cube2.U[0] = cube2.B[3]; cube2.U[2] = cube2.B[1];
+                cube2.B[1] = cube2.D[2]; cube2.B[3] = cube2.D[0];
+                cube2.D[0] = cube2.F[0]; cube2.D[2] = cube2.F[2];
+                cube2.F[0] = temp[0]; cube2.F[2] = temp[1];
+            } else if (face === 'R') {
+                rotateFaceCW2(cube2.R);
+                let temp = [cube2.U[1], cube2.U[3]];
+                cube2.U[1] = cube2.F[1]; cube2.U[3] = cube2.F[3];
+                cube2.F[1] = cube2.D[1]; cube2.F[3] = cube2.D[3];
+                cube2.D[1] = cube2.B[2]; cube2.D[3] = cube2.B[0];
+                cube2.B[0] = temp[1]; cube2.B[2] = temp[0];
+            }
+        }
+
+        function applyMoves3x3(scrambleStr) {
+            resetCubeState3x3();
+            const moves = scrambleStr.split(' ');
+            for (let m of moves) {
+                if (!m) continue;
+                let base = m[0];
+                let modifier = m.slice(1);
+                let count = 1;
+                if (modifier === '2') count = 2;
+                if (modifier === "'") count = 3;
+                
+                for (let i = 0; i < count; i++) {
+                    rotate3x3(base);
+                }
+            }
+        }
+
+        function applyMoves2x2(scrambleStr) {
+            resetCubeState2x2();
+            const moves = scrambleStr.split(' ');
+            for (let m of moves) {
+                if (!m) continue;
+                let base = m[0];
+                let modifier = m.slice(1);
+                let count = 1;
+                if (modifier === '2') count = 2;
+                if (modifier === "'") count = 3;
+                
+                for (let i = 0; i < count; i++) {
+                    rotate2x2(base);
+                }
+            }
+        }
+
+        // --- CONSTRUCT 2D CUBE PREVIEW NET ---
+        function drawCubeNet() {
+            const type = scrambleTypeSelect.value;
+            const container = document.getElementById('cube-net-container');
+            container.innerHTML = "";
+
+            if (type === '3x3') {
+                applyMoves3x3(currentScramble);
+                
+                const net = document.createElement('div');
+                net.className = 'cube-net-3x3';
+                
+                const faceLayouts = [
+                    { name: 'empty1', row: 1, col: 1 },
+                    { name: 'U', row: 1, col: 2, state: cube3.U },
+                    { name: 'empty2', row: 1, col: 3 },
+                    { name: 'empty3', row: 1, col: 4 },
+                    
+                    { name: 'L', row: 2, col: 1, state: cube3.L },
+                    { name: 'F', row: 2, col: 2, state: cube3.F },
+                    { name: 'R', row: 2, col: 3, state: cube3.R },
+                    { name: 'B', row: 2, col: 4, state: cube3.B },
+                    
+                    { name: 'empty4', row: 3, col: 1 },
+                    { name: 'D', row: 3, col: 2, state: cube3.D },
+                    { name: 'empty5', row: 3, col: 3 },
+                    { name: 'empty6', row: 3, col: 4 }
+                ];
+
+                faceLayouts.forEach(layout => {
+                    const cell = document.createElement('div');
+                    cell.style.gridRow = layout.row;
+                    cell.style.gridColumn = layout.col;
+                    
+                    if (layout.state) {
+                        const faceGrid = document.createElement('div');
+                        faceGrid.className = 'face-grid-3x3';
+                        layout.state.forEach(color => {
+                            const sticker = document.createElement('div');
+                            sticker.className = 'sticker';
+                            sticker.style.backgroundColor = colorMap[color];
+                            faceGrid.appendChild(sticker);
+                        });
+                        cell.appendChild(faceGrid);
+                    }
+                    net.appendChild(cell);
+                });
+                container.appendChild(net);
+            } else {
+                applyMoves2x2(currentScramble);
+                
+                const net = document.createElement('div');
+                net.className = 'cube-net-2x2';
+                
+                const faceLayouts = [
+                    { name: 'empty1', row: 1, col: 1 },
+                    { name: 'U', row: 1, col: 2, state: cube2.U },
+                    { name: 'empty2', row: 1, col: 3 },
+                    { name: 'empty3', row: 1, col: 4 },
+                    
+                    { name: 'L', row: 2, col: 1, state: cube2.L },
+                    { name: 'F', row: 2, col: 2, state: cube2.F },
+                    { name: 'R', row: 2, col: 3, state: cube2.R },
+                    { name: 'B', row: 2, col: 4, state: cube2.B },
+                    
+                    { name: 'empty4', row: 3, col: 1 },
+                    { name: 'D', row: 3, col: 2, state: cube2.D },
+                    { name: 'empty5', row: 3, col: 3 },
+                    { name: 'empty6', row: 3, col: 4 }
+                ];
+
+                faceLayouts.forEach(layout => {
+                    const cell = document.createElement('div');
+                    cell.style.gridRow = layout.row;
+                    cell.style.gridColumn = layout.col;
+                    
+                    if (layout.state) {
+                        const faceGrid = document.createElement('div');
+                        faceGrid.className = 'face-grid-2x2';
+                        layout.state.forEach(color => {
+                            const sticker = document.createElement('div');
+                            sticker.className = 'sticker';
+                            sticker.style.backgroundColor = colorMap[color];
+                            faceGrid.appendChild(sticker);
+                        });
+                        cell.appendChild(faceGrid);
+                    }
+                    net.appendChild(cell);
+                });
+                container.appendChild(net);
+            }
+        }
+
+        // --- SCRAMBLE GENERATION ---
+        function generateScramble(type) {
+            const faces = type === '2x2' ? ['U', 'R', 'F'] : ['U', 'D', 'F', 'B', 'L', 'R'];
+            const modifiers = ['', "'", '2'];
+            let moves = [];
+            let prevFace = '';
+            let prevPrevFace = '';
+            const scrambleLength = type === '2x2' ? 11 : 21;
+            
+            while (moves.length < scrambleLength) {
+                let face = faces[Math.floor(Math.random() * faces.length)];
+                if (face === prevFace) continue;
+                
+                const opposites = { 'U': 'D', 'D': 'U', 'R': 'L', 'L': 'R', 'F': 'B', 'B': 'F' };
+                if (type === '3x3' && face === prevPrevFace && opposites[face] === prevFace) continue;
+                
+                let mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                moves.push(face + mod);
+                prevPrevFace = prevFace;
+                prevFace = face;
+            }
+            return moves.join(' ');
+        }
+
+        function triggerNewScramble() {
+            const type = scrambleTypeSelect.value;
+            currentScramble = generateScramble(type);
+            scrambleDisplay.textContent = currentScramble;
+            drawCubeNet();
+        }
+
+        // --- LOCAL STORAGE & SOLVES HISTORY ---
+        function loadSolves() {
+            const stored = localStorage.getItem('cube_timer_solves_' + scrambleTypeSelect.value);
+            solves = stored ? JSON.parse(stored) : [];
+            renderSolves();
+            calculateStats();
+        }
+
+        function saveSolves() {
+            localStorage.setItem('cube_timer_solves_' + scrambleTypeSelect.value, JSON.stringify(solves));
+            renderSolves();
+            calculateStats();
+        }
+
+        function renderSolves() {
+            solvesTbody.innerHTML = "";
+            
+            if (solves.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="3" style="color: #999; font-style: italic;">No solves yet!</td>`;
+                solvesTbody.appendChild(tr);
+                return;
+            }
+
+            const reversed = [...solves].reverse();
+            reversed.forEach((solve, revIdx) => {
+                const originalIndex = solves.length - 1 - revIdx;
+                const tr = document.createElement('tr');
+                
+                let timeStr = solve.time.toFixed(2);
+                if (solve.plusTwo) timeStr += "+2";
+                if (solve.dnf) timeStr = "DNF";
+
+                tr.innerHTML = `
+                    <td>${originalIndex + 1}</td>
+                    <td style="color: #0066FF; font-size: 1.1em;">${timeStr}</td>
+                    <td>
+                        <button class="btn-solve-action ${solve.plusTwo ? 'active' : ''}" onclick="togglePlusTwo(${originalIndex})">+2</button>
+                        <button class="btn-solve-action ${solve.dnf ? 'active' : ''}" onclick="toggleDnf(${originalIndex})">DNF</button>
+                        <button class="btn-solve-action delete" onclick="deleteSolve(${originalIndex})">✕</button>
+                    </td>
+                `;
+                solvesTbody.appendChild(tr);
+            });
+        }
+
+        window.togglePlusTwo = function(idx) {
+            solves[idx].plusTwo = !solves[idx].plusTwo;
+            if (solves[idx].plusTwo) solves[idx].dnf = false;
+            saveSolves();
+        };
+
+        window.toggleDnf = function(idx) {
+            solves[idx].dnf = !solves[idx].dnf;
+            if (solves[idx].dnf) solves[idx].plusTwo = false;
+            saveSolves();
+        };
+
+        window.deleteSolve = function(idx) {
+            if (confirm("Delete solve #" + (idx + 1) + "?")) {
+                solves.splice(idx, 1);
+                saveSolves();
+            }
+        };
+
+        // --- STATS CALCULATIONS ---
+        function calculateStats() {
+            if (solves.length === 0) {
+                statBest.textContent = "-";
+                statMean.textContent = "-";
+                statAo5.textContent = "-";
+                statAo12.textContent = "-";
+                return;
+            }
+
+            const validSolves = solves.filter(s => !s.dnf);
+            if (validSolves.length > 0) {
+                const finalTimes = validSolves.map(s => s.time + (s.plusTwo ? 2 : 0));
+                statBest.textContent = Math.min(...finalTimes).toFixed(2) + "s";
+            } else {
+                statBest.textContent = "DNF";
+            }
+
+            const totalValidCount = validSolves.length;
+            if (totalValidCount > 0) {
+                const sum = validSolves.reduce((acc, s) => acc + s.time + (s.plusTwo ? 2 : 0), 0);
+                statMean.textContent = (sum / totalValidCount).toFixed(2) + "s";
+            } else {
+                statMean.textContent = "DNF";
+            }
+
+            statAo5.textContent = calculateAoX(5);
+            statAo12.textContent = calculateAoX(12);
+        }
+
+        function calculateAoX(x) {
+            if (solves.length < x) return "-";
+            const lastX = solves.slice(-x);
+            let dnfCount = 0;
+            const finalTimes = lastX.map(s => {
+                if (s.dnf) {
+                    dnfCount++;
+                    return Infinity;
+                }
+                return s.time + (s.plusTwo ? 2 : 0);
+            });
+
+            if (dnfCount > 1) return "DNF";
+
+            finalTimes.sort((a, b) => a - b);
+            const trimmed = finalTimes.slice(1, x - 1);
+            if (trimmed.includes(Infinity)) return "DNF";
+
+            const sum = trimmed.reduce((acc, val) => acc + val, 0);
+            return (sum / (x - 2)).toFixed(2) + "s";
+        }
+
+        // --- EMOJI CONFETTI CELEBRATION ---
+        function triggerEmojiConfetti() {
+            const emojis = ['🎉', '🥳', '🏆', '🧊', '✨', '⭐', '🎈'];
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.position = 'fixed';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                particle.style.fontSize = Math.random() * 20 + 20 + 'px';
+                particle.style.zIndex = '99999';
+                particle.style.pointerEvents = 'none';
+                particle.style.transition = 'all ' + (Math.random() * 2 + 1) + 's ease-out';
+                
+                document.body.appendChild(particle);
+                
+                particle.offsetHeight;
+                
+                particle.style.transform = `translate(${Math.random() * 300 - 150}px, -110vh) rotate(${Math.random() * 360}deg)`;
+                particle.style.opacity = '0';
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 3000);
+            }
+        }
+
+        // --- TIMER MAIN STATES ---
+        function updateTimerDisplay() {
+            const elapsed = (Date.now() - startTime) / 1000;
+            timerDisplay.textContent = elapsed.toFixed(2);
+        }
+
+        function startTimer() {
+            timerState = 'RUNNING';
+            startTime = Date.now();
+            timerDisplay.className = 'timer-display';
+            timerInterval = setInterval(updateTimerDisplay, 10);
+            
+            document.querySelector('.preview-section').style.opacity = '0.1';
+            document.querySelector('.scramble-box').style.opacity = '0.1';
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerState = 'IDLE';
+            const elapsed = (Date.now() - startTime) / 1000;
+            timerDisplay.textContent = elapsed.toFixed(2);
+
+            document.querySelector('.preview-section').style.opacity = '1';
+            document.querySelector('.scramble-box').style.opacity = '1';
+
+            const newSolve = {
+                time: elapsed,
+                scramble: currentScramble,
+                dnf: false,
+                plusTwo: false
+            };
+
+            const validPrevSolves = solves.filter(s => !s.dnf);
+            let isNewPB = false;
+            if (validPrevSolves.length > 0) {
+                const prevBest = Math.min(...validPrevSolves.map(s => s.time + (s.plusTwo ? 2 : 0)));
+                if (elapsed < prevBest) isNewPB = true;
+            } else {
+                isNewPB = true;
+            }
+
+            solves.push(newSolve);
+            saveSolves();
+            triggerNewScramble();
+
+            if (isNewPB && solves.length > 1) {
+                buddyBubble.innerHTML = `🎉 OMG! That's a new Personal Best! **${elapsed.toFixed(2)}s**! Incredible! 🏆`;
+                triggerEmojiConfetti();
+            } else if (elapsed < 9.00) {
+                buddyBubble.innerHTML = `🔥 Sub-9! You beat Cole's 9.00s record with **${elapsed.toFixed(2)}s**! Absolute master class! 🏆`;
+                triggerEmojiConfetti();
+            } else {
+                const randomQuote = buddyQuotes[Math.floor(Math.random() * buddyQuotes.length)];
+                buddyBubble.textContent = `Time: ${elapsed.toFixed(2)}s. ` + randomQuote;
+            }
+        }
+
+        // --- KEYBOARD TIMING EVENTS ---
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            
+            if (e.key === ' ') {
+                e.preventDefault();
+                if (timerState === 'RUNNING') {
+                    stopTimer();
+                } else if (timerState === 'IDLE') {
+                    timerState = 'READYING';
+                    timerDisplay.className = 'timer-display hold';
+                    timerDisplay.textContent = '0.00';
+                    
+                    spaceTimer = setTimeout(() => {
+                        timerState = 'READY';
+                        timerDisplay.className = 'timer-display ready';
+                    }, 400);
+                }
+            } else {
+                if (timerState === 'RUNNING') {
+                    stopTimer();
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === ' ') {
+                e.preventDefault();
+                clearTimeout(spaceTimer);
+                
+                if (timerState === 'READY') {
+                    startTimer();
+                } else if (timerState === 'READYING') {
+                    timerState = 'IDLE';
+                    timerDisplay.className = 'timer-display';
+                    timerDisplay.textContent = '0.00';
+                }
+            }
+        });
+
+        // --- MOBILE/TOUCH CONTROLS ON TAP ZONE ---
+        let touchTimer = null;
+
+        tapZone.addEventListener('touchstart', (e) => {
+            if (e.target.tagName === 'BUTTON') return;
+            
+            if (timerState === 'RUNNING') {
+                e.preventDefault();
+                stopTimer();
+            } else if (timerState === 'IDLE') {
+                e.preventDefault();
+                timerState = 'READYING';
+                timerDisplay.className = 'timer-display hold';
+                
+                touchTimer = setTimeout(() => {
+                    timerState = 'READY';
+                    timerDisplay.className = 'timer-display ready';
+                }, 400);
+            }
+        });
+
+        tapZone.addEventListener('touchend', (e) => {
+            clearTimeout(touchTimer);
+            if (timerState === 'READY') {
+                e.preventDefault();
+                startTimer();
+            } else if (timerState === 'READYING') {
+                e.preventDefault();
+                timerState = 'IDLE';
+                timerDisplay.className = 'timer-display';
+                timerDisplay.textContent = '0.00';
+            }
+        });
+
+        tapZone.addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'BUTTON') return;
+            if (timerState === 'RUNNING') {
+                stopTimer();
+            }
+        });
+
+        // --- BUTTON INTERACTION TRIGGERS ---
+        newScrambleBtn.addEventListener('click', triggerNewScramble);
+
+        copyScrambleBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(currentScramble).then(() => {
+                const prevText = copyScrambleBtn.textContent;
+                copyScrambleBtn.textContent = "Copied! ✔️";
+                copyScrambleBtn.style.backgroundColor = "#2ecc71";
+                setTimeout(() => {
+                    copyScrambleBtn.textContent = prevText;
+                    copyScrambleBtn.style.backgroundColor = "var(--cyan-blob)";
+                }, 1500);
+            });
+        });
+
+        scrambleTypeSelect.addEventListener('change', () => {
+            triggerNewScramble();
+            loadSolves();
+        });
+
+        clearSessionBtn.addEventListener('click', () => {
+            if (confirm("Are you sure you want to clear your entire " + scrambleTypeSelect.value + " solve history? This cannot be undone!")) {
+                solves = [];
+                saveSolves();
+            }
+        });
+
+        // --- INITIALIZATION ---
+        triggerNewScramble();
+        loadSolves();
+
+    </script>
+</body>
+</html>
