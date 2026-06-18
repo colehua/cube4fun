@@ -791,8 +791,11 @@
                     
                     if (layout.state) {
                         const faceGrid = document.createElement('div');
-                        faceGrid.className = 'face-grid-3x3';
-                        layout.state.forEach(color => {
+                        faceGrid.className = layout.name === 'B' ? 'face-grid-3x3 flip-horizontal' : 'face-grid-3x3';
+                        const order = (layout.name === 'B') ? [2,1,0,5,4,3,8,7,6] : null;
+                        const stickers = layout.state;
+                        const iter = layout.name === 'B' ? order.map(i => stickers[i]) : stickers;
+                        iter.forEach(color => {
                             const sticker = document.createElement('div');
                             sticker.className = 'sticker';
                             sticker.style.backgroundColor = colorMap[color];
@@ -833,8 +836,11 @@
                     
                     if (layout.state) {
                         const faceGrid = document.createElement('div');
-                        faceGrid.className = 'face-grid-2x2';
-                        layout.state.forEach(color => {
+                        faceGrid.className = layout.name === 'B' ? 'face-grid-2x2 flip-horizontal' : 'face-grid-2x2';
+                        const order = (layout.name === 'B') ? [1,0,3,2] : null;
+                        const stickers = layout.state;
+                        const iter = layout.name === 'B' ? order.map(i => stickers[i]) : stickers;
+                        iter.forEach(color => {
                             const sticker = document.createElement('div');
                             sticker.className = 'sticker';
                             sticker.style.backgroundColor = colorMap[color];
