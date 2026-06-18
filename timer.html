@@ -654,7 +654,7 @@
             } else if (face === 'B') {
                 rotateFaceCW(cube3.B);
                 let temp = [cube3.U[0], cube3.U[1], cube3.U[2]];
-                cube3.U[0] = cube3.R[8]; cube3.U[1] = cube3.R[5]; cube3.U[2] = cube3.R[2];
+                cube3.U[0] = cube3.R[2]; cube3.U[1] = cube3.R[5]; cube3.U[2] = cube3.R[8];
                 cube3.R[2] = cube3.D[8]; cube3.R[5] = cube3.D[7]; cube3.R[8] = cube3.D[6];
                 cube3.D[6] = cube3.L[0]; cube3.D[7] = cube3.L[3]; cube3.D[8] = cube3.L[6];
                 cube3.L[0] = temp[2]; cube3.L[3] = temp[1]; cube3.L[6] = temp[0];
@@ -700,7 +700,7 @@
             } else if (face === 'B') {
                 rotateFaceCW2(cube2.B);
                 let temp = [cube2.U[0], cube2.U[1]];
-                cube2.U[0] = cube2.R[3]; cube2.U[1] = cube2.R[1];
+                cube2.U[0] = cube2.R[1]; cube2.U[1] = cube2.R[3];
                 cube2.R[1] = cube2.D[3]; cube2.R[3] = cube2.D[2];
                 cube2.D[2] = cube2.L[0]; cube2.D[3] = cube2.L[2];
                 cube2.L[0] = temp[1]; cube2.L[2] = temp[0];
