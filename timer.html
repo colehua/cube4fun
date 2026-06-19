@@ -450,7 +450,9 @@
                 <option value="3x3">3x3x3 Rubik's Cube</option>
                 <option value="2x2">2x2x2 Rubik's Cube</option>
             </select>
+            <button id="btn-prev-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Previous Scramble">◀ Prev</button>
             <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
+            <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
             <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
         </div>
 
@@ -550,12 +552,16 @@
         let currentScramble = "";
         let spaceTimer = null;
         let solves = []; // List of { time: num, scramble: str, dnf: bool, plusTwo: bool }
+        let scrambleHistories = { '3x3': [], '2x2': [] };
+        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1 };
 
         const timerDisplay = document.getElementById('timer-val');
         const tapZone = document.getElementById('timer-tap-zone');
         const scrambleTypeSelect = document.getElementById('scramble-type-select');
         const scrambleDisplay = document.getElementById('scramble-display-text');
+        const prevScrambleBtn = document.getElementById('btn-prev-scramble');
         const newScrambleBtn = document.getElementById('btn-new-scramble');
+        const nextScrambleBtn = document.getElementById('btn-next-scramble');
         const copyScrambleBtn = document.getElementById('btn-copy-scramble');
         const solvesTbody = document.getElementById('solves-tbody');
         const clearSessionBtn = document.getElementById('btn-clear-session');
@@ -791,11 +797,9 @@
                     
                     if (layout.state) {
                         const faceGrid = document.createElement('div');
-                        faceGrid.className = layout.name === 'B' ? 'face-grid-3x3 flip-horizontal' : 'face-grid-3x3';
-                        const order = (layout.name === 'B') ? [2,1,0,5,4,3,8,7,6] : null;
+                        faceGrid.className = 'face-grid-3x3';
                         const stickers = layout.state;
-                        const iter = layout.name === 'B' ? order.map(i => stickers[i]) : stickers;
-                        iter.forEach(color => {
+                        stickers.forEach(color => {
                             const sticker = document.createElement('div');
                             sticker.className = 'sticker';
                             sticker.style.backgroundColor = colorMap[color];
@@ -836,11 +840,9 @@
                     
                     if (layout.state) {
                         const faceGrid = document.createElement('div');
-                        faceGrid.className = layout.name === 'B' ? 'face-grid-2x2 flip-horizontal' : 'face-grid-2x2';
-                        const order = (layout.name === 'B') ? [1,0,3,2] : null;
+                        faceGrid.className = 'face-grid-2x2';
                         const stickers = layout.state;
-                        const iter = layout.name === 'B' ? order.map(i => stickers[i]) : stickers;
-                        iter.forEach(color => {
+                        stickers.forEach(color => {
                             const sticker = document.createElement('div');
                             sticker.className = 'sticker';
                             sticker.style.backgroundColor = colorMap[color];
@@ -878,11 +880,59 @@
             return moves.join(' ');
         }
 
+        function updateNavigationButtons() {
+            const type = scrambleTypeSelect.value;
+            const history = scrambleHistories[type] || [];
+            const index = scrambleHistoryIndices[type];
+
+            if (prevScrambleBtn && nextScrambleBtn) {
+                const canPrev = index > 0;
+                prevScrambleBtn.disabled = !canPrev;
+                prevScrambleBtn.style.opacity = canPrev ? '1' : '0.5';
+                prevScrambleBtn.style.cursor = canPrev ? 'pointer' : 'not-allowed';
+
+                const canNext = index < history.length - 1;
+                nextScrambleBtn.disabled = !canNext;
+                nextScrambleBtn.style.opacity = canNext ? '1' : '0.5';
+                nextScrambleBtn.style.cursor = canNext ? 'pointer' : 'not-allowed';
+            }
+        }
+
+        function showScrambleFromHistory(type, index) {
+            const history = scrambleHistories[type];
+            if (index >= 0 && index < history.length) {
+                scrambleHistoryIndices[type] = index;
+                currentScramble = history[index];
+                scrambleDisplay.textContent = currentScramble;
+                drawCubeNet();
+                updateNavigationButtons();
+            }
+        }
+
         function triggerNewScramble() {
             const type = scrambleTypeSelect.value;
-            currentScramble = generateScramble(type);
+            const history = scrambleHistories[type];
+            const index = scrambleHistoryIndices[type];
+
+            const newScramble = generateScramble(type);
+
+            // If browsing history, truncate forward history before adding new scramble
+            if (index < history.length - 1) {
+                scrambleHistories[type] = history.slice(0, index + 1);
+            }
+
+            scrambleHistories[type].push(newScramble);
+            
+            // Keep up to 20 last scrambles (exceeds the 10 requested to be safe)
+            if (scrambleHistories[type].length > 20) {
+                scrambleHistories[type].shift();
+            }
+
+            scrambleHistoryIndices[type] = scrambleHistories[type].length - 1;
+            currentScramble = newScramble;
             scrambleDisplay.textContent = currentScramble;
             drawCubeNet();
+            updateNavigationButtons();
         }
 
         // --- LOCAL STORAGE & SOLVES HISTORY ---
@@ -1168,7 +1218,24 @@
         });
 
         // --- BUTTON INTERACTION TRIGGERS ---
+        prevScrambleBtn.addEventListener('click', () => {
+            const type = scrambleTypeSelect.value;
+            const index = scrambleHistoryIndices[type];
+            if (index > 0) {
+                showScrambleFromHistory(type, index - 1);
+            }
+        });
+
         newScrambleBtn.addEventListener('click', triggerNewScramble);
+
+        nextScrambleBtn.addEventListener('click', () => {
+            const type = scrambleTypeSelect.value;
+            const history = scrambleHistories[type];
+            const index = scrambleHistoryIndices[type];
+            if (index < history.length - 1) {
+                showScrambleFromHistory(type, index + 1);
+            }
+        });
 
         copyScrambleBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(currentScramble).then(() => {
@@ -1183,7 +1250,13 @@
         });
 
         scrambleTypeSelect.addEventListener('change', () => {
-            triggerNewScramble();
+            const type = scrambleTypeSelect.value;
+            if (scrambleHistories[type].length === 0) {
+                triggerNewScramble();
+            } else {
+                const index = scrambleHistoryIndices[type];
+                showScrambleFromHistory(type, index);
+            }
             loadSolves();
         });
 
