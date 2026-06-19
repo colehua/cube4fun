@@ -449,6 +449,8 @@
             <select id="scramble-type-select" class="select-style">
                 <option value="3x3">3x3x3 Rubik's Cube</option>
                 <option value="2x2">2x2x2 Rubik's Cube</option>
+                <option value="3x3-oh">3x3x3 One-Handed</option>
+                <option value="3x3-fmc">3x3x3 Fewest Moves (FMC)</option>
             </select>
             <button id="btn-prev-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Previous Scramble">◀ Prev</button>
             <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
@@ -459,6 +461,7 @@
         <!-- SCRAMBLE DISPLAY -->
         <div class="scramble-box" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
             <p id="scramble-display-text" class="scramble-text" style="margin-bottom: 0;">Loading scramble...</p>
+            <p id="scramble-inverse-text" style="font-size: 1.25em; color: #d63031; font-weight: bold; margin: 0; text-align: center; display: none;"></p>
             <p id="scramble-beginner-text" style="font-size: 1.15em; color: #555; font-weight: bold; margin: 0; text-align: center; font-style: italic;"></p>
             <div style="display: flex; gap: 15px; align-items: center; margin-top: 5px;">
                 <label style="font-weight: bold; font-size: 1em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
@@ -485,6 +488,42 @@
                 Hold Spacebar (Turns Green) and Release to Start! Press any key to stop.<br>
                 <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box to ready, release to start, tap anywhere to stop!)</span>
             </p>
+        </div>
+
+        <!-- FMC MODE CONTAINER -->
+        <div id="fmc-container" class="timer-card" style="display: none; border-color: #0066FF;">
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; text-align: left;">
+                <!-- Left: FMC timer and Submission -->
+                <div>
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #0033CC; font-size: 1.8em; margin-top: 0; margin-bottom: 10px;">FMC Solve Panel</h3>
+                    <div style="font-size: 2.5em; font-weight: bold; font-family: monospace; margin-bottom: 10px; text-align: center;" id="fmc-timer-val">60:00</div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                        <button id="btn-fmc-start" class="btn-action" style="background-color: #2ecc71; color: white;">Start ⏱️</button>
+                        <button id="btn-fmc-pause" class="btn-action" style="background-color: #ff7675; color: white; display: none;">Pause ⏸️</button>
+                        <button id="btn-fmc-reset" class="btn-action" style="background-color: #74b9ff; color: white;">Reset 🔄</button>
+                    </div>
+
+                    <label style="font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 5px;">Enter your solution:</label>
+                    <input type="text" id="input-fmc-solution" placeholder="e.g. R U R' U'" style="width: 100%; font-size: 1.2em; padding: 10px; border-radius: 10px; border: 3px solid #333; font-family: monospace; box-sizing: border-box; margin-bottom: 10px;">
+                    <div style="font-size: 1.15em; font-weight: bold; margin-bottom: 15px;" id="fmc-moves-count">Moves: 0 (OBTM)</div>
+
+                    <button id="btn-fmc-submit" class="btn-action" style="background-color: var(--cyan-blob); width: 100%;">Submit FMC Solve 🏆</button>
+                </div>
+
+                <!-- Right: Educational Tips -->
+                <div style="background: #e8f4fd; border: 3px solid #333; border-radius: 15px; padding: 15px; overflow-y: auto; max-height: 350px; color: #1a1a1a;">
+                    <h4 style="font-family: 'DynaPuff', cursive; color: #0066FF; margin-top: 0; margin-bottom: 10px; font-size: 1.3em;">💡 FMC Beginner Guide</h4>
+                    <p style="margin: 0 0 10px 0; font-size: 0.95em; line-height: 1.4;">
+                        FMC (Fewest Moves Challenge) is about finding the shortest solution in 1 hour.
+                    </p>
+                    <ul style="padding-left: 20px; margin: 0; font-size: 0.95em; line-height: 1.4; display: flex; flex-direction: column; gap: 8px;">
+                        <li><strong>EO (Edge Orientation)</strong>: Orienting edges makes the rest of the solve much easier. Count bad edges on the Front/Back faces.</li>
+                        <li><strong>Blockbuilding</strong>: Don't do cross + F2L! Try to build a 2x2x1 corner-edge block, then expand it to a 2x2x2 block.</li>
+                        <li><strong>NISS (Normal-Inverse Switch)</strong>: If you get stuck, apply your moves to the cube, then swap to the <em>Inverse Scramble</em> to solve the remaining pieces!</li>
+                        <li><strong>Learn Skeletons & insertions</strong>: Solve the corners/edges, leaving 3 corners unsolved, and insert a 3-cycle commutator to finish.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- GRID FOR SOLVES AND STATS -->
@@ -561,13 +600,14 @@
         let currentScramble = "";
         let spaceTimer = null;
         let solves = []; // List of { time: num, scramble: str, dnf: bool, plusTwo: bool }
-        let scrambleHistories = { '3x3': [], '2x2': [] };
-        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1 };
+        let scrambleHistories = { '3x3': [], '2x2': [], '3x3-oh': [], '3x3-fmc': [] };
+        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1, '3x3-oh': -1, '3x3-fmc': -1 };
 
         const timerDisplay = document.getElementById('timer-val');
         const tapZone = document.getElementById('timer-tap-zone');
         const scrambleTypeSelect = document.getElementById('scramble-type-select');
         const scrambleDisplay = document.getElementById('scramble-display-text');
+        const scrambleInverseText = document.getElementById('scramble-inverse-text');
         const prevScrambleBtn = document.getElementById('btn-prev-scramble');
         const newScrambleBtn = document.getElementById('btn-new-scramble');
         const nextScrambleBtn = document.getElementById('btn-next-scramble');
@@ -576,6 +616,16 @@
         const scrambleBeginnerText = document.getElementById('scramble-beginner-text');
         const solvesTbody = document.getElementById('solves-tbody');
         const clearSessionBtn = document.getElementById('btn-clear-session');
+
+        // FMC Mode elements
+        const fmcContainer = document.getElementById('fmc-container');
+        const fmcTimerVal = document.getElementById('fmc-timer-val');
+        const btnFmcStart = document.getElementById('btn-fmc-start');
+        const btnFmcPause = document.getElementById('btn-fmc-pause');
+        const btnFmcReset = document.getElementById('btn-fmc-reset');
+        const inputFmcSolution = document.getElementById('input-fmc-solution');
+        const fmcMovesCount = document.getElementById('fmc-moves-count');
+        const btnFmcSubmit = document.getElementById('btn-fmc-submit');
         
         // Stats elements
         const statBest = document.getElementById('stat-best');
@@ -778,7 +828,7 @@
             const container = document.getElementById('cube-net-container');
             container.innerHTML = "";
 
-            if (type === '3x3') {
+            if (type.startsWith('3x3')) {
                 applyMoves3x3(currentScramble);
                 
                 const net = document.createElement('div');
@@ -881,7 +931,7 @@
                 if (face === prevFace) continue;
                 
                 const opposites = { 'U': 'D', 'D': 'U', 'R': 'L', 'L': 'R', 'F': 'B', 'B': 'F' };
-                if (type === '3x3' && face === prevPrevFace && opposites[face] === prevFace) continue;
+                if (type.startsWith('3x3') && face === prevPrevFace && opposites[face] === prevFace) continue;
                 
                 let mod = modifiers[Math.floor(Math.random() * modifiers.length)];
                 moves.push(face + mod);
@@ -930,6 +980,61 @@
             }
         }
 
+        function invertScramble(scrambleStr) {
+            if (!scrambleStr) return "";
+            const moves = scrambleStr.trim().split(/\s+/);
+            const inverted = [];
+            for (let i = moves.length - 1; i >= 0; i--) {
+                let m = moves[i];
+                if (!m) continue;
+                let base = m[0];
+                let modifier = m.slice(1);
+                if (modifier === "") {
+                    inverted.push(base + "'");
+                } else if (modifier === "'") {
+                    inverted.push(base);
+                } else {
+                    inverted.push(base + "2");
+                }
+            }
+            return inverted.join(' ');
+        }
+
+        function updateStatsLabels() {
+            const type = scrambleTypeSelect.value;
+            const ao5Label = document.querySelector('.stats-list li:nth-child(2) span:first-child');
+            const ao12Label = document.querySelector('.stats-list li:nth-child(3) span:first-child');
+            const bestLabel = document.querySelector('.stats-list li:nth-child(1) span:first-child');
+            const historyHeader = document.querySelector('.solves-table th:nth-child(2)');
+
+            if (type === '3x3-fmc') {
+                if (bestLabel) bestLabel.textContent = "Best (Moves):";
+                if (ao5Label) ao5Label.textContent = "Mean of 3 (Mo3):";
+                if (ao12Label) ao12Label.textContent = "Ao12 (N/A):";
+                if (historyHeader) historyHeader.textContent = "Moves";
+            } else {
+                if (bestLabel) bestLabel.textContent = "Best Solve:";
+                if (ao5Label) ao5Label.textContent = "Average of 5 (Ao5):";
+                if (ao12Label) ao12Label.textContent = "Average of 12 (Ao12):";
+                if (historyHeader) historyHeader.textContent = "Time";
+            }
+        }
+
+        function toggleTimerMode() {
+            const type = scrambleTypeSelect.value;
+            if (type === '3x3-fmc') {
+                document.getElementById('timer-tap-zone').style.display = 'none';
+                fmcContainer.style.display = 'block';
+                scrambleInverseText.style.display = 'block';
+                scrambleInverseText.textContent = "Inverse: " + invertScramble(currentScramble);
+            } else {
+                document.getElementById('timer-tap-zone').style.display = 'block';
+                fmcContainer.style.display = 'none';
+                scrambleInverseText.style.display = 'none';
+            }
+            updateStatsLabels();
+        }
+
         function updateNavigationButtons() {
             const type = scrambleTypeSelect.value;
             const history = scrambleHistories[type] || [];
@@ -957,6 +1062,7 @@
                 drawCubeNet();
                 updateNavigationButtons();
                 updateBeginnerScrambleText();
+                toggleTimerMode();
             }
         }
 
@@ -985,6 +1091,7 @@
             drawCubeNet();
             updateNavigationButtons();
             updateBeginnerScrambleText();
+            toggleTimerMode();
         }
 
         // --- LOCAL STORAGE & SOLVES HISTORY ---
@@ -1003,6 +1110,7 @@
 
         function renderSolves() {
             solvesTbody.innerHTML = "";
+            const type = scrambleTypeSelect.value;
             
             if (solves.length === 0) {
                 const tr = document.createElement('tr');
@@ -1016,15 +1124,20 @@
                 const originalIndex = solves.length - 1 - revIdx;
                 const tr = document.createElement('tr');
                 
-                let timeStr = solve.time.toFixed(2);
-                if (solve.plusTwo) timeStr += "+2";
-                if (solve.dnf) timeStr = "DNF";
+                let timeStr = "";
+                if (type === '3x3-fmc') {
+                    timeStr = solve.dnf ? "DNF" : solve.time + " moves";
+                } else {
+                    timeStr = solve.dnf ? "DNF" : solve.time.toFixed(2) + (solve.plusTwo ? "+2" : "s");
+                }
+
+                const titleAttr = solve.solution ? `title="Solution: ${solve.solution}"` : '';
 
                 tr.innerHTML = `
                     <td>${originalIndex + 1}</td>
-                    <td style="color: #0066FF; font-size: 1.1em;">${timeStr}</td>
+                    <td style="color: #0066FF; font-size: 1.1em; cursor: help;" ${titleAttr}>${timeStr}</td>
                     <td>
-                        <button class="btn-solve-action ${solve.plusTwo ? 'active' : ''}" onclick="togglePlusTwo(${originalIndex})">+2</button>
+                        ${type !== '3x3-fmc' ? `<button class="btn-solve-action ${solve.plusTwo ? 'active' : ''}" onclick="togglePlusTwo(${originalIndex})">+2</button>` : ''}
                         <button class="btn-solve-action ${solve.dnf ? 'active' : ''}" onclick="toggleDnf(${originalIndex})">DNF</button>
                         <button class="btn-solve-action delete" onclick="deleteSolve(${originalIndex})">✕</button>
                     </td>
@@ -1054,6 +1167,10 @@
 
         // --- STATS CALCULATIONS ---
         function calculateStats() {
+            const type = scrambleTypeSelect.value;
+            const suffix = type === '3x3-fmc' ? ' moves' : 's';
+            const decimals = type === '3x3-fmc' ? 0 : 2;
+
             if (solves.length === 0) {
                 statBest.textContent = "-";
                 statMean.textContent = "-";
@@ -1065,7 +1182,7 @@
             const validSolves = solves.filter(s => !s.dnf);
             if (validSolves.length > 0) {
                 const finalTimes = validSolves.map(s => s.time + (s.plusTwo ? 2 : 0));
-                statBest.textContent = Math.min(...finalTimes).toFixed(2) + "s";
+                statBest.textContent = Math.min(...finalTimes).toFixed(decimals) + suffix;
             } else {
                 statBest.textContent = "DNF";
             }
@@ -1073,13 +1190,29 @@
             const totalValidCount = validSolves.length;
             if (totalValidCount > 0) {
                 const sum = validSolves.reduce((acc, s) => acc + s.time + (s.plusTwo ? 2 : 0), 0);
-                statMean.textContent = (sum / totalValidCount).toFixed(2) + "s";
+                statMean.textContent = (sum / totalValidCount).toFixed(2) + suffix;
             } else {
                 statMean.textContent = "DNF";
             }
 
-            statAo5.textContent = calculateAoX(5);
-            statAo12.textContent = calculateAoX(12);
+            if (type === '3x3-fmc') {
+                if (solves.length < 3) {
+                    statAo5.textContent = "-";
+                } else {
+                    const last3 = solves.slice(-3);
+                    let dnf = last3.some(s => s.dnf);
+                    if (dnf) {
+                        statAo5.textContent = "DNF";
+                    } else {
+                        const sum = last3.reduce((acc, s) => acc + s.time, 0);
+                        statAo5.textContent = (sum / 3).toFixed(2) + " moves";
+                    }
+                }
+                statAo12.textContent = "-";
+            } else {
+                statAo5.textContent = calculateAoX(5);
+                statAo12.textContent = calculateAoX(12);
+            }
         }
 
         function calculateAoX(x) {
@@ -1303,8 +1436,104 @@
 
         chkBeginnerMode.addEventListener('change', updateBeginnerScrambleText);
 
+        let fmcTimerInterval = null;
+        let fmcTimeLeft = 3600; // 60 minutes in seconds
+
+        function updateFmcTimerDisplay() {
+            const minutes = Math.floor(fmcTimeLeft / 60);
+            const seconds = fmcTimeLeft % 60;
+            fmcTimerVal.textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        btnFmcStart.addEventListener('click', () => {
+            if (fmcTimerInterval) return;
+            btnFmcStart.style.display = 'none';
+            btnFmcPause.style.display = 'inline-block';
+            fmcTimerInterval = setInterval(() => {
+                if (fmcTimeLeft > 0) {
+                    fmcTimeLeft--;
+                    updateFmcTimerDisplay();
+                } else {
+                    clearInterval(fmcTimerInterval);
+                    fmcTimerInterval = null;
+                    alert("FMC Time is UP! ⏱️ Write down your final solution.");
+                    btnFmcPause.style.display = 'none';
+                    btnFmcStart.style.display = 'inline-block';
+                }
+            }, 1000);
+        });
+
+        btnFmcPause.addEventListener('click', () => {
+            if (!fmcTimerInterval) return;
+            clearInterval(fmcTimerInterval);
+            fmcTimerInterval = null;
+            btnFmcPause.style.display = 'none';
+            btnFmcStart.style.display = 'inline-block';
+        });
+
+        btnFmcReset.addEventListener('click', () => {
+            clearInterval(fmcTimerInterval);
+            fmcTimerInterval = null;
+            fmcTimeLeft = 3600;
+            updateFmcTimerDisplay();
+            btnFmcPause.style.display = 'none';
+            btnFmcStart.style.display = 'inline-block';
+        });
+
+        inputFmcSolution.addEventListener('input', () => {
+            const val = inputFmcSolution.value.trim();
+            if (val === "") {
+                fmcMovesCount.textContent = "Moves: 0";
+                return;
+            }
+            const moves = val.split(/\s+/);
+            const validMoves = moves.filter(m => /^[UDFBLRudfblr][2']?$/.test(m));
+            fmcMovesCount.textContent = `Moves: ${validMoves.length} (${moves.length !== validMoves.length ? 'invalid format moves ignored' : 'valid WCA format'})`;
+        });
+
+        btnFmcSubmit.addEventListener('click', () => {
+            const solution = inputFmcSolution.value.trim();
+            if (solution === "") {
+                alert("Please type your solution first!");
+                return;
+            }
+            const moves = solution.split(/\s+/);
+            const validMoves = moves.filter(m => /^[UDFBLRudfblr][2']?$/.test(m));
+            if (validMoves.length === 0) {
+                alert("No valid WCA moves found in your solution. Please check the notation guide!");
+                return;
+            }
+            
+            const count = validMoves.length;
+            if (confirm(`Submit solution with ${count} moves?`)) {
+                const newSolve = {
+                    time: count,
+                    scramble: currentScramble,
+                    solution: solution,
+                    dnf: false,
+                    plusTwo: false
+                };
+                
+                solves.push(newSolve);
+                saveSolves();
+                
+                inputFmcSolution.value = "";
+                fmcMovesCount.textContent = "Moves: 0";
+                
+                triggerNewScramble();
+            }
+        });
+
         scrambleTypeSelect.addEventListener('change', () => {
             const type = scrambleTypeSelect.value;
+            // Stop FMC timer if active
+            if (type !== '3x3-fmc' && fmcTimerInterval) {
+                clearInterval(fmcTimerInterval);
+                fmcTimerInterval = null;
+                btnFmcPause.style.display = 'none';
+                btnFmcStart.style.display = 'inline-block';
+            }
             if (scrambleHistories[type].length === 0) {
                 triggerNewScramble();
             } else {
@@ -1324,6 +1553,7 @@
         // --- INITIALIZATION ---
         triggerNewScramble();
         loadSolves();
+        toggleTimerMode();
 
     </script>
 </body>
