@@ -457,8 +457,17 @@
         </div>
 
         <!-- SCRAMBLE DISPLAY -->
-        <div class="scramble-box">
-            <p id="scramble-display-text" class="scramble-text">Loading scramble...</p>
+        <div class="scramble-box" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <p id="scramble-display-text" class="scramble-text" style="margin-bottom: 0;">Loading scramble...</p>
+            <p id="scramble-beginner-text" style="font-size: 1.15em; color: #555; font-weight: bold; margin: 0; text-align: center; font-style: italic;"></p>
+            <div style="display: flex; gap: 15px; align-items: center; margin-top: 5px;">
+                <label style="font-weight: bold; font-size: 1em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <input type="checkbox" id="chk-beginner-mode" style="transform: scale(1.2); cursor: pointer;" checked>
+                    Translate Scramble 🗣️
+                </label>
+                <span style="color: #ccc;">|</span>
+                <a href="notation.html" target="_blank" style="font-size: 1em; color: #0066FF; font-weight: bold; text-decoration: underline;">Notation Guide 📖</a>
+            </div>
         </div>
 
         <!-- 2D SCRAMBLED CUBE PREVIEW -->
@@ -563,6 +572,8 @@
         const newScrambleBtn = document.getElementById('btn-new-scramble');
         const nextScrambleBtn = document.getElementById('btn-next-scramble');
         const copyScrambleBtn = document.getElementById('btn-copy-scramble');
+        const chkBeginnerMode = document.getElementById('chk-beginner-mode');
+        const scrambleBeginnerText = document.getElementById('scramble-beginner-text');
         const solvesTbody = document.getElementById('solves-tbody');
         const clearSessionBtn = document.getElementById('btn-clear-session');
         
@@ -880,6 +891,45 @@
             return moves.join(' ');
         }
 
+        const moveNames = {
+            'U': 'Up',
+            'D': 'Down',
+            'F': 'Front',
+            'B': 'Back',
+            'L': 'Left',
+            'R': 'Right'
+        };
+
+        function translateScrambleToEnglish(scrambleStr) {
+            if (!scrambleStr) return "";
+            const moves = scrambleStr.split(' ');
+            const translations = moves.map(m => {
+                if (!m) return "";
+                let base = m[0];
+                let modifier = m.slice(1);
+                let name = moveNames[base] || base;
+                
+                if (modifier === '2') {
+                    return `${name} (Twice)`;
+                } else if (modifier === "'") {
+                    return `${name} (Counter-Clockwise)`;
+                } else {
+                    return `${name} (Clockwise)`;
+                }
+            });
+            return translations.filter(t => t !== "").join(', ');
+        }
+
+        function updateBeginnerScrambleText() {
+            if (chkBeginnerMode && chkBeginnerMode.checked) {
+                scrambleBeginnerText.textContent = "Easy Read: " + translateScrambleToEnglish(currentScramble);
+                scrambleBeginnerText.style.display = 'block';
+            } else {
+                scrambleBeginnerText.textContent = "";
+                scrambleBeginnerText.style.display = 'none';
+            }
+        }
+
         function updateNavigationButtons() {
             const type = scrambleTypeSelect.value;
             const history = scrambleHistories[type] || [];
@@ -906,6 +956,7 @@
                 scrambleDisplay.textContent = currentScramble;
                 drawCubeNet();
                 updateNavigationButtons();
+                updateBeginnerScrambleText();
             }
         }
 
@@ -933,6 +984,7 @@
             scrambleDisplay.textContent = currentScramble;
             drawCubeNet();
             updateNavigationButtons();
+            updateBeginnerScrambleText();
         }
 
         // --- LOCAL STORAGE & SOLVES HISTORY ---
@@ -1248,6 +1300,8 @@
                 }, 1500);
             });
         });
+
+        chkBeginnerMode.addEventListener('change', updateBeginnerScrambleText);
 
         scrambleTypeSelect.addEventListener('change', () => {
             const type = scrambleTypeSelect.value;

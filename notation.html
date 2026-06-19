@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn Rubik's Cube scramble notation (R, L, U, D, F, B). Interactive move guide for speedcubing beginners.">
+    <title>Rubik's Cube Notation Guide - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --text-dark: #1a1a1a;
+            --white-sticker: #ffffff;
+            --yellow-sticker: #ffee55;
+            --green-sticker: #2ecc71;
+            --blue-sticker: #3498db;
+            --orange-sticker: #e67e22;
+            --red-sticker: #e74c3c;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            background-color: #fafafa;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            border: 3px solid #333;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.5em;
+            color: #87CEEB;
+            text-align: center;
+            -webkit-text-stroke: 2px #555;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            margin-top: 10px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 4px dashed #0066FF;
+        }
+
+        .card-title {
+            font-family: 'DynaPuff', cursive;
+            color: #0033CC;
+            font-size: 2em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+        }
+
+        .text-block {
+            font-size: 1.25em;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* INTERACTIVE PLAYGROUND */
+        .playground-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .playground-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .btn-move {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            background-color: var(--yellow-blob);
+            cursor: pointer;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            text-align: center;
+        }
+
+        .btn-move:hover {
+            transform: translateY(-1px);
+            box-shadow: 1px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .btn-action-style {
+            background-color: #ff7675;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* 2D CUBE PREVIEW NET */
+        .cube-net-3x3 {
+            display: grid;
+            grid-template-columns: repeat(4, 54px);
+            grid-template-rows: repeat(3, 54px);
+            gap: 6px;
+            background: #2c3e50;
+            padding: 10px;
+            border-radius: 12px;
+            border: 3px solid #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        .face-grid-3x3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 1px;
+            background: #111;
+            padding: 1px;
+            border-radius: 4px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .sticker {
+            border-radius: 2px;
+        }
+
+        .status-box {
+            background: #fff;
+            border: 3px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 50px;
+            font-size: 1.15em;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* REFERENCE TABLE */
+        .notation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 1.15em;
+            border: 3px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .notation-table th {
+            background-color: #0066FF;
+            color: white;
+            font-family: 'DynaPuff', cursive;
+            padding: 12px;
+            text-align: left;
+            border: 2px solid #333;
+        }
+
+        .notation-table td {
+            padding: 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-bottom: 2px solid #333;
+            font-weight: bold;
+        }
+
+        .notation-table tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
+        .badge-move {
+            display: inline-block;
+            font-family: 'DynaPuff', cursive;
+            background-color: var(--yellow-blob);
+            border: 2px solid #333;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 1em;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+        }
+
+        .badge-prime {
+            background-color: #ff7675;
+            color: white;
+        }
+
+        .badge-double {
+            background-color: var(--cyan-blob);
+        }
+
+        .orientation-hint {
+            background-color: #e8f4fd;
+            border-left: 6px solid #0066FF;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 1.15em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">🔙 Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--yellow-blob);">⏱️ Playful Timer</a>
+            <a href="tutorial-3x3.html" class="nav-button">🧊 3x3 Tutorial</a>
+        </div>
+
+        <h1 class="main-title">Cube Notation Guide 📖</h1>
+
+        <!-- HOW TO HOLD -->
+        <div class="card">
+            <h2 class="card-title">1. How to hold your cube 👐</h2>
+            <div class="orientation-hint">
+                <strong>Default WCA Orientation:</strong><br>
+                Hold the cube so that the <strong>Green</strong> face is in front (facing you) and the <strong>White</strong> face is on top (facing the ceiling). Under this standard:
+                <ul>
+                    <li><strong>Yellow</strong> is on the bottom (facing the floor).</li>
+                    <li><strong>Red</strong> is on the right.</li>
+                    <li><strong>Orange</strong> is on the left.</li>
+                    <li><strong>Blue</strong> is on the back (facing away from you).</li>
+                </ul>
+            </div>
+            <p class="text-block">
+                All scramble instructions assume you keep the cube in this exact position without rotating the whole cube in your hands while turning the layers!
+            </p>
+        </div>
+
+        <!-- INTERACTIVE PLAYGROUND -->
+        <div class="card" style="border-color: var(--yellow-blob);">
+            <h2 class="card-title">2. Interactive Notation Playground 🕹️</h2>
+            <p class="text-block" style="font-size: 1.1em;">
+                Click any of the move buttons below to see how they turn the cube! The 2D Net updates instantly to show you where the stickers move.
+            </p>
+
+            <div class="status-box" id="playground-status">
+                Solved State! Click any button to start turning.
+            </div>
+
+            <div class="playground-grid">
+                
+                <!-- Controls -->
+                <div class="controls-panel">
+                    <div class="text-block" style="margin: 0; font-size: 1.1em; color: #555;">Clockwise Moves (Standard):</div>
+                    <div class="btn-group">
+                        <button class="btn-move" onclick="playMove('U')">U</button>
+                        <button class="btn-move" onclick="playMove('D')">D</button>
+                        <button class="btn-move" onclick="playMove('F')">F</button>
+                        <button class="btn-move" onclick="playMove('B')">B</button>
+                        <button class="btn-move" onclick="playMove('L')">L</button>
+                        <button class="btn-move" onclick="playMove('R')">R</button>
+                    </div>
+
+                    <div class="text-block" style="margin: 0; font-size: 1.1em; color: #555;">Counter-Clockwise Moves (Prime):</div>
+                    <div class="btn-group">
+                        <button class="btn-move btn-action-style" onclick="playMove('U\'')">U'</button>
+                        <button class="btn-move btn-action-style" onclick="playMove('D\'')">D'</button>
+                        <button class="btn-move btn-action-style" onclick="playMove('F\'')">F'</button>
+                        <button class="btn-move btn-action-style" onclick="playMove('B\'')">B'</button>
+                        <button class="btn-move btn-action-style" onclick="playMove('L\'')">L'</button>
+                        <button class="btn-move btn-action-style" onclick="playMove('R\'')">R'</button>
+                    </div>
+
+                    <div class="text-block" style="margin: 0; font-size: 1.1em; color: #555;">Double Moves (Twice):</div>
+                    <div class="btn-group">
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('U2')">U2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('D2')">D2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('F2')">F2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('B2')">B2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('L2')">L2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('R2')">R2</button>
+                    </div>
+
+                    <button class="btn-move" style="background-color: #74b9ff; color: white; border-radius: 12px; margin-top: 10px;" onclick="resetPlayground()">Reset solved cube 🔄</button>
+                </div>
+
+                <!-- Cube Net -->
+                <div>
+                    <div id="cube-net-container"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- REFERENCE TABLE -->
+        <div class="card" style="border-color: #2ecc71;">
+            <h2 class="card-title">3. Scramble Symbol Cheat Sheet 📋</h2>
+            <p class="text-block">
+                Each letter represents a face. The symbols tell you which direction and how many times to turn that face.
+            </p>
+            
+            <table class="notation-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Symbol</th>
+                        <th style="width: 35%;">Action name</th>
+                        <th style="width: 40%;">How to turn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge-move">R</span></td>
+                        <td>Right Face (Clockwise)</td>
+                        <td>Turn the Right layer UP (away from you).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-prime">R'</span></td>
+                        <td>Right Face Prime</td>
+                        <td>Turn the Right layer DOWN (towards you).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move">L</span></td>
+                        <td>Left Face (Clockwise)</td>
+                        <td>Turn the Left layer DOWN (towards you).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-prime">L'</span></td>
+                        <td>Left Face Prime</td>
+                        <td>Turn the Left layer UP (away from you).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move">U</span></td>
+                        <td>Up / Top Face (Clockwise)</td>
+                        <td>Turn the Top layer to the LEFT.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-prime">U'</span></td>
+                        <td>Up Face Prime</td>
+                        <td>Turn the Top layer to the RIGHT.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move">D</span></td>
+                        <td>Down / Bottom Face (Clockwise)</td>
+                        <td>Turn the Bottom layer to the RIGHT.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-prime">D'</span></td>
+                        <td>Down Face Prime</td>
+                        <td>Turn the Bottom layer to the LEFT.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move">F</span></td>
+                        <td>Front Face (Clockwise)</td>
+                        <td>Turn the Front layer like turning a steering wheel to the right.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-prime">F'</span></td>
+                        <td>Front Face Prime</td>
+                        <td>Turn the Front layer to the left.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move">B</span></td>
+                        <td>Back Face (Clockwise)</td>
+                        <td>Turn the Back layer (the side facing away).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-prime">B'</span></td>
+                        <td>Back Face Prime</td>
+                        <td>Turn the Back layer counter-clockwise.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-move badge-double">U2 / R2 / F2...</span></td>
+                        <td>Double Turn</td>
+                        <td>Turn that face twice (180 degrees). Direction doesn't matter!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // --- SIMULATED CUBE STATE FOR PLAYGROUND ---
+        let cube3 = {};
+        const colorMap = {
+            'white': 'var(--white-sticker)',
+            'yellow': 'var(--yellow-sticker)',
+            'green': 'var(--green-sticker)',
+            'blue': 'var(--blue-sticker)',
+            'orange': 'var(--orange-sticker)',
+            'red': 'var(--red-sticker)'
+        };
+
+        const explanationMap = {
+            'U': "U: Turn the Top layer Clockwise (to the left).",
+            'D': "D: Turn the Bottom layer Clockwise (to the right).",
+            'F': "F: Turn the Front layer Clockwise (steering wheel right).",
+            'B': "B: Turn the Back layer Clockwise.",
+            'L': "L: Turn the Left layer Clockwise (downwards).",
+            'R': "R: Turn the Right layer Clockwise (upwards).",
+            
+            "U'": "U': Turn the Top layer Counter-Clockwise (to the right).",
+            "D'": "D': Turn the Bottom layer Counter-Clockwise (to the left).",
+            "F'": "F': Turn the Front layer Counter-Clockwise (steering wheel left).",
+            "B'": "B': Turn the Back layer Counter-Clockwise.",
+            "L'": "L': Turn the Left layer Counter-Clockwise (upwards).",
+            "R'": "R': Turn the Right layer Counter-Clockwise (downwards).",
+
+            'U2': "U2: Turn the Top layer twice (180 degrees).",
+            'D2': "D2: Turn the Bottom layer twice (180 degrees).",
+            'F2': "F2: Turn the Front layer twice (180 degrees).",
+            'B2': "B2: Turn the Back layer twice (180 degrees).",
+            'L2': "L2: Turn the Left layer twice (180 degrees).",
+            'R2': "R2: Turn the Right layer twice (180 degrees)."
+        };
+
+        function resetCubeState3x3() {
+            cube3 = {
+                U: Array(9).fill('white'),
+                D: Array(9).fill('yellow'),
+                F: Array(9).fill('green'),
+                B: Array(9).fill('blue'),
+                L: Array(9).fill('orange'),
+                R: Array(9).fill('red')
+            };
+        }
+
+        function rotateFaceCW(face) {
+            let temp = [...face];
+            face[0] = temp[6]; face[1] = temp[3]; face[2] = temp[0];
+            face[3] = temp[7];                  face[5] = temp[1];
+            face[6] = temp[8]; face[7] = temp[5]; face[8] = temp[2];
+        }
+
+        function rotate3x3(face) {
+            if (face === 'U') {
+                rotateFaceCW(cube3.U);
+                let temp = [...cube3.L.slice(0, 3)];
+                cube3.L[0] = cube3.F[0]; cube3.L[1] = cube3.F[1]; cube3.L[2] = cube3.F[2];
+                cube3.F[0] = cube3.R[0]; cube3.F[1] = cube3.R[1]; cube3.F[2] = cube3.R[2];
+                cube3.R[0] = cube3.B[0]; cube3.R[1] = cube3.B[1]; cube3.R[2] = cube3.B[2];
+                cube3.B[0] = temp[0]; cube3.B[1] = temp[1]; cube3.B[2] = temp[2];
+            } else if (face === 'D') {
+                rotateFaceCW(cube3.D);
+                let temp = [...cube3.R.slice(6, 9)];
+                cube3.R[6] = cube3.F[6]; cube3.R[7] = cube3.F[7]; cube3.R[8] = cube3.F[8];
+                cube3.F[6] = cube3.L[6]; cube3.F[7] = cube3.L[7]; cube3.F[8] = cube3.L[8];
+                cube3.L[6] = cube3.B[6]; cube3.L[7] = cube3.B[7]; cube3.L[8] = cube3.B[8];
+                cube3.B[6] = temp[0]; cube3.B[7] = temp[1]; cube3.B[8] = temp[2];
+            } else if (face === 'F') {
+                rotateFaceCW(cube3.F);
+                let temp = [cube3.U[6], cube3.U[7], cube3.U[8]];
+                cube3.U[6] = cube3.L[8]; cube3.U[7] = cube3.L[5]; cube3.U[8] = cube3.L[2];
+                cube3.L[2] = cube3.D[0]; cube3.L[5] = cube3.D[1]; cube3.L[8] = cube3.D[2];
+                cube3.D[0] = cube3.R[6]; cube3.D[1] = cube3.R[3]; cube3.D[2] = cube3.R[0];
+                cube3.R[0] = temp[0]; cube3.R[3] = temp[1]; cube3.R[6] = temp[2];
+            } else if (face === 'B') {
+                rotateFaceCW(cube3.B);
+                let temp = [cube3.U[0], cube3.U[1], cube3.U[2]];
+                cube3.U[0] = cube3.R[2]; cube3.U[1] = cube3.R[5]; cube3.U[2] = cube3.R[8];
+                cube3.R[2] = cube3.D[8]; cube3.R[5] = cube3.D[7]; cube3.R[8] = cube3.D[6];
+                cube3.D[6] = cube3.L[0]; cube3.D[7] = cube3.L[3]; cube3.D[8] = cube3.L[6];
+                cube3.L[0] = temp[2]; cube3.L[3] = temp[1]; cube3.L[6] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCW(cube3.L);
+                let temp = [cube3.U[0], cube3.U[3], cube3.U[6]];
+                cube3.U[0] = cube3.B[8]; cube3.U[3] = cube3.B[5]; cube3.U[6] = cube3.B[2];
+                cube3.B[2] = cube3.D[6]; cube3.B[5] = cube3.D[3]; cube3.B[8] = cube3.D[0];
+                cube3.D[0] = cube3.F[0]; cube3.D[3] = cube3.F[3]; cube3.D[6] = cube3.F[6];
+                cube3.F[0] = temp[0]; cube3.F[3] = temp[1]; cube3.F[6] = temp[2];
+            } else if (face === 'R') {
+                rotateFaceCW(cube3.R);
+                let temp = [cube3.U[2], cube3.U[5], cube3.U[8]];
+                cube3.U[2] = cube3.F[2]; cube3.U[5] = cube3.F[5]; cube3.U[8] = cube3.F[8];
+                cube3.F[2] = cube3.D[2]; cube3.F[5] = cube3.D[5]; cube3.F[8] = cube3.D[8];
+                cube3.D[2] = cube3.B[6]; cube3.D[5] = cube3.B[3]; cube3.D[8] = cube3.B[0];
+                cube3.B[0] = temp[2]; cube3.B[3] = temp[1]; cube3.B[6] = temp[0];
+            }
+        }
+
+        function drawCubeNet() {
+            const container = document.getElementById('cube-net-container');
+            container.innerHTML = "";
+
+            const net = document.createElement('div');
+            net.className = 'cube-net-3x3';
+            
+            const faceLayouts = [
+                { name: 'empty1', row: 1, col: 1 },
+                { name: 'U', row: 1, col: 2, state: cube3.U },
+                { name: 'empty2', row: 1, col: 3 },
+                { name: 'empty3', row: 1, col: 4 },
+                
+                { name: 'L', row: 2, col: 1, state: cube3.L },
+                { name: 'F', row: 2, col: 2, state: cube3.F },
+                { name: 'R', row: 2, col: 3, state: cube3.R },
+                { name: 'B', row: 2, col: 4, state: cube3.B },
+                
+                { name: 'empty4', row: 3, col: 1 },
+                { name: 'D', row: 3, col: 2, state: cube3.D },
+                { name: 'empty5', row: 3, col: 3 },
+                { name: 'empty6', row: 3, col: 4 }
+            ];
+
+            faceLayouts.forEach(layout => {
+                const cell = document.createElement('div');
+                cell.style.gridRow = layout.row;
+                cell.style.gridColumn = layout.col;
+                
+                if (layout.state) {
+                    const faceGrid = document.createElement('div');
+                    faceGrid.className = 'face-grid-3x3';
+                    const stickers = layout.state;
+                    stickers.forEach(color => {
+                        const sticker = document.createElement('div');
+                        sticker.className = 'sticker';
+                        sticker.style.backgroundColor = colorMap[color];
+                        faceGrid.appendChild(sticker);
+                    });
+                    cell.appendChild(faceGrid);
+                }
+                net.appendChild(cell);
+            });
+            container.appendChild(net);
+        }
+
+        function playMove(moveStr) {
+            let base = moveStr[0];
+            let modifier = moveStr.slice(1);
+            let count = 1;
+            if (modifier === '2') count = 2;
+            if (modifier === "'") count = 3;
+
+            for (let i = 0; i < count; i++) {
+                rotate3x3(base);
+            }
+            drawCubeNet();
+
+            // Update explanation status
+            document.getElementById('playground-status').innerHTML = explanationMap[moveStr] || `Executed: ${moveStr}`;
+        }
+
+        function resetPlayground() {
+            resetCubeState3x3();
+            drawCubeNet();
+            document.getElementById('playground-status').textContent = "Solved State! Click any button to start turning.";
+        }
+
+        // Initialize playground
+        resetPlayground();
+    </script>
+</body>
+</html>
