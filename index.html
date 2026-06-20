@@ -377,6 +377,36 @@
             </a>
         </div>
 
+        <!-- COMMENTS SECTION -->
+        <div class="text-section" style="margin-top: 40px; box-sizing: border-box;">
+            <h2 class="black-bubbly" style="font-size: 2.2em; text-align: center; margin-bottom: 5px;">💬 Community Comments</h2>
+            <p style="font-size: 1.15em; color: #666; text-align: center; margin-top: 0; margin-bottom: 25px;">Ask a question, share your record, or leave a message for Cole! 👇</p>
+            
+            <!-- Comment Form -->
+            <form id="comment-form" style="display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 0 auto 30px auto; box-sizing: border-box;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <label for="comment-name" style="font-size: 1.25em; font-weight: bold; color: #1a1a1a;">Your Name:</label>
+                    <input type="text" id="comment-name" placeholder="E.g., Speedcuber Sam 🧩" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.2em; padding: 12px 15px; border: 3px solid #333; border-radius: 15px; outline: none; box-shadow: 3px 3px 0px rgba(0,0,0,0.15); transition: box-shadow 0.2s, transform 0.2s;" onfocus="this.style.boxShadow='1px 1px 0px rgba(0,0,0,0.15)'; this.style.transform='translate(2px, 2px)';" onblur="this.style.boxShadow='3px 3px 0px rgba(0,0,0,0.15)'; this.style.transform='translate(0, 0)';">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <label for="comment-text" style="font-size: 1.25em; font-weight: bold; color: #1a1a1a;">Comment:</label>
+                    <textarea id="comment-text" rows="4" placeholder="Type your comment here! Ask a question or share your thoughts... 🌟" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.2em; padding: 12px 15px; border: 3px solid #333; border-radius: 15px; outline: none; box-shadow: 3px 3px 0px rgba(0,0,0,0.15); resize: vertical; transition: box-shadow 0.2s, transform 0.2s;" onfocus="this.style.boxShadow='1px 1px 0px rgba(0,0,0,0.15)'; this.style.transform='translate(2px, 2px)';" onblur="this.style.boxShadow='3px 3px 0px rgba(0,0,0,0.15)'; this.style.transform='translate(0, 0)';"></textarea>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button type="submit" class="cube-button" style="background-color: #00E5FF; color: #1a1a1a; cursor: pointer; border-radius: 15px; padding: 12px 30px; font-size: 1.3em; outline: none;">
+                        📣 Post Comment!
+                    </button>
+                </div>
+            </form>
+
+            <hr style="border: none; border-top: 3px dashed #ccc; margin: 35px 0;">
+
+            <!-- Comments List -->
+            <div id="comments-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 700px; margin: 0 auto; box-sizing: border-box;">
+                <!-- Comments loaded dynamically here -->
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -454,6 +484,160 @@
                     topBanner.innerHTML = "🎉 2026 Sessions are complete! Check back next year!";
                 }
             }
+
+            // ==========================================
+            // --- COMMENTS SECTION LOGIC (LOCAL STORAGE) ---
+            // ==========================================
+            const THEME_COLORS = ["#FF6B6B", "#00E5FF", "#FAED27", "#FF8787", "#029347", "#0066FF"];
+            function getAvatarColor(name) {
+                let hash = 0;
+                for (let i = 0; i < name.length; i++) {
+                    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                const index = Math.abs(hash) % THEME_COLORS.length;
+                return THEME_COLORS[index];
+            }
+
+            const DEFAULT_COMMENTS = [
+                {
+                    id: "mock-1",
+                    name: "Cole Hua 🧊 (Co-Host)",
+                    text: "Welcome to our cubing class website! Can't wait to see you all on Wednesday at 7 PM. Bring your favorite 3x3 cube! 🚀",
+                    date: "2026-06-01T19:00:00.000Z",
+                    avatarColor: "#FF6B6B"
+                },
+                {
+                    id: "mock-2",
+                    name: "Liam 🧩",
+                    text: "I practiced the first layer algorithms Cole showed us and managed to solve the white cross in under 30 seconds! See you this Wednesday!",
+                    date: "2026-06-15T10:30:00.000Z",
+                    avatarColor: "#00E5FF"
+                },
+                {
+                    id: "mock-3",
+                    name: "Sarah (Parent)",
+                    text: "My son absolutely loves this class! Cole is an amazing teacher and makes learning the Rubik's cube so much fun. Highly recommend to any parents at UBC/Wesbrook!",
+                    date: "2026-06-17T20:15:00.000Z",
+                    avatarColor: "#FAED27"
+                }
+            ];
+
+            const commentsContainer = document.getElementById('comments-container');
+            const commentForm = document.getElementById('comment-form');
+            const commentNameInput = document.getElementById('comment-name');
+            const commentTextInput = document.getElementById('comment-text');
+
+            function getSavedComments() {
+                const stored = localStorage.getItem('cube4fun_comments');
+                if (stored) {
+                    try {
+                        return JSON.parse(stored);
+                    } catch (e) {
+                        console.error("Failed to parse comments from localStorage", e);
+                    }
+                }
+                // Save default comments initially
+                localStorage.setItem('cube4fun_comments', JSON.stringify(DEFAULT_COMMENTS));
+                return DEFAULT_COMMENTS;
+            }
+
+            function saveComments(comments) {
+                localStorage.setItem('cube4fun_comments', JSON.stringify(comments));
+            }
+
+            function renderComments() {
+                if (!commentsContainer) return;
+                const comments = getSavedComments();
+                commentsContainer.innerHTML = '';
+
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = '<p style="text-align: center; color: #777; font-style: italic; font-weight: normal; font-size: 1.2em;">No comments yet. Be the first to say something! 💬</p>';
+                    return;
+                }
+
+                // Sort by date (newest first)
+                const sorted = [...comments].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                sorted.forEach(comment => {
+                    const card = document.createElement('div');
+                    card.style.background = '#fafafa';
+                    card.style.border = '3px solid #eee';
+                    card.style.borderRadius = '15px';
+                    card.style.padding = '15px';
+                    card.style.display = 'flex';
+                    card.style.gap = '15px';
+                    card.style.alignItems = 'flex-start';
+                    card.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.02)';
+                    card.style.boxSizing = 'border-box';
+
+                    const avatarColor = comment.avatarColor || getAvatarColor(comment.name);
+                    const initial = comment.name ? comment.name[0].toUpperCase() : '👤';
+                    
+                    const dateObj = new Date(comment.date);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    card.innerHTML = `
+                        <div style="background-color: ${avatarColor}; width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; display: flex; align-items: center; justify-content: center; font-family: 'DynaPuff', cursive; font-size: 1.4em; font-weight: bold; flex-shrink: 0; box-shadow: 2px 2px 0px rgba(0,0,0,0.15); box-sizing: border-box;">
+                            ${initial}
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 5px; flex-grow: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px;">
+                                <span style="font-size: 1.25em; font-weight: bold; color: #1a1a1a;">${escapeHTML(comment.name)}</span>
+                                <span style="font-size: 0.95em; color: #777;">${formattedDate}</span>
+                            </div>
+                            <p style="font-size: 1.15em; line-height: 1.4; margin: 5px 0 0 0; font-weight: normal; color: #333; white-space: pre-wrap; word-break: break-word;">${escapeHTML(comment.text)}</p>
+                        </div>
+                    `;
+                    commentsContainer.appendChild(card);
+                });
+            }
+
+            function escapeHTML(str) {
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        "'": '&#39;',
+                        '"': '&quot;'
+                    }[tag] || tag)
+                );
+            }
+
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = commentNameInput.value.trim();
+                    const text = commentTextInput.value.trim();
+
+                    if (!name || !text) return;
+
+                    const newComment = {
+                        id: 'comment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                        name: name,
+                        text: text,
+                        date: new Date().toISOString(),
+                        avatarColor: getAvatarColor(name)
+                    };
+
+                    const comments = getSavedComments();
+                    comments.push(newComment);
+                    saveComments(comments);
+                    
+                    // Reset form and rerender
+                    commentNameInput.value = '';
+                    commentTextInput.value = '';
+                    renderComments();
+                });
+            }
+
+            renderComments();
         });
     </script>
 
