@@ -423,14 +423,14 @@
             <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
             <h3 class="black-bubbly" style="font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h3>
             <p style="font-size: 1.1em; color: #666; margin: 0; text-align: center; font-weight: normal; font-family: 'Comic Neue', sans-serif;">Log in to delete or manage comments on the page.</p>
-            <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
+            <form id="admin-login-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-email" style="font-size: 1.1em; color: #1a1a1a;">Email Address:</label>
-                    <input type="email" id="admin-email" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <input type="email" id="admin-email" autocomplete="off" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-password" style="font-size: 1.1em; color: #1a1a1a;">Password:</label>
-                    <input type="password" id="admin-password" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <input type="password" id="admin-password" autocomplete="off" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
                 </div>
                 <button type="submit" class="cube-button" style="background-color: #FAED27; color: #1a1a1a; margin-top: 15px; padding: 10px 15px; font-size: 1.25em; border-radius: 12px; width: 100%; cursor: pointer; outline: none;">
                     🔓 Log In
@@ -572,7 +572,7 @@
                         if (error) throw error;
                         return data || [];
                     } catch (e) {
-                        console.error("Failed to load comments from Supabase, loading locally:", e);
+                        console.error("Failed to load comments from Supabase, falling back to LocalStorage:", e);
                     }
                 }
 
@@ -736,7 +736,8 @@
             }
 
             function escapeHTML(str) {
-                return str.replace(/[&<>'"]/g, 
+                if (str === null || str === undefined) return '';
+                return String(str).replace(/[&<>'"]/g, 
                     tag => ({
                         '&': '&amp;',
                         '<': '&lt;',
