@@ -1128,7 +1128,8 @@
                 if (type === '3x3-fmc') {
                     timeStr = solve.dnf ? "DNF" : solve.time + " moves";
                 } else {
-                    timeStr = solve.dnf ? "DNF" : solve.time.toFixed(2) + (solve.plusTwo ? "+2" : "s");
+                    const finalTime = solve.time + (solve.plusTwo ? 2 : 0);
+                    timeStr = solve.dnf ? "DNF" : formatTime(finalTime) + (solve.plusTwo ? " (+2)" : "");
                 }
 
                 const titleAttr = solve.solution ? `title="Solution: ${solve.solution}"` : '';
@@ -1168,8 +1169,7 @@
         // --- STATS CALCULATIONS ---
         function calculateStats() {
             const type = scrambleTypeSelect.value;
-            const suffix = type === '3x3-fmc' ? ' moves' : 's';
-            const decimals = type === '3x3-fmc' ? 0 : 2;
+            const suffix = type === '3x3-fmc' ? ' moves' : '';
 
             if (solves.length === 0) {
                 statBest.textContent = "-";
@@ -1182,7 +1182,8 @@
             const validSolves = solves.filter(s => !s.dnf);
             if (validSolves.length > 0) {
                 const finalTimes = validSolves.map(s => s.time + (s.plusTwo ? 2 : 0));
-                statBest.textContent = Math.min(...finalTimes).toFixed(decimals) + suffix;
+                const best = Math.min(...finalTimes);
+                statBest.textContent = type === '3x3-fmc' ? best.toFixed(0) + suffix : formatTime(best);
             } else {
                 statBest.textContent = "DNF";
             }
@@ -1190,7 +1191,8 @@
             const totalValidCount = validSolves.length;
             if (totalValidCount > 0) {
                 const sum = validSolves.reduce((acc, s) => acc + s.time + (s.plusTwo ? 2 : 0), 0);
-                statMean.textContent = (sum / totalValidCount).toFixed(2) + suffix;
+                const mean = sum / totalValidCount;
+                statMean.textContent = type === '3x3-fmc' ? mean.toFixed(2) + suffix : formatTime(mean);
             } else {
                 statMean.textContent = "DNF";
             }
@@ -1234,7 +1236,7 @@
             if (trimmed.includes(Infinity)) return "DNF";
 
             const sum = trimmed.reduce((acc, val) => acc + val, 0);
-            return (sum / (x - 2)).toFixed(2) + "s";
+            return formatTime(sum / (x - 2));
         }
 
         // --- EMOJI CONFETTI CELEBRATION ---
@@ -1264,10 +1266,28 @@
             }
         }
 
+        // --- WCA TIME FORMATTING HELPER ---
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds === null || seconds === Infinity) return "-";
+            
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            const cs = Math.floor((seconds * 100) % 100);
+            
+            const csStr = cs.toString().padStart(2, '0');
+            
+            if (mins > 0) {
+                const secsStr = secs.toString().padStart(2, '0');
+                return `${mins}:${secsStr}.${csStr}`;
+            } else {
+                return `${secs}.${csStr}`;
+            }
+        }
+
         // --- TIMER MAIN STATES ---
         function updateTimerDisplay() {
             const elapsed = (Date.now() - startTime) / 1000;
-            timerDisplay.textContent = elapsed.toFixed(2);
+            timerDisplay.textContent = formatTime(elapsed);
         }
 
         function startTimer() {
@@ -1284,7 +1304,7 @@
             clearInterval(timerInterval);
             timerState = 'IDLE';
             const elapsed = (Date.now() - startTime) / 1000;
-            timerDisplay.textContent = elapsed.toFixed(2);
+            timerDisplay.textContent = formatTime(elapsed);
 
             document.querySelector('.preview-section').style.opacity = '1';
             document.querySelector('.scramble-box').style.opacity = '1';
@@ -1310,14 +1330,14 @@
             triggerNewScramble();
 
             if (isNewPB && solves.length > 1) {
-                buddyBubble.innerHTML = `🎉 OMG! That's a new Personal Best! **${elapsed.toFixed(2)}s**! Incredible! 🏆`;
+                buddyBubble.innerHTML = `🎉 OMG! That's a new Personal Best! **${formatTime(elapsed)}**! Incredible! 🏆`;
                 triggerEmojiConfetti();
             } else if (elapsed < 9.00) {
-                buddyBubble.innerHTML = `🔥 Sub-9! You beat Cole's 9.00s record with **${elapsed.toFixed(2)}s**! Absolute master class! 🏆`;
+                buddyBubble.innerHTML = `🔥 Sub-9! You beat Cole's 9.00s record with **${formatTime(elapsed)}**! Absolute master class! 🏆`;
                 triggerEmojiConfetti();
             } else {
                 const randomQuote = buddyQuotes[Math.floor(Math.random() * buddyQuotes.length)];
-                buddyBubble.textContent = `Time: ${elapsed.toFixed(2)}s. ` + randomQuote;
+                buddyBubble.textContent = `Time: ${formatTime(elapsed)}. ` + randomQuote;
             }
         }
 

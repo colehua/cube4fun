@@ -248,6 +248,18 @@
             75% { transform: rotate(-15deg); }
             100% { transform: rotate(0deg); }
         }
+
+        /* Nested Comments Responsiveness */
+        @media (max-width: 600px) {
+            #comments-container .reply-toggle-btn {
+                padding: 4px 6px;
+                font-size: 0.8em;
+            }
+            #comments-container [id^="reply-form-container-"], 
+            #comments-container [id^="replies-container-"] {
+                margin-left: 20px !important;
+            }
+        }
     </style>
 
 </head>
@@ -588,13 +600,16 @@
                 return []; // No default comments (clean slate)
             }
 
-            async function addComment(name, text) {
+            async function addComment(name, text, parentId = null) {
                 const newComment = {
                     name: name,
                     text: text,
                     date: new Date().toISOString(),
                     avatarcolor: getAvatarColor(name)
                 };
+                if (parentId) {
+                    newComment.parent_id = parentId;
+                }
 
                 if (isSupabaseActive) {
                     try {
@@ -636,7 +651,7 @@
 
                 // Local Fallback
                 let localComments = await loadComments();
-                localComments = localComments.filter(c => c.id !== commentId);
+                localComments = localComments.filter(c => c.id !== commentId && c.parent_id !== commentId);
                 localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
                 return true;
             }
@@ -671,10 +686,26 @@
                     return;
                 }
 
-                // Sort by date (newest first)
-                const sorted = [...comments].sort((a, b) => new Date(b.date) - new Date(a.date));
+                // Separate top-level comments and replies
+                const parentComments = comments.filter(c => !c.parent_id);
+                const replies = comments.filter(c => c.parent_id);
 
-                sorted.forEach(comment => {
+                // Sort parent comments by date (newest first)
+                const sortedParents = [...parentComments].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (sortedParents.length === 0) {
+                    commentsContainer.innerHTML = '<p style="text-align: center; color: #777; font-style: italic; font-weight: normal; font-size: 1.2em; margin: 20px 0;">No comments yet. Be the first to say something! 💬</p>';
+                    return;
+                }
+
+                sortedParents.forEach(comment => {
+                    const commentId = comment.id;
+                    const parentWrapper = document.createElement('div');
+                    parentWrapper.style.display = 'flex';
+                    parentWrapper.style.flexDirection = 'column';
+                    parentWrapper.style.gap = '10px';
+                    parentWrapper.style.width = '100%';
+
                     const card = document.createElement('div');
                     card.style.background = '#fafafa';
                     card.style.border = '3px solid #eee';
@@ -685,6 +716,7 @@
                     card.style.alignItems = 'flex-start';
                     card.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.02)';
                     card.style.boxSizing = 'border-box';
+                    card.style.width = '100%';
 
                     const avatarColor = comment.avatarcolor || getAvatarColor(comment.name);
                     const initial = comment.name ? comment.name[0].toUpperCase() : '👤';
@@ -698,10 +730,11 @@
                         minute: '2-digit'
                     });
 
-                    const commentId = comment.id;
                     const deleteBtnHTML = loggedIn 
                         ? `<button class="delete-comment-btn" data-id="${commentId}" style="background: #FF6B6B; border: 2px solid #333; border-radius: 8px; color: white; cursor: pointer; font-size: 0.9em; padding: 5px 8px; box-shadow: 2px 2px 0px #333; font-family: 'Comic Neue', sans-serif; font-weight: bold; margin-left: 10px; display: inline-flex; align-items: center; gap: 3px; outline: none; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🗑️ Delete</button>`
                         : '';
+
+                    const replyBtnHTML = `<button class="reply-toggle-btn" data-id="${commentId}" style="background: #FFD25A; border: 2px solid #333; border-radius: 8px; color: #1a1a1a; cursor: pointer; font-size: 0.9em; padding: 5px 8px; box-shadow: 2px 2px 0px #333; font-family: 'Comic Neue', sans-serif; font-weight: bold; display: inline-flex; align-items: center; gap: 3px; outline: none; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">💬 Reply</button>`;
 
                     card.innerHTML = `
                         <div style="background-color: ${avatarColor}; width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; display: flex; align-items: center; justify-content: center; font-family: 'DynaPuff', cursive; font-size: 1.4em; font-weight: bold; flex-shrink: 0; box-shadow: 2px 2px 0px rgba(0,0,0,0.15); box-sizing: border-box;">
@@ -710,15 +743,115 @@
                         <div style="display: flex; flex-direction: column; gap: 5px; flex-grow: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px;">
                                 <span style="font-size: 1.25em; font-weight: bold; color: #1a1a1a;">${escapeHTML(comment.name)}</span>
-                                <div style="display: flex; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 5px;">
                                     <span style="font-size: 0.95em; color: #777;">${formattedDate}</span>
+                                    ${replyBtnHTML}
                                     ${deleteBtnHTML}
                                 </div>
                             </div>
                             <p style="font-size: 1.15em; line-height: 1.4; margin: 5px 0 0 0; font-weight: normal; color: #333; white-space: pre-wrap; word-break: break-word;">${escapeHTML(comment.text)}</p>
                         </div>
                     `;
-                    commentsContainer.appendChild(card);
+                    parentWrapper.appendChild(card);
+
+                    // Inline Reply Form (hidden by default)
+                    const formDiv = document.createElement('div');
+                    formDiv.id = `reply-form-container-${commentId}`;
+                    formDiv.style.display = 'none';
+                    formDiv.style.marginLeft = '50px';
+                    formDiv.style.padding = '15px';
+                    formDiv.style.background = '#FFF9E6';
+                    formDiv.style.border = '3px solid #333';
+                    formDiv.style.borderRadius = '15px';
+                    formDiv.style.boxShadow = '3px 3px 0px rgba(0,0,0,0.1)';
+                    formDiv.style.boxSizing = 'border-box';
+                    formDiv.innerHTML = `
+                        <form class="reply-form" data-parent-id="${commentId}" style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <label style="font-weight: bold; color: #1a1a1a; font-size: 1em;">Your Name:</label>
+                                <input type="text" class="reply-name-input" required placeholder="Name" autocomplete="off" style="padding: 8px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif; font-size: 1.1em; outline: none;">
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <label style="font-weight: bold; color: #1a1a1a; font-size: 1em;">Reply:</label>
+                                <textarea class="reply-text-input" required placeholder="Type reply here..." style="padding: 8px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif; font-size: 1.1em; height: 60px; resize: vertical; outline: none;"></textarea>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 5px;">
+                                <button type="submit" style="background-color: #2ecc71; color: white; border: 2px solid #333; border-radius: 10px; padding: 6px 12px; font-family: 'DynaPuff', cursive; font-size: 1.1em; cursor: pointer; box-shadow: 2px 2px 0px #333; transition: transform 0.1s; outline: none;">Post Reply 🚀</button>
+                                <button type="button" class="reply-cancel-btn" data-id="${commentId}" style="background-color: #aaa; color: white; border: 2px solid #333; border-radius: 10px; padding: 6px 12px; font-family: 'DynaPuff', cursive; font-size: 1.1em; cursor: pointer; box-shadow: 2px 2px 0px #333; transition: transform 0.1s; outline: none;">Cancel</button>
+                            </div>
+                        </form>
+                    `;
+                    parentWrapper.appendChild(formDiv);
+
+                    // Replies Container
+                    const repliesListContainer = document.createElement('div');
+                    repliesListContainer.id = `replies-container-${commentId}`;
+                    repliesListContainer.style.marginLeft = '50px';
+                    repliesListContainer.style.display = 'flex';
+                    repliesListContainer.style.flexDirection = 'column';
+                    repliesListContainer.style.gap = '15px';
+                    repliesListContainer.style.marginTop = '5px';
+                    repliesListContainer.style.borderLeft = '3px dashed #ccc';
+                    repliesListContainer.style.paddingLeft = '15px';
+                    repliesListContainer.style.boxSizing = 'border-box';
+                    repliesListContainer.style.display = 'none';
+
+                    // Get and sort replies chronological (oldest first)
+                    const parentReplies = replies
+                        .filter(r => r.parent_id === commentId)
+                        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                    if (parentReplies.length > 0) {
+                        repliesListContainer.style.display = 'flex';
+                        parentReplies.forEach(reply => {
+                            const replyCard = document.createElement('div');
+                            replyCard.style.background = '#ffffff';
+                            replyCard.style.border = '2px solid #ddd';
+                            replyCard.style.borderRadius = '12px';
+                            replyCard.style.padding = '12px';
+                            replyCard.style.display = 'flex';
+                            replyCard.style.gap = '12px';
+                            replyCard.style.alignItems = 'flex-start';
+                            replyCard.style.boxShadow = '1px 1px 3px rgba(0,0,0,0.01)';
+                            replyCard.style.boxSizing = 'border-box';
+                            replyCard.style.width = '100%';
+
+                            const rAvatarColor = reply.avatarcolor || getAvatarColor(reply.name);
+                            const rInitial = reply.name ? reply.name[0].toUpperCase() : '👤';
+                            const rDateObj = new Date(reply.date);
+                            const rFormattedDate = rDateObj.toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric', 
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+
+                            const rDeleteBtnHTML = loggedIn 
+                                ? `<button class="delete-comment-btn" data-id="${reply.id}" style="background: #FF6B6B; border: 2px solid #333; border-radius: 8px; color: white; cursor: pointer; font-size: 0.85em; padding: 3px 6px; box-shadow: 2px 2px 0px #333; font-family: 'Comic Neue', sans-serif; font-weight: bold; margin-left: 10px; display: inline-flex; align-items: center; gap: 2px; outline: none; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🗑️ Delete</button>`
+                                : '';
+
+                            replyCard.innerHTML = `
+                                <div style="background-color: ${rAvatarColor}; width: 38px; height: 38px; border-radius: 50%; border: 2.5px solid #333; display: flex; align-items: center; justify-content: center; font-family: 'DynaPuff', cursive; font-size: 1.1em; font-weight: bold; flex-shrink: 0; box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.15); box-sizing: border-box;">
+                                    ${rInitial}
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 3px; flex-grow: 1;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px;">
+                                        <span style="font-size: 1.1em; font-weight: bold; color: #1a1a1a;">${escapeHTML(reply.name)}</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <span style="font-size: 0.9em; color: #777;">${rFormattedDate}</span>
+                                            ${rDeleteBtnHTML}
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 1.05em; line-height: 1.4; margin: 3px 0 0 0; font-weight: normal; color: #333; white-space: pre-wrap; word-break: break-word;">${escapeHTML(reply.text)}</p>
+                                </div>
+                            `;
+                            repliesListContainer.appendChild(replyCard);
+                        });
+                    }
+
+                    parentWrapper.appendChild(repliesListContainer);
+                    commentsContainer.appendChild(parentWrapper);
                 });
 
                 // Attach delete button event listeners
@@ -733,7 +866,56 @@
                         }
                     });
                 });
+
+                // Attach reply toggle buttons
+                document.querySelectorAll('.reply-toggle-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        const id = this.getAttribute('data-id');
+                        const formDiv = document.getElementById(`reply-form-container-${id}`);
+                        if (formDiv) {
+                            const isNone = formDiv.style.display === 'none';
+                            formDiv.style.display = isNone ? 'block' : 'none';
+                            if (isNone) {
+                                const nameInput = formDiv.querySelector('.reply-name-input');
+                                if (nameInput) nameInput.focus();
+                            }
+                        }
+                    });
+                });
+
+                // Attach reply cancel buttons
+                document.querySelectorAll('.reply-cancel-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        const id = this.getAttribute('data-id');
+                        const formDiv = document.getElementById(`reply-form-container-${id}`);
+                        if (formDiv) formDiv.style.display = 'none';
+                    });
+                });
+
+                // Attach reply forms submit handler
+                document.querySelectorAll('.reply-form').forEach(form => {
+                    form.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const parentId = this.getAttribute('data-parent-id');
+                        const nameInput = this.querySelector('.reply-name-input');
+                        const textInput = this.querySelector('.reply-text-input');
+                        const name = nameInput.value.trim();
+                        const text = textInput.value.trim();
+
+                        if (!name || !text) return;
+
+                        const success = await addComment(name, text, parentId);
+                        if (success) {
+                            nameInput.value = '';
+                            textInput.value = '';
+                            const formDiv = document.getElementById(`reply-form-container-${parentId}`);
+                            if (formDiv) formDiv.style.display = 'none';
+                            renderComments();
+                        }
+                    });
+                });
             }
+
 
             function escapeHTML(str) {
                 if (str === null || str === undefined) return '';
