@@ -7,6 +7,7 @@
     <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, Cole Hua WorldCubeAssociation, Cole Hua WCA Profile, Cole Hua Cubing China, Cole Hua cubing.com, Learn Cube 4 Fun, Rubik's Cube tutorial, speedcubing, Wesbrook Community Centre">
     <title>Learn Cube 4 Fun - Cole Hua WCA Profile & Tutorials</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --cyan-blob: #00E5FF;
@@ -405,8 +406,37 @@
             <div id="comments-container" style="display: flex; flex-direction: column; gap: 20px; max-width: 700px; margin: 0 auto; box-sizing: border-box;">
                 <!-- Comments loaded dynamically here -->
             </div>
+
+            <!-- Admin Access Link -->
+            <div style="text-align: center; margin-top: 25px;">
+                <button id="admin-toggle-btn" style="background: none; border: none; color: #0066FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; font-weight: bold; cursor: pointer; text-decoration: underline; outline: none;">
+                    🔑 Admin Login
+                </button>
+            </div>
         </div>
 
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: center; justify-content: center; box-sizing: border-box; user-select: none; touch-action: none;">
+        <div style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
+            <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
+            <h3 class="black-bubbly" style="font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h3>
+            <p style="font-size: 1.1em; color: #666; margin: 0; text-align: center; font-weight: normal; font-family: 'Comic Neue', sans-serif;">Log in to delete or manage comments on the page.</p>
+            <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label for="admin-email" style="font-size: 1.1em; color: #1a1a1a;">Email Address:</label>
+                    <input type="email" id="admin-email" placeholder="admin@cube4fun.com" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label for="admin-password" style="font-size: 1.1em; color: #1a1a1a;">Password:</label>
+                    <input type="password" id="admin-password" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                </div>
+                <button type="submit" class="cube-button" style="background-color: #FAED27; color: #1a1a1a; margin-top: 15px; padding: 10px 15px; font-size: 1.25em; border-radius: 12px; width: 100%; cursor: pointer; outline: none;">
+                    🔓 Log In
+                </button>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -486,8 +516,28 @@
             }
 
             // ==========================================
-            // --- COMMENTS SECTION LOGIC (LOCAL STORAGE) ---
+            // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
             // ==========================================
+            // Replace these with your actual Supabase project credentials!
+            const SUPABASE_URL = ""; 
+            const SUPABASE_ANON_KEY = "";
+            // ==========================================
+
+            let supabase = null;
+            let isSupabaseActive = false;
+
+            if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+                try {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    isSupabaseActive = true;
+                    console.log("Supabase database connection active!");
+                } catch (e) {
+                    console.error("Failed to initialize Supabase client:", e);
+                }
+            } else {
+                console.log("Running in LOCAL MODE (LocalStorage). Set SUPABASE_URL and SUPABASE_ANON_KEY to go live.");
+            }
+
             const THEME_COLORS = ["#FF6B6B", "#00E5FF", "#FAED27", "#FF8787", "#029347", "#0066FF"];
             function getAvatarColor(name) {
                 let hash = 0;
@@ -498,60 +548,126 @@
                 return THEME_COLORS[index];
             }
 
-            const DEFAULT_COMMENTS = [
-                {
-                    id: "mock-1",
-                    name: "Cole Hua 🧊 (Co-Host)",
-                    text: "Welcome to our cubing class website! Can't wait to see you all on Wednesday at 7 PM. Bring your favorite 3x3 cube! 🚀",
-                    date: "2026-06-01T19:00:00.000Z",
-                    avatarColor: "#FF6B6B"
-                },
-                {
-                    id: "mock-2",
-                    name: "Liam 🧩",
-                    text: "I practiced the first layer algorithms Cole showed us and managed to solve the white cross in under 30 seconds! See you this Wednesday!",
-                    date: "2026-06-15T10:30:00.000Z",
-                    avatarColor: "#00E5FF"
-                },
-                {
-                    id: "mock-3",
-                    name: "Sarah (Parent)",
-                    text: "My son absolutely loves this class! Cole is an amazing teacher and makes learning the Rubik's cube so much fun. Highly recommend to any parents at UBC/Wesbrook!",
-                    date: "2026-06-17T20:15:00.000Z",
-                    avatarColor: "#FAED27"
-                }
-            ];
-
             const commentsContainer = document.getElementById('comments-container');
             const commentForm = document.getElementById('comment-form');
             const commentNameInput = document.getElementById('comment-name');
             const commentTextInput = document.getElementById('comment-text');
 
-            function getSavedComments() {
-                const stored = localStorage.getItem('cube4fun_comments');
+            // Admin elements
+            const adminModal = document.getElementById('admin-modal');
+            const adminToggleBtn = document.getElementById('admin-toggle-btn');
+            const adminModalClose = document.getElementById('admin-modal-close');
+            const adminLoginForm = document.getElementById('admin-login-form');
+            const adminEmailInput = document.getElementById('admin-email');
+            const adminPasswordInput = document.getElementById('admin-password');
+
+            async function loadComments() {
+                if (isSupabaseActive) {
+                    try {
+                        const { data, error } = await supabase
+                            .from('comments')
+                            .select('*')
+                            .order('date', { ascending: false });
+
+                        if (error) throw error;
+                        return data || [];
+                    } catch (e) {
+                        console.error("Failed to load comments from Supabase, loading locally:", e);
+                    }
+                }
+
+                // Local Fallback
+                const stored = localStorage.getItem('cube4fun_comments_v2');
                 if (stored) {
                     try {
                         return JSON.parse(stored);
                     } catch (e) {
-                        console.error("Failed to parse comments from localStorage", e);
+                        console.error("Failed to parse local comments:", e);
                     }
                 }
-                // Save default comments initially
-                localStorage.setItem('cube4fun_comments', JSON.stringify(DEFAULT_COMMENTS));
-                return DEFAULT_COMMENTS;
+                return []; // No default comments (clean slate)
             }
 
-            function saveComments(comments) {
-                localStorage.setItem('cube4fun_comments', JSON.stringify(comments));
+            async function addComment(name, text) {
+                const newComment = {
+                    name: name,
+                    text: text,
+                    date: new Date().toISOString(),
+                    avatarColor: getAvatarColor(name)
+                };
+
+                if (isSupabaseActive) {
+                    try {
+                        const { data, error } = await supabase
+                            .from('comments')
+                            .insert([newComment]);
+
+                        if (error) throw error;
+                        return true;
+                    } catch (e) {
+                        console.error("Failed to insert comment to Supabase, saving locally:", e);
+                    }
+                }
+
+                // Local Fallback
+                const localComments = await loadComments();
+                newComment.id = 'comment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                localComments.push(newComment);
+                localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
+                return true;
             }
 
-            function renderComments() {
+            async function deleteComment(commentId) {
+                if (isSupabaseActive) {
+                    try {
+                        const { error } = await supabase
+                            .from('comments')
+                            .delete()
+                            .eq('id', commentId);
+
+                        if (error) throw error;
+                        return true;
+                    } catch (e) {
+                        console.error("Failed to delete comment from Supabase:", e);
+                        alert("Database delete failed: " + e.message);
+                        return false;
+                    }
+                }
+
+                // Local Fallback
+                let localComments = await loadComments();
+                localComments = localComments.filter(c => c.id !== commentId);
+                localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
+                return true;
+            }
+
+            async function isAdminLoggedIn() {
+                if (isSupabaseActive) {
+                    try {
+                        const { data } = await supabase.auth.getSession();
+                        return !!(data && data.session);
+                    } catch (e) {
+                        console.error("Session fetch failed:", e);
+                        return false;
+                    }
+                }
+                return localStorage.getItem('cube4fun_admin_logged_in') === 'true';
+            }
+
+            async function renderComments() {
                 if (!commentsContainer) return;
-                const comments = getSavedComments();
+                const comments = await loadComments();
+                const loggedIn = await isAdminLoggedIn();
+
+                if (adminToggleBtn) {
+                    adminToggleBtn.textContent = loggedIn ? "🚪 Admin Logout" : "🔑 Admin Login";
+                    adminToggleBtn.style.color = loggedIn ? "#FF6B6B" : "#0066FF";
+                }
+
                 commentsContainer.innerHTML = '';
 
                 if (comments.length === 0) {
-                    commentsContainer.innerHTML = '<p style="text-align: center; color: #777; font-style: italic; font-weight: normal; font-size: 1.2em;">No comments yet. Be the first to say something! 💬</p>';
+                    commentsContainer.innerHTML = '<p style="text-align: center; color: #777; font-style: italic; font-weight: normal; font-size: 1.2em; margin: 20px 0;">No comments yet. Be the first to say something! 💬</p>';
                     return;
                 }
 
@@ -582,6 +698,11 @@
                         minute: '2-digit'
                     });
 
+                    const commentId = comment.id;
+                    const deleteBtnHTML = loggedIn 
+                        ? `<button class="delete-comment-btn" data-id="${commentId}" style="background: #FF6B6B; border: 2px solid #333; border-radius: 8px; color: white; cursor: pointer; font-size: 0.9em; padding: 5px 8px; box-shadow: 2px 2px 0px #333; font-family: 'Comic Neue', sans-serif; font-weight: bold; margin-left: 10px; display: inline-flex; align-items: center; gap: 3px; outline: none; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🗑️ Delete</button>`
+                        : '';
+
                     card.innerHTML = `
                         <div style="background-color: ${avatarColor}; width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; display: flex; align-items: center; justify-content: center; font-family: 'DynaPuff', cursive; font-size: 1.4em; font-weight: bold; flex-shrink: 0; box-shadow: 2px 2px 0px rgba(0,0,0,0.15); box-sizing: border-box;">
                             ${initial}
@@ -589,12 +710,28 @@
                         <div style="display: flex; flex-direction: column; gap: 5px; flex-grow: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px;">
                                 <span style="font-size: 1.25em; font-weight: bold; color: #1a1a1a;">${escapeHTML(comment.name)}</span>
-                                <span style="font-size: 0.95em; color: #777;">${formattedDate}</span>
+                                <div style="display: flex; align-items: center;">
+                                    <span style="font-size: 0.95em; color: #777;">${formattedDate}</span>
+                                    ${deleteBtnHTML}
+                                </div>
                             </div>
                             <p style="font-size: 1.15em; line-height: 1.4; margin: 5px 0 0 0; font-weight: normal; color: #333; white-space: pre-wrap; word-break: break-word;">${escapeHTML(comment.text)}</p>
                         </div>
                     `;
                     commentsContainer.appendChild(card);
+                });
+
+                // Attach delete button event listeners
+                document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+                    btn.addEventListener('click', async function(e) {
+                        const id = this.getAttribute('data-id');
+                        if (confirm("Are you sure you want to delete this comment? 🗑️")) {
+                            const success = await deleteComment(id);
+                            if (success) {
+                                renderComments();
+                            }
+                        }
+                    });
                 });
             }
 
@@ -611,29 +748,76 @@
             }
 
             if (commentForm) {
-                commentForm.addEventListener('submit', function(e) {
+                commentForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
                     const name = commentNameInput.value.trim();
                     const text = commentTextInput.value.trim();
 
                     if (!name || !text) return;
 
-                    const newComment = {
-                        id: 'comment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
-                        name: name,
-                        text: text,
-                        date: new Date().toISOString(),
-                        avatarColor: getAvatarColor(name)
-                    };
+                    const success = await addComment(name, text);
+                    if (success) {
+                        commentNameInput.value = '';
+                        commentTextInput.value = '';
+                        renderComments();
+                    }
+                });
+            }
 
-                    const comments = getSavedComments();
-                    comments.push(newComment);
-                    saveComments(comments);
-                    
-                    // Reset form and rerender
-                    commentNameInput.value = '';
-                    commentTextInput.value = '';
-                    renderComments();
+            // Modal Toggles
+            if (adminToggleBtn) {
+                adminToggleBtn.addEventListener('click', async function() {
+                    const loggedIn = await isAdminLoggedIn();
+                    if (loggedIn) {
+                        if (isSupabaseActive) {
+                            await supabase.auth.signOut();
+                        } else {
+                            localStorage.removeItem('cube4fun_admin_logged_in');
+                        }
+                        alert("Logged out as Admin! 🚪");
+                        renderComments();
+                    } else {
+                        adminModal.style.display = 'flex';
+                    }
+                });
+            }
+
+            if (adminModalClose) {
+                adminModalClose.addEventListener('click', function() {
+                    adminModal.style.display = 'none';
+                });
+            }
+
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const email = adminEmailInput.value.trim();
+                    const password = adminPasswordInput.value;
+
+                    if (isSupabaseActive) {
+                        try {
+                            const { data, error } = await supabase.auth.signInWithPassword({
+                                email: email,
+                                password: password
+                            });
+
+                            if (error) throw error;
+                            
+                            alert("Welcome, Admin! 🔓 You can now manage comments.");
+                            adminModal.style.display = 'none';
+                            renderComments();
+                        } catch (err) {
+                            alert("Login failed: " + err.message);
+                        }
+                    } else {
+                        // Local Mode simulation
+                        if (email && password) {
+                            localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                            alert("Logged in as Admin (LOCAL MODE)! You can now manage comments.");
+                            adminModal.style.display = 'none';
+                            renderComments();
+                        }
+                    }
                 });
             }
 
