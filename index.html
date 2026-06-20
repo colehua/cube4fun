@@ -412,7 +412,7 @@
                 // Exclude July(6) and August(7)
                 let isSummerBreak = (month === 6 || month === 7);
                 // Exclude Dec 23 and Dec 30
-                let isWinterBreak = (month === 11 && (dayOfMonth === 23 || dayOfMonth === 30));
+                let isWinterBreak = (month === 11 && (dayOfMonth === 2 || dayOfMonth === 23 || dayOfMonth === 30));
 
                 if (!isSummerBreak && !isWinterBreak) {
                     // Save to our array and add to the HTML list
