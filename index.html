@@ -593,7 +593,7 @@
                     name: name,
                     text: text,
                     date: new Date().toISOString(),
-                    avatarColor: getAvatarColor(name)
+                    avatarcolor: getAvatarColor(name)
                 };
 
                 if (isSupabaseActive) {
@@ -686,7 +686,7 @@
                     card.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.02)';
                     card.style.boxSizing = 'border-box';
 
-                    const avatarColor = comment.avatarColor || getAvatarColor(comment.name);
+                    const avatarColor = comment.avatarcolor || getAvatarColor(comment.name);
                     const initial = comment.name ? comment.name[0].toUpperCase() : '👤';
                     
                     const dateObj = new Date(comment.date);
