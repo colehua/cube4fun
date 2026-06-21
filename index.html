@@ -362,13 +362,20 @@
                 <p style="font-size: 1.1em; color: #555; font-style: italic;">Could practice at home for a bit of homework</p>
 
                 <h2 class="black-bubbly" style="font-size: 2em; margin-top: 30px;">2026 Schedule</h2>
-                <p style="font-size: 1em; margin: 0; color: #666;">Starts June 3rd<br><i>(Excludes Summer Break & Dec 2 & Winter Break)</i></p>
+                <p style="font-size: 1em; margin: 0; color: #666; margin-bottom: 20px;">Starts June 3rd<br><i>(Excludes Summer Break & Dec 2 & Winter Break)</i></p>
                 
-                <div class="schedule-box">
+                <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; color: #029347; margin: 0 0 5px 0;">📅 Upcoming Sessions</h3>
+                <div class="schedule-box" style="border-color: #029347;">
                     <ul id="schedule-list">
-                        </ul>
+                    </ul>
                 </div>
-                <p id="total-classes" style="font-size: 1em; text-align: center; color: #666;"></p>
+                <p id="total-classes" style="font-size: 1.1em; text-align: center; color: #1a1a1a; margin-top: 5px; margin-bottom: 25px; font-weight: bold;"></p>
+
+                <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; color: #777; margin: 20px 0 5px 0;">🕰️ Completed Sessions</h3>
+                <div class="schedule-box" style="border-color: #ccc; max-height: 120px; opacity: 0.75; background: #fdfdfd;">
+                    <ul id="past-schedule-list">
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -466,6 +473,7 @@
             // ==========================================
 
             const scheduleList = document.getElementById('schedule-list');
+            const pastScheduleList = document.getElementById('past-schedule-list');
             const totalClassesElem = document.getElementById('total-classes');
             const topBanner = document.getElementById('top-banner');
             
@@ -474,7 +482,11 @@
             const endDate = new Date('2026-12-31T12:00:00');
             
             let currentDate = new Date(startDate);
-            let validClassDates = [];
+            let upcomingClassDates = [];
+            let pastClassDates = [];
+
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // Reset time to start of day so we don't skip a class on the day-of
 
             // Loop to calculate all valid class dates
             while(currentDate <= endDate) {
@@ -483,24 +495,34 @@
                 
                 // Exclude July(6) and August(7)
                 let isSummerBreak = (month === 6 || month === 7);
-                // Exclude Dec 23 and Dec 30
+                // Exclude Dec 2, Dec 23 and Dec 30
                 let isWinterBreak = (month === 11 && (dayOfMonth === 2 || dayOfMonth === 23 || dayOfMonth === 30));
 
                 if (!isSummerBreak && !isWinterBreak) {
-                    // Save to our array and add to the HTML list
-                    validClassDates.push(new Date(currentDate));
-                    
+                    let tempDate = new Date(currentDate);
                     let li = document.createElement('li');
                     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-                    li.textContent = currentDate.toLocaleDateString('en-US', options);
-                    scheduleList.appendChild(li);
+                    li.textContent = tempDate.toLocaleDateString('en-US', options);
+
+                    if (tempDate >= today) {
+                        upcomingClassDates.push(tempDate);
+                        scheduleList.appendChild(li);
+                    } else {
+                        pastClassDates.push(tempDate);
+                        li.style.color = '#888';
+                        li.style.textDecoration = 'line-through';
+                        li.style.fontWeight = 'normal';
+                        if (pastScheduleList) {
+                            pastScheduleList.appendChild(li);
+                        }
+                    }
                 }
                 
                 // Advance exactly 7 days
                 currentDate.setDate(currentDate.getDate() + 7);
             }
 
-            totalClassesElem.textContent = `Total sessions remaining: ${validClassDates.length}`;
+            totalClassesElem.textContent = `Sessions remaining: ${upcomingClassDates.length} (Completed: ${pastClassDates.length})`;
 
             // --- BANNER LOGIC ---
             if (MANUAL_MESSAGE !== "") {
@@ -508,16 +530,7 @@
                 topBanner.innerHTML = "📣 " + MANUAL_MESSAGE;
             } else {
                 // Otherwise, calculate the next upcoming date automatically
-                let today = new Date();
-                today.setHours(0, 0, 0, 0); // Reset time to start of day so we don't skip a class on the day-of
-
-                let nextClassDate = null;
-                for (let i = 0; i < validClassDates.length; i++) {
-                    if (validClassDates[i] >= today) {
-                        nextClassDate = validClassDates[i];
-                        break;
-                    }
-                }
+                let nextClassDate = upcomingClassDates.length > 0 ? upcomingClassDates[0] : null;
 
                 if (nextClassDate) {
                     const options = { weekday: 'long', month: 'short', day: 'numeric' };
@@ -526,6 +539,7 @@
                     topBanner.innerHTML = "🎉 2026 Sessions are complete! Check back next year!";
                 }
             }
+
 
             // ==========================================
             // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
