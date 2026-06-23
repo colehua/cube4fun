@@ -574,15 +574,27 @@
                             <span id="stat-mean" class="stats-value">-</span>
                         </li>
                         <li class="stats-item" style="border-top: 3px solid #ccc; margin-top: 15px; padding-top: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-                            <span>Cole's Record:</span>
+                            <span>Cole's Single:</span>
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="stat-cole-record" style="color: #FF6B6B;">9.00 ⚡</span>
-                                <div id="edit-cole-record-container" style="display: none; align-items: center; gap: 5px;">
-                                    <input type="number" step="0.01" id="input-cole-record" style="width: 80px; font-size: 0.9em; padding: 4px 6px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif;">
-                                    <button id="btn-save-cole-record" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 3px 8px; margin: 0;">Save</button>
-                                    <button id="btn-cancel-cole-record" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 3px 8px; margin: 0;">✕</button>
+                                <span id="stat-cole-single" style="color: #FF6B6B; font-weight: bold;">9.00 ⚡</span>
+                                <div id="edit-cole-single-container" style="display: none; align-items: center; gap: 5px;">
+                                    <input type="number" step="0.01" id="input-cole-single" style="width: 85px; font-size: 0.9em; padding: 4px 6px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif;">
+                                    <button id="btn-save-cole-single" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 3px 8px; margin: 0;">Save</button>
+                                    <button id="btn-cancel-cole-single" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 3px 8px; margin: 0;">✕</button>
                                 </div>
-                                <button id="btn-edit-cole-record" style="display: none; background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 0; outline: none;" title="Edit Cole's Record">✏️</button>
+                                <button id="btn-edit-cole-single" style="display: none; background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 0; outline: none;" title="Edit Cole's Single Record">✏️</button>
+                            </div>
+                        </li>
+                        <li class="stats-item" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                            <span id="label-cole-average">Cole's Average:</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span id="stat-cole-average" style="color: #FF6B6B; font-weight: bold;">11.50 ⚡</span>
+                                <div id="edit-cole-average-container" style="display: none; align-items: center; gap: 5px;">
+                                    <input type="number" step="0.01" id="input-cole-average" style="width: 85px; font-size: 0.9em; padding: 4px 6px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif;">
+                                    <button id="btn-save-cole-average" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 3px 8px; margin: 0;">Save</button>
+                                    <button id="btn-cancel-cole-average" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 3px 8px; margin: 0;">✕</button>
+                                </div>
+                                <button id="btn-edit-cole-average" style="display: none; background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 0; outline: none;" title="Edit Cole's Average Record">✏️</button>
                             </div>
                         </li>
                     </ul>
@@ -664,12 +676,17 @@
 
         // Cole's customizable WCA records
         const DEFAULT_COLE_RECORDS = {
-            '3x3': 9.00,
-            '2x2': 2.50,
-            '3x3-oh': 15.00,
-            '3x3-fmc': 25.00
+            '3x3': { single: 9.00, average: 11.50 },
+            '2x2': { single: 2.50, average: 3.80 },
+            '3x3-oh': { single: 15.00, average: 18.50 },
+            '3x3-fmc': { single: 25.00, average: 28.00 }
         };
-        let coleRecords = { ...DEFAULT_COLE_RECORDS };
+        let coleRecords = {
+            '3x3': { single: 9.00, average: 11.50 },
+            '2x2': { single: 2.50, average: 3.80 },
+            '3x3-oh': { single: 15.00, average: 18.50 },
+            '3x3-fmc': { single: 25.00, average: 28.00 }
+        };
 
 
         const timerDisplay = document.getElementById('timer-val');
@@ -1399,14 +1416,15 @@
             triggerNewScramble();
 
             const type = scrambleTypeSelect.value;
-            const coleRecord = coleRecords[type] || DEFAULT_COLE_RECORDS[type];
+            const coleRecordObj = coleRecords[type] || DEFAULT_COLE_RECORDS[type];
+            const coleSingle = coleRecordObj.single;
 
             if (isNewPB && solves.length > 1) {
                 buddyBubble.innerHTML = `🎉 OMG! That's a new Personal Best! **${formatTime(elapsed)}**! Incredible! 🏆`;
                 triggerEmojiConfetti();
-            } else if (elapsed < coleRecord) {
-                const recordStr = type === '3x3-fmc' ? `${coleRecord} moves` : formatTime(coleRecord);
-                buddyBubble.innerHTML = `🔥 Beat Cole! You beat Cole's ${recordStr} record with **${type === '3x3-fmc' ? elapsed + ' moves' : formatTime(elapsed)}**! Absolute master class! 🏆`;
+            } else if (elapsed < coleSingle) {
+                const recordStr = type === '3x3-fmc' ? `${coleSingle} moves` : formatTime(coleSingle);
+                buddyBubble.innerHTML = `🔥 Beat Cole! You beat Cole's ${recordStr} Single record with **${type === '3x3-fmc' ? elapsed + ' moves' : formatTime(elapsed)}**! Absolute master class! 🏆`;
                 triggerEmojiConfetti();
             } else {
                 const randomQuote = buddyQuotes[Math.floor(Math.random() * buddyQuotes.length)];
@@ -1419,23 +1437,36 @@
         function updateColeRecordDisplay() {
             const type = scrambleTypeSelect.value;
             const record = coleRecords[type] || DEFAULT_COLE_RECORDS[type];
-            const displayElem = document.getElementById('stat-cole-record');
-            if (!displayElem) return;
-
-            let text = "";
-            let bubbleText = "";
-            if (type === '3x3-fmc') {
-                text = `${record.toFixed(0)} moves ⚡`;
-                bubbleText = `Welcome to Cole's FMC Timer! Can you beat my ${record.toFixed(0)} moves record? ⚡`;
-            } else {
-                text = `${formatTime(record)} ⚡`;
-                bubbleText = `Welcome to Cole's ${type} Timer! Can you beat my ${formatTime(record)} record? ⚡`;
+            const displaySingle = document.getElementById('stat-cole-single');
+            const displayAverage = document.getElementById('stat-cole-average');
+            const labelAverage = document.getElementById('label-cole-average');
+            
+            if (labelAverage) {
+                labelAverage.textContent = type === '3x3-fmc' ? "Cole's Mean:" : "Cole's Average:";
             }
-            displayElem.innerHTML = text;
+
+            if (displaySingle) {
+                if (type === '3x3-fmc') {
+                    displaySingle.innerHTML = `${record.single.toFixed(0)} moves ⚡`;
+                } else {
+                    displaySingle.innerHTML = `${formatTime(record.single)} ⚡`;
+                }
+            }
+
+            if (displayAverage) {
+                if (record.average === null || record.average === undefined) {
+                    displayAverage.innerHTML = `-`;
+                } else if (type === '3x3-fmc') {
+                    displayAverage.innerHTML = `${record.average.toFixed(2)} moves ⚡`;
+                } else {
+                    displayAverage.innerHTML = `${formatTime(record.average)} ⚡`;
+                }
+            }
             
             // Only update bubble if it's the welcome state or record beat state
             if (buddyBubble && (buddyBubble.textContent.includes("Welcome to Cole's") || buddyBubble.textContent.includes("Can you beat my"))) {
-                buddyBubble.textContent = bubbleText;
+                const singleStr = type === '3x3-fmc' ? `${record.single.toFixed(0)} moves` : formatTime(record.single);
+                buddyBubble.textContent = `Welcome to Cole's ${type} Timer! Can you beat my ${singleStr} single record? ⚡`;
             }
         }
 
@@ -1447,7 +1478,10 @@
                         .select('*');
                     if (!error && data) {
                         data.forEach(row => {
-                            coleRecords[row.id] = parseFloat(row.record_time);
+                            coleRecords[row.id] = {
+                                single: parseFloat(row.record_single),
+                                average: row.record_average ? parseFloat(row.record_average) : null
+                            };
                         });
                     }
                 } catch (e) {
@@ -1455,7 +1489,7 @@
                 }
             } else {
                 // Local storage fallback
-                const stored = localStorage.getItem('cube_timer_cole_records');
+                const stored = localStorage.getItem('cube_timer_cole_records_v2');
                 if (stored) {
                     try {
                         coleRecords = { ...DEFAULT_COLE_RECORDS, ...JSON.parse(stored) };
@@ -1467,54 +1501,62 @@
             updateColeRecordDisplay();
         }
 
-        // Admin functionality
-        const btnEditColeRecord = document.getElementById('btn-edit-cole-record');
-        const editContainer = document.getElementById('edit-cole-record-container');
-        const inputColeRecord = document.getElementById('input-cole-record');
-        const btnSaveColeRecord = document.getElementById('btn-save-cole-record');
-        const btnCancelColeRecord = document.getElementById('btn-cancel-cole-record');
-        const displayColeRecord = document.getElementById('stat-cole-record');
+        // Admin functionality - Single
+        const btnEditColeSingle = document.getElementById('btn-edit-cole-single');
+        const editSingleContainer = document.getElementById('edit-cole-single-container');
+        const inputColeSingle = document.getElementById('input-cole-single');
+        const btnSaveColeSingle = document.getElementById('btn-save-cole-single');
+        const btnCancelColeSingle = document.getElementById('btn-cancel-cole-single');
+        const displayColeSingle = document.getElementById('stat-cole-single');
 
-        if (btnEditColeRecord) {
-            btnEditColeRecord.addEventListener('click', () => {
+        if (btnEditColeSingle) {
+            btnEditColeSingle.addEventListener('click', () => {
                 const type = scrambleTypeSelect.value;
-                const currentVal = coleRecords[type];
+                const currentVal = coleRecords[type]?.single || DEFAULT_COLE_RECORDS[type].single;
                 
-                displayColeRecord.style.display = 'none';
-                btnEditColeRecord.style.display = 'none';
-                editContainer.style.display = 'inline-flex';
+                displayColeSingle.style.display = 'none';
+                btnEditColeSingle.style.display = 'none';
+                editSingleContainer.style.display = 'inline-flex';
                 
-                inputColeRecord.value = currentVal;
-                inputColeRecord.focus();
+                inputColeSingle.value = currentVal;
+                inputColeSingle.focus();
             });
         }
 
-        if (btnCancelColeRecord) {
-            btnCancelColeRecord.addEventListener('click', () => {
-                displayColeRecord.style.display = 'inline-block';
-                btnEditColeRecord.style.display = 'inline-block';
-                editContainer.style.display = 'none';
+        if (btnCancelColeSingle) {
+            btnCancelColeSingle.addEventListener('click', () => {
+                displayColeSingle.style.display = 'inline-block';
+                btnEditColeSingle.style.display = 'inline-block';
+                editSingleContainer.style.display = 'none';
             });
         }
 
-        if (btnSaveColeRecord) {
-            btnSaveColeRecord.addEventListener('click', async () => {
+        if (btnSaveColeSingle) {
+            btnSaveColeSingle.addEventListener('click', async () => {
                 const type = scrambleTypeSelect.value;
-                const newVal = parseFloat(inputColeRecord.value);
+                const newVal = parseFloat(inputColeSingle.value);
                 
                 if (isNaN(newVal) || newVal <= 0) {
-                    alert("Please enter a week/moves count or positive seconds record!");
+                    alert("Please enter a valid positive record!");
                     return;
                 }
 
-                coleRecords[type] = newVal;
+                if (!coleRecords[type]) {
+                    coleRecords[type] = { single: newVal, average: null };
+                } else {
+                    coleRecords[type].single = newVal;
+                }
                 
                 let success = false;
                 if (isSupabaseActive) {
                     try {
                         const { error } = await supabase
                             .from('cole_records')
-                            .upsert([{ id: type, record_time: newVal }]);
+                            .upsert([{ 
+                                id: type, 
+                                record_single: newVal,
+                                record_average: coleRecords[type].average
+                            }]);
                         if (error) throw error;
                         success = true;
                     } catch (e) {
@@ -1522,15 +1564,92 @@
                         alert("Database save failed: " + e.message);
                     }
                 } else {
-                    localStorage.setItem('cube_timer_cole_records', JSON.stringify(coleRecords));
+                    localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
                     success = true;
                 }
 
                 if (success) {
                     updateColeRecordDisplay();
-                    displayColeRecord.style.display = 'inline-block';
-                    btnEditColeRecord.style.display = 'inline-block';
-                    editContainer.style.display = 'none';
+                    displayColeSingle.style.display = 'inline-block';
+                    btnEditColeSingle.style.display = 'inline-block';
+                    editSingleContainer.style.display = 'none';
+                }
+            });
+        }
+
+        // Admin functionality - Average
+        const btnEditColeAverage = document.getElementById('btn-edit-cole-average');
+        const editAverageContainer = document.getElementById('edit-cole-average-container');
+        const inputColeAverage = document.getElementById('input-cole-average');
+        const btnSaveColeAverage = document.getElementById('btn-save-cole-average');
+        const btnCancelColeAverage = document.getElementById('btn-cancel-cole-average');
+        const displayColeAverage = document.getElementById('stat-cole-average');
+
+        if (btnEditColeAverage) {
+            btnEditColeAverage.addEventListener('click', () => {
+                const type = scrambleTypeSelect.value;
+                const currentVal = coleRecords[type]?.average || DEFAULT_COLE_RECORDS[type].average || "";
+                
+                displayColeAverage.style.display = 'none';
+                btnEditColeAverage.style.display = 'none';
+                editAverageContainer.style.display = 'inline-flex';
+                
+                inputColeAverage.value = currentVal;
+                inputColeAverage.focus();
+            });
+        }
+
+        if (btnCancelColeAverage) {
+            btnCancelColeAverage.addEventListener('click', () => {
+                displayColeAverage.style.display = 'inline-block';
+                btnEditColeAverage.style.display = 'inline-block';
+                editAverageContainer.style.display = 'none';
+            });
+        }
+
+        if (btnSaveColeAverage) {
+            btnSaveColeAverage.addEventListener('click', async () => {
+                const type = scrambleTypeSelect.value;
+                const valStr = inputColeAverage.value.trim();
+                const newVal = valStr === "" ? null : parseFloat(valStr);
+                
+                if (newVal !== null && (isNaN(newVal) || newVal <= 0)) {
+                    alert("Please enter a valid positive record!");
+                    return;
+                }
+
+                if (!coleRecords[type]) {
+                    coleRecords[type] = { single: DEFAULT_COLE_RECORDS[type].single, average: newVal };
+                } else {
+                    coleRecords[type].average = newVal;
+                }
+                
+                let success = false;
+                if (isSupabaseActive) {
+                    try {
+                        const { error } = await supabase
+                            .from('cole_records')
+                            .upsert([{ 
+                                id: type, 
+                                record_single: coleRecords[type].single,
+                                record_average: newVal
+                            }]);
+                        if (error) throw error;
+                        success = true;
+                    } catch (e) {
+                        console.error("Failed to save record to Supabase:", e);
+                        alert("Database save failed: " + e.message);
+                    }
+                } else {
+                    localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
+                    success = true;
+                }
+
+                if (success) {
+                    updateColeRecordDisplay();
+                    displayColeAverage.style.display = 'inline-block';
+                    btnEditColeAverage.style.display = 'inline-block';
+                    editAverageContainer.style.display = 'none';
                 }
             });
         }
@@ -1558,8 +1677,11 @@
 
         async function checkAdminSession() {
             const loggedIn = await isAdminLoggedIn();
-            if (btnEditColeRecord) {
-                btnEditColeRecord.style.display = loggedIn ? 'inline-block' : 'none';
+            if (btnEditColeSingle) {
+                btnEditColeSingle.style.display = loggedIn ? 'inline-block' : 'none';
+            }
+            if (btnEditColeAverage) {
+                btnEditColeAverage.style.display = loggedIn ? 'inline-block' : 'none';
             }
             if (adminToggleBtn) {
                 adminToggleBtn.textContent = loggedIn ? "🚪 Admin Logout" : "🔑 Admin Login";
