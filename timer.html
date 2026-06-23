@@ -661,12 +661,12 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2dua29yd2N0dXNhZ2dhZnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTc0MDYsImV4cCI6MjA5NzQ5MzQwNn0.FvL-F8P127De3O5lzAP2qNidOkzJn2a8Z3QxaZXNvV4";
         // ==========================================
 
-        let supabase = null;
+        let supabaseClient = null;
         let isSupabaseActive = false;
 
         if (SUPABASE_URL && SUPABASE_ANON_KEY) {
             try {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 isSupabaseActive = true;
                 console.log("Supabase active in timer!");
             } catch (e) {
@@ -1473,7 +1473,7 @@
         async function loadColeRecords() {
             if (isSupabaseActive) {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('cole_records')
                         .select('*');
                     if (!error && data) {
@@ -1550,7 +1550,7 @@
                 let success = false;
                 if (isSupabaseActive) {
                     try {
-                        const { error } = await supabase
+                        const { error } = await supabaseClient
                             .from('cole_records')
                             .upsert([{ 
                                 id: type, 
@@ -1627,7 +1627,7 @@
                 let success = false;
                 if (isSupabaseActive) {
                     try {
-                        const { error } = await supabase
+                        const { error } = await supabaseClient
                             .from('cole_records')
                             .upsert([{ 
                                 id: type, 
@@ -1665,7 +1665,7 @@
         async function isAdminLoggedIn() {
             if (isSupabaseActive) {
                 try {
-                    const { data } = await supabase.auth.getSession();
+                    const { data } = await supabaseClient.auth.getSession();
                     return !!(data && data.session);
                 } catch (e) {
                     console.error("Session fetch failed:", e);
@@ -1694,7 +1694,7 @@
                 const loggedIn = await isAdminLoggedIn();
                 if (loggedIn) {
                     if (isSupabaseActive) {
-                        await supabase.auth.signOut();
+                        await supabaseClient.auth.signOut();
                     } else {
                         localStorage.removeItem('cube4fun_admin_logged_in');
                     }
@@ -1720,7 +1720,7 @@
 
                 if (isSupabaseActive) {
                     try {
-                        const { data, error } = await supabase.auth.signInWithPassword({
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
                             email: email,
                             password: password
                         });
