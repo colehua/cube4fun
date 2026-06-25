@@ -446,13 +446,17 @@
         <h1 class="main-title">Cole's Speedcubing Timer ⏱️</h1>
 
         <!-- SETTINGS AND CONTROLS -->
-        <div class="timer-settings">
+        <div class="timer-settings" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;">
             <select id="scramble-type-select" class="select-style">
                 <option value="3x3">3x3x3 Rubik's Cube</option>
                 <option value="2x2">2x2x2 Rubik's Cube</option>
                 <option value="3x3-oh">3x3x3 One-Handed</option>
                 <option value="3x3-fmc">3x3x3 Fewest Moves (FMC)</option>
             </select>
+            <div style="display: inline-flex; align-items: center; gap: 8px;">
+                <label for="scramble-length-input" style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.1em; color: var(--text-dark);">Length:</label>
+                <input type="number" id="scramble-length-input" class="select-style" min="13" max="100" value="21" style="width: 75px; text-align: center; box-sizing: border-box;">
+            </div>
             <button id="btn-prev-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Previous Scramble">◀ Prev</button>
             <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
             <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
@@ -1010,7 +1014,19 @@
             let moves = [];
             let prevFace = '';
             let prevPrevFace = '';
-            const scrambleLength = type === '2x2' ? 11 : 21;
+            
+            // Get user configured scramble length from input, enforce minimum 13
+            let scrambleLength = 21;
+            const lenInput = document.getElementById('scramble-length-input');
+            if (lenInput) {
+                scrambleLength = parseInt(lenInput.value) || 21;
+                if (scrambleLength < 13) {
+                    scrambleLength = 13;
+                    lenInput.value = 13;
+                }
+            } else {
+                scrambleLength = type === '2x2' ? 13 : 21;
+            }
             
             while (moves.length < scrambleLength) {
                 let face = faces[Math.floor(Math.random() * faces.length)];
@@ -1951,6 +1967,10 @@
 
         scrambleTypeSelect.addEventListener('change', () => {
             const type = scrambleTypeSelect.value;
+            const lenInput = document.getElementById('scramble-length-input');
+            if (lenInput) {
+                lenInput.value = type === '2x2' ? 13 : 21;
+            }
             // Stop FMC timer if active
             if (type !== '3x3-fmc' && fmcTimerInterval) {
                 clearInterval(fmcTimerInterval);
@@ -1967,6 +1987,18 @@
             loadSolves();
             updateColeRecordDisplay();
         });
+
+        const scrambleLengthInput = document.getElementById('scramble-length-input');
+        if (scrambleLengthInput) {
+            scrambleLengthInput.addEventListener('change', () => {
+                let val = parseInt(scrambleLengthInput.value) || 21;
+                if (val < 13) {
+                    val = 13;
+                    scrambleLengthInput.value = 13;
+                }
+                triggerNewScramble();
+            });
+        }
 
         clearSessionBtn.addEventListener('click', () => {
             if (confirm("Are you sure you want to clear your entire " + scrambleTypeSelect.value + " solve history? This cannot be undone!")) {
