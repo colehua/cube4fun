@@ -137,7 +137,7 @@
             border: 3px solid #111;
             border-radius: 10px;
             backface-visibility: hidden;
-            cursor: pointer;
+            cursor: grab;
         }
 
         .face-3d.face-U { transform: rotateX(90deg) translateZ(90px); }
@@ -152,6 +152,7 @@
             box-shadow: inset 0 0 5px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
             border: 1px solid rgba(0, 0, 0, 0.2);
             transition: background-color 0.15s ease;
+            cursor: pointer;
         }
 
         .sticker-3d:hover {
@@ -239,6 +240,14 @@
             transform: translate(-1px, -1px);
         }
 
+        .move-content-tab {
+            display: none;
+        }
+
+        .move-content-tab.active {
+            display: block;
+        }
+
         .edu-tab-content {
             display: none;
         }
@@ -298,15 +307,19 @@
             <!-- Left Side: The 3D Cube & Camera Hint -->
             <div class="card" style="text-align: center; border-color: var(--cyan-blob);">
                 <div style="font-size: 1.1em; color: #555; margin-bottom: 5px; font-weight: bold;">
-                    3D Virtual Cube (Drag to rotate camera) 🔄
+                    3D Virtual Cube (Drag/Swipe stickers to operate) 🔄
                 </div>
                 <div class="scene-3d" id="cube-3d-container">
                     <div class="cube-3d" id="cube-3d">
                         <!-- Generated Dynamically -->
                     </div>
                 </div>
-                <div class="keyboard-tip">
-                    🖱️ <strong>Tips:</strong> Left-click any face to rotate it clockwise. Right-click to rotate counter-clockwise.
+                <div class="keyboard-tip" style="line-height: 1.5;">
+                    ☝️ <strong>Direct Cube Controls:</strong><br>
+                    • <strong>Swipe/Drag a sticker</strong> in any direction to spin its corresponding layer.<br>
+                    • <strong>Left-Click/Tap a face</strong> to rotate it clockwise.<br>
+                    • <strong>Right-Click a face</strong> to rotate it counter-clockwise.<br>
+                    • <strong>Drag on the background</strong> to rotate the camera.
                 </div>
             </div>
 
@@ -319,39 +332,105 @@
                 </div>
 
                 <div style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: center;">
-                    <button class="btn-action-main" style="background-color: #FAED27; flex: 1;" onclick="scramblePlayground()">Scramble 🎲</button>
-                    <button class="btn-action-main" style="background-color: #ff7675; color: white; flex: 1;" onclick="resetPlayground()">Reset Solved 🔄</button>
+                    <button class="btn-action-main" style="background-color: #FAED27; flex: 1;" title="Scrambles the cube with 15 random moves" onclick="scramblePlayground()">Scramble 🎲</button>
+                    <button class="btn-action-main" style="background-color: #ff7675; color: white; flex: 1;" title="Resets the cube instantly to solved state" onclick="resetPlayground()">Reset Solved 🔄</button>
                 </div>
 
-                <!-- Manual Move Buttons -->
-                <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Clockwise turns:</div>
-                <div class="btn-group">
-                    <button class="btn-move" onclick="playMove('U')">U</button>
-                    <button class="btn-move" onclick="playMove('D')">D</button>
-                    <button class="btn-move" onclick="playMove('F')">F</button>
-                    <button class="btn-move" onclick="playMove('B')">B</button>
-                    <button class="btn-move" onclick="playMove('L')">L</button>
-                    <button class="btn-move" onclick="playMove('R')">R</button>
+                <!-- Move Tabs -->
+                <div class="playground-tabs">
+                    <button id="tab-basic" class="tab-btn active" onclick="switchMoveTab('basic')">Basic Turns</button>
+                    <button id="tab-wide" class="tab-btn" onclick="switchMoveTab('wide')">Wide (2-Layer)</button>
+                    <button id="tab-slice" class="tab-btn" onclick="switchMoveTab('slice')">Slice Turns</button>
                 </div>
 
-                <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Counter-Clockwise turns (Prime):</div>
-                <div class="btn-group">
-                    <button class="btn-move btn-prime" onclick="playMove('U\'')">U'</button>
-                    <button class="btn-move btn-prime" onclick="playMove('D\'')">D'</button>
-                    <button class="btn-move btn-prime" onclick="playMove('F\'')">F'</button>
-                    <button class="btn-move btn-prime" onclick="playMove('B\'')">B'</button>
-                    <button class="btn-move btn-prime" onclick="playMove('L\'')">L'</button>
-                    <button class="btn-move btn-prime" onclick="playMove('R\'')">R'</button>
+                <!-- Basic Tab Content -->
+                <div id="content-basic" class="move-content-tab active">
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Clockwise turns:</div>
+                    <div class="btn-group">
+                        <button class="btn-move" title="U (Up): Rotate Top face Clockwise" onclick="playMove('U')">U</button>
+                        <button class="btn-move" title="D (Down): Rotate Bottom face Clockwise" onclick="playMove('D')">D</button>
+                        <button class="btn-move" title="F (Front): Rotate Front face Clockwise" onclick="playMove('F')">F</button>
+                        <button class="btn-move" title="B (Back): Rotate Back face Clockwise" onclick="playMove('B')">B</button>
+                        <button class="btn-move" title="L (Left): Rotate Left face Clockwise" onclick="playMove('L')">L</button>
+                        <button class="btn-move" title="R (Right): Rotate Right face Clockwise" onclick="playMove('R')">R</button>
+                    </div>
+
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Counter-Clockwise turns (Prime):</div>
+                    <div class="btn-group">
+                        <button class="btn-move btn-prime" title="U' (Up Prime): Rotate Top face Counter-Clockwise" onclick="playMove('U\'')">U'</button>
+                        <button class="btn-move btn-prime" title="D' (Down Prime): Rotate Bottom face Counter-Clockwise" onclick="playMove('D\'')">D'</button>
+                        <button class="btn-move btn-prime" title="F' (Front Prime): Rotate Front face Counter-Clockwise" onclick="playMove('F\'')">F'</button>
+                        <button class="btn-move btn-prime" title="B' (Back Prime): Rotate Back face Counter-Clockwise" onclick="playMove('B\'')">B'</button>
+                        <button class="btn-move btn-prime" title="L' (Left Prime): Rotate Left face Counter-Clockwise" onclick="playMove('L\'')">L'</button>
+                        <button class="btn-move btn-prime" title="R' (Right Prime): Rotate Right face Counter-Clockwise" onclick="playMove('R\'')">R'</button>
+                    </div>
+
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Double turns (180°):</div>
+                    <div class="btn-group">
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="U2: Rotate Top face 180 degrees" onclick="playMove('U2')">U2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="D2: Rotate Bottom face 180 degrees" onclick="playMove('D2')">D2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="F2: Rotate Front face 180 degrees" onclick="playMove('F2')">F2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="B2: Rotate Back face 180 degrees" onclick="playMove('B2')">B2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="L2: Rotate Left face 180 degrees" onclick="playMove('L2')">L2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="R2: Rotate Right face 180 degrees" onclick="playMove('R2')">R2</button>
+                    </div>
                 </div>
 
-                <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Double turns:</div>
-                <div class="btn-group">
-                    <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('U2')">U2</button>
-                    <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('D2')">D2</button>
-                    <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('F2')">F2</button>
-                    <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('B2')">B2</button>
-                    <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('L2')">L2</button>
-                    <button class="btn-move" style="background-color: var(--cyan-blob);" onclick="playMove('R2')">R2</button>
+                <!-- Wide Tab Content -->
+                <div id="content-wide" class="move-content-tab">
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Wide turns (Clockwise):</div>
+                    <div class="btn-group">
+                        <button class="btn-move" title="Uw (Up wide): Turn Top 2 layers Clockwise" onclick="playMove('Uw')">Uw</button>
+                        <button class="btn-move" title="Dw (Down wide): Turn Bottom 2 layers Clockwise" onclick="playMove('Dw')">Dw</button>
+                        <button class="btn-move" title="Fw (Front wide): Turn Front 2 layers Clockwise" onclick="playMove('Fw')">Fw</button>
+                        <button class="btn-move" title="Bw (Back wide): Turn Back 2 layers Clockwise" onclick="playMove('Bw')">Bw</button>
+                        <button class="btn-move" title="Lw (Left wide): Turn Left 2 layers Clockwise" onclick="playMove('Lw')">Lw</button>
+                        <button class="btn-move" title="Rw (Right wide): Turn Right 2 layers Clockwise" onclick="playMove('Rw')">Rw</button>
+                    </div>
+
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Wide turns (Prime):</div>
+                    <div class="btn-group">
+                        <button class="btn-move btn-prime" title="Uw': Turn Top 2 layers Counter-Clockwise" onclick="playMove('Uw\'')">Uw'</button>
+                        <button class="btn-move btn-prime" title="Dw': Turn Bottom 2 layers Counter-Clockwise" onclick="playMove('Dw\'')">Dw'</button>
+                        <button class="btn-move btn-prime" title="Fw': Turn Front 2 layers Counter-Clockwise" onclick="playMove('Fw\'')">Fw'</button>
+                        <button class="btn-move btn-prime" title="Bw': Turn Back 2 layers Counter-Clockwise" onclick="playMove('Bw\'')">Bw'</button>
+                        <button class="btn-move btn-prime" title="Lw': Turn Left 2 layers Counter-Clockwise" onclick="playMove('Lw\'')">Lw'</button>
+                        <button class="btn-move btn-prime" title="Rw': Turn Right 2 layers Counter-Clockwise" onclick="playMove('Rw\'')">Rw'</button>
+                    </div>
+
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Wide Double turns (180°):</div>
+                    <div class="btn-group">
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="Uw2: Turn Top 2 layers 180 degrees" onclick="playMove('Uw2')">Uw2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="Dw2: Turn Bottom 2 layers 180 degrees" onclick="playMove('Dw2')">Dw2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="Fw2: Turn Front 2 layers 180 degrees" onclick="playMove('Fw2')">Fw2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="Bw2: Turn Back 2 layers 180 degrees" onclick="playMove('Bw2')">Bw2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="Lw2: Turn Left 2 layers 180 degrees" onclick="playMove('Lw2')">Lw2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="Rw2: Turn Right 2 layers 180 degrees" onclick="playMove('Rw2')">Rw2</button>
+                    </div>
+                </div>
+
+                <!-- Slice Tab Content -->
+                <div id="content-slice" class="move-content-tab">
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Slice turns (Clockwise):</div>
+                    <div class="btn-group" style="grid-template-columns: repeat(3, 1fr);">
+                        <button class="btn-move" title="M (Middle): Turn slice between L and R downwards (with L)" onclick="playMove('M')">M</button>
+                        <button class="btn-move" title="E (Equator): Turn slice between U and D rightwards (with D)" onclick="playMove('E')">E</button>
+                        <button class="btn-move" title="S (Standing): Turn slice between F and B Clockwise (with F)" onclick="playMove('S')">S</button>
+                    </div>
+
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Slice turns (Prime):</div>
+                    <div class="btn-group btn-prime" style="grid-template-columns: repeat(3, 1fr);">
+                        <button class="btn-move btn-prime" title="M': Turn slice between L and R upwards (with R)" onclick="playMove('M\'')">M'</button>
+                        <button class="btn-move btn-prime" title="E': Turn slice between U and D leftwards (with U)" onclick="playMove('E\'')">E'</button>
+                        <button class="btn-move btn-prime" title="S': Turn slice between F and B Counter-Clockwise" onclick="playMove('S\'')">S'</button>
+                    </div>
+
+                    <div style="font-weight: bold; color: #555; margin-bottom: 5px;">Slice Double turns (180°):</div>
+                    <div class="btn-group" style="grid-template-columns: repeat(3, 1fr);">
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="M2: Turn middle slice 180 degrees" onclick="playMove('M2')">M2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="E2: Turn equator slice 180 degrees" onclick="playMove('E2')">E2</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob);" title="S2: Turn standing slice 180 degrees" onclick="playMove('S2')">S2</button>
+                    </div>
                 </div>
 
                 <div class="keyboard-tip" style="margin-top: 15px;">
@@ -363,8 +442,8 @@
                     <div style="font-weight: bold; color: #0066FF; margin-bottom: 5px;">💡 Step-by-Step Solver Hint</div>
                     <div id="hint-moves-list" style="font-family: 'DynaPuff', monospace; font-size: 1.15em; color: #333; margin-bottom: 10px;"></div>
                     <div style="display: flex; gap: 8px; justify-content: center;">
-                        <button class="btn-move" style="background-color: #2ecc71; color: white; width: 130px; font-size: 0.95em;" onclick="playNextHintMove()">Play Hint 🤖</button>
-                        <button class="btn-move" style="background-color: var(--cyan-blob); color: var(--text-dark); width: 130px; font-size: 0.95em;" onclick="playAllHintMoves()">Solve 1-Click ⚡</button>
+                        <button class="btn-move" style="background-color: #2ecc71; color: white; width: 130px; font-size: 0.95em;" title="Simulate and execute the next hint move" onclick="playNextHintMove()">Play Hint 🤖</button>
+                        <button class="btn-move" style="background-color: var(--cyan-blob); color: var(--text-dark); width: 130px; font-size: 0.95em;" title="Auto-solves the cube sequentially in 1-Click" onclick="playAllHintMoves()">Solve 1-Click ⚡</button>
                     </div>
                 </div>
             </div>
@@ -446,12 +525,12 @@
             "B'": "B': Back layer Counter-Clockwise",
             "L'": "L': Left layer Counter-Clockwise",
             "R'": "R': Right layer Counter-Clockwise",
-            'U2': "U2: Top layer twice",
-            'D2': "D2: Bottom layer twice",
-            'F2': "F2: Front layer twice",
-            'B2': "B2: Back layer twice",
-            'L2': "L2: Left layer twice",
-            'R2': "R2: Right layer twice",
+            'U2': "U2: Top layer twice (180°)",
+            'D2': "D2: Bottom layer twice (180°)",
+            'F2': "F2: Front layer twice (180°)",
+            'B2': "B2: Back layer twice (180°)",
+            'L2': "L2: Left layer twice (180°)",
+            'R2': "R2: Right layer twice (180°)",
             'M': "M: Middle slice Clockwise",
             "M'": "M': Middle slice Counter-Clockwise",
             'M2': "M2: Middle slice twice",
@@ -460,7 +539,25 @@
             'E2': "E2: Equator slice twice",
             'S': "S: Standing slice Clockwise",
             "S'": "S': Standing slice Counter-Clockwise",
-            'S2': "S2: Standing slice twice"
+            'S2': "S2: Standing slice twice",
+            'Uw': "Uw: Top 2 layers Clockwise",
+            "Uw'": "Uw': Top 2 layers Counter-Clockwise",
+            'Uw2': "Uw2: Top 2 layers twice",
+            'Dw': "Dw: Bottom 2 layers Clockwise",
+            "Dw'": "Dw': Bottom 2 layers Counter-Clockwise",
+            'Dw2': "Dw2: Bottom 2 layers twice",
+            'Fw': "Fw: Front 2 layers Clockwise",
+            "Fw'": "Fw': Front 2 layers Counter-Clockwise",
+            'Fw2': "Fw2: Front 2 layers twice",
+            'Bw': "Bw: Back 2 layers Clockwise",
+            "Bw'": "Bw': Back 2 layers Counter-Clockwise",
+            'Bw2': "Bw2: Back 2 layers twice",
+            'Lw': "Lw: Left 2 layers Clockwise",
+            "Lw'": "Lw': Left 2 layers Counter-Clockwise",
+            'Lw2': "Lw2: Left 2 layers twice",
+            'Rw': "Rw: Right 2 layers Clockwise",
+            "Rw'": "Rw': Right 2 layers Counter-Clockwise",
+            'Rw2': "Rw2: Right 2 layers twice"
         };
 
         let moveHistory = []; 
@@ -477,7 +574,8 @@
             };
             moveHistory = [];
             solutionMoves = [];
-            document.getElementById('hint-box').style.display = 'none';
+            const hintBox = document.getElementById('hint-box');
+            if (hintBox) hintBox.style.display = 'none';
         }
 
         function rotateFaceCW(face) {
@@ -586,6 +684,24 @@
                     rotateMiddleRow(1);
                 } else if (base === 'S') {
                     rotateMiddleRing(1);
+                } else if (base === 'Uw') {
+                    rotateFaceCW(cube3.U);
+                    rotateMiddleRow(-1);
+                } else if (base === 'Dw') {
+                    rotateFaceCW(cube3.D);
+                    rotateMiddleRow(1);
+                } else if (base === 'Fw') {
+                    rotateFaceCW(cube3.F);
+                    rotateMiddleRing(1);
+                } else if (base === 'Bw') {
+                    rotateFaceCW(cube3.B);
+                    rotateMiddleRing(-1);
+                } else if (base === 'Lw') {
+                    rotateFaceCW(cube3.L);
+                    rotateMiddleColumn(1);
+                } else if (base === 'Rw') {
+                    rotateFaceCW(cube3.R);
+                    rotateMiddleColumn(-1);
                 }
             }
         }
@@ -661,6 +777,12 @@
         }
 
         // --- 3D RENDERING ---
+        let isStickerDrag = false;
+        let stickerStartX = 0;
+        let stickerStartY = 0;
+        let stickerStartFace = "";
+        let stickerStartIndex = -1;
+
         function init3dCube() {
             const cubeEl = document.getElementById('cube-3d');
             cubeEl.innerHTML = "";
@@ -670,10 +792,6 @@
                 const faceEl = document.createElement('div');
                 faceEl.className = `face-3d face-${fName}`;
                 
-                faceEl.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    playMove(fName);
-                });
                 faceEl.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -683,6 +801,27 @@
                 for (let i = 0; i < 9; i++) {
                     const sticker = document.createElement('div');
                     sticker.className = `sticker-3d sticker-${fName}-${i}`;
+                    
+                    // Sticker drag/swipe listener setup
+                    sticker.addEventListener('mousedown', (e) => {
+                        if (e.button !== 0) return; // Only left click
+                        e.stopPropagation();
+                        isStickerDrag = true;
+                        stickerStartX = e.clientX;
+                        stickerStartY = e.clientY;
+                        stickerStartFace = fName;
+                        stickerStartIndex = i;
+                    });
+
+                    sticker.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                        isStickerDrag = true;
+                        stickerStartX = e.touches[0].clientX;
+                        stickerStartY = e.touches[0].clientY;
+                        stickerStartFace = fName;
+                        stickerStartIndex = i;
+                    }, { passive: true });
+
                     faceEl.appendChild(sticker);
                 }
                 cubeEl.appendChild(faceEl);
@@ -701,6 +840,78 @@
                     }
                 }
             });
+        }
+
+        // --- STICKER SWIPE INTERACTION ---
+        function executeSwipeMove(face, idx, dx, dy) {
+            const isHorizontal = Math.abs(dx) > Math.abs(dy);
+            let move = "";
+            
+            if (face === 'F') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L'" : "L";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M'" : "M";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R" : "R'";
+                }
+            } else if (face === 'R') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "F" : "F'";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "S" : "S'";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "B'" : "B";
+                }
+            } else if (face === 'U') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "B" : "B'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "S'" : "S";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "F'" : "F";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L'" : "L";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M'" : "M";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R" : "R'";
+                }
+            } else if (face === 'L') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "B" : "B'";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "S'" : "S";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "F'" : "F";
+                }
+            } else if (face === 'B') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "R'" : "R";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M" : "M'";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "L" : "L'";
+                }
+            } else if (face === 'D') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "F'" : "F";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "S" : "S'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "B" : "B'";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L" : "L'";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M" : "M'";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R'" : "R";
+                }
+            }
+            
+            if (move) {
+                playMove(move);
+            }
         }
 
         // --- HINT GENERATION ---
@@ -839,7 +1050,22 @@
             }
         });
 
-        // --- EDUCATIONAL TABS ---
+        // --- TABS & CONTROLS ---
+        function switchMoveTab(tabName) {
+            const tabs = ['basic', 'wide', 'slice'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const content = document.getElementById(`content-${t}`);
+                if (t === tabName) {
+                    btn.classList.add('active');
+                    content.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                    content.classList.remove('active');
+                }
+            });
+        }
+
         function switchEduTab(tabName) {
             const tabs = ['lbl', 'cfop', 'zbll'];
             tabs.forEach(t => {
@@ -855,7 +1081,7 @@
             });
         }
 
-        // --- DRAG ROTATION ---
+        // --- DRAG ROTATION FOR BACKGROUND & LAYER SWIPES ---
         let isDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
         let rotation = { x: -25, y: -45 };
@@ -863,13 +1089,28 @@
         const cube3d = document.getElementById('cube-3d');
         const container3d = document.getElementById('cube-3d-container');
 
+        // Mouse Drag setup for stickers & background
         container3d.addEventListener('mousedown', (e) => {
+            if (isStickerDrag) return; // Ignore if starting drag on sticker
             isDragging = true;
             previousMousePosition = { x: e.clientX, y: e.clientY };
             container3d.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', (e) => {
+            // Case 1: Dragging sticker to spin layers
+            if (isStickerDrag) {
+                const dx = e.clientX - stickerStartX;
+                const dy = e.clientY - stickerStartY;
+                const dist = Math.hypot(dx, dy);
+                if (dist > 30) {
+                    isStickerDrag = false;
+                    executeSwipeMove(stickerStartFace, stickerStartIndex, dx, dy);
+                }
+                return;
+            }
+            
+            // Case 2: Dragging background to rotate camera
             if (!isDragging) return;
             const deltaX = e.clientX - previousMousePosition.x;
             const deltaY = e.clientY - previousMousePosition.y;
@@ -882,17 +1123,39 @@
             previousMousePosition = { x: e.clientX, y: e.clientY };
         });
 
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            container3d.style.cursor = 'grab';
+        document.addEventListener('mouseup', (e) => {
+            if (isStickerDrag) {
+                isStickerDrag = false;
+                if (e.button === 0) {
+                    playMove(stickerStartFace);
+                }
+            }
+            if (isDragging) {
+                isDragging = false;
+                container3d.style.cursor = 'grab';
+            }
         });
 
+        // Touch setups for dragging
         container3d.addEventListener('touchstart', (e) => {
+            if (isStickerDrag) return;
             isDragging = true;
             previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
+            if (isStickerDrag) {
+                const dx = e.touches[0].clientX - stickerStartX;
+                const dy = e.touches[0].clientY - stickerStartY;
+                const dist = Math.hypot(dx, dy);
+                if (dist > 30) {
+                    isStickerDrag = false;
+                    executeSwipeMove(stickerStartFace, stickerStartIndex, dx, dy);
+                }
+                e.preventDefault(); // Prevents page scrolling during swipe play
+                return;
+            }
+            
             if (!isDragging) return;
             const deltaX = e.touches[0].clientX - previousMousePosition.x;
             const deltaY = e.touches[0].clientY - previousMousePosition.y;
@@ -903,10 +1166,16 @@
 
             cube3d.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
             previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }, { passive: true });
+        }, { passive: false });
 
         document.addEventListener('touchend', () => {
-            isDragging = false;
+            if (isStickerDrag) {
+                isStickerDrag = false;
+                playMove(stickerStartFace);
+            }
+            if (isDragging) {
+                isDragging = false;
+            }
         });
 
         // Initialize Cube
