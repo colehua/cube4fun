@@ -936,6 +936,13 @@
             container.appendChild(net);
         }
 
+        // --- 3D CUBE DRAG AND SWIPE STATE ---
+        let isStickerDrag = false;
+        let stickerStartX = 0;
+        let stickerStartY = 0;
+        let stickerStartFace = "";
+        let stickerStartIndex = -1;
+
         // --- 3D CUBE VISUALIZER FUNCTIONS ---
         function init3dCube() {
             const cubeEl = document.getElementById('cube-3d');
@@ -946,9 +953,37 @@
                 const faceEl = document.createElement('div');
                 faceEl.className = `face-3d face-${fName}`;
                 
+                faceEl.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    playMove(fName + "'");
+                });
+
                 for (let i = 0; i < 9; i++) {
                     const sticker = document.createElement('div');
                     sticker.className = `sticker-3d sticker-${fName}-${i}`;
+                    
+                    // Sticker drag/swipe listener setup
+                    sticker.addEventListener('mousedown', (e) => {
+                        if (e.button !== 0) return; // Only left click
+                        e.stopPropagation();
+                        e.preventDefault();
+                        isStickerDrag = true;
+                        stickerStartX = e.clientX;
+                        stickerStartY = e.clientY;
+                        stickerStartFace = fName;
+                        stickerStartIndex = i;
+                    });
+
+                    sticker.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                        isStickerDrag = true;
+                        stickerStartX = e.touches[0].clientX;
+                        stickerStartY = e.touches[0].clientY;
+                        stickerStartFace = fName;
+                        stickerStartIndex = i;
+                    }, { passive: true });
+
                     faceEl.appendChild(sticker);
                 }
                 cubeEl.appendChild(faceEl);
@@ -967,6 +1002,78 @@
                     }
                 }
             });
+        }
+
+        // --- STICKER SWIPE INTERACTION ---
+        function executeSwipeMove(face, idx, dx, dy) {
+            const isHorizontal = Math.abs(dx) > Math.abs(dy);
+            let move = "";
+            
+            if (face === 'F') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L'" : "L";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M'" : "M";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R" : "R'";
+                }
+            } else if (face === 'R') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "F" : "F'";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "S" : "S'";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "B'" : "B";
+                }
+            } else if (face === 'U') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "B" : "B'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "S'" : "S";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "F'" : "F";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L'" : "L";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M'" : "M";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R" : "R'";
+                }
+            } else if (face === 'L') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "B" : "B'";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "S'" : "S";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "F'" : "F";
+                }
+            } else if (face === 'B') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "R'" : "R";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M" : "M'";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "L" : "L'";
+                }
+            } else if (face === 'D') {
+                if (isHorizontal) {
+                    if ([0,1,2].includes(idx)) move = dx < 0 ? "F'" : "F";
+                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "S" : "S'";
+                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "B" : "B'";
+                } else {
+                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L" : "L'";
+                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M" : "M'";
+                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R'" : "R";
+                }
+            }
+            
+            if (move) {
+                playMove(move);
+            }
         }
 
         // --- PLAYGROUND CONTROLS ---
@@ -1061,7 +1168,7 @@
             });
         }
 
-        // --- DRAG ROTATION FOR 3D CUBE ---
+        // --- DRAG ROTATION & SWIPE FOR 3D CUBE ---
         let isDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
         let rotation = { x: -25, y: -45 };
@@ -1069,13 +1176,28 @@
         const cube3d = document.getElementById('cube-3d');
         const container3d = document.getElementById('cube-3d-container');
 
+        // Mouse Drag setup for stickers & background
         container3d.addEventListener('mousedown', (e) => {
+            if (isStickerDrag) return; // Ignore if starting drag on sticker
             isDragging = true;
             previousMousePosition = { x: e.clientX, y: e.clientY };
             container3d.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', (e) => {
+            // Case 1: Dragging sticker to spin layers
+            if (isStickerDrag) {
+                const dx = e.clientX - stickerStartX;
+                const dy = e.clientY - stickerStartY;
+                const dist = Math.hypot(dx, dy);
+                if (dist > 30) {
+                    isStickerDrag = false;
+                    executeSwipeMove(stickerStartFace, stickerStartIndex, dx, dy);
+                }
+                return;
+            }
+            
+            // Case 2: Dragging background to rotate camera
             if (!isDragging) return;
             const deltaX = e.clientX - previousMousePosition.x;
             const deltaY = e.clientY - previousMousePosition.y;
@@ -1088,17 +1210,39 @@
             previousMousePosition = { x: e.clientX, y: e.clientY };
         });
 
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            container3d.style.cursor = 'grab';
+        document.addEventListener('mouseup', (e) => {
+            if (isStickerDrag) {
+                isStickerDrag = false;
+                if (e.button === 0) {
+                    playMove(stickerStartFace);
+                }
+            }
+            if (isDragging) {
+                isDragging = false;
+                container3d.style.cursor = 'grab';
+            }
         });
 
+        // Touch setups for dragging
         container3d.addEventListener('touchstart', (e) => {
+            if (isStickerDrag) return;
             isDragging = true;
             previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
+            if (isStickerDrag) {
+                const dx = e.touches[0].clientX - stickerStartX;
+                const dy = e.touches[0].clientY - stickerStartY;
+                const dist = Math.hypot(dx, dy);
+                if (dist > 30) {
+                    isStickerDrag = false;
+                    executeSwipeMove(stickerStartFace, stickerStartIndex, dx, dy);
+                }
+                e.preventDefault(); // Prevents page scrolling during swipe play
+                return;
+            }
+            
             if (!isDragging) return;
             const deltaX = e.touches[0].clientX - previousMousePosition.x;
             const deltaY = e.touches[0].clientY - previousMousePosition.y;
@@ -1109,10 +1253,16 @@
 
             cube3d.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
             previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }, { passive: true });
+        }, { passive: false });
 
         document.addEventListener('touchend', () => {
-            isDragging = false;
+            if (isStickerDrag) {
+                isStickerDrag = false;
+                playMove(stickerStartFace);
+            }
+            if (isDragging) {
+                isDragging = false;
+            }
         });
 
         // Initialize playground on load

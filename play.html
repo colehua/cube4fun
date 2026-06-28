@@ -806,6 +806,7 @@
                     sticker.addEventListener('mousedown', (e) => {
                         if (e.button !== 0) return; // Only left click
                         e.stopPropagation();
+                        e.preventDefault();
                         isStickerDrag = true;
                         stickerStartX = e.clientX;
                         stickerStartY = e.clientY;
