@@ -384,5 +384,38 @@
 </div>
 
     </div>
+    
+    <script>
+        // Programmatically set all tutorial videos to loop and play in 50% slow motion
+        document.addEventListener('DOMContentLoaded', () => {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.loop = true;
+                video.playbackRate = 0.5;
+                
+                // Ensure playback rate remains 0.5 when playing
+                video.addEventListener('play', () => {
+                    video.playbackRate = 0.5;
+                });
+                
+                // Add a small style helper to indicate speed and looping
+                const container = video.parentElement;
+                if (container && container.classList.contains('media-container')) {
+                    const badge = document.createElement('div');
+                    badge.style.marginTop = '8px';
+                    badge.style.fontSize = '0.9em';
+                    badge.style.fontWeight = 'bold';
+                    badge.style.color = '#FF6B6B';
+                    badge.style.backgroundColor = '#FFF0F0';
+                    badge.style.border = '2px solid #FFB7B2';
+                    badge.style.padding = '4px 12px';
+                    badge.style.borderRadius = '20px';
+                    badge.style.display = 'inline-block';
+                    badge.textContent = '🔄 Looping at 0.5x Speed (Slow Motion)';
+                    container.appendChild(badge);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
