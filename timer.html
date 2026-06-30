@@ -521,6 +521,13 @@
             border: 2px solid #111;
             border-radius: 8px;
             backface-visibility: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .face-3d.highlight-active {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.9), inset 0 0 15px rgba(0, 229, 255, 0.7);
+            border-color: #00E5FF !important;
+            background: #00E5FF !important;
         }
 
         .face-3d.grid-3x3 {
@@ -544,7 +551,7 @@
             border-radius: 4px;
             box-shadow: inset 0 0 4px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
             border: 1px solid rgba(0, 0, 0, 0.2);
-            transition: background-color 0.15s ease;
+            transition: background-color 0.45s ease-in-out;
         }
 
         /* Video Player Styling */
@@ -680,11 +687,10 @@
         }
 
         .scramble-move-span.active {
-            background: #2ecc71;
-            color: white;
-            font-weight: bold;
-            transform: scale(1.15);
-            box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+            background: #00E5FF;
+            color: #1e272e;
+            font-weight: 800;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
         }
 
         .video-controls {
@@ -943,10 +949,11 @@
                     <button id="btn-animator-reset" class="video-btn" title="Reset to Start">🔄</button>
                     
                     <select id="animator-speed-select" class="select-style" style="background-color: #34495e; color: white; border-color: #2c3e50; font-family: monospace; font-size: 0.95em; padding: 6px 10px; border-radius: 8px;" title="Playback Speed">
-                        <option value="1500">0.5x</option>
-                        <option value="1000" selected>1.0x</option>
-                        <option value="650">1.5x</option>
-                        <option value="400">2.0x</option>
+                        <option value="3000">0.25x (Super Slow)</option>
+                        <option value="2000">0.5x (Slow)</option>
+                        <option value="1500" selected>1.0x (Clear Playback)</option>
+                        <option value="1000">1.5x (Normal)</option>
+                        <option value="600">2.0x (Fast)</option>
                     </select>
                 </div>
 
@@ -1506,7 +1513,7 @@
         let animatorCurrentStep = -1; // -1 means solved state, 0 means 1st move applied, etc.
         let animatorMoves = [];
         let animatorIsPlaying = false;
-        let animatorSpeed = 1000; // ms per move
+        let animatorSpeed = 1500; // ms per move
         let animatorIs2x2 = false;
         let animatorRotation = { x: -25, y: -45 };
 
@@ -1650,6 +1657,18 @@
             applyMoveToAnimatorState(move);
             updateAnimator3dCubeVisuals();
             updateAnimatorMovesDisplay();
+
+            // Highlight the active face of the cube
+            if (move && move[0]) {
+                const faceName = move[0];
+                const faceEl = document.querySelector(`.face-${faceName}`);
+                if (faceEl) {
+                    faceEl.classList.add('highlight-active');
+                    setTimeout(() => {
+                        faceEl.classList.remove('highlight-active');
+                    }, Math.min(600, animatorSpeed - 100)); // highlight duration scales with playback speed
+                }
+            }
 
             if (animatorCurrentStep === animatorMoves.length - 1) {
                 stopAnimatorPlayback();
