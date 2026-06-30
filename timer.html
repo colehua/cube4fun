@@ -2491,8 +2491,11 @@
             timerDisplay.className = 'timer-display';
             timerInterval = setInterval(updateTimerDisplay, 10);
             
-            document.querySelector('.preview-section').style.opacity = '0.1';
-            document.querySelector('.scramble-box').style.opacity = '0.1';
+            const previewsContainer = document.querySelector('.previews-container') || document.querySelector('.preview-section');
+            if (previewsContainer) previewsContainer.style.opacity = '0.1';
+            
+            const scrambleBox = document.querySelector('.scramble-box');
+            if (scrambleBox) scrambleBox.style.opacity = '0.1';
         }
 
         function stopTimer() {
@@ -2501,8 +2504,11 @@
             const elapsed = (Date.now() - startTime) / 1000;
             timerDisplay.textContent = formatTime(elapsed);
 
-            document.querySelector('.preview-section').style.opacity = '1';
-            document.querySelector('.scramble-box').style.opacity = '1';
+            const previewsContainer = document.querySelector('.previews-container') || document.querySelector('.preview-section');
+            if (previewsContainer) previewsContainer.style.opacity = '1';
+            
+            const scrambleBox = document.querySelector('.scramble-box');
+            if (scrambleBox) scrambleBox.style.opacity = '1';
 
             const newSolve = {
                 time: elapsed,
