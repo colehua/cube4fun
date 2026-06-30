@@ -433,6 +433,264 @@
             width: 0;
             z-index: -1;
         }
+
+        /* 3D SCENE & CUBE FOR SCRAMBLE ANIMATOR */
+        .scene-3d {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            perspective: 600px;
+            user-select: none;
+        }
+
+        .cube-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-25deg) rotateY(-45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .face-3d {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            left: 30px;
+            top: 30px;
+            display: grid;
+            gap: 3px;
+            background: #111;
+            padding: 4px;
+            box-sizing: border-box;
+            border: 2px solid #111;
+            border-radius: 8px;
+            backface-visibility: hidden;
+        }
+
+        .face-3d.grid-3x3 {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+        }
+
+        .face-3d.grid-2x2 {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+        }
+
+        .face-3d.face-U { transform: rotateX(90deg) translateZ(70px); }
+        .face-3d.face-D { transform: rotateX(-90deg) translateZ(70px); }
+        .face-3d.face-F { transform: rotateY(0deg) translateZ(70px); }
+        .face-3d.face-B { transform: rotateY(180deg) translateZ(70px); }
+        .face-3d.face-L { transform: rotateY(-90deg) translateZ(70px); }
+        .face-3d.face-R { transform: rotateY(90deg) translateZ(70px); }
+
+        .sticker-3d {
+            border-radius: 4px;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            transition: background-color 0.15s ease;
+        }
+
+        /* Video Player Styling */
+        .previews-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            gap: 30px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .preview-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            border: 4px solid #333;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            flex: 1;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+
+        .video-player-card {
+            background: #2c3e50;
+            color: white;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 320px;
+            max-width: 450px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .video-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .video-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            margin: 0;
+            color: #74b9ff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .video-status {
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 0.9em;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #95a5a6;
+        }
+
+        .status-dot.active {
+            background: #ff7675;
+            animation: pulse-red 1s infinite alternate;
+        }
+
+        @keyframes pulse-red {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+
+        .video-screen {
+            background: #1e272e;
+            border-radius: 12px;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            border: 2px solid #000;
+        }
+
+        .scramble-moves-display {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            padding: 8px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.15em;
+            text-align: center;
+            white-space: normal;
+            word-break: break-all;
+            min-height: 44px;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+            gap: 4px;
+        }
+
+        .scramble-move-span {
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            color: #b2bec3;
+        }
+
+        .scramble-move-span.active {
+            background: #2ecc71;
+            color: white;
+            font-weight: bold;
+            transform: scale(1.15);
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+        }
+
+        .video-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .video-btn {
+            background: #34495e;
+            border: 2px solid #2c3e50;
+            color: white;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-btn:hover {
+            background: #57606f;
+            transform: scale(1.05);
+        }
+
+        .video-btn.play-btn {
+            background: #2ecc71;
+            border-color: #27ae60;
+            padding: 8px 18px;
+            font-weight: bold;
+        }
+
+        .video-btn.play-btn:hover {
+            background: #27ae60;
+        }
+
+        .video-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .video-sign-banner {
+            width: 100%;
+            background: #f1c40f;
+            color: #2c3e50;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-top: 12px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: 'DynaPuff', cursive;
+        }
     </style>
 </head>
 <body>
@@ -455,6 +713,8 @@
             <select id="scramble-type-select" class="select-style">
                 <option value="3x3">3x3x3 Rubik's Cube</option>
                 <option value="2x2">2x2x2 Rubik's Cube</option>
+                <option value="3x3-cross">3x3x3 Easy Cross Practice</option>
+                <option value="3x3-f2l">3x3x3 Easy F2L Practice</option>
                 <option value="3x3-oh">3x3x3 One-Handed</option>
                 <option value="3x3-fmc">3x3x3 Fewest Moves (FMC)</option>
             </select>
@@ -483,11 +743,58 @@
             </div>
         </div>
 
-        <!-- 2D SCRAMBLED CUBE PREVIEW -->
-        <div class="preview-section">
-            <div class="preview-title">Scrambled State Preview</div>
-            <div id="cube-net-container">
-                <!-- Net will be rendered here dynamically based on 2x2/3x3 -->
+        <!-- PREVIEWS CONTAINER -->
+        <div class="previews-container">
+            <!-- 2D Net Preview Card -->
+            <div class="preview-card">
+                <div class="preview-title">Scrambled State Preview (2D Net)</div>
+                <div id="cube-net-container">
+                    <!-- Net will be rendered here dynamically based on 2x2/3x3 -->
+                </div>
+            </div>
+
+            <!-- 3D Scramble Animator Video Card -->
+            <div class="video-player-card">
+                <div class="video-header">
+                    <h3 class="video-title">Scramble Video 🎥</h3>
+                    <div class="video-status">
+                        <span id="animator-status-dot" class="status-dot"></span>
+                        <span id="animator-status-text">READY</span>
+                    </div>
+                </div>
+                
+                <div class="video-screen">
+                    <!-- 3D Cube View -->
+                    <div class="scene-3d" id="animator-cube-container" style="cursor: grab;">
+                        <div class="cube-3d" id="animator-cube-3d">
+                            <!-- 3D Cube faces will be generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Scramble Moves Overlay/Display -->
+                    <div id="animator-moves-list" class="scramble-moves-display">
+                        <!-- Scramble moves will be rendered here with highlighting -->
+                    </div>
+                </div>
+
+                <div class="video-controls">
+                    <button id="btn-animator-prev" class="video-btn" title="Previous Move">⏮</button>
+                    <button id="btn-animator-play" class="video-btn play-btn" title="Play / Pause">▶ Play</button>
+                    <button id="btn-animator-next" class="video-btn" title="Next Move">⏭</button>
+                    <button id="btn-animator-reset" class="video-btn" title="Reset to Start">🔄</button>
+                    
+                    <select id="animator-speed-select" class="select-style" style="background-color: #34495e; color: white; border-color: #2c3e50; font-family: monospace; font-size: 0.95em; padding: 6px 10px; border-radius: 8px;" title="Playback Speed">
+                        <option value="1500">0.5x</option>
+                        <option value="1000" selected>1.0x</option>
+                        <option value="650">1.5x</option>
+                        <option value="400">2.0x</option>
+                    </select>
+                </div>
+
+                <!-- Cole's Sign: Hold White on Top, Green on Bottom -->
+                <div class="video-sign-banner">
+                    ⚠️ Hold White on Top, Green on Bottom when scrambling!
+                </div>
             </div>
         </div>
 
@@ -495,8 +802,8 @@
         <div id="timer-tap-zone" class="timer-card">
             <div id="timer-val" class="timer-display">0.00</div>
             <p id="timer-instructions" class="timer-instructions">
-                Hold Spacebar (Turns Green) and Release to Start! Press any key to stop.<br>
-                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box to ready, release to start, tap anywhere to stop!)</span>
+                Hold Spacebar for 3 Seconds (Turns Green) and Release to Start! Press any key to stop.<br>
+                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box for 3 seconds to ready, release to start, tap anywhere to stop!)</span>
             </p>
         </div>
 
@@ -659,9 +966,10 @@
         let timerInterval = null;
         let currentScramble = "";
         let spaceTimer = null;
+        let holdInterval = null;
         let solves = []; // List of { time: num, scramble: str, dnf: bool, plusTwo: bool }
-        let scrambleHistories = { '3x3': [], '2x2': [], '3x3-oh': [], '3x3-fmc': [] };
-        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1, '3x3-oh': -1, '3x3-fmc': -1 };
+        let scrambleHistories = { '3x3': [], '2x2': [], '3x3-cross': [], '3x3-f2l': [], '3x3-oh': [], '3x3-fmc': [] };
+        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1, '3x3-cross': -1, '3x3-f2l': -1, '3x3-oh': -1, '3x3-fmc': -1 };
 
         // ==========================================
         // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
@@ -687,12 +995,16 @@
         const DEFAULT_COLE_RECORDS = {
             '3x3': { single: 9.00, average: 11.50 },
             '2x2': { single: 2.50, average: 3.80 },
+            '3x3-cross': { single: 4.00, average: 5.50 },
+            '3x3-f2l': { single: 6.00, average: 8.00 },
             '3x3-oh': { single: 15.00, average: 18.50 },
             '3x3-fmc': { single: 25.00, average: 28.00 }
         };
         let coleRecords = {
             '3x3': { single: 9.00, average: 11.50 },
             '2x2': { single: 2.50, average: 3.80 },
+            '3x3-cross': { single: 4.00, average: 5.50 },
+            '3x3-f2l': { single: 6.00, average: 8.00 },
             '3x3-oh': { single: 15.00, average: 18.50 },
             '3x3-fmc': { single: 25.00, average: 28.00 }
         };
@@ -1010,6 +1322,8 @@
                 });
                 container.appendChild(net);
             }
+            // Update the 3D scramble animator
+            initScrambleAnimator();
         }
 
         // --- SCRAMBLE GENERATION ---
@@ -1777,12 +2091,22 @@
                 } else if (timerState === 'IDLE') {
                     timerState = 'READYING';
                     timerDisplay.className = 'timer-display hold';
-                    timerDisplay.textContent = '0.00';
+                    timerDisplay.textContent = '3.00';
                     
-                    spaceTimer = setTimeout(() => {
-                        timerState = 'READY';
-                        timerDisplay.className = 'timer-display ready';
-                    }, 400);
+                    let holdStart = Date.now();
+                    clearInterval(holdInterval);
+                    holdInterval = setInterval(() => {
+                        let elapsed = Date.now() - holdStart;
+                        let remaining = Math.max(0, (3000 - elapsed) / 1000);
+                        if (remaining > 0) {
+                            timerDisplay.textContent = remaining.toFixed(2);
+                        } else {
+                            clearInterval(holdInterval);
+                            timerState = 'READY';
+                            timerDisplay.className = 'timer-display ready';
+                            timerDisplay.textContent = '0.00';
+                        }
+                    }, 10);
                 }
             } else {
                 if (timerState === 'RUNNING') {
@@ -1794,7 +2118,7 @@
         window.addEventListener('keyup', (e) => {
             if (e.key === ' ') {
                 e.preventDefault();
-                clearTimeout(spaceTimer);
+                clearInterval(holdInterval);
                 
                 if (timerState === 'READY') {
                     startTimer();
@@ -1807,8 +2131,6 @@
         });
 
         // --- MOBILE/TOUCH CONTROLS ON TAP ZONE ---
-        let touchTimer = null;
-
         tapZone.addEventListener('touchstart', (e) => {
             if (e.target.tagName === 'BUTTON') return;
             
@@ -1819,16 +2141,27 @@
                 e.preventDefault();
                 timerState = 'READYING';
                 timerDisplay.className = 'timer-display hold';
+                timerDisplay.textContent = '3.00';
                 
-                touchTimer = setTimeout(() => {
-                    timerState = 'READY';
-                    timerDisplay.className = 'timer-display ready';
-                }, 400);
+                let holdStart = Date.now();
+                clearInterval(holdInterval);
+                holdInterval = setInterval(() => {
+                    let elapsed = Date.now() - holdStart;
+                    let remaining = Math.max(0, (3000 - elapsed) / 1000);
+                    if (remaining > 0) {
+                        timerDisplay.textContent = remaining.toFixed(2);
+                    } else {
+                        clearInterval(holdInterval);
+                        timerState = 'READY';
+                        timerDisplay.className = 'timer-display ready';
+                        timerDisplay.textContent = '0.00';
+                    }
+                }, 10);
             }
         });
 
         tapZone.addEventListener('touchend', (e) => {
-            clearTimeout(touchTimer);
+            clearInterval(holdInterval);
             if (timerState === 'READY') {
                 e.preventDefault();
                 startTimer();
@@ -1974,7 +2307,10 @@
             const type = scrambleTypeSelect.value;
             const lenInput = document.getElementById('scramble-length-input');
             if (lenInput) {
-                lenInput.value = type === '2x2' ? 7 : 21;
+                if (type === '2x2') lenInput.value = 7;
+                else if (type === '3x3-cross') lenInput.value = 8;
+                else if (type === '3x3-f2l') lenInput.value = 12;
+                else lenInput.value = 21;
             }
             // Stop FMC timer if active
             if (type !== '3x3-fmc' && fmcTimerInterval) {
@@ -2013,6 +2349,7 @@
         });
 
         // --- INITIALIZATION ---
+        initAnimatorControls();
         triggerNewScramble();
         loadSolves();
         toggleTimerMode();
