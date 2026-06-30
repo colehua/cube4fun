@@ -955,8 +955,8 @@
         <div id="timer-tap-zone" class="timer-card">
             <div id="timer-val" class="timer-display">0.00</div>
             <p id="timer-instructions" class="timer-instructions">
-                Hold Spacebar for 3 Seconds (Turns Green) and Release to Start! Press any key to stop.<br>
-                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box for 3 seconds to ready, release to start, tap anywhere to stop!)</span>
+                Hold Spacebar for 2 Seconds (Turns Green) and Release to Start! Press any key to stop.<br>
+                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box for 2 seconds to ready, release to start, tap anywhere to stop!)</span>
             </p>
         </div>
 
@@ -2681,31 +2681,34 @@
         }
 
         async function loadColeRecords() {
+            // First load local storage records as the base
+            const stored = localStorage.getItem('cube_timer_cole_records_v2');
+            if (stored) {
+                try {
+                    coleRecords = { ...DEFAULT_COLE_RECORDS, ...JSON.parse(stored) };
+                } catch (e) {
+                    console.error("Failed to parse local Cole records:", e);
+                }
+            }
+
+            // Then if Supabase is active, try to fetch and overlay
             if (isSupabaseActive) {
                 try {
                     const { data, error } = await supabaseClient
                         .from('cole_records')
                         .select('*');
-                    if (!error && data) {
+                    if (!error && data && data.length > 0) {
                         data.forEach(row => {
                             coleRecords[row.id] = {
                                 single: parseFloat(row.record_single),
                                 average: row.record_average ? parseFloat(row.record_average) : null
                             };
                         });
+                        // Cache the fetched records back to local storage
+                        localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
                     }
                 } catch (e) {
                     console.error("Failed to load Cole's records from Supabase:", e);
-                }
-            } else {
-                // Local storage fallback
-                const stored = localStorage.getItem('cube_timer_cole_records_v2');
-                if (stored) {
-                    try {
-                        coleRecords = { ...DEFAULT_COLE_RECORDS, ...JSON.parse(stored) };
-                    } catch (e) {
-                        console.error("Failed to parse local Cole records:", e);
-                    }
                 }
             }
 
@@ -2774,7 +2777,10 @@
                     coleRecords[type].single = newVal;
                 }
                 
-                let success = false;
+                // Always write to local storage first
+                localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
+                let success = true;
+
                 if (isSupabaseActive) {
                     try {
                         const { error } = await supabaseClient
@@ -2785,14 +2791,9 @@
                                 record_average: coleRecords[type].average
                             }]);
                         if (error) throw error;
-                        success = true;
                     } catch (e) {
-                        console.error("Failed to save record to Supabase:", e);
-                        alert("Database save failed: " + e.message);
+                        console.error("Failed to save record to Supabase (falling back to local):", e);
                     }
-                } else {
-                    localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
-                    success = true;
                 }
 
                 if (success) {
@@ -2851,7 +2852,10 @@
                     coleRecords[type].average = newVal;
                 }
                 
-                let success = false;
+                // Always write to local storage first
+                localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
+                let success = true;
+
                 if (isSupabaseActive) {
                     try {
                         const { error } = await supabaseClient
@@ -2862,14 +2866,9 @@
                                 record_average: newVal
                             }]);
                         if (error) throw error;
-                        success = true;
                     } catch (e) {
-                        console.error("Failed to save record to Supabase:", e);
-                        alert("Database save failed: " + e.message);
+                        console.error("Failed to save record to Supabase (falling back to local):", e);
                     }
-                } else {
-                    localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
-                    success = true;
                 }
 
                 if (success) {
@@ -3110,12 +3109,7 @@
             }
         });
 
-        tapZone.addEventListener('mousedown', (e) => {
-            if (e.target.tagName === 'BUTTON') return;
-            if (timerState === 'RUNNING') {
-                stopTimer();
-            }
-        });
+
 
         // --- BUTTON INTERACTION TRIGGERS ---
         prevScrambleBtn.addEventListener('click', () => {
