@@ -2234,6 +2234,11 @@
             renderSolves();
             calculateStats();
             updateTotalSolvesCount();
+            
+            // Update the big timer display with the last solve time on load
+            if (timerDisplay) {
+                timerDisplay.textContent = getLastSolveTimeStr();
+            }
         }
 
         function saveSolves() {
@@ -2242,6 +2247,11 @@
             renderSolves();
             calculateStats();
             updateTotalSolvesCount();
+
+            // Update the big timer display with the last solve time on save
+            if (timerDisplay && timerState === 'IDLE') {
+                timerDisplay.textContent = getLastSolveTimeStr();
+            }
         }
 
         function renderSolves() {
