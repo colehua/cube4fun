@@ -643,16 +643,16 @@
             const cat = item.cat;
             
             // Render an SVG of size 70x70
-            let svg = `<svg viewBox="0 0 70 70" width="60" height="60" style="background:#2c3e50; border-radius:8px; border:2px solid #333; box-shadow: 2px 2px 5px rgba(0,0,0,0.15);">`;
+            let svg = `<svg viewBox="0 0 70 70" width="60" height="60" style="background:#1e272e; border-radius:8px; border:2.5px solid #333; box-shadow: 2px 2px 6px rgba(0,0,0,0.35);">`;
             
             // Add arrowhead marker definition for PLL arrows
             svg += `<defs>
                 <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff4757" />
+                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />
                 </marker>
             </defs>`;
             
-            let gridColors = Array(9).fill('#7f8c8d'); // default gray
+            let gridColors = Array(9).fill('#57606f'); // default dark gray
             let sideColors = {
                 top: Array(3).fill(null),
                 right: Array(3).fill(null),
@@ -661,18 +661,16 @@
             };
             let arrows = []; // list of {x1, y1, x2, y2, double: boolean}
             
-            const YELLOW = '#FAED27';
-            const WHITE = '#ffffff';
-            const RED = '#ff4757';
-            const GREEN = '#2ecc71';
-            const BLUE = '#3498db';
-            const ORANGE = '#e67e22';
+            const YELLOW = '#FFFF00';
+            const WHITE = '#FFFFFF';
+            const RED = '#FF3B30';
+            const GREEN = '#4CD964';
+            const BLUE = '#007AFF';
+            const ORANGE = '#FF9500';
             
             if (cat === "PLL") {
-                // PLL: top face is fully oriented (yellow)
                 gridColors.fill(YELLOW);
                 
-                // Initialize default physical representation of the last layer sides
                 let corners = [
                     { name: "UBL", stickers: { top: BLUE, left: ORANGE } },
                     { name: "UBR", stickers: { top: BLUE, right: RED } },
@@ -697,362 +695,143 @@
                     edges[j] = temp;
                 }
                 
-                // Apply permutation changes based on PLL case name
                 if (name.includes("T Perm")) {
                     swapCorners(1, 2);
                     swapEdges(1, 3);
-                    arrows = [
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: true}, // swap UBR (50,20) and UFR (50,50)
-                        {x1: 20, y1: 35, x2: 50, y2: 35, double: true}  // swap UL (20,35) and UR (50,35)
-                    ];
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
                 } else if (name.includes("Y Perm")) {
                     swapCorners(0, 2);
                     swapEdges(0, 3);
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 50, y2: 50, double: true}, // swap UBL (20,20) and UFR (50,50)
-                        {x1: 35, y1: 20, x2: 20, y2: 35, double: true}  // swap UB (35,20) and UL (20,35)
-                    ];
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
                 } else if (name.includes("H Perm")) {
                     swapEdges(0, 2);
                     swapEdges(1, 3);
-                    arrows = [
-                        {x1: 35, y1: 20, x2: 35, y2: 50, double: true}, // swap UB and UF
-                        {x1: 20, y1: 35, x2: 50, y2: 35, double: true}  // swap UL and UR
-                    ];
+                    arrows = [{x1: 35, y1: 20, x2: 35, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
                 } else if (name.includes("Ua Perm")) {
-                    // Edges 3-cycle: UR (1) -> UB (0) -> UL (3) -> UR
-                    let temp = edges[0];
-                    edges[0] = edges[1];
-                    edges[1] = edges[3];
-                    edges[3] = temp;
-                    arrows = [
-                        {x1: 50, y1: 35, x2: 35, y2: 20, double: false}, // UR -> UB
-                        {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, // UB -> UL
-                        {x1: 20, y1: 35, x2: 50, y2: 35, double: false}  // UL -> UR
-                    ];
+                    let temp = edges[0]; edges[0] = edges[1]; edges[1] = edges[3]; edges[3] = temp;
+                    arrows = [{x1: 50, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, {x1: 20, y1: 35, x2: 50, y2: 35, double: false}];
                 } else if (name.includes("Ub Perm")) {
-                    // Edges 3-cycle: UL (3) -> UB (0) -> UR (1) -> UL
-                    let temp = edges[0];
-                    edges[0] = edges[3];
-                    edges[3] = edges[1];
-                    edges[1] = temp;
-                    arrows = [
-                        {x1: 20, y1: 35, x2: 35, y2: 20, double: false}, // UL -> UB
-                        {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, // UB -> UR
-                        {x1: 50, y1: 35, x2: 20, y2: 35, double: false}  // UR -> UL
-                    ];
+                    let temp = edges[0]; edges[0] = edges[3]; edges[3] = edges[1]; edges[1] = temp;
+                    arrows = [{x1: 20, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, {x1: 50, y1: 35, x2: 20, y2: 35, double: false}];
                 } else if (name.includes("Z Perm")) {
                     swapEdges(0, 1);
                     swapEdges(2, 3);
-                    arrows = [
-                        {x1: 35, y1: 20, x2: 50, y2: 35, double: true}, // UB <-> UR
-                        {x1: 20, y1: 35, x2: 35, y2: 50, double: true}  // UL <-> UF
-                    ];
+                    arrows = [{x1: 35, y1: 20, x2: 50, y2: 35, double: true}, {x1: 20, y1: 35, x2: 35, y2: 50, double: true}];
                 } else if (name.includes("E Perm")) {
                     swapCorners(0, 3);
                     swapCorners(1, 2);
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 20, y2: 50, double: true}, // UBL <-> UFL
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: true}  // UBR <-> UFR
-                    ];
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 20, x2: 50, y2: 50, double: true}];
                 } else if (name.includes("F Perm")) {
                     swapCorners(1, 2);
                     swapEdges(0, 2);
-                    arrows = [
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 35, y2: 50, double: true}
-                    ];
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
                 } else if (name.includes("Ja Perm")) {
                     swapCorners(0, 3);
                     swapEdges(0, 3);
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 20, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 20, y2: 35, double: true}
-                    ];
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
                 } else if (name.includes("Jb Perm")) {
                     swapCorners(1, 2);
                     swapEdges(0, 1);
-                    arrows = [
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 50, y2: 35, double: true}
-                    ];
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
                 } else if (name.includes("Ra Perm")) {
                     swapCorners(1, 2);
                     swapEdges(0, 3);
-                    arrows = [
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 20, y2: 35, double: true}
-                    ];
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
                 } else if (name.includes("Rb Perm")) {
                     swapCorners(0, 3);
                     swapEdges(0, 1);
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 20, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 50, y2: 35, double: true}
-                    ];
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
                 } else if (name.includes("V Perm")) {
                     swapCorners(0, 2);
                     swapEdges(0, 1);
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 50, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 50, y2: 35, double: true}
-                    ];
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
                 } else if (name.includes("Na Perm")) {
                     swapCorners(0, 2);
                     swapEdges(0, 2);
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 50, y2: 50, double: true},
-                        {x1: 35, y1: 20, x2: 35, y2: 50, double: true}
-                    ];
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
                 } else if (name.includes("Nb Perm")) {
                     swapCorners(1, 3);
                     swapEdges(1, 3);
-                    arrows = [
-                        {x1: 50, y1: 20, x2: 20, y2: 50, double: true},
-                        {x1: 50, y1: 35, x2: 20, y2: 35, double: true}
-                    ];
+                    arrows = [{x1: 50, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 35, x2: 20, y2: 35, double: true}];
                 } else if (name.includes("Aa Perm")) {
-                    // Corners 3-cycle: UBL (0) -> UFR (2) -> UBR (1) -> UBL
-                    let temp = corners[0];
-                    corners[0] = corners[1];
-                    corners[1] = corners[2];
-                    corners[2] = temp;
-                    arrows = [
-                        {x1: 20, y1: 20, x2: 50, y2: 20, double: false},
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: false},
-                        {x1: 50, y1: 50, x2: 20, y2: 20, double: false}
-                    ];
+                    let temp = corners[0]; corners[0] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 20, double: false}];
                 } else if (name.includes("Ab Perm")) {
-                    // Corners 3-cycle: UFL (3) -> UBR (1) -> UFR (2) -> UFL
-                    let temp = corners[3];
-                    corners[3] = corners[1];
-                    corners[1] = corners[2];
-                    corners[2] = temp;
-                    arrows = [
-                        {x1: 20, y1: 50, x2: 50, y2: 20, double: false},
-                        {x1: 50, y1: 20, x2: 50, y2: 50, double: false},
-                        {x1: 50, y1: 50, x2: 20, y2: 50, double: false}
-                    ];
-                } else if (name.includes("Ga Perm")) {
-                    swapCorners(2, 3);
-                    swapEdges(0, 3);
-                } else if (name.includes("Gb Perm")) {
-                    swapCorners(0, 3);
-                    swapEdges(0, 1);
-                } else if (name.includes("Gc Perm")) {
-                    swapCorners(0, 1);
-                    swapEdges(1, 2);
-                } else if (name.includes("Gd Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(2, 3);
+                    let temp = corners[3]; corners[3] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
+                    arrows = [{x1: 20, y1: 50, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 50, double: false}];
                 }
                 
-                // Write simulation colors to side sticker arrays
-                sideColors.top[0] = corners[0].stickers.top;
-                sideColors.left[0] = corners[0].stickers.left;
-                
-                sideColors.top[2] = corners[1].stickers.top;
-                sideColors.right[0] = corners[1].stickers.right;
-                
-                sideColors.bottom[2] = corners[2].stickers.bottom;
-                sideColors.right[2] = corners[2].stickers.right;
-                
-                sideColors.bottom[0] = corners[3].stickers.bottom;
-                sideColors.left[2] = corners[3].stickers.left;
-                
-                sideColors.top[1] = edges[0].stickers.top;
-                sideColors.right[1] = edges[1].stickers.right;
-                sideColors.bottom[1] = edges[2].stickers.bottom;
-                sideColors.left[1] = edges[3].stickers.left;
+                sideColors.top[0] = corners[0].stickers.top; sideColors.left[0] = corners[0].stickers.left;
+                sideColors.top[2] = corners[1].stickers.top; sideColors.right[0] = corners[1].stickers.right;
+                sideColors.bottom[2] = corners[2].stickers.bottom; sideColors.right[2] = corners[2].stickers.right;
+                sideColors.bottom[0] = corners[3].stickers.bottom; sideColors.left[2] = corners[3].stickers.left;
+                sideColors.top[1] = edges[0].stickers.top; sideColors.right[1] = edges[1].stickers.right;
+                sideColors.bottom[1] = edges[2].stickers.bottom; sideColors.left[1] = edges[3].stickers.left;
                 
             } else if (cat === "OLL" || cat === "COLL" || cat === "CMLL" || cat === "ZBLL") {
-                // Default: orient all 4 edges & center (yellow)
-                gridColors[1] = YELLOW;
-                gridColors[3] = YELLOW;
-                gridColors[4] = YELLOW;
-                gridColors[5] = YELLOW;
-                gridColors[7] = YELLOW;
+                gridColors[1] = YELLOW; gridColors[3] = YELLOW; gridColors[4] = YELLOW; gridColors[5] = YELLOW; gridColors[7] = YELLOW;
                 
-                // Handle unoriented edges first (mostly for general OLL cases)
                 if (name.includes("OLL 1") || name.includes("OLL 2") || name.includes("Dot")) {
-                    gridColors[1] = '#7f8c8d';
-                    gridColors[3] = '#7f8c8d';
-                    gridColors[5] = '#7f8c8d';
-                    gridColors[7] = '#7f8c8d';
-                    sideColors.top[1] = YELLOW;
-                    sideColors.left[1] = YELLOW;
-                    sideColors.right[1] = YELLOW;
-                    sideColors.bottom[1] = YELLOW;
+                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; gridColors[5] = '#57606f'; gridColors[7] = '#57606f';
+                    sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW; sideColors.right[1] = YELLOW; sideColors.bottom[1] = YELLOW;
                 } else if (name.includes("OLL 33") || name.includes("T-shape")) {
-                    gridColors[1] = '#7f8c8d';
-                    sideColors.top[1] = YELLOW;
+                    gridColors[1] = '#57606f'; sideColors.top[1] = YELLOW;
                 } else if (name.includes("OLL 51") || name.includes("Line")) {
-                    gridColors[1] = '#7f8c8d';
-                    gridColors[7] = '#7f8c8d';
-                    sideColors.top[1] = YELLOW;
-                    sideColors.bottom[1] = YELLOW;
+                    gridColors[1] = '#57606f'; gridColors[7] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.bottom[1] = YELLOW;
                 }
                 
-                // Corner orientations
-                if (name.includes("Sune") && !name.includes("Anti")) {
-                    // Sune: bottom-left (UFL, index 6) oriented
-                    gridColors[6] = YELLOW;
-                    sideColors.bottom[2] = YELLOW; // UFR front
-                    sideColors.right[0] = YELLOW;  // UBR right
-                    sideColors.top[0] = YELLOW;    // UBL back
+                if (name.includes("OLL 20")) {
+                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; gridColors[6] = YELLOW; gridColors[8] = YELLOW;
+                } else if (name.includes("OLL 37") || name.includes("F-shape")) {
+                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
+                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
+                } else if (name.includes("OLL 44") || name.includes("P-shape")) {
+                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
+                    gridColors[0] = YELLOW; gridColors[6] = YELLOW;
+                } else if (name.includes("OLL 51")) {
+                    sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.right[2] = YELLOW;
+                } else if (name.includes("Sune") && !name.includes("Anti")) {
+                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
                 } else if (name.includes("Anti-Sune") || name.includes("ASune")) {
-                    // Anti-Sune: top-right (UBR, index 2) oriented
-                    gridColors[2] = YELLOW;
-                    sideColors.top[0] = YELLOW;    // UBL back
-                    sideColors.left[2] = YELLOW;   // UFL left
-                    sideColors.bottom[2] = YELLOW; // UFR front
+                    gridColors[2] = YELLOW; sideColors.top[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.bottom[2] = YELLOW;
                 } else if (name.includes("COLL-H") || name.includes("ZBLL-H") || name.includes("CMLL-H") || name.includes("OLL 21") || name.includes("H Case")) {
-                    // H Case: headlights front & back
-                    sideColors.top[0] = YELLOW; sideColors.top[2] = YELLOW;
-                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
+                    sideColors.top[0] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
                 } else if (name.includes("Pi Case") || name.includes("ZBLL-Pi") || name.includes("OLL 22") || name.includes("Car")) {
-                    // Pi Case: headlights front, side back-left, side back-right
-                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
-                    sideColors.left[0] = YELLOW;
-                    sideColors.right[0] = YELLOW;
+                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.left[0] = YELLOW; sideColors.right[0] = YELLOW;
                 } else if (name.includes("COLL-U") || name.includes("ZBLL-U") || name.includes("OLL 23") || name.includes("Headlights")) {
-                    // U Case: top UBL and UBR oriented
-                    gridColors[0] = YELLOW;
-                    gridColors[2] = YELLOW;
-                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW; // headlights front
+                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
                 } else if (name.includes("COLL-T") || name.includes("ZBLL-T") || name.includes("CMLL-T") || name.includes("OLL 33") || name.includes("Blinker")) {
-                    // T Case: top UBR and UFR oriented
-                    gridColors[2] = YELLOW;
-                    gridColors[8] = YELLOW;
-                    sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW; // headlights left
+                    gridColors[2] = YELLOW; gridColors[8] = YELLOW; sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW;
                 } else if (name.includes("ZBLL-L") || name.includes("OLL 25") || name.includes("L Case") || name.includes("Triple Sune")) {
-                    // L Case: top UBL and UFR oriented
-                    gridColors[0] = YELLOW;
-                    gridColors[8] = YELLOW;
-                    sideColors.top[2] = YELLOW;    // UBR back
-                    sideColors.bottom[0] = YELLOW; // UFL front
-                } else if (name.includes("OLL 24")) {
-                    gridColors[2] = YELLOW;
-                    gridColors[6] = YELLOW;
-                    sideColors.top[0] = YELLOW;
-                    sideColors.bottom[2] = YELLOW;
-                } else {
-                    // Solved corners (Skip)
-                    gridColors[0] = YELLOW; gridColors[2] = YELLOW;
-                    gridColors[6] = YELLOW; gridColors[8] = YELLOW;
+                    gridColors[0] = YELLOW; gridColors[8] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW;
                 }
             } else if (cat === "F2L" || cat === "ZBLS") {
-                // F2L: highlight slot corner and edge
-                if (name.includes("F2L 1") || name.includes("Easy Insert")) {
-                    gridColors[8] = RED; // UFR corner
-                    sideColors.right[2] = WHITE; // White facing right
-                    sideColors.bottom[2] = GREEN; // Green facing front
-                    
-                    gridColors[1] = GREEN; // UB edge
-                    sideColors.top[1] = RED;
+                if (name.includes("F2L 1")) {
+                    gridColors[8] = RED; sideColors.right[2] = WHITE; sideColors.bottom[2] = GREEN; gridColors[1] = GREEN; sideColors.top[1] = RED;
                 } else if (name.includes("F2L 2")) {
-                    gridColors[8] = GREEN;
-                    sideColors.right[2] = RED;
-                    sideColors.bottom[2] = WHITE; // White facing front
-                    
-                    gridColors[5] = RED;
-                    sideColors.right[1] = GREEN;
+                    gridColors[8] = GREEN; sideColors.right[2] = RED; sideColors.bottom[2] = WHITE; gridColors[5] = RED; sideColors.right[1] = GREEN;
                 } else if (name.includes("F2L 3")) {
-                    gridColors[8] = RED;
-                    sideColors.right[2] = GREEN;
-                    sideColors.bottom[2] = WHITE; // White facing front
-                    
-                    gridColors[1] = GREEN;
-                    sideColors.top[1] = RED;
+                    gridColors[8] = RED; sideColors.right[2] = GREEN; sideColors.bottom[2] = WHITE; gridColors[1] = GREEN; sideColors.top[1] = RED;
                 } else if (name.includes("F2L 4")) {
-                    gridColors[8] = WHITE; // White facing up
-                    sideColors.right[2] = RED;
-                    sideColors.bottom[2] = GREEN;
-                    
-                    gridColors[5] = RED;
-                    sideColors.right[1] = GREEN;
+                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[5] = RED; sideColors.right[1] = GREEN;
                 } else if (name.includes("F2L 5")) {
-                    // Corner in slot (FR), edge in top (UR)
-                    sideColors.bottom[2] = GREEN;
-                    sideColors.right[2] = RED;
-                    // White is at the bottom, so not visible on top
-                    
-                    gridColors[5] = GREEN;
-                    sideColors.right[1] = RED;
+                    sideColors.bottom[2] = GREEN; sideColors.right[2] = RED; gridColors[5] = GREEN; sideColors.right[1] = RED;
                 } else if (name.includes("F2L 19")) {
-                    gridColors[8] = WHITE; // White facing up
-                    sideColors.right[2] = RED;
-                    sideColors.bottom[2] = GREEN;
-                    
-                    gridColors[3] = GREEN;
-                    sideColors.left[1] = RED;
-                } else {
-                    // General F2L highlight
-                    gridColors[8] = RED;
-                    sideColors.right[2] = WHITE;
-                    sideColors.bottom[2] = GREEN;
-                    gridColors[5] = GREEN;
-                    sideColors.right[1] = RED;
+                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[3] = GREEN; sideColors.left[1] = RED;
                 }
-            } else if (cat === "ZBLS") {
-                // Show F2L corner/edge + edge orientation on top face
-                gridColors[1] = YELLOW;
-                gridColors[3] = YELLOW;
-                
-                gridColors[8] = RED;
-                sideColors.right[2] = WHITE;
-                sideColors.bottom[2] = GREEN;
-                
-                gridColors[5] = GREEN;
-                sideColors.right[1] = RED;
             }
             
-            // Draw top 3x3 face
-            const coords = [
-                {x: 14, y: 14}, {x: 29, y: 14}, {x: 44, y: 14},
-                {x: 14, y: 29}, {x: 29, y: 29}, {x: 44, y: 29},
-                {x: 14, y: 44}, {x: 29, y: 44}, {x: 44, y: 44}
-            ];
+            const coords = [{x: 14, y: 14}, {x: 29, y: 14}, {x: 44, y: 14}, {x: 14, y: 29}, {x: 29, y: 29}, {x: 44, y: 29}, {x: 14, y: 44}, {x: 29, y: 44}, {x: 44, y: 44}];
+            coords.forEach((c, i) => { svg += `<rect x="${c.x}" y="${c.y}" width="12" height="12" rx="2" fill="${gridColors[i]}" stroke="#111" stroke-width="1.5" />`; });
             
-            coords.forEach((coord, idx) => {
-                svg += `<rect x="${coord.x}" y="${coord.y}" width="12" height="12" rx="2" fill="${gridColors[idx]}" stroke="#111" stroke-width="1.5" />`;
-            });
-            
-            // Draw side bars
-            // Top Side (Back)
             for (let i = 0; i < 3; i++) {
-                if (sideColors.top[i]) {
-                    svg += `<rect x="${14 + i * 15}" y="6" width="12" height="4" rx="1" fill="${sideColors.top[i]}" stroke="#111" stroke-width="1" />`;
-                }
-            }
-            // Right Side
-            for (let i = 0; i < 3; i++) {
-                if (sideColors.right[i]) {
-                    svg += `<rect x="60" y="${14 + i * 15}" width="4" height="12" rx="1" fill="${sideColors.right[i]}" stroke="#111" stroke-width="1" />`;
-                }
-            }
-            // Bottom Side (Front)
-            for (let i = 0; i < 3; i++) {
-                if (sideColors.bottom[i]) {
-                    svg += `<rect x="${14 + i * 15}" y="60" width="12" height="4" rx="1" fill="${sideColors.bottom[i]}" stroke="#111" stroke-width="1" />`;
-                }
-            }
-            // Left Side
-            for (let i = 0; i < 3; i++) {
-                if (sideColors.left[i]) {
-                    svg += `<rect x="6" y="${14 + i * 15}" width="4" height="12" rx="1" fill="${sideColors.left[i]}" stroke="#111" stroke-width="1" />`;
-                }
+                if (sideColors.top[i]) svg += `<rect x="${14 + i * 15}" y="4" width="12" height="8" rx="2" fill="${sideColors.top[i]}" stroke="#111" stroke-width="1.5" />`;
+                if (sideColors.right[i]) svg += `<rect x="58" y="${14 + i * 15}" width="8" height="12" rx="2" fill="${sideColors.right[i]}" stroke="#111" stroke-width="1.5" />`;
+                if (sideColors.bottom[i]) svg += `<rect x="${14 + i * 15}" y="58" width="12" height="8" rx="2" fill="${sideColors.bottom[i]}" stroke="#111" stroke-width="1.5" />`;
+                if (sideColors.left[i]) svg += `<rect x="4" y="${14 + i * 15}" width="8" height="12" rx="2" fill="${sideColors.left[i]}" stroke="#111" stroke-width="1.5" />`;
             }
             
-            // Draw swap arrows for PLL
-            arrows.forEach(arrow => {
-                const markerEnd = `url(#arrow)`;
-                const markerStart = arrow.double ? `url(#arrow)` : 'none';
-                
-                // Draw a offset line to center arrow nicely
-                svg += `<line x1="${arrow.x1}" y1="${arrow.y1}" x2="${arrow.x2}" y2="${arrow.y2}" stroke="#ff4757" stroke-width="2.5" marker-end="${markerEnd}" marker-start="${markerStart}" />`;
-            });
-            
+            arrows.forEach(a => { svg += `<line x1="${a.x1}" y1="${a.y1}" x2="${a.x2}" y2="${a.y2}" stroke="#ff3838" stroke-width="2.5" marker-end="url(#arrow)" marker-start="${a.double ? 'url(#arrow)' : 'none'}" />`; });
             svg += `</svg>`;
             return svg;
         }
