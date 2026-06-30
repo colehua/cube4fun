@@ -1586,10 +1586,27 @@
                 container.appendChild(span);
             });
 
-            // Auto scroll the active move into view if needed
+            // Auto scroll the active move into view inside the container if it has overflow (prevents window shifting)
             const activeSpan = container.querySelector('.scramble-move-span.active');
             if (activeSpan) {
-                activeSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                const containerWidth = container.clientWidth;
+                const containerHeight = container.clientHeight;
+                
+                if (container.scrollWidth > containerWidth) {
+                    const spanLeft = activeSpan.offsetLeft;
+                    const spanWidth = activeSpan.clientWidth;
+                    container.scrollTo({
+                        left: spanLeft - (containerWidth / 2) + (spanWidth / 2),
+                        behavior: 'smooth'
+                    });
+                } else if (container.scrollHeight > containerHeight) {
+                    const spanTop = activeSpan.offsetTop;
+                    const spanHeight = activeSpan.clientHeight;
+                    container.scrollTo({
+                        top: spanTop - (containerHeight / 2) + (spanHeight / 2),
+                        behavior: 'smooth'
+                    });
+                }
             }
         }
 
