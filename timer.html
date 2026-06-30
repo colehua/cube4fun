@@ -691,6 +691,70 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             font-family: 'DynaPuff', cursive;
         }
+
+        /* DIFFICULTY SEGMENTED CONTROL */
+        .difficulty-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-options {
+            display: flex;
+            background: #e5e9f0;
+            padding: 4px;
+            border-radius: 15px;
+            border: 3px solid #333;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .diff-btn {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1em;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 11px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #4c566a;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+        }
+
+        .diff-btn:hover {
+            color: var(--text-dark);
+            transform: scale(1.05);
+        }
+
+        .diff-btn.active[data-difficulty="easy"] {
+            background-color: #2ecc71; /* Playful green */
+            color: white;
+            box-shadow: 2px 2px 0px #1e8449, inset 0 1px 3px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
+
+        .diff-btn.active[data-difficulty="medium"] {
+            background-color: #f1c40f; /* Playful yellow */
+            color: #333;
+            box-shadow: 2px 2px 0px #b7950b, inset 0 1px 3px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+
+        .diff-btn.active[data-difficulty="hard"] {
+            background-color: #e74c3c; /* Playful red */
+            color: white;
+            box-shadow: 2px 2px 0px #b03a2e, inset 0 1px 3px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -726,6 +790,18 @@
             <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
             <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
             <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
+        </div>
+
+        <!-- DIFFICULTY SELECTION BAR -->
+        <div class="difficulty-bar-container">
+            <span style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.15em; color: var(--text-dark); display: inline-flex; align-items: center; gap: 6px;">
+                Scramble Difficulty:
+            </span>
+            <div class="difficulty-options">
+                <button class="diff-btn" data-difficulty="easy" title="Short scramble, restricted faces (U, R, F)">🟢 Easy</button>
+                <button class="diff-btn" data-difficulty="medium" title="Medium length scramble">🟡 Medium</button>
+                <button class="diff-btn" data-difficulty="hard" title="Standard WCA length scramble">🔴 Hard</button>
+            </div>
         </div>
 
         <!-- SCRAMBLE DISPLAY -->
@@ -1772,11 +1848,91 @@
         }
 
         // --- SCRAMBLE GENERATION ---
+        const DIFFICULTY_LENGTHS = {
+            'easy': {
+                '3x3': 7,
+                '2x2': 5,
+                '3x3-cross': 4,
+                '3x3-f2l': 6,
+                '3x3-oh': 7,
+                '3x3-fmc': 10
+            },
+            'medium': {
+                '3x3': 13,
+                '2x2': 8,
+                '3x3-cross': 6,
+                '3x3-f2l': 9,
+                '3x3-oh': 13,
+                '3x3-fmc': 18
+            },
+            'hard': {
+                '3x3': 20,
+                '2x2': 11,
+                '3x3-cross': 8,
+                '3x3-f2l': 12,
+                '3x3-oh': 20,
+                '3x3-fmc': 30
+            }
+        };
+
+        function getCurrentDifficulty() {
+            return localStorage.getItem('cube_timer_scramble_difficulty') || 'hard';
+        }
+
+        function updateDifficultyButtons() {
+            const type = scrambleTypeSelect.value;
+            const lenInput = document.getElementById('scramble-length-input');
+            if (!lenInput) return;
+            const currentLength = parseInt(lenInput.value);
+            
+            let matchedDiff = null;
+            for (const diff of ['easy', 'medium', 'hard']) {
+                if (DIFFICULTY_LENGTHS[diff][type] === currentLength) {
+                    matchedDiff = diff;
+                    break;
+                }
+            }
+            
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                if (btn.getAttribute('data-difficulty') === matchedDiff) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            if (matchedDiff) {
+                localStorage.setItem('cube_timer_scramble_difficulty', matchedDiff);
+            } else {
+                localStorage.removeItem('cube_timer_scramble_difficulty');
+            }
+        }
+
+        function setDifficulty(diff) {
+            const type = scrambleTypeSelect.value;
+            const length = DIFFICULTY_LENGTHS[diff][type];
+            localStorage.setItem('cube_timer_scramble_difficulty', diff);
+            saveScrambleLength(type, length);
+            
+            const lenInput = document.getElementById('scramble-length-input');
+            if (lenInput) {
+                lenInput.value = length;
+            }
+            
+            updateDifficultyButtons();
+            triggerNewScramble();
+        }
+
         function saveScrambleLength(type, val) {
             localStorage.setItem('cube_timer_scramble_length_' + type, val);
         }
 
         function getScrambleLength(type) {
+            const diff = localStorage.getItem('cube_timer_scramble_difficulty');
+            if (diff && DIFFICULTY_LENGTHS[diff] && DIFFICULTY_LENGTHS[diff][type] !== undefined) {
+                return DIFFICULTY_LENGTHS[diff][type];
+            }
+
             const stored = localStorage.getItem('cube_timer_scramble_length_' + type);
             if (stored) return parseInt(stored);
             
@@ -1790,7 +1946,17 @@
 
         function generateScramble(type) {
             type = type || '3x3';
-            const faces = type === '2x2' ? ['U', 'R', 'F'] : ['U', 'D', 'F', 'B', 'L', 'R'];
+            const diff = getCurrentDifficulty();
+            
+            let faces;
+            if (type === '2x2') {
+                faces = ['U', 'R', 'F'];
+            } else if (diff === 'easy' && type.startsWith('3x3')) {
+                // Easy 3x3 scrambles use only U, R, F (3-generator)
+                faces = ['U', 'R', 'F'];
+            } else {
+                faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            }
             const modifiers = ['', "'", '2'];
             let moves = [];
             let prevFace = '';
@@ -2898,6 +3064,7 @@
                 const index = scrambleHistoryIndices[type];
                 showScrambleFromHistory(type, index);
             }
+            updateDifficultyButtons();
             loadSolves();
             updateColeRecordDisplay();
         });
@@ -2912,11 +3079,20 @@
                 }
                 const type = scrambleTypeSelect.value;
                 saveScrambleLength(type, val);
+                updateDifficultyButtons();
                 triggerNewScramble();
             };
             scrambleLengthInput.addEventListener('change', handleLengthChange);
             scrambleLengthInput.addEventListener('input', handleLengthChange);
         }
+
+        // Difficulty buttons click handler
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const diff = btn.getAttribute('data-difficulty');
+                setDifficulty(diff);
+            });
+        });
 
         clearSessionBtn.addEventListener('click', () => {
             if (confirm("Are you sure you want to clear your entire " + scrambleTypeSelect.value + " solve history? This cannot be undone!")) {
@@ -2928,6 +3104,7 @@
         // --- INITIALIZATION ---
         initAnimatorControls();
         triggerNewScramble();
+        updateDifficultyButtons();
         loadSolves();
         toggleTimerMode();
         loadColeRecords();
