@@ -771,6 +771,16 @@
             text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
             transform: scale(1.05);
         }
+
+        /* Remove spinner arrows from scramble length input */
+        #scramble-length-input::-webkit-outer-spin-button,
+        #scramble-length-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        #scramble-length-input {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body>
@@ -800,7 +810,7 @@
             </select>
             <div style="display: inline-flex; align-items: center; gap: 8px;">
                 <label for="scramble-length-input" style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.1em; color: var(--text-dark);">Length:</label>
-                <input type="number" id="scramble-length-input" class="select-style" min="1" max="100" value="20" style="width: 75px; text-align: center; box-sizing: border-box;">
+                <input type="number" id="scramble-length-input" class="select-style" min="1" max="100" value="15" style="width: 75px; text-align: center; box-sizing: border-box;">
             </div>
             <button id="btn-prev-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Previous Scramble">◀ Prev</button>
             <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
@@ -1980,7 +1990,7 @@
             if (type === '3x3-cross') return 8;
             if (type === '3x3-f2l') return 12;
             if (type === '3x3-fmc') return 30;
-            return 20; // 3x3, 3x3-oh, etc.
+            return 15; // 3x3, 3x3-oh, etc.
         }
 
         function generateScramble(type) {
@@ -3118,16 +3128,21 @@
             const handleLengthChange = () => {
                 let val = parseInt(scrambleLengthInput.value);
                 if (isNaN(val) || val < 1) {
-                    val = 1;
-                    scrambleLengthInput.value = 1;
+                    val = 15;
+                    scrambleLengthInput.value = 15;
                 }
                 const type = scrambleTypeSelect.value;
                 saveScrambleLength(type, val);
+                
+                // Clear random mode since they manually edited the length
+                if (localStorage.getItem('cube_timer_scramble_difficulty') === 'random') {
+                    localStorage.removeItem('cube_timer_scramble_difficulty');
+                }
+                
                 updateDifficultyButtons();
                 triggerNewScramble();
             };
             scrambleLengthInput.addEventListener('change', handleLengthChange);
-            scrambleLengthInput.addEventListener('input', handleLengthChange);
         }
 
         // Difficulty buttons click handler
