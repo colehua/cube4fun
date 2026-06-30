@@ -795,8 +795,8 @@
             <select id="scramble-type-select" class="select-style">
                 <option value="3x3">3x3x3 Rubik's Cube</option>
                 <option value="2x2">2x2x2 Rubik's Cube</option>
-                <option value="3x3-cross">3x3x3 Easy Cross Practice</option>
-                <option value="3x3-f2l">3x3x3 Easy F2L Practice</option>
+                <option value="3x3-cross">3x3x3 Cross Practice</option>
+                <option value="3x3-f2l">3x3x3 F2L Practice</option>
                 <option value="3x3-oh">3x3x3 One-Handed</option>
                 <option value="3x3-fmc">3x3x3 Fewest Moves (FMC)</option>
             </select>
@@ -1942,7 +1942,7 @@
             'easy': {
                 '3x3': 7,
                 '2x2': 5,
-                '3x3-cross': 4,
+                '3x3-cross': 3,
                 '3x3-f2l': 6,
                 '3x3-oh': 7,
                 '3x3-fmc': 10
@@ -1958,7 +1958,7 @@
             'hard': {
                 '3x3': 20,
                 '2x2': 11,
-                '3x3-cross': 8,
+                '3x3-cross': 20,
                 '3x3-f2l': 12,
                 '3x3-oh': 20,
                 '3x3-fmc': 30
@@ -2028,7 +2028,7 @@
             
             // Defaults (csTimer / WCA standards)
             if (type === '2x2') return 11;
-            if (type === '3x3-cross') return 8;
+            if (type === '3x3-cross') return 20;
             if (type === '3x3-f2l') return 12;
             if (type === '3x3-fmc') return 30;
             return 20; // 3x3, 3x3-oh, etc.
