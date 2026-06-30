@@ -3109,6 +3109,11 @@
             const type = scrambleTypeSelect.value;
             const lenInput = document.getElementById('scramble-length-input');
             if (lenInput) {
+                if (type === '3x3-cross') {
+                    lenInput.max = 8;
+                } else {
+                    lenInput.max = 100;
+                }
                 lenInput.value = getScrambleLength(type);
             }
             // Stop FMC timer if active
@@ -3133,11 +3138,17 @@
         if (scrambleLengthInput) {
             const handleLengthChange = () => {
                 let val = parseInt(scrambleLengthInput.value);
-                if (isNaN(val) || val < 1) {
-                    val = 15;
-                    scrambleLengthInput.value = 15;
-                }
                 const type = scrambleTypeSelect.value;
+                const maxVal = type === '3x3-cross' ? 8 : 100;
+
+                if (isNaN(val) || val < 1) {
+                    val = (type === '3x3-cross') ? 8 : 15;
+                    scrambleLengthInput.value = val;
+                } else if (val > maxVal) {
+                    val = maxVal;
+                    scrambleLengthInput.value = val;
+                }
+                
                 saveScrambleLength(type, val);
                 
                 // Clear random mode since they manually edited the length
@@ -3168,6 +3179,15 @@
 
         // --- INITIALIZATION ---
         initAnimatorControls();
+        const initialType = scrambleTypeSelect.value;
+        const initialLenInput = document.getElementById('scramble-length-input');
+        if (initialLenInput) {
+            if (initialType === '3x3-cross') {
+                initialLenInput.max = 8;
+            } else {
+                initialLenInput.max = 100;
+            }
+        }
         triggerNewScramble();
         updateDifficultyButtons();
         loadSolves();
