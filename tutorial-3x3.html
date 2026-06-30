@@ -7,22 +7,148 @@
     <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, Cole Hua WorldCubeAssociation, Cole Hua WCA Profile, 3x3 Rubik's Cube tutorial, speedcubing, LBL method">
     <title>3x3 Rubik's Cube Tutorial - Cole Hua WCA</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --cyan-blob: #00E5FF; --yellow-blob: #FAED27; --text-dark: #1a1a1a; }
-        body { margin: 0; padding: 0; font-family: 'Comic Neue', cursive, sans-serif; background-color: #fafafa; color: var(--text-dark); overflow-x: hidden; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .slide { background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 50px; border: 4px dashed #0066FF; display: flex; flex-direction: column; gap: 20px;}
-        .slide-title { font-family: 'DynaPuff', cursive; color: #0033CC; text-align: center; font-size: 2.5em; margin: 0 0 15px 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
-        .text-block { font-size: 1.4em; font-weight: bold; line-height: 1.4; margin: 0; background: #fff; padding: 15px; border-radius: 12px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;}
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: start;}
-        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; align-items: start;}
-        .card { background: #fafafa; border: 3px solid #eee; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;}
-        .media-container { text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;}
-        .media-container img, .media-container video { max-width: 100%; max-height: 350px; border-radius: 10px; border: 3px solid #333; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); }
-        .arrow-icon { max-height: 100px !important; border: none !important; box-shadow: none !important; }
-        .nav-button { display: inline-block; background-color: var(--cyan-blob); color: var(--text-dark); padding: 10px 20px; border-radius: 15px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.2em; border: 3px solid #333; margin-bottom: 20px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --primary: #0066FF;
+            --accent-pink: #FF6B6B;
+            --text-dark: #1e272e;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px 60px 20px;
+            position: relative;
+        }
+
+        .slide {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 50px;
+            border: 4px dashed var(--primary);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .slide:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .slide-title {
+            font-family: 'DynaPuff', cursive;
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.5em;
+            margin: 0 0 15px 0;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+        }
+
+        .text-block {
+            font-size: 1.25em;
+            font-weight: 700;
+            line-height: 1.5;
+            margin: 0;
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            color: #475569;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;}
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: start;}
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; align-items: start;}
+
+        .card {
+            background: #ffffff;
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .media-container {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .media-container img, .media-container video {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 16px;
+            border: 4px solid #1e272e;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .arrow-icon {
+            max-height: 100px !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 12px 24px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.15em;
+            border: 4px solid #1e272e;
+            margin-bottom: 25px;
+            box-shadow: 0px 6px 0px #1e272e;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            top: 0;
+        }
+
+        .nav-button:hover {
+            top: 3px;
+            box-shadow: 0px 3px 0px #1e272e;
+            transform: scale(1.02);
+        }
+
         .center-text { text-align: center; }
+
         @media (max-width: 768px) {
             .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
         }
@@ -31,7 +157,7 @@
 <body>
     <div class="container">
         <a href="index.html" class="nav-button">🔙 Back to Home</a>
-        <h1 style="font-family: 'DynaPuff', cursive; font-size: 4em; color: #87CEEB; text-align: center; -webkit-text-stroke: 2px #555; text-shadow: 4px 4px 0px rgba(0,0,0,0.1); margin-top: 10px;">3x3 Tutorial</h1>
+        <h1 style="font-family: 'DynaPuff', cursive; font-size: 4em; color: #ffffff; text-align: center; -webkit-text-stroke: 3px #1e272e; text-shadow: 6px 6px 0px #1e272e; margin-top: 10px; margin-bottom: 25px;">3x3 Tutorial</h1>
         
         <!-- YOUTUBE BANNER -->
         <div style="text-align: center; margin: 20px auto; max-width: 800px;">
@@ -47,7 +173,7 @@
         <style>@keyframes wiggle { 0%, 100% {transform: rotate(0deg);} 25% {transform: rotate(-10deg);} 50% {transform: rotate(10deg);} 75% {transform: rotate(-5deg);} }</style>
 
         <div style="text-align: center; margin-bottom: 30px;">
-            <a href="https://github.com/colehua/cube4fun/raw/main/how-to-solve-3x3.pptx" download style="display: inline-block; background-color: #FAED27; color: #1a1a1a; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.2em; border: 3px solid #333; box-shadow: 2px 4px 0px #333; transition: all 0.1s ease-in-out;">
+            <a href="https://github.com/colehua/cube4fun/raw/main/how-to-solve-3x3.pptx" download class="cube-button" style="background-color: var(--yellow-blob); color: var(--text-dark); font-size: 1.2em; padding: 12px 24px;">
                 ⬇️ Download Original PowerPoint
             </a>
         </div>
