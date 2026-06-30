@@ -28,14 +28,20 @@
             --red-sticker: #FF3B30;
         }
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body {
             font-family: 'Outfit', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
             color: var(--text-dark);
             min-height: 100vh;
-            overflow-x: hidden;
             user-select: none;
         }
 
