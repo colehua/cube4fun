@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Algorithms for different speedcubing methods: CFOP, ZB, Roux, and ZZ. Complete PLL, F2L, OLL, ZBLL, and ZBLS case list with copyable moves.">
+    <title>Algorithms for Different Methods 🧩 - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --text-dark: #1a1a1a;
+            --white-sticker: #ffffff;
+            --yellow-sticker: #ffee55;
+            --green-sticker: #2ecc71;
+            --blue-sticker: #3498db;
+            --orange-sticker: #e67e22;
+            --red-sticker: #e74c3c;
+            --purple-blob: #D8B4F8;
+            --pink-blob: #FFB7B2;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            background-color: #fafafa;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -100px;
+            left: -5%;
+            width: 110%;
+            height: 250px;
+            background-color: var(--cyan-blob);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--yellow-blob);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            border: 3px solid #333;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.5em;
+            color: #87CEEB;
+            text-align: center;
+            -webkit-text-stroke: 2px #555;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            margin-top: 10px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border: 4px solid #333;
+            border-radius: 20px;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            font-size: 1.25em;
+            font-weight: bold;
+            outline: none;
+            box-shadow: 0px 5px 0px #333, 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+
+        .search-input:focus {
+            transform: translateY(2px);
+            box-shadow: 0px 3px 0px #333, 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        /* METHOD TABS */
+        .method-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            padding: 12px 24px;
+            border-radius: 18px;
+            border: 3px solid #333;
+            cursor: pointer;
+            box-shadow: 0px 5px 0px #333;
+            transition: all 0.1s;
+            outline: none;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 7px 0px #333;
+        }
+
+        .tab-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0px 2px 0px #333;
+        }
+
+        .tab-btn.active {
+            transform: translateY(3px);
+            box-shadow: 0px 2px 0px #333;
+            background-color: var(--cyan-blob) !important;
+        }
+
+        /* CONTENT CARD */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 4px dashed #0066FF;
+        }
+
+        .method-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 4px dotted #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .method-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 2.2em;
+            margin: 0;
+            color: #0033CC;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+        }
+
+        .badge {
+            background-color: var(--yellow-blob);
+            border: 2px solid #333;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            color: var(--text-dark);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .info-alert {
+            background-color: #E8F4F8;
+            border: 3px dashed #00E5FF;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* SUB CATEGORIES (F2L, OLL, PLL) */
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 2px solid #333;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .sub-tab-btn.active {
+            background-color: #FF8B94;
+            color: white;
+            border-color: #FF8B94;
+        }
+
+        /* ALGORITHM GRID */
+        .alg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .alg-card {
+            background: #fff;
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .alg-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.15);
+        }
+
+        .alg-name {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            color: #0066FF;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .alg-moves {
+            font-family: monospace;
+            font-size: 1.2em;
+            background: #f1f2f6;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            margin: 5px 0 12px 0;
+            word-wrap: break-word;
+            word-break: break-all;
+            color: #2f3542;
+            font-weight: bold;
+        }
+
+        .alg-btn-copy {
+            width: 100%;
+            padding: 6px 10px;
+            border: 2px solid #333;
+            background-color: var(--yellow-blob);
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.1s;
+            outline: none;
+        }
+
+        .alg-btn-copy:active {
+            transform: scale(0.97);
+        }
+
+        .visual-cube {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #333;
+            background-color: #f1f2f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1em;
+            z-index: 10000;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+            border: 2px solid #fff;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Roux & ZZ specific style */
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 15px;
+            background: #fff;
+            border: 3px solid #333;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        .flow-step h4 {
+            margin: 0;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.15em;
+            color: #0066FF;
+        }
+    </style>
+</head>
+<body>
+    <div class="blob-top"></div>
+    
+    <div class="container">
+        <!-- NAVIGATION -->
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">🏠 Back to Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Speedcubing Timer</a>
+        </div>
+
+        <h1 class="main-title">Algorithms Guide 🧩</h1>
+        <p style="text-align: center; font-size: 1.3em; font-weight: bold; margin-bottom: 30px;">
+            Master speedcubing! Choose a method below to explore the cases and algorithms.
+        </p>
+
+        <!-- SEARCH -->
+        <div class="search-container">
+            <input type="text" id="alg-search" class="search-input" placeholder="🔍 Search case or algorithm (e.g. T Perm, F2L 1, ZBLL)...">
+        </div>
+
+        <!-- METHOD TABS -->
+        <div class="method-tabs">
+            <button class="tab-btn active" id="tab-cfop" style="background-color: #FFB7B2;" onclick="selectMethod('cfop')">CFOP</button>
+            <button class="tab-btn" id="tab-zb" style="background-color: #BFFCC6;" onclick="selectMethod('zb')">ZB Method</button>
+            <button class="tab-btn" id="tab-roux" style="background-color: #FFC6FF;" onclick="selectMethod('roux')">Roux</button>
+            <button class="tab-btn" id="tab-zz" style="background-color: #E8F4F8;" onclick="selectMethod('zz')">ZZ Method</button>
+        </div>
+
+        <!-- ==================== CFOP METHOD ==================== -->
+        <div id="content-cfop" class="method-content">
+            <div class="card" style="border-color: #FF8B94;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #FF5A76;">CFOP Method (Fridrich) ⚡</h2>
+                    <span class="badge">119 Algorithms Total</span>
+                </div>
+                
+                <div class="info-alert">
+                    <span style="font-size: 1.5em;">💡</span>
+                    <span><strong>Pro Tip:</strong> A cross could be solved in <strong>8 moves or less</strong> every single time! Start planning your entire cross during the 15-second inspection.</span>
+                </div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" id="btn-cfop-pll" onclick="selectSubTab('cfop', 'pll')">PLL (21 algs)</button>
+                    <button class="sub-tab-btn" id="btn-cfop-oll" onclick="selectSubTab('cfop', 'oll')">OLL (57 algs)</button>
+                    <button class="sub-tab-btn" id="btn-cfop-f2l" onclick="selectSubTab('cfop', 'f2l')">F2L (41 algs)</button>
+                </div>
+
+                <!-- PLL -->
+                <div id="cfop-pll" class="sub-content">
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">PLL (Permute Last Layer) - 21 Cases</h3>
+                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Rearrange the oriented pieces of the last layer to solve the entire cube!</p>
+                    <div class="alg-grid" id="grid-pll"></div>
+                </div>
+
+                <!-- OLL -->
+                <div id="cfop-oll" class="sub-content" style="display: none;">
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">OLL (Orient Last Layer) - 57 Cases</h3>
+                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Orient all last layer pieces so the top face becomes a solid yellow color.</p>
+                    <div class="alg-grid" id="grid-oll"></div>
+                </div>
+
+                <!-- F2L -->
+                <div id="cfop-f2l" class="sub-content" style="display: none;">
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">F2L (First Two Layers) - 41 Cases</h3>
+                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Solve a corner and an edge piece together, and insert them into their slot simultaneously.</p>
+                    <div class="alg-grid" id="grid-f2l"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ZB METHOD ==================== -->
+        <div id="content-zb" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #2ecc71;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #27ae60;">ZB Method (Zborowski-Bruchem) 🏆</h2>
+                    <span class="badge" style="background-color: #BFFCC6;">795 Algorithms Total</span>
+                </div>
+
+                <div class="info-alert" style="background-color: #EAFaf1; border-color: #2ecc71;">
+                    <span style="font-size: 1.5em;">🔥</span>
+                    <span><strong>Massive Database:</strong> ZB consists of <strong>493 ZBLL</strong> algorithms and <strong>302 ZBLS</strong> algorithms in a total of <strong>795 algorithms</strong> for the ZB method!</span>
+                </div>
+
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn active" id="btn-zb-zbll" onclick="selectSubTab('zb', 'zbll')">ZBLL (493 algs)</button>
+                    <button class="sub-tab-btn" id="btn-zb-zbls" onclick="selectSubTab('zb', 'zbls')">ZBLS (302 algs)</button>
+                </div>
+
+                <!-- ZBLL -->
+                <div id="zb-zbll" class="sub-content">
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">ZBLL (ZB Last Layer) - 493 Cases</h3>
+                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">If the last layer cross edges are already oriented, ZBLL solves the entire last layer (OLL and PLL) in one single algorithm!</p>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label for="zbll-subset" style="font-weight: bold; font-size: 1.1em; margin-right: 10px;">Select ZBLL Subset:</label>
+                        <select id="zbll-subset" class="nav-button" style="background-color: #fff; padding: 5px 15px; font-size: 1em; font-family: 'Comic Neue', sans-serif;" onchange="loadZbllSubset()">
+                            <option value="T">T Cases (72 algs)</option>
+                            <option value="U">U Cases (72 algs)</option>
+                            <option value="L">L Cases (72 algs)</option>
+                            <option value="H">H Cases (40 algs)</option>
+                            <option value="Pi">Pi Cases (72 algs)</option>
+                            <option value="Sune">Sune Cases (72 algs)</option>
+                            <option value="ASune">Anti-Sune Cases (72 algs)</option>
+                        </select>
+                    </div>
+                    <div class="alg-grid" id="grid-zbll"></div>
+                </div>
+
+                <!-- ZBLS -->
+                <div id="zb-zbls" class="sub-content" style="display: none;">
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">ZBLS (ZB Last Slot) - 302 Cases</h3>
+                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Solves the final F2L slot AND orients all 4 top-layer edges at the same time, preparing the cube perfectly for ZBLL!</p>
+                    <div class="alg-grid" id="grid-zbls"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ROUX METHOD ==================== -->
+        <div id="content-roux" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #D8B4F8;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #9b59b6;">Roux Method 💡</h2>
+                    <span class="badge" style="background-color: #E8D5F5;">Blockbuilding & LSE</span>
+                </div>
+
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    The Roux method is a highly efficient speedcubing method that uses fewer moves than CFOP and does not rely heavily on algorithms, focusing instead on blockbuilding and M-slice moves.
+                </p>
+
+                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">Roux Solve Workflow:</h3>
+                
+                <div class="flow-step">
+                    <h4>1. First Block (FB)</h4>
+                    <p>Build a 1x2x3 block on the left side of the cube. This is done entirely intuitively.</p>
+                </div>
+                <div class="flow-step">
+                    <h4>2. Second Block (SB)</h4>
+                    <p>Build another 1x2x3 block on the right side of the cube, leaving the M (middle) and U (up) slices free. This is also intuitive.</p>
+                </div>
+                <div class="flow-step">
+                    <h4>3. CMLL (42 Algorithms)</h4>
+                    <p>Solves the corners of the last layer (orientation and permutation) while preserving the two side blocks. If corners are already solved, skip this step.</p>
+                    <div class="alg-grid" id="grid-cmll"></div>
+                </div>
+                <div class="flow-step">
+                    <h4>4. LSE (Last Six Edges)</h4>
+                    <p>Solves the remaining six edges (four on top, two on bottom) using only U and M moves. LSE is divided into three sub-steps: Edge Orientation (EO), LR Edges, and Mid-slice Edges.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ZZ METHOD ==================== -->
+        <div id="content-zz" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #3498db;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #2980b9;">ZZ Method (EOLine) 🎯</h2>
+                    <span class="badge" style="background-color: #D6EAF8;">No Rotations</span>
+                </div>
+
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    The ZZ method orientates all edges at the very beginning of the solve. This eliminates cube rotations entirely, leading to extremely fast turning speeds and ergonomics.
+                </p>
+
+                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">ZZ Solve Workflow:</h3>
+
+                <div class="flow-step">
+                    <h4>1. EOLine (Edge Orientation + Line)</h4>
+                    <p>Orient all 12 edges on the cube, and place the DF and DB edges to form a "line" on the bottom layer. After this step, all remaining turns can be done using only R, L, and U moves (no rotations!).</p>
+                </div>
+                <div class="flow-step">
+                    <h4>2. ZZ F2L (Blockbuilding)</h4>
+                    <p>Build the left and right 2x2x3 blocks on both sides of the line. Since all edges are oriented, you can do this without rotating the cube.</p>
+                </div>
+                <div class="flow-step">
+                    <h4>3. COLL (42 Algorithms)</h4>
+                    <p>Solves the orientation and permutation of the last layer corners, leaving only the four edges to be permuted (EPLL). E.g., if you get a COLL skip, you go straight to EPLL.</p>
+                    <div class="alg-grid" id="grid-coll"></div>
+                </div>
+                <div class="flow-step">
+                    <h4>4. EPLL (Edge Permutation)</h4>
+                    <p>Solve the final 4 edges of the last layer using simple PLL algorithms (U-perm, H-perm, Z-perm).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast">Copied to clipboard! 📋</div>
+
+    <!-- ==================== JAVASCRIPT DATABASE & LOGIC ==================== -->
+    <script>
+        // Database of popular cubing algorithms
+        const ALGORITHMS = {
+            pll: [
+                { name: "T Perm", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", cat: "PLL", tags: "t perm t-perm" },
+                { name: "Y Perm", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", cat: "PLL", tags: "y perm y-perm" },
+                { name: "H Perm", moves: "M2' U M2' U2 M2' U M2'", cat: "PLL", tags: "h perm h-perm" },
+                { name: "Ua Perm", moves: "R U' R U R U R U' R' U' R2", cat: "PLL", tags: "ua perm u perm" },
+                { name: "Ub Perm", moves: "R2 U R U R' U' R' U' R' U R'", cat: "PLL", tags: "ub perm u perm" },
+                { name: "Z Perm", moves: "M2' U M2' U M' U2 M2' U2 M' U2", cat: "PLL", tags: "z perm z-perm" },
+                { name: "Aa Perm", moves: "x L2 D2 L' U' L D2 L' U L'", cat: "PLL", tags: "aa perm a perm" },
+                { name: "Ab Perm", moves: "x L' U L' D2 L U' L' D2 L2", cat: "PLL", tags: "ab perm a perm" },
+                { name: "E Perm", moves: "x' R U' R' D R U R' D' R U R' D R U' R' D'", cat: "PLL", tags: "e perm e-perm" },
+                { name: "F Perm", moves: "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", cat: "PLL", tags: "f perm f-perm" },
+                { name: "Ga Perm", moves: "R2 U R' U R' U' R U' R2 D U' R' U R D'", cat: "PLL", tags: "ga perm g perm" },
+                { name: "Gb Perm", moves: "R' U' R y R2 u R' U R U' R u' R2", cat: "PLL", tags: "gb perm g perm" },
+                { name: "Gc Perm", moves: "R2 U' R U' R U R' U R2 D' U R U' R' D", cat: "PLL", tags: "gc perm g perm" },
+                { name: "Gd Perm", moves: "R U R' y' R2 u' R U' R' U R' u R2", cat: "PLL", tags: "gd perm g perm" },
+                { name: "Ja Perm", moves: "x R2 F R F' R U2 r' U r U2", cat: "PLL", tags: "ja perm j perm" },
+                { name: "Jb Perm", moves: "R U R' F' R U R' U' R' F R2 U' R' U'", cat: "PLL", tags: "jb perm j perm" },
+                { name: "Ra Perm", moves: "R U' R' U' R U R D R' U' R D' R' U2 R'", cat: "PLL", tags: "ra perm r perm" },
+                { name: "Rb Perm", moves: "R' U2 R U2 R' F R U R' U' R' F' R2 U'", cat: "PLL", tags: "rb perm r perm" },
+                { name: "V Perm", moves: "R' U R' U' y R' F' R2 U' R' U R' F R F", cat: "PLL", tags: "v perm v-perm" },
+                { name: "Na Perm", moves: "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", cat: "PLL", tags: "na perm n perm" },
+                { name: "Nb Perm", moves: "R' U' R U' R' U' R F R' U' R U R F' R2 U R U2 R' U R", cat: "PLL", tags: "nb perm n perm" }
+            ],
+            oll: [
+                { name: "Sune (OLL 27)", moves: "R U R' U R U2 R'", cat: "OLL", tags: "sune oll 27" },
+                { name: "Anti-Sune (OLL 26)", moves: "R U2 R' U' R U' R'", cat: "OLL", tags: "antisune anti sune oll 26" },
+                { name: "Hao / Cross (OLL 21)", moves: "R U2 R' U' R U R' U' R U' R'", cat: "OLL", tags: "cross oll 21 hao" },
+                { name: "Car (OLL 22)", moves: "R U2 R2 U' R2 U' R2 U2 R", cat: "OLL", tags: "car oll 22" },
+                { name: "Headlights (OLL 23)", moves: "R2 D' R U2 R' D R U2 R", cat: "OLL", tags: "headlights oll 23" },
+                { name: "Blinker (OLL 24)", moves: "r U R' U' r' F R F'", cat: "OLL", tags: "blinker oll 24" },
+                { name: "Triple Sune (OLL 25)", moves: "R' F R B' R' F' R B", cat: "OLL", tags: "triple sune oll 25" },
+                { name: "OLL 1 (Dot)", moves: "R U2 R2 F R F' U2 R' F R F'", cat: "OLL", tags: "oll 1 dot" },
+                { name: "OLL 2 (Dot)", moves: "F R U R' U' F' f R U R' U' f'", cat: "OLL", tags: "oll 2 dot" },
+                { name: "OLL 20 (Checkered)", moves: "r U R' U' M2 U R U' r'", cat: "OLL", tags: "oll 20" },
+                { name: "OLL 33 (T-shape)", moves: "R U R' U' R' F R F'", cat: "OLL", tags: "oll 33 t shape" },
+                { name: "OLL 37 (F-shape)", moves: "F R' F' R U R U' R'", cat: "OLL", tags: "oll 37 f shape" },
+                { name: "OLL 44 (P-shape)", moves: "f R U R' U' f'", cat: "OLL", tags: "oll 44 p shape" },
+                { name: "OLL 51 (Line)", moves: "f R U R' U' R U R' U' f'", cat: "OLL", tags: "oll 51 line" }
+            ],
+            f2l: [
+                { name: "F2L 1 (Easy Insert)", moves: "U R U' R'", cat: "F2L", tags: "f2l 1" },
+                { name: "F2L 2 (Corner facing right)", moves: "y U' L' U L", cat: "F2L", tags: "f2l 2" },
+                { name: "F2L 3 (Corner facing front)", moves: "y' U' R' U R", cat: "F2L", tags: "f2l 3" },
+                { name: "F2L 4 (Corner facing up)", moves: "R U2 R' U' R U R'", cat: "F2L", tags: "f2l 4" },
+                { name: "F2L 5 (Corner in bottom, edge top)", moves: "R U' R' U R U' R'", cat: "F2L", tags: "f2l 5" },
+                { name: "F2L 19 (Split case)", moves: "R U' R' U2 R U' R'", cat: "F2L", tags: "f2l 19" },
+                { name: "F2L 24 (Stuck edge)", moves: "R U R' U' R U2 R' U' R U R'", cat: "F2L", tags: "f2l 24" },
+                { name: "F2L 36 (Both in slot)", moves: "R U' R' U R U2 R' U R U' R'", cat: "F2L", tags: "f2l 36" }
+            ],
+            cmll: [
+                { name: "CMLL-U 1", moves: "R2 D R' U2 R D' R' U2 R'", cat: "CMLL", tags: "cmll u1" },
+                { name: "CMLL-T 1", moves: "R U R' U' R' F R F'", cat: "CMLL", tags: "cmll t1" },
+                { name: "CMLL-Sune", moves: "R U R' U R U2 R'", cat: "CMLL", tags: "cmll sune" },
+                { name: "CMLL-H 1", moves: "R U R' U R U' R' U R U2 R'", cat: "CMLL", tags: "cmll h1" }
+            ],
+            coll: [
+                { name: "COLL-T 1", moves: "F R U R' U' F'", cat: "COLL", tags: "coll t1" },
+                { name: "COLL-U 1", moves: "R' U' R U' R' U2 R", cat: "COLL", tags: "coll u1" },
+                { name: "COLL-H 1", moves: "R U2 R' U' R U R' U' R U' R'", cat: "COLL", tags: "coll h1" }
+            ],
+            zbll: {
+                T: [
+                    { name: "ZBLL-T 1", moves: "R U2 R' U' R U' R2 F R F' R U R'", cat: "ZBLL", tags: "zbll t1" },
+                    { name: "ZBLL-T 2", moves: "R U2 R2 F R F' R U2 R'", cat: "ZBLL", tags: "zbll t2" },
+                    { name: "ZBLL-T 3", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", cat: "ZBLL", tags: "zbll t3" },
+                    { name: "ZBLL-T 12", moves: "r U' r' U' r U r' F' R U R'", cat: "ZBLL", tags: "zbll t12" }
+                ],
+                U: [
+                    { name: "ZBLL-U 1", moves: "R' U2 R F U' R' U' R U F' R'", cat: "ZBLL", tags: "zbll u1" },
+                    { name: "ZBLL-U 2", moves: "R U2 R' U' F' L' U' L U F", cat: "ZBLL", tags: "zbll u2" },
+                    { name: "ZBLL-U 5", moves: "r U r' U2 r U' r' F R' F' R", cat: "ZBLL", tags: "zbll u5" }
+                ],
+                L: [
+                    { name: "ZBLL-L 1", moves: "R U2 R' U' R U' R' U2 L' U L", cat: "ZBLL", tags: "zbll l1" },
+                    { name: "ZBLL-L 2", moves: "R' U2 R U R' U R U2 L U' L'", cat: "ZBLL", tags: "zbll l2" }
+                ],
+                H: [
+                    { name: "ZBLL-H 1", moves: "R U2 R' U' R U R' U' R U' R'", cat: "ZBLL", tags: "zbll h1" },
+                    { name: "ZBLL-H 2", moves: "F R U R' U' R U R' U' R U R' U' F'", cat: "ZBLL", tags: "zbll h2" }
+                ],
+                Pi: [
+                    { name: "ZBLL-Pi 1", moves: "R U2 R2 U' R2 U' R2 U2 R", cat: "ZBLL", tags: "zbll pi1" },
+                    { name: "ZBLL-Pi 2", moves: "R U' R' U2 R U2 R' U' F' U F", cat: "ZBLL", tags: "zbll pi2" }
+                ],
+                Sune: [
+                    { name: "ZBLL-Sune 1", moves: "R U R' U R U2 R'", cat: "ZBLL", tags: "zbll sune1" },
+                    { name: "ZBLL-Sune 2", moves: "R U2 R' U' R U' R' U' F' U F", cat: "ZBLL", tags: "zbll sune2" }
+                ],
+                ASune: [
+                    { name: "ZBLL-ASune 1", moves: "R U2 R' U' R U' R'", cat: "ZBLL", tags: "zbll asune1" },
+                    { name: "ZBLL-ASune 2", moves: "R' U' R U' R' U2 R U F U' F'", cat: "ZBLL", tags: "zbll asune2" }
+                ]
+            },
+            zbls: [
+                { name: "ZBLS 1 (Corner in top, edge top)", moves: "U' R U2 R' U R U R'", cat: "ZBLS", tags: "zbls 1" },
+                { name: "ZBLS 2 (Corner facing right)", moves: "R U' R' U R U2 R'", cat: "ZBLS", tags: "zbls 2" },
+                { name: "ZBLS 15 (Orienting two edges)", moves: "y' U R' U' R U2 R' U' R", cat: "ZBLS", tags: "zbls 15" },
+                { name: "ZBLS 42 (Orienting all edges)", moves: "R U R' U' R U' R' U2 R U' R'", cat: "ZBLS", tags: "zbls 42" }
+            ]
+        };
+
+        // Initialize lists
+        function populateGrid(gridId, data) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            grid.innerHTML = "";
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "alg-card";
+                card.dataset.name = item.name.toLowerCase();
+                card.dataset.tags = item.tags.toLowerCase();
+                card.dataset.moves = item.moves.toLowerCase();
+                
+                // Use a default emoji based on type
+                let emoji = "🧊";
+                if (item.cat === "PLL") emoji = "⚡";
+                else if (item.cat === "OLL") emoji = "☀️";
+                else if (item.cat === "F2L") emoji = "🧱";
+                else if (item.cat === "CMLL") emoji = "👑";
+                else if (item.cat === "COLL") emoji = "🎓";
+                else if (item.cat === "ZBLS") emoji = "💫";
+                else if (item.cat === "ZBLL") emoji = "🌟";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="alg-name">
+                            <span>${item.name}</span>
+                            <span class="visual-cube">${emoji}</span>
+                        </div>
+                        <div class="alg-moves">${item.moves}</div>
+                    </div>
+                    <button class="alg-btn-copy" onclick="copyToClipboard('${item.moves}')">Copy Algorithm 📋</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Copy Helper
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 1500);
+            }).catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+        }
+
+        // Tab selection
+        function selectMethod(methodId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.method-content').forEach(content => content.style.display = 'none');
+            
+            document.getElementById('tab-' + methodId).classList.add('active');
+            document.getElementById('content-' + methodId).style.display = 'block';
+        }
+
+        // Sub-tab selection
+        function selectSubTab(methodId, subTabId) {
+            const container = document.getElementById('content-' + methodId);
+            container.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+            container.querySelectorAll('.sub-content').forEach(content => content.style.display = 'none');
+
+            document.getElementById('btn-' + methodId + '-' + subTabId).classList.add('active');
+            document.getElementById(methodId + '-' + subTabId).style.display = 'block';
+        }
+
+        // ZBLL subset loader
+        function loadZbllSubset() {
+            const val = document.getElementById('zbll-subset').value;
+            const data = ALGORITHMS.zbll[val] || [];
+            populateGrid('grid-zbll', data);
+        }
+
+        // Search logic
+        const searchInput = document.getElementById('alg-search');
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.alg-card');
+            
+            if (query === "") {
+                cards.forEach(card => card.style.display = 'flex');
+                return;
+            }
+
+            cards.forEach(card => {
+                const name = card.dataset.name;
+                const tags = card.dataset.tags;
+                const moves = card.dataset.moves;
+                
+                if (name.includes(query) || tags.includes(query) || moves.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            populateGrid('grid-pll', ALGORITHMS.pll);
+            populateGrid('grid-oll', ALGORITHMS.oll);
+            populateGrid('grid-f2l', ALGORITHMS.f2l);
+            
+            populateGrid('grid-zbls', ALGORITHMS.zbls);
+            loadZbllSubset();
+            
+            populateGrid('grid-cmll', ALGORITHMS.cmll);
+            populateGrid('grid-coll', ALGORITHMS.coll);
+        });
+    </script>
+</body>
+</html>

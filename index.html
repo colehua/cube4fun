@@ -309,9 +309,15 @@
         </div>
 
         <!-- TUTORIAL BUTTONS & TIMER -->
-        <div style="text-align: center; margin-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+        <div style="text-align: center; margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
             <a href="timer.html" class="cube-button" style="background-color: #00E5FF; color: #1a1a1a;">
                 <span class="cube-icon">⏱️</span> Cole's Speedcubing Timer
+            </a>
+            <a href="algorithms.html" class="cube-button" style="background-color: #A8E6CF; color: #1a1a1a;">
+                <span class="cube-icon">🧩</span> Algorithms for Different Methods
+            </a>
+            <a href="blog.html" class="cube-button" style="background-color: #FFD3B6; color: #1a1a1a;">
+                <span class="cube-icon">✍️</span> Cole's Blog
             </a>
             <a href="play.html" class="cube-button" style="background-color: #2ECC71; color: #ffffff;">
                 <span class="cube-icon">🎮</span> Virtual 3D Cube Play
@@ -328,6 +334,13 @@
             <a href="#" class="cube-button" style="background-color: #ccc; cursor: not-allowed; box-shadow: 0px 4px 0px #999; top: 4px;" onclick="alert('Coming soon!'); return false;">
                 <span class="cube-icon" style="animation: none;">🔒</span> 4x4 Tutorial (Soon)
             </a>
+        </div>
+
+        <!-- Total Solves Counter Badge -->
+        <div style="text-align: center; margin-bottom: 45px;">
+            <span style="display: inline-block; background-color: #ffffff; border: 3px solid #333; padding: 6px 16px; border-radius: 15px; font-family: 'DynaPuff', cursive; font-size: 1.15em; box-shadow: 0px 4px 0px rgba(0,0,0,0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                🔥 <span style="color: #0066FF;">Cole's Speedcubing Timer:</span> <strong id="home-total-solves" style="color: #FF6B6B;">0</strong> solves completed!
+            </span>
         </div>
 
         <div class="content-grid">
@@ -1211,6 +1224,26 @@
                 return Math.sqrt(dx * dx + dy * dy);
             }
         })();
+
+        // --- UPDATE HOME TOTAL SOLVES ---
+        function updateHomeSolvesCount() {
+            const types = ['3x3', '2x2', '3x3-cross', '3x3-f2l', '3x3-oh', '3x3-fmc'];
+            let total = 0;
+            types.forEach(type => {
+                const stored = localStorage.getItem('cube_timer_solves_' + type);
+                if (stored) {
+                    try {
+                        const arr = JSON.parse(stored);
+                        if (Array.isArray(arr)) {
+                            total += arr.length;
+                        }
+                    } catch (e) {}
+                }
+            });
+            const el = document.getElementById('home-total-solves');
+            if (el) el.textContent = total;
+        }
+        updateHomeSolvesCount();
     </script>
 </body>
 </html>

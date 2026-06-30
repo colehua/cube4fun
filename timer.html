@@ -993,6 +993,10 @@
                             <span>Session Mean:</span>
                             <span id="stat-mean" class="stats-value">-</span>
                         </li>
+                        <li class="stats-item" style="border-top: 2px dotted #eee; padding-top: 10px; margin-top: 10px;">
+                            <span>Total Solves (All):</span>
+                            <span id="stat-total-solves" class="stats-value" style="color: #0066FF;">0</span>
+                        </li>
                         <li class="stats-item" style="border-top: 3px solid #ccc; margin-top: 15px; padding-top: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
                             <span>Cole's Single:</span>
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -2198,12 +2202,38 @@
         }
 
         // --- LOCAL STORAGE & SOLVES HISTORY ---
+        function updateTotalSolvesCount() {
+            const types = ['3x3', '2x2', '3x3-cross', '3x3-f2l', '3x3-oh', '3x3-fmc'];
+            let total = 0;
+            types.forEach(type => {
+                const stored = localStorage.getItem('cube_timer_solves_' + type);
+                if (stored) {
+                    try {
+                        const arr = JSON.parse(stored);
+                        if (Array.isArray(arr)) {
+                            total += arr.length;
+                        }
+                    } catch (e) {}
+                }
+            });
+            const display = document.getElementById('stat-total-solves');
+            if (display) {
+                display.textContent = total;
+            }
+        }
+
         function loadSolves() {
             const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             const stored = localStorage.getItem('cube_timer_solves_' + type);
-            solves = stored ? JSON.parse(stored) : [];
+            try {
+                solves = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                console.error("Error parsing solves:", e);
+                solves = [];
+            }
             renderSolves();
             calculateStats();
+            updateTotalSolvesCount();
         }
 
         function saveSolves() {
@@ -2211,6 +2241,7 @@
             localStorage.setItem('cube_timer_solves_' + type, JSON.stringify(solves));
             renderSolves();
             calculateStats();
+            updateTotalSolvesCount();
         }
 
         function renderSolves() {
@@ -2882,6 +2913,20 @@
         }
 
 
+        function getLastSolveTimeStr() {
+            if (solves.length > 0) {
+                const lastSolve = solves[solves.length - 1];
+                const type = scrambleTypeSelect.value;
+                if (type === '3x3-fmc') {
+                    return lastSolve.dnf ? "DNF" : lastSolve.time + " moves";
+                } else {
+                    const finalTime = lastSolve.time + (lastSolve.plusTwo ? 2 : 0);
+                    return lastSolve.dnf ? "DNF" : formatTime(finalTime);
+                }
+            }
+            return "0.00";
+        }
+
         // --- KEYBOARD TIMING EVENTS ---
         window.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
@@ -2893,16 +2938,14 @@
                 } else if (timerState === 'IDLE') {
                     timerState = 'READYING';
                     timerDisplay.className = 'timer-display hold';
-                    timerDisplay.textContent = '3.00';
+                    // Do not show the countdown, just keep 0.00 or the last time in red
+                    timerDisplay.textContent = getLastSolveTimeStr();
                     
                     let holdStart = Date.now();
                     clearInterval(holdInterval);
                     holdInterval = setInterval(() => {
                         let elapsed = Date.now() - holdStart;
-                        let remaining = Math.max(0, (3000 - elapsed) / 1000);
-                        if (remaining > 0) {
-                            timerDisplay.textContent = remaining.toFixed(2);
-                        } else {
+                        if (elapsed >= 2000) { // 2 seconds hold instead of 3
                             clearInterval(holdInterval);
                             timerState = 'READY';
                             timerDisplay.className = 'timer-display ready';
@@ -2927,7 +2970,8 @@
                 } else if (timerState === 'READYING') {
                     timerState = 'IDLE';
                     timerDisplay.className = 'timer-display';
-                    timerDisplay.textContent = '0.00';
+                    // Restore the last solve time instead of showing 0.00
+                    timerDisplay.textContent = getLastSolveTimeStr();
                 }
             }
         });
@@ -2943,16 +2987,13 @@
                 e.preventDefault();
                 timerState = 'READYING';
                 timerDisplay.className = 'timer-display hold';
-                timerDisplay.textContent = '3.00';
+                timerDisplay.textContent = getLastSolveTimeStr();
                 
                 let holdStart = Date.now();
                 clearInterval(holdInterval);
                 holdInterval = setInterval(() => {
                     let elapsed = Date.now() - holdStart;
-                    let remaining = Math.max(0, (3000 - elapsed) / 1000);
-                    if (remaining > 0) {
-                        timerDisplay.textContent = remaining.toFixed(2);
-                    } else {
+                    if (elapsed >= 2000) { // 2 seconds hold instead of 3
                         clearInterval(holdInterval);
                         timerState = 'READY';
                         timerDisplay.className = 'timer-display ready';
@@ -2971,7 +3012,42 @@
                 e.preventDefault();
                 timerState = 'IDLE';
                 timerDisplay.className = 'timer-display';
-                timerDisplay.textContent = '0.00';
+                timerDisplay.textContent = getLastSolveTimeStr();
+            }
+        });
+
+        tapZone.addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'BUTTON') return;
+            if (timerState === 'RUNNING') {
+                stopTimer();
+            } else if (timerState === 'IDLE') {
+                timerState = 'READYING';
+                timerDisplay.className = 'timer-display hold';
+                timerDisplay.textContent = getLastSolveTimeStr();
+                
+                let holdStart = Date.now();
+                clearInterval(holdInterval);
+                holdInterval = setInterval(() => {
+                    let elapsed = Date.now() - holdStart;
+                    if (elapsed >= 2000) {
+                        clearInterval(holdInterval);
+                        timerState = 'READY';
+                        timerDisplay.className = 'timer-display ready';
+                        timerDisplay.textContent = '0.00';
+                    }
+                }, 10);
+            }
+        });
+
+        tapZone.addEventListener('mouseup', (e) => {
+            if (e.target.tagName === 'BUTTON') return;
+            clearInterval(holdInterval);
+            if (timerState === 'READY') {
+                startTimer();
+            } else if (timerState === 'READYING') {
+                timerState = 'IDLE';
+                timerDisplay.className = 'timer-display';
+                timerDisplay.textContent = getLastSolveTimeStr();
             }
         });
 
@@ -3107,6 +3183,7 @@
 
         scrambleTypeSelect.addEventListener('change', () => {
             const type = scrambleTypeSelect.value;
+            localStorage.setItem('cube_timer_last_scramble_type', type);
             const lenInput = document.getElementById('scramble-length-input');
             if (lenInput) {
                 if (type === '3x3-cross') {
@@ -3179,6 +3256,10 @@
 
         // --- INITIALIZATION ---
         initAnimatorControls();
+        const savedType = localStorage.getItem('cube_timer_last_scramble_type');
+        if (savedType) {
+            scrambleTypeSelect.value = savedType;
+        }
         const initialType = scrambleTypeSelect.value;
         const initialLenInput = document.getElementById('scramble-length-input');
         if (initialLenInput) {

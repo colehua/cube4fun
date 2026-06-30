@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cole's Speedcubing Blog - Learn Cube 4 Fun. Read Cole's latest updates, cubing tips, and news.">
+    <title>Cole's Blog ✍️ - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --text-dark: #1a1a1a;
+            --purple-blob: #D8B4F8;
+            --pink-blob: #FFB7B2;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            background-color: #fafafa;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -100px;
+            left: -5%;
+            width: 110%;
+            height: 250px;
+            background-color: var(--purple-blob);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--yellow-blob);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            border: 3px solid #333;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.5em;
+            color: #FFB7B2;
+            text-align: center;
+            -webkit-text-stroke: 2px #555;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            margin-top: 10px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        /* ADMIN BAR */
+        .admin-bar {
+            background-color: #f1f2f6;
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .btn-admin-action {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 2px solid #333;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            transition: all 0.1s;
+        }
+
+        .btn-admin-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 2px 3px 0px rgba(0,0,0,0.15);
+        }
+
+        /* BLOG POSTS */
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .post-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            border: 4px dashed #9b59b6;
+            position: relative;
+        }
+
+        .post-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 2.1em;
+            color: #9b59b6;
+            margin-top: 0;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .post-date {
+            font-size: 1em;
+            color: #888;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .post-body {
+            font-size: 1.3em;
+            line-height: 1.6;
+            font-weight: bold;
+            color: #2f3542;
+            word-wrap: break-word;
+        }
+
+        .post-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            border: 3px solid #333;
+            margin: 15px 0;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .post-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            border-top: 2px dotted #eee;
+            padding-top: 15px;
+        }
+
+        .btn-post-op {
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            padding: 6px 12px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #fff;
+            transition: all 0.1s;
+        }
+
+        .btn-post-op:hover {
+            background-color: #f1f2f6;
+        }
+
+        .btn-post-op.delete {
+            background-color: #ff8585;
+            color: white;
+        }
+
+        .btn-post-op.delete:hover {
+            background-color: #ff6b6b;
+        }
+
+        /* COMPOSER FORM */
+        .composer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 10005;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .composer-card {
+            background: white;
+            border: 4px solid #333;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 750px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .composer-title-input {
+            width: 100%;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.5em;
+            padding: 10px 15px;
+            border: 3px solid #333;
+            border-radius: 12px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .composer-textarea {
+            width: 100%;
+            height: 250px;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 15px;
+            border: 3px solid #333;
+            border-radius: 12px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            outline: none;
+            resize: vertical;
+        }
+
+        /* EMOJI BAR */
+        .emoji-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+
+        .emoji-btn {
+            font-size: 1.5em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.1s;
+        }
+
+        .emoji-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        /* IMAGE UPLOADER */
+        .img-uploader-container {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-upload-trigger {
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            padding: 8px 16px;
+            border: 3px dashed #9b59b6;
+            border-radius: 12px;
+            background: #fdfafb;
+            cursor: pointer;
+            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-upload-trigger:hover {
+            background: #f5f0f6;
+        }
+
+        /* PREVIEW BLOCK */
+        .preview-header {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            color: #888;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-top: 3px dashed #ccc;
+            padding-top: 15px;
+        }
+
+        .preview-box {
+            background-color: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        /* MODAL CLOSE */
+        .composer-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            font-weight: bold;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="blob-top"></div>
+
+    <div class="container">
+        <!-- NAVIGATION -->
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">🏠 Back to Home</a>
+            <span id="admin-status" style="font-weight: bold; font-family: 'DynaPuff', cursive; color: #9b59b6; font-size: 1.1em; display: none;">👑 Cole Logged In</span>
+        </div>
+
+        <h1 class="main-title">Cole's Blog ✍️</h1>
+        <p style="text-align: center; font-size: 1.3em; font-weight: bold; margin-bottom: 30px;">
+            Welcome to my blog! I'll share my cubing updates, tutorials, and class details here.
+        </p>
+
+        <!-- ADMIN CONTROLS -->
+        <div id="admin-bar" class="admin-bar" style="display: none;">
+            <span>👋 Hi Cole! You can create, edit, or delete posts.</span>
+            <button id="btn-new-post" class="btn-admin-action" style="background-color: #FFB7B2;">✍️ New Blog Post</button>
+        </div>
+
+        <!-- BLOG LIST -->
+        <div id="blog-list" class="blog-list">
+            <div style="text-align: center; font-size: 1.2em; font-weight: bold; color: #888; margin-top: 35px;">
+                Loading blog posts... ⏳
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPOSER MODAL -->
+    <div id="composer-modal" class="composer-overlay">
+        <div class="composer-card">
+            <button id="composer-close-btn" class="composer-close">✕</button>
+            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin-top: 0; margin-bottom: 20px; color: #9b59b6;" id="composer-title-label">✍️ Write a Blog Post</h3>
+            
+            <input type="text" id="composer-title" class="composer-title-input" placeholder="Post Title (e.g. My new 3x3 record!)">
+            
+            <!-- Emoji insertion bar -->
+            <div class="emoji-bar">
+                <button class="emoji-btn" onclick="insertEmoji('🧊')">🧊</button>
+                <button class="emoji-btn" onclick="insertEmoji('⏱️')">⏱️</button>
+                <button class="emoji-btn" onclick="insertEmoji('🏆')">🏆</button>
+                <button class="emoji-btn" onclick="insertEmoji('🎉')">🎉</button>
+                <button class="emoji-btn" onclick="insertEmoji('🔥')">🔥</button>
+                <button class="emoji-btn" onclick="insertEmoji('🚀')">🚀</button>
+                <button class="emoji-btn" onclick="insertEmoji('🧠')">🧠</button>
+                <button class="emoji-btn" onclick="insertEmoji('👀')">👀</button>
+                <button class="emoji-btn" onclick="insertEmoji('🇨🇳')">🇨🇳</button>
+                <button class="emoji-btn" onclick="insertEmoji('👏')">👏</button>
+            </div>
+
+            <!-- Image upload bar -->
+            <div class="img-uploader-container">
+                <label class="btn-upload-trigger">
+                    📷 Insert Photo
+                    <input type="file" id="composer-file" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                </label>
+                <span style="font-size: 0.9em; color: #888; font-weight: bold;">Upload a photo directly from your device!</span>
+            </div>
+
+            <textarea id="composer-content" class="composer-textarea" placeholder="Write your post here... You can insert photos or emojis. Use HTML tags like <b>bold</b> if you like!"></textarea>
+            
+            <div class="preview-header">Live Preview 👀</div>
+            <div id="composer-preview" class="preview-box post-body"></div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button id="btn-cancel-publish" class="btn-admin-action" style="background-color: #f1f2f6;">Cancel</button>
+                <button id="btn-save-post" class="btn-admin-action" style="background-color: var(--cyan-blob);">Publish Post 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT BLOG LOGIC ==================== -->
+    <script>
+        // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
+        const SUPABASE_URL = "https://eisgnkorwctusaggafxt.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2dua29yd2N0dXNhZ2dhZnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTc0MDYsImV4cCI6MjA5NzQ5MzQwNn0.FvL-F8P127De3O5lzAP2qNidOkzJn2a8Z3QxaZXNvV4";
+
+        let supabaseClient = null;
+        let isSupabaseActive = false;
+
+        if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+            try {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                isSupabaseActive = true;
+                console.log("Supabase active in blog!");
+            } catch (e) {
+                console.error("Failed to initialize Supabase client in blog:", e);
+            }
+        }
+
+        // Blog state
+        let blogPosts = [];
+        let editingPostId = null; // null if creating, string/number if editing
+
+        // DOM elements
+        const blogListContainer = document.getElementById('blog-list');
+        const adminBar = document.getElementById('admin-bar');
+        const adminStatus = document.getElementById('admin-status');
+        const btnNewPost = document.getElementById('btn-new-post');
+        const composerModal = document.getElementById('composer-modal');
+        const composerCloseBtn = document.getElementById('composer-close-btn');
+        const composerTitle = document.getElementById('composer-title');
+        const composerContent = document.getElementById('composer-content');
+        const composerPreview = document.getElementById('composer-preview');
+        const btnSavePost = document.getElementById('btn-save-post');
+        const btnCancelPublish = document.getElementById('btn-cancel-publish');
+        const composerTitleLabel = document.getElementById('composer-title-label');
+
+        // Check if admin is logged in (reusing credentials from home/timer)
+        async function checkAdminState() {
+            let loggedIn = false;
+            if (isSupabaseActive) {
+                try {
+                    const { data } = await supabaseClient.auth.getSession();
+                    loggedIn = !!(data && data.session);
+                } catch (e) {
+                    console.error("Session fetch failed:", e);
+                }
+            }
+            if (!loggedIn) {
+                loggedIn = localStorage.getItem('cube4fun_admin_logged_in') === 'true';
+            }
+
+            if (loggedIn) {
+                adminBar.style.display = 'flex';
+                adminStatus.style.display = 'inline-block';
+            } else {
+                adminBar.style.display = 'none';
+                adminStatus.style.display = 'none';
+            }
+        }
+
+        // Fetch Blog Posts
+        async function fetchPosts() {
+            if (isSupabaseActive) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('blog_posts')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        blogPosts = data;
+                        renderPosts();
+                        return;
+                    }
+                    if (error) {
+                        console.warn("Supabase blog fetch error, falling back to LocalStorage:", error.message);
+                    }
+                } catch (e) {
+                    console.error("Supabase blog fetch failed, falling back to LocalStorage:", e);
+                }
+            }
+
+            // Local fallback
+            const stored = localStorage.getItem('cube_blog_posts');
+            blogPosts = stored ? JSON.parse(stored) : getMockPosts();
+            renderPosts();
+        }
+
+        // Default mock posts if empty
+        function getMockPosts() {
+            const mock = [
+                {
+                    id: "mock-1",
+                    title: "Welcome to Learn Cube 4 Fun! 🧊",
+                    content: "Hey guys! I'm grade 4 and I love speedcubing. I made this website to share my passion for cubing and to teach you how to solve the Rubik's cube. We hold classes at Wesbrook Community Centre every Wednesday from 7pm to 8pm. Hope to see you there! 🎉",
+                    created_at: new Date(Date.now() - 86400000 * 5).toISOString() // 5 days ago
+                },
+                {
+                    id: "mock-2",
+                    title: "My 3x3 speedcubing record! ⏱️",
+                    content: "I'm super happy to share that my official WCA 3x3 record is 9 seconds! You can check out my official profile on the WCA website. I've been practicing fingertricks and looking ahead to spot my F2L pairs faster. Let's practice together! 🚀",
+                    created_at: new Date(Date.now() - 86400000 * 2).toISOString() // 2 days ago
+                }
+            ];
+            localStorage.setItem('cube_blog_posts', JSON.stringify(mock));
+            return mock;
+        }
+
+        // Render blog posts list
+        function renderPosts() {
+            blogListContainer.innerHTML = "";
+            if (blogPosts.length === 0) {
+                blogListContainer.innerHTML = `<div style="text-align: center; font-size: 1.2em; font-weight: bold; color: #888; margin-top: 35px;">No blog posts yet!</div>`;
+                return;
+            }
+
+            const loggedIn = adminBar.style.display === 'flex';
+
+            blogPosts.forEach(post => {
+                const trDate = new Date(post.created_at);
+                const dateStr = trDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + trDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                
+                const card = document.createElement('div');
+                card.className = 'post-card';
+                
+                card.innerHTML = `
+                    <h2 class="post-title">${post.title}</h2>
+                    <div class="post-date">📅 ${dateStr}</div>
+                    <div class="post-body">${post.content}</div>
+                    ${loggedIn ? `
+                        <div class="post-actions">
+                            <button class="btn-post-op" onclick="editPost('${post.id}')">✏️ Edit</button>
+                            <button class="btn-post-op delete" onclick="deletePost('${post.id}')">✕ Delete</button>
+                        </div>
+                    ` : ''}
+                `;
+                blogListContainer.appendChild(card);
+            });
+        }
+
+        // Add Emoji to textarea
+        window.insertEmoji = function(emoji) {
+            const start = composerContent.selectionStart;
+            const end = composerContent.selectionEnd;
+            composerContent.value = composerContent.value.substring(0, start) + emoji + composerContent.value.substring(end);
+            composerContent.focus();
+            composerContent.selectionStart = composerContent.selectionEnd = start + emoji.length;
+            updatePreview();
+        };
+
+        // Handle Image Upload
+        window.handleImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) { // Limit to 2MB for base64 safety
+                alert("Please select a smaller photo (under 2MB)!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const base64 = evt.target.result;
+                const imgTag = `<img src="${base64}" alt="Blog Image">`;
+                
+                const start = composerContent.selectionStart;
+                const end = composerContent.selectionEnd;
+                composerContent.value = composerContent.value.substring(0, start) + imgTag + composerContent.value.substring(end);
+                composerContent.focus();
+                composerContent.selectionStart = composerContent.selectionEnd = start + imgTag.length;
+                updatePreview();
+            };
+            reader.readAsDataURL(file);
+            // Reset file input value
+            event.target.value = "";
+        };
+
+        // Update Live Preview
+        function updatePreview() {
+            composerPreview.innerHTML = composerContent.value.replace(/\n/g, '<br>');
+        }
+
+        composerContent.addEventListener('input', updatePreview);
+
+        // Open composer for creating
+        btnNewPost.addEventListener('click', () => {
+            editingPostId = null;
+            composerTitleLabel.textContent = "✍️ Write a Blog Post";
+            composerTitle.value = "";
+            composerContent.value = "";
+            composerPreview.innerHTML = "";
+            composerModal.style.display = 'flex';
+        });
+
+        // Open composer for editing
+        window.editPost = function(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+
+            editingPostId = id;
+            composerTitleLabel.textContent = "✏️ Edit Blog Post";
+            composerTitle.value = post.title;
+            // Convert <br> back to newlines if necessary, but we render content raw
+            composerContent.value = post.content.replace(/<br>/g, '\n');
+            updatePreview();
+            composerModal.style.display = 'flex';
+        };
+
+        // Close composer
+        composerCloseBtn.addEventListener('click', () => {
+            composerModal.style.display = 'none';
+        });
+        btnCancelPublish.addEventListener('click', () => {
+            composerModal.style.display = 'none';
+        });
+
+        // Publish / Update Post
+        btnSavePost.addEventListener('click', async () => {
+            const title = composerTitle.value.trim();
+            const content = composerContent.value.trim().replace(/\n/g, '<br>');
+
+            if (!title || !content) {
+                alert("Please fill in both the title and content!");
+                return;
+            }
+
+            const postObj = {
+                title: title,
+                content: content,
+                created_at: new Date().toISOString()
+            };
+
+            let success = false;
+
+            if (isSupabaseActive) {
+                try {
+                    if (editingPostId) {
+                        // Update
+                        const { error } = await supabaseClient
+                            .from('blog_posts')
+                            .update(postObj)
+                            .eq('id', editingPostId);
+                        if (error) throw error;
+                    } else {
+                        // Insert
+                        const { error } = await supabaseClient
+                            .from('blog_posts')
+                            .insert([postObj]);
+                        if (error) throw error;
+                    }
+                    success = true;
+                } catch (e) {
+                    console.error("Supabase write failed, saving locally:", e);
+                }
+            }
+
+            // Local fallback or parallel local sync
+            if (!success || !isSupabaseActive) {
+                const stored = localStorage.getItem('cube_blog_posts');
+                let localPosts = stored ? JSON.parse(stored) : [];
+
+                if (editingPostId) {
+                    localPosts = localPosts.map(p => {
+                        if (p.id === editingPostId) {
+                            return { ...p, title: title, content: content };
+                        }
+                        return p;
+                    });
+                } else {
+                    postObj.id = Date.now().toString();
+                    localPosts.unshift(postObj);
+                }
+                localStorage.setItem('cube_blog_posts', JSON.stringify(localPosts));
+                success = true;
+            }
+
+            if (success) {
+                alert(editingPostId ? "Post updated successfully! ✏️" : "Post published successfully! 🚀");
+                composerModal.style.display = 'none';
+                fetchPosts();
+            }
+        });
+
+        // Delete Post
+        window.deletePost = async function(id) {
+            if (!confirm("Are you sure you want to delete this blog post? This cannot be undone!")) return;
+
+            let success = false;
+
+            if (isSupabaseActive) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('blog_posts')
+                        .delete()
+                        .eq('id', id);
+                    if (!error) success = true;
+                } catch (e) {
+                    console.error("Failed to delete post from Supabase:", e);
+                }
+            }
+
+            if (!success || !isSupabaseActive) {
+                const stored = localStorage.getItem('cube_blog_posts');
+                if (stored) {
+                    let localPosts = JSON.parse(stored);
+                    localPosts = localPosts.filter(p => p.id !== id);
+                    localStorage.setItem('cube_blog_posts', JSON.stringify(localPosts));
+                    success = true;
+                }
+            }
+
+            if (success) {
+                alert("Post deleted! 🗑️");
+                fetchPosts();
+            }
+        };
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkAdminState();
+            await fetchPosts();
+        });
+    </script>
+</body>
+</html>
