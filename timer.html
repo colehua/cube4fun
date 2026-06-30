@@ -1512,8 +1512,36 @@
             }
         }
 
+        const baseTransforms = {
+            'U': 'rotateX(90deg) translateZ(70px)',
+            'D': 'rotateX(-90deg) translateZ(70px)',
+            'F': 'rotateY(0deg) translateZ(70px)',
+            'B': 'rotateY(180deg) translateZ(70px)',
+            'L': 'rotateY(-90deg) translateZ(70px)',
+            'R': 'rotateY(90deg) translateZ(70px)'
+        };
+
+        let animatorAnimationTimeout = null;
+        let animatorAnimatingFace = null;
+
+        function finishAnimatorAnimation() {
+            if (animatorAnimationTimeout) {
+                clearTimeout(animatorAnimationTimeout);
+                animatorAnimationTimeout = null;
+            }
+            if (animatorAnimatingFace) {
+                const faceEl = document.querySelector(`.face-3d.face-${animatorAnimatingFace}`);
+                if (faceEl) {
+                    faceEl.style.transition = 'none';
+                    faceEl.style.transform = baseTransforms[animatorAnimatingFace];
+                }
+                animatorAnimatingFace = null;
+            }
+        }
+
         function initScrambleAnimator() {
             stopAnimatorPlayback();
+            finishAnimatorAnimation();
 
             const type = scrambleTypeSelect.value;
             animatorIs2x2 = type === '2x2';
@@ -1529,8 +1557,49 @@
             if (statusText) statusText.textContent = 'READY';
         }
 
+        function animateFaceTurn(move) {
+            if (!move) return;
+            const face = move[0];
+            const modifier = move.slice(1);
+            
+            let angle = '90deg';
+            if (modifier === "'") angle = '-90deg';
+            if (modifier === '2') angle = '180deg';
+
+            const faceEl = document.querySelector(`.face-3d.face-${face}`);
+            if (faceEl) {
+                animatorAnimatingFace = face;
+                // Add a smooth easing animation
+                faceEl.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
+                faceEl.style.transform = `${baseTransforms[face]} rotate(${angle})`;
+            }
+
+            // Apply the move to the logical state immediately
+            applyMoveToAnimatorState(move);
+            updateAnimatorMovesDisplay();
+
+            animatorAnimationTimeout = setTimeout(() => {
+                if (faceEl) {
+                    faceEl.style.transition = 'none';
+                    faceEl.style.transform = baseTransforms[face];
+                }
+                updateAnimator3dCubeVisuals();
+                animatorAnimatingFace = null;
+                animatorAnimationTimeout = null;
+
+                // If reached the end, stop playback
+                if (animatorCurrentStep === animatorMoves.length - 1) {
+                    stopAnimatorPlayback();
+                    const statusText = document.getElementById('animator-status-text');
+                    if (statusText) statusText.textContent = 'FINISHED';
+                }
+            }, 250);
+        }
+
         function playAnimatorNextStep() {
             if (animatorMoves.length === 0) return;
+
+            finishAnimatorAnimation();
 
             if (animatorCurrentStep >= animatorMoves.length - 1) {
                 // Wrap around to start
@@ -1543,19 +1612,13 @@
 
             animatorCurrentStep++;
             const move = animatorMoves[animatorCurrentStep];
-            applyMoveToAnimatorState(move);
-            updateAnimator3dCubeVisuals();
-            updateAnimatorMovesDisplay();
-
-            if (animatorCurrentStep === animatorMoves.length - 1) {
-                stopAnimatorPlayback();
-                const statusText = document.getElementById('animator-status-text');
-                if (statusText) statusText.textContent = 'FINISHED';
-            }
+            animateFaceTurn(move);
         }
 
         function playAnimatorPrevStep() {
             if (animatorMoves.length === 0 || animatorCurrentStep < 0) return;
+
+            finishAnimatorAnimation();
 
             animatorCurrentStep--;
             resetAnimatorCubeState();
@@ -1637,8 +1700,10 @@
             }
         }
 
+        // Reset the animator
         function resetAnimator() {
             stopAnimatorPlayback();
+            finishAnimatorAnimation();
             animatorCurrentStep = -1;
             resetAnimatorCubeState();
             updateAnimator3dCubeVisuals();
