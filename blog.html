@@ -349,7 +349,10 @@
         <!-- NAVIGATION -->
         <div class="nav-buttons">
             <a href="index.html" class="nav-button">🏠 Back to Home</a>
-            <span id="admin-status" style="font-weight: bold; font-family: 'DynaPuff', cursive; color: #9b59b6; font-size: 1.1em; display: none;">👑 Cole Logged In</span>
+            <div>
+                <button id="admin-toggle-btn" style="background: none; border: none; color: #0066FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; font-weight: bold; cursor: pointer; text-decoration: underline; outline: none; margin-right: 15px;">🔑 Admin Login</button>
+                <span id="admin-status" style="font-weight: bold; font-family: 'DynaPuff', cursive; color: #9b59b6; font-size: 1.1em; display: none;">👑 Cole Logged In</span>
+            </div>
         </div>
 
         <h1 class="main-title">Cole's Blog ✍️</h1>
@@ -368,6 +371,26 @@
             <div style="text-align: center; font-size: 1.2em; font-weight: bold; color: #888; margin-top: 35px;">
                 Loading blog posts... ⏳
             </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: center; justify-content: center; box-sizing: border-box; user-select: none; touch-action: none;">
+        <div style="background: white; border: 4px solid #333; padding: 30px; border-radius: 25px; width: 100%; max-width: 400px; box-sizing: border-box; position: relative; box-shadow: 0px 10px 30px rgba(0,0,0,0.25);">
+            <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
+            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h3>
+            <p style="text-align: center; margin-top: 5px; margin-bottom: 20px; font-size: 1.05em; color: #666; font-weight: bold;">Only Cole can publish blog posts!</p>
+            <form id="admin-login-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label for="admin-email" style="font-size: 1.1em; color: #1a1a1a;">Email Address:</label>
+                    <input type="email" id="admin-email" autocomplete="off" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label for="admin-password" style="font-size: 1.1em; color: #1a1a1a;">Password:</label>
+                    <input type="password" id="admin-password" autocomplete="off" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                </div>
+                <button type="submit" style="font-family: 'DynaPuff', cursive; font-size: 1.25em; padding: 12px; border: 3px solid #333; border-radius: 15px; background-color: var(--yellow-blob); cursor: pointer; box-shadow: 0px 4px 0px #333; margin-top: 10px; outline: none; transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='0px 2px 0px #333';" onmouseup="this.style.transform='none'; this.style.boxShadow='0px 4px 0px #333';">Unlock Admin 🔓</button>
+            </form>
         </div>
     </div>
 
@@ -451,6 +474,14 @@
         const btnCancelPublish = document.getElementById('btn-cancel-publish');
         const composerTitleLabel = document.getElementById('composer-title-label');
 
+        // Admin login elements
+        const adminModal = document.getElementById('admin-modal');
+        const adminToggleBtn = document.getElementById('admin-toggle-btn');
+        const adminModalClose = document.getElementById('admin-modal-close');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
+
         // Check if admin is logged in (reusing credentials from home/timer)
         async function checkAdminState() {
             let loggedIn = false;
@@ -469,10 +500,83 @@
             if (loggedIn) {
                 adminBar.style.display = 'flex';
                 adminStatus.style.display = 'inline-block';
+                if (adminToggleBtn) {
+                    adminToggleBtn.textContent = "🚪 Admin Logout";
+                    adminToggleBtn.style.color = "#FF6B6B";
+                }
             } else {
                 adminBar.style.display = 'none';
                 adminStatus.style.display = 'none';
+                if (adminToggleBtn) {
+                    adminToggleBtn.textContent = "🔑 Admin Login";
+                    adminToggleBtn.style.color = "#0066FF";
+                }
             }
+        }
+
+        if (adminToggleBtn) {
+            adminToggleBtn.addEventListener('click', async function() {
+                let loggedIn = false;
+                if (isSupabaseActive) {
+                    try {
+                        const { data } = await supabaseClient.auth.getSession();
+                        loggedIn = !!(data && data.session);
+                    } catch (e) {}
+                }
+                if (!loggedIn) {
+                    loggedIn = localStorage.getItem('cube4fun_admin_logged_in') === 'true';
+                }
+
+                if (loggedIn) {
+                    if (isSupabaseActive) {
+                        await supabaseClient.auth.signOut();
+                    }
+                    localStorage.removeItem('cube4fun_admin_logged_in');
+                    alert("Logged out as Admin! 🚪");
+                    checkAdminState();
+                    renderPosts(); // re-render to hide edit/delete buttons
+                } else {
+                    adminModal.style.display = 'flex';
+                }
+            });
+        }
+
+        if (adminModalClose) {
+            adminModalClose.addEventListener('click', () => {
+                adminModal.style.display = 'none';
+            });
+        }
+
+        if (adminLoginForm) {
+            adminLoginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = adminEmailInput.value.trim();
+                const password = adminPasswordInput.value;
+
+                if (isSupabaseActive) {
+                    try {
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
+                            email: email,
+                            password: password
+                        });
+                        if (error) throw error;
+                        alert("Welcome, Admin! 🔓 You can now write blog posts.");
+                        adminModal.style.display = 'none';
+                        await checkAdminState();
+                        renderPosts();
+                    } catch (err) {
+                        alert("Login failed: " + err.message);
+                    }
+                } else {
+                    if (email && password) {
+                        localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                        alert("Logged in as Admin (LOCAL MODE)! You can now write blog posts.");
+                        adminModal.style.display = 'none';
+                        await checkAdminState();
+                        renderPosts();
+                    }
+                }
+            });
         }
 
         // Fetch Blog Posts
