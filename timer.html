@@ -763,6 +763,14 @@
             text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
             transform: scale(1.05);
         }
+
+        .diff-btn.active[data-difficulty="random"] {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Playful coral gradient */
+            color: white;
+            box-shadow: 2px 2px 0px #d35400, inset 0 1px 3px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -810,6 +818,7 @@
                 <button class="diff-btn" data-difficulty="medium" title="Medium length scramble">🟡 Medium</button>
                 <button class="diff-btn" data-difficulty="hard" title="Standard WCA length scramble">🔴 Hard</button>
                 <button class="diff-btn" data-difficulty="advanced" title="Extra long scramble for advanced practice">🟣 Advanced</button>
+                <button class="diff-btn" data-difficulty="random" title="Randomize difficulty for every scramble">🎲 Random</button>
             </div>
         </div>
 
@@ -1903,11 +1912,17 @@
             if (!lenInput) return;
             const currentLength = parseInt(lenInput.value);
             
+            const storedDiff = localStorage.getItem('cube_timer_scramble_difficulty');
+            
             let matchedDiff = null;
-            for (const diff of ['easy', 'medium', 'hard', 'advanced']) {
-                if (DIFFICULTY_LENGTHS[diff][type] === currentLength) {
-                    matchedDiff = diff;
-                    break;
+            if (storedDiff === 'random') {
+                matchedDiff = 'random';
+            } else {
+                for (const diff of ['easy', 'medium', 'hard', 'advanced']) {
+                    if (DIFFICULTY_LENGTHS[diff][type] === currentLength) {
+                        matchedDiff = diff;
+                        break;
+                    }
                 }
             }
             
@@ -1928,13 +1943,16 @@
 
         function setDifficulty(diff) {
             const type = scrambleTypeSelect.value;
-            const length = DIFFICULTY_LENGTHS[diff][type];
             localStorage.setItem('cube_timer_scramble_difficulty', diff);
-            saveScrambleLength(type, length);
-            
-            const lenInput = document.getElementById('scramble-length-input');
-            if (lenInput) {
-                lenInput.value = length;
+
+            if (diff !== 'random') {
+                const length = DIFFICULTY_LENGTHS[diff][type];
+                saveScrambleLength(type, length);
+                
+                const lenInput = document.getElementById('scramble-length-input');
+                if (lenInput) {
+                    lenInput.value = length;
+                }
             }
             
             updateDifficultyButtons();
@@ -1947,6 +1965,9 @@
 
         function getScrambleLength(type) {
             const diff = localStorage.getItem('cube_timer_scramble_difficulty');
+            if (diff === 'random') {
+                return DIFFICULTY_LENGTHS['hard'][type];
+            }
             if (diff && DIFFICULTY_LENGTHS[diff] && DIFFICULTY_LENGTHS[diff][type] !== undefined) {
                 return DIFFICULTY_LENGTHS[diff][type];
             }
@@ -1964,7 +1985,12 @@
 
         function generateScramble(type) {
             type = type || '3x3';
-            const diff = getCurrentDifficulty();
+            let diff = getCurrentDifficulty();
+            
+            if (diff === 'random') {
+                const choices = ['easy', 'medium', 'hard', 'advanced'];
+                diff = choices[Math.floor(Math.random() * choices.length)];
+            }
             
             let faces;
             if (type === '2x2') {
@@ -1980,8 +2006,8 @@
             let prevFace = '';
             let prevPrevFace = '';
             
-            // Get user configured scramble length
-            let scrambleLength = getScrambleLength(type);
+            // Get scramble length for the chosen difficulty
+            let scrambleLength = DIFFICULTY_LENGTHS[diff][type];
             const lenInput = document.getElementById('scramble-length-input');
             if (lenInput) {
                 lenInput.value = scrambleLength;
