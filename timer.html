@@ -755,6 +755,24 @@
             text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
             transform: scale(1.05);
         }
+
+        /* STICKER POP TRANSITION FOR ANIMATOR */
+        @keyframes sticker-pop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.35);
+                border-radius: 50%;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .sticker-pop-active {
+            animation: sticker-pop 0.25s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -1512,31 +1530,16 @@
             }
         }
 
-        const baseTransforms = {
-            'U': 'rotateX(90deg) translateZ(70px)',
-            'D': 'rotateX(-90deg) translateZ(70px)',
-            'F': 'rotateY(0deg) translateZ(70px)',
-            'B': 'rotateY(180deg) translateZ(70px)',
-            'L': 'rotateY(-90deg) translateZ(70px)',
-            'R': 'rotateY(90deg) translateZ(70px)'
-        };
-
         let animatorAnimationTimeout = null;
-        let animatorAnimatingFace = null;
 
         function finishAnimatorAnimation() {
             if (animatorAnimationTimeout) {
                 clearTimeout(animatorAnimationTimeout);
                 animatorAnimationTimeout = null;
             }
-            if (animatorAnimatingFace) {
-                const faceEl = document.querySelector(`.face-3d.face-${animatorAnimatingFace}`);
-                if (faceEl) {
-                    faceEl.style.transition = 'none';
-                    faceEl.style.transform = baseTransforms[animatorAnimatingFace];
-                }
-                animatorAnimatingFace = null;
-            }
+            document.querySelectorAll('.sticker-3d').forEach(sticker => {
+                sticker.classList.remove('sticker-pop-active');
+            });
         }
 
         function initScrambleAnimator() {
@@ -1557,43 +1560,65 @@
             if (statusText) statusText.textContent = 'READY';
         }
 
-        function animateFaceTurn(move) {
+        function animateStickerChanges(move) {
             if (!move) return;
-            const face = move[0];
-            const modifier = move.slice(1);
+
+            // 1. Capture current visual state (old colors)
+            const oldState = {};
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            const numStickers = animatorIs2x2 ? 4 : 9;
             
-            let angle = '90deg';
-            if (modifier === "'") angle = '-90deg';
-            if (modifier === '2') angle = '180deg';
+            faces.forEach(fName => {
+                oldState[fName] = [...animatorCubeState[fName]];
+            });
 
-            const faceEl = document.querySelector(`.face-3d.face-${face}`);
-            if (faceEl) {
-                animatorAnimatingFace = face;
-                // Add a smooth easing animation
-                faceEl.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
-                faceEl.style.transform = `${baseTransforms[face]} rotate(${angle})`;
-            }
-
-            // Apply the move to the logical state immediately
+            // 2. Apply move to logical state
             applyMoveToAnimatorState(move);
             updateAnimatorMovesDisplay();
 
-            animatorAnimationTimeout = setTimeout(() => {
-                if (faceEl) {
-                    faceEl.style.transition = 'none';
-                    faceEl.style.transform = baseTransforms[face];
+            // 3. Compare and find which stickers changed
+            const changedStickers = [];
+            faces.forEach(fName => {
+                const newState = animatorCubeState[fName];
+                for (let i = 0; i < numStickers; i++) {
+                    if (oldState[fName][i] !== newState[i]) {
+                        changedStickers.push({ face: fName, index: i });
+                    }
                 }
-                updateAnimator3dCubeVisuals();
-                animatorAnimatingFace = null;
-                animatorAnimationTimeout = null;
+            });
 
-                // If reached the end, stop playback
-                if (animatorCurrentStep === animatorMoves.length - 1) {
-                    stopAnimatorPlayback();
-                    const statusText = document.getElementById('animator-status-text');
-                    if (statusText) statusText.textContent = 'FINISHED';
+            // 4. Add pop class to changed stickers
+            changedStickers.forEach(item => {
+                const stickerEl = document.querySelector(`.animator-sticker-${item.face}-${item.index}`);
+                if (stickerEl) {
+                    stickerEl.classList.remove('sticker-pop-active');
+                    void stickerEl.offsetWidth; // Trigger reflow to restart animation
+                    stickerEl.classList.add('sticker-pop-active');
                 }
-            }, 250);
+            });
+
+            // 5. Halfway through the animation (120ms), update the colors so they change while shrunk
+            animatorAnimationTimeout = setTimeout(() => {
+                updateAnimator3dCubeVisuals();
+                
+                // 6. At the end of the animation (250ms), clean up
+                animatorAnimationTimeout = setTimeout(() => {
+                    changedStickers.forEach(item => {
+                        const stickerEl = document.querySelector(`.animator-sticker-${item.face}-${item.index}`);
+                        if (stickerEl) {
+                            stickerEl.classList.remove('sticker-pop-active');
+                        }
+                    });
+                    animatorAnimationTimeout = null;
+
+                    // If reached the end, stop playback
+                    if (animatorCurrentStep === animatorMoves.length - 1) {
+                        stopAnimatorPlayback();
+                        const statusText = document.getElementById('animator-status-text');
+                        if (statusText) statusText.textContent = 'FINISHED';
+                    }
+                }, 130);
+            }, 120);
         }
 
         function playAnimatorNextStep() {
@@ -1612,7 +1637,7 @@
 
             animatorCurrentStep++;
             const move = animatorMoves[animatorCurrentStep];
-            animateFaceTurn(move);
+            animateStickerChanges(move);
         }
 
         function playAnimatorPrevStep() {
