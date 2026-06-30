@@ -755,6 +755,14 @@
             text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
             transform: scale(1.05);
         }
+
+        .diff-btn.active[data-difficulty="advanced"] {
+            background-color: #9b59b6; /* Playful purple */
+            color: white;
+            box-shadow: 2px 2px 0px #7d3c98, inset 0 1px 3px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -801,6 +809,7 @@
                 <button class="diff-btn" data-difficulty="easy" title="Short scramble, restricted faces (U, R, F)">🟢 Easy</button>
                 <button class="diff-btn" data-difficulty="medium" title="Medium length scramble">🟡 Medium</button>
                 <button class="diff-btn" data-difficulty="hard" title="Standard WCA length scramble">🔴 Hard</button>
+                <button class="diff-btn" data-difficulty="advanced" title="Extra long scramble for advanced practice">🟣 Advanced</button>
             </div>
         </div>
 
@@ -1873,6 +1882,14 @@
                 '3x3-f2l': 12,
                 '3x3-oh': 20,
                 '3x3-fmc': 30
+            },
+            'advanced': {
+                '3x3': 25,
+                '2x2': 15,
+                '3x3-cross': 25,
+                '3x3-f2l': 20,
+                '3x3-oh': 25,
+                '3x3-fmc': 35
             }
         };
 
@@ -1887,7 +1904,7 @@
             const currentLength = parseInt(lenInput.value);
             
             let matchedDiff = null;
-            for (const diff of ['easy', 'medium', 'hard']) {
+            for (const diff of ['easy', 'medium', 'hard', 'advanced']) {
                 if (DIFFICULTY_LENGTHS[diff][type] === currentLength) {
                     matchedDiff = diff;
                     break;
