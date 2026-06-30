@@ -1995,7 +1995,7 @@
 
         function generateScramble(type) {
             type = type || '3x3';
-            let diff = getCurrentDifficulty();
+            let diff = localStorage.getItem('cube_timer_scramble_difficulty');
             
             if (diff === 'random') {
                 const choices = ['easy', 'medium', 'hard', 'advanced'];
@@ -2016,8 +2016,14 @@
             let prevFace = '';
             let prevPrevFace = '';
             
-            // Get scramble length for the chosen difficulty
-            let scrambleLength = DIFFICULTY_LENGTHS[diff][type];
+            // Get scramble length
+            let scrambleLength;
+            if (diff && DIFFICULTY_LENGTHS[diff] && DIFFICULTY_LENGTHS[diff][type] !== undefined) {
+                scrambleLength = DIFFICULTY_LENGTHS[diff][type];
+            } else {
+                scrambleLength = getScrambleLength(type);
+            }
+            
             const lenInput = document.getElementById('scramble-length-input');
             if (lenInput) {
                 lenInput.value = scrambleLength;
