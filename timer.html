@@ -1231,7 +1231,7 @@
 
         // --- CONSTRUCT 2D CUBE PREVIEW NET ---
         function drawCubeNet() {
-            const type = scrambleTypeSelect.value;
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             const container = document.getElementById('cube-net-container');
             container.innerHTML = "";
 
@@ -1326,6 +1326,442 @@
             initScrambleAnimator();
         }
 
+        // ==========================================
+        // --- 3D SCRAMBLE ANIMATOR (VIDEO PLAYER) ---
+        // ==========================================
+        let animatorCubeState = {};
+        let animatorPlaybackInterval = null;
+        let animatorCurrentStep = -1; // -1 means solved state, 0 means 1st move applied, etc.
+        let animatorMoves = [];
+        let animatorIsPlaying = false;
+        let animatorSpeed = 1000; // ms per move
+        let animatorIs2x2 = false;
+        let animatorRotation = { x: -25, y: -45 };
+
+        function resetAnimatorCubeState() {
+            if (animatorIs2x2) {
+                animatorCubeState = {
+                    U: Array(4).fill('white'),
+                    D: Array(4).fill('yellow'),
+                    F: Array(4).fill('green'),
+                    B: Array(4).fill('blue'),
+                    L: Array(4).fill('orange'),
+                    R: Array(4).fill('red')
+                };
+            } else {
+                animatorCubeState = {
+                    U: Array(9).fill('white'),
+                    D: Array(9).fill('yellow'),
+                    F: Array(9).fill('green'),
+                    B: Array(9).fill('blue'),
+                    L: Array(9).fill('orange'),
+                    R: Array(9).fill('red')
+                };
+            }
+        }
+
+        function renderAnimator3dCubeDOM() {
+            const cubeEl = document.getElementById('animator-cube-3d');
+            if (!cubeEl) return;
+            cubeEl.innerHTML = "";
+
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            const numStickers = animatorIs2x2 ? 4 : 9;
+            const gridClass = animatorIs2x2 ? 'grid-2x2' : 'grid-3x3';
+
+            faces.forEach(fName => {
+                const faceEl = document.createElement('div');
+                faceEl.className = `face-3d face-${fName} ${gridClass}`;
+
+                for (let i = 0; i < numStickers; i++) {
+                    const sticker = document.createElement('div');
+                    sticker.className = `sticker-3d animator-sticker-${fName}-${i}`;
+                    faceEl.appendChild(sticker);
+                }
+                cubeEl.appendChild(faceEl);
+            });
+
+            // Reset rotation style
+            cubeEl.style.transform = `rotateX(${animatorRotation.x}deg) rotateY(${animatorRotation.y}deg)`;
+        }
+
+        function updateAnimator3dCubeVisuals() {
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            const numStickers = animatorIs2x2 ? 4 : 9;
+            faces.forEach(fName => {
+                const state = animatorCubeState[fName];
+                for (let i = 0; i < numStickers; i++) {
+                    const color = state[i];
+                    const stickerEl = document.querySelector(`.animator-sticker-${fName}-${i}`);
+                    if (stickerEl) {
+                        stickerEl.style.backgroundColor = colorMap[color];
+                    }
+                }
+            });
+        }
+
+        function updateAnimatorMovesDisplay() {
+            const container = document.getElementById('animator-moves-list');
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (animatorMoves.length === 0) {
+                container.textContent = "No moves in scramble";
+                return;
+            }
+
+            animatorMoves.forEach((move, idx) => {
+                const span = document.createElement('span');
+                span.className = 'scramble-move-span';
+                if (idx === animatorCurrentStep) {
+                    span.className += ' active';
+                }
+                span.textContent = move;
+                container.appendChild(span);
+            });
+
+            // Auto scroll the active move into view if needed
+            const activeSpan = container.querySelector('.scramble-move-span.active');
+            if (activeSpan) {
+                activeSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        function initScrambleAnimator() {
+            stopAnimatorPlayback();
+
+            const type = scrambleTypeSelect.value;
+            animatorIs2x2 = type === '2x2';
+            animatorMoves = currentScramble.trim().split(/\s+/).filter(m => m !== "");
+            animatorCurrentStep = -1;
+
+            resetAnimatorCubeState();
+            renderAnimator3dCubeDOM();
+            updateAnimatorMovesDisplay();
+            updateAnimator3dCubeVisuals();
+
+            const statusText = document.getElementById('animator-status-text');
+            if (statusText) statusText.textContent = 'READY';
+        }
+
+        function playAnimatorNextStep() {
+            if (animatorMoves.length === 0) return;
+
+            if (animatorCurrentStep >= animatorMoves.length - 1) {
+                // Wrap around to start
+                animatorCurrentStep = -1;
+                resetAnimatorCubeState();
+                updateAnimator3dCubeVisuals();
+                updateAnimatorMovesDisplay();
+                return;
+            }
+
+            animatorCurrentStep++;
+            const move = animatorMoves[animatorCurrentStep];
+            applyMoveToAnimatorState(move);
+            updateAnimator3dCubeVisuals();
+            updateAnimatorMovesDisplay();
+
+            if (animatorCurrentStep === animatorMoves.length - 1) {
+                stopAnimatorPlayback();
+                const statusText = document.getElementById('animator-status-text');
+                if (statusText) statusText.textContent = 'FINISHED';
+            }
+        }
+
+        function playAnimatorPrevStep() {
+            if (animatorMoves.length === 0 || animatorCurrentStep < 0) return;
+
+            animatorCurrentStep--;
+            resetAnimatorCubeState();
+            for (let i = 0; i <= animatorCurrentStep; i++) {
+                applyMoveToAnimatorState(animatorMoves[i]);
+            }
+            updateAnimator3dCubeVisuals();
+            updateAnimatorMovesDisplay();
+
+            const statusText = document.getElementById('animator-status-text');
+            if (statusText) statusText.textContent = 'PAUSED';
+        }
+
+        function applyMoveToAnimatorState(move) {
+            if (!move) return;
+            let base = move[0];
+            let modifier = move.slice(1);
+            let count = 1;
+            if (modifier === '2') count = 2;
+            if (modifier === "'") count = 3;
+
+            for (let i = 0; i < count; i++) {
+                if (animatorIs2x2) {
+                    rotate2x2State(animatorCubeState, base);
+                } else {
+                    rotate3x3State(animatorCubeState, base);
+                }
+            }
+        }
+
+        function startAnimatorPlayback() {
+            if (animatorIsPlaying || animatorMoves.length === 0) return;
+
+            if (animatorCurrentStep >= animatorMoves.length - 1) {
+                animatorCurrentStep = -1;
+                resetAnimatorCubeState();
+                updateAnimator3dCubeVisuals();
+                updateAnimatorMovesDisplay();
+            }
+
+            animatorIsPlaying = true;
+            
+            const statusDot = document.getElementById('animator-status-dot');
+            const statusText = document.getElementById('animator-status-text');
+            const playBtn = document.getElementById('btn-animator-play');
+            
+            if (statusDot) statusDot.classList.add('active');
+            if (statusText) statusText.textContent = 'PLAYING';
+            if (playBtn) playBtn.innerHTML = '⏸ Pause';
+
+            animatorPlaybackInterval = setInterval(() => {
+                playAnimatorNextStep();
+            }, animatorSpeed);
+        }
+
+        function stopAnimatorPlayback() {
+            if (!animatorIsPlaying) return;
+
+            animatorIsPlaying = false;
+            if (animatorPlaybackInterval) {
+                clearInterval(animatorPlaybackInterval);
+                animatorPlaybackInterval = null;
+            }
+
+            const statusDot = document.getElementById('animator-status-dot');
+            const statusText = document.getElementById('animator-status-text');
+            const playBtn = document.getElementById('btn-animator-play');
+            
+            if (statusDot) statusDot.classList.remove('active');
+            if (statusText) statusText.textContent = 'PAUSED';
+            if (playBtn) playBtn.innerHTML = '▶ Play';
+        }
+
+        function toggleAnimatorPlayback() {
+            if (animatorIsPlaying) {
+                stopAnimatorPlayback();
+            } else {
+                startAnimatorPlayback();
+            }
+        }
+
+        function resetAnimator() {
+            stopAnimatorPlayback();
+            animatorCurrentStep = -1;
+            resetAnimatorCubeState();
+            updateAnimator3dCubeVisuals();
+            updateAnimatorMovesDisplay();
+
+            const statusText = document.getElementById('animator-status-text');
+            if (statusText) statusText.textContent = 'READY';
+        }
+
+        function changeAnimatorSpeed(val) {
+            animatorSpeed = parseInt(val);
+            if (animatorIsPlaying) {
+                stopAnimatorPlayback();
+                startAnimatorPlayback();
+            }
+        }
+
+        // Animator 3D State Rotations
+        function rotateFaceCWState(face) {
+            let temp = [...face];
+            face[0] = temp[6]; face[1] = temp[3]; face[2] = temp[0];
+            face[3] = temp[7];                  face[5] = temp[1];
+            face[6] = temp[8]; face[7] = temp[5]; face[8] = temp[2];
+        }
+
+        function rotateFaceCW2State(face) {
+            let temp = [...face];
+            face[0] = temp[2]; face[1] = temp[0];
+            face[2] = temp[3]; face[3] = temp[1];
+        }
+
+        function rotate3x3State(state, face) {
+            if (face === 'U') {
+                rotateFaceCWState(state.U);
+                let temp = [...state.L.slice(0, 3)];
+                state.L[0] = state.F[0]; state.L[1] = state.F[1]; state.L[2] = state.F[2];
+                state.F[0] = state.R[0]; state.F[1] = state.R[1]; state.F[2] = state.R[2];
+                state.R[0] = state.B[0]; state.R[1] = state.B[1]; state.R[2] = state.B[2];
+                state.B[0] = temp[0]; state.B[1] = temp[1]; state.B[2] = temp[2];
+            } else if (face === 'D') {
+                rotateFaceCWState(state.D);
+                let temp = [...state.R.slice(6, 9)];
+                state.R[6] = state.F[6]; state.R[7] = state.F[7]; state.R[8] = state.F[8];
+                state.F[6] = state.L[6]; state.F[7] = state.L[7]; state.F[8] = state.L[8];
+                state.L[6] = state.B[6]; state.L[7] = state.B[7]; state.L[8] = state.B[8];
+                state.B[6] = temp[0]; state.B[7] = temp[1]; state.B[8] = temp[2];
+            } else if (face === 'F') {
+                rotateFaceCWState(state.F);
+                let temp = [state.U[6], state.U[7], state.U[8]];
+                state.U[6] = state.L[8]; state.U[7] = state.L[5]; state.U[8] = state.L[2];
+                state.L[2] = state.D[0]; state.L[5] = state.D[1]; state.L[8] = state.D[2];
+                state.D[0] = state.R[6]; state.D[1] = state.R[3]; state.D[2] = state.R[0];
+                state.R[0] = temp[0]; state.R[3] = temp[1]; state.R[6] = temp[2];
+            } else if (face === 'B') {
+                rotateFaceCWState(state.B);
+                let temp = [state.U[0], state.U[1], state.U[2]];
+                state.U[0] = state.R[2]; state.U[1] = state.R[5]; state.U[2] = state.R[8];
+                state.R[2] = state.D[8]; state.R[5] = state.D[7]; state.R[8] = state.D[6];
+                state.D[6] = state.L[0]; state.D[7] = state.L[3]; state.D[8] = state.L[6];
+                state.L[0] = temp[2]; state.L[3] = temp[1]; state.L[6] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCWState(state.L);
+                let temp = [state.U[0], state.U[3], state.U[6]];
+                state.U[0] = state.B[8]; state.U[3] = state.B[5]; state.U[6] = state.B[2];
+                state.B[2] = state.D[6]; state.B[5] = state.D[3]; state.B[8] = state.D[0];
+                state.D[0] = state.F[0]; state.D[3] = state.F[3]; state.D[6] = state.F[6];
+                state.F[0] = temp[0]; state.F[3] = temp[1]; state.F[6] = temp[2];
+            } else if (face === 'R') {
+                rotateFaceCWState(state.R);
+                let temp = [state.U[2], state.U[5], state.U[8]];
+                state.U[2] = state.F[2]; state.U[5] = state.F[5]; state.U[8] = state.F[8];
+                state.F[2] = state.D[2]; state.F[5] = state.D[5]; state.F[8] = state.D[8];
+                state.D[2] = state.B[6]; state.D[5] = state.B[3]; state.D[8] = state.B[0];
+                state.B[0] = temp[2]; state.B[3] = temp[1]; state.B[6] = temp[0];
+            }
+        }
+
+        // Animator 2x2 State Rotations
+        function rotate2x2State(state, face) {
+            if (face === 'U') {
+                rotateFaceCW2State(state.U);
+                let temp = [...state.L.slice(0, 2)];
+                state.L[0] = state.F[0]; state.L[1] = state.F[1];
+                state.F[0] = state.R[0]; state.F[1] = state.R[1];
+                state.R[0] = state.B[0]; state.R[1] = state.B[1];
+                state.B[0] = temp[0]; state.B[1] = temp[1];
+            } else if (face === 'D') {
+                rotateFaceCW2State(state.D);
+                let temp = [...state.R.slice(2, 4)];
+                state.R[2] = state.F[2]; state.R[3] = state.F[3];
+                state.F[2] = state.L[2]; state.F[3] = state.L[3];
+                state.L[2] = state.B[2]; state.L[3] = state.B[3];
+                state.B[2] = temp[0]; state.B[3] = temp[1];
+            } else if (face === 'F') {
+                rotateFaceCW2State(state.F);
+                let temp = [state.U[2], state.U[3]];
+                state.U[2] = state.L[3]; state.U[3] = state.L[1];
+                state.L[1] = state.D[0]; state.L[3] = state.D[1];
+                state.D[0] = state.R[2]; state.D[1] = state.R[0];
+                state.R[0] = temp[0]; state.R[2] = temp[1];
+            } else if (face === 'B') {
+                rotateFaceCW2State(state.B);
+                let temp = [state.U[0], state.U[1]];
+                state.U[0] = state.R[1]; state.U[1] = state.R[3];
+                state.R[1] = state.D[3]; state.R[3] = state.D[2];
+                state.D[2] = state.L[0]; state.D[3] = state.L[2];
+                state.L[0] = temp[1]; state.L[2] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCW2State(state.L);
+                let temp = [state.U[0], state.U[2]];
+                state.U[0] = state.B[3]; state.U[2] = state.B[1];
+                state.B[1] = state.D[2]; state.B[3] = state.D[0];
+                state.D[0] = state.F[0]; state.D[2] = state.F[2];
+                state.F[0] = temp[0]; state.F[2] = temp[1];
+            } else if (face === 'R') {
+                rotateFaceCW2State(state.R);
+                let temp = [state.U[1], state.U[3]];
+                state.U[1] = state.F[1]; state.U[3] = state.F[3];
+                state.F[1] = state.D[1]; state.F[3] = state.D[3];
+                state.D[1] = state.B[2]; state.D[3] = state.B[0];
+                state.B[0] = temp[1]; state.B[2] = temp[0];
+            }
+        }
+
+        function initAnimatorDrag() {
+            const cubeEl = document.getElementById('animator-cube-3d');
+            const containerEl = document.getElementById('animator-cube-container');
+            if (!cubeEl || !containerEl) return;
+
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+
+            containerEl.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                containerEl.style.cursor = 'grabbing';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                
+                animatorRotation.y += dx * 0.5;
+                animatorRotation.x -= dy * 0.5;
+                animatorRotation.x = Math.max(-85, Math.min(85, animatorRotation.x));
+
+                cubeEl.style.transform = `rotateX(${animatorRotation.x}deg) rotateY(${animatorRotation.y}deg)`;
+                
+                startX = e.clientX;
+                startY = e.clientY;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    containerEl.style.cursor = 'grab';
+                }
+            });
+
+            containerEl.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+
+            containerEl.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const dx = e.touches[0].clientX - startX;
+                const dy = e.touches[0].clientY - startY;
+                
+                animatorRotation.y += dx * 0.5;
+                animatorRotation.x -= dy * 0.5;
+                animatorRotation.x = Math.max(-85, Math.min(85, animatorRotation.x));
+
+                cubeEl.style.transform = `rotateX(${animatorRotation.x}deg) rotateY(${animatorRotation.y}deg)`;
+                
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+
+            containerEl.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+        }
+
+        function initAnimatorControls() {
+            const playBtn = document.getElementById('btn-animator-play');
+            const prevBtn = document.getElementById('btn-animator-prev');
+            const nextBtn = document.getElementById('btn-animator-next');
+            const resetBtn = document.getElementById('btn-animator-reset');
+            const speedSelect = document.getElementById('animator-speed-select');
+
+            if (playBtn) playBtn.addEventListener('click', toggleAnimatorPlayback);
+            if (prevBtn) prevBtn.addEventListener('click', playAnimatorPrevStep);
+            if (nextBtn) nextBtn.addEventListener('click', playAnimatorNextStep);
+            if (resetBtn) resetBtn.addEventListener('click', resetAnimator);
+            if (speedSelect) {
+                speedSelect.addEventListener('change', () => {
+                    changeAnimatorSpeed(speedSelect.value);
+                });
+            }
+
+            initAnimatorDrag();
+        }
+
         // --- SCRAMBLE GENERATION ---
         function saveScrambleLength(type, val) {
             localStorage.setItem('cube_timer_scramble_length_' + type, val);
@@ -1344,6 +1780,7 @@
         }
 
         function generateScramble(type) {
+            type = type || '3x3';
             const faces = type === '2x2' ? ['U', 'R', 'F'] : ['U', 'D', 'F', 'B', 'L', 'R'];
             const modifiers = ['', "'", '2'];
             let moves = [];
@@ -1452,7 +1889,7 @@
         }
 
         function toggleTimerMode() {
-            const type = scrambleTypeSelect.value;
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             if (type === '3x3-fmc') {
                 document.getElementById('timer-tap-zone').style.display = 'none';
                 fmcContainer.style.display = 'block';
@@ -1498,9 +1935,9 @@
         }
 
         function triggerNewScramble() {
-            const type = scrambleTypeSelect.value;
-            const history = scrambleHistories[type];
-            const index = scrambleHistoryIndices[type];
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            const history = scrambleHistories[type] || [];
+            const index = (scrambleHistoryIndices[type] !== undefined) ? scrambleHistoryIndices[type] : -1;
 
             const newScramble = generateScramble(type);
 
@@ -1527,21 +1964,23 @@
 
         // --- LOCAL STORAGE & SOLVES HISTORY ---
         function loadSolves() {
-            const stored = localStorage.getItem('cube_timer_solves_' + scrambleTypeSelect.value);
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            const stored = localStorage.getItem('cube_timer_solves_' + type);
             solves = stored ? JSON.parse(stored) : [];
             renderSolves();
             calculateStats();
         }
 
         function saveSolves() {
-            localStorage.setItem('cube_timer_solves_' + scrambleTypeSelect.value, JSON.stringify(solves));
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            localStorage.setItem('cube_timer_solves_' + type, JSON.stringify(solves));
             renderSolves();
             calculateStats();
         }
 
         function renderSolves() {
             solvesTbody.innerHTML = "";
-            const type = scrambleTypeSelect.value;
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             
             if (solves.length === 0) {
                 const tr = document.createElement('tr');
@@ -1599,7 +2038,7 @@
 
         // --- STATS CALCULATIONS ---
         function calculateStats() {
-            const type = scrambleTypeSelect.value;
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             const suffix = type === '3x3-fmc' ? ' moves' : '';
 
             if (solves.length === 0) {
@@ -1780,7 +2219,7 @@
 
         // --- COLE'S CUSTOMIZABLE WCA RECORDS LOGIC ---
         function updateColeRecordDisplay() {
-            const type = scrambleTypeSelect.value;
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             const record = coleRecords[type] || DEFAULT_COLE_RECORDS[type];
             const displaySingle = document.getElementById('stat-cole-single');
             const displayAverage = document.getElementById('stat-cole-average');
