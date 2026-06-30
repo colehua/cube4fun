@@ -913,6 +913,14 @@
                                 <button id="btn-edit-cole-average" style="display: none; background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 0; outline: none;" title="Edit Cole's Average Record">✏️</button>
                             </div>
                         </li>
+                        <li id="wca-single-item" class="stats-item" style="border-top: 2px dashed #ccc; margin-top: 10px; padding-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span>Cole's WCA Single:</span>
+                            <span id="stat-wca-single" style="color: #0066FF; font-weight: bold;">-</span>
+                        </li>
+                        <li id="wca-average-item" class="stats-item" style="display: flex; align-items: center; justify-content: space-between;">
+                            <span id="label-wca-average">Cole's WCA Average:</span>
+                            <span id="stat-wca-average" style="color: #0066FF; font-weight: bold;">-</span>
+                        </li>
                     </ul>
                 </div>
 
@@ -993,21 +1001,22 @@
 
         // Cole's customizable WCA records
         const DEFAULT_COLE_RECORDS = {
-            '3x3': { single: 12.60, average: 14.43 },
-            '2x2': { single: 4.51, average: 8.50 },
+            '3x3': { single: 8.46, average: 12.95 },
+            '2x2': { single: 2.50, average: 4.43 },
             '3x3-cross': { single: 4.00, average: 5.50 },
             '3x3-f2l': { single: 6.00, average: 8.00 },
-            '3x3-oh': { single: 15.00, average: 18.50 },
-            '3x3-fmc': { single: 25.00, average: 28.00 }
+            '3x3-oh': { single: 26.24, average: 31.26 },
+            '3x3-fmc': { single: 0.00, average: 0.00 }
         };
         let coleRecords = {
-            '3x3': { single: 12.60, average: 14.43 },
-            '2x2': { single: 4.51, average: 8.50 },
+            '3x3': { single: 8.46, average: 12.95 },
+            '2x2': { single: 2.50, average: 4.43 },
             '3x3-cross': { single: 4.00, average: 5.50 },
             '3x3-f2l': { single: 6.00, average: 8.00 },
-            '3x3-oh': { single: 15.00, average: 18.50 },
-            '3x3-fmc': { single: 25.00, average: 28.00 }
+            '3x3-oh': { single: 26.24, average: 31.26 },
+            '3x3-fmc': { single: 0.00, average: 0.00 }
         };
+        let wcaRecords = {};
 
 
         const timerDisplay = document.getElementById('timer-val');
@@ -2220,6 +2229,8 @@
         // --- COLE'S CUSTOMIZABLE WCA RECORDS LOGIC ---
         function updateColeRecordDisplay() {
             const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            
+            // 1. Update Home PBs (from Supabase / localStorage)
             const record = coleRecords[type] || DEFAULT_COLE_RECORDS[type];
             const displaySingle = document.getElementById('stat-cole-single');
             const displayAverage = document.getElementById('stat-cole-average');
@@ -2229,7 +2240,7 @@
                 labelAverage.textContent = type === '3x3-fmc' ? "Cole's Mean:" : "Cole's Average:";
             }
 
-            if (displaySingle) {
+            if (displaySingle && record) {
                 if (type === '3x3-fmc') {
                     displaySingle.innerHTML = `${record.single.toFixed(0)} moves ⚡`;
                 } else {
@@ -2237,7 +2248,7 @@
                 }
             }
 
-            if (displayAverage) {
+            if (displayAverage && record) {
                 if (record.average === null || record.average === undefined) {
                     displayAverage.innerHTML = `-`;
                 } else if (type === '3x3-fmc') {
@@ -2251,6 +2262,45 @@
             if (buddyBubble && (buddyBubble.textContent.includes("Welcome to Cole's") || buddyBubble.textContent.includes("Can you beat my"))) {
                 const singleStr = type === '3x3-fmc' ? `${record.single.toFixed(0)} moves` : formatTime(record.single);
                 buddyBubble.textContent = `Welcome to Cole's ${type} Timer! Can you beat my ${singleStr} single record? ⚡`;
+            }
+
+            // 2. Update Official WCA Records (from WCA Profile)
+            const wcaSingleItem = document.getElementById('wca-single-item');
+            const wcaAverageItem = document.getElementById('wca-average-item');
+            const displayWcaSingle = document.getElementById('stat-wca-single');
+            const displayWcaAverage = document.getElementById('stat-wca-average');
+            const labelWcaAverage = document.getElementById('label-wca-average');
+
+            // Only show WCA records for official events
+            const isOfficialWcaEvent = ['3x3', '2x2', '3x3-oh', '3x3-fmc'].includes(type);
+            if (isOfficialWcaEvent) {
+                if (wcaSingleItem) wcaSingleItem.style.display = 'flex';
+                if (wcaAverageItem) wcaAverageItem.style.display = 'flex';
+
+                if (labelWcaAverage) {
+                    labelWcaAverage.textContent = type === '3x3-fmc' ? "Cole's WCA Mean:" : "Cole's WCA Average:";
+                }
+
+                const wcaRec = wcaRecords[type];
+                if (wcaRec) {
+                    if (displayWcaSingle && wcaRec.single !== null) {
+                        displayWcaSingle.textContent = type === '3x3-fmc' ? `${wcaRec.single} moves 🏆` : `${formatTime(wcaRec.single)} 🏆`;
+                    } else if (displayWcaSingle) {
+                        displayWcaSingle.textContent = "-";
+                    }
+
+                    if (displayWcaAverage && wcaRec.average !== null) {
+                        displayWcaAverage.textContent = type === '3x3-fmc' ? `${wcaRec.average} moves 🏆` : `${formatTime(wcaRec.average)} 🏆`;
+                    } else if (displayWcaAverage) {
+                        displayWcaAverage.textContent = "-";
+                    }
+                } else {
+                    if (displayWcaSingle) displayWcaSingle.textContent = "-";
+                    if (displayWcaAverage) displayWcaAverage.textContent = "-";
+                }
+            } else {
+                if (wcaSingleItem) wcaSingleItem.style.display = 'none';
+                if (wcaAverageItem) wcaAverageItem.style.display = 'none';
             }
         }
 
@@ -2343,38 +2393,23 @@
                 }
             }
 
-            // Dynamically fetch from WCA Profile
-            const wcaRecords = await fetchWcaRecordsFromProfile();
-            if (wcaRecords) {
-                let hasChanges = false;
-                for (let key in wcaRecords) {
-                    const oldRecord = coleRecords[key];
-                    const newRecord = wcaRecords[key];
-                    if (!oldRecord || oldRecord.single !== newRecord.single || oldRecord.average !== newRecord.average) {
-                        coleRecords[key] = newRecord;
-                        hasChanges = true;
-                        
-                        if (isSupabaseActive) {
-                            try {
-                                await supabaseClient
-                                    .from('cole_records')
-                                    .upsert([{
-                                        id: key,
-                                        record_single: newRecord.single,
-                                        record_average: newRecord.average
-                                    }]);
-                            } catch (err) {
-                                console.error("Failed to auto-update Supabase with fetched WCA record:", err);
-                            }
-                        }
-                    }
-                }
-                if (hasChanges) {
-                    localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
-                }
+            // Load cached WCA records from local storage
+            const cachedWca = localStorage.getItem('cube_timer_wca_records');
+            if (cachedWca) {
+                try {
+                    wcaRecords = JSON.parse(cachedWca);
+                } catch (e) {}
             }
 
             updateColeRecordDisplay();
+
+            // Dynamically fetch fresh WCA Profile records
+            const freshWca = await fetchWcaRecordsFromProfile();
+            if (freshWca) {
+                wcaRecords = freshWca;
+                localStorage.setItem('cube_timer_wca_records', JSON.stringify(wcaRecords));
+                updateColeRecordDisplay();
+            }
         }
 
         // Admin functionality - Single
