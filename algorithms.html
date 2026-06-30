@@ -641,6 +641,218 @@
             ]
         };
 
+        // Generate a beautiful 2D Rubik's cube SVG diagram of the case
+        function generateCubeSvg(item) {
+            const name = item.name;
+            const cat = item.cat;
+            
+            // Render an SVG of size 70x70
+            // Central 3x3 grid: start x=14, y=14. Each sticker is 12x12, gap is 3 (14, 29, 44)
+            let svg = `<svg viewBox="0 0 70 70" width="60" height="60" style="background:#2c3e50; border-radius:8px; border:2px solid #333; box-shadow: 2px 2px 5px rgba(0,0,0,0.15);">`;
+            
+            let gridColors = Array(9).fill('#7f8c8d'); // default gray
+            let sideColors = {
+                top: Array(3).fill(null),
+                right: Array(3).fill(null),
+                bottom: Array(3).fill(null),
+                left: Array(3).fill(null)
+            };
+            
+            const YELLOW = '#FAED27';
+            const GRAY = '#7f8c8d';
+            const RED = '#ff6b6b';
+            const GREEN = '#2ecc71';
+            const BLUE = '#3498db';
+            const ORANGE = '#e67e22';
+            
+            if (cat === "PLL") {
+                // PLL: top face is fully oriented (yellow)
+                gridColors.fill(YELLOW);
+                
+                // Set side sticker colors to represent specific PLL cases
+                if (name.includes("T Perm")) {
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, ORANGE, RED];
+                    sideColors.bottom = [GREEN, RED, GREEN];
+                    sideColors.left = [ORANGE, GREEN, ORANGE];
+                } else if (name.includes("Y Perm")) {
+                    sideColors.top = [BLUE, ORANGE, BLUE];
+                    sideColors.right = [RED, GREEN, RED];
+                    sideColors.bottom = [GREEN, BLUE, GREEN];
+                    sideColors.left = [ORANGE, RED, ORANGE];
+                } else if (name.includes("H Perm")) {
+                    sideColors.top = [BLUE, GREEN, BLUE];
+                    sideColors.right = [RED, ORANGE, RED];
+                    sideColors.bottom = [GREEN, BLUE, GREEN];
+                    sideColors.left = [ORANGE, RED, ORANGE];
+                } else if (name.includes("Ua Perm")) {
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, GREEN, RED];
+                    sideColors.bottom = [GREEN, ORANGE, GREEN];
+                    sideColors.left = [ORANGE, RED, ORANGE];
+                } else if (name.includes("Ub Perm")) {
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, ORANGE, RED];
+                    sideColors.bottom = [GREEN, RED, GREEN];
+                    sideColors.left = [ORANGE, GREEN, ORANGE];
+                } else if (name.includes("Z Perm")) {
+                    sideColors.top = [BLUE, ORANGE, BLUE];
+                    sideColors.right = [RED, GREEN, RED];
+                    sideColors.bottom = [GREEN, RED, GREEN];
+                    sideColors.left = [ORANGE, BLUE, ORANGE];
+                } else if (name.includes("E Perm")) {
+                    sideColors.top = [BLUE, ORANGE, BLUE];
+                    sideColors.right = [RED, GREEN, RED];
+                    sideColors.bottom = [GREEN, ORANGE, GREEN];
+                    sideColors.left = [ORANGE, GREEN, ORANGE];
+                } else if (name.includes("F Perm")) {
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, RED, RED];
+                    sideColors.bottom = [GREEN, ORANGE, GREEN];
+                    sideColors.left = [ORANGE, GREEN, ORANGE];
+                } else if (name.includes("Ja Perm")) {
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, RED, RED];
+                    sideColors.bottom = [GREEN, GREEN, GREEN];
+                    sideColors.left = [ORANGE, ORANGE, ORANGE];
+                } else if (name.includes("Jb Perm")) {
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, RED, RED];
+                    sideColors.bottom = [GREEN, GREEN, GREEN];
+                    sideColors.left = [ORANGE, ORANGE, ORANGE];
+                } else {
+                    // Default PLL side pattern (swap indicators)
+                    sideColors.top = [BLUE, BLUE, BLUE];
+                    sideColors.right = [RED, RED, RED];
+                    sideColors.bottom = [GREEN, GREEN, GREEN];
+                    sideColors.left = [ORANGE, ORANGE, ORANGE];
+                }
+            } else if (cat === "OLL" || cat === "COLL" || cat === "CMLL" || cat === "ZBLL") {
+                // Oriented edges (cross) and center are always yellow
+                gridColors[1] = YELLOW;
+                gridColors[3] = YELLOW;
+                gridColors[4] = YELLOW;
+                gridColors[5] = YELLOW;
+                gridColors[7] = YELLOW;
+                
+                // Color corners and side bars depending on specific orientation cases
+                if (name.includes("Sune") && !name.includes("Anti")) {
+                    // Sune: only bottom-left corner is oriented
+                    gridColors[6] = YELLOW;
+                    sideColors.left[2] = YELLOW;
+                    sideColors.top[2] = YELLOW;
+                    sideColors.right[2] = YELLOW;
+                } else if (name.includes("Anti-Sune") || name.includes("ASune")) {
+                    // Anti-Sune: only bottom-right corner is oriented
+                    gridColors[8] = YELLOW;
+                    sideColors.bottom[2] = YELLOW;
+                    sideColors.top[0] = YELLOW;
+                    sideColors.left[0] = YELLOW;
+                } else if (name.includes("COLL-H") || name.includes("ZBLL-H") || name.includes("CMLL-H") || name.includes("OLL 21")) {
+                    // H Case: double headlights on sides
+                    sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW;
+                    sideColors.right[0] = YELLOW; sideColors.right[2] = YELLOW;
+                } else if (name.includes("COLL-U") || name.includes("ZBLL-U") || name.includes("OLL 22")) {
+                    // U Case: top-left and top-right oriented
+                    gridColors[0] = YELLOW;
+                    gridColors[2] = YELLOW;
+                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
+                } else if (name.includes("COLL-T") || name.includes("ZBLL-T") || name.includes("CMLL-T") || name.includes("OLL 33")) {
+                    // T Case: headlights on one side, opposing corners oriented
+                    gridColors[2] = YELLOW;
+                    gridColors[8] = YELLOW;
+                    sideColors.left[0] = YELLOW;
+                    sideColors.left[2] = YELLOW;
+                } else if (name.includes("Pi Case") || name.includes("ZBLL-Pi")) {
+                    // Pi Case: bottom-left and bottom-right oriented
+                    gridColors[6] = YELLOW;
+                    gridColors[8] = YELLOW;
+                    sideColors.top[0] = YELLOW;
+                    sideColors.top[2] = YELLOW;
+                } else if (name.includes("OLL 23")) {
+                    gridColors[0] = YELLOW;
+                    sideColors.right[0] = YELLOW;
+                    sideColors.bottom[0] = YELLOW;
+                    sideColors.left[2] = YELLOW;
+                } else if (name.includes("OLL 24")) {
+                    gridColors[2] = YELLOW;
+                    gridColors[6] = YELLOW;
+                    sideColors.top[0] = YELLOW;
+                    sideColors.bottom[2] = YELLOW;
+                } else if (name.includes("OLL 25")) {
+                    gridColors[0] = YELLOW;
+                    gridColors[8] = YELLOW;
+                    sideColors.top[2] = YELLOW;
+                    sideColors.left[2] = YELLOW;
+                } else {
+                    // Fully solved last layer corners (like COLL-skip)
+                    gridColors[0] = YELLOW; gridColors[2] = YELLOW;
+                    gridColors[6] = YELLOW; gridColors[8] = YELLOW;
+                }
+            } else if (cat === "F2L" || cat === "ZBLS") {
+                // Show slotting (gray cross, highlight active F2L corner and edge)
+                if (name.includes("F2L 1") || name.includes("Easy Insert")) {
+                    gridColors[2] = RED; // active corner
+                    gridColors[5] = GREEN; // active edge
+                } else if (name.includes("F2L 2")) {
+                    gridColors[0] = GREEN;
+                    gridColors[5] = RED;
+                } else if (name.includes("F2L 3")) {
+                    gridColors[2] = GREEN;
+                    gridColors[7] = RED;
+                } else if (name.includes("F2L 4")) {
+                    gridColors[2] = YELLOW;
+                    gridColors[5] = GREEN;
+                } else if (name.includes("F2L 5")) {
+                    gridColors[2] = RED;
+                    gridColors[5] = YELLOW;
+                } else {
+                    gridColors[2] = RED;
+                    gridColors[5] = GREEN;
+                }
+            }
+            
+            // Draw top 3x3 face
+            const coords = [
+                {x: 14, y: 14}, {x: 29, y: 14}, {x: 44, y: 14},
+                {x: 14, y: 29}, {x: 29, y: 29}, {x: 44, y: 29},
+                {x: 14, y: 44}, {x: 29, y: 44}, {x: 44, y: 44}
+            ];
+            
+            coords.forEach((coord, idx) => {
+                svg += `<rect x="${coord.x}" y="${coord.y}" width="12" height="12" rx="2" fill="${gridColors[idx]}" stroke="#111" stroke-width="1.5" />`;
+            });
+            
+            // Draw side bars
+            // Top (Back) Side
+            for (let i = 0; i < 3; i++) {
+                if (sideColors.top[i]) {
+                    svg += `<rect x="${14 + i * 15}" y="6" width="12" height="4" rx="1" fill="${sideColors.top[i]}" stroke="#111" stroke-width="1" />`;
+                }
+            }
+            // Right Side
+            for (let i = 0; i < 3; i++) {
+                if (sideColors.right[i]) {
+                    svg += `<rect x="60" y="${14 + i * 15}" width="4" height="12" rx="1" fill="${sideColors.right[i]}" stroke="#111" stroke-width="1" />`;
+                }
+            }
+            // Bottom (Front) Side
+            for (let i = 0; i < 3; i++) {
+                if (sideColors.bottom[i]) {
+                    svg += `<rect x="${14 + i * 15}" y="60" width="12" height="4" rx="1" fill="${sideColors.bottom[i]}" stroke="#111" stroke-width="1" />`;
+                }
+            }
+            // Left Side
+            for (let i = 0; i < 3; i++) {
+                if (sideColors.left[i]) {
+                    svg += `<rect x="6" y="${14 + i * 15}" width="4" height="12" rx="1" fill="${sideColors.left[i]}" stroke="#111" stroke-width="1" />`;
+                }
+            }
+            
+            svg += `</svg>`;
+            return svg;
+        }
+
         // Initialize lists
         function populateGrid(gridId, data) {
             const grid = document.getElementById(gridId);
@@ -654,21 +866,16 @@
                 card.dataset.tags = item.tags.toLowerCase();
                 card.dataset.moves = item.moves.toLowerCase();
                 
-                // Use a default emoji based on type
-                let emoji = "🧊";
-                if (item.cat === "PLL") emoji = "⚡";
-                else if (item.cat === "OLL") emoji = "☀️";
-                else if (item.cat === "F2L") emoji = "🧱";
-                else if (item.cat === "CMLL") emoji = "👑";
-                else if (item.cat === "COLL") emoji = "🎓";
-                else if (item.cat === "ZBLS") emoji = "💫";
-                else if (item.cat === "ZBLL") emoji = "🌟";
+                // Generate the SVG diagram for the case
+                const cubeSvg = generateCubeSvg(item);
 
                 card.innerHTML = `
                     <div>
                         <div class="alg-name">
                             <span>${item.name}</span>
-                            <span class="visual-cube">${emoji}</span>
+                            <div class="visual-cube" style="background:none; border:none; box-shadow:none;">
+                                ${cubeSvg}
+                            </div>
                         </div>
                         <div class="alg-moves">${item.moves}</div>
                     </div>
