@@ -3809,29 +3809,7 @@
                 return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
             }
             
-            if (item.vis) {
-                const parts = item.vis.split(' ');
-                const gridStr = parts[0];
-                for (let i = 0; i < 9; i++) {
-                    gridColors[i] = gridStr[i] === '1' ? YELLOW : '#57606f';
-                }
-                if (parts[1]) {
-                    const topStr = parts[1];
-                    for (let i = 0; i < 3; i++) sideColors.top[i] = topStr[i] === '1' ? YELLOW : null;
-                }
-                if (parts[2]) {
-                    const rightStr = parts[2];
-                    for (let i = 0; i < 3; i++) sideColors.right[i] = rightStr[i] === '1' ? YELLOW : null;
-                }
-                if (parts[3]) {
-                    const bottomStr = parts[3];
-                    for (let i = 0; i < 3; i++) sideColors.bottom[i] = bottomStr[i] === '1' ? YELLOW : null;
-                }
-                if (parts[4]) {
-                    const leftStr = parts[4];
-                    for (let i = 0; i < 3; i++) sideColors.left[i] = leftStr[i] === '1' ? YELLOW : null;
-                }
-            } else if (cat === "PLL") {
+            if (cat === "PLL") {
                 gridColors.fill(YELLOW);
                 
                 let corners = [
@@ -3931,6 +3909,42 @@
                 sideColors.top[1] = edges[0].stickers.top; sideColors.right[1] = edges[1].stickers.right;
                 sideColors.bottom[1] = edges[2].stickers.bottom; sideColors.left[1] = edges[3].stickers.left;
                 
+            } else if (cat === "F2L" || cat === "ZBLS") {
+                if (name.includes("F2L 1")) {
+                    gridColors[8] = RED; sideColors.right[2] = WHITE; sideColors.bottom[2] = GREEN; gridColors[1] = GREEN; sideColors.top[1] = RED;
+                } else if (name.includes("F2L 2")) {
+                    gridColors[8] = GREEN; sideColors.right[2] = RED; sideColors.bottom[2] = WHITE; gridColors[5] = RED; sideColors.right[1] = GREEN;
+                } else if (name.includes("F2L 3")) {
+                    gridColors[8] = RED; sideColors.right[2] = GREEN; sideColors.bottom[2] = WHITE; gridColors[1] = GREEN; sideColors.top[1] = RED;
+                } else if (name.includes("F2L 4")) {
+                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[5] = RED; sideColors.right[1] = GREEN;
+                } else if (name.includes("F2L 5")) {
+                    sideColors.bottom[2] = GREEN; sideColors.right[2] = RED; gridColors[5] = GREEN; sideColors.right[1] = RED;
+                } else if (name.includes("F2L 19")) {
+                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[3] = GREEN; sideColors.left[1] = RED;
+                }
+            } else if (item.vis) {
+                const parts = item.vis.split(' ');
+                const gridStr = parts[0];
+                for (let i = 0; i < 9; i++) {
+                    gridColors[i] = gridStr[i] === '1' ? YELLOW : '#57606f';
+                }
+                if (parts[1]) {
+                    const topStr = parts[1];
+                    for (let i = 0; i < 3; i++) sideColors.top[i] = topStr[i] === '1' ? YELLOW : null;
+                }
+                if (parts[2]) {
+                    const rightStr = parts[2];
+                    for (let i = 0; i < 3; i++) sideColors.right[i] = rightStr[i] === '1' ? YELLOW : null;
+                }
+                if (parts[3]) {
+                    const bottomStr = parts[3];
+                    for (let i = 0; i < 3; i++) sideColors.bottom[i] = bottomStr[i] === '1' ? YELLOW : null;
+                }
+                if (parts[4]) {
+                    const leftStr = parts[4];
+                    for (let i = 0; i < 3; i++) sideColors.left[i] = leftStr[i] === '1' ? YELLOW : null;
+                }
             } else if (cat === "OLL" || cat === "COLL" || cat === "CMLL" || cat === "ZBLL") {
                 gridColors[1] = YELLOW; gridColors[3] = YELLOW; gridColors[4] = YELLOW; gridColors[5] = YELLOW; gridColors[7] = YELLOW;
                 
@@ -3967,20 +3981,6 @@
                     gridColors[2] = YELLOW; gridColors[8] = YELLOW; sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW;
                 } else if (name.includes("ZBLL-L") || name.includes("OLL 25") || name.includes("L Case") || name.includes("Triple Sune")) {
                     gridColors[0] = YELLOW; gridColors[8] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW;
-                }
-            } else if (cat === "F2L" || cat === "ZBLS") {
-                if (name.includes("F2L 1")) {
-                    gridColors[8] = RED; sideColors.right[2] = WHITE; sideColors.bottom[2] = GREEN; gridColors[1] = GREEN; sideColors.top[1] = RED;
-                } else if (name.includes("F2L 2")) {
-                    gridColors[8] = GREEN; sideColors.right[2] = RED; sideColors.bottom[2] = WHITE; gridColors[5] = RED; sideColors.right[1] = GREEN;
-                } else if (name.includes("F2L 3")) {
-                    gridColors[8] = RED; sideColors.right[2] = GREEN; sideColors.bottom[2] = WHITE; gridColors[1] = GREEN; sideColors.top[1] = RED;
-                } else if (name.includes("F2L 4")) {
-                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[5] = RED; sideColors.right[1] = GREEN;
-                } else if (name.includes("F2L 5")) {
-                    sideColors.bottom[2] = GREEN; sideColors.right[2] = RED; gridColors[5] = GREEN; sideColors.right[1] = RED;
-                } else if (name.includes("F2L 19")) {
-                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[3] = GREEN; sideColors.left[1] = RED;
                 }
             }
             
@@ -4075,7 +4075,7 @@
                 const card = document.createElement('div');
                 card.className = "alg-card";
                 card.dataset.name = item.name.toLowerCase();
-                card.dataset.tags = item.tags.toLowerCase();
+                card.dataset.tags = (item.tags || "").toLowerCase();
                 card.dataset.moves = item.moves.toLowerCase();
                 
                 // Generate the SVG diagram for the case
