@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Algorithms for different speedcubing methods: CFOP, ZB, Roux, and ZZ. Complete PLL, F2L, OLL, ZBLL, and ZBLS case list with copyable moves.">
-    <title>Algorithms for Different Methods 🧩 - Learn Cube 4 Fun</title>
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <meta name="description" content="Rubik's Cube Case Recognition and execution trainer. Practice PLL, OLL, COLL, CMLL, WV, and ELL with dynamic scrambles, SVGs, and recognition timing.">
+    <title>Case Recognition Trainer ⏱️ - Learn Cube 4 Fun</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,10 +13,8 @@
             --primary: #0066FF;
             --accent-pink: #FF6B6B;
             --text-dark: #1e272e;
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-bg: rgba(255, 255, 255, 0.92);
             --glass-border: rgba(255, 255, 255, 0.4);
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -37,7 +34,6 @@
             width: 120%;
             height: 280px;
             background: linear-gradient(90deg, #00E5FF 0%, #0088FF 100%);
-            border-radius: 50%;
             z-index: -1;
             opacity: 0.95;
             filter: blur(10px);
@@ -81,982 +77,331 @@
 
         h1.main-title {
             font-family: 'DynaPuff', cursive;
-            font-size: 4em;
+            font-size: 3.5em;
             color: #ffffff;
             text-align: center;
             -webkit-text-stroke: 3px #1e272e;
             text-shadow: 6px 6px 0px #1e272e;
             margin-top: 10px;
-            margin-bottom: 25px;
-            line-height: 1.1;
+            margin-bottom: 10px;
         }
 
-        .search-container {
-            margin-bottom: 35px;
+        .subtitle {
             text-align: center;
+            font-size: 1.2em;
+            font-weight: 800;
+            color: #475569;
+            margin-bottom: 35px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 850px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 4px solid #1e272e;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0px 8px 0px #1e272e;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+        }
+
+        .card-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            color: var(--primary);
+            margin: 0 0 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* TRAINER CONTROLS */
+        .select-input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid #1e272e;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: inherit;
+            font-weight: 700;
+            outline: none;
+            box-sizing: border-box;
+            background: #fff;
+            margin-bottom: 15px;
         }
 
         .search-input {
             width: 100%;
-            max-width: 500px;
-            padding: 14px 24px;
-            border: 4px solid #1e272e;
-            border-radius: 24px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.2em;
-            font-weight: 700;
-            outline: none;
-            box-shadow: 0px 6px 0px #1e272e, 0 8px 20px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            background: #ffffff;
-        }
-
-        .search-input:focus {
-            transform: translateY(3px);
-            box-shadow: 0px 3px 0px #1e272e, 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        /* METHOD TABS */
-        .method-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 35px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            font-family: 'DynaPuff', cursive;
-            font-size: 1.15em;
-            padding: 12px 24px;
-            border-radius: 18px;
-            border: 4px solid #1e272e;
-            cursor: pointer;
-            box-shadow: 0px 6px 0px #1e272e;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            outline: none;
-            background-color: #ffffff;
-        }
-
-        .tab-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 8px 0px #1e272e;
-        }
-
-        .tab-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0px 2px 0px #1e272e;
-        }
-
-        .tab-btn.active {
-            transform: translateY(4px);
-            box-shadow: 0px 2px 0px #1e272e;
-            background-color: var(--cyan-blob) !important;
-        }
-
-        /* CONTENT CARD */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 35px;
-            border-radius: 24px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 35px;
-            border: 4px dashed var(--primary);
-        }
-
-        .method-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-            border-bottom: 4px dotted #cbd5e1;
-            padding-bottom: 20px;
-            margin-bottom: 25px;
-        }
-
-        .method-title {
-            font-family: 'DynaPuff', cursive;
-            font-size: 2.2em;
-            margin: 0;
-            color: var(--primary);
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
-        }
-
-        .badge {
-            background-color: var(--yellow-blob);
+            padding: 12px;
             border: 3px solid #1e272e;
-            padding: 6px 14px;
             border-radius: 12px;
-            font-family: 'DynaPuff', cursive;
             font-size: 1em;
-            color: var(--text-dark);
-            box-shadow: 0px 4px 0px #1e272e;
-        }
-
-        .info-alert {
-            background-color: #E8F4F8;
-            border: 3px dashed #00E5FF;
-            padding: 16px 20px;
-            border-radius: 16px;
+            font-family: inherit;
             font-weight: 700;
-            font-size: 1.15em;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #1e272e;
-        }
-
-        /* SUB CATEGORIES (F2L, OLL, PLL) */
-        .sub-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .sub-tab-btn {
-            font-family: 'DynaPuff', cursive;
-            font-size: 1.05em;
-            padding: 10px 18px;
-            border-radius: 14px;
-            border: 3px solid #1e272e;
-            background-color: #fff;
-            cursor: pointer;
-            box-shadow: 0px 4px 0px #1e272e;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .sub-tab-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 6px 0px #1e272e;
-        }
-
-        .sub-tab-btn.active {
-            background-color: #FF8B94;
-            color: white;
-            border-color: #1e272e;
-            transform: translateY(2px);
-            box-shadow: 0px 2px 0px #1e272e;
-        }
-
-        /* ALGORITHM GRID */
-        .alg-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 15px;
-        }
-
-        .alg-card {
-            background: #ffffff;
-            border: 3px solid #1e272e;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0px 6px 0px #1e272e;
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .alg-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0px 9px 0px #1e272e;
-        }
-
-        .alg-name {
-            font-family: 'DynaPuff', cursive;
-            font-size: 1.25em;
-            color: var(--primary);
-            margin: 0 0 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .alg-moves {
-            font-family: monospace;
-            font-size: 1.2em;
-            background: #f1f2f6;
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 2px solid #cbd5e1;
-            margin: 5px 0 14px 0;
-            word-wrap: break-word;
-            word-break: break-all;
-            color: #2f3542;
-            font-weight: 800;
-        }
-
-        .alg-btn-copy {
-            width: 100%;
-            padding: 10px 14px;
-            border: 3px solid #1e272e;
-            background-color: var(--yellow-blob);
-            border-radius: 14px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 0.95em;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             outline: none;
-            box-shadow: 0px 4px 0px #1e272e;
-        }
-
-        .alg-btn-copy:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 6px 0px #1e272e;
-        }
-
-        .alg-btn-copy:active {
-            transform: translateY(2px);
-            box-shadow: 0px 2px 0px #1e272e;
-        }
-
-        /* Alternative Algorithms Styling (SpeedCubeDB Style) */
-        .alt-algs-title {
-            font-size: 0.82em;
-            color: #475569;
-            font-weight: 800;
-            margin-top: 12px;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .alt-algs-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #f8fafc;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            padding: 8px;
-            margin-bottom: 12px;
-        }
-        
-        .alt-alg-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 6px 8px;
-            border-radius: 8px;
-            background: #ffffff;
-            border: 1.5px solid #cbd5e1;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-            transition: all 0.15s;
-        }
-
-        .alt-alg-row:hover {
-            border-color: var(--primary);
-            background-color: #f0f9ff;
-        }
-        
-        .alt-alg-rank {
-            font-size: 0.78em;
-            color: #475569;
-            font-weight: 800;
-            background: #e2e8f0;
-            padding: 2px 6px;
-            border-radius: 5px;
-        }
-        
-        .alt-alg-moves {
-            font-family: monospace;
-            font-size: 0.9em;
-            color: #1e272e;
-            font-weight: 800;
-            word-break: break-all;
-            flex-grow: 1;
-            text-align: left;
-            line-height: 1.25;
-        }
-        
-        .alt-alg-copy-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.15em;
-            padding: 2px;
-            line-height: 1;
-            border-radius: 4px;
-            transition: background 0.15s, transform 0.1s;
-        }
-        
-        .alt-alg-copy-btn:hover {
-            background: #cbd5e1;
-            transform: scale(1.15);
-        }
-        
-        .alt-alg-copy-btn:active {
-            transform: scale(0.9);
-        }
-
-        .visual-cube {
-            width: 60px;
-            height: 60px;
-            border: 2px solid #1e272e;
-            background-color: #f1f2f6;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8em;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background-color: #1e272e;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 1.1em;
-            z-index: 10000;
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            pointer-events: none;
-            border: 3px solid #fff;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        /* Roux & ZZ specific style */
-        .flow-step {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 15px;
+            box-sizing: border-box;
             background: #fff;
-            border: 3px solid #333;
-            border-radius: 15px;
             margin-bottom: 15px;
         }
-        .flow-step h4 {
-            margin: 0;
-            font-family: 'DynaPuff', cursive;
-            font-size: 1.15em;
-            color: #0066FF;
-        }
 
-        /* 3D SCENE & CUBE FOR SCRAMBLE ANIMATOR */
-        .scene-3d {
-            width: 180px;
-            height: 180px;
-            margin: 15px auto;
-            perspective: 600px;
-            user-select: none;
-            cursor: grab;
-        }
-        .scene-3d:active {
-            cursor: grabbing;
-        }
-
-        .cube-3d {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transform: rotateX(-25deg) rotateY(-45deg);
-            transition: transform 0.3s ease;
-        }
-
-        .face-3d {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            left: 30px;
-            top: 30px;
-            display: grid;
-            gap: 3px;
-            background: #111;
-            padding: 4px;
-            box-sizing: border-box;
-            border: 2px solid #111;
-            border-radius: 8px;
-            backface-visibility: hidden;
-            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
-        }
-
-        .face-3d.highlight-active {
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.9), inset 0 0 15px rgba(0, 229, 255, 0.7);
-            border-color: #00E5FF !important;
-            background: #00E5FF !important;
-        }
-
-        .face-3d.grid-3x3 {
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-        }
-
-        .face-3d.face-U { transform: rotateX(90deg) translateZ(60px); }
-        .face-3d.face-D { transform: rotateX(-90deg) translateZ(60px); }
-        .face-3d.face-F { transform: rotateY(0deg) translateZ(60px); }
-        .face-3d.face-B { transform: rotateY(180deg) translateZ(60px); }
-        .face-3d.face-L { transform: rotateY(-90deg) translateZ(60px); }
-        .face-3d.face-R { transform: rotateY(90deg) translateZ(60px); }
-
-        .sticker-3d {
-            border-radius: 4px;
-            box-shadow: inset 0 0 4px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            transition: background-color 0.45s ease-in-out;
-        }
-
-        /* 3D Animator Modal CSS */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.show {
-            opacity: 1;
-        }
-
-        .modal-container {
-            background: #ffffff;
-            border: 4px solid #1e272e;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 16px 0 #1e272e;
-            padding: 24px;
-            transform: translateY(30px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        .modal-overlay.show .modal-container {
-            transform: translateY(0);
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2.2em;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #475569;
-            transition: color 0.15s;
-            line-height: 1;
-        }
-
-        .modal-close-btn:hover {
-            color: #ef4444;
-        }
-
-        .modal-title {
-            font-family: 'DynaPuff', cursive;
-            font-size: 1.5em;
-            color: var(--primary);
-            margin: 0 0 5px 0;
-            text-align: center;
-            padding-right: 20px;
-        }
-
-        .modal-subtitle {
-            font-size: 1.05em;
-            color: #64748b;
-            font-weight: 800;
-            margin: 0 0 20px 0;
-            text-align: center;
-            word-wrap: break-word;
-            padding: 0 10px;
-        }
-
-        .modal-body {
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 24px;
-            align-items: center;
-        }
-
-        @media (max-width: 600px) {
-            .modal-body {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-        }
-
-        .modal-controls-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .modal-btn-row {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .modal-btn {
-            padding: 10px 14px;
+        .cases-scroller {
+            max-height: 350px;
+            overflow-y: auto;
             border: 3px solid #1e272e;
             border-radius: 12px;
+            padding: 12px;
+            background: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .case-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
             font-weight: 800;
-            font-size: 0.9em;
+            transition: background 0.15s;
             cursor: pointer;
-            transition: all 0.15s;
-            box-shadow: 0 4px 0 #1e272e;
-            outline: none;
         }
 
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 #1e272e;
+        .case-item:hover {
+            background: #f1f5f9;
         }
 
-        .modal-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #1e272e;
+        .case-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
         }
 
-        .btn-primary-modal {
-            background-color: var(--yellow-blob);
-        }
-
-        .btn-secondary-modal {
-            background-color: #e2e8f0;
-        }
-
-        .modal-moves-display {
+        /* TIMER AREA */
+        .timer-display {
             font-family: monospace;
-            font-size: 1.05em;
+            font-size: 4em;
+            font-weight: 800;
+            text-align: center;
+            margin: 20px 0;
+            color: #1e272e;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .timer-status {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .timer-status.recognizing {
+            color: var(--primary);
+            animation: pulse 1s infinite alternate;
+        }
+
+        .timer-status.solving {
+            color: #10b981;
+            animation: pulse 0.7s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .practice-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 14px;
+            border-radius: 16px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            border: 4px solid #1e272e;
+            box-shadow: 0px 5px 0px #1e272e;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.15s;
+            margin-top: 15px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .practice-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0px 2px 0px #1e272e;
+        }
+
+        /* ACTIVE WORKSPACE */
+        .workspace-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+        }
+
+        .scramble-box {
+            font-family: monospace;
+            font-size: 1.25em;
+            font-weight: 800;
             background: #f8fafc;
             border: 2px solid #cbd5e1;
             border-radius: 12px;
             padding: 12px;
-            max-height: 80px;
-            overflow-x: auto;
-            white-space: nowrap;
             text-align: center;
-            font-weight: 800;
+            margin-top: 15px;
+            word-break: break-all;
+            width: 100%;
             box-sizing: border-box;
         }
 
-        .modal-move-span {
-            display: inline-block;
-            padding: 2px 6px;
-            margin: 0 3px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            color: #64748b;
+        /* SCOREBOARD */
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
 
-        .modal-move-span.active {
-            background: var(--yellow-blob);
-            color: #1e272e;
-            transform: scale(1.15);
-            border: 1.5px solid #1e272e;
-            box-shadow: 0 2px 0 #1e272e;
+        .score-table th, .score-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #cbd5e1;
+            font-weight: 700;
         }
 
-        .speed-slider-container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-weight: 800;
+        .score-table th {
+            background: #f1f5f9;
             color: #475569;
-            font-size: 0.82em;
-        }
-
-        .speed-slider-container label {
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .speed-slider-container input {
-            cursor: pointer;
-            accent-color: var(--primary);
         }
     </style>
 </head>
 <body>
     <div class="blob-top"></div>
-    
     <div class="container">
+        
         <!-- NAVIGATION -->
         <div class="nav-buttons">
             <a href="index.html" class="nav-button">🏠 Back to Home</a>
-            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Speedcubing Timer</a>
-            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Case Trainer</a>
-            <a href="guide.html" class="nav-button" style="background-color: #E2C2FF;">📖 Finger Tricks</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF;">🧩 Algorithms</a>
+            <a href="guide.html" class="nav-button" style="background-color: #FFD3B6;">📖 Guide & Finger Tricks</a>
         </div>
 
-        <h1 class="main-title">Algorithms Guide 🧩</h1>
-        <p style="text-align: center; font-size: 1.3em; font-weight: bold; margin-bottom: 30px;">
-            Master speedcubing! Choose a method below to explore the cases and algorithms.
-        </p>
+        <h1 class="main-title">Case Trainer ⏱️</h1>
+        <p class="subtitle">Select your method, check your target cases, and practice recognition & solves!</p>
 
-        <!-- SEARCH -->
-        <div class="search-container">
-            <input type="text" id="alg-search" class="search-input" placeholder="🔍 Search case or algorithm (e.g. T Perm, F2L 1, ZBLL)...">
-        </div>
-
-        <!-- METHOD TABS -->
-        <div class="method-tabs">
-            <button class="tab-btn active" id="tab-cfop" style="background-color: #FFB7B2;" onclick="selectMethod('cfop')">CFOP</button>
-            <button class="tab-btn" id="tab-zb" style="background-color: #BFFCC6;" onclick="selectMethod('zb')">ZB Method</button>
-            <button class="tab-btn" id="tab-roux" style="background-color: #FFC6FF;" onclick="selectMethod('roux')">Roux</button>
-            <button class="tab-btn" id="tab-zz" style="background-color: #E8F4F8;" onclick="selectMethod('zz')">ZZ Method</button>
-            <button class="tab-btn" id="tab-coll" style="background-color: #FFF9A6;" onclick="selectMethod('coll')">COLL</button>
-            <button class="tab-btn" id="tab-wv-vls" style="background-color: #FFD1D1;" onclick="selectMethod('wv-vls')">WV & VLS</button>
-            <button class="tab-btn" id="tab-oh" style="background-color: #E2C2FF;" onclick="selectMethod('oh')">One-Handed (OH)</button>
-            <button class="tab-btn" id="tab-bld" style="background-color: #C2F1FF;" onclick="selectMethod('bld')">Blindfolded (BLD)</button>
-            <button class="tab-btn" id="tab-fmc" style="background-color: #FFE4C2;" onclick="selectMethod('fmc')">Fewest Moves (FMC)</button>
-            <button class="tab-btn" id="tab-ell" style="background-color: #C2FFD4;" onclick="selectMethod('ell')">ELL Method</button>
-        </div>
-
-        <!-- ==================== CFOP METHOD ==================== -->
-        <div id="content-cfop" class="method-content">
-            <div class="card" style="border-color: #FF8B94;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #FF5A76;">CFOP Method (Fridrich) ⚡</h2>
-                    <span class="badge">119 Algorithms Total</span>
-                </div>
-                
-                <div class="info-alert">
-                    <span style="font-size: 1.5em;">💡</span>
-                    <span><strong>Pro Tip:</strong> A cross could be solved in <strong>8 moves or less</strong> every single time! Start planning your entire cross during the 15-second inspection.</span>
-                </div>
-
-                <div class="sub-tabs">
-                    <button class="sub-tab-btn active" id="btn-cfop-pll" onclick="selectSubTab('cfop', 'pll')">PLL (21 algs)</button>
-                    <button class="sub-tab-btn" id="btn-cfop-oll" onclick="selectSubTab('cfop', 'oll')">OLL (57 algs)</button>
-                    <button class="sub-tab-btn" id="btn-cfop-f2l" onclick="selectSubTab('cfop', 'f2l')">F2L (41 algs)</button>
-                </div>
-
-                <!-- PLL -->
-                <div id="cfop-pll" class="sub-content">
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">PLL (Permute Last Layer) - 21 Cases</h3>
-                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Rearrange the oriented pieces of the last layer to solve the entire cube!</p>
-                    <div class="alg-grid" id="grid-pll"></div>
-                </div>
-
-                <!-- OLL -->
-                <div id="cfop-oll" class="sub-content" style="display: none;">
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">OLL (Orient Last Layer) - 57 Cases</h3>
-                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Orient all last layer pieces so the top face becomes a solid yellow color.</p>
-                    <div class="alg-grid" id="grid-oll"></div>
-                </div>
-
-                <!-- F2L -->
-                <div id="cfop-f2l" class="sub-content" style="display: none;">
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">F2L (First Two Layers) - 41 Cases</h3>
-                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Solve a corner and an edge piece together, and insert them into their slot simultaneously.</p>
-                    <div class="alg-grid" id="grid-f2l"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== ZB METHOD ==================== -->
-        <div id="content-zb" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #2ecc71;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #27ae60;">ZB Method (Zborowski-Bruchem) 🏆</h2>
-                    <span class="badge" style="background-color: #BFFCC6;">795 Algorithms Total</span>
-                </div>
-
-                <div class="info-alert" style="background-color: #EAFaf1; border-color: #2ecc71;">
-                    <span style="font-size: 1.5em;">🔥</span>
-                    <span><strong>Massive Database:</strong> ZB consists of <strong>493 ZBLL</strong> algorithms and <strong>302 ZBLS</strong> algorithms in a total of <strong>795 algorithms</strong> for the ZB method!</span>
-                </div>
-
-                <div class="sub-tabs">
-                    <button class="sub-tab-btn active" id="btn-zb-zbll" onclick="selectSubTab('zb', 'zbll')">ZBLL (493 algs)</button>
-                    <button class="sub-tab-btn" id="btn-zb-zbls" onclick="selectSubTab('zb', 'zbls')">ZBLS (302 algs)</button>
-                </div>
-
-                <!-- ZBLL -->
-                <div id="zb-zbll" class="sub-content">
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">ZBLL (ZB Last Layer) - 493 Cases</h3>
-                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">If the last layer cross edges are already oriented, ZBLL solves the entire last layer (OLL and PLL) in one single algorithm!</p>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label for="zbll-subset" style="font-weight: bold; font-size: 1.1em; margin-right: 10px;">Select ZBLL Subset:</label>
-                        <select id="zbll-subset" class="nav-button" style="background-color: #fff; padding: 5px 15px; font-size: 1em; font-family: 'Comic Neue', sans-serif;" onchange="loadZbllSubset()">
-                            <option value="T">T Cases (72 algs)</option>
-                            <option value="U">U Cases (72 algs)</option>
-                            <option value="L">L Cases (72 algs)</option>
-                            <option value="H">H Cases (40 algs)</option>
-                            <option value="Pi">Pi Cases (72 algs)</option>
-                            <option value="Sune">Sune Cases (72 algs)</option>
-                            <option value="ASune">Anti-Sune Cases (72 algs)</option>
-                        </select>
-                    </div>
-                    <div class="alg-grid" id="grid-zbll"></div>
-                </div>
-
-                <!-- ZBLS -->
-                <div id="zb-zbls" class="sub-content" style="display: none;">
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #333;">ZBLS (ZB Last Slot) - 302 Cases</h3>
-                    <p style="font-weight: bold; font-size: 1.1em; color: #555;">Solves the final F2L slot AND orients all 4 top-layer edges at the same time, preparing the cube perfectly for ZBLL!</p>
-                    <div class="alg-grid" id="grid-zbls"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== ROUX METHOD ==================== -->
-        <div id="content-roux" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #D8B4F8;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #9b59b6;">Roux Method 💡</h2>
-                    <span class="badge" style="background-color: #E8D5F5;">Blockbuilding & LSE</span>
-                </div>
-
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    The Roux method is a highly efficient speedcubing method that uses fewer moves than CFOP and does not rely heavily on algorithms, focusing instead on blockbuilding and M-slice moves.
-                </p>
-
-                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">Roux Solve Workflow:</h3>
-                
-                <div class="flow-step">
-                    <h4>1. First Block (FB)</h4>
-                    <p>Build a 1x2x3 block on the left side of the cube. This is done entirely intuitively.</p>
-                </div>
-                <div class="flow-step">
-                    <h4>2. Second Block (SB)</h4>
-                    <p>Build another 1x2x3 block on the right side of the cube, leaving the M (middle) and U (up) slices free. This is also intuitive.</p>
-                </div>
-                <div class="flow-step">
-                    <h4>3. CMLL (42 Algorithms)</h4>
-                    <p>Solves the corners of the last layer (orientation and permutation) while preserving the two side blocks. If corners are already solved, skip this step.</p>
-                    <div class="alg-grid" id="grid-cmll"></div>
-                </div>
-                <div class="flow-step">
-                    <h4>4. LSE (Last Six Edges)</h4>
-                    <p>Solves the remaining six edges (four on top, two on bottom) using only U and M moves. LSE is divided into three sub-steps: Edge Orientation (EO), LR Edges, and Mid-slice Edges.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== ZZ METHOD ==================== -->
-        <div id="content-zz" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #3498db;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #2980b9;">ZZ Method (EOLine) 🎯</h2>
-                    <span class="badge" style="background-color: #D6EAF8;">No Rotations</span>
-                </div>
-
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    The ZZ method orientates all edges at the very beginning of the solve. This eliminates cube rotations entirely, leading to extremely fast turning speeds and ergonomics.
-                </p>
-
-                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">ZZ Solve Workflow:</h3>
-
-                <div class="flow-step">
-                    <h4>1. EOLine (Edge Orientation + Line)</h4>
-                    <p>Orient all 12 edges on the cube, and place the DF and DB edges to form a "line" on the bottom layer. After this step, all remaining turns can be done using only R, L, and U moves (no rotations!).</p>
-                </div>
-                <div class="flow-step">
-                    <h4>2. ZZ F2L (Blockbuilding)</h4>
-                    <p>Build the left and right 2x2x3 blocks on both sides of the line. Since all edges are oriented, you can do this without rotating the cube.</p>
-                </div>
-                <div class="flow-step">
-                    <h4>3. COLL (42 Algorithms)</h4>
-                    <p>Solves the orientation and permutation of the last layer corners, leaving only the four edges to be permuted (EPLL). E.g., if you get a COLL skip, you go straight to EPLL.</p>
-                    <div class="alg-grid" id="grid-coll"></div>
-                </div>
-                <div class="flow-step">
-                    <h4>4. EPLL (Edge Permutation)</h4>
-                    <p>Solve the final 4 edges of the last layer using simple PLL algorithms (U-perm, H-perm, Z-perm).</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ==================== COLL METHOD ==================== -->
-        <div id="content-coll" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #FFF9A6;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #d4af37;">COLL Method (Corners of Last Layer) 👑</h2>
-                    <span class="badge" style="background-color: #FEF9E7;">42 Algorithms Total</span>
-                </div>
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    COLL solves the orientation and permutation of the last layer corners when the top edges are already oriented. This reduces the final step to a simple Edge Permutation (EPLL), increasing the chances of a PLL skip!
-                </p>
-                <div class="alg-grid" id="grid-coll-standalone"></div>
-            </div>
-        </div>
-
-        <!-- ==================== WV & VLS METHOD ==================== -->
-        <div id="content-wv-vls" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #FFD1D1;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #c0392b;">WV & VLS (Advanced Last Slot) ⚡</h2>
-                    <span class="badge" style="background-color: #FDEDEC;">Orient Corners during Insertion</span>
-                </div>
-                
-                <div class="flow-step">
-                    <h4>Winter Variation (WV)</h4>
-                    <p>WV solves the orientation of all last layer corners while inserting the final F2L corner-edge pair, provided the F2L edge is already oriented and placed.</p>
-                    <div class="alg-grid" id="grid-wv"></div>
-                </div>
-                <div class="flow-step">
-                    <h4>Valk Last Slot (VLS)</h4>
-                    <p>VLS is a massive set of algorithms (432 cases) that solves all corners orientation while inserting the final corner-edge pair in any state.</p>
-                    <div class="alg-grid" id="grid-vls"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== ONE-HANDED (OH) ==================== -->
-        <div id="content-oh" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #E2C2FF;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #8e44ad;">One-Handed Method (OH) 🖐️</h2>
-                    <span class="badge" style="background-color: #F5EEF8;">Ergonomic RU-gen / No Rotations</span>
-                </div>
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    OH solving requires algorithms optimized for execution with one hand. These avoid double-flicks and M-moves, instead using pure <strong style="color: var(--primary);">R and U moves</strong> (RU-gen) for maximum turning efficiency and speed!
-                </p>
-                <div class="alg-grid" id="grid-oh"></div>
-            </div>
-        </div>
-
-        <!-- ==================== BLINDFOLDED (BLD) ==================== -->
-        <div id="content-bld" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #C2F1FF;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #2980b9;">Blindfolded Solving (BLD) 🙈</h2>
-                    <span class="badge" style="background-color: #EBF5FB;">Old Pochmann & M2</span>
-                </div>
-                
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    BLD algorithms do not swap random pieces. Instead, they swap exactly two pieces at a time (cycles) using a dedicated **Buffer** and **Target** location to cycle pieces sequentially into their correct spots.
-                </p>
-
-                <div class="flow-step">
-                    <h4>Old Pochmann Corners Buffer</h4>
-                    <p>The standard corner buffer is UBL. Targets are solved one-by-one by setting up the target piece to RDF, swapping it using the Y Perm (or T Perm), and doing the reverse setup.</p>
-                </div>
-                
-                <div class="flow-step">
-                    <h4>M2 Edges Buffer</h4>
-                    <p>The standard edge buffer is DF. Edges are cycled one-by-one using the M2 double turn targeting the UB slot, with special setup algorithms for different targets.</p>
-                </div>
-
-                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">Blindfolded Case Setups & Parities:</h3>
-                <div class="alg-grid" id="grid-bld"></div>
-            </div>
-        </div>
-
-        <!-- ==================== FEWEST MOVES (FMC) ==================== -->
-        <div id="content-fmc" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #FFE4C2;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #d35400;">Fewest Moves Challenge (FMC) 📝</h2>
-                    <span class="badge" style="background-color: #FDF2E9;">NISS & Blockbuilding</span>
-                </div>
-
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    FMC requires finding a solution in the absolute fewest moves. This is done by planning extensive blocks (1x2x2, 2x2x3), orienting edges (EO), and inserting commutators into a "skeleton" solution.
-                </p>
-
-                <div class="flow-step">
-                    <h4>NISS (Normal-Inverse Shuffle State)</h4>
-                    <p>Switching scramble direction. You apply your partial solution to the inverse of the scramble to find easier block insertions from the back side!</p>
-                </div>
-
-                <div class="flow-step">
-                    <h4>Commutators & Insertions</h4>
-                    <p>Commutators solve 3 pieces without affecting any other part of the cube. We insert them into the skeleton at the point where they cancel the most moves.</p>
-                </div>
-
-                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">FMC Commutator Set:</h3>
-                <div class="alg-grid" id="grid-fmc"></div>
-            </div>
-        </div>
-
-        <!-- ==================== ELL METHOD ==================== -->
-        <div id="content-ell" class="method-content" style="display: none;">
-            <div class="card" style="border-color: #C2FFD4;">
-                <div class="method-header">
-                    <h2 class="method-title" style="color: #27ae60;">ELL Method (Edges of Last Layer) 🌿</h2>
-                    <span class="badge" style="background-color: #E8F8F5;">29 Algorithms Total</span>
-                </div>
-                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    ELL solves the orientation and permutation of all four last layer edges at the same time, provided the corners of the last layer are already oriented and permuted (e.g. solved). ELL is extremely popular for Roux method LSE variants and advanced speedcubing subsets!
-                </p>
-                <div class="alg-grid" id="grid-ell"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="toast">Copied to clipboard! 📋</div>
-
-    <!-- ==================== JAVASCRIPT DATABASE & LOGIC ==================== -->
-    <!-- 3D CUBE ANIMATOR MODAL OVERLAY -->
-    <div id="animator-modal" class="modal-overlay" onclick="if(event.target===this) closeAnimatorModal()">
-        <div class="modal-container">
-            <button class="modal-close-btn" onclick="closeAnimatorModal()">&times;</button>
-            <h3 id="modal-title-text" class="modal-title">Algorithm Player</h3>
-            <p id="modal-subtitle-text" class="modal-subtitle">R U R' U' ...</p>
+        <div class="grid-layout">
             
-            <div class="modal-body">
-                <!-- Left: 3D Scene -->
-                <div class="scene-3d" id="modal-scene-3d">
-                    <div class="cube-3d" id="modal-cube-3d">
-                        <!-- Faces will be dynamically populated -->
+            <!-- LEFT: CONFIGURATION PANEL -->
+            <div>
+                <div class="card">
+                    <div class="card-title">1. Setup Session ⚙️</div>
+                    
+                    <label style="font-weight: 800; font-size: 0.9em; text-transform: uppercase; color: #64748b;">Select Method</label>
+                    <select id="method-select" class="select-input" onchange="onMethodChanged()">
+                        <option value="pll">PLL (Permutation of Last Layer)</option>
+                        <option value="oll">OLL (Orientation of Last Layer)</option>
+                        <option value="coll">COLL (Corners of Last Layer)</option>
+                        <option value="cmll">CMLL (Roux Corners)</option>
+                        <option value="wv">Winter Variation (WV)</option>
+                        <option value="ell">ELL (Edges of Last Layer)</option>
+                    </select>
+
+                    <label style="font-weight: 800; font-size: 0.9em; text-transform: uppercase; color: #64748b;">Search / Filter Cases</label>
+                    <input type="text" id="case-search" class="search-input" placeholder="🔍 Write tag, name, or alg (e.g. Sune, T-Perm)..." oninput="filterCases()">
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <button style="font-weight:800; background:none; border:none; color: var(--primary); cursor:pointer; font-size:0.9em;" onclick="selectAll(true)">Select All</button>
+                        <button style="font-weight:800; background:none; border:none; color: #64748b; cursor:pointer; font-size:0.9em;" onclick="selectAll(false)">Clear All</button>
+                    </div>
+
+                    <div class="cases-scroller" id="cases-list-container">
+                        <!-- Checkboxes will be populated dynamically -->
+                    </div>
+
+                    <button class="practice-btn" onclick="startPracticeSession()">🚀 Start Practice Session</button>
+                </div>
+            </div>
+
+            <!-- RIGHT: ACTIVE WORKSPACE & TIMER -->
+            <div>
+                <div class="card" style="border-color: var(--cyan-blob);">
+                    <div class="card-title">2. Practice Workspace ⏱️</div>
+                    
+                    <div id="welcome-message" style="text-align: center; padding: 40px 10px;">
+                        <span style="font-size: 3.5em;">🏁</span>
+                        <h3 style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0;">Ready to train?</h3>
+                        <p style="color: #64748b; margin: 0;">Configure your cases on the left and click start to begin your custom session!</p>
+                    </div>
+
+                    <div id="trainer-workspace" style="display: none;">
+                        <div class="workspace-area">
+                            <div id="case-svg-container" style="width: 130px; height: 104px;">
+                                <!-- Dynamic SVG -->
+                            </div>
+                            <h3 id="active-case-name" style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0; text-align: center;">T Perm</h3>
+                            <div id="active-case-desc" style="font-size: 0.9em; color: #64748b; font-weight: 700; text-align: center;">Headlights left</div>
+                        </div>
+
+                        <div class="scramble-box">
+                            <div style="font-size: 0.8em; text-transform: uppercase; color: #64748b; font-weight: 800; margin-bottom: 4px;">Scramble to make case:</div>
+                            <span id="active-case-scramble">-</span>
+                        </div>
+
+                        <div class="timer-display" id="timer-display-text">0.00</div>
+                        <div class="timer-status" id="timer-status-text">Press Spacebar / Tap to Start!</div>
+                        
+                        <div id="timer-helper-txt" style="text-align: center; font-size: 0.85em; font-weight: 800; color: #94a3b8; margin-top: 10px;">
+                            (Click/Tap this area or press Space to trigger the timer)
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right: Controls -->
-                <div class="modal-controls-panel">
-                    <div id="modal-moves-list" class="modal-moves-display">
-                        <!-- Moves highlight list -->
-                    </div>
-
-                    <div class="modal-btn-row">
-                        <button class="modal-btn btn-secondary-modal" onclick="initCubeForAlg(currentAlgRunning)">⏪ Reset</button>
-                        <button class="modal-btn btn-secondary-modal" onclick="playModalPrevStep()">◀ Prev</button>
-                        <button class="modal-btn btn-primary-modal" id="btn-modal-play" onclick="toggleModalPlayback()">▶ Play</button>
-                        <button class="modal-btn btn-secondary-modal" onclick="playModalNextStep()">▶ Next</button>
-                    </div>
-
-                    <div class="speed-slider-container">
-                        <label>Speed Selector</label>
-                        <input type="range" min="300" max="2000" step="100" value="1000" oninput="changeModalSpeed(this.value)">
+                <!-- SESSION LOG -->
+                <div class="card">
+                    <div class="card-title">3. Session Log 📊</div>
+                    <div style="max-height: 250px; overflow-y: auto;">
+                        <table class="score-table">
+                            <thead>
+                                <tr>
+                                    <th>Case</th>
+                                    <th>Recog 🧠</th>
+                                    <th>Solve ⚡</th>
+                                    <th>Total 🏁</th>
+                                </tr>
+                            </thead>
+                            <tbody id="session-log-body">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #64748b; font-weight: 500;">No solves in this session yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
         </div>
+
     </div>
 
+    <!-- ==================== JAVASCRIPT DATABASE & TRAINER LOGIC ==================== -->
     <script>
-        // Database of popular cubing algorithms
         const ALGORITHMS = {
     "pll": [
         {
@@ -3702,38 +3047,102 @@
     ]
 };
 
-        // Generate a beautiful 3D Isometric Rubik's cube SVG diagram of the case
+
+
+        // --- TRAINER CONTROLLER ENGINE ---
+        let selectedCases = [];
+        let activeCase = null;
+        let activeScramble = "";
+        let trainerState = "READY"; // READY, RECOG, SOLVE, DONE
+        let recogStartTime = 0;
+        let recogTime = 0;
+        let solveStartTime = 0;
+        let solveTime = 0;
+        let timerInterval = null;
+
+        // Populate lists on load
+        function onMethodChanged() {
+            const method = document.getElementById('method-select').value;
+            const container = document.getElementById('cases-list-container');
+            container.innerHTML = "";
+
+            let cases = [];
+            if (method === "zbll") {
+                // Combine ZBLL subsets
+                for (let sub in ALGORITHMS.zbll) {
+                    cases = cases.concat(ALGORITHMS.zbll[sub]);
+                }
+            } else {
+                cases = ALGORITHMS[method] || [];
+            }
+
+            cases.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "case-item";
+                
+                const cb = document.createElement('input');
+                cb.type = "checkbox";
+                cb.id = 'case-cb-' + index;
+                cb.value = JSON.stringify(item);
+                cb.checked = true; // default select all
+
+                const label = document.createElement('label');
+                label.htmlFor = cb.id;
+                label.style.cursor = "pointer";
+                label.innerHTML = '<span>' + item.name + '</span> <span style="font-size:0.85em; color:#64748b; font-weight:normal;">(' + item.moves + ')</span>';
+
+                div.appendChild(cb);
+                div.appendChild(label);
+                container.appendChild(div);
+            });
+            
+            filterCases();
+        }
+
+        function filterCases() {
+            const query = document.getElementById('case-search').value.toLowerCase();
+            const items = document.querySelectorAll('#cases-list-container .case-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        function selectAll(checked) {
+            const checkboxes = document.querySelectorAll('#cases-list-container input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (cb.parentElement.style.display !== "none") {
+                    cb.checked = checked;
+                }
+            });
+        }
+
+        // SVG Renderer from algorithms.html
         function generateCubeSvg(item) {
-            const name = item.name;
-            const cat = item.cat;
+            let svg = '<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">';
+            svg += '<defs>\
+                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">\
+                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />\
+                </marker>\
+            </defs>';
             
-            // Render an isometric 3D Rubik's cube SVG
-            let svg = `<svg viewBox="0 0 100 80" width="80" height="64" style="background:none;">`;
-            
-            // Add arrowhead marker definition for PLL arrows
-            svg += `<defs>
-                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />
-                </marker>
-            </defs>`;
-            
-            let gridColors = Array(9).fill('#57606f'); // default dark gray
+            let gridColors = Array(9).fill('#57606f');
             let sideColors = {
                 top: Array(3).fill(null),
                 right: Array(3).fill(null),
                 bottom: Array(3).fill(null),
                 left: Array(3).fill(null)
             };
-            let arrows = []; // list of {x1, y1, x2, y2, double: boolean}
             
             const YELLOW = '#FFFF00';
-            const WHITE = '#FFFFFF';
             const RED = '#FF3B30';
             const GREEN = '#4CD964';
-            const BLUE = '#007AFF';
-            const ORANGE = '#FF9500';
             
-            // Helper functions for 3D Isometric Projection
             function mapToIso(x, y) {
                 const dx = x - 35;
                 const dy = y - 35;
@@ -3748,7 +3157,7 @@
                 const lx = -35 / 3, ly = 17.5 / 3;
                 const x0 = ox + row * lx + col * rx;
                 const y0 = oy + row * ly + col * ry;
-                return `M ${x0},${y0} L ${x0 + rx},${y0 + ry} L ${x0 + rx + lx},${y0 + ry + ly} L ${x0 + lx},${y0 + ly} Z`;
+                return 'M ' + x0 + ',' + y0 + ' L ' + (x0 + rx) + ',' + (y0 + ry) + ' L ' + (x0 + rx + lx) + ',' + (y0 + ry + ly) + ' L ' + (x0 + lx) + ',' + (y0 + ly) + ' Z';
             }
 
             function getFStickerPath(row, col) {
@@ -3757,7 +3166,7 @@
                 const vx = 0, vy = 35 / 3;
                 const x0 = ox + col * hx + row * vx;
                 const y0 = oy + col * hy + row * vy;
-                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
+                return 'M ' + x0 + ',' + y0 + ' L ' + (x0 + hx) + ',' + (y0 + hy) + ' L ' + (x0 + hx + vx) + ',' + (y0 + hy + vy) + ' L ' + (x0 + vx) + ',' + (y0 + vy) + ' Z';
             }
 
             function getRStickerPath(row, col) {
@@ -3766,18 +3175,14 @@
                 const vx = 0, vy = 35 / 3;
                 const x0 = ox + col * hx + row * vx;
                 const y0 = oy + col * hy + row * vy;
-                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
+                return 'M ' + x0 + ',' + y0 + ' L ' + (x0 + hx) + ',' + (y0 + hy) + ' L ' + (x0 + hx + vx) + ',' + (y0 + hy + vy) + ' L ' + (x0 + vx) + ',' + (y0 + vy) + ' Z';
             }
-            
+
             if (item.vis) {
                 const parts = item.vis.split(' ');
                 const gridStr = parts[0];
                 for (let i = 0; i < 9; i++) {
                     gridColors[i] = gridStr[i] === '1' ? YELLOW : '#57606f';
-                }
-                if (parts[1]) {
-                    const topStr = parts[1];
-                    for (let i = 0; i < 3; i++) sideColors.top[i] = topStr[i] === '1' ? YELLOW : null;
                 }
                 if (parts[2]) {
                     const rightStr = parts[2];
@@ -3787,431 +3192,32 @@
                     const bottomStr = parts[3];
                     for (let i = 0; i < 3; i++) sideColors.bottom[i] = bottomStr[i] === '1' ? YELLOW : null;
                 }
-                if (parts[4]) {
-                    const leftStr = parts[4];
-                    for (let i = 0; i < 3; i++) sideColors.left[i] = leftStr[i] === '1' ? YELLOW : null;
-                }
-            } else if (cat === "PLL") {
-                gridColors.fill(YELLOW);
-                
-                let corners = [
-                    { name: "UBL", stickers: { top: BLUE, left: ORANGE } },
-                    { name: "UBR", stickers: { top: BLUE, right: RED } },
-                    { name: "UFR", stickers: { bottom: GREEN, right: RED } },
-                    { name: "UFL", stickers: { bottom: GREEN, left: ORANGE } }
-                ];
-                let edges = [
-                    { name: "UB", stickers: { top: BLUE } },
-                    { name: "UR", stickers: { right: RED } },
-                    { name: "UF", stickers: { bottom: GREEN } },
-                    { name: "UL", stickers: { left: ORANGE } }
-                ];
-                
-                function swapCorners(i, j) {
-                    let temp = corners[i];
-                    corners[i] = corners[j];
-                    corners[j] = temp;
-                }
-                function swapEdges(i, j) {
-                    let temp = edges[i];
-                    edges[i] = edges[j];
-                    edges[j] = temp;
-                }
-                
-                if (name.includes("T Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(1, 3);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Y Perm")) {
-                    swapCorners(0, 2);
-                    swapEdges(0, 3);
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("H Perm")) {
-                    swapEdges(0, 2);
-                    swapEdges(1, 3);
-                    arrows = [{x1: 35, y1: 20, x2: 35, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Ua Perm")) {
-                    let temp = edges[0]; edges[0] = edges[1]; edges[1] = edges[3]; edges[3] = temp;
-                    arrows = [{x1: 50, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, {x1: 20, y1: 35, x2: 50, y2: 35, double: false}];
-                } else if (name.includes("Ub Perm")) {
-                    let temp = edges[0]; edges[0] = edges[3]; edges[3] = edges[1]; edges[1] = temp;
-                    arrows = [{x1: 20, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, {x1: 50, y1: 35, x2: 20, y2: 35, double: false}];
-                } else if (name.includes("Z Perm")) {
-                    swapEdges(0, 1);
-                    swapEdges(2, 3);
-                    arrows = [{x1: 35, y1: 20, x2: 50, y2: 35, double: true}, {x1: 20, y1: 35, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("E Perm")) {
-                    swapCorners(0, 3);
-                    swapCorners(1, 2);
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 20, x2: 50, y2: 50, double: true}];
-                } else if (name.includes("F Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(0, 2);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("Ja Perm")) {
-                    swapCorners(0, 3);
-                    swapEdges(0, 3);
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Jb Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(0, 1);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Ra Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(0, 3);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Rb Perm")) {
-                    swapCorners(0, 3);
-                    swapEdges(0, 1);
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("V Perm")) {
-                    swapCorners(0, 2);
-                    swapEdges(0, 1);
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Na Perm")) {
-                    swapCorners(0, 2);
-                    swapEdges(0, 2);
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("Nb Perm")) {
-                    swapCorners(1, 3);
-                    swapEdges(1, 3);
-                    arrows = [{x1: 50, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 35, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Aa Perm")) {
-                    let temp = corners[0]; corners[0] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 20, double: false}];
-                } else if (name.includes("Ab Perm")) {
-                    let temp = corners[3]; corners[3] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
-                    arrows = [{x1: 20, y1: 50, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 50, double: false}];
-                }
-                
-                sideColors.top[0] = corners[0].stickers.top; sideColors.left[0] = corners[0].stickers.left;
-                sideColors.top[2] = corners[1].stickers.top; sideColors.right[0] = corners[1].stickers.right;
-                sideColors.bottom[2] = corners[2].stickers.bottom; sideColors.right[2] = corners[2].stickers.right;
-                sideColors.bottom[0] = corners[3].stickers.bottom; sideColors.left[2] = corners[3].stickers.left;
-                sideColors.top[1] = edges[0].stickers.top; sideColors.right[1] = edges[1].stickers.right;
-                sideColors.bottom[1] = edges[2].stickers.bottom; sideColors.left[1] = edges[3].stickers.left;
-                
-            } else if (cat === "OLL" || cat === "COLL" || cat === "CMLL" || cat === "ZBLL") {
-                gridColors[1] = YELLOW; gridColors[3] = YELLOW; gridColors[4] = YELLOW; gridColors[5] = YELLOW; gridColors[7] = YELLOW;
-                
-                if (name.includes("OLL 1") || name.includes("OLL 2") || name.includes("Dot")) {
-                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; gridColors[5] = '#57606f'; gridColors[7] = '#57606f';
-                    sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW; sideColors.right[1] = YELLOW; sideColors.bottom[1] = YELLOW;
-                } else if (name.includes("OLL 33") || name.includes("T-shape")) {
-                    gridColors[1] = '#57606f'; sideColors.top[1] = YELLOW;
-                } else if (name.includes("OLL 51") || name.includes("Line")) {
-                    gridColors[1] = '#57606f'; gridColors[7] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.bottom[1] = YELLOW;
-                }
-                
-                if (name.includes("OLL 20")) {
-                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; gridColors[6] = YELLOW; gridColors[8] = YELLOW;
-                } else if (name.includes("OLL 37") || name.includes("F-shape")) {
-                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
-                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
-                } else if (name.includes("OLL 44") || name.includes("P-shape")) {
-                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
-                    gridColors[0] = YELLOW; gridColors[6] = YELLOW;
-                } else if (name.includes("OLL 51")) {
-                    sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.right[2] = YELLOW;
-                } else if (name.includes("Sune") && !name.includes("Anti")) {
-                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
-                } else if (name.includes("Anti-Sune") || name.includes("ASune")) {
-                    gridColors[2] = YELLOW; sideColors.top[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.bottom[2] = YELLOW;
-                } else if (name.includes("COLL-H") || name.includes("ZBLL-H") || name.includes("CMLL-H") || name.includes("OLL 21") || name.includes("H Case")) {
-                    sideColors.top[0] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
-                } else if (name.includes("Pi Case") || name.includes("ZBLL-Pi") || name.includes("OLL 22") || name.includes("Car")) {
-                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.left[0] = YELLOW; sideColors.right[0] = YELLOW;
-                } else if (name.includes("COLL-U") || name.includes("ZBLL-U") || name.includes("OLL 23") || name.includes("Headlights")) {
-                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
-                } else if (name.includes("COLL-T") || name.includes("ZBLL-T") || name.includes("CMLL-T") || name.includes("OLL 33") || name.includes("Blinker")) {
-                    gridColors[2] = YELLOW; gridColors[8] = YELLOW; sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW;
-                } else if (name.includes("ZBLL-L") || name.includes("OLL 25") || name.includes("L Case") || name.includes("Triple Sune")) {
-                    gridColors[0] = YELLOW; gridColors[8] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW;
-                }
-            } else if (cat === "F2L" || cat === "ZBLS") {
-                if (name.includes("F2L 1")) {
-                    gridColors[8] = RED; sideColors.right[2] = WHITE; sideColors.bottom[2] = GREEN; gridColors[1] = GREEN; sideColors.top[1] = RED;
-                } else if (name.includes("F2L 2")) {
-                    gridColors[8] = GREEN; sideColors.right[2] = RED; sideColors.bottom[2] = WHITE; gridColors[5] = RED; sideColors.right[1] = GREEN;
-                } else if (name.includes("F2L 3")) {
-                    gridColors[8] = RED; sideColors.right[2] = GREEN; sideColors.bottom[2] = WHITE; gridColors[1] = GREEN; sideColors.top[1] = RED;
-                } else if (name.includes("F2L 4")) {
-                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[5] = RED; sideColors.right[1] = GREEN;
-                } else if (name.includes("F2L 5")) {
-                    sideColors.bottom[2] = GREEN; sideColors.right[2] = RED; gridColors[5] = GREEN; sideColors.right[1] = RED;
-                } else if (name.includes("F2L 19")) {
-                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[3] = GREEN; sideColors.left[1] = RED;
-                }
             }
-            
-            // Draw 3D Isometric stickers
-            // 1. Draw U Face (Top Rhombus)
+
+            // Draw Top
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
-                    const color = gridColors[row * 3 + col] || '#57606f';
-                    const path = getUStickerPath(row, col);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                    const color = gridColors[row * 3 + col];
+                    svg += '<path d="' + getUStickerPath(row, col) + '" fill="' + color + '" stroke="#1e272e" stroke-width="1.2" />';
+                }
+            }
+            // Draw F
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let color = row === 0 && sideColors.bottom[col] ? YELLOW : GREEN;
+                    svg += '<path d="' + getFStickerPath(row, col) + '" fill="' + color + '" stroke="#1e272e" stroke-width="1.2" />';
+                }
+            }
+            // Draw R
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let color = row === 0 && sideColors.right[2 - col] ? YELLOW : RED;
+                    svg += '<path d="' + getRStickerPath(row, col) + '" fill="' + color + '" stroke="#1e272e" stroke-width="1.2" />';
                 }
             }
 
-            // 2. Draw F Face (Front-Left Face)
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = '#57606f';
-                    if (row === 0) {
-                        color = sideColors.bottom[col] || GREEN;
-                    } else {
-                        color = GREEN;
-                    }
-                    const path = getFStickerPath(row, col);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
-                }
-            }
-
-            // 3. Draw R Face (Front-Right Face)
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = '#57606f';
-                    if (row === 0) {
-                        color = sideColors.right[2 - col] || RED;
-                    } else {
-                        color = RED;
-                    }
-                    const path = getRStickerPath(row, col);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
-                }
-            }
-            
-            // Draw projected arrows on top face
-            arrows.forEach(a => {
-                const start = mapToIso(a.x1, a.y1);
-                const end = mapToIso(a.x2, a.y2);
-                svg += `<line x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" stroke="#ff3838" stroke-width="2.5" marker-end="url(#arrow)" marker-start="${a.double ? 'url(#arrow)' : 'none'}" stroke-linecap="round" />`;
-            });
-            
-            svg += `</svg>`;
+            svg += '</svg>';
             return svg;
-        }
-
-        // Initialize lists
-        function populateGrid(gridId, data) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            grid.innerHTML = "";
-            
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "alg-card";
-                card.dataset.name = item.name.toLowerCase();
-                card.dataset.tags = item.tags.toLowerCase();
-                card.dataset.moves = item.moves.toLowerCase();
-                
-                // Generate the SVG diagram for the case
-                const cubeSvg = generateCubeSvg(item);
-
-                // Setup alternative algorithms (SpeedCubeDB style)
-                const algs = item.algs || [item.moves];
-                let altAlgsHtml = "";
-                if (algs.length > 1) {
-                    altAlgsHtml = `
-                        <div class="alt-algs-title">Alternative Algorithms 📑</div>
-                        <div class="alt-algs-list">
-                            ${algs.map((alg, index) => `
-                                <div class="alt-alg-row">
-                                    <span class="alt-alg-rank">#${index + 1}</span>
-                                    <span class="alt-alg-moves">${alg}</span>
-                                    <div style="display: flex; gap: 4px;">
-                                        <button class="alt-alg-copy-btn" onclick="openAnimatorModal('${item.name.replace(/'/g, "\\'")} (Alt #${index + 1})', '${alg.replace(/'/g, "\\'")}')" title="Play 3D Animation">🎥</button>
-                                        <button class="alt-alg-copy-btn" onclick="copyToClipboard('${alg.replace(/'/g, "\\'")}')" title="Copy Move Set">📋</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div>
-                        <div class="alg-name">
-                            <span>${item.name}</span>
-                            <div class="visual-cube" style="background:none; border:none; box-shadow:none; width:80px; height:64px;">
-                                ${cubeSvg}
-                            </div>
-                        </div>
-                        <div class="alg-desc" style="font-size: 0.92em; color: #666; font-weight: bold; margin-top: 4px; margin-bottom: 8px; line-height: 1.25;">${item.desc || ""}</div>
-                        <div class="alg-moves">${item.moves}</div>
-                        ${altAlgsHtml}
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 8px; margin-top: 10px; box-sizing: border-box;">
-                        <button class="alg-btn-copy" style="background-color: var(--yellow-blob);" onclick="openAnimatorModal('${item.name.replace(/'/g, "\\'")}', '${item.moves.replace(/'/g, "\\'")}')">Play 3D 🎥</button>
-                        <button class="alg-btn-copy" style="background-color: #e2e8f0; box-shadow: 0px 4px 0px #1e272e;" onclick="copyToClipboard('${item.moves.replace(/'/g, "\\'")}')">Copy 📋</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // Copy Helper
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById('toast');
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 1500);
-            }).catch(err => {
-                console.error("Failed to copy: ", err);
-            });
-        }
-
-        // Tab selection
-        function selectMethod(methodId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.method-content').forEach(content => content.style.display = 'none');
-            
-            document.getElementById('tab-' + methodId).classList.add('active');
-            document.getElementById('content-' + methodId).style.display = 'block';
-        }
-
-        // Sub-tab selection
-        function selectSubTab(methodId, subTabId) {
-            const container = document.getElementById('content-' + methodId);
-            container.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
-            container.querySelectorAll('.sub-content').forEach(content => content.style.display = 'none');
-
-            document.getElementById('btn-' + methodId + '-' + subTabId).classList.add('active');
-            document.getElementById(methodId + '-' + subTabId).style.display = 'block';
-        }
-
-        // ZBLL subset loader
-        function loadZbllSubset() {
-            const val = document.getElementById('zbll-subset').value;
-            const data = ALGORITHMS.zbll[val] || [];
-            populateGrid('grid-zbll', data);
-        }
-
-        // Search logic
-        const searchInput = document.getElementById('alg-search');
-        searchInput.addEventListener('input', function() {
-            const query = searchInput.value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.alg-card');
-            
-            if (query === "") {
-                cards.forEach(card => card.style.display = 'flex');
-                return;
-            }
-
-            cards.forEach(card => {
-                const name = card.dataset.name;
-                const tags = card.dataset.tags;
-                const moves = card.dataset.moves;
-                
-                if (name.includes(query) || tags.includes(query) || moves.includes(query)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-
-        // ==========================================
-        // --- 3D ALGORITHM ANIMATOR (MODAL) ---
-        // ==========================================
-        let modalCubeState = {};
-        let modalPlaybackInterval = null;
-        let modalCurrentStep = -1; // -1 means scrambled state, 0 means 1st move applied
-        let modalMoves = [];
-        let modalIsPlaying = false;
-        let modalSpeed = 1000; // ms per move
-        let modalRotation = { x: -25, y: -45 };
-        let activeModalTimeout = null;
-        let pendingModalMoveToApply = null;
-        let pendingModalFaceToReset = null;
-
-        // Colors mapping for 3D stickers
-        const modalColorMap = {
-            '#FFFF00': '#FFFF00', // Yellow
-            '#FFFFFF': '#FFFFFF', // White
-            '#FF3B30': '#FF3B30', // Red
-            '#4CD964': '#4CD964', // Green
-            '#007AFF': '#007AFF', // Blue
-            '#FF9500': '#FF9500', // Orange
-            '#57606f': '#57606f'  // Grey
-        };
-
-        const modalFaceTransforms = {
-            U: 'rotateX(90deg) translateZ(60px)',
-            D: 'rotateX(-90deg) translateZ(60px)',
-            F: 'rotateY(0deg) translateZ(60px)',
-            B: 'rotateY(180deg) translateZ(60px)',
-            L: 'rotateY(-90deg) translateZ(60px)',
-            R: 'rotateY(90deg) translateZ(60px)'
-        };
-
-        function resetModalCubeState() {
-            modalCubeState = {
-                U: Array(9).fill('#FFFF00'),
-                D: Array(9).fill('#FFFFFF'),
-                F: Array(9).fill('#4CD964'),
-                B: Array(9).fill('#007AFF'),
-                L: Array(9).fill('#FF9500'),
-                R: Array(9).fill('#FF3B30')
-            };
-        }
-
-        // Apply 3x3 rotation state
-        function rotateModal3x3State(state, face) {
-            const temp = {...state};
-            if (face === 'U') {
-                state.U = [temp.U[6], temp.U[3], temp.U[0], temp.U[7], temp.U[4], temp.U[1], temp.U[8], temp.U[5], temp.U[2]];
-                state.F[0] = temp.R[0]; state.F[1] = temp.R[1]; state.F[2] = temp.R[2];
-                state.L[0] = temp.F[0]; state.L[1] = temp.F[1]; state.L[2] = temp.F[2];
-                state.B[0] = temp.L[0]; state.B[1] = temp.L[1]; state.B[2] = temp.L[2];
-                state.R[0] = temp.B[0]; state.R[1] = temp.B[1]; state.R[2] = temp.B[2];
-            } else if (face === 'D') {
-                state.D = [temp.D[6], temp.D[3], temp.D[0], temp.D[7], temp.D[4], temp.D[1], temp.D[8], temp.D[5], temp.D[2]];
-                state.F[6] = temp.L[6]; state.F[7] = temp.L[7]; state.F[8] = temp.L[8];
-                state.R[6] = temp.F[6]; state.R[7] = temp.F[7]; state.R[8] = temp.F[8];
-                state.B[6] = temp.R[6]; state.B[7] = temp.R[7]; state.B[8] = temp.R[8];
-                state.L[6] = temp.B[6]; state.L[7] = temp.B[7]; state.L[8] = temp.B[8];
-            } else if (face === 'F') {
-                state.F = [temp.F[6], temp.F[3], temp.F[0], temp.F[7], temp.F[4], temp.F[1], temp.F[8], temp.F[5], temp.F[2]];
-                state.U[6] = temp.L[8]; state.U[7] = temp.L[5]; state.U[8] = temp.L[2];
-                state.R[0] = temp.U[6]; state.R[3] = temp.U[7]; state.R[6] = temp.U[8];
-                state.D[2] = temp.R[0]; state.D[1] = temp.R[3]; state.D[0] = temp.R[6];
-                state.L[8] = temp.D[2]; state.L[5] = temp.D[1]; state.L[2] = temp.D[0];
-            } else if (face === 'B') {
-                state.B = [temp.B[6], temp.B[3], temp.B[0], temp.B[7], temp.B[4], temp.B[1], temp.B[8], temp.B[5], temp.B[2]];
-                state.U[2] = temp.R[2]; state.U[1] = temp.R[5]; state.U[0] = temp.R[8];
-                state.L[0] = temp.U[2]; state.L[3] = temp.U[1]; state.L[6] = temp.U[0];
-                state.D[6] = temp.L[0]; state.D[7] = temp.L[3]; state.D[8] = temp.L[6];
-                state.R[8] = temp.D[6]; state.R[5] = temp.D[7]; state.R[2] = temp.D[8];
-            } else if (face === 'L') {
-                state.L = [temp.L[6], temp.L[3], temp.L[0], temp.L[7], temp.L[4], temp.L[1], temp.L[8], temp.L[5], temp.L[2]];
-                state.U[0] = temp.B[8]; state.U[3] = temp.B[5]; state.U[6] = temp.B[2];
-                state.F[0] = temp.U[0]; state.F[3] = temp.U[3]; state.F[6] = temp.U[6];
-                state.D[0] = temp.F[0]; state.D[3] = temp.F[3]; state.D[6] = temp.F[6];
-                state.B[8] = temp.D[0]; state.B[5] = temp.D[3]; state.B[2] = temp.D[6];
-            } else if (face === 'R') {
-                state.R = [temp.R[6], temp.R[3], temp.R[0], temp.R[7], temp.R[4], temp.R[1], temp.R[8], temp.R[5], temp.R[2]];
-                state.U[8] = temp.F[8]; state.U[5] = temp.F[5]; state.U[2] = temp.F[2];
-                state.B[0] = temp.U[8]; state.B[3] = temp.U[5]; state.B[6] = temp.U[2];
-                state.D[8] = temp.B[0]; state.D[5] = temp.B[3]; state.D[2] = temp.B[6];
-                state.F[8] = temp.D[8]; state.F[5] = temp.D[5]; state.F[2] = temp.D[2];
-            }
-        }
-
-        function applyMoveToModalState(move) {
-            if (!move) return;
-            let base = move[0];
-            let modifier = move.slice(1);
-            let count = 1;
-            if (modifier === '2') count = 2;
-            if (modifier === "'") count = 3;
-
-            for (let i = 0; i < count; i++) {
-                rotateModal3x3State(modalCubeState, base);
-            }
         }
 
         function invertAlgorithm(movesStr) {
@@ -4227,326 +3233,148 @@
                     inverted.push(move + "'");
                 }
             }
-            return inverted;
+            return inverted.join(" ");
         }
 
-        // Render DOM of the modal 3D cube
-        function renderModal3dCubeDOM() {
-            const cubeEl = document.getElementById('modal-cube-3d');
-            if (!cubeEl) return;
-            cubeEl.innerHTML = "";
-
-            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
-            faces.forEach(fName => {
-                const faceEl = document.createElement('div');
-                faceEl.className = `face-3d face-${fName} grid-3x3`;
-
-                for (let i = 0; i < 9; i++) {
-                    const sticker = document.createElement('div');
-                    sticker.className = `sticker-3d modal-sticker-${fName}-${i}`;
-                    faceEl.appendChild(sticker);
-                }
-                cubeEl.appendChild(faceEl);
-            });
-
-            cubeEl.style.transform = `rotateX(${modalRotation.x}deg) rotateY(${modalRotation.y}deg)`;
-        }
-
-        function updateModal3dCubeVisuals() {
-            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
-            faces.forEach(fName => {
-                const state = modalCubeState[fName];
-                for (let i = 0; i < 9; i++) {
-                    const color = state[i];
-                    const stickerEl = document.querySelector(`.modal-sticker-${fName}-${i}`);
-                    if (stickerEl) {
-                        stickerEl.style.backgroundColor = modalColorMap[color] || color;
-                    }
+        // --- SESSION MANAGEMENT ---
+        function startPracticeSession() {
+            selectedCases = [];
+            const checkboxes = document.querySelectorAll('#cases-list-container input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    selectedCases.push(JSON.parse(cb.value));
                 }
             });
-        }
 
-        function updateModalMovesDisplay() {
-            const container = document.getElementById('modal-moves-list');
-            if (!container) return;
-            container.innerHTML = "";
-
-            if (modalMoves.length === 0) {
-                container.textContent = "No moves";
+            if (selectedCases.length === 0) {
+                alert("Please select at least one case to practice!");
                 return;
             }
 
-            modalMoves.forEach((move, idx) => {
-                const span = document.createElement('span');
-                span.className = 'modal-move-span';
-                if (idx === modalCurrentStep) {
-                    span.className += ' active';
-                }
-                span.textContent = move;
-                container.appendChild(span);
-            });
+            document.getElementById('welcome-message').style.display = "none";
+            document.getElementById('trainer-workspace').style.display = "block";
+            document.getElementById('session-log-body').innerHTML = "";
 
-            // Auto-scroll active move span into view
-            const activeSpan = container.querySelector('.modal-move-span.active');
-            if (activeSpan) {
-                container.scrollTo({
-                    left: activeSpan.offsetLeft - (container.clientWidth / 2) + (activeSpan.clientWidth / 2),
-                    behavior: 'smooth'
+            loadNextScramble();
+        }
+
+        function loadNextScramble() {
+            if (selectedCases.length === 0) return;
+            const randIdx = Math.floor(Math.random() * selectedCases.length);
+            activeCase = selectedCases[randIdx];
+
+            // Render SVG diagram
+            document.getElementById('case-svg-container').innerHTML = generateCubeSvg(activeCase);
+            document.getElementById('active-case-name').textContent = activeCase.name;
+            document.getElementById('active-case-desc').textContent = activeCase.desc || "";
+
+            // Calculate scramble
+            activeScramble = invertAlgorithm(activeCase.moves);
+            document.getElementById('active-case-scramble').textContent = activeScramble;
+
+            // State Reset
+            trainerState = "READY";
+            document.getElementById('timer-display-text').textContent = "0.00";
+            document.getElementById('timer-display-text').style.color = "#1e272e";
+            document.getElementById('timer-status-text').textContent = "Press Space / Tap to Start!";
+            document.getElementById('timer-status-text').className = "timer-status";
+        }
+
+        // Timer Trigger Logic
+        function handleTimerTrigger() {
+            if (trainerState === "READY") {
+                // Start Recognition
+                trainerState = "RECOG";
+                recogStartTime = performance.now();
+                document.getElementById('timer-display-text').style.color = "var(--primary)";
+                document.getElementById('timer-status-text').textContent = "Recognizing (Press Space when done!)";
+                document.getElementById('timer-status-text').className = "timer-status recognizing";
+
+                timerInterval = setInterval(() => {
+                    const elapsed = (performance.now() - recogStartTime) / 1000;
+                    document.getElementById('timer-display-text').textContent = elapsed.toFixed(2);
+                }, 10);
+            } else if (trainerState === "RECOG") {
+                // End Recognition, Start Solve
+                clearInterval(timerInterval);
+                const recogEndTime = performance.now();
+                recogTime = (recogEndTime - recogStartTime) / 1000;
+
+                trainerState = "SOLVE";
+                solveStartTime = performance.now();
+                document.getElementById('timer-display-text').style.color = "#10b981";
+                document.getElementById('timer-status-text').textContent = "Solving (Press Space when solved!)";
+                document.getElementById('timer-status-text').className = "timer-status solving";
+
+                timerInterval = setInterval(() => {
+                    const elapsed = (performance.now() - solveStartTime) / 1000;
+                    document.getElementById('timer-display-text').textContent = elapsed.toFixed(2);
+                }, 10);
+            } else if (trainerState === "SOLVE") {
+                // End Solve, Done!
+                clearInterval(timerInterval);
+                const solveEndTime = performance.now();
+                solveTime = (solveEndTime - solveStartTime) / 1000;
+
+                trainerState = "DONE";
+                const totalTime = recogTime + solveTime;
+                
+                document.getElementById('timer-display-text').textContent = totalTime.toFixed(2);
+                document.getElementById('timer-display-text').style.color = "#1e272e";
+                document.getElementById('timer-status-text').textContent = "Done! Press Space to next scramble";
+                document.getElementById('timer-status-text').className = "timer-status";
+
+                // Log score to table
+                logScoreToTable(activeCase.name, recogTime, solveTime, totalTime);
+            } else if (trainerState === "DONE") {
+                loadNextScramble();
+            }
+        }
+
+        function logScoreToTable(name, recog, solve, total) {
+            const tbody = document.getElementById('session-log-body');
+            
+            // Remove helper row if present
+            if (tbody.textContent.includes("No solves")) {
+                tbody.innerHTML = "";
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td>' + name + '</td>' +
+                           '<td style="color: var(--primary);">' + recog.toFixed(2) + 's</td>' +
+                           '<td style="color: #10b981;">' + solve.toFixed(2) + 's</td>' +
+                           '<td style="font-weight: 800;">' + total.toFixed(2) + 's</td>';
+            tbody.insertBefore(tr, tbody.firstChild);
+        }
+
+        // Attach listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.code === "Space") {
+                // Avoid scrolling page when pressing spacebar
+                e.preventDefault();
+                handleTimerTrigger();
+            }
+        });
+
+        // Tap area trigger
+        document.addEventListener('DOMContentLoaded', () => {
+            onMethodChanged();
+            
+            const workspace = document.querySelector('.workspace-area');
+            if (workspace) {
+                workspace.style.cursor = "pointer";
+                workspace.addEventListener('click', () => {
+                    handleTimerTrigger();
                 });
             }
-        }
-
-        function finishModalActiveAnimation() {
-            if (activeModalTimeout) {
-                clearTimeout(activeModalTimeout);
-                activeModalTimeout = null;
-            }
-            if (pendingModalMoveToApply && pendingModalFaceToReset) {
-                applyMoveToModalState(pendingModalMoveToApply);
-                updateModal3dCubeVisuals();
-                
-                const faceEl = document.querySelector(`#modal-cube-3d .face-${pendingModalFaceToReset}`);
-                if (faceEl) {
-                    faceEl.style.transition = 'none';
-                    faceEl.style.transform = modalFaceTransforms[pendingModalFaceToReset];
-                    faceEl.classList.remove('highlight-active');
-                }
-                
-                pendingModalMoveToApply = null;
-                pendingModalFaceToReset = null;
-            }
-        }
-
-        function playModalNextStep() {
-            if (modalMoves.length === 0) return;
-
-            finishModalActiveAnimation();
-
-            if (modalCurrentStep >= modalMoves.length - 1) {
-                initCubeForAlg(currentAlgRunning);
-                return;
-            }
-
-            modalCurrentStep++;
-            const move = modalMoves[modalCurrentStep];
-
-            if (move && move[0]) {
-                const faceName = move[0];
-                let modifier = move.slice(1);
-                let angle = '90deg';
-                if (modifier === '2') angle = '180deg';
-                if (modifier === "'") angle = '-90deg';
-
-                const faceEl = document.querySelector(`#modal-cube-3d .face-${faceName}`);
-                if (faceEl) {
-                    pendingModalMoveToApply = move;
-                    pendingModalFaceToReset = faceName;
-
-                    const animDuration = Math.min(400, modalSpeed - 150);
-                    faceEl.style.transition = `transform ${animDuration}ms ease-in-out`;
-                    faceEl.style.transform = `${modalFaceTransforms[faceName]} rotate(${angle})`;
-                    faceEl.classList.add('highlight-active');
-
-                    activeModalTimeout = setTimeout(() => {
-                        finishModalActiveAnimation();
-                    }, animDuration);
-                } else {
-                    applyMoveToModalState(move);
-                    updateModal3dCubeVisuals();
-                }
-            } else {
-                applyMoveToModalState(move);
-                updateModal3dCubeVisuals();
-            }
-
-            updateModalMovesDisplay();
-
-            if (modalCurrentStep === modalMoves.length - 1) {
-                stopModalPlayback();
-            }
-        }
-
-        function playModalPrevStep() {
-            finishModalActiveAnimation();
-            if (modalMoves.length === 0 || modalCurrentStep < 0) return;
-
-            modalCurrentStep--;
             
-            resetModalCubeState();
-            const inverted = invertAlgorithm(currentAlgRunning);
-            inverted.forEach(m => applyMoveToModalState(m));
-
-            for (let i = 0; i <= modalCurrentStep; i++) {
-                applyMoveToModalState(modalMoves[i]);
+            const timerTxt = document.getElementById('timer-display-text');
+            if (timerTxt) {
+                timerTxt.style.cursor = "pointer";
+                timerTxt.addEventListener('click', () => {
+                    handleTimerTrigger();
+                });
             }
-            updateModal3dCubeVisuals();
-            updateModalMovesDisplay();
-            stopModalPlayback();
-        }
-
-        function startModalPlayback() {
-            if (modalIsPlaying || modalMoves.length === 0) return;
-
-            if (modalCurrentStep >= modalMoves.length - 1) {
-                initCubeForAlg(currentAlgRunning);
-            }
-
-            modalIsPlaying = true;
-            document.getElementById('btn-modal-play').innerHTML = '⏸ Pause';
-
-            modalPlaybackInterval = setInterval(() => {
-                playModalNextStep();
-            }, modalSpeed);
-        }
-
-        function stopModalPlayback() {
-            if (!modalIsPlaying) return;
-            modalIsPlaying = false;
-            if (modalPlaybackInterval) {
-                clearInterval(modalPlaybackInterval);
-                modalPlaybackInterval = null;
-            }
-            document.getElementById('btn-modal-play').innerHTML = '▶ Play';
-        }
-
-        function toggleModalPlayback() {
-            if (modalIsPlaying) {
-                stopModalPlayback();
-            } else {
-                startModalPlayback();
-            }
-        }
-
-        let currentAlgRunning = "";
-
-        function initCubeForAlg(algMovesStr) {
-            stopModalPlayback();
-            finishModalActiveAnimation();
-            
-            currentAlgRunning = algMovesStr;
-            modalMoves = algMovesStr.trim().split(/\s+/).filter(m => m !== "");
-            modalCurrentStep = -1;
-
-            resetModalCubeState();
-            
-            const inverted = invertAlgorithm(algMovesStr);
-            inverted.forEach(m => applyMoveToModalState(m));
-
-            updateModal3dCubeVisuals();
-            updateModalMovesDisplay();
-        }
-
-        function openAnimatorModal(algName, algMovesStr) {
-            document.getElementById('modal-title-text').textContent = algName;
-            document.getElementById('modal-subtitle-text').textContent = algMovesStr;
-            
-            const overlay = document.getElementById('animator-modal');
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                overlay.classList.add('show');
-            }, 10);
-
-            initCubeForAlg(algMovesStr);
-            renderModal3dCubeDOM();
-            updateModal3dCubeVisuals();
-        }
-
-        function closeAnimatorModal() {
-            stopModalPlayback();
-            finishModalActiveAnimation();
-            
-            const overlay = document.getElementById('animator-modal');
-            overlay.classList.remove('show');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 300);
-        }
-
-        function changeModalSpeed(val) {
-            modalSpeed = parseInt(val);
-            if (modalIsPlaying) {
-                stopModalPlayback();
-                startModalPlayback();
-            }
-        }
-
-        // --- DRAG TO ROTATE CUBE ---
-        let isModalDragging = false;
-        let previousModalMousePosition = { x: 0, y: 0 };
-
-        function initModalDragListeners() {
-            const scene = document.getElementById('modal-scene-3d');
-            const cube = document.getElementById('modal-cube-3d');
-            if (!scene || !cube) return;
-
-            scene.addEventListener('mousedown', (e) => {
-                isModalDragging = true;
-                previousModalMousePosition = { x: e.clientX, y: e.clientY };
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (!isModalDragging) return;
-                const deltaX = e.clientX - previousModalMousePosition.x;
-                const deltaY = e.clientY - previousModalMousePosition.y;
-
-                modalRotation.y += deltaX * 0.5;
-                modalRotation.x -= deltaY * 0.5;
-
-                cube.style.transform = `rotateX(${modalRotation.x}deg) rotateY(${modalRotation.y}deg)`;
-                previousModalMousePosition = { x: e.clientX, y: e.clientY };
-            });
-
-            window.addEventListener('mouseup', () => {
-                isModalDragging = false;
-            });
-
-            scene.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) {
-                    isModalDragging = true;
-                    previousModalMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-                }
-            });
-
-            window.addEventListener('touchmove', (e) => {
-                if (!isModalDragging || e.touches.length !== 1) return;
-                const deltaX = e.touches[0].clientX - previousModalMousePosition.x;
-                const deltaY = e.touches[0].clientY - previousModalMousePosition.y;
-
-                modalRotation.y += deltaX * 0.5;
-                modalRotation.x -= deltaY * 0.5;
-
-                cube.style.transform = `rotateX(${modalRotation.x}deg) rotateY(${modalRotation.y}deg)`;
-                previousModalMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            });
-
-            window.addEventListener('touchend', () => {
-                isModalDragging = false;
-            });
-        }
-
-        // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            populateGrid('grid-pll', ALGORITHMS.pll);
-            populateGrid('grid-oll', ALGORITHMS.oll);
-            populateGrid('grid-f2l', ALGORITHMS.f2l);
-            
-            populateGrid('grid-zbls', ALGORITHMS.zbls);
-            loadZbllSubset();
-            
-            populateGrid('grid-cmll', ALGORITHMS.cmll);
-            populateGrid('grid-coll', ALGORITHMS.coll);
-
-            // Populate the new standalone methods
-            populateGrid('grid-coll-standalone', ALGORITHMS.coll);
-            populateGrid('grid-wv', ALGORITHMS.wv);
-            populateGrid('grid-vls', ALGORITHMS.vls);
-            populateGrid('grid-oh', ALGORITHMS.oh);
-            populateGrid('grid-bld', ALGORITHMS.bld);
-            populateGrid('grid-fmc', ALGORITHMS.fmc);
-            populateGrid('grid-ell', ALGORITHMS.ell);
-
-            // Init modal rotation drags
-            initModalDragListeners();
         });
     </script>
 </body>

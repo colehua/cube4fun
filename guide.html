@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how the Rubik's Cube works, piece anatomy, rotation notation, and the absolute best finger tricks (flicks, double-flicks, and triggers).">
+    <title>How It Works & Finger Tricks 📖 - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --primary: #0066FF;
+            --accent-pink: #FF6B6B;
+            --text-dark: #1e272e;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.4);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -120px;
+            left: -10%;
+            width: 120%;
+            height: 280px;
+            background: linear-gradient(90deg, #FAED27 0%, #FF9500 100%);
+            z-index: -1;
+            opacity: 0.95;
+            filter: blur(10px);
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 30px 20px 60px 20px;
+            position: relative;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 12px 24px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.15em;
+            border: 4px solid #1e272e;
+            box-shadow: 0px 6px 0px #1e272e;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            top: 0;
+        }
+
+        .nav-button:hover {
+            top: 3px;
+            box-shadow: 0px 3px 0px #1e272e;
+            transform: scale(1.02);
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.5em;
+            color: #ffffff;
+            text-align: center;
+            -webkit-text-stroke: 3px #1e272e;
+            text-shadow: 6px 6px 0px #1e272e;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #475569;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 4px solid #1e272e;
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 0px 10px 0px #1e272e;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 2.1em;
+            margin-top: 0;
+            color: var(--primary);
+            -webkit-text-stroke: 1.5px #1e272e;
+            text-shadow: 3px 3px 0px #1e272e;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        p {
+            font-size: 1.15em;
+            line-height: 1.6;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ANATOMY STICKERS */
+        .anatomy-label {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: 800;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            margin-top: 5px;
+        }
+
+        /* FINGER TRICK GRID */
+        .trick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 25px;
+        }
+
+        .trick-card {
+            background: #ffffff;
+            border: 3px solid #1e272e;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 6px 0px #1e272e;
+            transition: transform 0.2s;
+        }
+
+        .trick-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .trick-icon {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .trick-name {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.3em;
+            color: #1e272e;
+            margin: 0 0 10px 0;
+        }
+
+        /* EXPLAINER TRIGGERS */
+        .trigger-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .trigger-seq {
+            font-family: monospace;
+            font-size: 1.4em;
+            font-weight: 800;
+            background: var(--yellow-blob);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 2.5px solid #1e272e;
+            box-shadow: 0 3px 0 #1e272e;
+            white-space: nowrap;
+        }
+
+        .trigger-desc {
+            font-weight: 700;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="blob-top"></div>
+    <div class="container">
+        
+        <!-- NAVIGATION -->
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">🏠 Back to Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--yellow-blob);">⏱️ Timer</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF;">🧩 Algorithms</a>
+        </div>
+
+        <h1 class="main-title">Cube Guide & Finger Tricks 📖</h1>
+        <p class="subtitle">Understand the magic of the Rubik's Cube and turn it like a pro speedcuber!</p>
+
+        <!-- SECTION 1: ANATOMY OF THE CUBE -->
+        <div class="card" style="border-color: #FAED27;">
+            <h2 class="section-title" style="color: #FF9500;">1. How the Cube Works 🧊</h2>
+            <div class="grid-2col">
+                <div>
+                    <p>
+                        A 3x3 Rubik's Cube is not made of 27 smaller cubes. In fact, it consists of a central core holding <strong>26 individual pieces</strong> together. Understanding these pieces is vital for speedcubing:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong style="color: var(--primary);">Centers (6 pieces):</strong> Centers have only <strong>1 sticker</strong>. They are fixed to the core and <strong>never move</strong> relative to each other. They determine the color of that entire face!
+                        </li>
+                        <li>
+                            <strong style="color: var(--accent-pink);">Edges (12 pieces):</strong> Edges have <strong>2 stickers</strong>. They sit between corners and connect centers.
+                        </li>
+                        <li>
+                            <strong style="color: #2ECC71;">Corners (8 pieces):</strong> Corners have <strong>3 stickers</strong>. They sit at the outer vertices of the cube.
+                        </li>
+                    </ul>
+                    <p>
+                        <em>Remember:</em> You do not solve stickers, you solve **pieces**! An edge piece cannot be put in a corner slot, and center colors define color layout (white opposite yellow, green opposite blue, orange opposite red).
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <!-- SVG Visual representation of Cube Anatomy -->
+                    <svg viewBox="0 0 200 200" width="220" height="220" style="background:none;">
+                        <!-- Center Core Graphic -->
+                        <circle cx="100" cy="100" r="15" fill="#34495e" stroke="#1e272e" stroke-width="3"/>
+                        
+                        <!-- Core Axes -->
+                        <line x1="100" y1="50" x2="100" y2="150" stroke="#2c3e50" stroke-width="6"/>
+                        <line x1="50" y1="100" x2="150" y2="100" stroke="#2c3e50" stroke-width="6"/>
+                        
+                        <!-- Center Pieces -->
+                        <rect x="90" y="35" width="20" height="20" rx="4" fill="#FFFF00" stroke="#1e272e" stroke-width="2"/>
+                        <rect x="90" y="145" width="20" height="20" rx="4" fill="#FFFFFF" stroke="#1e272e" stroke-width="2"/>
+                        <rect x="35" y="90" width="20" height="20" rx="4" fill="#FF9500" stroke="#1e272e" stroke-width="2"/>
+                        <rect x="145" y="90" width="20" height="20" rx="4" fill="#FF3B30" stroke="#1e272e" stroke-width="2"/>
+                        
+                        <text x="100" y="25" text-anchor="middle" font-family="'DynaPuff'" font-size="10" fill="#1e272e" font-weight="bold">Center</text>
+                        
+                        <!-- Corner piece illustration -->
+                        <rect x="140" y="30" width="22" height="22" rx="4" fill="#4CD964" stroke="#1e272e" stroke-width="2.5"/>
+                        <path d="M140,30 L150,20 L172,20 L162,30 Z" fill="#007AFF" stroke="#1e272e" stroke-width="2"/>
+                        <path d="M162,30 L172,20 L172,42 L162,52 Z" fill="#FF3B30" stroke="#1e272e" stroke-width="2"/>
+                        <text x="175" y="15" font-family="'DynaPuff'" font-size="10" fill="#1e272e" font-weight="bold">Corner</text>
+                        
+                        <!-- Edge piece illustration -->
+                        <rect x="30" y="130" width="22" height="22" rx="4" fill="#007AFF" stroke="#1e272e" stroke-width="2.5"/>
+                        <path d="M30,130 L40,120 L62,120 L52,130 Z" fill="#FF9500" stroke="#1e272e" stroke-width="2"/>
+                        <text x="25" y="165" font-family="'DynaPuff'" font-size="10" fill="#1e272e" font-weight="bold">Edge</text>
+                    </svg>
+                    <br>
+                    <span class="anatomy-label" style="background-color: var(--cyan-blob);">Fixed Center Core Mechanic</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: CUBE NOTATION -->
+        <div class="card" style="border-color: #FF6B6B;">
+            <h2 class="section-title" style="color: #FF6B6B;">2. Understanding Cube Notation 📖</h2>
+            <p>
+                In speedcubing, algorithms are written in standard letters. Each letter represents a <strong>90-degree clockwise rotation</strong> of a specific face, as if looking directly at that face:
+            </p>
+            <div class="trick-grid">
+                <div class="trick-card" style="border-color: #FFB7B2;">
+                    <div class="trick-name">U (Up)</div>
+                    <p>Rotate the <strong>Top layer</strong> clockwise.</p>
+                </div>
+                <div class="trick-card" style="border-color: #BFFCC6;">
+                    <div class="trick-name">D (Down)</div>
+                    <p>Rotate the <strong>Bottom layer</strong> clockwise.</p>
+                </div>
+                <div class="trick-card" style="border-color: #FFC6FF;">
+                    <div class="trick-name">R (Right)</div>
+                    <p>Rotate the <strong>Right face</strong> clockwise (upward).</p>
+                </div>
+                <div class="trick-card" style="border-color: #E8F4F8;">
+                    <div class="trick-name">L (Left)</div>
+                    <p>Rotate the <strong>Left face</strong> clockwise (downward).</p>
+                </div>
+                <div class="trick-card" style="border-color: #FFF9A6;">
+                    <div class="trick-name">F (Front)</div>
+                    <p>Rotate the <strong>Front face</strong> clockwise.</p>
+                </div>
+                <div class="trick-card" style="border-color: #C2F1FF;">
+                    <div class="trick-name">B (Back)</div>
+                    <p>Rotate the <strong>Back face</strong> clockwise.</p>
+                </div>
+            </div>
+            
+            <h3 style="font-family: 'DynaPuff', cursive; color: #1e272e; margin-top: 25px;">Modifiers:</h3>
+            <ul>
+                <li><strong>Prime (')</strong>: Means turn in the <strong>counter-clockwise</strong> direction (e.g., <code>R'</code> or <code>U'</code>).</li>
+                <li><strong>Double (2)</strong>: Means rotate the face <strong>180 degrees</strong> (e.g., <code>R2</code> or <code>U2</code>). Direction does not matter!</li>
+                <li><strong>Wide (lowercase)</strong>: Means rotate <strong>two layers</strong> at once (e.g., <code>r</code> means rotate Right face and middle column).</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 3: FINGER TRICKS -->
+        <div class="card" style="border-color: #00E5FF;">
+            <h2 class="section-title" style="color: #0088FF;">3. Speedcubing Finger Tricks ⚡</h2>
+            <p>
+                To turn fast, you should **never** rotate the cube with whole wrist turns for every single move. Instead, utilize your fingers to "flick" layers. This keeps your grip stable and minimizes friction:
+            </p>
+            
+            <div class="trick-grid">
+                <div class="trick-card">
+                    <div class="trick-icon">☝️</div>
+                    <h4 class="trick-name">Index Finger Flick (U / U')</h4>
+                    <p>
+                        Place your index fingers on the back corners of the top layer. Flick your **right index finger** forward to do a <code>U'</code>, or flick your **left index finger** forward to do a <code>U</code>.
+                    </p>
+                </div>
+                <div class="trick-card">
+                    <div class="trick-icon">✌️</div>
+                    <h4 class="trick-name">U2 Double Flick (U2)</h4>
+                    <p>
+                        Instead of flicking twice with one finger, execute a U2 turn by flicking with your **index finger** immediately followed by your **middle finger** in one fast, sweeping motion!
+                    </p>
+                </div>
+                <div class="trick-card">
+                    <div class="trick-icon">🤙</div>
+                    <h4 class="trick-name">Ring Finger Flick (D / D')</h4>
+                    <p>
+                        Place your ring fingers on the bottom back corners. Flick your **right ring finger** forward for <code>D</code>, or **left ring finger** for <code>D'</code>. This allows seamless bottom layer execution without wrist regrips.
+                    </p>
+                </div>
+                <div class="trick-card">
+                    <div class="trick-icon">👍</div>
+                    <h4 class="trick-name">Thumb Push (F / F')</h4>
+                    <p>
+                        Keep your thumbs on the front center face. Push the front-left edge upward with your right thumb to do an <code>F'</code>, or do the same on the front-right to do an <code>F</code>.
+                    </p>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'DynaPuff', cursive; color: #1e272e; margin-top: 30px;">Core Speedcubing Triggers:</h3>
+            <p>
+                Most speedcubing algorithms are built from two fundamental 4-move sequences. You should practice these until they are in your muscle memory:
+            </p>
+
+            <div class="trigger-box">
+                <div class="trigger-seq">R U R' U'</div>
+                <div>
+                    <div class="trigger-desc">The "Sexy Move" ⚡</div>
+                    <p style="margin: 3px 0 0 0; font-size: 0.95em;">Used in almost every method. Rotate Right face up, flick top layer with left index, rotate Right face down, flick top layer with right index.</p>
+                </div>
+            </div>
+
+            <div class="trigger-box">
+                <div class="trigger-seq">R' F R F'</div>
+                <div>
+                    <div class="trigger-desc">The "Sledgehammer" 🔨</div>
+                    <p style="margin: 3px 0 0 0; font-size: 0.95em;">Excellent for orienting edges and inserting F2L pairs. Rotate Right face down, turn Front clockwise with right index/wrist, rotate Right face up, turn Front counter-clockwise with left index/wrist.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
