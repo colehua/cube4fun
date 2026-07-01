@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to solve a 2x2 Rubik's Cube step-by-step with Cole Hua. Follow the steps, watch looping videos, and download the original PPTX.">
+    <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, 2x2 Rubik's Cube tutorial, speedcubing, sexy move, PLL, OLL">
+    <title>2x2 Rubik's Cube Tutorial - Cole Hua WCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --primary: #0066FF;
+            --accent-pink: #FF6B6B;
+            --text-dark: #1e272e;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px 60px 20px;
+            position: relative;
+        }
+
+        .slide {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 50px;
+            border: 4px dashed var(--primary);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .slide:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .slide-title {
+            font-family: 'DynaPuff', cursive;
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.5em;
+            margin: 0 0 15px 0;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+        }
+
+        .text-block {
+            font-size: 1.25em;
+            font-weight: 700;
+            line-height: 1.5;
+            margin: 0;
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            color: #475569;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;}
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: start;}
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; align-items: start;}
+
+        .card {
+            background: #ffffff;
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .media-container {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .media-container img, .media-container video {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 16px;
+            border: 4px solid #1e272e;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .arrow-icon {
+            max-height: 100px !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 12px 24px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.15em;
+            border: 4px solid #1e272e;
+            margin-bottom: 25px;
+            box-shadow: 0px 6px 0px #1e272e;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            top: 0;
+        }
+
+        .nav-button:hover {
+            top: 3px;
+            box-shadow: 0px 3px 0px #1e272e;
+            transform: scale(1.02);
+        }
+
+        .center-text { text-align: center; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-button">🔙 Back to Home</a>
+        <h1 style="font-family: 'DynaPuff', cursive; font-size: 4em; color: #ffffff; text-align: center; -webkit-text-stroke: 3px #1e272e; text-shadow: 6px 6px 0px #1e272e; margin-top: 10px; margin-bottom: 25px;">2x2 Tutorial</h1>
+        
+        <!-- YOUTUBE BANNER -->
+        <div style="text-align: center; margin: 20px auto; max-width: 800px;">
+            <a href="https://www.youtube.com/@ColeHua" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 15px; background-color: #FF0000; color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.6em; border: 4px dashed white; box-shadow: 0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; position: relative; top: 0;" onmouseover="this.style.top='4px'; this.style.boxShadow='0px 4px 0px #CC0000, 0px 4px 10px rgba(0,0,0,0.2)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2)';">
+                <span style="display: inline-flex; align-items: center; animation: wiggle 2s infinite;">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="white" style="display: block;">
+                        <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.507 9.388.507 9.388.507s7.518 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                </span> 
+                <span>Love cubes? <strong>Subscribe to Cole's YouTube!</strong> 🚀</span>
+            </a>
+        </div>
+        <style>@keyframes wiggle { 0%, 100% {transform: rotate(0deg);} 25% {transform: rotate(-10deg);} 50% {transform: rotate(10deg);} 75% {transform: rotate(-5deg);} }</style>
+
+        <!-- RECOMMENDED ORDER WARNING -->
+        <div style="background-color: #FFF3CD; border: 4px dashed #FFC107; border-radius: 20px; padding: 22px; margin-bottom: 30px; text-align: center; font-size: 1.3em; font-weight: bold; color: #856404; font-family: 'Outfit', sans-serif; box-shadow: var(--card-shadow);">
+            💡 <strong>Recommended Learning Order:</strong> You should learn how to solve a <a href="tutorial-3x3.html" style="color: #0066FF; text-decoration: underline;">3x3 Rubik's Cube first</a>, and then learn the 2x2. It makes understanding the algorithms much easier! 🧊
+        </div>
+
+        <div style="text-align: center; margin-bottom: 35px;">
+            <a href="https://github.com/colehua/cube4fun/raw/main/How%20to%20solve%20a%202x2%20cube.pptx" download class="nav-button" style="background-color: var(--yellow-blob); color: var(--text-dark); font-size: 1.2em; padding: 12px 24px; box-shadow: 0px 6px 0px #1e272e; border: 4px solid #1e272e;">
+                ⬇️ Download Original PowerPoint
+            </a>
+        </div>
+
+        <!-- Slide 1 -->
+        <div class="slide">
+            <h2 class="slide-title">How to solve a 2x2 cube</h2>
+            <div class="text-block center-text">If you know how to solve a three by three you pretty much already know how to solve a two by two! 🧊</div>
+            <div class="text-block center-text">On a two by two you use the exact algorithms in a three by three but easier (it’s actually just a 3x3 but only corners.)</div>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="text-block">Let's check out the introduction video:</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media1.mp4#t=0.001" poster="./media/2x2_image1.jpeg" preload="metadata"></video>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block">If you don’t know what’s the sexy move, it’s just a really really famous algorithm on Rubik’s cubes! 💫</div>
+                    <div class="media-container">
+                        <img src="./media/2x2_image2.png" alt="Sexy move diagram">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <h2 class="slide-title">Finding the White Corner 🔍</h2>
+            <div class="text-block">We first find a white corner. Once we find the white corner we then could determine that it’s the white side.</div>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="text-block">Like in this photo, I found a white corner here so I could determine that it’s gonna be the white side (about to be the white side in the future).</div>
+                    <div class="media-container">
+                        <img src="./media/2x2_image3.jpeg" alt="Finding a white corner">
+                        <div style="margin-top: 15px;">
+                            <img src="./media/2x2_image4.png" class="arrow-icon" alt="Arrow pointing to white corner">
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block" style="background-color: #E2C2FF; color: #1a1a1a; border: 3px dashed #9B59B6;">
+                        <strong>Only Corners!</strong><br>
+                        Since there are no center or edge pieces on a 2x2 cube, any corner can be used to start the white side!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <h2 class="slide-title">White Side for 2x2 ⚪</h2>
+            <div class="text-block">After we find a random corner we would want to solve the corner with the sexy move just like on the 3x3 for first layer as well!</div>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="text-block">Some people will think 🤔 why don’t us have daisy and cross anymore? It’s because the 2x2 is only corners, no edges, no centres only corners, and you might notice the daisy and the cross is edge business.</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media2.mp4#t=0.001" poster="./media/2x2_image5.png" preload="metadata"></video>
+                    </div>
+                </div>
+                <div class="card" style="border: 3px dashed var(--accent-pink); background-color: #FFF5F5;">
+                    <div class="text-block" style="background: transparent; box-shadow: none; padding: 0;">
+                        <strong style="color: var(--accent-pink); font-size: 1.25em;">💡 TIP:</strong><br><br>
+                        You should keep practicing until you could solve it blind folded for at least once or getting color neutral which means being able to solve from any side if you want to get fast and cook when you go to a competition. 🍳
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+            <h2 class="slide-title">Yellow side (OLL) for 2x2 🟡</h2>
+            <div class="text-block">You do the same as a 3x3, you also hold the yellow side on the bottom which means you put the white on the top like this, then do the same thing you would do on a three by three which is solving the yellow side with the sexy move again.</div>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <div class="text-block">Put white on top and hold the yellow side on the bottom:</div>
+                    <div class="media-container">
+                        <img src="./media/2x2_image6.jpeg" alt="Hold cube with white on top">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block">Solving the yellow side with the sexy move:</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media3.mp4#t=0.001" poster="./media/2x2_image7.png" preload="metadata"></video>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block">If you get 2 twisted corners, use triple anti sune:</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media4.mp4#t=0.001" poster="./media/2x2_image8.png" preload="metadata"></video>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-block center-text" style="background-color: #E8F4FD; border: 2px dashed #2196F3; color: #1565C0;">
+                ℹ️ <strong>Note:</strong> I got lucky and got a last step skip even though I knew I was getting a skip anyways because it was only 2 twisted corners!
+            </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide">
+            <h2 class="slide-title">PLL (Permutation of Last Layer) 🏁</h2>
+            <div class="text-block">The last layer is probably the easiest so there are only 2 cases. Case one is when there is a solved side and case two is the one that does not have a solved side.</div>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="text-block" style="color: var(--primary);">Case 2: No Solved Side</div>
+                    <div class="text-block" style="font-size: 0.9em; font-weight: normal;">These are both case 2 pictures:</div>
+                    <div class="grid-2" style="width: 100%;">
+                        <div class="media-container"><img src="./media/2x2_image9.jpeg" alt="Case 2 illustration A"></div>
+                        <div class="media-container"><img src="./media/2x2_image10.jpeg" alt="Case 2 illustration B"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block" style="color: #2ECC71;">Case 1: One Solved Side (Headlights)</div>
+                    <div class="text-block" style="font-size: 0.9em; font-weight: normal;">This is case 1:</div>
+                    <div class="media-container"><img src="./media/2x2_image11.jpeg" alt="Case 1 illustration"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide">
+            <h2 class="slide-title">LL (Last Layer) Algorithms ⚙️</h2>
+            <div class="text-block">Case one is just the normal algorithms I showed on my 3x3 tutorial. I taught 2 algs: there’s this alg and this alg.</div>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="text-block">Algorithm A (9-move Way 1)</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media5.mp4#t=0.001" poster="./media/2x2_image12.png" preload="metadata"></video>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block">Algorithm B (9-move Way 2)</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media6.mp4#t=0.001" poster="./media/2x2_image13.png" preload="metadata"></video>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide">
+            <h2 class="slide-title">Algs for LL Cases 🔄</h2>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="text-block"><strong>For Case 1:</strong> You do the same alg and you also hold the headlights on the side as your normal alg.</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media7.mp4#t=0.001" poster="./media/2x2_image14.png" preload="metadata"></video>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="text-block"><strong>For Case 2:</strong> Where you have no headlights or no solved side then you could do your alg anywhere then there will form a headlight or a solved side and then you just do your algorithm again then it should get solved.</div>
+                    <div class="media-container">
+                        <video controls src="./media/2x2_media8.mp4#t=0.001" poster="./media/2x2_image15.png" preload="metadata"></video>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide">
+            <h2 class="slide-title">Thank you!!! 🎉</h2>
+            <div class="card" style="background: #111; color: white; width: 100%; box-sizing: border-box;">
+                <div class="text-block center-text" style="background: transparent; color: white; font-size: 1.5em; border: none; box-shadow: none;">
+                    Hope you liked my tutorial! By Cole. 🧊
+                </div>
+                <div class="media-container">
+                    <img src="./media/2x2_image16.jpeg" alt="Cole's thank you slide" style="max-width: 600px;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+        // Programmatically set all tutorial videos to loop and play in 50% slow motion
+        document.addEventListener('DOMContentLoaded', () => {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.loop = true;
+                video.playbackRate = 0.5;
+                
+                // Ensure playback rate remains 0.5 when playing
+                video.addEventListener('play', () => {
+                    video.playbackRate = 0.5;
+                });
+                
+                // Add a small style helper to indicate speed and looping
+                const container = video.parentElement;
+                if (container && container.classList.contains('media-container')) {
+                    const badge = document.createElement('div');
+                    badge.style.marginTop = '8px';
+                    badge.style.fontSize = '0.9em';
+                    badge.style.fontWeight = 'bold';
+                    badge.style.color = '#FF6B6B';
+                    badge.style.backgroundColor = '#FFF0F0';
+                    badge.style.border = '2px solid #FFB7B2';
+                    badge.style.padding = '4px 12px';
+                    badge.style.borderRadius = '20px';
+                    badge.style.display = 'inline-block';
+                    badge.textContent = '🔄 Looping at 0.5x Speed (Slow Motion)';
+                    container.appendChild(badge);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
