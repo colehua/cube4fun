@@ -454,6 +454,253 @@
             font-size: 1.15em;
             color: #0066FF;
         }
+
+        /* 3D SCENE & CUBE FOR SCRAMBLE ANIMATOR */
+        .scene-3d {
+            width: 180px;
+            height: 180px;
+            margin: 15px auto;
+            perspective: 600px;
+            user-select: none;
+            cursor: grab;
+        }
+        .scene-3d:active {
+            cursor: grabbing;
+        }
+
+        .cube-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-25deg) rotateY(-45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .face-3d {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            left: 30px;
+            top: 30px;
+            display: grid;
+            gap: 3px;
+            background: #111;
+            padding: 4px;
+            box-sizing: border-box;
+            border: 2px solid #111;
+            border-radius: 8px;
+            backface-visibility: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .face-3d.highlight-active {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.9), inset 0 0 15px rgba(0, 229, 255, 0.7);
+            border-color: #00E5FF !important;
+            background: #00E5FF !important;
+        }
+
+        .face-3d.grid-3x3 {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+        }
+
+        .face-3d.face-U { transform: rotateX(90deg) translateZ(60px); }
+        .face-3d.face-D { transform: rotateX(-90deg) translateZ(60px); }
+        .face-3d.face-F { transform: rotateY(0deg) translateZ(60px); }
+        .face-3d.face-B { transform: rotateY(180deg) translateZ(60px); }
+        .face-3d.face-L { transform: rotateY(-90deg) translateZ(60px); }
+        .face-3d.face-R { transform: rotateY(90deg) translateZ(60px); }
+
+        .sticker-3d {
+            border-radius: 4px;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            transition: background-color 0.45s ease-in-out;
+        }
+
+        /* 3D Animator Modal CSS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+        }
+
+        .modal-container {
+            background: #ffffff;
+            border: 4px solid #1e272e;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 16px 0 #1e272e;
+            padding: 24px;
+            transform: translateY(30px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.show .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2.2em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #475569;
+            transition: color 0.15s;
+            line-height: 1;
+        }
+
+        .modal-close-btn:hover {
+            color: #ef4444;
+        }
+
+        .modal-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.5em;
+            color: var(--primary);
+            margin: 0 0 5px 0;
+            text-align: center;
+            padding-right: 20px;
+        }
+
+        .modal-subtitle {
+            font-size: 1.05em;
+            color: #64748b;
+            font-weight: 800;
+            margin: 0 0 20px 0;
+            text-align: center;
+            word-wrap: break-word;
+            padding: 0 10px;
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .modal-body {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        .modal-controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 14px;
+            border: 3px solid #1e272e;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #1e272e;
+            outline: none;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e272e;
+        }
+
+        .modal-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        .btn-primary-modal {
+            background-color: var(--yellow-blob);
+        }
+
+        .btn-secondary-modal {
+            background-color: #e2e8f0;
+        }
+
+        .modal-moves-display {
+            font-family: monospace;
+            font-size: 1.05em;
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px;
+            max-height: 80px;
+            overflow-x: auto;
+            white-space: nowrap;
+            text-align: center;
+            font-weight: 800;
+            box-sizing: border-box;
+        }
+
+        .modal-move-span {
+            display: inline-block;
+            padding: 2px 6px;
+            margin: 0 3px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            color: #64748b;
+        }
+
+        .modal-move-span.active {
+            background: var(--yellow-blob);
+            color: #1e272e;
+            transform: scale(1.15);
+            border: 1.5px solid #1e272e;
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        .speed-slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-weight: 800;
+            color: #475569;
+            font-size: 0.82em;
+        }
+
+        .speed-slider-container label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .speed-slider-container input {
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -646,6 +893,43 @@
     <div id="toast" class="toast">Copied to clipboard! 📋</div>
 
     <!-- ==================== JAVASCRIPT DATABASE & LOGIC ==================== -->
+    <!-- 3D CUBE ANIMATOR MODAL OVERLAY -->
+    <div id="animator-modal" class="modal-overlay" onclick="if(event.target===this) closeAnimatorModal()">
+        <div class="modal-container">
+            <button class="modal-close-btn" onclick="closeAnimatorModal()">&times;</button>
+            <h3 id="modal-title-text" class="modal-title">Algorithm Player</h3>
+            <p id="modal-subtitle-text" class="modal-subtitle">R U R' U' ...</p>
+            
+            <div class="modal-body">
+                <!-- Left: 3D Scene -->
+                <div class="scene-3d" id="modal-scene-3d">
+                    <div class="cube-3d" id="modal-cube-3d">
+                        <!-- Faces will be dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Right: Controls -->
+                <div class="modal-controls-panel">
+                    <div id="modal-moves-list" class="modal-moves-display">
+                        <!-- Moves highlight list -->
+                    </div>
+
+                    <div class="modal-btn-row">
+                        <button class="modal-btn btn-secondary-modal" onclick="initCubeForAlg(currentAlgRunning)">⏪ Reset</button>
+                        <button class="modal-btn btn-secondary-modal" onclick="playModalPrevStep()">◀ Prev</button>
+                        <button class="modal-btn btn-primary-modal" id="btn-modal-play" onclick="toggleModalPlayback()">▶ Play</button>
+                        <button class="modal-btn btn-secondary-modal" onclick="playModalNextStep()">▶ Next</button>
+                    </div>
+
+                    <div class="speed-slider-container">
+                        <label>Speed Selector</label>
+                        <input type="range" min="300" max="2000" step="100" value="1000" oninput="changeModalSpeed(this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Database of popular cubing algorithms
         const ALGORITHMS = {
@@ -1046,7 +1330,10 @@
                                 <div class="alt-alg-row">
                                     <span class="alt-alg-rank">#${index + 1}</span>
                                     <span class="alt-alg-moves">${alg}</span>
-                                    <button class="alt-alg-copy-btn" onclick="copyToClipboard('${alg.replace(/'/g, "\\'")}')" title="Copy Move Set">📋</button>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="alt-alg-copy-btn" onclick="openAnimatorModal('${item.name.replace(/'/g, "\\'")} (Alt #${index + 1})', '${alg.replace(/'/g, "\\'")}')" title="Play 3D Animation">🎥</button>
+                                        <button class="alt-alg-copy-btn" onclick="copyToClipboard('${alg.replace(/'/g, "\\'")}')" title="Copy Move Set">📋</button>
+                                    </div>
                                 </div>
                             `).join('')}
                         </div>
@@ -1065,7 +1352,10 @@
                         <div class="alg-moves">${item.moves}</div>
                         ${altAlgsHtml}
                     </div>
-                    <button class="alg-btn-copy" onclick="copyToClipboard('${item.moves.replace(/'/g, "\\'")}')">Copy Main Algorithm 📋</button>
+                    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 8px; margin-top: 10px; box-sizing: border-box;">
+                        <button class="alg-btn-copy" style="background-color: var(--yellow-blob);" onclick="openAnimatorModal('${item.name.replace(/'/g, "\\'")}', '${item.moves.replace(/'/g, "\\'")}')">Play 3D 🎥</button>
+                        <button class="alg-btn-copy" style="background-color: #e2e8f0; box-shadow: 0px 4px 0px #1e272e;" onclick="copyToClipboard('${item.moves.replace(/'/g, "\\'")}')">Copy 📋</button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -1134,6 +1424,416 @@
             });
         });
 
+        // ==========================================
+        // --- 3D ALGORITHM ANIMATOR (MODAL) ---
+        // ==========================================
+        let modalCubeState = {};
+        let modalPlaybackInterval = null;
+        let modalCurrentStep = -1; // -1 means scrambled state, 0 means 1st move applied
+        let modalMoves = [];
+        let modalIsPlaying = false;
+        let modalSpeed = 1000; // ms per move
+        let modalRotation = { x: -25, y: -45 };
+        let activeModalTimeout = null;
+        let pendingModalMoveToApply = null;
+        let pendingModalFaceToReset = null;
+
+        // Colors mapping for 3D stickers
+        const modalColorMap = {
+            '#FFFF00': '#FFFF00', // Yellow
+            '#FFFFFF': '#FFFFFF', // White
+            '#FF3B30': '#FF3B30', // Red
+            '#4CD964': '#4CD964', // Green
+            '#007AFF': '#007AFF', // Blue
+            '#FF9500': '#FF9500', // Orange
+            '#57606f': '#57606f'  // Grey
+        };
+
+        const modalFaceTransforms = {
+            U: 'rotateX(90deg) translateZ(60px)',
+            D: 'rotateX(-90deg) translateZ(60px)',
+            F: 'rotateY(0deg) translateZ(60px)',
+            B: 'rotateY(180deg) translateZ(60px)',
+            L: 'rotateY(-90deg) translateZ(60px)',
+            R: 'rotateY(90deg) translateZ(60px)'
+        };
+
+        function resetModalCubeState() {
+            modalCubeState = {
+                U: Array(9).fill('#FFFF00'),
+                D: Array(9).fill('#FFFFFF'),
+                F: Array(9).fill('#4CD964'),
+                B: Array(9).fill('#007AFF'),
+                L: Array(9).fill('#FF9500'),
+                R: Array(9).fill('#FF3B30')
+            };
+        }
+
+        // Apply 3x3 rotation state
+        function rotateModal3x3State(state, face) {
+            const temp = {...state};
+            if (face === 'U') {
+                state.U = [temp.U[6], temp.U[3], temp.U[0], temp.U[7], temp.U[4], temp.U[1], temp.U[8], temp.U[5], temp.U[2]];
+                state.F[0] = temp.R[0]; state.F[1] = temp.R[1]; state.F[2] = temp.R[2];
+                state.L[0] = temp.F[0]; state.L[1] = temp.F[1]; state.L[2] = temp.F[2];
+                state.B[0] = temp.L[0]; state.B[1] = temp.L[1]; state.B[2] = temp.L[2];
+                state.R[0] = temp.B[0]; state.R[1] = temp.B[1]; state.R[2] = temp.B[2];
+            } else if (face === 'D') {
+                state.D = [temp.D[6], temp.D[3], temp.D[0], temp.D[7], temp.D[4], temp.D[1], temp.D[8], temp.D[5], temp.D[2]];
+                state.F[6] = temp.L[6]; state.F[7] = temp.L[7]; state.F[8] = temp.L[8];
+                state.R[6] = temp.F[6]; state.R[7] = temp.F[7]; state.R[8] = temp.F[8];
+                state.B[6] = temp.R[6]; state.B[7] = temp.R[7]; state.B[8] = temp.R[8];
+                state.L[6] = temp.B[6]; state.L[7] = temp.B[7]; state.L[8] = temp.B[8];
+            } else if (face === 'F') {
+                state.F = [temp.F[6], temp.F[3], temp.F[0], temp.F[7], temp.F[4], temp.F[1], temp.F[8], temp.F[5], temp.F[2]];
+                state.U[6] = temp.L[8]; state.U[7] = temp.L[5]; state.U[8] = temp.L[2];
+                state.R[0] = temp.U[6]; state.R[3] = temp.U[7]; state.R[6] = temp.U[8];
+                state.D[2] = temp.R[0]; state.D[1] = temp.R[3]; state.D[0] = temp.R[6];
+                state.L[8] = temp.D[2]; state.L[5] = temp.D[1]; state.L[2] = temp.D[0];
+            } else if (face === 'B') {
+                state.B = [temp.B[6], temp.B[3], temp.B[0], temp.B[7], temp.B[4], temp.B[1], temp.B[8], temp.B[5], temp.B[2]];
+                state.U[2] = temp.R[2]; state.U[1] = temp.R[5]; state.U[0] = temp.R[8];
+                state.L[0] = temp.U[2]; state.L[3] = temp.U[1]; state.L[6] = temp.U[0];
+                state.D[6] = temp.L[0]; state.D[7] = temp.L[3]; state.D[8] = temp.L[6];
+                state.R[8] = temp.D[6]; state.R[5] = temp.D[7]; state.R[2] = temp.D[8];
+            } else if (face === 'L') {
+                state.L = [temp.L[6], temp.L[3], temp.L[0], temp.L[7], temp.L[4], temp.L[1], temp.L[8], temp.L[5], temp.L[2]];
+                state.U[0] = temp.B[8]; state.U[3] = temp.B[5]; state.U[6] = temp.B[2];
+                state.F[0] = temp.U[0]; state.F[3] = temp.U[3]; state.F[6] = temp.U[6];
+                state.D[0] = temp.F[0]; state.D[3] = temp.F[3]; state.D[6] = temp.F[6];
+                state.B[8] = temp.D[0]; state.B[5] = temp.D[3]; state.B[2] = temp.D[6];
+            } else if (face === 'R') {
+                state.R = [temp.R[6], temp.R[3], temp.R[0], temp.R[7], temp.R[4], temp.R[1], temp.R[8], temp.R[5], temp.R[2]];
+                state.U[8] = temp.F[8]; state.U[5] = temp.F[5]; state.U[2] = temp.F[2];
+                state.B[0] = temp.U[8]; state.B[3] = temp.U[5]; state.B[6] = temp.U[2];
+                state.D[8] = temp.B[0]; state.D[5] = temp.B[3]; state.D[2] = temp.B[6];
+                state.F[8] = temp.D[8]; state.F[5] = temp.D[5]; state.F[2] = temp.D[2];
+            }
+        }
+
+        function applyMoveToModalState(move) {
+            if (!move) return;
+            let base = move[0];
+            let modifier = move.slice(1);
+            let count = 1;
+            if (modifier === '2') count = 2;
+            if (modifier === "'") count = 3;
+
+            for (let i = 0; i < count; i++) {
+                rotateModal3x3State(modalCubeState, base);
+            }
+        }
+
+        function invertAlgorithm(movesStr) {
+            const moves = movesStr.trim().split(/\s+/).filter(m => m !== "");
+            const inverted = [];
+            for (let i = moves.length - 1; i >= 0; i--) {
+                const move = moves[i];
+                if (move.endsWith("'")) {
+                    inverted.push(move.slice(0, -1));
+                } else if (move.endsWith("2")) {
+                    inverted.push(move);
+                } else {
+                    inverted.push(move + "'");
+                }
+            }
+            return inverted;
+        }
+
+        // Render DOM of the modal 3D cube
+        function renderModal3dCubeDOM() {
+            const cubeEl = document.getElementById('modal-cube-3d');
+            if (!cubeEl) return;
+            cubeEl.innerHTML = "";
+
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            faces.forEach(fName => {
+                const faceEl = document.createElement('div');
+                faceEl.className = `face-3d face-${fName} grid-3x3`;
+
+                for (let i = 0; i < 9; i++) {
+                    const sticker = document.createElement('div');
+                    sticker.className = `sticker-3d modal-sticker-${fName}-${i}`;
+                    faceEl.appendChild(sticker);
+                }
+                cubeEl.appendChild(faceEl);
+            });
+
+            cubeEl.style.transform = `rotateX(${modalRotation.x}deg) rotateY(${modalRotation.y}deg)`;
+        }
+
+        function updateModal3dCubeVisuals() {
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            faces.forEach(fName => {
+                const state = modalCubeState[fName];
+                for (let i = 0; i < 9; i++) {
+                    const color = state[i];
+                    const stickerEl = document.querySelector(`.modal-sticker-${fName}-${i}`);
+                    if (stickerEl) {
+                        stickerEl.style.backgroundColor = modalColorMap[color] || color;
+                    }
+                }
+            });
+        }
+
+        function updateModalMovesDisplay() {
+            const container = document.getElementById('modal-moves-list');
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (modalMoves.length === 0) {
+                container.textContent = "No moves";
+                return;
+            }
+
+            modalMoves.forEach((move, idx) => {
+                const span = document.createElement('span');
+                span.className = 'modal-move-span';
+                if (idx === modalCurrentStep) {
+                    span.className += ' active';
+                }
+                span.textContent = move;
+                container.appendChild(span);
+            });
+
+            // Auto-scroll active move span into view
+            const activeSpan = container.querySelector('.modal-move-span.active');
+            if (activeSpan) {
+                container.scrollTo({
+                    left: activeSpan.offsetLeft - (container.clientWidth / 2) + (activeSpan.clientWidth / 2),
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function finishModalActiveAnimation() {
+            if (activeModalTimeout) {
+                clearTimeout(activeModalTimeout);
+                activeModalTimeout = null;
+            }
+            if (pendingModalMoveToApply && pendingModalFaceToReset) {
+                applyMoveToModalState(pendingModalMoveToApply);
+                updateModal3dCubeVisuals();
+                
+                const faceEl = document.querySelector(`#modal-cube-3d .face-${pendingModalFaceToReset}`);
+                if (faceEl) {
+                    faceEl.style.transition = 'none';
+                    faceEl.style.transform = modalFaceTransforms[pendingModalFaceToReset];
+                    faceEl.classList.remove('highlight-active');
+                }
+                
+                pendingModalMoveToApply = null;
+                pendingModalFaceToReset = null;
+            }
+        }
+
+        function playModalNextStep() {
+            if (modalMoves.length === 0) return;
+
+            finishModalActiveAnimation();
+
+            if (modalCurrentStep >= modalMoves.length - 1) {
+                initCubeForAlg(currentAlgRunning);
+                return;
+            }
+
+            modalCurrentStep++;
+            const move = modalMoves[modalCurrentStep];
+
+            if (move && move[0]) {
+                const faceName = move[0];
+                let modifier = move.slice(1);
+                let angle = '90deg';
+                if (modifier === '2') angle = '180deg';
+                if (modifier === "'") angle = '-90deg';
+
+                const faceEl = document.querySelector(`#modal-cube-3d .face-${faceName}`);
+                if (faceEl) {
+                    pendingModalMoveToApply = move;
+                    pendingModalFaceToReset = faceName;
+
+                    const animDuration = Math.min(400, modalSpeed - 150);
+                    faceEl.style.transition = `transform ${animDuration}ms ease-in-out`;
+                    faceEl.style.transform = `${modalFaceTransforms[faceName]} rotate(${angle})`;
+                    faceEl.classList.add('highlight-active');
+
+                    activeModalTimeout = setTimeout(() => {
+                        finishModalActiveAnimation();
+                    }, animDuration);
+                } else {
+                    applyMoveToModalState(move);
+                    updateModal3dCubeVisuals();
+                }
+            } else {
+                applyMoveToModalState(move);
+                updateModal3dCubeVisuals();
+            }
+
+            updateModalMovesDisplay();
+
+            if (modalCurrentStep === modalMoves.length - 1) {
+                stopModalPlayback();
+            }
+        }
+
+        function playModalPrevStep() {
+            finishModalActiveAnimation();
+            if (modalMoves.length === 0 || modalCurrentStep < 0) return;
+
+            modalCurrentStep--;
+            
+            resetModalCubeState();
+            const inverted = invertAlgorithm(currentAlgRunning);
+            inverted.forEach(m => applyMoveToModalState(m));
+
+            for (let i = 0; i <= modalCurrentStep; i++) {
+                applyMoveToModalState(modalMoves[i]);
+            }
+            updateModal3dCubeVisuals();
+            updateModalMovesDisplay();
+            stopModalPlayback();
+        }
+
+        function startModalPlayback() {
+            if (modalIsPlaying || modalMoves.length === 0) return;
+
+            if (modalCurrentStep >= modalMoves.length - 1) {
+                initCubeForAlg(currentAlgRunning);
+            }
+
+            modalIsPlaying = true;
+            document.getElementById('btn-modal-play').innerHTML = '⏸ Pause';
+
+            modalPlaybackInterval = setInterval(() => {
+                playModalNextStep();
+            }, modalSpeed);
+        }
+
+        function stopModalPlayback() {
+            if (!modalIsPlaying) return;
+            modalIsPlaying = false;
+            if (modalPlaybackInterval) {
+                clearInterval(modalPlaybackInterval);
+                modalPlaybackInterval = null;
+            }
+            document.getElementById('btn-modal-play').innerHTML = '▶ Play';
+        }
+
+        function toggleModalPlayback() {
+            if (modalIsPlaying) {
+                stopModalPlayback();
+            } else {
+                startModalPlayback();
+            }
+        }
+
+        let currentAlgRunning = "";
+
+        function initCubeForAlg(algMovesStr) {
+            stopModalPlayback();
+            finishModalActiveAnimation();
+            
+            currentAlgRunning = algMovesStr;
+            modalMoves = algMovesStr.trim().split(/\s+/).filter(m => m !== "");
+            modalCurrentStep = -1;
+
+            resetModalCubeState();
+            
+            const inverted = invertAlgorithm(algMovesStr);
+            inverted.forEach(m => applyMoveToModalState(m));
+
+            updateModal3dCubeVisuals();
+            updateModalMovesDisplay();
+        }
+
+        function openAnimatorModal(algName, algMovesStr) {
+            document.getElementById('modal-title-text').textContent = algName;
+            document.getElementById('modal-subtitle-text').textContent = algMovesStr;
+            
+            const overlay = document.getElementById('animator-modal');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 10);
+
+            initCubeForAlg(algMovesStr);
+            renderModal3dCubeDOM();
+            updateModal3dCubeVisuals();
+        }
+
+        function closeAnimatorModal() {
+            stopModalPlayback();
+            finishModalActiveAnimation();
+            
+            const overlay = document.getElementById('animator-modal');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+
+        function changeModalSpeed(val) {
+            modalSpeed = parseInt(val);
+            if (modalIsPlaying) {
+                stopModalPlayback();
+                startModalPlayback();
+            }
+        }
+
+        // --- DRAG TO ROTATE CUBE ---
+        let isModalDragging = false;
+        let previousModalMousePosition = { x: 0, y: 0 };
+
+        function initModalDragListeners() {
+            const scene = document.getElementById('modal-scene-3d');
+            const cube = document.getElementById('modal-cube-3d');
+            if (!scene || !cube) return;
+
+            scene.addEventListener('mousedown', (e) => {
+                isModalDragging = true;
+                previousModalMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isModalDragging) return;
+                const deltaX = e.clientX - previousModalMousePosition.x;
+                const deltaY = e.clientY - previousModalMousePosition.y;
+
+                modalRotation.y += deltaX * 0.5;
+                modalRotation.x -= deltaY * 0.5;
+
+                cube.style.transform = `rotateX(${modalRotation.x}deg) rotateY(${modalRotation.y}deg)`;
+                previousModalMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            window.addEventListener('mouseup', () => {
+                isModalDragging = false;
+            });
+
+            scene.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isModalDragging = true;
+                    previousModalMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isModalDragging || e.touches.length !== 1) return;
+                const deltaX = e.touches[0].clientX - previousModalMousePosition.x;
+                const deltaY = e.touches[0].clientY - previousModalMousePosition.y;
+
+                modalRotation.y += deltaX * 0.5;
+                modalRotation.x -= deltaY * 0.5;
+
+                cube.style.transform = `rotateX(${modalRotation.x}deg) rotateY(${modalRotation.y}deg)`;
+                previousModalMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            });
+
+            window.addEventListener('touchend', () => {
+                isModalDragging = false;
+            });
+        }
+
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
             populateGrid('grid-pll', ALGORITHMS.pll);
@@ -1145,6 +1845,9 @@
             
             populateGrid('grid-cmll', ALGORITHMS.cmll);
             populateGrid('grid-coll', ALGORITHMS.coll);
+
+            // Init modal rotation drags
+            initModalDragListeners();
         });
     </script>
 </body>
