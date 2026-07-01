@@ -729,6 +729,11 @@
             <button class="tab-btn" id="tab-zb" style="background-color: #BFFCC6;" onclick="selectMethod('zb')">ZB Method</button>
             <button class="tab-btn" id="tab-roux" style="background-color: #FFC6FF;" onclick="selectMethod('roux')">Roux</button>
             <button class="tab-btn" id="tab-zz" style="background-color: #E8F4F8;" onclick="selectMethod('zz')">ZZ Method</button>
+            <button class="tab-btn" id="tab-coll" style="background-color: #FFF9A6;" onclick="selectMethod('coll')">COLL</button>
+            <button class="tab-btn" id="tab-wv-vls" style="background-color: #FFD1D1;" onclick="selectMethod('wv-vls')">WV & VLS</button>
+            <button class="tab-btn" id="tab-oh" style="background-color: #E2C2FF;" onclick="selectMethod('oh')">One-Handed (OH)</button>
+            <button class="tab-btn" id="tab-bld" style="background-color: #C2F1FF;" onclick="selectMethod('bld')">Blindfolded (BLD)</button>
+            <button class="tab-btn" id="tab-fmc" style="background-color: #FFE4C2;" onclick="selectMethod('fmc')">Fewest Moves (FMC)</button>
         </div>
 
         <!-- ==================== CFOP METHOD ==================== -->
@@ -887,6 +892,109 @@
                 </div>
             </div>
         </div>
+        
+        <!-- ==================== COLL METHOD ==================== -->
+        <div id="content-coll" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #FFF9A6;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #d4af37;">COLL Method (Corners of Last Layer) 👑</h2>
+                    <span class="badge" style="background-color: #FEF9E7;">42 Algorithms Total</span>
+                </div>
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    COLL solves the orientation and permutation of the last layer corners when the top edges are already oriented. This reduces the final step to a simple Edge Permutation (EPLL), increasing the chances of a PLL skip!
+                </p>
+                <div class="alg-grid" id="grid-coll-standalone"></div>
+            </div>
+        </div>
+
+        <!-- ==================== WV & VLS METHOD ==================== -->
+        <div id="content-wv-vls" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #FFD1D1;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #c0392b;">WV & VLS (Advanced Last Slot) ⚡</h2>
+                    <span class="badge" style="background-color: #FDEDEC;">Orient Corners during Insertion</span>
+                </div>
+                
+                <div class="flow-step">
+                    <h4>Winter Variation (WV)</h4>
+                    <p>WV solves the orientation of all last layer corners while inserting the final F2L corner-edge pair, provided the F2L edge is already oriented and placed.</p>
+                    <div class="alg-grid" id="grid-wv"></div>
+                </div>
+                <div class="flow-step">
+                    <h4>Valk Last Slot (VLS)</h4>
+                    <p>VLS is a massive set of algorithms (432 cases) that solves all corners orientation while inserting the final corner-edge pair in any state.</p>
+                    <div class="alg-grid" id="grid-vls"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ONE-HANDED (OH) ==================== -->
+        <div id="content-oh" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #E2C2FF;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #8e44ad;">One-Handed Method (OH) 🖐️</h2>
+                    <span class="badge" style="background-color: #F5EEF8;">Ergonomic RU-gen / No Rotations</span>
+                </div>
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    OH solving requires algorithms optimized for execution with one hand. These avoid double-flicks and M-moves, instead using pure <strong style="color: var(--primary);">R and U moves</strong> (RU-gen) for maximum turning efficiency and speed!
+                </p>
+                <div class="alg-grid" id="grid-oh"></div>
+            </div>
+        </div>
+
+        <!-- ==================== BLINDFOLDED (BLD) ==================== -->
+        <div id="content-bld" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #C2F1FF;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #2980b9;">Blindfolded Solving (BLD) 🙈</h2>
+                    <span class="badge" style="background-color: #EBF5FB;">Old Pochmann & M2</span>
+                </div>
+                
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    BLD algorithms do not swap random pieces. Instead, they swap exactly two pieces at a time (cycles) using a dedicated **Buffer** and **Target** location to cycle pieces sequentially into their correct spots.
+                </p>
+
+                <div class="flow-step">
+                    <h4>Old Pochmann Corners Buffer</h4>
+                    <p>The standard corner buffer is UBL. Targets are solved one-by-one by setting up the target piece to RDF, swapping it using the Y Perm (or T Perm), and doing the reverse setup.</p>
+                </div>
+                
+                <div class="flow-step">
+                    <h4>M2 Edges Buffer</h4>
+                    <p>The standard edge buffer is DF. Edges are cycled one-by-one using the M2 double turn targeting the UB slot, with special setup algorithms for different targets.</p>
+                </div>
+
+                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">Blindfolded Case Setups & Parities:</h3>
+                <div class="alg-grid" id="grid-bld"></div>
+            </div>
+        </div>
+
+        <!-- ==================== FEWEST MOVES (FMC) ==================== -->
+        <div id="content-fmc" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #FFE4C2;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #d35400;">Fewest Moves Challenge (FMC) 📝</h2>
+                    <span class="badge" style="background-color: #FDF2E9;">NISS & Blockbuilding</span>
+                </div>
+
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    FMC requires finding a solution in the absolute fewest moves. This is done by planning extensive blocks (1x2x2, 2x2x3), orienting edges (EO), and inserting commutators into a "skeleton" solution.
+                </p>
+
+                <div class="flow-step">
+                    <h4>NISS (Normal-Inverse Shuffle State)</h4>
+                    <p>Switching scramble direction. You apply your partial solution to the inverse of the scramble to find easier block insertions from the back side!</p>
+                </div>
+
+                <div class="flow-step">
+                    <h4>Commutators & Insertions</h4>
+                    <p>Commutators solve 3 pieces without affecting any other part of the cube. We insert them into the skeleton at the point where they cancel the most moves.</p>
+                </div>
+
+                <h3 style="font-family: 'DynaPuff', cursive; color: #333; margin-top: 25px;">FMC Commutator Set:</h3>
+                <div class="alg-grid" id="grid-fmc"></div>
+            </div>
+        </div>
     </div>
 
     <!-- TOAST NOTIFICATION -->
@@ -1031,6 +1139,33 @@
                 { name: "ZBLS 2 (Corner facing right)", moves: "R U' R' U R U2 R'", cat: "ZBLS", tags: "zbls 2", desc: "Corner white facing right, edge in top, orienting 4 edges." },
                 { name: "ZBLS 15 (Orienting two edges)", moves: "y' U R' U' R U2 R' U' R", cat: "ZBLS", tags: "zbls 15", desc: "Corner white facing front, edge in top, orienting 2 edges." },
                 { name: "ZBLS 42 (Orienting all edges)", moves: "R U R' U' R U' R' U2 R U' R'", cat: "ZBLS", tags: "zbls 42", desc: "Corner in slot, edge in top layer, orienting all edges." }
+            ],
+            wv: [
+                { name: "WV 1 (Solved Insert)", moves: "R U' R'", algs: ["R U' R'"], cat: "WV", tags: "wv 1 winter variation", desc: "All 3 top corners oriented. Direct insert." },
+                { name: "WV 2 (UFL Oriented)", moves: "R U R' U' R U' R'", algs: ["R U R' U' R U' R'"], cat: "WV", tags: "wv 2 winter variation", desc: "UFL corner oriented, other 3 top corners unoriented." },
+                { name: "WV 3 (L-shape)", moves: "R U2 R' U' R U R' U' R U' R'", algs: ["R U2 R' U' R U R' U' R U' R'"], cat: "WV", tags: "wv 3 winter variation", desc: "Two adjacent top corners oriented." },
+                { name: "WV 15 (Double Corner Swap)", moves: "R U' R' U R U2 R'", algs: ["R U' R' U R U2 R'"], cat: "WV", tags: "wv 15 winter variation", desc: "Double corner orientation swap." }
+            ],
+            vls: [
+                { name: "VLS 1 (Corner Oriented)", moves: "R U2 R' U' R U R'", algs: ["R U2 R' U' R U R'"], cat: "VLS", tags: "vls 1 valk last slot", desc: "Corner oriented, edge unoriented. Orientation and insertion." },
+                { name: "VLS 2 (Edge Oriented)", moves: "R U R' U' R U2 R' U' R U R'", algs: ["R U R' U' R U2 R' U' R U R'"], cat: "VLS", tags: "vls 2 valk last slot", desc: "Edge oriented, corner unoriented. Advanced Valk Last Slot." }
+            ],
+            oh: [
+                { name: "OH T Perm (Standard)", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", algs: ["R U R' U' R' F R2 U' R' U' R U R' F'"], cat: "OH", tags: "oh t perm", desc: "Highly ergonomic standard T Perm for OH." },
+                { name: "OH Ua Perm (RU Gen)", moves: "R2 U' R' U' R U R U R U' R", algs: ["R2 U' R' U' R U R U R U' R", "R U' R U R U R U' R' U' R2"], cat: "OH", tags: "oh ua perm", desc: "OH-optimal RU-gen Ua Permutation (no M-slice)." },
+                { name: "OH Ub Perm (RU Gen)", moves: "R' U R' U' R' U' R' U R U R2", algs: ["R' U R' U' R' U' R' U R U R2", "R2 U R U R' U' R' U' R' U R'"], cat: "OH", tags: "oh ub perm", desc: "OH-optimal RU-gen Ub Permutation." },
+                { name: "OH H Perm (RU Gen)", moves: "R2 U2 R U2 R2 U2 R2 U2 R U2 R2", algs: ["R2 U2 R U2 R2 U2 R2 U2 R U2 R2"], cat: "OH", tags: "oh h perm", desc: "Replaces M2 U M2 moves with pure RU turns for OH efficiency." },
+                { name: "OH Z Perm (RU Gen)", moves: "R' U' R U' R U R U' R' U R U R2 U' R'", algs: ["R' U' R U' R U R U' R' U R U R2 U' R'"], cat: "OH", tags: "oh z perm", desc: "OH-optimal RU-gen Z Permutation." }
+            ],
+            bld: [
+                { name: "OP Corners (Y Perm)", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", algs: ["F R U' R' U' R U R' F' R U R' U' R' F R F'"], cat: "BLD", tags: "bld op corner y perm", desc: "Old Pochmann Corner Swapper targeting RDF slot." },
+                { name: "OP Corners (T Perm)", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", algs: ["R U R' U' R' F R2 U' R' U' R U R' F'"], cat: "BLD", tags: "bld op corner t perm", desc: "Alternative OP Corner Swapper targeting UFR slot." },
+                { name: "BLD Corner Parity", moves: "R U2 R' U' R U2 L' U R' U' L", algs: ["R U2 R' U' R U2 L' U R' U' L"], cat: "BLD", tags: "bld parity corners", desc: "Swaps UBL and UBR corners to resolve corner-edge parity." },
+                { name: "M2 Edges (M2 Double)", moves: "M2", algs: ["M2"], cat: "BLD", tags: "bld m2 edges", desc: "Standard M2 double turn targeting UB slot (from DF buffer)." }
+            ],
+            fmc: [
+                { name: "3-Corner Commutator", moves: "R U L U' R' U L' U'", algs: ["R U L U' R' U L' U'"], cat: "FMC", tags: "fmc commutator corners", desc: "8-move commutator to cycle UFR, UFL, and UBL corners." },
+                { name: "3-Edge Commutator", moves: "M' U2 M U2", algs: ["M' U2 M U2"], cat: "FMC", tags: "fmc commutator edges", desc: "4-move commutator to cycle UB, UF, and DB edges." }
             ]
         };
 
@@ -1845,6 +1980,14 @@
             
             populateGrid('grid-cmll', ALGORITHMS.cmll);
             populateGrid('grid-coll', ALGORITHMS.coll);
+
+            // Populate the new standalone methods
+            populateGrid('grid-coll-standalone', ALGORITHMS.coll);
+            populateGrid('grid-wv', ALGORITHMS.wv);
+            populateGrid('grid-vls', ALGORITHMS.vls);
+            populateGrid('grid-oh', ALGORITHMS.oh);
+            populateGrid('grid-bld', ALGORITHMS.bld);
+            populateGrid('grid-fmc', ALGORITHMS.fmc);
 
             // Init modal rotation drags
             initModalDragListeners();
