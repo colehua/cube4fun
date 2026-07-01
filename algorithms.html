@@ -318,6 +318,89 @@
             box-shadow: 0px 2px 0px #1e272e;
         }
 
+        /* Alternative Algorithms Styling (SpeedCubeDB Style) */
+        .alt-algs-title {
+            font-size: 0.82em;
+            color: #475569;
+            font-weight: 800;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .alt-algs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .alt-alg-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            transition: all 0.15s;
+        }
+
+        .alt-alg-row:hover {
+            border-color: var(--primary);
+            background-color: #f0f9ff;
+        }
+        
+        .alt-alg-rank {
+            font-size: 0.78em;
+            color: #475569;
+            font-weight: 800;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 5px;
+        }
+        
+        .alt-alg-moves {
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #1e272e;
+            font-weight: 800;
+            word-break: break-all;
+            flex-grow: 1;
+            text-align: left;
+            line-height: 1.25;
+        }
+        
+        .alt-alg-copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.15em;
+            padding: 2px;
+            line-height: 1;
+            border-radius: 4px;
+            transition: background 0.15s, transform 0.1s;
+        }
+        
+        .alt-alg-copy-btn:hover {
+            background: #cbd5e1;
+            transform: scale(1.15);
+        }
+        
+        .alt-alg-copy-btn:active {
+            transform: scale(0.9);
+        }
+
         .visual-cube {
             width: 60px;
             height: 60px;
@@ -567,43 +650,43 @@
         // Database of popular cubing algorithms
         const ALGORITHMS = {
             pll: [
-                { name: "T Perm", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", cat: "PLL", tags: "t perm t-perm", desc: "Headlights on left side, solved 2x1 block on back-right." },
-                { name: "Y Perm", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", cat: "PLL", tags: "y perm y-perm", desc: "Diagonal corner swap. Two adjacent 2x1 blocks on front and right." },
-                { name: "H Perm", moves: "M2' U M2' U2 M2' U M2'", cat: "PLL", tags: "h perm h-perm", desc: "Opposite edge swap (cross shape swap on all 4 sides)." },
-                { name: "Ua Perm", moves: "R U' R U R U R U' R' U' R2", cat: "PLL", tags: "ua perm u perm", desc: "3-cycle edges swap clockwise. Fully solved bar on back." },
-                { name: "Ub Perm", moves: "R2 U R U R' U' R' U' R' U R'", cat: "PLL", tags: "ub perm u perm", desc: "3-cycle edges swap counter-clockwise. Fully solved bar on back." },
-                { name: "Z Perm", moves: "M2' U M2' U M' U2 M2' U2 M' U2", cat: "PLL", tags: "z perm z-perm", desc: "Adjacent edge swap (cross swap on left/front and right/back)." },
-                { name: "Aa Perm", moves: "x L2 D2 L' U' L D2 L' U L'", cat: "PLL", tags: "aa perm a perm", desc: "Headlights on front, solved 2x1 block on back-right." },
-                { name: "Ab Perm", moves: "x L' U L' D2 L U' L' D2 L2", cat: "PLL", tags: "ab perm a perm", desc: "Headlights on front, solved 2x1 block on back-left." },
-                { name: "E Perm", moves: "x' R U' R' D R U R' D' R U R' D R U' R' D'", cat: "PLL", tags: "e perm e-perm", desc: "Corner swap vertically on left and right (no edges swapped)." },
-                { name: "F Perm", moves: "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", cat: "PLL", tags: "f perm f-perm", desc: "Solved 3x1 bar on left side. Swaps UFR/UBR corners." },
-                { name: "Ga Perm", moves: "R2 U R' U R' U' R U' R2 D U' R' U R D'", cat: "PLL", tags: "ga perm g perm", desc: "Solved 2x1 block on front-left, headlights on right side." },
-                { name: "Gb Perm", moves: "R' U' R y R2 u R' U R U' R u' R2", cat: "PLL", tags: "gb perm g perm", desc: "Solved 2x1 block on back-left, headlights on right side." },
-                { name: "Gc Perm", moves: "R2 U' R U' R U R' U R2 D' U R U' R' D", cat: "PLL", tags: "gc perm g perm", desc: "Solved 2x1 block on back-right, headlights on left side." },
-                { name: "Gd Perm", moves: "R U R' y' R2 u' R U' R' U R' u R2", cat: "PLL", tags: "gd perm g perm", desc: "Solved 2x1 block on front-right, headlights on left side." },
-                { name: "Ja Perm", moves: "x R2 F R F' R U2 r' U r U2", cat: "PLL", tags: "ja perm j perm", desc: "Solved J-block on left/back, swapping left corners." },
-                { name: "Jb Perm", moves: "R U R' F' R U R' U' R' F R2 U' R' U'", cat: "PLL", tags: "jb perm j perm", desc: "Solved J-block on left/front, swapping right corners." },
-                { name: "Ra Perm", moves: "R U' R' U' R U R D R' U' R D' R' U2 R'", cat: "PLL", tags: "ra perm r perm", desc: "Headlights on left, solved 2x1 block on front-right." },
-                { name: "Rb Perm", moves: "R' U2 R U2 R' F R U R' U' R' F' R2 U'", cat: "PLL", tags: "rb perm r perm", desc: "Headlights on left, solved 2x1 block on back-right." },
-                { name: "V Perm", moves: "R' U R' U' y R' F' R2 U' R' U R' F R F", cat: "PLL", tags: "v perm v-perm", desc: "Diagonal corner swap, solved 2x1 block on back-right." },
-                { name: "Na Perm", moves: "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", cat: "PLL", tags: "na perm n perm", desc: "Two diagonal corner-edge blocks, UBL and UFR swapping." },
-                { name: "Nb Perm", moves: "R' U' R U' R' U' R F R' U' R U R F' R2 U R U2 R' U R", cat: "PLL", tags: "nb perm n perm", desc: "Two diagonal corner-edge blocks, UBR and UFL swapping." }
+                { name: "T Perm", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", algs: ["R U R' U' R' F R2 U' R' U' R U R' F'", "F R U' R' U' R U R' F' R U R' U' R' F R F'", "R2 U' R2 U' R2 U R2 U R2 D' R2 D R2 U' R2"], cat: "PLL", tags: "t perm t-perm", desc: "Headlights on left side, solved 2x1 block on back-right." },
+                { name: "Y Perm", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", algs: ["F R U' R' U' R U R' F' R U R' U' R' F R F'", "R2 U' R' U R U' x' U' R' U R' U' R U R"], cat: "PLL", tags: "y perm y-perm", desc: "Diagonal corner swap. Two adjacent 2x1 blocks on front and right." },
+                { name: "H Perm", moves: "M2' U M2' U2 M2' U M2'", algs: ["M2' U M2' U2 M2' U M2'", "M2 U' M2 U2 M2 U' M2", "R2 U2 R U2 R2 U2 R2 U2 R U2 R2"], cat: "PLL", tags: "h perm h-perm", desc: "Opposite edge swap (cross shape swap on all 4 sides)." },
+                { name: "Ua Perm", moves: "R U' R U R U R U' R' U' R2", algs: ["R U' R U R U R U' R' U' R2", "M2 U M U2 M' U M2", "y2 R2 U' R' U' R U R U R U' R"], cat: "PLL", tags: "ua perm u perm", desc: "3-cycle edges swap clockwise. Fully solved bar on back." },
+                { name: "Ub Perm", moves: "R2 U R U R' U' R' U' R' U R'", algs: ["R2 U R U R' U' R' U' R' U R'", "M2 U' M U2 M' U' M2", "R' U R' U' R' U' R' U R U R2"], cat: "PLL", tags: "ub perm u perm", desc: "3-cycle edges swap counter-clockwise. Fully solved bar on back." },
+                { name: "Z Perm", moves: "M2' U M2' U M' U2 M2' U2 M' U2", algs: ["M2' U M2' U M' U2 M2' U2 M' U2", "M' U' M2' U' M2' U' M' U2 M2'", "R' U' R U' R U R U' R' U R U R2 U' R'"], cat: "PLL", tags: "z perm z-perm", desc: "Adjacent edge swap (cross swap on left/front and right/back)." },
+                { name: "Aa Perm", moves: "x L2 D2 L' U' L D2 L' U L'", algs: ["x L2 D2 L' U' L D2 L' U L'", "y' x R2 D2 R' U' R D2 R' U R'", "y x' R2 D2 R' U' R D2 R' U R"], cat: "PLL", tags: "aa perm a perm", desc: "Headlights on front, solved 2x1 block on back-right." },
+                { name: "Ab Perm", moves: "x L' U L' D2 L U' L' D2 L2", algs: ["x L' U L' D2 L U' L' D2 L2", "y' x R' U R' D2 R U' R' D2 R2", "y x' R' U R' D2 R U' R' D2 R2"], cat: "PLL", tags: "ab perm a perm", desc: "Headlights on front, solved 2x1 block on back-left." },
+                { name: "E Perm", moves: "x' R U' R' D R U R' D' R U R' D R U' R' D'", algs: ["x' R U' R' D R U R' D' R U R' D R U' R' D'", "y x' L' U L D' L' U' L D L' U' L D' L' U L D"], cat: "PLL", tags: "e perm e-perm", desc: "Corner swap vertically on left and right (no edges swapped)." },
+                { name: "F Perm", moves: "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", algs: ["R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", "y' R' U2 R' d' R' F' R2 U' R' U R' F R U' F"], cat: "PLL", tags: "f perm f-perm", desc: "Solved 3x1 bar on left side. Swaps UFR/UBR corners." },
+                { name: "Ga Perm", moves: "R2 U R' U R' U' R U' R2 D U' R' U R D'", algs: ["R2 U R' U R' U' R U' R2 D U' R' U R D'", "y2 R2 u R' U R' U' R u' R2 y' R' U R"], cat: "PLL", tags: "ga perm g perm", desc: "Solved 2x1 block on front-left, headlights on right side." },
+                { name: "Gb Perm", moves: "R' U' R y R2 u R' U R U' R u' R2", algs: ["R' U' R y R2 u R' U R U' R u' R2", "y2 F' U' F R2 u R' U R U' R u' R2"], cat: "PLL", tags: "gb perm g perm", desc: "Solved 2x1 block on back-left, headlights on right side." },
+                { name: "Gc Perm", moves: "R2 U' R U' R U R' U R2 D' U R U' R' D", algs: ["R2 U' R U' R U R' U R2 D' U R U' R' D", "y2 R2 u' R U' R U R' u R2 y R U' R'"], cat: "PLL", tags: "gc perm g perm", desc: "Solved 2x1 block on back-right, headlights on left side." },
+                { name: "Gd Perm", moves: "R U R' y' R2 u' R U' R' U R' u R2", algs: ["R U R' y' R2 u' R U' R' U R' u R2", "y2 R U R' F' R2 u' R U' R' U R' u R2"], cat: "PLL", tags: "gd perm g perm", desc: "Solved 2x1 block on front-right, headlights on left side." },
+                { name: "Ja Perm", moves: "x R2 F R F' R U2 r' U r U2", algs: ["x R2 F R F' R U2 r' U r U2", "y' R' U L' U2 R U' R' U2 R L"], cat: "PLL", tags: "ja perm j perm", desc: "Solved J-block on left/back, swapping left corners." },
+                { name: "Jb Perm", moves: "R U R' F' R U R' U' R' F R2 U' R' U'", algs: ["R U R' F' R U R' U' R' F R2 U' R' U'", "y2 r' U L' U2 R U' R' U2 R L"], cat: "PLL", tags: "jb perm j perm", desc: "Solved J-block on left/front, swapping right corners." },
+                { name: "Ra Perm", moves: "R U' R' U' R U R D R' U' R D' R' U2 R'", algs: ["R U' R' U' R U R D R' U' R D' R' U2 R'", "y L U2 L' U2 L F' L' U' L U L F L2'"], cat: "PLL", tags: "ra perm r perm", desc: "Headlights on left, solved 2x1 block on front-right." },
+                { name: "Rb Perm", moves: "R' U2 R U2 R' F R U R' U' R' F' R2 U'", algs: ["R' U2 R U2 R' F R U R' U' R' F' R2 U'", "y' R' U2 R' D' R U' R' D R U R' U' R U R'"], cat: "PLL", tags: "rb perm r perm", desc: "Headlights on left, solved 2x1 block on back-right." },
+                { name: "V Perm", moves: "R' U R' U' y R' F' R2 U' R' U R' F R F", algs: ["R' U R' U' y R' F' R2 U' R' U R' F R F", "R' U R' U' R D' R' D R' U D' R2 U' R2' D R"], cat: "PLL", tags: "v perm v-perm", desc: "Diagonal corner swap, solved 2x1 block on back-right." },
+                { name: "Na Perm", moves: "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", algs: ["R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", "z U R' D R2 U' R D' U R' D R2 U' R D' z'"], cat: "PLL", tags: "na perm n perm", desc: "Two diagonal corner-edge blocks, UBL and UFR swapping." },
+                { name: "Nb Perm", moves: "R' U' R U' R' U' R F R' U' R U R F' R2 U R U2 R' U R", algs: ["R' U' R U' R' U' R F R' U' R U R F' R2 U R U2 R' U R", "z U' R D' R2 U R' D U' R D' R2 U R' D z'"], cat: "PLL", tags: "nb perm n perm", desc: "Two diagonal corner-edge blocks, UBR and UFL swapping." }
             ],
             oll: [
-                { name: "Sune (OLL 27)", moves: "R U R' U R U2 R'", cat: "OLL", tags: "sune oll 27", desc: "1 oriented corner on bottom-left, front-right corner faces front." },
-                { name: "Anti-Sune (OLL 26)", moves: "R U2 R' U' R U' R'", cat: "OLL", tags: "antisune anti sune oll 26", desc: "1 oriented corner on top-right, front-right corner faces right." },
-                { name: "Hao / Cross (OLL 21)", moves: "R U2 R' U' R U R' U' R U' R'", cat: "OLL", tags: "cross oll 21 hao", desc: "Cross. 0 oriented corners, headlights on front and back." },
-                { name: "Car (OLL 22)", moves: "R U2 R2 U' R2 U' R2 U2 R", cat: "OLL", tags: "car oll 22", desc: "Pi shape. 0 oriented corners, headlights on front, side bars left/right." },
-                { name: "Headlights (OLL 23)", moves: "R2 D' R U2 R' D R U2 R", cat: "OLL", tags: "headlights oll 23", desc: "U shape. 2 oriented corners at the back, headlights facing front." },
-                { name: "Blinker (OLL 24)", moves: "r U R' U' r' F R F'", cat: "OLL", tags: "blinker oll 24", desc: "T shape. 2 oriented corners on right side, headlights facing left." },
-                { name: "Triple Sune (OLL 25)", moves: "R' F R B' R' F' R B", cat: "OLL", tags: "triple sune oll 25", desc: "L shape. 2 diagonal oriented corners, headlights facing front/back." },
-                { name: "OLL 1 (Dot)", moves: "R U2 R2 F R F' U2 R' F R F'", cat: "OLL", tags: "oll 1 dot", desc: "Dot case: no oriented edges, oriented corners on front/back." },
-                { name: "OLL 2 (Dot)", moves: "F R U R' U' F' f R U R' U' f'", cat: "OLL", tags: "oll 2 dot", desc: "Dot case: no oriented edges, all corners unoriented." },
-                { name: "OLL 20 (Checkered)", moves: "r U R' U' M2 U R U' r'", cat: "OLL", tags: "oll 20", desc: "Checkered dot: all corners oriented, no edges oriented." },
-                { name: "OLL 33 (T-shape)", moves: "R U R' U' R' F R F'", cat: "OLL", tags: "oll 33 t shape", desc: "T-shape: oriented bar on top, headlights facing front." },
-                { name: "OLL 37 (F-shape)", moves: "F R' F' R U R U' R'", cat: "OLL", tags: "oll 37 f shape", desc: "F-shape: line on top, UFL corner oriented." },
-                { name: "OLL 44 (P-shape)", moves: "f R U R' U' f'", cat: "OLL", tags: "oll 44 p shape", desc: "P-shape: 2x2 yellow block in top-left, oriented edges." },
-                { name: "OLL 51 (Line)", moves: "f R U R' U' R U R' U' f'", cat: "OLL", tags: "oll 51 line", desc: "Line OLL: horizontal line of edges, headlights on front/back." }
+                { name: "Sune (OLL 27)", moves: "R U R' U R U2 R'", algs: ["R U R' U R U2 R'", "y2 R' U' R U' R' U2 R", "y L' U' L U' L' U2 L"], cat: "OLL", tags: "sune oll 27", desc: "1 oriented corner on bottom-left, front-right corner faces front." },
+                { name: "Anti-Sune (OLL 26)", moves: "R U2 R' U' R U' R'", algs: ["R U2 R' U' R U' R'", "y2 R' U2 R U R' U R", "y L' U2 L U L' U L"], cat: "OLL", tags: "antisune anti sune oll 26", desc: "1 oriented corner on top-right, front-right corner faces right." },
+                { name: "Hao / Cross (OLL 21)", moves: "R U2 R' U' R U R' U' R U' R'", algs: ["R U2 R' U' R U R' U' R U' R'", "R U R' U R U' R' U R U2 R'"], cat: "OLL", tags: "cross oll 21 hao", desc: "Cross. 0 oriented corners, headlights on front and back." },
+                { name: "Car (OLL 22)", moves: "R U2 R2 U' R2 U' R2 U2 R", algs: ["R U2 R2 U' R2 U' R2 U2 R", "f R U R' U' f' F R U R' U' F'"], cat: "OLL", tags: "car oll 22", desc: "Pi shape. 0 oriented corners, headlights on front, side bars left/right." },
+                { name: "Headlights (OLL 23)", moves: "R2 D' R U2 R' D R U2 R", algs: ["R2 D' R U2 R' D R U2 R", "y2 R2 D R' U2 R D' R' U2 R'"], cat: "OLL", tags: "headlights oll 23", desc: "U shape. 2 oriented corners at the back, headlights facing front." },
+                { name: "Blinker (OLL 24)", moves: "r U R' U' r' F R F'", algs: ["r U R' U' r' F R F'", "y2 r' U' R U r U' r' F'"], cat: "OLL", tags: "blinker oll 24", desc: "T shape. 2 oriented corners on right side, headlights facing left." },
+                { name: "Triple Sune (OLL 25)", moves: "R' F R B' R' F' R B", algs: ["R' F R B' R' F' R B", "y' R' F R F' r U R' U' r'"], cat: "OLL", tags: "triple sune oll 25", desc: "L shape. 2 diagonal oriented corners, headlights facing front/back." },
+                { name: "OLL 1 (Dot)", moves: "R U2 R2 F R F' U2 R' F R F'", algs: ["R U2 R2 F R F' U2 R' F R F'", "y R U2 R2' F R F' U2 R' F R F'"], cat: "OLL", tags: "oll 1 dot", desc: "Dot case: no oriented edges, oriented corners on front/back." },
+                { name: "OLL 2 (Dot)", moves: "F R U R' U' F' f R U R' U' f'", algs: ["F R U R' U' F' f R U R' U' f'", "y' F R U R' U' F' U f R U R' U' f'"], cat: "OLL", tags: "oll 2 dot", desc: "Dot case: no oriented edges, all corners unoriented." },
+                { name: "OLL 20 (Checkered)", moves: "r U R' U' M2 U R U' r'", algs: ["r U R' U' M2 U R U' r'", "y2 r U R' U' M2 U R U' r'"], cat: "OLL", tags: "oll 20", desc: "Checkered dot: all corners oriented, no edges oriented." },
+                { name: "OLL 33 (T-shape)", moves: "R U R' U' R' F R F'", algs: ["R U R' U' R' F R F'", "y2 F R U R' U' F'"], cat: "OLL", tags: "oll 33 t shape", desc: "T-shape: oriented bar on top, headlights facing front." },
+                { name: "OLL 37 (F-shape)", moves: "F R' F' R U R U' R'", algs: ["F R' F' R U R U' R'", "y2 F R' F' R U R U' R'"], cat: "OLL", tags: "oll 37 f shape", desc: "F-shape: line on top, UFL corner oriented." },
+                { name: "OLL 44 (P-shape)", moves: "f R U R' U' f'", algs: ["f R U R' U' f'", "y2 f R U R' U' f'"], cat: "OLL", tags: "oll 44 p shape", desc: "P-shape: 2x2 yellow block in top-left, oriented edges." },
+                { name: "OLL 51 (Line)", moves: "f R U R' U' R U R' U' f'", algs: ["f R U R' U' R U R' U' f'", "y2 f R U R' U' R U R' U' f'"], cat: "OLL", tags: "oll 51 line", desc: "Line OLL: horizontal line of edges, headlights on front/back." }
             ],
             f2l: [
                 { name: "F2L 1 (Easy Insert)", moves: "U R U' R'", cat: "F2L", tags: "f2l 1", desc: "Corner white faces right, edge matching top color." },
@@ -882,6 +965,24 @@
                 // Generate the SVG diagram for the case
                 const cubeSvg = generateCubeSvg(item);
 
+                // Setup alternative algorithms (SpeedCubeDB style)
+                const algs = item.algs || [item.moves];
+                let altAlgsHtml = "";
+                if (algs.length > 1) {
+                    altAlgsHtml = `
+                        <div class="alt-algs-title">Alternative Algorithms 📑</div>
+                        <div class="alt-algs-list">
+                            ${algs.map((alg, index) => `
+                                <div class="alt-alg-row">
+                                    <span class="alt-alg-rank">#${index + 1}</span>
+                                    <span class="alt-alg-moves">${alg}</span>
+                                    <button class="alt-alg-copy-btn" onclick="copyToClipboard('${alg.replace(/'/g, "\\'")}')" title="Copy Move Set">📋</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
                 card.innerHTML = `
                     <div>
                         <div class="alg-name">
@@ -892,8 +993,9 @@
                         </div>
                         <div class="alg-desc" style="font-size: 0.92em; color: #666; font-weight: bold; margin-top: 4px; margin-bottom: 8px; line-height: 1.25;">${item.desc || ""}</div>
                         <div class="alg-moves">${item.moves}</div>
+                        ${altAlgsHtml}
                     </div>
-                    <button class="alg-btn-copy" onclick="copyToClipboard('${item.moves}')">Copy Algorithm 📋</button>
+                    <button class="alg-btn-copy" onclick="copyToClipboard('${item.moves.replace(/'/g, "\\'")}')">Copy Main Algorithm 📋</button>
                 `;
                 grid.appendChild(card);
             });
