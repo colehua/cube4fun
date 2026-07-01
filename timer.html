@@ -1517,6 +1517,40 @@
         let animatorIs2x2 = false;
         let animatorRotation = { x: -25, y: -45 };
 
+        // 3D Turn Animation Configuration
+        const faceTransforms = {
+            U: 'rotateX(90deg) translateZ(70px)',
+            D: 'rotateX(-90deg) translateZ(70px)',
+            F: 'rotateY(0deg) translateZ(70px)',
+            B: 'rotateY(180deg) translateZ(70px)',
+            L: 'rotateY(-90deg) translateZ(70px)',
+            R: 'rotateY(90deg) translateZ(70px)'
+        };
+        let activeAnimatorTimeout = null;
+        let pendingMoveToApply = null;
+        let pendingFaceToReset = null;
+
+        function finishActiveAnimation() {
+            if (activeAnimatorTimeout) {
+                clearTimeout(activeAnimatorTimeout);
+                activeAnimatorTimeout = null;
+            }
+            if (pendingMoveToApply && pendingFaceToReset) {
+                applyMoveToAnimatorState(pendingMoveToApply);
+                updateAnimator3dCubeVisuals();
+                
+                const faceEl = document.querySelector(`.face-${pendingFaceToReset}`);
+                if (faceEl) {
+                    faceEl.style.transition = 'none';
+                    faceEl.style.transform = faceTransforms[pendingFaceToReset];
+                    faceEl.classList.remove('highlight-active');
+                }
+                
+                pendingMoveToApply = null;
+                pendingFaceToReset = null;
+            }
+        }
+
         function resetAnimatorCubeState() {
             if (animatorIs2x2) {
                 animatorCubeState = {
@@ -1643,6 +1677,9 @@
         function playAnimatorNextStep() {
             if (animatorMoves.length === 0) return;
 
+            // Instantly finalize any currently running animation before starting a new step
+            finishActiveAnimation();
+
             if (animatorCurrentStep >= animatorMoves.length - 1) {
                 // Wrap around to start
                 animatorCurrentStep = -1;
@@ -1654,21 +1691,42 @@
 
             animatorCurrentStep++;
             const move = animatorMoves[animatorCurrentStep];
-            applyMoveToAnimatorState(move);
-            updateAnimator3dCubeVisuals();
-            updateAnimatorMovesDisplay();
-
-            // Highlight the active face of the cube
+            
+            // Determine active face and rotation angle
             if (move && move[0]) {
                 const faceName = move[0];
+                let modifier = move.slice(1);
+                let angle = '90deg';
+                if (modifier === '2') angle = '180deg';
+                if (modifier === "'") angle = '-90deg';
+
                 const faceEl = document.querySelector(`.face-${faceName}`);
                 if (faceEl) {
+                    // Set pending queue details for finishActiveAnimation
+                    pendingMoveToApply = move;
+                    pendingFaceToReset = faceName;
+
+                    // Animate the physical face turn in 3D
+                    const animDuration = Math.min(500, animatorSpeed - 150); // scales with play speed
+                    faceEl.style.transition = `transform ${animDuration}ms ease-in-out`;
+                    faceEl.style.transform = `${faceTransforms[faceName]} rotate(${angle})`;
                     faceEl.classList.add('highlight-active');
-                    setTimeout(() => {
-                        faceEl.classList.remove('highlight-active');
-                    }, Math.min(600, animatorSpeed - 100)); // highlight duration scales with playback speed
+
+                    // Set timeout to commit color states at the end of physical rotation
+                    activeAnimatorTimeout = setTimeout(() => {
+                        finishActiveAnimation();
+                    }, animDuration);
+                } else {
+                    // Fallback if DOM face element is missing
+                    applyMoveToAnimatorState(move);
+                    updateAnimator3dCubeVisuals();
                 }
+            } else {
+                applyMoveToAnimatorState(move);
+                updateAnimator3dCubeVisuals();
             }
+
+            updateAnimatorMovesDisplay();
 
             if (animatorCurrentStep === animatorMoves.length - 1) {
                 stopAnimatorPlayback();
@@ -1678,6 +1736,7 @@
         }
 
         function playAnimatorPrevStep() {
+            finishActiveAnimation();
             if (animatorMoves.length === 0 || animatorCurrentStep < 0) return;
 
             animatorCurrentStep--;
@@ -1735,6 +1794,7 @@
         }
 
         function stopAnimatorPlayback() {
+            finishActiveAnimation();
             if (!animatorIsPlaying) return;
 
             animatorIsPlaying = false;
@@ -1762,6 +1822,7 @@
 
         // Reset the animator
         function resetAnimator() {
+            finishActiveAnimation();
             stopAnimatorPlayback();
             animatorCurrentStep = -1;
             resetAnimatorCubeState();
