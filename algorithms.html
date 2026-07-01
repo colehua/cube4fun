@@ -3985,6 +3985,38 @@
             }
             
             // Draw 3D Isometric stickers
+            // Draw external yellow bars for back-left side (L face)
+            for (let row = 0; row < 3; row++) {
+                if (sideColors.left[row] === YELLOW) {
+                    const ox = 50, oy = 5;
+                    const rx = 35 / 3, ry = 17.5 / 3;
+                    const lx = -35 / 3, ly = 17.5 / 3;
+                    const x0 = ox + row * lx;
+                    const y0 = oy + row * ly;
+                    const p1x = x0, p1y = y0;
+                    const p2x = x0 + lx, p2y = y0 + ly;
+                    const p3x = p2x - 2.5, p3y = p2y - 1.25;
+                    const p4x = p1x - 2.5, p4y = p1y - 1.25;
+                    svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                }
+            }
+
+            // Draw external yellow bars for back-right side (B face)
+            for (let col = 0; col < 3; col++) {
+                if (sideColors.top[col] === YELLOW) {
+                    const ox = 50, oy = 5;
+                    const rx = 35 / 3, ry = 17.5 / 3;
+                    const lx = -35 / 3, ly = 17.5 / 3;
+                    const x0 = ox + col * rx;
+                    const y0 = oy + col * ry;
+                    const p1x = x0, p1y = y0;
+                    const p2x = x0 + rx, p2y = y0 + ry;
+                    const p3x = p2x + 2.5, p3y = p2y - 1.25;
+                    const p4x = p1x + 2.5, p4y = p1y - 1.25;
+                    svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                }
+            }
+            
             // 1. Draw U Face (Top Rhombus)
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {

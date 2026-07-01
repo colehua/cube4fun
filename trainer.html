@@ -317,10 +317,17 @@
                     <select id="method-select" class="select-input" onchange="onMethodChanged()">
                         <option value="pll">PLL (Permutation of Last Layer)</option>
                         <option value="oll">OLL (Orientation of Last Layer)</option>
+                        <option value="f2l">F2L (First Two Layers)</option>
                         <option value="coll">COLL (Corners of Last Layer)</option>
                         <option value="cmll">CMLL (Roux Corners)</option>
+                        <option value="zbll">ZBLL (ZB Last Layer)</option>
+                        <option value="zbls">ZBLS (ZB Last Slot)</option>
                         <option value="wv">Winter Variation (WV)</option>
+                        <option value="vls">VLS (Valk Last Slot)</option>
                         <option value="ell">ELL (Edges of Last Layer)</option>
+                        <option value="oh">OH (One Handed)</option>
+                        <option value="bld">BLD (Blindfolded)</option>
+                        <option value="fmc">FMC (Fewest Moves)</option>
                     </select>
 
                     <label style="font-weight: 800; font-size: 0.9em; text-transform: uppercase; color: #64748b;">Search / Filter Cases</label>
@@ -352,11 +359,14 @@
 
                     <div id="trainer-workspace" style="display: none;">
                         <div class="workspace-area">
-                            <div id="case-svg-container" style="width: 130px; height: 104px;">
+                            <div id="case-svg-container" style="width: 140px; height: 112px;">
                                 <!-- Dynamic SVG -->
                             </div>
-                            <h3 id="active-case-name" style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0; text-align: center;">T Perm</h3>
-                            <div id="active-case-desc" style="font-size: 0.9em; color: #64748b; font-weight: 700; text-align: center;">Headlights left</div>
+                            <h3 id="active-case-name" style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0; text-align: center;">???</h3>
+                            <div id="active-case-desc" style="font-size: 0.9em; color: #64748b; font-weight: 700; text-align: center;">&nbsp;</div>
+                            <div id="active-case-answer" style="margin-top: 15px; font-weight: 800; font-size: 1.1em; color: var(--primary); text-align: center; display: none;">
+                                Alg: <span id="active-case-alg-text" style="font-family: monospace; background: #e0f2fe; padding: 6px 12px; border-radius: 8px; border: 2px solid #bae6fd; font-size: 1.1em; word-break: break-all;">-</span>
+                            </div>
                         </div>
 
                         <div class="scramble-box">
@@ -3162,14 +3172,17 @@
             });
         }
 
-        // SVG Renderer from algorithms.html
+        // SVG Renderer aligned with algorithms.html for exact fidelity
         function generateCubeSvg(item) {
-            let svg = '<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">';
-            svg += '<defs>\
-                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">\
-                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />\
-                </marker>\
-            </defs>';
+            const name = item.name;
+            const cat = item.cat;
+            
+            let svg = `<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">`;
+            svg += `<defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />
+                </marker>
+            </defs>`;
             
             let gridColors = Array(9).fill('#57606f');
             let sideColors = {
@@ -3178,10 +3191,14 @@
                 bottom: Array(3).fill(null),
                 left: Array(3).fill(null)
             };
+            let arrows = [];
             
             const YELLOW = '#FFFF00';
+            const WHITE = '#FFFFFF';
             const RED = '#FF3B30';
             const GREEN = '#4CD964';
+            const BLUE = '#007AFF';
+            const ORANGE = '#FF9500';
             
             function mapToIso(x, y) {
                 const dx = x - 35;
@@ -3197,7 +3214,7 @@
                 const lx = -35 / 3, ly = 17.5 / 3;
                 const x0 = ox + row * lx + col * rx;
                 const y0 = oy + row * ly + col * ry;
-                return 'M ' + x0 + ',' + y0 + ' L ' + (x0 + rx) + ',' + (y0 + ry) + ' L ' + (x0 + rx + lx) + ',' + (y0 + ry + ly) + ' L ' + (x0 + lx) + ',' + (y0 + ly) + ' Z';
+                return `M ${x0},${y0} L ${x0 + rx},${y0 + ry} L ${x0 + rx + lx},${y0 + ry + ly} L ${x0 + lx},${y0 + ly} Z`;
             }
 
             function getFStickerPath(row, col) {
@@ -3206,7 +3223,7 @@
                 const vx = 0, vy = 35 / 3;
                 const x0 = ox + col * hx + row * vx;
                 const y0 = oy + col * hy + row * vy;
-                return 'M ' + x0 + ',' + y0 + ' L ' + (x0 + hx) + ',' + (y0 + hy) + ' L ' + (x0 + hx + vx) + ',' + (y0 + hy + vy) + ' L ' + (x0 + vx) + ',' + (y0 + vy) + ' Z';
+                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
             }
 
             function getRStickerPath(row, col) {
@@ -3215,14 +3232,18 @@
                 const vx = 0, vy = 35 / 3;
                 const x0 = ox + col * hx + row * vx;
                 const y0 = oy + col * hy + row * vy;
-                return 'M ' + x0 + ',' + y0 + ' L ' + (x0 + hx) + ',' + (y0 + hy) + ' L ' + (x0 + hx + vx) + ',' + (y0 + hy + vy) + ' L ' + (x0 + vx) + ',' + (y0 + vy) + ' Z';
+                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
             }
-
+            
             if (item.vis) {
                 const parts = item.vis.split(' ');
                 const gridStr = parts[0];
                 for (let i = 0; i < 9; i++) {
                     gridColors[i] = gridStr[i] === '1' ? YELLOW : '#57606f';
+                }
+                if (parts[1]) {
+                    const topStr = parts[1];
+                    for (let i = 0; i < 3; i++) sideColors.top[i] = topStr[i] === '1' ? YELLOW : null;
                 }
                 if (parts[2]) {
                     const rightStr = parts[2];
@@ -3232,31 +3253,224 @@
                     const bottomStr = parts[3];
                     for (let i = 0; i < 3; i++) sideColors.bottom[i] = bottomStr[i] === '1' ? YELLOW : null;
                 }
+                if (parts[4]) {
+                    const leftStr = parts[4];
+                    for (let i = 0; i < 3; i++) sideColors.left[i] = leftStr[i] === '1' ? YELLOW : null;
+                }
+            } else if (cat === "PLL") {
+                gridColors.fill(YELLOW);
+                
+                let corners = [
+                    { name: "UBL", stickers: { top: BLUE, left: ORANGE } },
+                    { name: "UBR", stickers: { top: BLUE, right: RED } },
+                    { name: "UFR", stickers: { bottom: GREEN, right: RED } },
+                    { name: "UFL", stickers: { bottom: GREEN, left: ORANGE } }
+                ];
+                let edges = [
+                    { name: "UB", stickers: { top: BLUE } },
+                    { name: "UR", stickers: { right: RED } },
+                    { name: "UF", stickers: { bottom: GREEN } },
+                    { name: "UL", stickers: { left: ORANGE } }
+                ];
+                
+                function swapCorners(i, j) {
+                    let temp = corners[i]; corners[i] = corners[j]; corners[j] = temp;
+                }
+                function swapEdges(i, j) {
+                    let temp = edges[i]; edges[i] = edges[j]; edges[j] = temp;
+                }
+                
+                if (name.includes("T Perm")) {
+                    swapCorners(1, 2); swapEdges(1, 3);
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Y Perm")) {
+                    swapCorners(0, 2); swapEdges(0, 3);
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("H Perm")) {
+                    swapEdges(0, 2); swapEdges(1, 3);
+                    arrows = [{x1: 35, y1: 20, x2: 35, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Ua Perm")) {
+                    let temp = edges[0]; edges[0] = edges[1]; edges[1] = edges[3]; edges[3] = temp;
+                    arrows = [{x1: 50, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, {x1: 20, y1: 35, x2: 50, y2: 35, double: false}];
+                } else if (name.includes("Ub Perm")) {
+                    let temp = edges[0]; edges[0] = edges[3]; edges[3] = edges[1]; edges[1] = temp;
+                    arrows = [{x1: 20, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, {x1: 50, y1: 35, x2: 20, y2: 35, double: false}];
+                } else if (name.includes("Z Perm")) {
+                    swapEdges(0, 1); swapEdges(2, 3);
+                    arrows = [{x1: 35, y1: 20, x2: 50, y2: 35, double: true}, {x1: 20, y1: 35, x2: 35, y2: 50, double: true}];
+                } else if (name.includes("E Perm")) {
+                    swapCorners(0, 3); swapCorners(1, 2);
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 20, x2: 50, y2: 50, double: true}];
+                } else if (name.includes("F Perm")) {
+                    swapCorners(1, 2); swapEdges(0, 2);
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
+                } else if (name.includes("Ja Perm")) {
+                    swapCorners(0, 3); swapEdges(0, 3);
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Jb Perm")) {
+                    swapCorners(1, 2); swapEdges(0, 1);
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Ra Perm")) {
+                    swapCorners(1, 2); swapEdges(0, 3);
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Rb Perm")) {
+                    swapCorners(0, 3); swapEdges(0, 1);
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("V Perm")) {
+                    swapCorners(0, 2); swapEdges(0, 1);
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Na Perm")) {
+                    swapCorners(0, 2); swapEdges(0, 2);
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
+                } else if (name.includes("Nb Perm")) {
+                    swapCorners(1, 3); swapEdges(1, 3);
+                    arrows = [{x1: 50, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 35, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Aa Perm")) {
+                    let temp = corners[0]; corners[0] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 20, double: false}];
+                } else if (name.includes("Ab Perm")) {
+                    let temp = corners[3]; corners[3] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
+                    arrows = [{x1: 20, y1: 50, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 50, double: false}];
+                }
+                
+                sideColors.top[0] = corners[0].stickers.top; sideColors.left[0] = corners[0].stickers.left;
+                sideColors.top[2] = corners[1].stickers.top; sideColors.right[0] = corners[1].stickers.right;
+                sideColors.bottom[2] = corners[2].stickers.bottom; sideColors.right[2] = corners[2].stickers.right;
+                sideColors.bottom[0] = corners[3].stickers.bottom; sideColors.left[2] = corners[3].stickers.left;
+                sideColors.top[1] = edges[0].stickers.top; sideColors.right[1] = edges[1].stickers.right;
+                sideColors.bottom[1] = edges[2].stickers.bottom; sideColors.left[1] = edges[3].stickers.left;
+                
+            } else if (cat === "OLL" || cat === "COLL" || cat === "CMLL" || cat === "ZBLL") {
+                gridColors[1] = YELLOW; gridColors[3] = YELLOW; gridColors[4] = YELLOW; gridColors[5] = YELLOW; gridColors[7] = YELLOW;
+                
+                if (name.includes("OLL 1") || name.includes("OLL 2") || name.includes("Dot")) {
+                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; gridColors[5] = '#57606f'; gridColors[7] = '#57606f';
+                    sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW; sideColors.right[1] = YELLOW; sideColors.bottom[1] = YELLOW;
+                } else if (name.includes("OLL 33") || name.includes("T-shape")) {
+                    gridColors[1] = '#57606f'; sideColors.top[1] = YELLOW;
+                } else if (name.includes("OLL 51") || name.includes("Line")) {
+                    gridColors[1] = '#57606f'; gridColors[7] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.bottom[1] = YELLOW;
+                }
+                
+                if (name.includes("OLL 20")) {
+                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; gridColors[6] = YELLOW; gridColors[8] = YELLOW;
+                } else if (name.includes("OLL 37") || name.includes("F-shape")) {
+                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
+                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
+                } else if (name.includes("OLL 44") || name.includes("P-shape")) {
+                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
+                    gridColors[0] = YELLOW; gridColors[6] = YELLOW;
+                } else if (name.includes("OLL 51")) {
+                    sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.right[2] = YELLOW;
+                } else if (name.includes("Sune") && !name.includes("Anti")) {
+                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
+                } else if (name.includes("Anti-Sune") || name.includes("ASune")) {
+                    gridColors[2] = YELLOW; sideColors.top[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.bottom[2] = YELLOW;
+                } else if (name.includes("COLL-H") || name.includes("ZBLL-H") || name.includes("CMLL-H") || name.includes("OLL 21") || name.includes("H Case")) {
+                    sideColors.top[0] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
+                } else if (name.includes("Pi Case") || name.includes("ZBLL-Pi") || name.includes("OLL 22") || name.includes("Car")) {
+                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.left[0] = YELLOW; sideColors.right[0] = YELLOW;
+                } else if (name.includes("COLL-U") || name.includes("ZBLL-U") || name.includes("OLL 23") || name.includes("Headlights")) {
+                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
+                } else if (name.includes("COLL-T") || name.includes("ZBLL-T") || name.includes("CMLL-T") || name.includes("OLL 33") || name.includes("Blinker")) {
+                    gridColors[2] = YELLOW; gridColors[8] = YELLOW; sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW;
+                } else if (name.includes("ZBLL-L") || name.includes("OLL 25") || name.includes("L Case") || name.includes("Triple Sune")) {
+                    gridColors[0] = YELLOW; gridColors[8] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW;
+                }
+            } else if (cat === "F2L" || cat === "ZBLS") {
+                if (name.includes("F2L 1")) {
+                    gridColors[8] = RED; sideColors.right[2] = WHITE; sideColors.bottom[2] = GREEN; gridColors[1] = GREEN; sideColors.top[1] = RED;
+                } else if (name.includes("F2L 2")) {
+                    gridColors[8] = GREEN; sideColors.right[2] = RED; sideColors.bottom[2] = WHITE; gridColors[5] = RED; sideColors.right[1] = GREEN;
+                } else if (name.includes("F2L 3")) {
+                    gridColors[8] = RED; sideColors.right[2] = GREEN; sideColors.bottom[2] = WHITE; gridColors[1] = GREEN; sideColors.top[1] = RED;
+                } else if (name.includes("F2L 4")) {
+                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[5] = RED; sideColors.right[1] = GREEN;
+                } else if (name.includes("F2L 5")) {
+                    sideColors.bottom[2] = GREEN; sideColors.right[2] = RED; gridColors[5] = GREEN; sideColors.right[1] = RED;
+                } else if (name.includes("F2L 19")) {
+                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[3] = GREEN; sideColors.left[1] = RED;
+                }
+            }
+            
+            // Draw 3D Isometric stickers
+            // Draw external yellow bars for back-left side (L face)
+            for (let row = 0; row < 3; row++) {
+                if (sideColors.left[row] === YELLOW) {
+                    const ox = 50, oy = 5;
+                    const rx = 35 / 3, ry = 17.5 / 3;
+                    const lx = -35 / 3, ly = 17.5 / 3;
+                    const x0 = ox + row * lx;
+                    const y0 = oy + row * ly;
+                    const p1x = x0, p1y = y0;
+                    const p2x = x0 + lx, p2y = y0 + ly;
+                    const p3x = p2x - 2.5, p3y = p2y - 1.25;
+                    const p4x = p1x - 2.5, p4y = p1y - 1.25;
+                    svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                }
             }
 
-            // Draw Top
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    const color = gridColors[row * 3 + col];
-                    svg += '<path d="' + getUStickerPath(row, col) + '" fill="' + color + '" stroke="#1e272e" stroke-width="1.2" />';
-                }
-            }
-            // Draw F
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = row === 0 && sideColors.bottom[col] ? YELLOW : GREEN;
-                    svg += '<path d="' + getFStickerPath(row, col) + '" fill="' + color + '" stroke="#1e272e" stroke-width="1.2" />';
-                }
-            }
-            // Draw R
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = row === 0 && sideColors.right[2 - col] ? YELLOW : RED;
-                    svg += '<path d="' + getRStickerPath(row, col) + '" fill="' + color + '" stroke="#1e272e" stroke-width="1.2" />';
+            // Draw external yellow bars for back-right side (B face)
+            for (let col = 0; col < 3; col++) {
+                if (sideColors.top[col] === YELLOW) {
+                    const ox = 50, oy = 5;
+                    const rx = 35 / 3, ry = 17.5 / 3;
+                    const lx = -35 / 3, ly = 17.5 / 3;
+                    const x0 = ox + col * rx;
+                    const y0 = oy + col * ry;
+                    const p1x = x0, p1y = y0;
+                    const p2x = x0 + rx, p2y = y0 + ry;
+                    const p3x = p2x + 2.5, p3y = p2y - 1.25;
+                    const p4x = p1x + 2.5, p4y = p1y - 1.25;
+                    svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
                 }
             }
 
-            svg += '</svg>';
+            // 1. Draw U Face (Top Rhombus)
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const color = gridColors[row * 3 + col] || '#57606f';
+                    const path = getUStickerPath(row, col);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                }
+            }
+
+            // 2. Draw F Face (Front-Left Face)
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let color = '#57606f';
+                    if (row === 0) {
+                        color = sideColors.bottom[col] || GREEN;
+                    } else {
+                        color = GREEN;
+                    }
+                    const path = getFStickerPath(row, col);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                }
+            }
+
+            // 3. Draw R Face (Front-Right Face)
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let color = '#57606f';
+                    if (row === 0) {
+                        color = sideColors.right[2 - col] || RED;
+                    } else {
+                        color = RED;
+                    }
+                    const path = getRStickerPath(row, col);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                }
+            }
+            
+            // Draw projected arrows on top face
+            arrows.forEach(a => {
+                const start = mapToIso(a.x1, a.y1);
+                const end = mapToIso(a.x2, a.y2);
+                svg += `<line x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" stroke="#ff3838" stroke-width="2.5" marker-end="url(#arrow)" marker-start="${a.double ? 'url(#arrow)' : 'none'}" stroke-linecap="round" />`;
+            });
+            
+            svg += `</svg>`;
             return svg;
         }
 
@@ -3305,8 +3519,11 @@
 
             // Render SVG diagram
             document.getElementById('case-svg-container').innerHTML = generateCubeSvg(activeCase);
-            document.getElementById('active-case-name').textContent = activeCase.name;
-            document.getElementById('active-case-desc').textContent = activeCase.desc || "";
+            
+            // Mask case details during active practice
+            document.getElementById('active-case-name').textContent = "???";
+            document.getElementById('active-case-desc').innerHTML = "&nbsp;";
+            document.getElementById('active-case-answer').style.display = "none";
 
             // Calculate scramble
             activeScramble = invertAlgorithm(activeCase.moves);
@@ -3363,6 +3580,12 @@
                 document.getElementById('timer-display-text').style.color = "#1e272e";
                 document.getElementById('timer-status-text').textContent = "Done! Press Space to next scramble";
                 document.getElementById('timer-status-text').className = "timer-status";
+
+                // Reveal case identity and correct algorithm moves after solving
+                document.getElementById('active-case-name').textContent = activeCase.name;
+                document.getElementById('active-case-desc').textContent = activeCase.desc || "";
+                document.getElementById('active-case-alg-text').textContent = activeCase.moves;
+                document.getElementById('active-case-answer').style.display = "block";
 
                 // Log score to table
                 logScoreToTable(activeCase.name, recogTime, solveTime, totalTime);
