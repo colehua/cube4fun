@@ -750,13 +750,13 @@
             ]
         };
 
-        // Generate a beautiful 2D Rubik's cube SVG diagram of the case
+        // Generate a beautiful 3D Isometric Rubik's cube SVG diagram of the case
         function generateCubeSvg(item) {
             const name = item.name;
             const cat = item.cat;
             
-            // Render an SVG of size 70x70
-            let svg = `<svg viewBox="0 0 70 70" width="60" height="60" style="background:#1e272e; border-radius:8px; border:2.5px solid #333; box-shadow: 2px 2px 6px rgba(0,0,0,0.35);">`;
+            // Render an isometric 3D Rubik's cube SVG
+            let svg = `<svg viewBox="0 0 100 80" width="80" height="64" style="background:none;">`;
             
             // Add arrowhead marker definition for PLL arrows
             svg += `<defs>
@@ -780,6 +780,42 @@
             const GREEN = '#4CD964';
             const BLUE = '#007AFF';
             const ORANGE = '#FF9500';
+            
+            // Helper functions for 3D Isometric Projection
+            function mapToIso(x, y) {
+                const dx = x - 35;
+                const dy = y - 35;
+                const rx = 50 + (7 / 6) * dx - (7 / 6) * dy;
+                const ry = 22.5 + (7 / 12) * dx + (7 / 12) * dy;
+                return { x: rx, y: ry };
+            }
+
+            function getUStickerPath(row, col) {
+                const ox = 50, oy = 5;
+                const rx = 35 / 3, ry = 17.5 / 3;
+                const lx = -35 / 3, ly = 17.5 / 3;
+                const x0 = ox + row * lx + col * rx;
+                const y0 = oy + row * ly + col * ry;
+                return `M ${x0},${y0} L ${x0 + rx},${y0 + ry} L ${x0 + rx + lx},${y0 + ry + ly} L ${x0 + lx},${y0 + ly} Z`;
+            }
+
+            function getFStickerPath(row, col) {
+                const ox = 15, oy = 22.5;
+                const hx = 35 / 3, hy = 17.5 / 3;
+                const vx = 0, vy = 35 / 3;
+                const x0 = ox + col * hx + row * vx;
+                const y0 = oy + col * hy + row * vy;
+                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
+            }
+
+            function getRStickerPath(row, col) {
+                const ox = 50, oy = 40;
+                const hx = 35 / 3, hy = -17.5 / 3;
+                const vx = 0, vy = 35 / 3;
+                const x0 = ox + col * hx + row * vx;
+                const y0 = oy + col * hy + row * vy;
+                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
+            }
             
             if (cat === "PLL") {
                 gridColors.fill(YELLOW);
@@ -934,17 +970,51 @@
                 }
             }
             
-            const coords = [{x: 14, y: 14}, {x: 29, y: 14}, {x: 44, y: 14}, {x: 14, y: 29}, {x: 29, y: 29}, {x: 44, y: 29}, {x: 14, y: 44}, {x: 29, y: 44}, {x: 44, y: 44}];
-            coords.forEach((c, i) => { svg += `<rect x="${c.x}" y="${c.y}" width="12" height="12" rx="2" fill="${gridColors[i]}" stroke="#111" stroke-width="1.5" />`; });
-            
-            for (let i = 0; i < 3; i++) {
-                if (sideColors.top[i]) svg += `<rect x="${14 + i * 15}" y="4" width="12" height="8" rx="2" fill="${sideColors.top[i]}" stroke="#111" stroke-width="1.5" />`;
-                if (sideColors.right[i]) svg += `<rect x="58" y="${14 + i * 15}" width="8" height="12" rx="2" fill="${sideColors.right[i]}" stroke="#111" stroke-width="1.5" />`;
-                if (sideColors.bottom[i]) svg += `<rect x="${14 + i * 15}" y="58" width="12" height="8" rx="2" fill="${sideColors.bottom[i]}" stroke="#111" stroke-width="1.5" />`;
-                if (sideColors.left[i]) svg += `<rect x="4" y="${14 + i * 15}" width="8" height="12" rx="2" fill="${sideColors.left[i]}" stroke="#111" stroke-width="1.5" />`;
+            // Draw 3D Isometric stickers
+            // 1. Draw U Face (Top Rhombus)
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const color = gridColors[row * 3 + col] || '#57606f';
+                    const path = getUStickerPath(row, col);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                }
+            }
+
+            // 2. Draw F Face (Front-Left Face)
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let color = '#57606f';
+                    if (row === 0) {
+                        color = sideColors.bottom[col] || GREEN;
+                    } else {
+                        color = GREEN;
+                    }
+                    const path = getFStickerPath(row, col);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                }
+            }
+
+            // 3. Draw R Face (Front-Right Face)
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    let color = '#57606f';
+                    if (row === 0) {
+                        color = sideColors.right[2 - col] || RED;
+                    } else {
+                        color = RED;
+                    }
+                    const path = getRStickerPath(row, col);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                }
             }
             
-            arrows.forEach(a => { svg += `<line x1="${a.x1}" y1="${a.y1}" x2="${a.x2}" y2="${a.y2}" stroke="#ff3838" stroke-width="2.5" marker-end="url(#arrow)" marker-start="${a.double ? 'url(#arrow)' : 'none'}" />`; });
+            // Draw projected arrows on top face
+            arrows.forEach(a => {
+                const start = mapToIso(a.x1, a.y1);
+                const end = mapToIso(a.x2, a.y2);
+                svg += `<line x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" stroke="#ff3838" stroke-width="2.5" marker-end="url(#arrow)" marker-start="${a.double ? 'url(#arrow)' : 'none'}" stroke-linecap="round" />`;
+            });
+            
             svg += `</svg>`;
             return svg;
         }
@@ -987,7 +1057,7 @@
                     <div>
                         <div class="alg-name">
                             <span>${item.name}</span>
-                            <div class="visual-cube" style="background:none; border:none; box-shadow:none;">
+                            <div class="visual-cube" style="background:none; border:none; box-shadow:none; width:80px; height:64px;">
                                 ${cubeSvg}
                             </div>
                         </div>
