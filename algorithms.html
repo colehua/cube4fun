@@ -1056,140 +1056,2649 @@
     <script>
         // Database of popular cubing algorithms
         const ALGORITHMS = {
-            pll: [
-                { name: "T Perm", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", algs: ["R U R' U' R' F R2 U' R' U' R U R' F'", "F R U' R' U' R U R' F' R U R' U' R' F R F'", "R2 U' R2 U' R2 U R2 U R2 D' R2 D R2 U' R2"], cat: "PLL", tags: "t perm t-perm", desc: "Headlights on left side, solved 2x1 block on back-right." },
-                { name: "Y Perm", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", algs: ["F R U' R' U' R U R' F' R U R' U' R' F R F'", "R2 U' R' U R U' x' U' R' U R' U' R U R"], cat: "PLL", tags: "y perm y-perm", desc: "Diagonal corner swap. Two adjacent 2x1 blocks on front and right." },
-                { name: "H Perm", moves: "M2' U M2' U2 M2' U M2'", algs: ["M2' U M2' U2 M2' U M2'", "M2 U' M2 U2 M2 U' M2", "R2 U2 R U2 R2 U2 R2 U2 R U2 R2"], cat: "PLL", tags: "h perm h-perm", desc: "Opposite edge swap (cross shape swap on all 4 sides)." },
-                { name: "Ua Perm", moves: "R U' R U R U R U' R' U' R2", algs: ["R U' R U R U R U' R' U' R2", "M2 U M U2 M' U M2", "y2 R2 U' R' U' R U R U R U' R"], cat: "PLL", tags: "ua perm u perm", desc: "3-cycle edges swap clockwise. Fully solved bar on back." },
-                { name: "Ub Perm", moves: "R2 U R U R' U' R' U' R' U R'", algs: ["R2 U R U R' U' R' U' R' U R'", "M2 U' M U2 M' U' M2", "R' U R' U' R' U' R' U R U R2"], cat: "PLL", tags: "ub perm u perm", desc: "3-cycle edges swap counter-clockwise. Fully solved bar on back." },
-                { name: "Z Perm", moves: "M2' U M2' U M' U2 M2' U2 M' U2", algs: ["M2' U M2' U M' U2 M2' U2 M' U2", "M' U' M2' U' M2' U' M' U2 M2'", "R' U' R U' R U R U' R' U R U R2 U' R'"], cat: "PLL", tags: "z perm z-perm", desc: "Adjacent edge swap (cross swap on left/front and right/back)." },
-                { name: "Aa Perm", moves: "x L2 D2 L' U' L D2 L' U L'", algs: ["x L2 D2 L' U' L D2 L' U L'", "y' x R2 D2 R' U' R D2 R' U R'", "y x' R2 D2 R' U' R D2 R' U R"], cat: "PLL", tags: "aa perm a perm", desc: "Headlights on front, solved 2x1 block on back-right." },
-                { name: "Ab Perm", moves: "x L' U L' D2 L U' L' D2 L2", algs: ["x L' U L' D2 L U' L' D2 L2", "y' x R' U R' D2 R U' R' D2 R2", "y x' R' U R' D2 R U' R' D2 R2"], cat: "PLL", tags: "ab perm a perm", desc: "Headlights on front, solved 2x1 block on back-left." },
-                { name: "E Perm", moves: "x' R U' R' D R U R' D' R U R' D R U' R' D'", algs: ["x' R U' R' D R U R' D' R U R' D R U' R' D'", "y x' L' U L D' L' U' L D L' U' L D' L' U L D"], cat: "PLL", tags: "e perm e-perm", desc: "Corner swap vertically on left and right (no edges swapped)." },
-                { name: "F Perm", moves: "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", algs: ["R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", "y' R' U2 R' d' R' F' R2 U' R' U R' F R U' F"], cat: "PLL", tags: "f perm f-perm", desc: "Solved 3x1 bar on left side. Swaps UFR/UBR corners." },
-                { name: "Ga Perm", moves: "R2 U R' U R' U' R U' R2 D U' R' U R D'", algs: ["R2 U R' U R' U' R U' R2 D U' R' U R D'", "y2 R2 u R' U R' U' R u' R2 y' R' U R"], cat: "PLL", tags: "ga perm g perm", desc: "Solved 2x1 block on front-left, headlights on right side." },
-                { name: "Gb Perm", moves: "R' U' R y R2 u R' U R U' R u' R2", algs: ["R' U' R y R2 u R' U R U' R u' R2", "y2 F' U' F R2 u R' U R U' R u' R2"], cat: "PLL", tags: "gb perm g perm", desc: "Solved 2x1 block on back-left, headlights on right side." },
-                { name: "Gc Perm", moves: "R2 U' R U' R U R' U R2 D' U R U' R' D", algs: ["R2 U' R U' R U R' U R2 D' U R U' R' D", "y2 R2 u' R U' R U R' u R2 y R U' R'"], cat: "PLL", tags: "gc perm g perm", desc: "Solved 2x1 block on back-right, headlights on left side." },
-                { name: "Gd Perm", moves: "R U R' y' R2 u' R U' R' U R' u R2", algs: ["R U R' y' R2 u' R U' R' U R' u R2", "y2 R U R' F' R2 u' R U' R' U R' u R2"], cat: "PLL", tags: "gd perm g perm", desc: "Solved 2x1 block on front-right, headlights on left side." },
-                { name: "Ja Perm", moves: "x R2 F R F' R U2 r' U r U2", algs: ["x R2 F R F' R U2 r' U r U2", "y' R' U L' U2 R U' R' U2 R L"], cat: "PLL", tags: "ja perm j perm", desc: "Solved J-block on left/back, swapping left corners." },
-                { name: "Jb Perm", moves: "R U R' F' R U R' U' R' F R2 U' R' U'", algs: ["R U R' F' R U R' U' R' F R2 U' R' U'", "y2 r' U L' U2 R U' R' U2 R L"], cat: "PLL", tags: "jb perm j perm", desc: "Solved J-block on left/front, swapping right corners." },
-                { name: "Ra Perm", moves: "R U' R' U' R U R D R' U' R D' R' U2 R'", algs: ["R U' R' U' R U R D R' U' R D' R' U2 R'", "y L U2 L' U2 L F' L' U' L U L F L2'"], cat: "PLL", tags: "ra perm r perm", desc: "Headlights on left, solved 2x1 block on front-right." },
-                { name: "Rb Perm", moves: "R' U2 R U2 R' F R U R' U' R' F' R2 U'", algs: ["R' U2 R U2 R' F R U R' U' R' F' R2 U'", "y' R' U2 R' D' R U' R' D R U R' U' R U R'"], cat: "PLL", tags: "rb perm r perm", desc: "Headlights on left, solved 2x1 block on back-right." },
-                { name: "V Perm", moves: "R' U R' U' y R' F' R2 U' R' U R' F R F", algs: ["R' U R' U' y R' F' R2 U' R' U R' F R F", "R' U R' U' R D' R' D R' U D' R2 U' R2' D R"], cat: "PLL", tags: "v perm v-perm", desc: "Diagonal corner swap, solved 2x1 block on back-right." },
-                { name: "Na Perm", moves: "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", algs: ["R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", "z U R' D R2 U' R D' U R' D R2 U' R D' z'"], cat: "PLL", tags: "na perm n perm", desc: "Two diagonal corner-edge blocks, UBL and UFR swapping." },
-                { name: "Nb Perm", moves: "R' U' R U' R' U' R F R' U' R U R F' R2 U R U2 R' U R", algs: ["R' U' R U' R' U' R F R' U' R U R F' R2 U R U2 R' U R", "z U' R D' R2 U R' D U' R D' R2 U R' D z'"], cat: "PLL", tags: "nb perm n perm", desc: "Two diagonal corner-edge blocks, UBR and UFL swapping." }
+    "pll": [
+        {
+            "name": "T Perm",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
             ],
-            oll: [
-                { name: "Sune (OLL 27)", moves: "R U R' U R U2 R'", algs: ["R U R' U R U2 R'", "y2 R' U' R U' R' U2 R", "y L' U' L U' L' U2 L"], cat: "OLL", tags: "sune oll 27", desc: "1 oriented corner on bottom-left, front-right corner faces front." },
-                { name: "Anti-Sune (OLL 26)", moves: "R U2 R' U' R U' R'", algs: ["R U2 R' U' R U' R'", "y2 R' U2 R U R' U R", "y L' U2 L U L' U L"], cat: "OLL", tags: "antisune anti sune oll 26", desc: "1 oriented corner on top-right, front-right corner faces right." },
-                { name: "Hao / Cross (OLL 21)", moves: "R U2 R' U' R U R' U' R U' R'", algs: ["R U2 R' U' R U R' U' R U' R'", "R U R' U R U' R' U R U2 R'"], cat: "OLL", tags: "cross oll 21 hao", desc: "Cross. 0 oriented corners, headlights on front and back." },
-                { name: "Car (OLL 22)", moves: "R U2 R2 U' R2 U' R2 U2 R", algs: ["R U2 R2 U' R2 U' R2 U2 R", "f R U R' U' f' F R U R' U' F'"], cat: "OLL", tags: "car oll 22", desc: "Pi shape. 0 oriented corners, headlights on front, side bars left/right." },
-                { name: "Headlights (OLL 23)", moves: "R2 D' R U2 R' D R U2 R", algs: ["R2 D' R U2 R' D R U2 R", "y2 R2 D R' U2 R D' R' U2 R'"], cat: "OLL", tags: "headlights oll 23", desc: "U shape. 2 oriented corners at the back, headlights facing front." },
-                { name: "Blinker (OLL 24)", moves: "r U R' U' r' F R F'", algs: ["r U R' U' r' F R F'", "y2 r' U' R U r U' r' F'"], cat: "OLL", tags: "blinker oll 24", desc: "T shape. 2 oriented corners on right side, headlights facing left." },
-                { name: "Triple Sune (OLL 25)", moves: "R' F R B' R' F' R B", algs: ["R' F R B' R' F' R B", "y' R' F R F' r U R' U' r'"], cat: "OLL", tags: "triple sune oll 25", desc: "L shape. 2 diagonal oriented corners, headlights facing front/back." },
-                { name: "OLL 1 (Dot)", moves: "R U2 R2 F R F' U2 R' F R F'", algs: ["R U2 R2 F R F' U2 R' F R F'", "y R U2 R2' F R F' U2 R' F R F'"], cat: "OLL", tags: "oll 1 dot", desc: "Dot case: no oriented edges, oriented corners on front/back." },
-                { name: "OLL 2 (Dot)", moves: "F R U R' U' F' f R U R' U' f'", algs: ["F R U R' U' F' f R U R' U' f'", "y' F R U R' U' F' U f R U R' U' f'"], cat: "OLL", tags: "oll 2 dot", desc: "Dot case: no oriented edges, all corners unoriented." },
-                { name: "OLL 20 (Checkered)", moves: "r U R' U' M2 U R U' r'", algs: ["r U R' U' M2 U R U' r'", "y2 r U R' U' M2 U R U' r'"], cat: "OLL", tags: "oll 20", desc: "Checkered dot: all corners oriented, no edges oriented." },
-                { name: "OLL 33 (T-shape)", moves: "R U R' U' R' F R F'", algs: ["R U R' U' R' F R F'", "y2 F R U R' U' F'"], cat: "OLL", tags: "oll 33 t shape", desc: "T-shape: oriented bar on top, headlights facing front." },
-                { name: "OLL 37 (F-shape)", moves: "F R' F' R U R U' R'", algs: ["F R' F' R U R U' R'", "y2 F R' F' R U R U' R'"], cat: "OLL", tags: "oll 37 f shape", desc: "F-shape: line on top, UFL corner oriented." },
-                { name: "OLL 44 (P-shape)", moves: "f R U R' U' f'", algs: ["f R U R' U' f'", "y2 f R U R' U' f'"], cat: "OLL", tags: "oll 44 p shape", desc: "P-shape: 2x2 yellow block in top-left, oriented edges." },
-                { name: "OLL 51 (Line)", moves: "f R U R' U' R U R' U' f'", algs: ["f R U R' U' R U R' U' f'", "y2 f R U R' U' R U R' U' f'"], cat: "OLL", tags: "oll 51 line", desc: "Line OLL: horizontal line of edges, headlights on front/back." }
+            "desc": "Headlights on left side, solved 2x1 block on back-right.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Y Perm",
+            "moves": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+            "algs": [
+                "F R U' R' U' R U R' F' R U R' U' R' F R F'"
             ],
-            f2l: [
-                { name: "F2L 1 (Easy Insert)", moves: "U R U' R'", cat: "F2L", tags: "f2l 1", desc: "Corner white faces right, edge matching top color." },
-                { name: "F2L 2 (Corner facing right)", moves: "y U' L' U L", cat: "F2L", tags: "f2l 2", desc: "Corner white faces front, edge matching top color." },
-                { name: "F2L 3 (Corner facing front)", moves: "y' U' R' U R", cat: "F2L", tags: "f2l 3", desc: "Corner white faces right, edge opposite top color." },
-                { name: "F2L 4 (Corner facing up)", moves: "R U2 R' U' R U R'", cat: "F2L", tags: "f2l 4", desc: "Corner white faces up, edge matching top color." },
-                { name: "F2L 5 (Corner in bottom, edge top)", moves: "R U' R' U R U' R'", cat: "F2L", tags: "f2l 5", desc: "Corner is in bottom slot, edge is in top layer." },
-                { name: "F2L 19 (Split case)", moves: "R U' R' U2 R U' R'", cat: "F2L", tags: "f2l 19", desc: "Corner white faces up, edge in top layer separated." },
-                { name: "F2L 24 (Stuck edge)", moves: "R U R' U' R U2 R' U' R U R'", cat: "F2L", tags: "f2l 24", desc: "Corner in top layer, edge is stuck in front-right slot." },
-                { name: "F2L 36 (Both in slot)", moves: "R U' R' U R U2 R' U R U' R'", cat: "F2L", tags: "f2l 36", desc: "Corner and edge are in slot but mismatched." }
+            "desc": "Diagonal corner swap. Two adjacent 2x1 blocks on front and right.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "H Perm",
+            "moves": "M2' U M2' U2 M2' U M2'",
+            "algs": [
+                "M2' U M2' U2 M2' U M2'"
             ],
-            cmll: [
-                { name: "CMLL-U 1", moves: "R2 D R' U2 R D' R' U2 R'", cat: "CMLL", tags: "cmll u1", desc: "U-shape CMLL: headlights on front, back corners oriented." },
-                { name: "CMLL-T 1", moves: "R U R' U' R' F R F'", cat: "CMLL", tags: "cmll t1", desc: "T-shape CMLL: headlights on left side, right corners oriented." },
-                { name: "CMLL-Sune", moves: "R U R' U R U2 R'", cat: "CMLL", tags: "cmll sune", desc: "Sune corner orientation with Roux edge-independent permutation." },
-                { name: "CMLL-H 1", moves: "R U R' U R U' R' U R U2 R'", cat: "CMLL", tags: "cmll h1", desc: "H-shape CMLL: headlights on front and back side." }
+            "desc": "Opposite edge swap (cross shape swap on all 4 sides).",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Ua Perm",
+            "moves": "R U' R U R U R U' R' U' R2",
+            "algs": [
+                "R U' R U R U R U' R' U' R2"
             ],
-            coll: [
-                { name: "COLL-T 1", moves: "F R U R' U' F'", cat: "COLL", tags: "coll t1", desc: "T-case: headlights on left side, right corners oriented." },
-                { name: "COLL-U 1", moves: "R' U' R U' R' U2 R", cat: "COLL", tags: "coll u1", desc: "U-case: headlights on front side, back corners oriented." },
-                { name: "COLL-H 1", moves: "R U2 R' U' R U R' U' R U' R'", cat: "COLL", tags: "coll h1", desc: "H-case: double headlights front and back side." }
+            "desc": "3-cycle edges swap clockwise. Fully solved bar on back.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Ub Perm",
+            "moves": "R2 U R U R' U' R' U' R' U R'",
+            "algs": [
+                "R2 U R U R' U' R' U' R' U R'"
             ],
-            zbll: {
-                T: [
-                    { name: "ZBLL-T 1", moves: "R U2 R' U' R U' R2 F R F' R U R'", cat: "ZBLL", tags: "zbll t1", desc: "T-case corner orientation with adjacent corner permutation." },
-                    { name: "ZBLL-T 2", moves: "R U2 R2 F R F' R U2 R'", cat: "ZBLL", tags: "zbll t2", desc: "T-case corner orientation with diagonal corner permutation." },
-                    { name: "ZBLL-T 3", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", cat: "ZBLL", tags: "zbll t3", desc: "T-case corner orientation with solved corners permutation." },
-                    { name: "ZBLL-T 12", moves: "r U' r' U' r U r' F' R U R'", cat: "ZBLL", tags: "zbll t12", desc: "T-case corner orientation with headlights swap." }
+            "desc": "3-cycle edges swap counter-clockwise. Fully solved bar on back.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Z Perm",
+            "moves": "M2' U M2' U M' U2 M2' U2 M' U2",
+            "algs": [
+                "M2' U M2' U M' U2 M2' U2 M' U2"
+            ],
+            "desc": "Adjacent edge swap (cross swap on left/front and right/back).",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "E Perm",
+            "moves": "x' R U' R' D R U R' D' R U R' D R U' R' D' x",
+            "algs": [
+                "x' R U' R' D R U R' D' R U R' D R U' R' D' x"
+            ],
+            "desc": "Swaps UFL-UBL and UFR-UBR corners.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "F Perm",
+            "moves": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
+            "algs": [
+                "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R"
+            ],
+            "desc": "Swaps UFL-UFR corners and UB-UF edges (adjacent swap).",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Aa Perm",
+            "moves": "x L D' L U2 L' D L U2 L2 x'",
+            "algs": [
+                "x L D' L U2 L' D L U2 L2 x'"
+            ],
+            "desc": "Swaps UBL-UFR-UBR corners clockwise.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Ab Perm",
+            "moves": "x L2 U2 L D L' U2 L D' L x'",
+            "algs": [
+                "x L2 U2 L D L' U2 L D' L x'"
+            ],
+            "desc": "Swaps UBL-UFR-UBR corners counter-clockwise.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Ga Perm",
+            "moves": "R2 U R' U R' U' R U' R2 D U' R U' R' D'",
+            "algs": [
+                "R2 U R' U R' U' R U' R2 D U' R U' R' D'"
+            ],
+            "desc": "Adjacent corner swap with a 2x1 block on left front.",
+            "cat": "PLL",
+            "vis": "000110010 000 001 000 100"
+        },
+        {
+            "name": "Gb Perm",
+            "moves": "F' U' F R2 D R' U R U' R D' R2",
+            "algs": [
+                "F' U' F R2 D R' U R U' R D' R2"
+            ],
+            "desc": "Adjacent corner swap with a 2x1 block on left back.",
+            "cat": "PLL",
+            "vis": "010010110 100 000 000 000"
+        },
+        {
+            "name": "Gc Perm",
+            "moves": "R2 U' R U' R U R' U R2 D' U R' U R D",
+            "algs": [
+                "R2 U' R U' R U R' U R2 D' U R' U R D"
+            ],
+            "desc": "Adjacent corner swap with a 2x1 block on right front.",
+            "cat": "PLL",
+            "vis": "010110000 000 100 000 001"
+        },
+        {
+            "name": "Gd Perm",
+            "moves": "R U R' F' R U R' U' R' F R2 U' R' U'",
+            "algs": [
+                "R U R' F' R U R' U' R' F R2 U' R' U'"
+            ],
+            "desc": "Adjacent corner swap with a 2x1 block on right back.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Ja Perm",
+            "moves": "x R2 F R F' R U2' r' U r U2' x'",
+            "algs": [
+                "x R2 F R F' R U2' r' U r U2' x'"
+            ],
+            "desc": "Swaps UFL-UBL corners and UL-UF edges.",
+            "cat": "PLL",
+            "vis": "011110110 000 000 000 000"
+        },
+        {
+            "name": "Jb Perm",
+            "moves": "R U R' F' R U R' U' R' F R2 U' R' U'",
+            "algs": [
+                "R U R' F' R U R' U' R' F R2 U' R' U'"
+            ],
+            "desc": "Swaps UFR-UBR corners and UR-UF edges.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Ra Perm",
+            "moves": "R U' R' U' R U R D R' U' R D' R' U2 R'",
+            "algs": [
+                "R U' R' U' R U R D R' U' R D' R' U2 R'"
+            ],
+            "desc": "Swaps UFL-UFR corners and UL-UR edges.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Rb Perm",
+            "moves": "R' U2 R U2 R' F R U R' U' R' F' R2 U' R'",
+            "algs": [
+                "R' U2 R U2 R' F R U R' U' R' F' R2 U' R'"
+            ],
+            "desc": "Swaps UBL-UBR corners and UL-UR edges.",
+            "cat": "PLL",
+            "vis": "011111100 000 000 000 001"
+        },
+        {
+            "name": "V Perm",
+            "moves": "R' U R' d' R' F' R2 U' R' U R' F R F",
+            "algs": [
+                "R' U R' d' R' F' R2 U' R' U R' F R F"
+            ],
+            "desc": "Swaps UFR-UBL corners and UF-UR edges.",
+            "cat": "PLL",
+            "vis": "010011001 000 000 000 101"
+        },
+        {
+            "name": "Na Perm",
+            "moves": "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
+            "algs": [
+                "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'"
+            ],
+            "desc": "Diagonal corner swap, outer blocks line swap.",
+            "cat": "PLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "Nb Perm",
+            "moves": "R' (U' L' U R) (U' R' U L) U2 (R U R' U R U2 R')",
+            "algs": [
+                "R' (U' L' U R) (U' R' U L) U2 (R U R' U R U2 R')"
+            ],
+            "desc": "Diagonal corner swap, mirror Nb Perm.",
+            "cat": "PLL",
+            "vis": "000010010 001 100 000 100"
+        }
+    ],
+    "oll": [
+        {
+            "name": "OLL 1",
+            "moves": "R U2 R2 F R F' U2 R' F R F'",
+            "algs": [
+                "R U2 R2 F R F' U2 R' F R F'"
+            ],
+            "desc": "Dot: no oriented edges, all corners unoriented",
+            "cat": "OLL",
+            "vis": "000010000 010 111 010 111"
+        },
+        {
+            "name": "OLL 2",
+            "moves": "r U r' U2 r U2 r' U2 r U' r'",
+            "algs": [
+                "r U r' U2 r U2 r' U2 r U' r'"
+            ],
+            "desc": "Dot: no oriented edges, opposite corners unoriented",
+            "cat": "OLL",
+            "vis": "001111100 000 000 000 000"
+        },
+        {
+            "name": "OLL 3",
+            "moves": "r' R2 U R' U r U2 r' U M'",
+            "algs": [
+                "r' R2 U R' U r U2 r' U M'"
+            ],
+            "desc": "Dot: no oriented edges, diagonal corners unoriented",
+            "cat": "OLL",
+            "vis": "000000000 010 000 110 000"
+        },
+        {
+            "name": "OLL 4",
+            "moves": "M U' r U2 r' U' R U' R' M'",
+            "algs": [
+                "M U' r U2 r' U' R U' R' M'"
+            ],
+            "desc": "Dot: no oriented edges, adjacent corners oriented",
+            "cat": "OLL",
+            "vis": "000011011 100 000 000 000"
+        },
+        {
+            "name": "OLL 5",
+            "moves": "l' U2 L U L' U l",
+            "algs": [
+                "l' U2 L U L' U l"
+            ],
+            "desc": "Square shape: oriented UFL/UBR corners",
+            "cat": "OLL",
+            "vis": "011011001 000 000 010 000"
+        },
+        {
+            "name": "OLL 6",
+            "moves": "r U2 R' U' R U' r'",
+            "algs": [
+                "r U2 R' U' R U' r'"
+            ],
+            "desc": "Square shape: oriented UFR/UBL corners",
+            "cat": "OLL",
+            "vis": "110110100 000 000 010 000"
+        },
+        {
+            "name": "OLL 7",
+            "moves": "r U R' U R U2 r'",
+            "algs": [
+                "r U R' U R U2 r'"
+            ],
+            "desc": "Lightning bolt: small lightning shape",
+            "cat": "OLL",
+            "vis": "110110100 000 010 000 000"
+        },
+        {
+            "name": "OLL 8",
+            "moves": "l' U' L U' L' U2 l",
+            "algs": [
+                "l' U' L U' L' U2 l"
+            ],
+            "desc": "Lightning bolt: small lightning shape mirrored",
+            "cat": "OLL",
+            "vis": "011011001 000 000 000 010"
+        },
+        {
+            "name": "OLL 9",
+            "moves": "R U R' U' R' F R2 U R' U' F'",
+            "algs": [
+                "R U R' U' R' F R2 U R' U' F'"
+            ],
+            "desc": "Fish shape: fish tail oriented, head unoriented",
+            "cat": "OLL",
+            "vis": "010110001 001 010 110 001"
+        },
+        {
+            "name": "OLL 10",
+            "moves": "R U R' U R' F R F' R U2 R'",
+            "algs": [
+                "R U R' U R' F R F' R U2 R'"
+            ],
+            "desc": "Fish shape: fish tail oriented, head unoriented mirrored",
+            "cat": "OLL",
+            "vis": "001110010 110 010 001 100"
+        },
+        {
+            "name": "OLL 11",
+            "moves": "r U R' U R U' R' U R U2 r'",
+            "algs": [
+                "r U R' U R U' R' U R U2 r'"
+            ],
+            "desc": "Lightning bolt: large lightning shape",
+            "cat": "OLL",
+            "vis": "110110100 000 101 010 000"
+        },
+        {
+            "name": "OLL 12",
+            "moves": "M' U' M U2 M' U' M",
+            "algs": [
+                "M' U' M U2 M' U' M"
+            ],
+            "desc": "Lightning bolt: large lightning shape mirrored",
+            "cat": "OLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OLL 13",
+            "moves": "F U R U2 R' U' R U R' F'",
+            "algs": [
+                "F U R U2 R' U' R U R' F'"
+            ],
+            "desc": "Knight shape: knight move layout",
+            "cat": "OLL",
+            "vis": "000111100 110 001 011 000"
+        },
+        {
+            "name": "OLL 14",
+            "moves": "R' F R U R' F' R y' R2 U' R",
+            "algs": [
+                "R' F R U R' F' R y' R2 U' R"
+            ],
+            "desc": "Knight shape: knight move layout mirrored",
+            "cat": "OLL",
+            "vis": "000111000 000 101 100 000"
+        },
+        {
+            "name": "OLL 15",
+            "moves": "r' U' r R' U' R U r' U r",
+            "algs": [
+                "r' U' r R' U' R U r' U r"
+            ],
+            "desc": "Knight shape: knight move layout #2",
+            "cat": "OLL",
+            "vis": "100111001 010 000 010 100"
+        },
+        {
+            "name": "OLL 16",
+            "moves": "r U r' R U R' U' r U' r'",
+            "algs": [
+                "r U r' R U R' U' r U' r'"
+            ],
+            "desc": "Knight shape: knight move layout #2 mirrored",
+            "cat": "OLL",
+            "vis": "001111100 010 000 010 001"
+        },
+        {
+            "name": "OLL 17",
+            "moves": "F R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' F'"
+            ],
+            "desc": "Dot case: corner and edge oriented",
+            "cat": "OLL",
+            "vis": "010110000 001 010 011 101"
+        },
+        {
+            "name": "OLL 18",
+            "moves": "r U R' U R U2 r' U' r U' r'",
+            "algs": [
+                "r U R' U R U2 r' U' r U' r'"
+            ],
+            "desc": "Dot case: corner and edge oriented mirrored",
+            "cat": "OLL",
+            "vis": "110010000 000 010 000 000"
+        },
+        {
+            "name": "OLL 19",
+            "moves": "r' R U R U R' U' r2 R2 U R U' r'",
+            "algs": [
+                "r' R U R U R' U' r2 R2 U R U' r'"
+            ],
+            "desc": "Dot case: diagonal oriented corners",
+            "cat": "OLL",
+            "vis": "101110100 000 010 010 000"
+        },
+        {
+            "name": "OLL 20",
+            "moves": "r U R' U' M2 U R U' r'",
+            "algs": [
+                "r U R' U' M2 U R U' r'"
+            ],
+            "desc": "Dot case: two adjacent oriented edges",
+            "cat": "OLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OLL 21",
+            "moves": "RU R' U R U' R' U R U2 R'",
+            "algs": [
+                "RU R' U R U' R' U R U2 R'"
+            ],
+            "desc": "Cross shape (H): double headlights front/back",
+            "cat": "OLL",
+            "vis": "010111000 101 000 001 000"
+        },
+        {
+            "name": "OLL 22",
+            "moves": "R U2 R2 U' R2 U' R2 U2 R",
+            "algs": [
+                "R U2 R2 U' R2 U' R2 U2 R"
+            ],
+            "desc": "Cross shape (Pi): side/front headlights layout",
+            "cat": "OLL",
+            "vis": "010111010 001 000 001 101"
+        },
+        {
+            "name": "OLL 23",
+            "moves": "R2 D' R U2 R' D R U2 R",
+            "algs": [
+                "R2 D' R U2 R' D R U2 R"
+            ],
+            "desc": "Cross shape (U): headlights on front",
+            "cat": "OLL",
+            "vis": "010111111 101 000 000 000"
+        },
+        {
+            "name": "OLL 24",
+            "moves": "r U R' U' r' F R F'",
+            "algs": [
+                "r U R' U' r' F R F'"
+            ],
+            "desc": "Cross shape (T): headlights on side",
+            "cat": "OLL",
+            "vis": "110111011 000 000 100 000"
+        },
+        {
+            "name": "OLL 25",
+            "moves": "F' r U R' U' r' F R",
+            "algs": [
+                "F' r U R' U' r' F R"
+            ],
+            "desc": "Cross shape (L): corners swap orientation",
+            "cat": "OLL",
+            "vis": "110111110 001 000 001 000"
+        },
+        {
+            "name": "OLL 26",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Anti-Sune: 3 corners unoriented",
+            "cat": "OLL",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "OLL 27",
+            "moves": "R U R' U R U2 R'",
+            "algs": [
+                "R U R' U R U2 R'"
+            ],
+            "desc": "Sune: 3 corners unoriented",
+            "cat": "OLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "OLL 28",
+            "moves": "r U R' U' r' R U R U' R'",
+            "algs": [
+                "r U R' U' r' R U R U' R'"
+            ],
+            "desc": "Awkward shape: 2 corners oriented, 2 edges unoriented",
+            "cat": "OLL",
+            "vis": "110110101 000 010 010 000"
+        },
+        {
+            "name": "OLL 29",
+            "moves": "r2 U' r D' r' U r D r2",
+            "algs": [
+                "r2 U' r D' r' U r D r2"
+            ],
+            "desc": "Awkward shape: 2 corners oriented, 2 edges unoriented mirrored",
+            "cat": "OLL",
+            "vis": "000100000 000 000 000 000"
+        },
+        {
+            "name": "OLL 30",
+            "moves": "r2 U r' D r U' r' D' r2",
+            "algs": [
+                "r2 U r' D r U' r' D' r2"
+            ],
+            "desc": "Awkward shape: 2 corners oriented, 2 edges unoriented #2",
+            "cat": "OLL",
+            "vis": "000100000 000 000 000 000"
+        },
+        {
+            "name": "OLL 31",
+            "moves": "R' U' F U R U' R' F' R",
+            "algs": [
+                "R' U' F U R U' R' F' R"
+            ],
+            "desc": "P-shape: left-facing P block oriented",
+            "cat": "OLL",
+            "vis": "011011001 100 000 110 010"
+        },
+        {
+            "name": "OLL 32",
+            "moves": "R U B' U' R' U R B R'",
+            "algs": [
+                "R U B' U' R' U R B R'"
+            ],
+            "desc": "P-shape: right-facing P block oriented",
+            "cat": "OLL",
+            "vis": "101011011 010 000 100 010"
+        },
+        {
+            "name": "OLL 33",
+            "moves": "R U R' U' R' F R F'",
+            "algs": [
+                "R U R' U' R' F R F'"
+            ],
+            "desc": "T-shape: T block oriented, corners unoriented",
+            "cat": "OLL",
+            "vis": "001111001 110 000 110 000"
+        },
+        {
+            "name": "OLL 34",
+            "moves": "R U R' U' B' R' F R F' B",
+            "algs": [
+                "R U R' U' B' R' F R F' B"
+            ],
+            "desc": "T-shape: T block oriented, corners unoriented mirrored",
+            "cat": "OLL",
+            "vis": "001111101 010 001 010 000"
+        },
+        {
+            "name": "OLL 35",
+            "moves": "R U2 R2 F R F' R U2 R'",
+            "algs": [
+                "R U2 R2 F R F' R U2 R'"
+            ],
+            "desc": "Fish shape: fish tail oriented, corners unoriented",
+            "cat": "OLL",
+            "vis": "100011011 010 001 100 010"
+        },
+        {
+            "name": "OLL 36",
+            "moves": "R' U' R' F R F' R U2 R'",
+            "algs": [
+                "R' U' R' F R F' R U2 R'"
+            ],
+            "desc": "Fish shape: fish tail oriented, corners unoriented mirrored",
+            "cat": "OLL",
+            "vis": "001010111 000 010 000 011"
+        },
+        {
+            "name": "OLL 37",
+            "moves": "F R' F' R U R U' R'",
+            "algs": [
+                "F R' F' R U R U' R'"
+            ],
+            "desc": "F-shape: F block oriented, corners unoriented",
+            "cat": "OLL",
+            "vis": "110110001 000 011 110 000"
+        },
+        {
+            "name": "OLL 38",
+            "moves": "R U R' U R U' R' U' R' F R F'",
+            "algs": [
+                "R U R' U R U' R' U' R' F R F'"
+            ],
+            "desc": "F-shape: F block oriented, corners unoriented mirrored",
+            "cat": "OLL",
+            "vis": "011110100 100 110 010 000"
+        },
+        {
+            "name": "OLL 39",
+            "moves": "L F' L' U' L U F U' L'",
+            "algs": [
+                "L F' L' U' L U F U' L'"
+            ],
+            "desc": "Lightning bolt: 3 edges oriented, 2 corners oriented",
+            "cat": "OLL",
+            "vis": "001111100 110 100 010 000"
+        },
+        {
+            "name": "OLL 40",
+            "moves": "R' F R U R' U' F' U R",
+            "algs": [
+                "R' F R U R' U' F' U R"
+            ],
+            "desc": "Lightning bolt: 3 edges oriented, 2 corners oriented mirrored",
+            "cat": "OLL",
+            "vis": "100111001 011 000 010 100"
+        },
+        {
+            "name": "OLL 41",
+            "moves": "R U R' U R U2 R' F R U R' U' F'",
+            "algs": [
+                "R U R' U R U2 R' F R U R' U' F'"
+            ],
+            "desc": "Awkward shape: 3 corners oriented",
+            "cat": "OLL",
+            "vis": "010110101 101 010 010 000"
+        },
+        {
+            "name": "OLL 42",
+            "moves": "R' U' R U' R' U2 R F R U R' U' F'",
+            "algs": [
+                "R' U' R U' R' U2 R F R U R' U' F'"
+            ],
+            "desc": "Awkward shape: 3 corners oriented mirrored",
+            "cat": "OLL",
+            "vis": "101110010 010 010 101 000"
+        },
+        {
+            "name": "OLL 43",
+            "moves": "F' U' L' U L F",
+            "algs": [
+                "F' U' L' U L F"
+            ],
+            "desc": "P-shape: 3 edges oriented, corners unoriented",
+            "cat": "OLL",
+            "vis": "011011001 000 000 010 111"
+        },
+        {
+            "name": "OLL 44",
+            "moves": "F U R U' R' F'",
+            "algs": [
+                "F U R U' R' F'"
+            ],
+            "desc": "P-shape: 3 edges oriented, corners unoriented mirrored",
+            "cat": "OLL",
+            "vis": "110110100 000 111 010 000"
+        },
+        {
+            "name": "OLL 45",
+            "moves": "F R U R' U' F'",
+            "algs": [
+                "F R U R' U' F'"
+            ],
+            "desc": "T-shape: T block oriented, corners unoriented #2",
+            "cat": "OLL",
+            "vis": "001111001 010 000 010 101"
+        },
+        {
+            "name": "OLL 46",
+            "moves": "R' U' R' F R F' U R",
+            "algs": [
+                "R' U' R' F R F' U R"
+            ],
+            "desc": "C-shape: C block oriented, corners unoriented",
+            "cat": "OLL",
+            "vis": "110010110 000 111 000 010"
+        },
+        {
+            "name": "OLL 47",
+            "moves": "F' L' U' L U L' U' L U F",
+            "algs": [
+                "F' L' U' L U L' U' L U F"
+            ],
+            "desc": "L-shape: 2 adjacent edges oriented, 2 adjacent corners oriented",
+            "cat": "OLL",
+            "vis": "010011000 100 101 110 010"
+        },
+        {
+            "name": "OLL 48",
+            "moves": "F R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' F'"
+            ],
+            "desc": "L-shape: 2 adjacent edges oriented, 2 adjacent corners oriented mirrored",
+            "cat": "OLL",
+            "vis": "010110000 001 010 011 101"
+        },
+        {
+            "name": "OLL 49",
+            "moves": "r U' r2 U r2 U r2 U' r",
+            "algs": [
+                "r U' r2 U r2 U r2 U' r"
+            ],
+            "desc": "L-shape: 2 adjacent edges oriented, corners unoriented",
+            "cat": "OLL",
+            "vis": "110111100 000 000 000 000"
+        },
+        {
+            "name": "OLL 50",
+            "moves": "r' U r2 U' r2 U' r2 U r'",
+            "algs": [
+                "r' U r2 U' r2 U' r2 U r'"
+            ],
+            "desc": "L-shape: 2 adjacent edges oriented, corners unoriented mirrored",
+            "cat": "OLL",
+            "vis": "100111110 000 000 000 000"
+        },
+        {
+            "name": "OLL 51",
+            "moves": "f R U R' U' R U R' U' f'",
+            "algs": [
+                "f R U R' U' R U R' U' f'"
+            ],
+            "desc": "Line: 3 edges oriented in line, corners unoriented",
+            "cat": "OLL",
+            "vis": "111111000 000 000 001 100"
+        },
+        {
+            "name": "OLL 52",
+            "moves": "R' U' R' F R F' R' U' R' F R F' U R",
+            "algs": [
+                "R' U' R' F R F' R' U' R' F R F' U R"
+            ],
+            "desc": "Line: 3 edges oriented in line, corners unoriented mirrored",
+            "cat": "OLL",
+            "vis": "100110000 010 011 001 000"
+        },
+        {
+            "name": "OLL 53",
+            "moves": "r U R' U' r' R U R' U' r U R' U' r'",
+            "algs": [
+                "r U R' U' r' R U R' U' r U R' U' r'"
+            ],
+            "desc": "Line: 3 edges oriented in line, 2 corners oriented",
+            "cat": "OLL",
+            "vis": "000110100 000 101 000 000"
+        },
+        {
+            "name": "OLL 54",
+            "moves": "r' U' R U r R' U' R U r' U' r",
+            "algs": [
+                "r' U' R U r R' U' R U r' U' r"
+            ],
+            "desc": "Line: 3 edges oriented in line, 2 corners oriented mirrored",
+            "cat": "OLL",
+            "vis": "100110000 000 000 001 100"
+        },
+        {
+            "name": "OLL 55",
+            "moves": "R U2 R2 U' R U' R' U2 F R F'",
+            "algs": [
+                "R U2 R2 U' R U' R' U2 F R F'"
+            ],
+            "desc": "Line: 3 edges oriented in line, 2 corners oriented #2",
+            "cat": "OLL",
+            "vis": "010010010 000 111 000 111"
+        },
+        {
+            "name": "OLL 56",
+            "moves": "r' U' r U' R' U R U' R' U R r' U r",
+            "algs": [
+                "r' U' r U' R' U R U' R' U R r' U r"
+            ],
+            "desc": "Line: 3 edges oriented in line, 2 corners oriented #2 mirrored",
+            "cat": "OLL",
+            "vis": "100111000 010 101 110 000"
+        },
+        {
+            "name": "OLL 57",
+            "moves": "R U R' U' M' U R U' r'",
+            "algs": [
+                "R U R' U' M' U R U' r'"
+            ],
+            "desc": "Corners oriented: all corners oriented, 2 edges unoriented",
+            "cat": "OLL",
+            "vis": "001001001 010 000 000 000"
+        }
+    ],
+    "f2l": [
+        {
+            "name": "F2L 1 (Easy Insert)",
+            "moves": "U R U' R'",
+            "algs": [
+                "U R U' R'"
+            ],
+            "desc": "Basic corner-edge pair insert.",
+            "cat": "F2L",
+            "vis": "110110110 000 001 000 000"
+        },
+        {
+            "name": "F2L 2 (Corner facing right)",
+            "moves": "R U R'",
+            "algs": [
+                "R U R'"
+            ],
+            "desc": "Corner facing right, edge in top layer.",
+            "cat": "F2L",
+            "vis": "001111110 000 000 000 001"
+        },
+        {
+            "name": "F2L 3 (Corner facing front)",
+            "moves": "F' U' F",
+            "algs": [
+                "F' U' F"
+            ],
+            "desc": "Corner facing front, edge in top layer.",
+            "cat": "F2L",
+            "vis": "011011110 100 000 000 000"
+        },
+        {
+            "name": "F2L 4 (Corner facing up)",
+            "moves": "R U2 R' U' R U R'",
+            "algs": [
+                "R U2 R' U' R U R'"
+            ],
+            "desc": "Corner white facing up, edge in top layer.",
+            "cat": "F2L",
+            "vis": "110110010 001 000 100 000"
+        },
+        {
+            "name": "F2L 5 (Corner in bottom, edge top)",
+            "moves": "R U' R' U R U' R'",
+            "algs": [
+                "R U' R' U R U' R'"
+            ],
+            "desc": "Corner is in bottom slot, edge is in top layer.",
+            "cat": "F2L",
+            "vis": "110110010 000 001 101 000"
+        },
+        {
+            "name": "F2L 19 (Split case)",
+            "moves": "R U' R' U2 R U' R'",
+            "algs": [
+                "R U' R' U2 R U' R'"
+            ],
+            "desc": "Corner white faces up, edge in top layer separated.",
+            "cat": "F2L",
+            "vis": "110111010 000 100 100 000"
+        },
+        {
+            "name": "F2L 24 (Stuck edge)",
+            "moves": "R U R' U' R U2 R' U' R U R'",
+            "algs": [
+                "R U R' U' R U2 R' U' R U R'"
+            ],
+            "desc": "Corner in top layer, edge is stuck in front-right slot.",
+            "cat": "F2L",
+            "vis": "011111010 100 000 101 000"
+        },
+        {
+            "name": "F2L 36 (Both in slot)",
+            "moves": "R U' R' U R U2 R' U R U' R'",
+            "algs": [
+                "R U' R' U R U2 R' U R U' R'"
+            ],
+            "desc": "Corner and edge are in slot but mismatched.",
+            "cat": "F2L",
+            "vis": "010111110 000 101 000 001"
+        }
+    ],
+    "cmll": [
+        {
+            "name": "CMLL-H 1",
+            "moves": "R U R' U R U' R' U R U2 R'",
+            "algs": [
+                "R U R' U R U' R' U R U2 R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for H-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "010111010 000 101 000 101"
+        },
+        {
+            "name": "CMLL-H 2",
+            "moves": "F R U R' U' R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' R U R' U' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for H-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "CMLL-H 3",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for H-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "CMLL-H 4",
+            "moves": "R U R' U' R' F R F'",
+            "algs": [
+                "R U R' U' R' F R F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for H-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "001111001 110 000 110 000"
+        },
+        {
+            "name": "CMLL-H 5",
+            "moves": "r U r' U2 r U' r' U r U2 r'",
+            "algs": [
+                "r U r' U2 r U' r' U r U2 r'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for H-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "001011011 000 000 000 000"
+        },
+        {
+            "name": "CMLL-H 6",
+            "moves": "F R U R' U' F'",
+            "algs": [
+                "F R U R' U' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for H-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "001111001 010 000 010 101"
+        },
+        {
+            "name": "CMLL-U 1",
+            "moves": "R2 D R' U2 R D' R' U2 R'",
+            "algs": [
+                "R2 D R' U2 R D' R' U2 R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for U-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "111111010 000 000 101 000"
+        },
+        {
+            "name": "CMLL-U 2",
+            "moves": "R' U' R U' R' U2 R",
+            "algs": [
+                "R' U' R U' R' U2 R"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for U-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "110111010 001 100 100 000"
+        },
+        {
+            "name": "CMLL-U 3",
+            "moves": "R' U2 R F U' R' U' R U F' R'",
+            "algs": [
+                "R' U2 R F U' R' U' R U F' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for U-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "010011010 101 000 100 000"
+        },
+        {
+            "name": "CMLL-U 4",
+            "moves": "R2 U' R2 U' R2 U R2 U R2",
+            "algs": [
+                "R2 U' R2 U' R2 U R2 U R2"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for U-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "111111110 000 000 000 000"
+        },
+        {
+            "name": "CMLL-U 5",
+            "moves": "F R2 U' R2 U' R2 U R2 F'",
+            "algs": [
+                "F R2 U' R2 U' R2 U R2 F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for U-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "010110010 000 101 000 101"
+        },
+        {
+            "name": "CMLL-U 6",
+            "moves": "r U r' U' r' F R F'",
+            "algs": [
+                "r U r' U' r' F R F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for U-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "000001011 000 000 000 000"
+        },
+        {
+            "name": "CMLL-T 1",
+            "moves": "R U R' U' R' F R F'",
+            "algs": [
+                "R U R' U' R' F R F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for T-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "001111001 110 000 110 000"
+        },
+        {
+            "name": "CMLL-T 2",
+            "moves": "F R U R' U' F'",
+            "algs": [
+                "F R U R' U' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for T-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "001111001 010 000 010 101"
+        },
+        {
+            "name": "CMLL-T 3",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for T-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "CMLL-T 4",
+            "moves": "r U' r' U' r U r' F' R U R'",
+            "algs": [
+                "r U' r' U' r U r' F' R U R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for T-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "010110000 001 100 000 000"
+        },
+        {
+            "name": "CMLL-T 5",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for T-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "CMLL-T 6",
+            "moves": "F R U' R' U' R U R' F'",
+            "algs": [
+                "F R U' R' U' R U R' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for T-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "110110001 000 011 110 000"
+        },
+        {
+            "name": "CMLL-L 1",
+            "moves": "F R' F' r U R U' r'",
+            "algs": [
+                "F R' F' r U R U' r'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for L-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "110111011 000 001 000 000"
+        },
+        {
+            "name": "CMLL-L 2",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for L-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "CMLL-L 3",
+            "moves": "R' U2 R U R' U R U2 L U' L'",
+            "algs": [
+                "R' U2 R U R' U R U2 L U' L'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for L-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "010011011 000 000 000 101"
+        },
+        {
+            "name": "CMLL-L 4",
+            "moves": "F R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for L-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "010110000 001 010 011 101"
+        },
+        {
+            "name": "CMLL-L 5",
+            "moves": "R U2 R' U' R U' R' U2 L' U L",
+            "algs": [
+                "R U2 R' U' R U' R' U2 L' U L"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for L-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "011011010 000 000 000 101"
+        },
+        {
+            "name": "CMLL-L 6",
+            "moves": "R' F R U R' U' F' U R",
+            "algs": [
+                "R' F R U R' U' F' U R"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for L-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "100111001 011 000 010 100"
+        },
+        {
+            "name": "CMLL-Pi 1",
+            "moves": "F R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Pi-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "010110000 001 010 011 101"
+        },
+        {
+            "name": "CMLL-Pi 2",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Pi-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "CMLL-Pi 3",
+            "moves": "R U2 R2 U' R2 U' R2 U2 R",
+            "algs": [
+                "R U2 R2 U' R2 U' R2 U2 R"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Pi-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "010111010 001 000 001 101"
+        },
+        {
+            "name": "CMLL-Pi 4",
+            "moves": "r U' r' U' r U2 r' U' r U r'",
+            "algs": [
+                "r U' r' U' r U2 r' U' r U r'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Pi-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "001011000 000 000 000 000"
+        },
+        {
+            "name": "CMLL-Pi 5",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Pi-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "CMLL-Pi 6",
+            "moves": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+            "algs": [
+                "F R U' R' U' R U R' F' R U R' U' R' F R F'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Pi-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "CMLL-Sune 1",
+            "moves": "R U R' U R U2 R'",
+            "algs": [
+                "R U R' U R U2 R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Sune-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "CMLL-Sune 2",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Sune-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "CMLL-Sune 3",
+            "moves": "R U R' U R U' R' U R U2 R'",
+            "algs": [
+                "R U R' U R U' R' U R U2 R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Sune-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "010111010 000 101 000 101"
+        },
+        {
+            "name": "CMLL-Sune 4",
+            "moves": "L' U' L U' L' U2 L",
+            "algs": [
+                "L' U' L U' L' U2 L"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Sune-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "010111011 001 000 100 001"
+        },
+        {
+            "name": "CMLL-Sune 5",
+            "moves": "R' U' R U' R' U2 R",
+            "algs": [
+                "R' U' R U' R' U2 R"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Sune-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "110111010 001 100 100 000"
+        },
+        {
+            "name": "CMLL-Sune 6",
+            "moves": "y L' U2 L U L' U L",
+            "algs": [
+                "y L' U2 L U L' U L"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for Sune-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "CMLL-ASune 1",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for ASune-set, Case #1.",
+            "cat": "CMLL",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "CMLL-ASune 2",
+            "moves": "R U R' U R U2 R'",
+            "algs": [
+                "R U R' U R U2 R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for ASune-set, Case #2.",
+            "cat": "CMLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "CMLL-ASune 3",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for ASune-set, Case #3.",
+            "cat": "CMLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "CMLL-ASune 4",
+            "moves": "L' U2 L U L' U L",
+            "algs": [
+                "L' U2 L U L' U L"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for ASune-set, Case #4.",
+            "cat": "CMLL",
+            "vis": "110111010 000 001 001 100"
+        },
+        {
+            "name": "CMLL-ASune 5",
+            "moves": "R' U2 R U R' U R",
+            "algs": [
+                "R' U2 R U R' U R"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for ASune-set, Case #5.",
+            "cat": "CMLL",
+            "vis": "010111011 100 001 000 100"
+        },
+        {
+            "name": "CMLL-ASune 6",
+            "moves": "y L' U' L U' L' U2 L",
+            "algs": [
+                "y L' U' L U' L' U2 L"
+            ],
+            "desc": "Roux CMLL: Orient and permute corners for ASune-set, Case #6.",
+            "cat": "CMLL",
+            "vis": "011111010 000 100 100 001"
+        }
+    ],
+    "coll": [
+        {
+            "name": "COLL-H 1",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Orient corners and permute for last layer H-set, Case #1.",
+            "cat": "COLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "COLL-H 2",
+            "moves": "F R U R' U' R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' R U R' U' F'"
+            ],
+            "desc": "Orient corners and permute for last layer H-set, Case #2.",
+            "cat": "COLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "COLL-H 3",
+            "moves": "R U R' U R U' R' U R U2 R'",
+            "algs": [
+                "R U R' U R U' R' U R U2 R'"
+            ],
+            "desc": "Orient corners and permute for last layer H-set, Case #3.",
+            "cat": "COLL",
+            "vis": "010111010 000 101 000 101"
+        },
+        {
+            "name": "COLL-H 4",
+            "moves": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+            "algs": [
+                "F R U' R' U' R U R' F' R U R' U' R' F R F'"
+            ],
+            "desc": "Orient corners and permute for last layer H-set, Case #4.",
+            "cat": "COLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "COLL-H 5",
+            "moves": "R U2 R2 U' R2 U' R2 U2 R",
+            "algs": [
+                "R U2 R2 U' R2 U' R2 U2 R"
+            ],
+            "desc": "Orient corners and permute for last layer H-set, Case #5.",
+            "cat": "COLL",
+            "vis": "010111010 001 000 001 101"
+        },
+        {
+            "name": "COLL-H 6",
+            "moves": "y L' U' L U' L' U2 L U' L' U L",
+            "algs": [
+                "y L' U' L U' L' U2 L U' L' U L"
+            ],
+            "desc": "Orient corners and permute for last layer H-set, Case #6.",
+            "cat": "COLL",
+            "vis": "000111010 001 100 100 000"
+        },
+        {
+            "name": "COLL-U 1",
+            "moves": "R' U' R U' R' U2 R",
+            "algs": [
+                "R' U' R U' R' U2 R"
+            ],
+            "desc": "Orient corners and permute for last layer U-set, Case #1.",
+            "cat": "COLL",
+            "vis": "110111010 001 100 100 000"
+        },
+        {
+            "name": "COLL-U 2",
+            "moves": "R2 D R' U2 R D' R' U2 R'",
+            "algs": [
+                "R2 D R' U2 R D' R' U2 R'"
+            ],
+            "desc": "Orient corners and permute for last layer U-set, Case #2.",
+            "cat": "COLL",
+            "vis": "111111010 000 000 101 000"
+        },
+        {
+            "name": "COLL-U 3",
+            "moves": "R' U2 R F U' R' U' R U F' R'",
+            "algs": [
+                "R' U2 R F U' R' U' R U F' R'"
+            ],
+            "desc": "Orient corners and permute for last layer U-set, Case #3.",
+            "cat": "COLL",
+            "vis": "010011010 101 000 100 000"
+        },
+        {
+            "name": "COLL-U 4",
+            "moves": "R' U' R y' R2 D' R U' R' D R2",
+            "algs": [
+                "R' U' R y' R2 D' R U' R' D R2"
+            ],
+            "desc": "Orient corners and permute for last layer U-set, Case #4.",
+            "cat": "COLL",
+            "vis": "000111001 000 000 000 100"
+        },
+        {
+            "name": "COLL-U 5",
+            "moves": "F R2 U' R2 U' R2 U R2 F'",
+            "algs": [
+                "F R2 U' R2 U' R2 U R2 F'"
+            ],
+            "desc": "Orient corners and permute for last layer U-set, Case #5.",
+            "cat": "COLL",
+            "vis": "010110010 000 101 000 101"
+        },
+        {
+            "name": "COLL-U 6",
+            "moves": "R U2 R' U' R U' R2' U2' R U R' U R",
+            "algs": [
+                "R U2 R' U' R U' R2' U2' R U R' U R"
+            ],
+            "desc": "Orient corners and permute for last layer U-set, Case #6.",
+            "cat": "COLL",
+            "vis": "010111111 000 001 000 001"
+        },
+        {
+            "name": "COLL-T 1",
+            "moves": "F R U R' U' F'",
+            "algs": [
+                "F R U R' U' F'"
+            ],
+            "desc": "Orient corners and permute for last layer T-set, Case #1.",
+            "cat": "COLL",
+            "vis": "001111001 010 000 010 101"
+        },
+        {
+            "name": "COLL-T 2",
+            "moves": "R U2' R' U' R U' R2' U2' R U R' U R",
+            "algs": [
+                "R U2' R' U' R U' R2' U2' R U R' U R"
+            ],
+            "desc": "Orient corners and permute for last layer T-set, Case #2.",
+            "cat": "COLL",
+            "vis": "010111111 000 001 000 001"
+        },
+        {
+            "name": "COLL-T 3",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
+            ],
+            "desc": "Orient corners and permute for last layer T-set, Case #3.",
+            "cat": "COLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "COLL-T 4",
+            "moves": "F R U' R' U' R U R' F'",
+            "algs": [
+                "F R U' R' U' R U R' F'"
+            ],
+            "desc": "Orient corners and permute for last layer T-set, Case #4.",
+            "cat": "COLL",
+            "vis": "110110001 000 011 110 000"
+        },
+        {
+            "name": "COLL-T 5",
+            "moves": "R' U R U2' R' L' U R U' L",
+            "algs": [
+                "R' U R U2' R' L' U R U' L"
+            ],
+            "desc": "Orient corners and permute for last layer T-set, Case #5.",
+            "cat": "COLL",
+            "vis": "010111111 000 001 000 001"
+        },
+        {
+            "name": "COLL-T 6",
+            "moves": "R U' R' U' R U R' F' R U R' U' R' F R F'",
+            "algs": [
+                "R U' R' U' R U R' F' R U R' U' R' F R F'"
+            ],
+            "desc": "Orient corners and permute for last layer T-set, Case #6.",
+            "cat": "COLL",
+            "vis": "111111000 000 100 000 000"
+        },
+        {
+            "name": "COLL-L 1",
+            "moves": "F R' F' r U R U' r'",
+            "algs": [
+                "F R' F' r U R U' r'"
+            ],
+            "desc": "Orient corners and permute for last layer L-set, Case #1.",
+            "cat": "COLL",
+            "vis": "110111011 000 001 000 000"
+        },
+        {
+            "name": "COLL-L 2",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Orient corners and permute for last layer L-set, Case #2.",
+            "cat": "COLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "COLL-L 3",
+            "moves": "R' U2 R U R' U R U2 L U' L'",
+            "algs": [
+                "R' U2 R U R' U R U2 L U' L'"
+            ],
+            "desc": "Orient corners and permute for last layer L-set, Case #3.",
+            "cat": "COLL",
+            "vis": "010011011 000 000 000 101"
+        },
+        {
+            "name": "COLL-L 4",
+            "moves": "F R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' F'"
+            ],
+            "desc": "Orient corners and permute for last layer L-set, Case #4.",
+            "cat": "COLL",
+            "vis": "010110000 001 010 011 101"
+        },
+        {
+            "name": "COLL-L 5",
+            "moves": "R U2 R' U' R U' R' U2 L' U L",
+            "algs": [
+                "R U2 R' U' R U' R' U2 L' U L"
+            ],
+            "desc": "Orient corners and permute for last layer L-set, Case #5.",
+            "cat": "COLL",
+            "vis": "011011010 000 000 000 101"
+        },
+        {
+            "name": "COLL-L 6",
+            "moves": "R' F R U R' U' F' U R",
+            "algs": [
+                "R' F R U R' U' F' U R"
+            ],
+            "desc": "Orient corners and permute for last layer L-set, Case #6.",
+            "cat": "COLL",
+            "vis": "100111001 011 000 010 100"
+        },
+        {
+            "name": "COLL-Pi 1",
+            "moves": "R U2 R2 U' R2 U' R2 U2 R",
+            "algs": [
+                "R U2 R2 U' R2 U' R2 U2 R"
+            ],
+            "desc": "Orient corners and permute for last layer Pi-set, Case #1.",
+            "cat": "COLL",
+            "vis": "010111010 001 000 001 101"
+        },
+        {
+            "name": "COLL-Pi 2",
+            "moves": "F R U R' U' R U R' U' F'",
+            "algs": [
+                "F R U R' U' R U R' U' F'"
+            ],
+            "desc": "Orient corners and permute for last layer Pi-set, Case #2.",
+            "cat": "COLL",
+            "vis": "010110000 001 010 011 101"
+        },
+        {
+            "name": "COLL-Pi 3",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
+            ],
+            "desc": "Orient corners and permute for last layer Pi-set, Case #3.",
+            "cat": "COLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "COLL-Pi 4",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Orient corners and permute for last layer Pi-set, Case #4.",
+            "cat": "COLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "COLL-Pi 5",
+            "moves": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+            "algs": [
+                "F R U' R' U' R U R' F' R U R' U' R' F R F'"
+            ],
+            "desc": "Orient corners and permute for last layer Pi-set, Case #5.",
+            "cat": "COLL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "COLL-Pi 6",
+            "moves": "R U' R' U2 R U2 R' U' F' U F",
+            "algs": [
+                "R U' R' U2 R U2 R' U' F' U F"
+            ],
+            "desc": "Orient corners and permute for last layer Pi-set, Case #6.",
+            "cat": "COLL",
+            "vis": "110010110 000 010 001 000"
+        },
+        {
+            "name": "COLL-Sune 1",
+            "moves": "R U R' U R U2 R'",
+            "algs": [
+                "R U R' U R U2 R'"
+            ],
+            "desc": "Orient corners and permute for last layer Sune-set, Case #1.",
+            "cat": "COLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "COLL-Sune 2",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Orient corners and permute for last layer Sune-set, Case #2.",
+            "cat": "COLL",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "COLL-Sune 3",
+            "moves": "R U R' U R U' R' U R U2 R'",
+            "algs": [
+                "R U R' U R U' R' U R U2 R'"
+            ],
+            "desc": "Orient corners and permute for last layer Sune-set, Case #3.",
+            "cat": "COLL",
+            "vis": "010111010 000 101 000 101"
+        },
+        {
+            "name": "COLL-Sune 4",
+            "moves": "L' U' L U' L' U2 L",
+            "algs": [
+                "L' U' L U' L' U2 L"
+            ],
+            "desc": "Orient corners and permute for last layer Sune-set, Case #4.",
+            "cat": "COLL",
+            "vis": "010111011 001 000 100 001"
+        },
+        {
+            "name": "COLL-Sune 5",
+            "moves": "R' U' R U' R' U2 R",
+            "algs": [
+                "R' U' R U' R' U2 R"
+            ],
+            "desc": "Orient corners and permute for last layer Sune-set, Case #5.",
+            "cat": "COLL",
+            "vis": "110111010 001 100 100 000"
+        },
+        {
+            "name": "COLL-Sune 6",
+            "moves": "y L' U2 L U L' U L",
+            "algs": [
+                "y L' U2 L U L' U L"
+            ],
+            "desc": "Orient corners and permute for last layer Sune-set, Case #6.",
+            "cat": "COLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "COLL-ASune 1",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Orient corners and permute for last layer ASune-set, Case #1.",
+            "cat": "COLL",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "COLL-ASune 2",
+            "moves": "R U R' U R U2 R'",
+            "algs": [
+                "R U R' U R U2 R'"
+            ],
+            "desc": "Orient corners and permute for last layer ASune-set, Case #2.",
+            "cat": "COLL",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "COLL-ASune 3",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Orient corners and permute for last layer ASune-set, Case #3.",
+            "cat": "COLL",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "COLL-ASune 4",
+            "moves": "L' U2 L U L' U L",
+            "algs": [
+                "L' U2 L U L' U L"
+            ],
+            "desc": "Orient corners and permute for last layer ASune-set, Case #4.",
+            "cat": "COLL",
+            "vis": "110111010 000 001 001 100"
+        },
+        {
+            "name": "COLL-ASune 5",
+            "moves": "R' U2 R U R' U R",
+            "algs": [
+                "R' U2 R U R' U R"
+            ],
+            "desc": "Orient corners and permute for last layer ASune-set, Case #5.",
+            "cat": "COLL",
+            "vis": "010111011 100 001 000 100"
+        },
+        {
+            "name": "COLL-ASune 6",
+            "moves": "y L' U' L U' L' U2 L",
+            "algs": [
+                "y L' U' L U' L' U2 L"
+            ],
+            "desc": "Orient corners and permute for last layer ASune-set, Case #6.",
+            "cat": "COLL",
+            "vis": "011111010 000 100 100 001"
+        }
+    ],
+    "zbll": {
+        "T": [
+            {
+                "name": "ZBLL-T 1",
+                "moves": "R U2 R' U' R U' R2 F R F' R U R'",
+                "algs": [
+                    "R U2 R' U' R U' R2 F R F' R U R'"
                 ],
-                U: [
-                    { name: "ZBLL-U 1", moves: "R' U2 R F U' R' U' R U F' R'", cat: "ZBLL", tags: "zbll u1", desc: "U-case corner orientation with headlights on front side, back corners oriented." },
-                    { name: "ZBLL-U 2", moves: "R U2 R' U' F' L' U' L U F", cat: "ZBLL", tags: "zbll u2", desc: "U-case corner orientation with headlights on front side, back corners oriented (different edge permutation)." },
-                    { name: "ZBLL-U 5", moves: "r U r' U2 r U' r' F R' F' R", cat: "ZBLL", tags: "zbll u5", desc: "U-case corner orientation with headlights on front side, back corners oriented (different corner/edge swap)." }
-                ],
-                L: [
-                    { name: "ZBLL-L 1", moves: "R U2 R' U' R U' R' U2 L' U L", cat: "ZBLL", tags: "zbll l1", desc: "L-case corner orientation with headlights on front side." },
-                    { name: "ZBLL-L 2", moves: "R' U2 R U R' U R U2 L U' L'", cat: "ZBLL", tags: "zbll l2", desc: "L-case corner orientation with headlights on back side." }
-                ],
-                H: [
-                    { name: "ZBLL-H 1", moves: "R U2 R' U' R U R' U' R U' R'", cat: "ZBLL", tags: "zbll h1", desc: "H-case corner orientation with headlights on front/back." },
-                    { name: "ZBLL-H 2", moves: "F R U R' U' R U R' U' R U R' U' F'", cat: "ZBLL", tags: "zbll h2", desc: "H-case corner orientation with headlights on left/right." }
-                ],
-                Pi: [
-                    { name: "ZBLL-Pi 1", moves: "R U2 R2 U' R2 U' R2 U2 R", cat: "ZBLL", tags: "zbll pi1", desc: "Pi-case corner orientation with diagonal corners swap." },
-                    { name: "ZBLL-Pi 2", moves: "R U' R' U2 R U2 R' U' F' U F", cat: "ZBLL", tags: "zbll pi2", desc: "Pi-case corner orientation with adjacent corners swap." }
-                ],
-                Sune: [
-                    { name: "ZBLL-Sune 1", moves: "R U R' U R U2 R'", cat: "ZBLL", tags: "zbll sune1", desc: "Sune corner orientation with corner cycle." },
-                    { name: "ZBLL-Sune 2", moves: "R U2 R' U' R U' R' U' F' U F", cat: "ZBLL", tags: "zbll sune2", desc: "Sune corner orientation with edge cycle." }
-                ],
-                ASune: [
-                    { name: "ZBLL-ASune 1", moves: "R U2 R' U' R U' R'", cat: "ZBLL", tags: "zbll asune1", desc: "Anti-Sune corner orientation with corner cycle." },
-                    { name: "ZBLL-ASune 2", moves: "R' U' R U' R' U2 R U F U' F'", cat: "ZBLL", tags: "zbll asune2", desc: "Anti-Sune corner orientation with edge cycle." }
-                ]
+                "desc": "T-case corner orientation with adjacent corner permutation.",
+                "cat": "ZBLL",
+                "vis": "010011000 001 000 011 101"
             },
-            zbls: [
-                { name: "ZBLS 1 (Corner in top, edge top)", moves: "U' R U2 R' U R U R'", cat: "ZBLS", tags: "zbls 1", desc: "Corner in top, edge in top layer, orienting 2 edges." },
-                { name: "ZBLS 2 (Corner facing right)", moves: "R U' R' U R U2 R'", cat: "ZBLS", tags: "zbls 2", desc: "Corner white facing right, edge in top, orienting 4 edges." },
-                { name: "ZBLS 15 (Orienting two edges)", moves: "y' U R' U' R U2 R' U' R", cat: "ZBLS", tags: "zbls 15", desc: "Corner white facing front, edge in top, orienting 2 edges." },
-                { name: "ZBLS 42 (Orienting all edges)", moves: "R U R' U' R U' R' U2 R U' R'", cat: "ZBLS", tags: "zbls 42", desc: "Corner in slot, edge in top layer, orienting all edges." }
+            {
+                "name": "ZBLL-T 2",
+                "moves": "R U2 R2 F R F' R U2 R'",
+                "algs": [
+                    "R U2 R2 F R F' R U2 R'"
+                ],
+                "desc": "T-case corner orientation with diagonal corner permutation.",
+                "cat": "ZBLL",
+                "vis": "100011011 010 001 100 010"
+            },
+            {
+                "name": "ZBLL-T 3",
+                "moves": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+                "algs": [
+                    "F R U' R' U' R U R' F' R U R' U' R' F R F'"
+                ],
+                "desc": "T-case corner orientation with solved corners permutation.",
+                "cat": "ZBLL",
+                "vis": "111111111 000 000 000 000"
+            },
+            {
+                "name": "ZBLL-T 12",
+                "moves": "r U' r' U' r U r' F' R U R'",
+                "algs": [
+                    "r U' r' U' r U r' F' R U R'"
+                ],
+                "desc": "T-case corner orientation with headlights swap.",
+                "cat": "ZBLL",
+                "vis": "010110000 001 100 000 000"
+            }
+        ],
+        "U": [
+            {
+                "name": "ZBLL-U 1",
+                "moves": "R' U2 R F U' R' U' R U F' R'",
+                "algs": [
+                    "R' U2 R F U' R' U' R U F' R'"
+                ],
+                "desc": "U-case corner orientation with headlights on front side, back corners oriented.",
+                "cat": "ZBLL",
+                "vis": "010011010 101 000 100 000"
+            },
+            {
+                "name": "ZBLL-U 2",
+                "moves": "R U2 R' U' F' L' U' L U F",
+                "algs": [
+                    "R U2 R' U' F' L' U' L U F"
+                ],
+                "desc": "U-case corner orientation with headlights on front side, back corners oriented (different edge permutation).",
+                "cat": "ZBLL",
+                "vis": "011010111 000 010 000 000"
+            },
+            {
+                "name": "ZBLL-U 5",
+                "moves": "r U r' U2 r U' r' F R' F' R",
+                "algs": [
+                    "r U r' U2 r U' r' F R' F' R"
+                ],
+                "desc": "U-case corner orientation with headlights on front side, back corners oriented (different corner/edge swap).",
+                "cat": "ZBLL",
+                "vis": "000011000 000 001 000 110"
+            }
+        ],
+        "L": [
+            {
+                "name": "ZBLL-L 1",
+                "moves": "R U2 R' U' R U' R' U2 L' U L",
+                "algs": [
+                    "R U2 R' U' R U' R' U2 L' U L"
+                ],
+                "desc": "L-case corner orientation with headlights on front side.",
+                "cat": "ZBLL",
+                "vis": "011011010 000 000 000 101"
+            },
+            {
+                "name": "ZBLL-L 2",
+                "moves": "R' U2 R U R' U R U2 L U' L'",
+                "algs": [
+                    "R' U2 R U R' U R U2 L U' L'"
+                ],
+                "desc": "L-case corner orientation with headlights on back side.",
+                "cat": "ZBLL",
+                "vis": "010011011 000 000 000 101"
+            }
+        ],
+        "H": [
+            {
+                "name": "ZBLL-H 1",
+                "moves": "R U2 R' U' R U R' U' R U' R'",
+                "algs": [
+                    "R U2 R' U' R U R' U' R U' R'"
+                ],
+                "desc": "H-case corner orientation with headlights on front/back.",
+                "cat": "ZBLL",
+                "vis": "010111010 101 000 101 000"
+            },
+            {
+                "name": "ZBLL-H 2",
+                "moves": "F R U R' U' R U R' U' R U R' U' F'",
+                "algs": [
+                    "F R U R' U' R U R' U' R U R' U' F'"
+                ],
+                "desc": "H-case corner orientation with headlights on left/right.",
+                "cat": "ZBLL",
+                "vis": "010111010 101 000 101 000"
+            }
+        ],
+        "Pi": [
+            {
+                "name": "ZBLL-Pi 1",
+                "moves": "R U2 R2 U' R2 U' R2 U2 R",
+                "algs": [
+                    "R U2 R2 U' R2 U' R2 U2 R"
+                ],
+                "desc": "Pi-case corner orientation with diagonal corners swap.",
+                "cat": "ZBLL",
+                "vis": "010111010 001 000 001 101"
+            },
+            {
+                "name": "ZBLL-Pi 2",
+                "moves": "R U' R' U2 R U2 R' U' F' U F",
+                "algs": [
+                    "R U' R' U2 R U2 R' U' F' U F"
+                ],
+                "desc": "Pi-case corner orientation with adjacent corners swap.",
+                "cat": "ZBLL",
+                "vis": "110010110 000 010 001 000"
+            }
+        ],
+        "Sune": [
+            {
+                "name": "ZBLL-Sune 1",
+                "moves": "R U R' U R U2 R'",
+                "algs": [
+                    "R U R' U R U2 R'"
+                ],
+                "desc": "Sune corner orientation with corner cycle.",
+                "cat": "ZBLL",
+                "vis": "010111110 100 001 001 000"
+            },
+            {
+                "name": "ZBLL-Sune 2",
+                "moves": "R U2 R' U' R U' R' U' F' U F",
+                "algs": [
+                    "R U2 R' U' R U' R' U' F' U F"
+                ],
+                "desc": "Sune corner orientation with edge cycle.",
+                "cat": "ZBLL",
+                "vis": "010111000 001 100 100 000"
+            }
+        ],
+        "ASune": [
+            {
+                "name": "ZBLL-ASune 1",
+                "moves": "R U2 R' U' R U' R'",
+                "algs": [
+                    "R U2 R' U' R U' R'"
+                ],
+                "desc": "Anti-Sune corner orientation with corner cycle.",
+                "cat": "ZBLL",
+                "vis": "011111010 000 100 100 001"
+            },
+            {
+                "name": "ZBLL-ASune 2",
+                "moves": "R' U' R U' R' U2 R U F U' F'",
+                "algs": [
+                    "R' U' R U' R' U2 R U F U' F'"
+                ],
+                "desc": "Anti-Sune corner orientation with edge cycle.",
+                "cat": "ZBLL",
+                "vis": "010110010 100 100 100 000"
+            }
+        ]
+    },
+    "zbls": [
+        {
+            "name": "ZBLS 1 (Corner in top, edge top)",
+            "moves": "U' R U2 R' U R U R'",
+            "algs": [
+                "U' R U2 R' U R U R'"
             ],
-            wv: [
-                { name: "WV 1 (Solved Insert)", moves: "R U' R'", algs: ["R U' R'"], cat: "WV", tags: "wv 1 winter variation", desc: "All 3 top corners oriented. Direct insert." },
-                { name: "WV 2 (UFL Oriented)", moves: "R U R' U' R U' R'", algs: ["R U R' U' R U' R'"], cat: "WV", tags: "wv 2 winter variation", desc: "UFL corner oriented, other 3 top corners unoriented." },
-                { name: "WV 3 (L-shape)", moves: "R U2 R' U' R U R' U' R U' R'", algs: ["R U2 R' U' R U R' U' R U' R'"], cat: "WV", tags: "wv 3 winter variation", desc: "Two adjacent top corners oriented." },
-                { name: "WV 15 (Double Corner Swap)", moves: "R U' R' U R U2 R'", algs: ["R U' R' U R U2 R'"], cat: "WV", tags: "wv 15 winter variation", desc: "Double corner orientation swap." }
+            "desc": "Corner in top, edge in top layer, orienting 2 edges.",
+            "cat": "ZBLS",
+            "vis": "011111110 000 000 000 001"
+        },
+        {
+            "name": "ZBLS 2 (Corner facing right)",
+            "moves": "R U' R' U R U2 R'",
+            "algs": [
+                "R U' R' U R U2 R'"
             ],
-            vls: [
-                { name: "VLS 1 (Corner Oriented)", moves: "R U2 R' U' R U R'", algs: ["R U2 R' U' R U R'"], cat: "VLS", tags: "vls 1 valk last slot", desc: "Corner oriented, edge unoriented. Orientation and insertion." },
-                { name: "VLS 2 (Edge Oriented)", moves: "R U R' U' R U2 R' U' R U R'", algs: ["R U R' U' R U2 R' U' R U R'"], cat: "VLS", tags: "vls 2 valk last slot", desc: "Edge oriented, corner unoriented. Advanced Valk Last Slot." }
+            "desc": "Corner white facing right, edge in top, orienting 4 edges.",
+            "cat": "ZBLS",
+            "vis": "010011110 000 001 001 000"
+        },
+        {
+            "name": "ZBLS 15 (Orienting two edges)",
+            "moves": "y' U R' U' R U2 R' U' R",
+            "algs": [
+                "y' U R' U' R U2 R' U' R"
             ],
-            oh: [
-                { name: "OH T Perm (Standard)", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", algs: ["R U R' U' R' F R2 U' R' U' R U R' F'"], cat: "OH", tags: "oh t perm", desc: "Highly ergonomic standard T Perm for OH." },
-                { name: "OH Ua Perm (RU Gen)", moves: "R2 U' R' U' R U R U R U' R", algs: ["R2 U' R' U' R U R U R U' R", "R U' R U R U R U' R' U' R2"], cat: "OH", tags: "oh ua perm", desc: "OH-optimal RU-gen Ua Permutation (no M-slice)." },
-                { name: "OH Ub Perm (RU Gen)", moves: "R' U R' U' R' U' R' U R U R2", algs: ["R' U R' U' R' U' R' U R U R2", "R2 U R U R' U' R' U' R' U R'"], cat: "OH", tags: "oh ub perm", desc: "OH-optimal RU-gen Ub Permutation." },
-                { name: "OH H Perm (RU Gen)", moves: "R2 U2 R U2 R2 U2 R2 U2 R U2 R2", algs: ["R2 U2 R U2 R2 U2 R2 U2 R U2 R2"], cat: "OH", tags: "oh h perm", desc: "Replaces M2 U M2 moves with pure RU turns for OH efficiency." },
-                { name: "OH Z Perm (RU Gen)", moves: "R' U' R U' R U R U' R' U R U R2 U' R'", algs: ["R' U' R U' R U R U' R' U R U R2 U' R'"], cat: "OH", tags: "oh z perm", desc: "OH-optimal RU-gen Z Permutation." }
+            "desc": "Corner white facing front, edge in top, orienting 2 edges.",
+            "cat": "ZBLS",
+            "vis": "010111011 001 000 100 000"
+        },
+        {
+            "name": "ZBLS 42 (Orienting all edges)",
+            "moves": "R U R' U' R U' R' U2 R U' R'",
+            "algs": [
+                "R U R' U' R U' R' U2 R U' R'"
             ],
-            bld: [
-                { name: "OP Corners (Y Perm)", moves: "F R U' R' U' R U R' F' R U R' U' R' F R F'", algs: ["F R U' R' U' R U R' F' R U R' U' R' F R F'"], cat: "BLD", tags: "bld op corner y perm", desc: "Old Pochmann Corner Swapper targeting RDF slot." },
-                { name: "OP Corners (T Perm)", moves: "R U R' U' R' F R2 U' R' U' R U R' F'", algs: ["R U R' U' R' F R2 U' R' U' R U R' F'"], cat: "BLD", tags: "bld op corner t perm", desc: "Alternative OP Corner Swapper targeting UFR slot." },
-                { name: "BLD Corner Parity", moves: "R U2 R' U' R U2 L' U R' U' L", algs: ["R U2 R' U' R U2 L' U R' U' L"], cat: "BLD", tags: "bld parity corners", desc: "Swaps UBL and UBR corners to resolve corner-edge parity." },
-                { name: "M2 Edges (M2 Double)", moves: "M2", algs: ["M2"], cat: "BLD", tags: "bld m2 edges", desc: "Standard M2 double turn targeting UB slot (from DF buffer)." }
+            "desc": "Corner in slot, edge in top layer, orienting all edges.",
+            "cat": "ZBLS",
+            "vis": "001111011 000 000 100 000"
+        }
+    ],
+    "wv": [
+        {
+            "name": "WV 1",
+            "moves": "R U' R'",
+            "algs": [
+                "R U' R'"
             ],
-            fmc: [
-                { name: "3-Corner Commutator", moves: "R U L U' R' U L' U'", algs: ["R U L U' R' U L' U'"], cat: "FMC", tags: "fmc commutator corners", desc: "8-move commutator to cycle UFR, UFL, and UBL corners." },
-                { name: "3-Edge Commutator", moves: "M' U2 M U2", algs: ["M' U2 M U2"], cat: "FMC", tags: "fmc commutator edges", desc: "4-move commutator to cycle UB, UF, and DB edges." }
+            "desc": "Winter Variation Case #1: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "111111000 000 000 001 000"
+        },
+        {
+            "name": "WV 2",
+            "moves": "R U R' U' R U' R'",
+            "algs": [
+                "R U R' U' R U' R'"
             ],
-            ell: [
-                { name: "ELL H Perm", moves: "M2' U M2' U2 M2' U M2'", algs: ["M2' U M2' U2 M2' U M2'", "M2 U' M2 U2 M2 U' M2"], cat: "ELL", tags: "ell h perm edges swap", desc: "Swaps all 4 edges opposite to each other. Corners are solved." },
-                { name: "ELL Z Perm", moves: "M2' U M2' U M' U2 M2' U2 M' U2", algs: ["M2' U M2' U M' U2 M2' U2 M' U2", "M' U' M2' U' M2' U' M' U2 M2'"], cat: "ELL", tags: "ell z perm edges swap", desc: "Swaps adjacent edges (cross swap on UF/UL and UB/UR)." },
-                { name: "ELL Ua Perm", moves: "R U' R U R U R U' R' U' R2", algs: ["R U' R U R U R U' R' U' R2", "M2 U M U2 M' U M2"], cat: "ELL", tags: "ell ua perm", desc: "3-cycle edges clockwise. Solved bar on back." },
-                { name: "ELL Ub Perm", moves: "R2 U R U R' U' R' U' R' U R'", algs: ["R2 U R U R' U' R' U' R' U R'", "M2 U' M U2 M' U' M2"], cat: "ELL", tags: "ell ub perm", desc: "3-cycle edges counter-clockwise. Solved bar on back." },
-                { name: "ELL 2-Flip (Opposite)", moves: "M' U M' U M' U2 M U M U M U2", algs: ["M' U M' U M' U2 M U M U M U2"], cat: "ELL", tags: "ell 2 flip opposite edges", desc: "Flips 2 opposite edges (UB and UF) while leaving corners solved." }
-            ]
-        };
+            "desc": "Winter Variation Case #2: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "011111001 000 000 000 001"
+        },
+        {
+            "name": "WV 3",
+            "moves": "R U2 R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #3: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010111010 101 000 101 000"
+        },
+        {
+            "name": "WV 4",
+            "moves": "R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #4: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "011111010 000 100 100 001"
+        },
+        {
+            "name": "WV 5",
+            "moves": "U R U' R' U R U2 R' U R U' R'",
+            "algs": [
+                "U R U' R' U R U2 R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #5: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010111011 101 000 100 000"
+        },
+        {
+            "name": "WV 6",
+            "moves": "R U' R' U R U2 R'",
+            "algs": [
+                "R U' R' U R U2 R'"
+            ],
+            "desc": "Winter Variation Case #6: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010011110 000 001 001 000"
+        },
+        {
+            "name": "WV 7",
+            "moves": "R U' R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U' R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #7: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "100111010 001 000 000 100"
+        },
+        {
+            "name": "WV 8",
+            "moves": "U R U2 R' U' R U R'",
+            "algs": [
+                "U R U2 R' U' R U R'"
+            ],
+            "desc": "Winter Variation Case #8: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "000111110 000 100 000 001"
+        },
+        {
+            "name": "WV 9",
+            "moves": "R U R' U R U2 R'",
+            "algs": [
+                "R U R' U R U2 R'"
+            ],
+            "desc": "Winter Variation Case #9: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010111110 100 001 001 000"
+        },
+        {
+            "name": "WV 10",
+            "moves": "R U R' U' R U2 R' U' R U' R'",
+            "algs": [
+                "R U R' U' R U2 R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #10: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "000111010 001 000 100 001"
+        },
+        {
+            "name": "WV 11",
+            "moves": "R U' R' U R U' R' U R U2 R'",
+            "algs": [
+                "R U' R' U R U' R' U R U2 R'"
+            ],
+            "desc": "Winter Variation Case #11: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010011010 000 101 000 100"
+        },
+        {
+            "name": "WV 12",
+            "moves": "R U2 R' U R U' R'",
+            "algs": [
+                "R U2 R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #12: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010110010 000 001 001 001"
+        },
+        {
+            "name": "WV 13",
+            "moves": "R U' R' U R U' R'",
+            "algs": [
+                "R U' R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #13: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "110110010 000 001 101 000"
+        },
+        {
+            "name": "WV 14",
+            "moves": "R U R' U R U' R'",
+            "algs": [
+                "R U R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #14: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010110111 000 001 000 000"
+        },
+        {
+            "name": "WV 15",
+            "moves": "R U2 R' U R U2 R'",
+            "algs": [
+                "R U2 R' U R U2 R'"
+            ],
+            "desc": "Winter Variation Case #15: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "100111010 000 001 000 100"
+        },
+        {
+            "name": "WV 16",
+            "moves": "R U R' U' R U R' U' R U' R'",
+            "algs": [
+                "R U R' U' R U R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #16: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010111000 001 100 000 001"
+        },
+        {
+            "name": "WV 17",
+            "moves": "R U' R' U' R U2 R'",
+            "algs": [
+                "R U' R' U' R U2 R'"
+            ],
+            "desc": "Winter Variation Case #17: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010111111 100 000 000 000"
+        },
+        {
+            "name": "WV 18",
+            "moves": "R U R' U R U' R' U R U' R'",
+            "algs": [
+                "R U R' U R U' R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #18: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010011010 100 001 000 100"
+        },
+        {
+            "name": "WV 19",
+            "moves": "U R U' R' U' R U2 R'",
+            "algs": [
+                "U R U' R' U' R U2 R'"
+            ],
+            "desc": "Winter Variation Case #19: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "011111011 000 000 000 100"
+        },
+        {
+            "name": "WV 20",
+            "moves": "R U' R' U R U R' U R U2 R'",
+            "algs": [
+                "R U' R' U R U R' U R U2 R'"
+            ],
+            "desc": "Winter Variation Case #20: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010111000 100 101 000 000"
+        },
+        {
+            "name": "WV 21",
+            "moves": "R U R' U' R U2 R'",
+            "algs": [
+                "R U R' U' R U2 R'"
+            ],
+            "desc": "Winter Variation Case #21: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010011010 000 000 101 001"
+        },
+        {
+            "name": "WV 22",
+            "moves": "R U' R' U' R U R'",
+            "algs": [
+                "R U' R' U' R U R'"
+            ],
+            "desc": "Winter Variation Case #22: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010110110 001 000 001 000"
+        },
+        {
+            "name": "WV 23",
+            "moves": "R U R' U' R U' R' U R U' R'",
+            "algs": [
+                "R U R' U' R U' R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #23: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "111111010 000 000 100 000"
+        },
+        {
+            "name": "WV 24",
+            "moves": "R U2 R' U' R U' R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U' R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #24: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010110010 000 001 100 001"
+        },
+        {
+            "name": "WV 25",
+            "moves": "R U2 R' U' R U R' U R U' R'",
+            "algs": [
+                "R U2 R' U' R U R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #25: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "100111110 000 000 001 000"
+        },
+        {
+            "name": "WV 26",
+            "moves": "R U2 R' U' R U2 R' U' R U' R'",
+            "algs": [
+                "R U2 R' U' R U2 R' U' R U' R'"
+            ],
+            "desc": "Winter Variation Case #26: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010011011 001 000 100 000"
+        },
+        {
+            "name": "WV 27",
+            "moves": "R U R' U R U2 R' U R U' R'",
+            "algs": [
+                "R U R' U R U2 R' U R U' R'"
+            ],
+            "desc": "Winter Variation Case #27: orient corners during last slot insertion.",
+            "cat": "WV",
+            "vis": "010011010 000 001 001 100"
+        }
+    ],
+    "vls": [
+        {
+            "name": "VLS 1 (Corner Oriented)",
+            "moves": "R U2 R' U' R U R'",
+            "algs": [
+                "R U2 R' U' R U R'"
+            ],
+            "desc": "Corner oriented, edge unoriented. Orientation and insertion.",
+            "cat": "VLS",
+            "vis": "110110010 001 000 100 000"
+        },
+        {
+            "name": "VLS 2 (Edge Oriented)",
+            "moves": "R U R' U' R U2 R' U' R U R'",
+            "algs": [
+                "R U R' U' R U2 R' U' R U R'"
+            ],
+            "desc": "Edge oriented, corner unoriented. Advanced Valk Last Slot.",
+            "cat": "VLS",
+            "vis": "011111010 100 000 101 000"
+        }
+    ],
+    "oh": [
+        {
+            "name": "OH T Perm (Standard)",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
+            ],
+            "desc": "Highly ergonomic standard T Perm for OH.",
+            "cat": "OH",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OH Ua Perm (RU Gen)",
+            "moves": "R2 U' R' U' R U R U R U' R",
+            "algs": [
+                "R2 U' R' U' R U R U R U' R",
+                "R U' R U R U R U' R' U' R2"
+            ],
+            "desc": "OH-optimal RU-gen Ua Permutation (no M-slice).",
+            "cat": "OH",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OH Ub Perm (RU Gen)",
+            "moves": "R' U R' U' R' U' R' U R U R2",
+            "algs": [
+                "R' U R' U' R' U' R' U R U R2",
+                "R2 U R U R' U' R' U' R' U R'"
+            ],
+            "desc": "OH-optimal RU-gen Ub Permutation.",
+            "cat": "OH",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OH H Perm (RU Gen)",
+            "moves": "R2 U2 R U2 R2 U2 R2 U2 R U2 R2",
+            "algs": [
+                "R2 U2 R U2 R2 U2 R2 U2 R U2 R2"
+            ],
+            "desc": "Replaces M2 U M2 moves with pure RU turns for OH efficiency.",
+            "cat": "OH",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OH Z Perm (RU Gen)",
+            "moves": "R' U' R U' R U R U' R' U R U R2 U' R'",
+            "algs": [
+                "R' U' R U' R U R U' R' U R U R2 U' R'"
+            ],
+            "desc": "OH-optimal RU-gen Z Permutation.",
+            "cat": "OH",
+            "vis": "111111111 000 000 000 000"
+        }
+    ],
+    "bld": [
+        {
+            "name": "OP Corners (Y Perm)",
+            "moves": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+            "algs": [
+                "F R U' R' U' R U R' F' R U R' U' R' F R F'"
+            ],
+            "desc": "Old Pochmann Corner Swapper targeting RDF slot.",
+            "cat": "BLD",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "OP Corners (T Perm)",
+            "moves": "R U R' U' R' F R2 U' R' U' R U R' F'",
+            "algs": [
+                "R U R' U' R' F R2 U' R' U' R U R' F'"
+            ],
+            "desc": "Alternative OP Corner Swapper targeting UFR slot.",
+            "cat": "BLD",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "BLD Corner Parity",
+            "moves": "R U2 R' U' R U2 L' U R' U' L",
+            "algs": [
+                "R U2 R' U' R U2 L' U R' U' L"
+            ],
+            "desc": "Swaps UBL and UBR corners to resolve corner-edge parity.",
+            "cat": "BLD",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "M2 Edges (M2 Double)",
+            "moves": "M2",
+            "algs": [
+                "M2"
+            ],
+            "desc": "Standard M2 double turn targeting UB slot (from DF buffer).",
+            "cat": "BLD",
+            "vis": "111111111 000 000 000 000"
+        }
+    ],
+    "fmc": [
+        {
+            "name": "3-Corner Commutator",
+            "moves": "R U L U' R' U L' U'",
+            "algs": [
+                "R U L U' R' U L' U'"
+            ],
+            "desc": "8-move commutator to cycle UFR, UFL, and UBL corners.",
+            "cat": "FMC",
+            "vis": "111111010 000 100 000 000"
+        },
+        {
+            "name": "3-Edge Commutator",
+            "moves": "M' U2 M U2",
+            "algs": [
+                "M' U2 M U2"
+            ],
+            "desc": "4-move commutator to cycle UB, UF, and DB edges.",
+            "cat": "FMC",
+            "vis": "111111111 000 000 000 000"
+        }
+    ],
+    "ell": [
+        {
+            "name": "ELL Case 1",
+            "moves": "M2' U M2' U2 M2' U M2'",
+            "algs": [
+                "M2' U M2' U2 M2' U M2'"
+            ],
+            "desc": "Edges of Last Layer Case #1: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 2",
+            "moves": "M2' U M2' U M' U2 M2' U2 M' U2",
+            "algs": [
+                "M2' U M2' U M' U2 M2' U2 M' U2"
+            ],
+            "desc": "Edges of Last Layer Case #2: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 3",
+            "moves": "R U' R U R U R U' R' U' R2",
+            "algs": [
+                "R U' R U R U R U' R' U' R2"
+            ],
+            "desc": "Edges of Last Layer Case #3: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 4",
+            "moves": "R2 U R U R' U' R' U' R' U R'",
+            "algs": [
+                "R2 U R U R' U' R' U' R' U R'"
+            ],
+            "desc": "Edges of Last Layer Case #4: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 5",
+            "moves": "M' U M' U M' U2 M U M U M U2",
+            "algs": [
+                "M' U M' U M' U2 M U M U M U2"
+            ],
+            "desc": "Edges of Last Layer Case #5: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 6",
+            "moves": "r U R' U' r' R U R' U' r U R' U' r'",
+            "algs": [
+                "r U R' U' r' R U R' U' r U R' U' r'"
+            ],
+            "desc": "Edges of Last Layer Case #6: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "000110100 000 101 000 000"
+        },
+        {
+            "name": "ELL Case 7",
+            "moves": "M' U' M' U' M' U2 M U' M U' M U2",
+            "algs": [
+                "M' U' M' U' M' U2 M U' M U' M U2"
+            ],
+            "desc": "Edges of Last Layer Case #7: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 8",
+            "moves": "M' U M' U' M' U2 M U M U' M U2",
+            "algs": [
+                "M' U M' U' M' U2 M U M U' M U2"
+            ],
+            "desc": "Edges of Last Layer Case #8: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 9",
+            "moves": "R U R' U' R' F R F' M' U M U2 M' U M",
+            "algs": [
+                "R U R' U' R' F R F' M' U M U2 M' U M"
+            ],
+            "desc": "Edges of Last Layer Case #9: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "001111001 110 000 110 000"
+        },
+        {
+            "name": "ELL Case 10",
+            "moves": "M' U M' U M' U' M' U' M' U2",
+            "algs": [
+                "M' U M' U M' U' M' U' M' U2"
+            ],
+            "desc": "Edges of Last Layer Case #10: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 11",
+            "moves": "M' U' M' U M' U M' U M' U2",
+            "algs": [
+                "M' U' M' U M' U M' U M' U2"
+            ],
+            "desc": "Edges of Last Layer Case #11: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 12",
+            "moves": "M2 U M2 U M' U2 M2 U2 M' U2",
+            "algs": [
+                "M2 U M2 U M' U2 M2 U2 M' U2"
+            ],
+            "desc": "Edges of Last Layer Case #12: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 13",
+            "moves": "M2 U' M2 U' M' U2 M2 U2 M' U2",
+            "algs": [
+                "M2 U' M2 U' M' U2 M2 U2 M' U2"
+            ],
+            "desc": "Edges of Last Layer Case #13: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 14",
+            "moves": "R U R' U' R' F R F' M2 U M2 U2 M2 U M2",
+            "algs": [
+                "R U R' U' R' F R F' M2 U M2 U2 M2 U M2"
+            ],
+            "desc": "Edges of Last Layer Case #14: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "001111001 110 000 110 000"
+        },
+        {
+            "name": "ELL Case 15",
+            "moves": "R U2 R' U' R U2 L' U R' U' L M' U2 M U2",
+            "algs": [
+                "R U2 R' U' R U2 L' U R' U' L M' U2 M U2"
+            ],
+            "desc": "Edges of Last Layer Case #15: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 16",
+            "moves": "M' U M' U2 M U M U2 M' U2 M2",
+            "algs": [
+                "M' U M' U2 M U M U2 M' U2 M2"
+            ],
+            "desc": "Edges of Last Layer Case #16: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 17",
+            "moves": "M' U' M' U2 M U' M U2 M' U2 M2",
+            "algs": [
+                "M' U' M' U2 M U' M U2 M' U2 M2"
+            ],
+            "desc": "Edges of Last Layer Case #17: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 18",
+            "moves": "M2 U M' U2 M U M2 U2 M'",
+            "algs": [
+                "M2 U M' U2 M U M2 U2 M'"
+            ],
+            "desc": "Edges of Last Layer Case #18: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 19",
+            "moves": "M2 U' M' U2 M U' M2 U2 M'",
+            "algs": [
+                "M2 U' M' U2 M U' M2 U2 M'"
+            ],
+            "desc": "Edges of Last Layer Case #19: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 20",
+            "moves": "R' U2 R2 U R' U' R' U2 F R F' U2 M'",
+            "algs": [
+                "R' U2 R2 U R' U' R' U2 F R F' U2 M'"
+            ],
+            "desc": "Edges of Last Layer Case #20: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "011110001 100 010 110 000"
+        },
+        {
+            "name": "ELL Case 21",
+            "moves": "r U R' U' r' R U R' U' M2 U2 M2",
+            "algs": [
+                "r U R' U' r' R U R' U' M2 U2 M2"
+            ],
+            "desc": "Edges of Last Layer Case #21: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "000110100 000 010 000 001"
+        },
+        {
+            "name": "ELL Case 22",
+            "moves": "M2 U2 M2 U M' U2 M U2 M' U M2",
+            "algs": [
+                "M2 U2 M2 U M' U2 M U2 M' U M2"
+            ],
+            "desc": "Edges of Last Layer Case #22: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 23",
+            "moves": "M2 U2 M2 U' M' U2 M U2 M' U' M2",
+            "algs": [
+                "M2 U2 M2 U' M' U2 M U2 M' U' M2"
+            ],
+            "desc": "Edges of Last Layer Case #23: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 24",
+            "moves": "M' U M U2 M' U' M U2 M' U M",
+            "algs": [
+                "M' U M U2 M' U' M U2 M' U M"
+            ],
+            "desc": "Edges of Last Layer Case #24: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 25",
+            "moves": "M' U' M U2 M' U M U2 M' U' M",
+            "algs": [
+                "M' U' M U2 M' U M U2 M' U' M"
+            ],
+            "desc": "Edges of Last Layer Case #25: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 26",
+            "moves": "M' U2 M' U2 M' U M' U2 M U2 M",
+            "algs": [
+                "M' U2 M' U2 M' U M' U2 M U2 M"
+            ],
+            "desc": "Edges of Last Layer Case #26: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 27",
+            "moves": "M' U2 M' U2 M' U' M' U2 M U2 M",
+            "algs": [
+                "M' U2 M' U2 M' U' M' U2 M U2 M"
+            ],
+            "desc": "Edges of Last Layer Case #27: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 28",
+            "moves": "M' U M' U M' U' M U M U M U2",
+            "algs": [
+                "M' U M' U M' U' M U M U M U2"
+            ],
+            "desc": "Edges of Last Layer Case #28: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        },
+        {
+            "name": "ELL Case 29",
+            "moves": "M' U' M' U' M' U M U' M U' M U2",
+            "algs": [
+                "M' U' M' U' M' U M U' M U' M U2"
+            ],
+            "desc": "Edges of Last Layer Case #29: orient and permute 4 edges.",
+            "cat": "ELL",
+            "vis": "111111111 000 000 000 000"
+        }
+    ]
+};
 
         // Generate a beautiful 3D Isometric Rubik's cube SVG diagram of the case
         function generateCubeSvg(item) {
@@ -1258,7 +3767,29 @@
                 return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
             }
             
-            if (cat === "PLL") {
+            if (item.vis) {
+                const parts = item.vis.split(' ');
+                const gridStr = parts[0];
+                for (let i = 0; i < 9; i++) {
+                    gridColors[i] = gridStr[i] === '1' ? YELLOW : '#57606f';
+                }
+                if (parts[1]) {
+                    const topStr = parts[1];
+                    for (let i = 0; i < 3; i++) sideColors.top[i] = topStr[i] === '1' ? YELLOW : null;
+                }
+                if (parts[2]) {
+                    const rightStr = parts[2];
+                    for (let i = 0; i < 3; i++) sideColors.right[i] = rightStr[i] === '1' ? YELLOW : null;
+                }
+                if (parts[3]) {
+                    const bottomStr = parts[3];
+                    for (let i = 0; i < 3; i++) sideColors.bottom[i] = bottomStr[i] === '1' ? YELLOW : null;
+                }
+                if (parts[4]) {
+                    const leftStr = parts[4];
+                    for (let i = 0; i < 3; i++) sideColors.left[i] = leftStr[i] === '1' ? YELLOW : null;
+                }
+            } else if (cat === "PLL") {
                 gridColors.fill(YELLOW);
                 
                 let corners = [
