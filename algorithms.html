@@ -734,6 +734,7 @@
             <button class="tab-btn" id="tab-oh" style="background-color: #E2C2FF;" onclick="selectMethod('oh')">One-Handed (OH)</button>
             <button class="tab-btn" id="tab-bld" style="background-color: #C2F1FF;" onclick="selectMethod('bld')">Blindfolded (BLD)</button>
             <button class="tab-btn" id="tab-fmc" style="background-color: #FFE4C2;" onclick="selectMethod('fmc')">Fewest Moves (FMC)</button>
+            <button class="tab-btn" id="tab-ell" style="background-color: #C2FFD4;" onclick="selectMethod('ell')">ELL Method</button>
         </div>
 
         <!-- ==================== CFOP METHOD ==================== -->
@@ -995,6 +996,20 @@
                 <div class="alg-grid" id="grid-fmc"></div>
             </div>
         </div>
+
+        <!-- ==================== ELL METHOD ==================== -->
+        <div id="content-ell" class="method-content" style="display: none;">
+            <div class="card" style="border-color: #C2FFD4;">
+                <div class="method-header">
+                    <h2 class="method-title" style="color: #27ae60;">ELL Method (Edges of Last Layer) 🌿</h2>
+                    <span class="badge" style="background-color: #E8F8F5;">29 Algorithms Total</span>
+                </div>
+                <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
+                    ELL solves the orientation and permutation of all four last layer edges at the same time, provided the corners of the last layer are already oriented and permuted (e.g. solved). ELL is extremely popular for Roux method LSE variants and advanced speedcubing subsets!
+                </p>
+                <div class="alg-grid" id="grid-ell"></div>
+            </div>
+        </div>
     </div>
 
     <!-- TOAST NOTIFICATION -->
@@ -1166,6 +1181,13 @@
             fmc: [
                 { name: "3-Corner Commutator", moves: "R U L U' R' U L' U'", algs: ["R U L U' R' U L' U'"], cat: "FMC", tags: "fmc commutator corners", desc: "8-move commutator to cycle UFR, UFL, and UBL corners." },
                 { name: "3-Edge Commutator", moves: "M' U2 M U2", algs: ["M' U2 M U2"], cat: "FMC", tags: "fmc commutator edges", desc: "4-move commutator to cycle UB, UF, and DB edges." }
+            ],
+            ell: [
+                { name: "ELL H Perm", moves: "M2' U M2' U2 M2' U M2'", algs: ["M2' U M2' U2 M2' U M2'", "M2 U' M2 U2 M2 U' M2"], cat: "ELL", tags: "ell h perm edges swap", desc: "Swaps all 4 edges opposite to each other. Corners are solved." },
+                { name: "ELL Z Perm", moves: "M2' U M2' U M' U2 M2' U2 M' U2", algs: ["M2' U M2' U M' U2 M2' U2 M' U2", "M' U' M2' U' M2' U' M' U2 M2'"], cat: "ELL", tags: "ell z perm edges swap", desc: "Swaps adjacent edges (cross swap on UF/UL and UB/UR)." },
+                { name: "ELL Ua Perm", moves: "R U' R U R U R U' R' U' R2", algs: ["R U' R U R U R U' R' U' R2", "M2 U M U2 M' U M2"], cat: "ELL", tags: "ell ua perm", desc: "3-cycle edges clockwise. Solved bar on back." },
+                { name: "ELL Ub Perm", moves: "R2 U R U R' U' R' U' R' U R'", algs: ["R2 U R U R' U' R' U' R' U R'", "M2 U' M U2 M' U' M2"], cat: "ELL", tags: "ell ub perm", desc: "3-cycle edges counter-clockwise. Solved bar on back." },
+                { name: "ELL 2-Flip (Opposite)", moves: "M' U M' U M' U2 M U M U M U2", algs: ["M' U M' U M' U2 M U M U M U2"], cat: "ELL", tags: "ell 2 flip opposite edges", desc: "Flips 2 opposite edges (UB and UF) while leaving corners solved." }
             ]
         };
 
@@ -1988,6 +2010,7 @@
             populateGrid('grid-oh', ALGORITHMS.oh);
             populateGrid('grid-bld', ALGORITHMS.bld);
             populateGrid('grid-fmc', ALGORITHMS.fmc);
+            populateGrid('grid-ell', ALGORITHMS.ell);
 
             // Init modal rotation drags
             initModalDragListeners();
