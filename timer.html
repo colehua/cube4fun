@@ -968,8 +968,8 @@
         <div id="timer-tap-zone" class="timer-card">
             <div id="timer-val" class="timer-display">0.00</div>
             <p id="timer-instructions" class="timer-instructions">
-                Hold Spacebar for 2 Seconds (Turns Green) and Release to Start! Press any key to stop.<br>
-                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box for 2 seconds to ready, release to start, tap anywhere to stop!)</span>
+                Hold Spacebar for 1 Second (Turns Green) and Release to Start! Press any key to stop.<br>
+                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box for 1 second to ready, release to start, tap anywhere to stop!)</span>
             </p>
         </div>
 
@@ -3051,7 +3051,7 @@
                     clearInterval(holdInterval);
                     holdInterval = setInterval(() => {
                         let elapsed = Date.now() - holdStart;
-                        if (elapsed >= 2000) { // 2 seconds hold instead of 3
+                        if (elapsed >= 1000) { // 1 second hold instead of 2
                             clearInterval(holdInterval);
                             timerState = 'READY';
                             timerDisplay.className = 'timer-display ready';
@@ -3099,7 +3099,7 @@
                 clearInterval(holdInterval);
                 holdInterval = setInterval(() => {
                     let elapsed = Date.now() - holdStart;
-                    if (elapsed >= 2000) { // 2 seconds hold instead of 3
+                    if (elapsed >= 1000) { // 1 second hold instead of 2
                         clearInterval(holdInterval);
                         timerState = 'READY';
                         timerDisplay.className = 'timer-display ready';
@@ -3135,7 +3135,7 @@
                 clearInterval(holdInterval);
                 holdInterval = setInterval(() => {
                     let elapsed = Date.now() - holdStart;
-                    if (elapsed >= 2000) {
+                    if (elapsed >= 1000) { // 1 second hold instead of 2
                         clearInterval(holdInterval);
                         timerState = 'READY';
                         timerDisplay.className = 'timer-display ready';
