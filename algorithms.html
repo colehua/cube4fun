@@ -3752,21 +3752,178 @@
                 </marker>
             </defs>`;
             
-            let gridColors = Array(9).fill('#57606f'); // default dark gray
-            let sideColors = {
-                top: Array(3).fill(null),
-                right: Array(3).fill(null),
-                bottom: Array(3).fill(null),
-                left: Array(3).fill(null)
-            };
-            let arrows = []; // list of {x1, y1, x2, y2, double: boolean}
-            
             const YELLOW = '#FFFF00';
             const WHITE = '#FFFFFF';
             const RED = '#FF3B30';
             const GREEN = '#4CD964';
             const BLUE = '#007AFF';
             const ORANGE = '#FF9500';
+            const GREY = '#57606f';
+            
+            // 1. Initialize solved Rubik's cube state (Yellow top, White bottom, Green front, Blue back, Orange left, Red right)
+            let simState = {
+                U: Array(9).fill(YELLOW),
+                D: Array(9).fill(WHITE),
+                F: Array(9).fill(GREEN),
+                B: Array(9).fill(BLUE),
+                L: Array(9).fill(ORANGE),
+                R: Array(9).fill(RED)
+            };
+            
+            // Helper to invert algorithm moves
+            function invertAlgorithm(movesStr) {
+                const moves = movesStr.trim().split(/\s+/).filter(m => m !== "");
+                const inverted = [];
+                for (let i = moves.length - 1; i >= 0; i--) {
+                    const move = moves[i];
+                    if (move.endsWith("'")) {
+                        inverted.push(move.slice(0, -1));
+                    } else if (move.endsWith("2")) {
+                        inverted.push(move);
+                    } else {
+                        inverted.push(move + "'");
+                    }
+                }
+                return inverted;
+            }
+            
+            // 2. Apply scramble (inverse of algorithm moves) to reach target case state
+            if (item.moves) {
+                try {
+                    const inverted = invertAlgorithm(item.moves);
+                    inverted.forEach(move => {
+                        let base = move;
+                        let modifier = '';
+                        if (move.endsWith("'")) {
+                            modifier = "'";
+                            base = move.slice(0, -1);
+                        } else if (move.endsWith("2")) {
+                            modifier = '2';
+                            base = move.slice(0, -1);
+                        }
+                        
+                        if (base === 'r') base = 'Rw';
+                        else if (base === 'l') base = 'Lw';
+                        else if (base === 'u') base = 'Uw';
+                        else if (base === 'd') base = 'Dw';
+                        else if (base === 'f') base = 'Fw';
+                        else if (base === 'b') base = 'Bw';
+                        
+                        let count = 1;
+                        if (modifier === "'") count = 3;
+                        else if (modifier === '2') count = 2;
+                        
+                        for (let c = 0; c < count; c++) {
+                            const temp = {
+                                U: [...simState.U], D: [...simState.D], F: [...simState.F],
+                                B: [...simState.B], L: [...simState.L], R: [...simState.R]
+                            };
+                            
+                            function rotFaceCW(face) {
+                                const copy = [...face];
+                                face[0] = copy[6]; face[1] = copy[3]; face[2] = copy[0];
+                                face[3] = copy[7];                   face[5] = copy[1];
+                                face[6] = copy[8]; face[7] = copy[5]; face[8] = copy[2];
+                            }
+                            
+                            function rotCol(dir) {
+                                let count = dir === 1 ? 1 : 3;
+                                for (let i = 0; i < count; i++) {
+                                    let t = [simState.U[1], simState.U[4], simState.U[7]];
+                                    simState.U[1] = simState.B[7]; simState.U[4] = simState.B[4]; simState.U[7] = simState.B[1];
+                                    simState.B[7] = simState.D[1]; simState.B[4] = simState.D[4]; simState.B[1] = simState.D[7];
+                                    simState.D[1] = simState.F[1]; simState.D[4] = simState.F[4]; simState.D[7] = simState.F[7];
+                                    simState.F[1] = t[0]; simState.F[4] = t[1]; simState.F[7] = t[2];
+                                }
+                            }
+                            function rotRow(dir) {
+                                let count = dir === 1 ? 1 : 3;
+                                for (let i = 0; i < count; i++) {
+                                    let t = [simState.R[3], simState.R[4], simState.R[5]];
+                                    simState.R[3] = simState.F[3]; simState.R[4] = simState.F[4]; simState.R[5] = simState.F[5];
+                                    simState.F[3] = simState.L[3]; simState.F[4] = simState.L[4]; simState.F[5] = simState.L[5];
+                                    simState.L[3] = simState.B[3]; simState.L[4] = simState.B[4]; simState.L[5] = simState.B[5];
+                                    simState.B[3] = t[0]; simState.B[4] = t[1]; simState.B[5] = t[2];
+                                }
+                            }
+                            function rotRing(dir) {
+                                let count = dir === 1 ? 1 : 3;
+                                for (let i = 0; i < count; i++) {
+                                    let t = [simState.U[3], simState.U[4], simState.U[5]];
+                                    simState.U[3] = simState.L[7]; simState.U[4] = simState.L[4]; simState.U[5] = simState.L[1];
+                                    simState.L[1] = simState.D[3]; simState.L[4] = simState.D[4]; simState.L[7] = simState.D[5];
+                                    simState.D[3] = simState.R[7]; simState.D[4] = simState.R[4]; simState.D[5] = simState.R[1];
+                                    simState.R[1] = t[0]; simState.R[4] = t[1]; simState.R[7] = t[2];
+                                }
+                            }
+
+                            if (base === 'U') {
+                                rotFaceCW(simState.U);
+                                simState.L[0] = temp.F[0]; simState.L[1] = temp.F[1]; simState.L[2] = temp.F[2];
+                                simState.F[0] = temp.R[0]; simState.F[1] = temp.R[1]; simState.F[2] = temp.R[2];
+                                simState.R[0] = temp.B[0]; simState.R[1] = temp.B[1]; simState.R[2] = temp.B[2];
+                                simState.B[0] = temp.L[0]; simState.B[1] = temp.L[1]; simState.B[2] = temp.L[2];
+                            } else if (base === 'D') {
+                                rotFaceCW(simState.D);
+                                simState.R[6] = temp.F[6]; simState.R[7] = temp.F[7]; simState.R[8] = temp.F[8];
+                                simState.F[6] = temp.L[6]; simState.F[7] = temp.L[7]; simState.F[8] = temp.L[8];
+                                simState.L[6] = temp.B[6]; simState.L[7] = temp.B[7]; simState.L[8] = temp.B[8];
+                                simState.B[6] = temp.R[6]; simState.B[7] = temp.R[7]; simState.B[8] = temp.R[8];
+                            } else if (base === 'F') {
+                                rotFaceCW(simState.F);
+                                simState.U[6] = temp.L[8]; simState.U[7] = temp.L[5]; simState.U[8] = temp.L[2];
+                                simState.L[2] = temp.D[0]; simState.L[5] = temp.D[1]; simState.L[8] = temp.D[2];
+                                simState.D[0] = temp.R[6]; simState.D[1] = temp.R[3]; simState.D[2] = temp.R[0];
+                                simState.R[0] = temp.U[6]; simState.R[3] = temp.U[7]; simState.R[6] = temp.U[8];
+                            } else if (base === 'B') {
+                                rotFaceCW(simState.B);
+                                simState.U[0] = temp.R[2]; simState.U[1] = temp.R[5]; simState.U[2] = temp.R[8];
+                                simState.R[2] = temp.D[8]; simState.R[5] = temp.D[7]; simState.R[8] = temp.D[6];
+                                simState.D[6] = temp.L[0]; simState.D[7] = temp.L[3]; simState.D[8] = temp.L[6];
+                                simState.L[0] = temp.U[2]; simState.L[3] = temp.U[1]; simState.L[6] = temp.U[0];
+                            } else if (base === 'L') {
+                                rotFaceCW(simState.L);
+                                simState.U[0] = temp.B[8]; simState.U[3] = temp.B[5]; simState.U[6] = temp.B[2];
+                                simState.B[2] = temp.D[6]; simState.B[5] = temp.D[3]; simState.B[8] = temp.D[0];
+                                simState.D[0] = temp.F[0]; simState.D[3] = temp.F[3]; simState.D[6] = temp.F[6];
+                                simState.F[0] = temp.U[0]; simState.F[3] = temp.U[3]; simState.F[6] = temp.U[6];
+                            } else if (base === 'R') {
+                                rotFaceCW(simState.R);
+                                simState.U[2] = temp.F[2]; simState.U[5] = temp.F[5]; simState.U[8] = temp.F[8];
+                                simState.F[2] = temp.D[2]; simState.F[5] = temp.D[5]; simState.F[8] = temp.D[8];
+                                simState.D[2] = temp.B[6]; simState.D[5] = temp.B[3]; simState.D[8] = temp.B[0];
+                                simState.B[0] = temp.U[2]; simState.B[3] = temp.U[5]; simState.B[6] = temp.U[8];
+                            } else if (base === 'M') {
+                                rotCol(1);
+                            } else if (base === 'E') {
+                                rotRow(1);
+                            } else if (base === 'S') {
+                                rotRing(1);
+                            } else if (base === 'Uw') {
+                                rotFaceCW(simState.U);
+                                rotRow(-1);
+                            } else if (base === 'Dw') {
+                                rotFaceCW(simState.D);
+                                rotRow(1);
+                            } else if (base === 'Fw') {
+                                rotFaceCW(simState.F);
+                                rotRing(1);
+                            } else if (base === 'Bw') {
+                                rotFaceCW(simState.B);
+                                rotRing(-1);
+                            } else if (base === 'Lw') {
+                                rotFaceCW(simState.L);
+                                rotCol(1);
+                            } else if (base === 'Rw') {
+                                rotFaceCW(simState.R);
+                                rotCol(-1);
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error("Cube simulation scramble failed:", e);
+                }
+            }
             
             // Helper functions for 3D Isometric Projection
             function mapToIso(x, y) {
@@ -3804,218 +3961,118 @@
                 return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
             }
             
-            if (cat === "PLL") {
-                gridColors.fill(YELLOW);
-                
-                let corners = [
-                    { name: "UBL", stickers: { top: BLUE, left: ORANGE } },
-                    { name: "UBR", stickers: { top: BLUE, right: RED } },
-                    { name: "UFR", stickers: { bottom: GREEN, right: RED } },
-                    { name: "UFL", stickers: { bottom: GREEN, left: ORANGE } }
-                ];
-                let edges = [
-                    { name: "UB", stickers: { top: BLUE } },
-                    { name: "UR", stickers: { right: RED } },
-                    { name: "UF", stickers: { bottom: GREEN } },
-                    { name: "UL", stickers: { left: ORANGE } }
-                ];
-                
-                function swapCorners(i, j) {
-                    let temp = corners[i];
-                    corners[i] = corners[j];
-                    corners[j] = temp;
-                }
-                function swapEdges(i, j) {
-                    let temp = edges[i];
-                    edges[i] = edges[j];
-                    edges[j] = temp;
-                }
-                
-                if (name.includes("T Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(1, 3);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Y Perm")) {
-                    swapCorners(0, 2);
-                    swapEdges(0, 3);
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("H Perm")) {
-                    swapEdges(0, 2);
-                    swapEdges(1, 3);
-                    arrows = [{x1: 35, y1: 20, x2: 35, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Ua Perm")) {
-                    let temp = edges[0]; edges[0] = edges[1]; edges[1] = edges[3]; edges[3] = temp;
-                    arrows = [{x1: 50, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, {x1: 20, y1: 35, x2: 50, y2: 35, double: false}];
-                } else if (name.includes("Ub Perm")) {
-                    let temp = edges[0]; edges[0] = edges[3]; edges[3] = edges[1]; edges[1] = temp;
-                    arrows = [{x1: 20, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, {x1: 50, y1: 35, x2: 20, y2: 35, double: false}];
-                } else if (name.includes("Z Perm")) {
-                    swapEdges(0, 1);
-                    swapEdges(2, 3);
-                    arrows = [{x1: 35, y1: 20, x2: 50, y2: 35, double: true}, {x1: 20, y1: 35, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("E Perm")) {
-                    swapCorners(0, 3);
-                    swapCorners(1, 2);
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 20, x2: 50, y2: 50, double: true}];
-                } else if (name.includes("F Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(0, 2);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("Ja Perm")) {
-                    swapCorners(0, 3);
-                    swapEdges(0, 3);
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Jb Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(0, 1);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Ra Perm")) {
-                    swapCorners(1, 2);
-                    swapEdges(0, 3);
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Rb Perm")) {
-                    swapCorners(0, 3);
-                    swapEdges(0, 1);
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("V Perm")) {
-                    swapCorners(0, 2);
-                    swapEdges(0, 1);
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Na Perm")) {
-                    swapCorners(0, 2);
-                    swapEdges(0, 2);
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("Nb Perm")) {
-                    swapCorners(1, 3);
-                    swapEdges(1, 3);
-                    arrows = [{x1: 50, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 35, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Aa Perm")) {
-                    let temp = corners[0]; corners[0] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 20, double: false}];
-                } else if (name.includes("Ab Perm")) {
-                    let temp = corners[3]; corners[3] = corners[1]; corners[1] = corners[2]; corners[2] = temp;
-                    arrows = [{x1: 20, y1: 50, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 50, double: false}];
-                }
-                
-                sideColors.top[0] = corners[0].stickers.top; sideColors.left[0] = corners[0].stickers.left;
-                sideColors.top[2] = corners[1].stickers.top; sideColors.right[0] = corners[1].stickers.right;
-                sideColors.bottom[2] = corners[2].stickers.bottom; sideColors.right[2] = corners[2].stickers.right;
-                sideColors.bottom[0] = corners[3].stickers.bottom; sideColors.left[2] = corners[3].stickers.left;
-                sideColors.top[1] = edges[0].stickers.top; sideColors.right[1] = edges[1].stickers.right;
-                sideColors.bottom[1] = edges[2].stickers.bottom; sideColors.left[1] = edges[3].stickers.left;
-                
-            } else if (cat === "F2L" || cat === "ZBLS") {
-                if (name.includes("F2L 1")) {
-                    gridColors[8] = RED; sideColors.right[2] = WHITE; sideColors.bottom[2] = GREEN; gridColors[1] = GREEN; sideColors.top[1] = RED;
-                } else if (name.includes("F2L 2")) {
-                    gridColors[8] = GREEN; sideColors.right[2] = RED; sideColors.bottom[2] = WHITE; gridColors[5] = RED; sideColors.right[1] = GREEN;
-                } else if (name.includes("F2L 3")) {
-                    gridColors[8] = RED; sideColors.right[2] = GREEN; sideColors.bottom[2] = WHITE; gridColors[1] = GREEN; sideColors.top[1] = RED;
-                } else if (name.includes("F2L 4")) {
-                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[5] = RED; sideColors.right[1] = GREEN;
-                } else if (name.includes("F2L 5")) {
-                    sideColors.bottom[2] = GREEN; sideColors.right[2] = RED; gridColors[5] = GREEN; sideColors.right[1] = RED;
-                } else if (name.includes("F2L 19")) {
-                    gridColors[8] = WHITE; sideColors.right[2] = RED; sideColors.bottom[2] = GREEN; gridColors[3] = GREEN; sideColors.left[1] = RED;
-                }
-            } else if (item.vis) {
-                const parts = item.vis.split(' ');
-                const gridStr = parts[0];
-                for (let i = 0; i < 9; i++) {
-                    gridColors[i] = gridStr[i] === '1' ? YELLOW : '#57606f';
-                }
-                if (parts[1]) {
-                    const topStr = parts[1];
-                    for (let i = 0; i < 3; i++) sideColors.top[i] = topStr[i] === '1' ? YELLOW : null;
-                }
-                if (parts[2]) {
-                    const rightStr = parts[2];
-                    for (let i = 0; i < 3; i++) sideColors.right[i] = rightStr[i] === '1' ? YELLOW : null;
-                }
-                if (parts[3]) {
-                    const bottomStr = parts[3];
-                    for (let i = 0; i < 3; i++) sideColors.bottom[i] = bottomStr[i] === '1' ? YELLOW : null;
-                }
-                if (parts[4]) {
-                    const leftStr = parts[4];
-                    for (let i = 0; i < 3; i++) sideColors.left[i] = leftStr[i] === '1' ? YELLOW : null;
-                }
-            } else if (cat === "OLL" || cat === "COLL" || cat === "CMLL" || cat === "ZBLL") {
-                gridColors[1] = YELLOW; gridColors[3] = YELLOW; gridColors[4] = YELLOW; gridColors[5] = YELLOW; gridColors[7] = YELLOW;
-                
-                if (name.includes("OLL 1") || name.includes("OLL 2") || name.includes("Dot")) {
-                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; gridColors[5] = '#57606f'; gridColors[7] = '#57606f';
-                    sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW; sideColors.right[1] = YELLOW; sideColors.bottom[1] = YELLOW;
-                } else if (name.includes("OLL 33") || name.includes("T-shape")) {
-                    gridColors[1] = '#57606f'; sideColors.top[1] = YELLOW;
-                } else if (name.includes("OLL 51") || name.includes("Line")) {
-                    gridColors[1] = '#57606f'; gridColors[7] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.bottom[1] = YELLOW;
-                }
-                
-                if (name.includes("OLL 20")) {
-                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; gridColors[6] = YELLOW; gridColors[8] = YELLOW;
-                } else if (name.includes("OLL 37") || name.includes("F-shape")) {
-                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
-                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
-                } else if (name.includes("OLL 44") || name.includes("P-shape")) {
-                    gridColors[1] = '#57606f'; gridColors[3] = '#57606f'; sideColors.top[1] = YELLOW; sideColors.left[1] = YELLOW;
-                    gridColors[0] = YELLOW; gridColors[6] = YELLOW;
-                } else if (name.includes("OLL 51")) {
-                    sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.right[2] = YELLOW;
-                } else if (name.includes("Sune") && !name.includes("Anti")) {
-                    gridColors[6] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.right[0] = YELLOW; sideColors.top[0] = YELLOW;
-                } else if (name.includes("Anti-Sune") || name.includes("ASune")) {
-                    gridColors[2] = YELLOW; sideColors.top[0] = YELLOW; sideColors.left[2] = YELLOW; sideColors.bottom[2] = YELLOW;
-                } else if (name.includes("COLL-H") || name.includes("ZBLL-H") || name.includes("CMLL-H") || name.includes("OLL 21") || name.includes("H Case")) {
-                    sideColors.top[0] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
-                } else if (name.includes("Pi Case") || name.includes("ZBLL-Pi") || name.includes("OLL 22") || name.includes("Car")) {
-                    sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW; sideColors.left[0] = YELLOW; sideColors.right[0] = YELLOW;
-                } else if (name.includes("COLL-U") || name.includes("ZBLL-U") || name.includes("OLL 23") || name.includes("Headlights")) {
-                    gridColors[0] = YELLOW; gridColors[2] = YELLOW; sideColors.bottom[0] = YELLOW; sideColors.bottom[2] = YELLOW;
-                } else if (name.includes("COLL-T") || name.includes("ZBLL-T") || name.includes("CMLL-T") || name.includes("OLL 33") || name.includes("Blinker")) {
-                    gridColors[2] = YELLOW; gridColors[8] = YELLOW; sideColors.left[0] = YELLOW; sideColors.left[2] = YELLOW;
-                } else if (name.includes("ZBLL-L") || name.includes("OLL 25") || name.includes("L Case") || name.includes("Triple Sune")) {
-                    gridColors[0] = YELLOW; gridColors[8] = YELLOW; sideColors.top[2] = YELLOW; sideColors.bottom[0] = YELLOW;
-                }
-            }
+            // F2L/ZBLS specific target piece isolation
+            let isF2lOrZbls = (cat === "F2L" || cat === "ZBLS");
+            let targetCornerIdx = -1;
+            let targetEdgeIdx = -1;
             
-            // Draw 3D Isometric stickers
-            // Draw external yellow bars for back-left side (L face)
-            for (let row = 0; row < 3; row++) {
-                if (sideColors.left[row] === YELLOW) {
-                    const ox = 50, oy = 5;
-                    const rx = 35 / 3, ry = 17.5 / 3;
-                    const lx = -35 / 3, ly = 17.5 / 3;
-                    const x0 = ox + row * lx;
-                    const y0 = oy + row * ly;
-                    const p1x = x0, p1y = y0;
-                    const p2x = x0 + lx, p2y = y0 + ly;
-                    const p3x = p2x - 2.5, p3y = p2y - 1.25;
-                    const p4x = p1x - 2.5, p4y = p1y - 1.25;
-                    svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+            const corners = [
+                { id: 0, faces: ['U', 'B', 'L'], indices: [0, 2, 0] },
+                { id: 1, faces: ['U', 'B', 'R'], indices: [2, 0, 2] },
+                { id: 2, faces: ['U', 'F', 'R'], indices: [8, 2, 0] },
+                { id: 3, faces: ['U', 'F', 'L'], indices: [6, 0, 2] },
+                { id: 4, faces: ['D', 'F', 'L'], indices: [0, 6, 8] },
+                { id: 5, faces: ['D', 'F', 'R'], indices: [2, 8, 6] },
+                { id: 6, faces: ['D', 'B', 'R'], indices: [8, 6, 8] },
+                { id: 7, faces: ['D', 'B', 'L'], indices: [6, 8, 6] }
+            ];
+
+            const edges = [
+                { id: 0, faces: ['U', 'B'], indices: [1, 1] },
+                { id: 1, faces: ['U', 'R'], indices: [5, 1] },
+                { id: 2, faces: ['U', 'F'], indices: [7, 1] },
+                { id: 3, faces: ['U', 'L'], indices: [3, 1] },
+                { id: 4, faces: ['F', 'L'], indices: [3, 5] },
+                { id: 5, faces: ['F', 'R'], indices: [5, 3] },
+                { id: 6, faces: ['B', 'R'], indices: [3, 5] },
+                { id: 7, faces: ['B', 'L'], indices: [5, 3] },
+                { id: 8, faces: ['D', 'F'], indices: [1, 7] },
+                { id: 9, faces: ['D', 'R'], indices: [5, 7] },
+                { id: 10, faces: ['D', 'B'], indices: [7, 7] },
+                { id: 11, faces: ['D', 'L'], indices: [3, 7] }
+            ];
+
+            if (isF2lOrZbls) {
+                // Target slot pieces are White-Green-Red corner (DFR) and Green-Red edge (FR)
+                for (let c of corners) {
+                    let colors = c.faces.map((f, idx) => simState[f][c.indices[idx]]);
+                    if (colors.includes(WHITE) && colors.includes(GREEN) && colors.includes(RED)) {
+                        targetCornerIdx = c.id;
+                        break;
+                    }
+                }
+                for (let e of edges) {
+                    let colors = e.faces.map((f, idx) => simState[f][e.indices[idx]]);
+                    if (colors.includes(GREEN) && colors.includes(RED)) {
+                        targetEdgeIdx = e.id;
+                        break;
+                    }
                 }
             }
 
-            // Draw external yellow bars for back-right side (B face)
-            for (let col = 0; col < 3; col++) {
-                if (sideColors.top[col] === YELLOW) {
-                    const ox = 50, oy = 5;
-                    const rx = 35 / 3, ry = 17.5 / 3;
-                    const lx = -35 / 3, ly = 17.5 / 3;
-                    const x0 = ox + col * rx;
-                    const y0 = oy + col * ry;
-                    const p1x = x0, p1y = y0;
-                    const p2x = x0 + rx, p2y = y0 + ry;
-                    const p3x = p2x + 2.5, p3y = p2y - 1.25;
-                    const p4x = p1x + 2.5, p4y = p1y - 1.25;
-                    svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+            function isFaceletTarget(face, index) {
+                if (!isF2lOrZbls) return true;
+                for (let c of corners) {
+                    if (c.id === targetCornerIdx) {
+                        for (let idx = 0; idx < 3; idx++) {
+                            if (c.faces[idx] === face && c.indices[idx] === index) return true;
+                        }
+                    }
+                }
+                for (let e of edges) {
+                    if (e.id === targetEdgeIdx) {
+                        for (let idx = 0; idx < 2; idx++) {
+                            if (e.faces[idx] === face && e.indices[idx] === index) return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            // Draw external yellow bars for back faces (L and B) if not F2L
+            if (!isF2lOrZbls) {
+                // Draw L-face yellow bars (floating left)
+                for (let row = 0; row < 3; row++) {
+                    if (simState.L[row] === YELLOW) {
+                        const ox = 50, oy = 5;
+                        const rx = 35 / 3, ry = 17.5 / 3;
+                        const lx = -35 / 3, ly = 17.5 / 3;
+                        const x0 = ox + row * lx;
+                        const y0 = oy + row * ly;
+                        const p1x = x0, p1y = y0;
+                        const p2x = x0 + lx, p2y = y0 + ly;
+                        const p3x = p2x - 2.5, p3y = p2y - 1.25;
+                        const p4x = p1x - 2.5, p4y = p1y - 1.25;
+                        svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                    }
+                }
+
+                // Draw B-face yellow bars (floating right)
+                for (let col = 0; col < 3; col++) {
+                    if (simState.B[2 - col] === YELLOW) {
+                        const ox = 50, oy = 5;
+                        const rx = 35 / 3, ry = 17.5 / 3;
+                        const lx = -35 / 3, ly = 17.5 / 3;
+                        const x0 = ox + col * rx;
+                        const y0 = oy + col * ry;
+                        const p1x = x0, p1y = y0;
+                        const p2x = x0 + rx, p2y = y0 + ry;
+                        const p3x = p2x + 2.5, p3y = p2y - 1.25;
+                        const p4x = p1x + 2.5, p4y = p1y - 1.25;
+                        svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                    }
                 }
             }
             
             // 1. Draw U Face (Top Rhombus)
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
-                    const color = gridColors[row * 3 + col] || '#57606f';
+                    let color = GREY;
+                    if (isF2lOrZbls) {
+                        color = isFaceletTarget('U', row * 3 + col) ? simState.U[row * 3 + col] : GREY;
+                    } else {
+                        color = simState.U[row * 3 + col] === YELLOW ? YELLOW : GREY;
+                    }
                     const path = getUStickerPath(row, col);
                     svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
                 }
@@ -4024,11 +4081,17 @@
             // 2. Draw F Face (Front-Left Face)
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
-                    let color = '#57606f';
-                    if (row === 0) {
-                        color = sideColors.bottom[col] || GREEN;
+                    let color = GREY;
+                    if (isF2lOrZbls) {
+                        color = isFaceletTarget('F', row * 3 + col) ? simState.F[row * 3 + col] : GREY;
                     } else {
-                        color = GREEN;
+                        if (row === 0) {
+                            let isOllBased = (cat === "OLL" || cat === "WV" || cat === "VLS" || cat === "ELL");
+                            let stickerColor = simState.F[col];
+                            color = stickerColor === YELLOW ? YELLOW : (isOllBased ? GREY : stickerColor);
+                        } else {
+                            color = GREEN;
+                        }
                     }
                     const path = getFStickerPath(row, col);
                     svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
@@ -4038,18 +4101,71 @@
             // 3. Draw R Face (Front-Right Face)
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
-                    let color = '#57606f';
-                    if (row === 0) {
-                        color = sideColors.right[2 - col] || RED;
+                    let color = GREY;
+                    if (isF2lOrZbls) {
+                        color = isFaceletTarget('R', row * 3 + col) ? simState.R[row * 3 + col] : GREY;
                     } else {
-                        color = RED;
+                        if (row === 0) {
+                            let isOllBased = (cat === "OLL" || cat === "WV" || cat === "VLS" || cat === "ELL");
+                            let stickerColor = simState.R[col];
+                            color = stickerColor === YELLOW ? YELLOW : (isOllBased ? GREY : stickerColor);
+                        } else {
+                            color = RED;
+                        }
                     }
                     const path = getRStickerPath(row, col);
                     svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
                 }
             }
             
-            // Draw projected arrows on top face
+            // PLL permutation direction arrows
+            let arrows = [];
+            if (cat === "PLL") {
+                if (name.includes("T Perm")) {
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Y Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("H Perm")) {
+                    arrows = [{x1: 35, y1: 20, x2: 35, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Ua Perm")) {
+                    arrows = [{x1: 50, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, {x1: 20, y1: 35, x2: 50, y2: 35, double: false}];
+                } else if (name.includes("Ub Perm")) {
+                    arrows = [{x1: 20, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, {x1: 50, y1: 35, x2: 20, y2: 35, double: false}];
+                } else if (name.includes("Z Perm")) {
+                    arrows = [{x1: 35, y1: 20, x2: 50, y2: 35, double: true}, {x1: 20, y1: 35, x2: 35, y2: 50, double: true}];
+                } else if (name.includes("E Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 20, x2: 50, y2: 50, double: true}];
+                } else if (name.includes("F Perm")) {
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
+                } else if (name.includes("Ja Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Jb Perm")) {
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Ra Perm")) {
+                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Rb Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("V Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Na Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
+                } else if (name.includes("Nb Perm")) {
+                    arrows = [{x1: 50, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 35, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Aa Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 20, double: false}];
+                } else if (name.includes("Ab Perm")) {
+                    arrows = [{x1: 20, y1: 50, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 50, double: false}];
+                } else if (name.includes("Ga Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 50, x2: 20, y2: 35, double: true}];
+                } else if (name.includes("Gb Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 50, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Gc Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
+                } else if (name.includes("Gd Perm")) {
+                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+                }
+            }
+            
             arrows.forEach(a => {
                 const start = mapToIso(a.x1, a.y1);
                 const end = mapToIso(a.x2, a.y2);
@@ -4226,59 +4342,140 @@
             };
         }
 
-        // Apply 3x3 rotation state
-        function rotateModal3x3State(state, face) {
-            const temp = {...state};
-            if (face === 'U') {
-                state.U = [temp.U[6], temp.U[3], temp.U[0], temp.U[7], temp.U[4], temp.U[1], temp.U[8], temp.U[5], temp.U[2]];
-                state.F[0] = temp.R[0]; state.F[1] = temp.R[1]; state.F[2] = temp.R[2];
-                state.L[0] = temp.F[0]; state.L[1] = temp.F[1]; state.L[2] = temp.F[2];
-                state.B[0] = temp.L[0]; state.B[1] = temp.L[1]; state.B[2] = temp.L[2];
-                state.R[0] = temp.B[0]; state.R[1] = temp.B[1]; state.R[2] = temp.B[2];
-            } else if (face === 'D') {
-                state.D = [temp.D[6], temp.D[3], temp.D[0], temp.D[7], temp.D[4], temp.D[1], temp.D[8], temp.D[5], temp.D[2]];
-                state.F[6] = temp.L[6]; state.F[7] = temp.L[7]; state.F[8] = temp.L[8];
-                state.R[6] = temp.F[6]; state.R[7] = temp.F[7]; state.R[8] = temp.F[8];
-                state.B[6] = temp.R[6]; state.B[7] = temp.R[7]; state.B[8] = temp.R[8];
-                state.L[6] = temp.B[6]; state.L[7] = temp.B[7]; state.L[8] = temp.B[8];
-            } else if (face === 'F') {
-                state.F = [temp.F[6], temp.F[3], temp.F[0], temp.F[7], temp.F[4], temp.F[1], temp.F[8], temp.F[5], temp.F[2]];
-                state.U[6] = temp.L[8]; state.U[7] = temp.L[5]; state.U[8] = temp.L[2];
-                state.R[0] = temp.U[6]; state.R[3] = temp.U[7]; state.R[6] = temp.U[8];
-                state.D[2] = temp.R[0]; state.D[1] = temp.R[3]; state.D[0] = temp.R[6];
-                state.L[8] = temp.D[2]; state.L[5] = temp.D[1]; state.L[2] = temp.D[0];
-            } else if (face === 'B') {
-                state.B = [temp.B[6], temp.B[3], temp.B[0], temp.B[7], temp.B[4], temp.B[1], temp.B[8], temp.B[5], temp.B[2]];
-                state.U[2] = temp.R[2]; state.U[1] = temp.R[5]; state.U[0] = temp.R[8];
-                state.L[0] = temp.U[2]; state.L[3] = temp.U[1]; state.L[6] = temp.U[0];
-                state.D[6] = temp.L[0]; state.D[7] = temp.L[3]; state.D[8] = temp.L[6];
-                state.R[8] = temp.D[6]; state.R[5] = temp.D[7]; state.R[2] = temp.D[8];
-            } else if (face === 'L') {
-                state.L = [temp.L[6], temp.L[3], temp.L[0], temp.L[7], temp.L[4], temp.L[1], temp.L[8], temp.L[5], temp.L[2]];
-                state.U[0] = temp.B[8]; state.U[3] = temp.B[5]; state.U[6] = temp.B[2];
-                state.F[0] = temp.U[0]; state.F[3] = temp.U[3]; state.F[6] = temp.U[6];
-                state.D[0] = temp.F[0]; state.D[3] = temp.F[3]; state.D[6] = temp.F[6];
-                state.B[8] = temp.D[0]; state.B[5] = temp.D[3]; state.B[2] = temp.D[6];
-            } else if (face === 'R') {
-                state.R = [temp.R[6], temp.R[3], temp.R[0], temp.R[7], temp.R[4], temp.R[1], temp.R[8], temp.R[5], temp.R[2]];
-                state.U[8] = temp.F[8]; state.U[5] = temp.F[5]; state.U[2] = temp.F[2];
-                state.B[0] = temp.U[8]; state.B[3] = temp.U[5]; state.B[6] = temp.U[2];
-                state.D[8] = temp.B[0]; state.D[5] = temp.B[3]; state.D[2] = temp.B[6];
-                state.F[8] = temp.D[8]; state.F[5] = temp.D[5]; state.F[2] = temp.D[2];
+        // Apply 3x3 rotation state including slice and wide moves
+        function rotateModal3x3State(state, move) {
+            let base = move;
+            let modifier = '';
+            if (move.endsWith("'")) {
+                modifier = "'";
+                base = move.slice(0, -1);
+            } else if (move.endsWith("2")) {
+                modifier = '2';
+                base = move.slice(0, -1);
+            }
+            
+            if (base === 'r') base = 'Rw';
+            else if (base === 'l') base = 'Lw';
+            else if (base === 'u') base = 'Uw';
+            else if (base === 'd') base = 'Dw';
+            else if (base === 'f') base = 'Fw';
+            else if (base === 'b') base = 'Bw';
+            
+            let count = 1;
+            if (modifier === "'") count = 3;
+            else if (modifier === '2') count = 2;
+            
+            for (let c = 0; c < count; c++) {
+                const temp = {
+                    U: [...state.U], D: [...state.D], F: [...state.F],
+                    B: [...state.B], L: [...state.L], R: [...state.R]
+                };
+                
+                function rotFaceCW(face) {
+                    const copy = [...face];
+                    face[0] = copy[6]; face[1] = copy[3]; face[2] = copy[0];
+                    face[3] = copy[7];                   face[5] = copy[1];
+                    face[6] = copy[8]; face[7] = copy[5]; face[8] = copy[2];
+                }
+                
+                function rotCol(dir) {
+                    let count = dir === 1 ? 1 : 3;
+                    for (let i = 0; i < count; i++) {
+                        let t = [state.U[1], state.U[4], state.U[7]];
+                        state.U[1] = state.B[7]; state.U[4] = state.B[4]; state.U[7] = state.B[1];
+                        state.B[7] = state.D[1]; state.B[4] = state.D[4]; state.B[1] = state.D[7];
+                        state.D[1] = state.F[1]; state.D[4] = state.F[4]; state.D[7] = state.F[7];
+                        state.F[1] = t[0]; state.F[4] = t[1]; state.F[7] = t[2];
+                    }
+                }
+                function rotRow(dir) {
+                    let count = dir === 1 ? 1 : 3;
+                    for (let i = 0; i < count; i++) {
+                        let t = [state.R[3], state.R[4], state.R[5]];
+                        state.R[3] = state.F[3]; state.R[4] = state.F[4]; state.R[5] = state.F[5];
+                        state.F[3] = state.L[3]; state.F[4] = state.L[4]; state.F[5] = state.L[5];
+                        state.L[3] = state.B[3]; state.L[4] = state.B[4]; state.L[5] = state.B[5];
+                        state.B[3] = t[0]; state.B[4] = t[1]; state.B[5] = t[2];
+                    }
+                }
+                function rotRing(dir) {
+                    let count = dir === 1 ? 1 : 3;
+                    for (let i = 0; i < count; i++) {
+                        let t = [state.U[3], state.U[4], state.U[5]];
+                        state.U[3] = state.L[7]; state.U[4] = state.L[4]; state.U[5] = state.L[1];
+                        state.L[1] = state.D[3]; state.L[4] = state.D[4]; state.L[7] = state.D[5];
+                        state.D[3] = state.R[7]; state.D[4] = state.R[4]; state.D[5] = state.R[1];
+                        state.R[1] = t[0]; state.R[4] = t[1]; state.R[7] = t[2];
+                    }
+                }
+
+                if (base === 'U') {
+                    rotFaceCW(state.U);
+                    state.L[0] = temp.F[0]; state.L[1] = temp.F[1]; state.L[2] = temp.F[2];
+                    state.F[0] = temp.R[0]; state.F[1] = temp.R[1]; state.F[2] = temp.R[2];
+                    state.R[0] = temp.B[0]; state.R[1] = temp.B[1]; state.R[2] = temp.B[2];
+                    state.B[0] = temp.L[0]; state.B[1] = temp.L[1]; state.B[2] = temp.L[2];
+                } else if (base === 'D') {
+                    rotFaceCW(state.D);
+                    state.R[6] = temp.F[6]; state.R[7] = temp.F[7]; state.R[8] = temp.F[8];
+                    state.F[6] = temp.L[6]; state.F[7] = temp.L[7]; state.F[8] = temp.L[8];
+                    state.L[6] = temp.B[6]; state.L[7] = temp.B[7]; state.L[8] = temp.B[8];
+                    state.B[6] = temp.R[6]; state.B[7] = temp.R[7]; state.B[8] = temp.R[8];
+                } else if (base === 'F') {
+                    rotFaceCW(state.F);
+                    state.U[6] = temp.L[8]; state.U[7] = temp.L[5]; state.U[8] = temp.L[2];
+                    state.L[2] = temp.D[0]; state.L[5] = temp.D[1]; state.L[8] = temp.D[2];
+                    state.D[0] = temp.R[6]; state.D[1] = temp.R[3]; state.D[2] = temp.R[0];
+                    state.R[0] = temp.U[6]; state.R[3] = temp.U[7]; state.R[6] = temp.U[8];
+                } else if (base === 'B') {
+                    rotFaceCW(state.B);
+                    state.U[0] = temp.R[2]; state.U[1] = temp.R[5]; state.U[2] = temp.R[8];
+                    state.R[2] = temp.D[8]; state.R[5] = temp.D[7]; state.R[8] = temp.D[6];
+                    state.D[6] = temp.L[0]; state.D[7] = temp.L[3]; state.D[8] = temp.L[6];
+                    state.L[0] = temp.U[2]; state.L[3] = temp.U[1]; state.L[6] = temp.U[0];
+                } else if (base === 'L') {
+                    rotFaceCW(state.L);
+                    state.U[0] = temp.B[8]; state.U[3] = temp.B[5]; state.U[6] = temp.B[2];
+                    state.B[2] = temp.D[6]; state.B[5] = temp.D[3]; state.B[8] = temp.D[0];
+                    state.D[0] = temp.F[0]; state.D[3] = temp.F[3]; state.D[6] = temp.F[6];
+                    state.F[0] = temp.U[0]; state.F[3] = temp.U[3]; state.F[6] = temp.U[6];
+                } else if (base === 'R') {
+                    rotFaceCW(state.R);
+                    state.U[2] = temp.F[2]; state.U[5] = temp.F[5]; state.U[8] = temp.F[8];
+                    state.F[2] = temp.D[2]; state.F[5] = temp.D[5]; state.F[8] = temp.D[8];
+                    state.D[2] = temp.B[6]; state.D[5] = temp.B[3]; state.D[8] = temp.B[0];
+                    state.B[0] = temp.U[2]; state.B[3] = temp.U[5]; state.B[6] = temp.U[8];
+                } else if (base === 'M') {
+                    rotCol(1);
+                } else if (base === 'E') {
+                    rotRow(1);
+                } else if (base === 'S') {
+                    rotRing(1);
+                } else if (base === 'Uw') {
+                    rotFaceCW(state.U);
+                    rotRow(-1);
+                } else if (base === 'Dw') {
+                    rotFaceCW(state.D);
+                    rotRow(1);
+                } else if (base === 'Fw') {
+                    rotFaceCW(state.F);
+                    rotRing(1);
+                } else if (base === 'Bw') {
+                    rotFaceCW(state.B);
+                    rotRing(-1);
+                } else if (base === 'Lw') {
+                    rotFaceCW(state.L);
+                    rotCol(1);
+                } else if (base === 'Rw') {
+                    rotFaceCW(state.R);
+                    rotCol(-1);
+                }
             }
         }
 
         function applyMoveToModalState(move) {
             if (!move) return;
-            let base = move[0];
-            let modifier = move.slice(1);
-            let count = 1;
-            if (modifier === '2') count = 2;
-            if (modifier === "'") count = 3;
-
-            for (let i = 0; i < count; i++) {
-                rotateModal3x3State(modalCubeState, base);
-            }
+            rotateModal3x3State(modalCubeState, move);
         }
 
         function invertAlgorithm(movesStr) {
