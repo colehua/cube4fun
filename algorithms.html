@@ -4120,7 +4120,7 @@
             
             // PLL permutation direction arrows
             let arrows = [];
-            if (cat === "PLL") {
+            if (cat === "PLL" || name.includes("Perm")) {
                 if (name.includes("T Perm")) {
                     arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
                 } else if (name.includes("Y Perm")) {
