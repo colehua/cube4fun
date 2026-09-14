@@ -485,6 +485,84 @@
             display: block;
         }
 
+        /* SPEEDCUBE PRICE TABLE & BADGES */
+        .cube-price-table-wrapper {
+            overflow-x: auto;
+            margin: 18px 0 24px 0;
+            border-radius: 16px;
+            border: 3px solid #1e272e;
+            box-shadow: 0 5px 0 #1e272e;
+            background: white;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cube-price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95em;
+            text-align: left;
+            min-width: 600px;
+        }
+
+        .cube-price-table th {
+            background: #1e272e;
+            color: #FAED27;
+            padding: 12px 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.98em;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #1e272e;
+            white-space: nowrap;
+        }
+
+        .cube-price-table td {
+            padding: 12px 14px;
+            border-bottom: 1.5px solid #e2e8f0;
+            color: #1e272e;
+            vertical-align: middle;
+        }
+
+        .cube-price-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .cube-price-table tr:hover {
+            background: #fff9db;
+        }
+
+        .price-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            border: 2px solid #1e272e;
+            box-shadow: 0 2px 0 #1e272e;
+            white-space: nowrap;
+        }
+
+        .tier-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.76em;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 1.5px solid #1e272e;
+            white-space: nowrap;
+        }
+
+        .tier-flagship { background: #ffd3b6; color: #b43b02; }
+        .tier-mid { background: #dff9fb; color: #0984e3; }
+        .tier-budget { background: #d1fae5; color: #047857; }
+        .tier-smart { background: #f3e8ff; color: #7e22ce; }
+        .tier-big { background: #fef08a; color: #854d0e; }
+
         /* CARD FOOTER & INTERACTIONS */
         .news-footer {
             display: flex;
@@ -882,7 +960,7 @@
         <div class="ticker-bar">
             <span class="ticker-badge">🚨 BREAKING</span>
             <div class="ticker-text" id="breaking-ticker-text">
-                🚨 Teodor Zajder sets official 3x3 WR Single of 2.76s at GLS Big Cubes Gdańsk 2026 • Yiheng Wang clocks 3.51s WR Average at Hefei Cubing League • Cole Hua logs official 12.60s single at Burnaby Cubes 2026 • Free weekly cubing Wednesdays 7-8 PM at Wesbrook Community Centre!
+                🚨 NEW CUBES & PRICES: GAN 16 MagLev ($84.99), MoYu WeiLong V11 ($49.99), Tornado V5 ($54.99), RS3 M V5 ($8.95) • Teodor Zajder sets official 3x3 WR Single of 2.76s • Yiheng Wang clocks 3.51s WR Average • Cole Hua logs 12.60s WCA Single • Free weekly cubing Wednesdays at Wesbrook!
             </div>
         </div>
 
@@ -913,7 +991,7 @@
                     <button class="cat-tab" data-cat="community">📍 Community & Events</button>
                     <button class="cat-tab" data-cat="tips">💡 Tips & Methods</button>
                 </div>
-                <div class="articles-count-badge" id="articles-count-badge">Showing 6 articles</div>
+                <div class="articles-count-badge" id="articles-count-badge">Showing 7 articles</div>
             </div>
         </div>
 
@@ -1262,8 +1340,223 @@
                     </ul>`
                 },
                 {
+                    id: "news-new-cubes-prices",
+                    title: "🧊 New Speedcubes Release Roundup: 2026 Flagships, Budget Beasts & Full Price Guide!",
+                    category: "gear",
+                    badge: "NEW RELEASES & PRICES",
+                    author: "Cole Hua (Gear Bench)",
+                    date: "September 2026",
+                    isFeatured: true,
+                    imageUrl: "",
+                    reactions: { fire: 365, rocket: 298, clap: 312, heart: 340 },
+                    content: `The speedcubing world has exploded with groundbreaking new releases! From next-generation <b>20-magnet spherical ball-cores</b> and <b>frictionless MagLev magnetic levitation</b> to <b>UV scratch-resistant armor</b> and <b>AI Bluetooth smart telemetry</b>, cubes turn smoother, faster, and more stably than ever before.
+                    <br><br>
+                    Whether you are looking for an ultra-luxury tournament flagship or an unbeatable budget cube under $10, here is Cole's complete breakdown of every major new cube that came out and its exact retail price!
+                    <br><br>
+                    <div class="cube-price-table-wrapper">
+                        <table class="cube-price-table">
+                            <thead>
+                                <tr>
+                                    <th>Cube Model</th>
+                                    <th>Category</th>
+                                    <th>Key Technologies</th>
+                                    <th>Retail Price</th>
+                                    <th>Cole's Verdict</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="cube-name">👑 GAN 16 MagLev MAX UV</span></td>
+                                    <td><span class="tier-tag tier-flagship">Flagship</span></td>
+                                    <td>Omnidirectional Ball-Core, MagLev, 88 Magnets, UV Coat (61g)</td>
+                                    <td><span class="price-badge">$84.99</span></td>
+                                    <td>The pinnacle of speedcube luxury; lightning fast & airy</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">⚡ GAN 16 MagLev UV</span></td>
+                                    <td><span class="tier-tag tier-flagship">Flagship</span></td>
+                                    <td>Core Magnets, MagLev Levitation, UV High-Gloss (60g)</td>
+                                    <td><span class="price-badge">$69.99</span></td>
+                                    <td>Pure flagship speed without outer magnetic weight</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🌪️ X-Man Tornado V5 Pioneer UV</span></td>
+                                    <td><span class="tier-tag tier-flagship">Flagship</span></td>
+                                    <td>20-Magnet Ball-Core, MagLev, Dual-Ring Dials, UV (68g)</td>
+                                    <td><span class="price-badge">$54.99</span></td>
+                                    <td>Whisper-quiet, buttery smooth, and zero lockups</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🌪️ X-Man Tornado V5 Flagship UV</span></td>
+                                    <td><span class="tier-tag tier-flagship">Flagship</span></td>
+                                    <td>Magnetic Ball-Core, Dual-Ring Springs, UV Coated (69g)</td>
+                                    <td><span class="price-badge">$44.99</span></td>
+                                    <td>Ideal for cubers who love tactile, controllable spring recoil</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🐉 MoYu WeiLong V11 SE (Special Edition)</span></td>
+                                    <td><span class="tier-tag tier-flagship">Flagship</span></td>
+                                    <td>20-Magnet Ball-Core, MagLev, Edge Repulsion, UV (65g)</td>
+                                    <td><span class="price-badge">$59.99</span></td>
+                                    <td>Massive 35° auto-homing suction; rock-solid tournament stability</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🐉 MoYu WeiLong V11 20-Magnet</span></td>
+                                    <td><span class="tier-tag tier-flagship">Flagship</span></td>
+                                    <td>20-Magnet Ball-Core, MagLev Suspension, UV Coated (65g)</td>
+                                    <td><span class="price-badge">$49.99</span></td>
+                                    <td>Mainline tournament weapon; snappy, crisp, and forgiving</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🪶 GAN 15 MagLev UV</span></td>
+                                    <td><span class="tier-tag tier-mid">Mid / Flagship</span></td>
+                                    <td>Magnetic Core 3.0, MagLev, Numerical GTN, Ultralight (59g)</td>
+                                    <td><span class="price-badge">$49.95</span></td>
+                                    <td>One of the lightest cubes ever; effortless fingertricks</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">💎 MoYu WeiLong WR M V10</span></td>
+                                    <td><span class="tier-tag tier-mid">Mid / Flagship</span></td>
+                                    <td>20-Magnet Ball-Core, MagLev, UV High-Gloss (65g)</td>
+                                    <td><span class="price-badge">$39.95</span></td>
+                                    <td>Proven record-breaker now at a fantastic discount</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🔷 GAN V100 MagLev UV</span></td>
+                                    <td><span class="tier-tag tier-mid">Mid-Tier</span></td>
+                                    <td>Core Magnets, MagLev, UV High-Gloss (62g)</td>
+                                    <td><span class="price-badge">$39.95</span></td>
+                                    <td>Compact, nimble, and crisp tactile snaps in the hands</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🤖 MoYu RS3 M V5 Ball-Core UV</span></td>
+                                    <td><span class="tier-tag tier-budget">Value King</span></td>
+                                    <td>Ball-Core, MagLev, UV Coated + Robot Display Box (67g)</td>
+                                    <td><span class="price-badge">$24.95</span></td>
+                                    <td>Performs 90% as well as $80 flagships; best value cube</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🤫 DaYan GuHong Pro+ MagLev</span></td>
+                                    <td><span class="tier-tag tier-budget">Value Champ</span></td>
+                                    <td>Core Magnets, MagLev, 54mm/55mm/56mm sizing (68g)</td>
+                                    <td><span class="price-badge">$18.95</span></td>
+                                    <td>Ultra-quiet stealth turning; great for small hands & OH</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🚀 QiYi M Pro 3x3 V3 Pioneer UV</span></td>
+                                    <td><span class="tier-tag tier-budget">Budget Beast</span></td>
+                                    <td>Core Magnets, MagLev, UV Coating</td>
+                                    <td><span class="price-badge">$17.96</span></td>
+                                    <td>The lowest-priced cube on earth with both MagLev and UV!</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🍯 GAN 356 ME Magnetic</span></td>
+                                    <td><span class="tier-tag tier-budget">Budget GAN</span></td>
+                                    <td>GES numerical tensioning, Honeycomb contact tracks</td>
+                                    <td><span class="price-badge">$18.95</span></td>
+                                    <td>The most affordable ticket to authentic GAN turning feel</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🏆 MoYu RS3 M V5 Standard</span></td>
+                                    <td><span class="tier-tag tier-budget">Budget Steal</span></td>
+                                    <td>Factory Magnetic, Dual-Adjustment System (67g)</td>
+                                    <td><span class="price-badge">$8.95</span></td>
+                                    <td>The indisputable budget king for beginners and school clubs</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">📱 GAN 16 ui MagLev MAX UV</span></td>
+                                    <td><span class="tier-tag tier-smart">Smart Cube</span></td>
+                                    <td>Gyroscope, Bluetooth 5.1, App Battles, PowerPod Case</td>
+                                    <td><span class="price-badge">$139.99</span></td>
+                                    <td>The ultimate smart cube with real-time 3D tracking & AI battle</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">📱 MoYu WeiLong AI V11</span></td>
+                                    <td><span class="tier-tag tier-smart">Smart Cube</span></td>
+                                    <td>MagLev, Ball-Core, Bluetooth, Guided Mistake Recovery</td>
+                                    <td><span class="price-badge">$115.99</span></td>
+                                    <td>Coaches your solves step-by-step with real-time AI</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">📱 X-Man Tornado V4 AI UV</span></td>
+                                    <td><span class="tier-tag tier-smart">Smart Cube</span></td>
+                                    <td>Magnetic Core, Gyroscope, Smart Charging Dock</td>
+                                    <td><span class="price-badge">$59.99</span></td>
+                                    <td>Most affordable flagship-grade smart cube available</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🛡️ MoYu AoSu 4x4 V7 Triple-Track</span></td>
+                                    <td><span class="tier-tag tier-big">Big Cube 4x4</span></td>
+                                    <td>Triple-Track Magnetic, Ball-Core, UV Coated</td>
+                                    <td><span class="price-badge">$55.95</span></td>
+                                    <td>Max Park's official 4x4 weapon; single-track starts at $19.95</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🪐 GAN 562 M 5x5 Magnetic Core</span></td>
+                                    <td><span class="tier-tag tier-big">Big Cube 5x5</span></td>
+                                    <td>Omnidirectional Core Magnets, 55mm Compact (UV: $67.95)</td>
+                                    <td><span class="price-badge">$58.95</span></td>
+                                    <td>Revolutionized modern 5x5 speedcubing; zero outer-layer lockups</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">🌟 QiYi M Pro Big Cube Line</span></td>
+                                    <td><span class="tier-tag tier-big">Big Cubes</span></td>
+                                    <td>Magnetic Ball-Core, UV Coated (4x4, 5x5, 7x7)</td>
+                                    <td><span class="price-badge">$17.95 - $32.95</span></td>
+                                    <td>High-performance magnetic big cubes at half the regular price</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cube-name">💫 GAN Megaminx V2 MagLev UV</span></td>
+                                    <td><span class="tier-tag tier-big">Megaminx</span></td>
+                                    <td>Concave Grips, MagLev Core, UV Gloss (100g)</td>
+                                    <td><span class="price-badge">$66.95</span></td>
+                                    <td>The lightest and fastest competition Megaminx on the planet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <b>🔍 In-Depth Breakdown: Which Cube is Right for You?</b>
+                    <br><br>
+                    <b>1. 👑 The Heavyweight Flagship Arena ($50 – $85):</b>
+                    <ul>
+                        <li><b>GAN 16 MagLev MAX UV ($84.99):</b> GAN's reigning flagship puzzle. It features 88 factory magnets, auto-aligning core magnets, and repelling magnetic rings that replace traditional steel springs. At 61 grams, it glides with zero friction. Best for cubers with a light, precise turning style.</li>
+                        <li><b>MoYu WeiLong V11 SE ($59.99) & V11 ($49.99):</b> MoYu's answer to the GAN 16. It packs a 20-magnet spherical ball-core that provides an incredible 35 degrees of magnetic pull, snapping every face into perfect alignment even during rapid 12+ TPS algorithm bursts.</li>
+                        <li><b>X-Man Tornado V5 Pioneer UV ($54.99):</b> QiYi's smoothest flagship yet. With tool-free dual-ring tensioning dials (5 spring/MagLev settings and 5 axis distances) and signature quiet turning, it is the most forgiving puzzle for aggressive competitors.</li>
+                    </ul>
+                    <b>2. ⚡ The Budget Kings & Value Champions ($8.95 – $25):</b>
+                    <ul>
+                        <li><b>MoYu RS3 M V5 (Standard $8.95 | Ball-Core UV $24.95):</b> Still the undisputed #1 recommendation for 90% of speedcubers! At just $8.95, the standard version solves better than $50 flagships did a few years ago. The $24.95 Ball-Core UV edition adds magnetic core suction and a collector Robot Box.</li>
+                        <li><b>QiYi M Pro 3x3 V3 Pioneer UV ($17.96):</b> The most feature-packed cube under $20 in cubing history. You get genuine MagLev and scratch-resistant UV coating for less than the cost of a lunch!</li>
+                        <li><b>DaYan GuHong Pro+ MagLev ($18.95):</b> Available in 54mm, 55mm, and 56mm sizes. It has practically zero turning sound, making it the favorite for cubing in school, libraries, or practicing One-Handed (OH).</li>
+                        <li><b>GAN 356 ME Magnetic ($18.95):</b> Brings GAN's iconic honeycomb lubrication contact surfaces and numerical tensioning to a budget price point.</li>
+                    </ul>
+                    <b>3. 📱 The Smart Bluetooth Revolution ($60 – $140):</b>
+                    <ul>
+                        <li><b>GAN 16 ui MagLev MAX UV ($139.99):</b> Built-in gyroscopes and Bluetooth 5.1 stream your solves to your smartphone in real-time. The CubeStation app tracks your TPS, move count, rotations, and pair-by-pair splits, and allows you to battle cubers across the globe. Comes with a wireless PowerPod charging case!</li>
+                        <li><b>MoYu WeiLong AI V11 ($115.99):</b> Guided recovery edition that detects mistakes as you make them and highlights the next algorithm directly on your screen.</li>
+                        <li><b>X-Man Tornado V4 AI UV ($59.99):</b> The most budget-friendly flagship smart cube, featuring direct integration with virtual timers and smart charging stands.</li>
+                    </ul>
+                    <b>4. 🧩 Big Cubes & WCA Non-3x3 New Releases:</b>
+                    <ul>
+                        <li><b>MoYu AoSu 4x4 V7 ($19.95 – $55.95):</b> The cube Max Park used to cement his world record domination. The Triple-Track Ball-Core UV version ($55.95) completely eliminates internal pops and catches.</li>
+                        <li><b>GAN 562 M 5x5 ($58.95 | UV $67.95):</b> A groundbreaking 55mm compact magnetic core design that transformed 5x5 speedcubing into a fast, fluid event.</li>
+                        <li><b>QiYi M Pro Big Cube Series (4x4 $17.95 | 5x5 $23.95 | 7x7 $32.95):</b> Finally brings magnetic ball-core technology to big cubes without breaking the bank.</li>
+                        <li><b>GAN Megaminx V2 MagLev UV ($66.95):</b> Precision concave grips, 100g ultralight body, and snappy core magnets make it the new Megaminx benchmark.</li>
+                    </ul>
+                    <br>
+                    <b>🎯 Cole's Buyer Recommendation by Budget:</b>
+                    <ul>
+                        <li>🥇 <b>Best Overall Performance (Unlimited Budget):</b> MoYu WeiLong V11 20-Magnet ($49.99) or GAN 16 MagLev MAX ($84.99)</li>
+                        <li>🥈 <b>Best Competition Workhorse ($40 – $55):</b> X-Man Tornado V5 Pioneer UV ($54.99)</li>
+                        <li>🥉 <b>Best Value Under $25:</b> MoYu RS3 M V5 Ball-Core UV ($24.95) or QiYi M Pro V3 Pioneer ($17.96)</li>
+                        <li>🎖️ <b>Best Absolute Budget Under $10:</b> MoYu RS3 M V5 Standard ($8.95)</li>
+                    </ul>
+                    Check out our <a href="timer.html" style="color: #0066FF; font-weight: bold; text-decoration: underline;">Speedcubing Timer</a> and <a href="algorithms.html" style="color: #0066FF; font-weight: bold; text-decoration: underline;">Algorithms Guide</a> to test out your new hardware!`
+                },
+                {
                     id: "news-3",
-                    title: "⚙️ 2026 Flagship Hardware Breakdown: GAN 15 MagLev vs MoYu WR M V10 vs Tornado V4!",
+                    title: "⚙️ 2026 Flagship Hardware Breakdown: GAN 15 ($49.95) vs MoYu WR M V10 ($39.95) vs Tornado V4 ($35.99)!",
                     category: "gear",
                     badge: "HARDWARE LAB",
                     author: "Cole Hua (Gear Bench)",
@@ -1273,24 +1566,27 @@
                     reactions: { fire: 145, rocket: 112, clap: 98, heart: 76 },
                     content: `The speedcube arms race in 2026 has brought flagship 3x3 puzzles to an unprecedented level of precision engineering:
                     <br><br>
-                    <b>1. GAN 15 MagLev (The Ultralight King):</b>
+                    <b>1. GAN 15 MagLev (The Ultralight King - $49.95):</b>
                     <ul>
                         <li><b>Weight:</b> 59 grams (one of the lightest magnetic flagships ever produced).</li>
                         <li><b>Core:</b> Magnetic Core 3.0 with 88 omnidirectional factory magnets.</li>
                         <li><b>Adjustment:</b> Numerical GTN system with 6 elasticity levels and 6 magnet strength settings.</li>
                         <li><b>Feel:</b> Effortless, snappy, airy turning. Best suited for cubers with a soft, precise turning style.</li>
+                        <li><b>Price:</b> <b>$49.95</b> (SpeedCubeShop / TheCubicle).</li>
                     </ul>
-                    <b>2. MoYu WeiLong WR M V10 (20-Magnet Ball-Core MagLev):</b>
+                    <b>2. MoYu WeiLong WR M V10 (20-Magnet Ball-Core MagLev - $39.95):</b>
                     <ul>
                         <li><b>Weight:</b> 65 grams.</li>
                         <li><b>Core:</b> 20-magnet spherical core providing up to <b>35 degrees of magnetic auto-homing suction</b>.</li>
                         <li><b>Finish:</b> Scratch-resistant UV high-gloss coating that prevents slipping even with sweaty fingers.</li>
                         <li><b>Feel:</b> Extremely stable, solid, and forgiving on aggressive TPS bursts.</li>
+                        <li><b>Price:</b> <b>$39.95</b> for 20-M MagLev UV (Spring edition available at <b>$29.66</b>).</li>
                     </ul>
-                    <b>3. QiYi X-Man Tornado V4 Flagship (Pioneer Edition):</b>
+                    <b>3. QiYi X-Man Tornado V4 Flagship ($35.99 / Pioneer MagLev $49.99):</b>
                     <ul>
                         <li><b>Adjustment:</b> Dual-ring tool-free adjustment system (5 axis distances, 5 elasticity clicks).</li>
                         <li><b>Corner Cutting:</b> 55° regular and 35° reverse corner cutting with virtually zero lockups.</li>
+                        <li><b>Price:</b> <b>$35.99</b> for Flagship, <b>$49.99</b> for Pioneer MagLev UV.</li>
                     </ul>
                     <b>Cole's Lube Recommendation:</b>
                     <br>
@@ -1389,7 +1685,7 @@
         // --- LOAD & SAVE ARTICLES ---
         async function loadArticles() {
             // Version key to guarantee users get fresh authentic news
-            const CURRENT_NEWS_VERSION = "2026_v2_authentic";
+            const CURRENT_NEWS_VERSION = "2026_v3_cubes_and_prices";
             const storedVer = localStorage.getItem('cube4fun_news_version');
             const stored = localStorage.getItem('cube4fun_news_articles');
 
@@ -1429,7 +1725,7 @@
             // Dynamically update breaking ticker with top verified stories
             const tickerEl = document.getElementById('breaking-ticker-text');
             if (tickerEl && newsArticles.length > 0) {
-                const headlines = newsArticles.slice(0, 3).map(a => a.title.replace(/^[🚨⭐⚙️📍🏆💡]+\s*/, '')).join(' • ');
+                const headlines = newsArticles.slice(0, 3).map(a => a.title.replace(/^[🚨⭐⚙️📍🏆💡🧊]+\s*/, '')).join(' • ');
                 tickerEl.textContent = `🚨 ${headlines} • Free weekly cubing Wednesdays 7-8 PM at Wesbrook Community Centre!`;
             }
 
@@ -1778,7 +2074,7 @@
             if (confirm("Reset news to official verified default stories? Any custom news you added locally will be reset.")) {
                 newsArticles = getDefaultNews();
                 saveArticlesLocally();
-                localStorage.setItem('cube4fun_news_version', '2026_v2_authentic');
+                localStorage.setItem('cube4fun_news_version', '2026_v3_cubes_and_prices');
                 showToast("News reset to verified stories! 🔄");
                 renderArticles();
             }
