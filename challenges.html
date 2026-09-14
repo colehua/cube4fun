@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Challenges of Cubing - Epic speedcubing milestones, turning handicaps, move restrictions, and creative patterns to test your skills!">
+    <meta name="description" content="Challenges of Cubing - Push your limits with crazy upside-down solves, camping tents, rocking boats, speed milestones, and wild handicaps!">
     <title>Challenges of Cubing 🏆 - Learn Cube 4 Fun</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -12,11 +12,12 @@
             --yellow-blob: #FAED27;
             --primary: #0066FF;
             --accent-pink: #FF6584;
+            --accent-red: #ff4757;
             --accent-green: #2ECC71;
             --accent-orange: #FF9F43;
             --accent-purple: #9B51E0;
             --text-dark: #1e272e;
-            --glass-bg: rgba(255, 255, 255, 0.94);
+            --glass-bg: rgba(255, 255, 255, 0.95);
             --card-border: #1e272e;
         }
 
@@ -40,7 +41,7 @@
             left: -10%;
             width: 120%;
             height: 280px;
-            background: linear-gradient(90deg, #FF6584 0%, #FF9F43 45%, #FAED27 100%);
+            background: linear-gradient(90deg, #ff4757 0%, #FF9F43 45%, #FAED27 100%);
             z-index: -1;
             opacity: 0.9;
             filter: blur(14px);
@@ -149,7 +150,7 @@
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #2ECC71 0%, #00E5FF 50%, #FF6584 100%);
+            background: linear-gradient(90deg, #ff4757 0%, #FAED27 50%, #2ECC71 100%);
             border-radius: 16px;
             transition: width 0.4s ease;
         }
@@ -172,7 +173,7 @@
 
         /* ACTIVE CHALLENGE & SCRAMBLE GENERATOR ARENA */
         .challenge-arena {
-            background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #fff0f3 50%, #fff7d6 100%);
             border: 4px solid var(--card-border);
             border-radius: 28px;
             padding: 28px;
@@ -197,9 +198,10 @@
             padding: 5px 14px;
             border-radius: 14px;
             border: 2px solid #1e272e;
-            background: #FF6584;
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
             color: #ffffff;
             letter-spacing: 0.5px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
         }
 
         .active-counter {
@@ -358,7 +360,7 @@
         }
 
         .btn-next {
-            background-color: #FF6584;
+            background-color: #ff4757;
             color: #ffffff;
         }
 
@@ -399,6 +401,19 @@
             box-shadow: 0 2px 0 #1e272e;
         }
 
+        .filter-btn.btn-crazy-tab {
+            background: #ffeaa7;
+            border-color: #d63031;
+            color: #d63031;
+            font-weight: bold;
+        }
+
+        .filter-btn.btn-crazy-tab.active {
+            background: #ff4757;
+            color: white;
+            border-color: #1e272e;
+        }
+
         /* CHALLENGES GRID */
         .challenges-grid {
             display: grid;
@@ -425,6 +440,11 @@
             box-shadow: 0px 10px 0px var(--card-border);
         }
 
+        .challenge-card.is-crazy {
+            background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
+            border-color: #ff4757;
+        }
+
         .challenge-card.completed {
             background: #e8f8f0;
             border-color: #27ae60;
@@ -432,9 +452,9 @@
         }
 
         .challenge-card.active-selected {
-            border-color: #FF6584;
+            border-color: #ff4757;
             border-width: 4px;
-            box-shadow: 0px 8px 0px #FF6584;
+            box-shadow: 0px 8px 0px #ff4757;
         }
 
         .challenge-badge-row {
@@ -452,6 +472,12 @@
             border: 2px solid #1e272e;
             background: #e0f2fe;
             color: #0369a1;
+        }
+
+        .challenge-category-badge.badge-crazy {
+            background: #ffeae8;
+            color: #d63031;
+            border-color: #d63031;
         }
 
         .challenge-difficulty {
@@ -616,14 +642,14 @@
         </div>
 
         <h1 class="main-title">Challenges of Cubing 🏆</h1>
-        <p class="subtitle">Push your limits with speed milestones, crazy handicaps, move restrictions, and creative pattern art! 🚀</p>
+        <p class="subtitle">Push your limits with crazy upside-down solves, camping tents, rocking boats, speed milestones, and wild handicaps! 🚀</p>
 
         <!-- PROGRESS CARD -->
         <div class="progress-card">
             <div class="progress-header">
                 <div class="progress-title">
                     <span>🏆</span>
-                    <span id="progress-text">Completed: 0 / 20 Challenges (0%)</span>
+                    <span id="progress-text">Completed: 0 / 30 Challenges (0%)</span>
                 </div>
                 <button id="btn-reset-progress" class="reset-btn" title="Reset completed challenge checkmarks">🔄 Reset Progress</button>
             </div>
@@ -635,13 +661,13 @@
         <!-- ACTIVE CHALLENGE & SCRAMBLE GENERATOR ARENA -->
         <div class="challenge-arena" id="active-challenge-arena">
             <div class="arena-top-row">
-                <span class="active-badge-tag" id="active-badge">⚡ Speed Milestone</span>
-                <span class="active-counter" id="active-counter">Challenge 1 of 20</span>
-                <span class="active-diff-stars" id="active-diff" title="Difficulty">⭐⭐</span>
+                <span class="active-badge-tag" id="active-badge">🤪 Crazy & Wild</span>
+                <span class="active-counter" id="active-counter">Challenge 1 of 30</span>
+                <span class="active-diff-stars" id="active-diff" title="Difficulty">⭐⭐⭐⭐⭐ (Extreme)</span>
             </div>
 
-            <h2 class="active-challenge-title" id="active-title">Sub-60: The 1-Minute Barrier 🥉</h2>
-            <div class="active-challenge-desc" id="active-desc">Solve the 3x3 Rubik's Cube completely in under 60.00 seconds using any method you like!</div>
+            <h2 class="active-challenge-title" id="active-title">The Upside-Down Bat Solve 🦇</h2>
+            <div class="active-challenge-desc" id="active-desc">Hang upside down like a bat (from playground monkey bars, an inversion bench, or off the side of the sofa) and solve the cube against gravity!</div>
             
             <div id="active-alg-wrapper" style="display: none;">
                 <div class="active-alg-box">
@@ -650,7 +676,7 @@
                 </div>
             </div>
 
-            <div class="active-challenge-tip" id="active-tip">💡 Tip: Keep the cross on the bottom and learn basic trigger finger tricks (R U R' U') to eliminate pausing.</div>
+            <div class="active-challenge-tip" id="active-tip">💡 Tip: Blood rushes to your head, your arms are lifted backward, and the cube colors look completely reversed. Take deep breaths!</div>
 
             <!-- SCRAMBLE BOX -->
             <div class="scramble-box-container">
@@ -680,7 +706,8 @@
 
         <!-- FILTER BUTTONS -->
         <div class="filter-container">
-            <button class="filter-btn active" data-filter="all">🌟 All Challenges (20)</button>
+            <button class="filter-btn active" data-filter="all">🌟 All Challenges (30)</button>
+            <button class="filter-btn btn-crazy-tab" data-filter="crazy">🤪 Crazy & Wild (10)</button>
             <button class="filter-btn" data-filter="speed">⚡ Speed Milestones (5)</button>
             <button class="filter-btn" data-filter="handicap">🖐️ Turning Handicaps (5)</button>
             <button class="filter-btn" data-filter="restriction">🧩 Move Restrictions (5)</button>
@@ -695,8 +722,120 @@
     </div>
 
     <script>
-        // --- CHALLENGES DATABASE ---
+        // --- CHALLENGES DATABASE (30 Challenges) ---
         const CHALLENGES = [
+            // Category 0: Crazy & Wild Adventures!
+            {
+                id: 'upside_down',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Upside-Down Bat Solve 🦇',
+                difficulty: '⭐⭐⭐⭐⭐',
+                desc: 'Hang upside down like a bat (from playground monkey bars, an inversion bench, or hanging off the edge of the sofa) and solve the cube completely against gravity!',
+                tip: '💡 Tip: Blood rushes to your head and your orientation is inverted! Keep your arms relaxed and focus on one face at a time.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Inverted Timer'
+            },
+            {
+                id: 'tent_solve',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Midnight Tent Expedition ⛺',
+                difficulty: '⭐⭐⭐',
+                desc: 'Crawl inside a camping tent (or build an epic living room blanket fort!) with all room lights turned off. Solve the cube illuminated ONLY by a flashlight or headlamp!',
+                tip: '💡 Tip: Flashlights distort yellow vs white stickers—angle the light beam across the stickers to verify piece colors!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Tent Speedrun'
+            },
+            {
+                id: 'boat_solve',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Rocking Boat Sailor ⛵',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Solve the Rubik\'s Cube while riding on a boat, ferry, sailboat, kayak, or paddleboard with unpredictable waves rocking you back and forth!',
+                tip: '💡 Tip: Wear a wrist strap or keep the cube close to your chest so a surprise ocean wave doesn\'t send your cube overboard!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Seasick Solve'
+            },
+            {
+                id: 'trampoline_solve',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Trampoline Sky Bouncer 🦘',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Continuously bounce up and down on a trampoline (or jump rope in place!) without stopping, and solve the entire cube before your legs give out!',
+                tip: '💡 Tip: Execute algorithms during the zero-gravity float at the peak of every bounce when your hands feel weightless!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Bounce Solve'
+            },
+            {
+                id: 'oven_mitts',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Kitchen Oven Mitts Solve 🧤',
+                difficulty: '⭐⭐⭐⭐⭐',
+                desc: 'Put on thick winter ski gloves or puffy kitchen oven mitts on both hands! Zero fingertip grip allowed—you must turn the layers using pure palm and thumb power!',
+                tip: '💡 Tip: Grip the entire faces with your palms and use whole-wrist rotations to avoid dropping the slippery cube.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Mitts Challenge'
+            },
+            {
+                id: 'ice_bucket',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Ice Bucket Chill Solve 🥶',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Submerge both hands in a bowl filled with ice water for 25 seconds. Pull them out and immediately solve the cube with freezing, numb fingers!',
+                tip: '💡 Tip: Your finger muscles will feel like popsicles! Slower, deliberate wrist turns will prevent lockups until your hands warm up.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Chill Challenge'
+            },
+            {
+                id: 'cuber_biathlon',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Cuber\'s Biathlon (Sprint & Solve) 🏃',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Sprint 50 meters outside (or do 25 explosive jumping jacks or burpees) at 100% effort, drop down, and solve the cube while your heart pounds at 170 BPM!',
+                tip: '💡 Tip: When your hands shake from pure adrenaline, tuck your elbows against your ribcage for stability!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Biathlon Sprint'
+            },
+            {
+                id: 'distraction_chamber',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Heckler Distraction Chamber 📢',
+                difficulty: '⭐⭐⭐',
+                desc: 'Have friends or family stand directly in front of you yelling fake moves (like "R U R\' F2 B\'!") and making hilarious animal noises while you try to solve!',
+                tip: '💡 Tip: Put on your iron focus face! Trust your eyes and subconscious muscle memory rather than your ears.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Focus Test'
+            },
+            {
+                id: 'cardboard_bunker',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'Secret Agent Box Bunker 📦',
+                difficulty: '⭐⭐⭐',
+                desc: 'Crawl completely inside a giant cardboard delivery box or laundry hamper, pull the flaps shut, and solve the cube like a spy on a covert mission!',
+                tip: '💡 Tip: Ultra-tight elbow space forces you to hold the cube close and use minimal wrist sweep.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Bunker Solve'
+            },
+            {
+                id: 'air_toss_solve',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Mid-Air Toss & Catch Solve 🤹',
+                difficulty: '⭐⭐⭐⭐⭐',
+                desc: 'Between every single algorithm (or F2L pair), toss the cube at least 1 foot up in the air, catch it cleanly with two hands, and resume your solve!',
+                tip: '💡 Tip: Practice gentle, non-spinning straight vertical tosses so the cube stays in your line of sight!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Toss Challenge'
+            },
+
             // Category 1: Speed Milestones
             {
                 id: 'sub60',
@@ -1009,7 +1148,14 @@
             const isDone = completed.includes(c.id);
 
             // Update UI elements
-            document.getElementById('active-badge').textContent = c.categoryName;
+            const badgeEl = document.getElementById('active-badge');
+            badgeEl.textContent = c.categoryName;
+            if (c.category === 'crazy') {
+                badgeEl.style.background = "linear-gradient(135deg, #ff4757 0%, #ff6b81 100%)";
+            } else {
+                badgeEl.style.background = "#FF6584";
+            }
+
             document.getElementById('active-counter').textContent = `Challenge ${activeChallengeIndex + 1} of ${CHALLENGES.length}`;
             document.getElementById('active-diff').textContent = c.difficulty;
             document.getElementById('active-title').textContent = c.title;
@@ -1132,10 +1278,11 @@
             filtered.forEach(c => {
                 const isDone = completed.includes(c.id);
                 const isActive = CHALLENGES[activeChallengeIndex].id === c.id;
+                const isCrazy = c.category === 'crazy';
 
                 const card = document.createElement('div');
                 card.id = 'card-' + c.id;
-                card.className = 'challenge-card' + (isDone ? ' completed' : '') + (isActive ? ' active-selected' : '');
+                card.className = 'challenge-card' + (isDone ? ' completed' : '') + (isActive ? ' active-selected' : '') + (isCrazy ? ' is-crazy' : '');
 
                 let algHtml = '';
                 if (c.alg) {
@@ -1147,10 +1294,12 @@
                     `;
                 }
 
+                const badgeClass = isCrazy ? 'challenge-category-badge badge-crazy' : 'challenge-category-badge';
+
                 card.innerHTML = `
                     <div>
                         <div class="challenge-badge-row">
-                            <span class="challenge-category-badge">${c.categoryName}</span>
+                            <span class="${badgeClass}">${c.categoryName}</span>
                             <span class="challenge-difficulty" title="Difficulty">${c.difficulty}</span>
                         </div>
                         <h3 class="challenge-title">${c.title}</h3>
@@ -1255,7 +1404,7 @@
 
         // --- CONFETTI CELEBRATION EFFECT ---
         function triggerConfetti() {
-            const emojis = ['🎉', '🏆', '⭐', '🧊', '✨', '🥇', '👑', '🔥'];
+            const emojis = ['🎉', '🏆', '⭐', '🧊', '✨', '🥇', '👑', '🔥', '🦇', '⛺', '⛵'];
             for (let i = 0; i < 35; i++) {
                 const particle = document.createElement('div');
                 particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
