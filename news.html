@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cubing News & Updates - Learn Cube 4 Fun. The greatest and newest speedcubing news, WCA world records, Cole's milestones, and community sessions!">
+    <title>Cubing News & Updates 📰 - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --primary: #0066FF;
+            --accent-pink: #FF6584;
+            --accent-red: #ff4757;
+            --accent-orange: #FF9F43;
+            --accent-purple: #6c5ce7;
+            --accent-green: #2ECC71;
+            --text-dark: #1e272e;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --card-border: #1e272e;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            --hover-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2eafc 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -120px;
+            left: -10%;
+            width: 120%;
+            height: 280px;
+            background: linear-gradient(90deg, #FF9F43 0%, #FF6584 50%, #FAED27 100%);
+            z-index: -1;
+            opacity: 0.9;
+            filter: blur(14px);
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 25px 20px 80px 20px;
+            position: relative;
+        }
+
+        /* NAVIGATION BAR */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-group-left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-group-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--yellow-blob);
+            color: var(--text-dark);
+            padding: 10px 18px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            border: 3px solid #1e272e;
+            box-shadow: 0px 5px 0px #1e272e;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            top: 2px;
+            box-shadow: 0px 3px 0px #1e272e;
+            transform: scale(1.02);
+        }
+
+        .admin-login-link {
+            background: white;
+            color: #0066FF;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 14px;
+            border: 2px solid #1e272e;
+            box-shadow: 0px 4px 0px #1e272e;
+            cursor: pointer;
+            transition: all 0.15s;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .admin-login-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 0px #1e272e;
+            background-color: #f1f5f9;
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.5em;
+            color: #ffffff;
+            text-align: center;
+            -webkit-text-stroke: 3px #1e272e;
+            text-shadow: 6px 6px 0px #1e272e;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 25px;
+            font-family: 'Comic Neue', sans-serif;
+        }
+
+        /* BREAKING NEWS TICKER */
+        .ticker-bar {
+            background: linear-gradient(90deg, #ff4757 0%, #ff6b81 100%);
+            color: white;
+            border: 3px solid #1e272e;
+            border-radius: 16px;
+            padding: 10px 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 0 #1e272e;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1em;
+            overflow: hidden;
+        }
+
+        .ticker-badge {
+            background: #FAED27;
+            color: #1e272e;
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 2px solid #1e272e;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        .ticker-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.05em;
+        }
+
+        /* ADMIN BAR */
+        .admin-bar {
+            background: linear-gradient(135deg, #fff2e0 0%, #ffeaa7 100%);
+            border: 3px solid #1e272e;
+            border-radius: 20px;
+            padding: 16px 24px;
+            margin-bottom: 30px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0px 6px 0px #1e272e;
+        }
+
+        .admin-bar-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.15em;
+            color: #d35400;
+        }
+
+        .admin-bar-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-admin {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            padding: 9px 18px;
+            border-radius: 14px;
+            border: 2.5px solid #1e272e;
+            cursor: pointer;
+            box-shadow: 0px 4px 0px #1e272e;
+            transition: all 0.15s;
+            outline: none;
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 0px #1e272e;
+        }
+
+        .btn-admin.add {
+            background-color: #00E5FF;
+            color: #1e272e;
+        }
+
+        .btn-admin.reset {
+            background-color: #ffffff;
+            color: #475569;
+        }
+
+        .btn-admin.logout {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        /* SEARCH & FILTER CONTROLS */
+        .controls-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 4px solid var(--card-border);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin-bottom: 30px;
+            box-shadow: 0px 8px 0px var(--card-border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .search-bar-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .news-search-input {
+            flex: 1;
+            padding: 12px 18px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: 3px solid #1e272e;
+            border-radius: 16px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+
+        .news-search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .cat-tab {
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #1e272e;
+            border-radius: 14px;
+            padding: 7px 15px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.9em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e272e;
+            transition: all 0.15s;
+        }
+
+        .cat-tab:hover {
+            transform: translateY(-1px);
+            background: #e2e8f0;
+        }
+
+        .cat-tab.active {
+            background: #FAED27;
+            color: #1e272e;
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #1e272e;
+        }
+
+        .articles-count-badge {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #64748b;
+            font-family: 'Comic Neue', sans-serif;
+            margin-left: auto;
+            align-self: center;
+        }
+
+        /* NEWS ARTICLES GRID */
+        .news-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .news-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            border: 4px solid var(--card-border);
+            border-radius: 26px;
+            padding: 30px;
+            box-shadow: 0px 9px 0px var(--card-border);
+            position: relative;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 14px 0px var(--card-border);
+        }
+
+        .news-card.featured-card {
+            border: 4px solid #ff4757;
+            box-shadow: 0px 9px 0px #ff4757;
+            background: linear-gradient(180deg, #ffffff 0%, #fff8f8 100%);
+        }
+
+        .news-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .news-tags-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .news-tag-badge {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.82em;
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 2px solid #1e272e;
+            background: #e0f2fe;
+            color: #0369a1;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+        }
+
+        .news-tag-badge.featured-badge {
+            background: #ff4757;
+            color: white;
+            border-color: #1e272e;
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .news-date {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .news-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 2.1em;
+            color: #1e272e;
+            margin-top: 0;
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+
+        .news-meta-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .news-author {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+        }
+
+        .news-body {
+            font-size: 1.18em;
+            line-height: 1.7;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 24px;
+            word-wrap: break-word;
+        }
+
+        .news-body b, .news-body strong {
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .news-body ul, .news-body ol {
+            margin: 12px 0 16px 20px;
+            padding-left: 10px;
+        }
+
+        .news-body li {
+            margin-bottom: 8px;
+        }
+
+        .news-image-box {
+            margin: 18px 0;
+            border-radius: 18px;
+            border: 3.5px solid #1e272e;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            max-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e272e;
+        }
+
+        .news-image-box img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* CARD FOOTER & INTERACTIONS */
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2.5px dashed #cbd5e1;
+            padding-top: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .reactions-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-reaction {
+            background: white;
+            border: 2px solid #1e272e;
+            border-radius: 14px;
+            padding: 6px 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.9em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e272e;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-reaction:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #1e272e;
+            background: #fffdf0;
+        }
+
+        .btn-reaction.reacted {
+            background: #ffeaa7;
+            border-color: #d35400;
+        }
+
+        .card-action-btns {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .btn-card-action {
+            background: white;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 6px 14px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.9em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e272e;
+            transition: all 0.15s;
+        }
+
+        .btn-card-action:hover {
+            transform: translateY(-1px);
+            background: #f1f5f9;
+        }
+
+        .btn-card-action.btn-edit {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .btn-card-action.btn-delete {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-card-action.btn-delete:hover {
+            background-color: #fca5a5;
+        }
+
+        /* COMPOSER / ADD NEWS MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10005;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .composer-card {
+            background: white;
+            border: 4px solid #1e272e;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 780px;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: sans-serif;
+            outline: none;
+            transition: transform 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            margin-bottom: 6px;
+            color: #1e272e;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05em;
+            font-weight: 600;
+            padding: 12px 16px;
+            border: 3px solid #1e272e;
+            border-radius: 14px;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            background: #ffffff;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            height: 220px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        /* EMOJI BAR */
+        .emoji-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .emoji-btn {
+            background: #f1f5f9;
+            border: 2px solid #1e272e;
+            border-radius: 10px;
+            font-size: 1.2em;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .emoji-btn:hover {
+            transform: scale(1.15);
+            background: #FAED27;
+        }
+
+        /* LIVE PREVIEW BOX */
+        .preview-box {
+            background: #f8fafc;
+            border: 2.5px dashed #94a3b8;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* TOAST ALERT */
+        #news-toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #0066FF 0%, #00E5FF 100%);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 18px;
+            border: 3px solid #1e272e;
+            box-shadow: 0 8px 0 #1e272e;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            z-index: 100000;
+            display: none;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            h1.main-title {
+                font-size: 2.4em;
+            }
+            .news-title {
+                font-size: 1.6em;
+            }
+            .news-card {
+                padding: 20px;
+            }
+            .composer-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob-top"></div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="news-toast">🚀 Action Complete!</div>
+
+    <div class="container">
+        
+        <!-- TOP NAVIGATION BAR -->
+        <div class="nav-buttons">
+            <div class="nav-group-left">
+                <a href="index.html" class="nav-button">🏠 Home</a>
+                <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Timer</a>
+                <a href="challenges.html" class="nav-button" style="background-color: var(--accent-pink); color: white;">🏆 Challenges</a>
+                <a href="blog.html" class="nav-button" style="background-color: #FFD3B6;">✍️ Cole's Blog</a>
+                <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF;">🧩 Algorithms</a>
+                <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Trainer</a>
+                <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 3D Play</a>
+            </div>
+            
+            <div class="nav-group-right">
+                <button id="admin-toggle-btn" class="admin-login-link">
+                    <span>🔑 Admin Login</span>
+                </button>
+            </div>
+        </div>
+
+        <h1 class="main-title">Cubing News 📰</h1>
+        <p class="subtitle">The greatest and newest speedcubing news, records, gear, and community updates! 🔥</p>
+
+        <!-- BREAKING TICKER -->
+        <div class="ticker-bar">
+            <span class="ticker-badge">🚨 BREAKING</span>
+            <div class="ticker-text" id="breaking-ticker-text">
+                Luke Garrett & Max Park push 3x3 limits with sub-3.5s solves • Cole lands official 9.xx WCA single record! • Free weekly cubing at Wesbrook Community Centre!
+            </div>
+        </div>
+
+        <!-- ADMIN CONTROLS BAR (Shown only when Admin is logged in) -->
+        <div id="admin-bar" class="admin-bar">
+            <div class="admin-bar-info">
+                <span>👑 Admin Mode Active</span>
+                <span style="font-size: 0.85em; background: #ffffff; padding: 4px 10px; border-radius: 10px; border: 2px solid #1e272e;">Welcome Cole!</span>
+            </div>
+            <div class="admin-bar-actions">
+                <button id="btn-open-composer" class="btn-admin add">➕ Add News Story 🚀</button>
+                <button id="btn-reset-news" class="btn-admin reset" title="Restore standard default news items">🔄 Reset Defaults</button>
+                <button id="btn-admin-logout" class="btn-admin logout">🚪 Logout</button>
+            </div>
+        </div>
+
+        <!-- CONTROLS & FILTER BAR -->
+        <div class="controls-card">
+            <div class="search-bar-row">
+                <input type="text" id="news-search-input" class="news-search-input" placeholder="🔍 Search news headlines, cubers, tech, records...">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div class="category-tabs" id="category-tabs">
+                    <button class="cat-tab active" data-cat="all">🌟 All News</button>
+                    <button class="cat-tab" data-cat="records">🏆 World Records</button>
+                    <button class="cat-tab" data-cat="cole">⭐ Cole's Milestones</button>
+                    <button class="cat-tab" data-cat="gear">⚙️ Cubes & Gear</button>
+                    <button class="cat-tab" data-cat="community">📍 Community & Events</button>
+                    <button class="cat-tab" data-cat="tips">💡 Tips & Methods</button>
+                </div>
+                <div class="articles-count-badge" id="articles-count-badge">Showing 6 articles</div>
+            </div>
+        </div>
+
+        <!-- NEWS ARTICLES FEED -->
+        <div id="news-list" class="news-grid">
+            <!-- Articles rendered by JavaScript -->
+        </div>
+
+    </div>
+
+    <!-- ==================== ADMIN LOGIN MODAL ==================== -->
+    <div id="admin-modal" class="modal-overlay">
+        <div style="background: white; border: 4px solid #1e272e; padding: 30px; border-radius: 25px; width: 100%; max-width: 420px; box-sizing: border-box; position: relative; box-shadow: 0px 10px 30px rgba(0,0,0,0.3);">
+            <button id="admin-modal-close" class="modal-close-btn">✕</button>
+            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; color: #1e272e;">🔑 Admin Login</h3>
+            <p style="text-align: center; margin-top: 6px; margin-bottom: 20px; font-size: 1.05em; color: #64748b; font-weight: 600;">Log in as Cole to publish, edit, or delete news stories!</p>
+            <form id="admin-login-form">
+                <div style="margin-bottom: 15px;">
+                    <label for="admin-email" style="display: block; font-family: 'DynaPuff', cursive; font-size: 0.95em; margin-bottom: 5px;">Username / Email</label>
+                    <input type="text" id="admin-email" placeholder="cole or email" required style="width: 100%; padding: 12px; border: 2.5px solid #1e272e; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1.05em; box-sizing: border-box; outline: none;">
+                </div>
+                <div style="margin-bottom: 22px;">
+                    <label for="admin-password" style="display: block; font-family: 'DynaPuff', cursive; font-size: 0.95em; margin-bottom: 5px;">Password</label>
+                    <input type="password" id="admin-password" placeholder="••••••••" required style="width: 100%; padding: 12px; border: 2.5px solid #1e272e; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1.05em; box-sizing: border-box; outline: none;">
+                </div>
+                <button type="submit" style="width: 100%; background-color: var(--cyan-blob); color: #1e272e; border: 3px solid #1e272e; border-radius: 14px; padding: 12px; font-family: 'DynaPuff', cursive; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0px 5px 0px #1e272e; transition: all 0.15s; outline: none;">Unlock Admin Access 🚀</button>
+            </form>
+            <div style="margin-top: 15px; text-align: center; font-size: 0.85em; color: #94a3b8; font-weight: 600;">
+                (Supports Cole / Admin credentials & local mode)
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== COMPOSER / EDIT MODAL ==================== -->
+    <div id="composer-modal" class="modal-overlay">
+        <div class="composer-card">
+            <button id="composer-close-btn" class="modal-close-btn">✕</button>
+            <h2 id="composer-title-label" style="font-family: 'DynaPuff', cursive; font-size: 2em; margin-top: 0; margin-bottom: 18px; color: #1e272e;">✍️ Publish News Story</h2>
+
+            <div class="form-group">
+                <label class="form-label" for="composer-title">Headline / Title *</label>
+                <input type="text" id="composer-title" class="form-input" placeholder="e.g. Cole shatters personal record at UBC!">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label class="form-label" for="composer-category">Category *</label>
+                    <select id="composer-category" class="form-select">
+                        <option value="records">🏆 World Records</option>
+                        <option value="cole">⭐ Cole's Milestones</option>
+                        <option value="gear">⚙️ Cubes & Gear</option>
+                        <option value="community">📍 Community & Events</option>
+                        <option value="tips">💡 Tips & Methods</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="composer-badge">Tag / Badge</label>
+                    <input type="text" id="composer-badge" class="form-input" placeholder="e.g. BREAKING, WCA, UBC, TECH">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label class="form-label" for="composer-author">Reporter / Author</label>
+                    <input type="text" id="composer-author" class="form-input" value="Cole (Admin)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="composer-image">Image URL (Optional)</label>
+                    <input type="text" id="composer-image" class="form-input" placeholder="https://... or upload below">
+                </div>
+            </div>
+
+            <!-- Upload Photo Directly -->
+            <div class="form-group" style="background: #f8fafc; border: 2px dashed #cbd5e1; padding: 12px 16px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <label style="background: #e2e8f0; border: 2px solid #1e272e; padding: 6px 14px; border-radius: 10px; font-family: 'DynaPuff', cursive; cursor: pointer; font-size: 0.9em; display: inline-flex; align-items: center; gap: 5px;">
+                        📷 Upload Photo from Device
+                        <input type="file" id="composer-file-input" accept="image/*" style="display: none;" onchange="handleNewsImageUpload(event)">
+                    </label>
+                </div>
+                <span id="upload-status-text" style="font-size: 0.88em; color: #64748b; font-weight: 600;">Direct image upload (max 2MB)</span>
+            </div>
+
+            <!-- Quick Emoji Buttons -->
+            <div class="form-group">
+                <label class="form-label">Quick Emojis</label>
+                <div class="emoji-bar">
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('🚀')">🚀</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('🏆')">🏆</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('⏱️')">⏱️</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('🔥')">🔥</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('⚡')">⚡</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('🇨🇳')">🇨🇳</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('🧠')">🧠</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('👏')">👏</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('📍')">📍</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('⚙️')">⚙️</button>
+                    <button class="emoji-btn" type="button" onclick="insertNewsEmoji('⭐')">⭐</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="composer-content">Story Content (HTML / Text) *</label>
+                <textarea id="composer-content" class="form-textarea" placeholder="Write the news story here... You can use HTML tags like <b>bold</b>, <ul><li>lists</li></ul>, or links!"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Live Preview 👀</label>
+                <div id="composer-preview" class="preview-box news-body">
+                    Live preview will show here...
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+                <button id="btn-cancel-composer" class="btn-admin" style="background: #e2e8f0; color: #1e272e;">Cancel</button>
+                <button id="btn-save-news" class="btn-admin add" style="background: #00E5FF; font-size: 1.05em;">🚀 Publish Story</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT NEWS LOGIC ==================== -->
+    <script>
+        // --- SUPABASE CONFIGURATION (Shared with blog/index/timer) ---
+        const SUPABASE_URL = "https://eisgnkorwctusaggafxt.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2dua29yd2N0dXNhZ2dhZnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTc0MDYsImV4cCI6MjA5NzQ5MzQwNn0.FvL-F8P127De3O5lzAP2qNidOkzJn2a8Z3QxaZXNvV4";
+
+        let supabaseClient = null;
+        let isSupabaseActive = false;
+
+        if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+            try {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                isSupabaseActive = true;
+                console.log("Supabase active in news!");
+            } catch (e) {
+                console.error("Supabase init failed:", e);
+            }
+        }
+
+        // State
+        let newsArticles = [];
+        let editingArticleId = null;
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let userReactions = {};
+
+        // DOM Elements
+        const newsListContainer = document.getElementById('news-list');
+        const adminBar = document.getElementById('admin-bar');
+        const adminToggleBtn = document.getElementById('admin-toggle-btn');
+        const btnAdminLogout = document.getElementById('btn-admin-logout');
+        const adminModal = document.getElementById('admin-modal');
+        const adminModalClose = document.getElementById('admin-modal-close');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
+
+        const composerModal = document.getElementById('composer-modal');
+        const btnOpenComposer = document.getElementById('btn-open-composer');
+        const composerCloseBtn = document.getElementById('composer-close-btn');
+        const btnCancelComposer = document.getElementById('btn-cancel-composer');
+        const btnSaveNews = document.getElementById('btn-save-news');
+        const btnResetNews = document.getElementById('btn-reset-news');
+
+        const composerTitle = document.getElementById('composer-title');
+        const composerCategory = document.getElementById('composer-category');
+        const composerBadge = document.getElementById('composer-badge');
+        const composerAuthor = document.getElementById('composer-author');
+        const composerImage = document.getElementById('composer-image');
+        const composerContent = document.getElementById('composer-content');
+        const composerPreview = document.getElementById('composer-preview');
+        const composerTitleLabel = document.getElementById('composer-title-label');
+        const uploadStatusText = document.getElementById('upload-status-text');
+
+        const newsSearchInput = document.getElementById('news-search-input');
+        const categoryTabs = document.getElementById('category-tabs');
+        const articlesCountBadge = document.getElementById('articles-count-badge');
+        const toastElem = document.getElementById('news-toast');
+
+        // Toast Helper
+        function showToast(msg) {
+            if (!toastElem) return;
+            toastElem.textContent = msg;
+            toastElem.style.display = 'block';
+            setTimeout(() => {
+                toastElem.style.display = 'none';
+            }, 3000);
+        }
+
+        // --- CHECK ADMIN STATE ---
+        async function isAdminLoggedIn() {
+            if (isSupabaseActive) {
+                try {
+                    const { data } = await supabaseClient.auth.getSession();
+                    if (data && data.session) return true;
+                } catch (e) {}
+            }
+            return localStorage.getItem('cube4fun_admin_logged_in') === 'true';
+        }
+
+        async function updateAdminUI() {
+            const loggedIn = await isAdminLoggedIn();
+            if (loggedIn) {
+                adminBar.style.display = 'flex';
+                adminToggleBtn.innerHTML = `<span>👑 Cole (Admin)</span>`;
+                adminToggleBtn.style.color = "#d35400";
+                adminToggleBtn.style.backgroundColor = "#fff2e0";
+            } else {
+                adminBar.style.display = 'none';
+                adminToggleBtn.innerHTML = `<span>🔑 Admin Login</span>`;
+                adminToggleBtn.style.color = "#0066FF";
+                adminToggleBtn.style.backgroundColor = "white";
+            }
+        }
+
+        // Admin Toggle Button Click
+        adminToggleBtn.addEventListener('click', async () => {
+            const loggedIn = await isAdminLoggedIn();
+            if (loggedIn) {
+                // If already logged in, prompt to compose or log out
+                if (confirm("You are currently logged in as Cole (Admin)! Would you like to log out?")) {
+                    logoutAdmin();
+                }
+            } else {
+                adminModal.style.display = 'flex';
+            }
+        });
+
+        if (btnAdminLogout) {
+            btnAdminLogout.addEventListener('click', logoutAdmin);
+        }
+
+        async function logoutAdmin() {
+            if (isSupabaseActive) {
+                try {
+                    await supabaseClient.auth.signOut();
+                } catch (e) {}
+            }
+            localStorage.removeItem('cube4fun_admin_logged_in');
+            showToast("Logged out as Admin! 🚪");
+            await updateAdminUI();
+            renderArticles();
+        }
+
+        if (adminModalClose) {
+            adminModalClose.addEventListener('click', () => {
+                adminModal.style.display = 'none';
+            });
+        }
+
+        // Admin Login Form Submit
+        if (adminLoginForm) {
+            adminLoginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = adminEmailInput.value.trim();
+                const password = adminPasswordInput.value;
+
+                if (isSupabaseActive) {
+                    try {
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
+                            email: email,
+                            password: password
+                        });
+                        if (error) throw error;
+
+                        localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                        showToast("Welcome back, Cole! 🔓 Admin Mode Active.");
+                        adminModal.style.display = 'none';
+                        await updateAdminUI();
+                        renderArticles();
+                        return;
+                    } catch (err) {
+                        console.warn("Supabase auth failed, trying local fallback:", err.message);
+                    }
+                }
+
+                // Local mode fallback
+                if (email && password) {
+                    localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                    showToast("Logged in as Admin (Local Mode)! 🔓");
+                    adminModal.style.display = 'none';
+                    await updateAdminUI();
+                    renderArticles();
+                }
+            });
+        }
+
+        // --- PRESET DEFAULT NEWS ARTICLES ---
+        function getDefaultNews() {
+            return [
+                {
+                    id: "news-1",
+                    title: "🚨 Luke Garrett & Max Park Shatter Human Limits with Sub-3.5s 3x3 Solves!",
+                    category: "records",
+                    badge: "BREAKING RECORD",
+                    author: "Cole (Speedcubing Reporter)",
+                    date: "September 2026",
+                    isFeatured: true,
+                    imageUrl: "",
+                    reactions: { fire: 142, rocket: 98, clap: 87, heart: 65 },
+                    content: `Speedcubing history is being rewritten at breathtaking speed! Top world-class cubers Luke Garrett and Max Park have broken new frontiers, achieving official sub-3.5 second 3x3 single solves and sub-4.5 second tournament averages.
+                    <br><br>
+                    Peaking at over <b>14.5 Turns Per Second (TPS)</b>, these solves rely on complete inspection mastery:
+                    <ul>
+                        <li><b>Full Cross + First 2 Pairs Planned in Inspection:</b> Before even touching the cube, the entire cross and the first two corner-edge pairs are solved in their mind!</li>
+                        <li><b>Zero-Pause F2L Transition:</b> Continuous fluid turning without a single millisecond stop to search for pieces.</li>
+                        <li><b>ZBLL / 1LLL Mastery:</b> Solving the entire last layer (orientation + permutation) in a single high-speed algorithmic burst!</li>
+                    </ul>
+                    Will the community witness an official sub-3 second 3x3 solve soon? Top cubers believe it is only a matter of time!`
+                },
+                {
+                    id: "news-2",
+                    title: "⭐ Cole Achieves Official 9-Second WCA Single Record!",
+                    category: "cole",
+                    badge: "OFFICIAL WCA",
+                    author: "Learn Cube 4 Fun Team",
+                    date: "September 2026",
+                    isFeatured: true,
+                    imageUrl: "",
+                    reactions: { fire: 312, rocket: 189, clap: 245, heart: 280 },
+                    content: `Huge congratulations to Cole! In official World Cube Association (WCA) competition, Cole achieved an astonishing <b>9-second single record</b>!
+                    <br><br>
+                    Currently in Grade 4, Cole can solve every puzzle from 2x2 all the way up to 8x8. His official WCA profile ID is <b>2026HUAC01</b>, where you can view all his official rankings, solves, and competition history.
+                    <br><br>
+                    <b>Cole's Golden Rule for Getting Faster:</b>
+                    <br>
+                    <i>"Don't turn as fast as your fingers can move if it makes you pause. Smooth, steady turning with lookahead is always faster than furious turning followed by stopping to find pieces!"</i>
+                    <br><br>
+                    🔗 Check out Cole's official profiles:
+                    <ul>
+                        <li><a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" style="color: #0066FF; font-weight: bold; text-decoration: underline;">Cole Hua on World Cube Association (WCA)</a> ⚡</li>
+                        <li><a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" style="color: #029347; font-weight: bold; text-decoration: underline;">Cole Hua on Cubing China (粗饼网)</a> 🇨🇳</li>
+                    </ul>`
+                },
+                {
+                    id: "news-3",
+                    title: "⚙️ Next-Gen Cube Tech: GAN 15 MagLev & MoYu Super WeiLong V2 Ball-Core Revolution!",
+                    category: "gear",
+                    badge: "HARDWARE TECH",
+                    author: "Cole (Gear Analyst)",
+                    date: "Autumn 2026",
+                    isFeatured: false,
+                    imageUrl: "",
+                    reactions: { fire: 110, rocket: 84, clap: 72, heart: 55 },
+                    content: `Cube engineering has reached a whole new level! If you are still solving on an old spring cube with screws, modern magnetic flagships are like driving a supersonic jet.
+                    <br><br>
+                    <b>Top hardware breakthroughs in 2026:</b>
+                    <ul>
+                        <li><b>MagLev Magnetic Levitation:</b> Two opposing ring magnets replace traditional coil springs, completely eliminating friction, spring squeaks, and spring resistance.</li>
+                        <li><b>88+ Magnet Ball-Core Systems:</b> Magnets embedded inside the central sphere attract the bottom of corner pieces, providing up to <b>35 degrees of auto-aligning magnetic suction</b> into place!</li>
+                        <li><b>Bluetooth Smart Core Integration:</b> Microscopic gyroscopes and sensors track every single move angle, calculating real-time TPS and syncing directly to practice timers with zero latency.</li>
+                        <li><b>UV High-Gloss Coated Finish:</b> Scratch-resistant high-grip exterior prevents slipping even when your hands get sweaty during intense solves.</li>
+                    </ul>`
+                },
+                {
+                    id: "news-4",
+                    title: "📍 Wesbrook Community Centre: Weekly Cubing Sessions Every Wednesday (7:00 - 8:00 PM)!",
+                    category: "community",
+                    badge: "UBC SESSIONS",
+                    author: "Cole & Community Coaches",
+                    date: "Weekly Ongoing",
+                    isFeatured: false,
+                    imageUrl: "",
+                    reactions: { fire: 156, rocket: 104, clap: 180, heart: 210 },
+                    content: `Calling all cubers, parents, and enthusiasts in Vancouver and the UBC area!
+                    <br><br>
+                    Cole and his family host weekly speedcubing sessions at the <b>Wesbrook Community Centre</b> every Wednesday evening from <b>7:00 PM to 8:00 PM</b>.
+                    <br><br>
+                    <b>What you'll experience:</b>
+                    <ul>
+                        <li>🤝 <b>Beginner to Advanced Coaching:</b> Learn the beginner LBL method, F2L pairing tricks, and full PLL algorithms!</li>
+                        <li>⏱️ <b>Real Stackmat Timers:</b> Practice under official WCA tournament conditions with official mats and displays.</li>
+                        <li>🧰 <b>Cube Lube & Tension Clinic:</b> Learn how to set up, tension, and lubricate your cube for maximum speed.</li>
+                        <li>🎁 <b>Mini Battles & Fun Challenges:</b> Try blindfolded solves, team solves, and conquer big cubes!</li>
+                    </ul>
+                    Come by, bring your cube, and make new cubing friends!`
+                },
+                {
+                    id: "news-5",
+                    title: "🏆 World Cube Association (WCA) Updates: Smart Cube Official Trials & New Regulations!",
+                    category: "records",
+                    badge: "WCA ANNOUNCEMENT",
+                    author: "Speedcubing Association Digest",
+                    date: "September 2026",
+                    isFeatured: false,
+                    imageUrl: "",
+                    reactions: { fire: 94, rocket: 78, clap: 88, heart: 60 },
+                    content: `The World Cube Association (WCA) has announced major updates for upcoming regional and world championships:
+                    <br><br>
+                    <ul>
+                        <li><b>Official Smart Cube Side Events:</b> Pilot trials are beginning for digital smart cubes, enabling automated branch analysis, TPS tracking, and algorithmic verification.</li>
+                        <li><b>Audio Inspection Prompt Standards:</b> Standardized digital countdown beeps at 8 seconds and 12 seconds during the 15-second inspection phase to prevent human timing disputes.</li>
+                        <li><b>Fewest Moves (FMC) Breakthroughs:</b> World champions are posting sub-17 move official solutions utilizing NISS (Normal Inverse Scramble Search) and blockbuilding insertions!</li>
+                    </ul>
+                    Stay tuned right here on <b>Learn Cube 4 Fun</b> for more competition dates and registration updates!`
+                },
+                {
+                    id: "news-6",
+                    title: "💡 Top 3 Secrets to Breaking the 20-Second Barrier (Sub-20 Speedcubing Roadmap)",
+                    category: "tips",
+                    badge: "PRO GUIDE",
+                    author: "Cole Hua",
+                    date: "Recent Guide",
+                    isFeatured: false,
+                    imageUrl: "",
+                    reactions: { fire: 215, rocket: 178, clap: 195, heart: 240 },
+                    content: `Stuck at 35 or 45 seconds? Here is the exact checklist Cole used to drop from 30 seconds down to single digits:
+                    <br><br>
+                    <ol>
+                        <li><b>Plan the entire Cross in Inspection:</b> Never start turning until you can solve the bottom cross with your eyes closed (usually 5 to 7 moves).</li>
+                        <li><b>Slow Down to Speed Up (Lookahead):</b> Turning at 10 TPS with 2-second pauses between pairs averages 35 seconds. Turning smoothly at 4 TPS with ZERO pauses averages 18 seconds!</li>
+                        <li><b>Learn 2-Look OLL and Full PLL:</b> You only need 9 algorithms for 2-Look OLL and 21 for PLL. Check out our <a href="algorithms.html" style="color: #0066FF; font-weight: bold; text-decoration: underline;">Algorithms Guide</a> to practice them right now!</li>
+                    </ol>`
+                }
+            ];
+        }
+
+        // --- LOAD & SAVE ARTICLES ---
+        async function loadArticles() {
+            // Check local storage
+            const stored = localStorage.getItem('cube4fun_news_articles');
+            if (stored) {
+                try {
+                    newsArticles = JSON.parse(stored);
+                } catch (e) {
+                    console.error("Failed to parse local news:", e);
+                    newsArticles = getDefaultNews();
+                }
+            } else {
+                newsArticles = getDefaultNews();
+                saveArticlesLocally();
+            }
+
+            // Load user reactions
+            const storedReactions = localStorage.getItem('cube4fun_news_user_reactions');
+            if (storedReactions) {
+                try {
+                    userReactions = JSON.parse(storedReactions);
+                } catch (e) {}
+            }
+
+            renderArticles();
+        }
+
+        function saveArticlesLocally() {
+            localStorage.setItem('cube4fun_news_articles', JSON.stringify(newsArticles));
+        }
+
+        // --- RENDER ARTICLES ---
+        async function renderArticles() {
+            const loggedIn = await isAdminLoggedIn();
+            newsListContainer.innerHTML = '';
+
+            let filtered = newsArticles.filter(item => {
+                // Category filter
+                if (currentFilter !== 'all' && item.category !== currentFilter) {
+                    return false;
+                }
+                // Search filter
+                if (searchQuery.trim() !== '') {
+                    const q = searchQuery.toLowerCase();
+                    const titleMatch = item.title.toLowerCase().includes(q);
+                    const contentMatch = item.content.toLowerCase().includes(q);
+                    const authorMatch = item.author.toLowerCase().includes(q);
+                    const badgeMatch = (item.badge || '').toLowerCase().includes(q);
+                    if (!titleMatch && !contentMatch && !authorMatch && !badgeMatch) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            articlesCountBadge.textContent = `Showing ${filtered.length} article${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                newsListContainer.innerHTML = `
+                    <div style="text-align: center; padding: 50px 20px; background: white; border: 3px dashed #cbd5e1; border-radius: 20px;">
+                        <span style="font-size: 3em;">🔍</span>
+                        <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.6em; margin: 10px 0;">No matching news found!</h3>
+                        <p style="color: #64748b; font-size: 1.1em; font-weight: 600;">Try clearing your search or picking another category.</p>
+                        <button onclick="clearNewsFilters()" class="cat-tab active" style="margin-top: 10px; font-size: 1em; padding: 8px 18px;">Show All News 🌟</button>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(article => {
+                const card = document.createElement('article');
+                card.className = `news-card ${article.isFeatured ? 'featured-card' : ''}`;
+                card.id = `article-${article.id}`;
+
+                // Reactions setup
+                const reacts = article.reactions || { fire: 12, rocket: 8, clap: 15, heart: 10 };
+                const userKey = article.id;
+                const userHasFire = userReactions[userKey + '_fire'];
+                const userHasRocket = userReactions[userKey + '_rocket'];
+                const userHasClap = userReactions[userKey + '_clap'];
+                const userHasHeart = userReactions[userKey + '_heart'];
+
+                card.innerHTML = `
+                    <div class="news-card-header">
+                        <div class="news-tags-group">
+                            ${article.isFeatured ? `<span class="news-tag-badge featured-badge">🔥 FEATURED</span>` : ''}
+                            <span class="news-tag-badge">${escapeHTML(article.badge || getCategoryName(article.category))}</span>
+                        </div>
+                        <div class="news-date">📅 ${escapeHTML(article.date || 'Recent')}</div>
+                    </div>
+
+                    <h2 class="news-title">${article.title}</h2>
+
+                    <div class="news-meta-row">
+                        <span class="news-author">✍️ ${escapeHTML(article.author || 'Cole')}</span>
+                        <span>⚡ ${getCategoryName(article.category)}</span>
+                    </div>
+
+                    ${article.imageUrl ? `
+                        <div class="news-image-box">
+                            <img src="${article.imageUrl}" alt="News Image">
+                        </div>
+                    ` : ''}
+
+                    <div class="news-body">
+                        ${article.content}
+                    </div>
+
+                    <div class="news-footer">
+                        <div class="reactions-group">
+                            <button class="btn-reaction ${userHasFire ? 'reacted' : ''}" onclick="handleReaction('${article.id}', 'fire')">
+                                🔥 <span>${reacts.fire || 0}</span>
+                            </button>
+                            <button class="btn-reaction ${userHasRocket ? 'reacted' : ''}" onclick="handleReaction('${article.id}', 'rocket')">
+                                🚀 <span>${reacts.rocket || 0}</span>
+                            </button>
+                            <button class="btn-reaction ${userHasClap ? 'reacted' : ''}" onclick="handleReaction('${article.id}', 'clap')">
+                                👏 <span>${reacts.clap || 0}</span>
+                            </button>
+                            <button class="btn-reaction ${userHasHeart ? 'reacted' : ''}" onclick="handleReaction('${article.id}', 'heart')">
+                                ❤️ <span>${reacts.heart || 0}</span>
+                            </button>
+                        </div>
+
+                        <div class="card-action-btns">
+                            <button class="btn-card-action" onclick="shareArticle('${article.id}', '${escapeAttr(article.title)}')">🔗 Share</button>
+                            ${loggedIn ? `
+                                <button class="btn-card-action btn-edit" onclick="editArticle('${article.id}')">✏️ Edit</button>
+                                <button class="btn-card-action btn-delete" onclick="deleteArticle('${article.id}')">🗑️ Delete</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+
+                newsListContainer.appendChild(card);
+            });
+        }
+
+        function getCategoryName(cat) {
+            switch(cat) {
+                case 'records': return 'World Records 🏆';
+                case 'cole': return "Cole's Milestones ⭐";
+                case 'gear': return 'Cubes & Gear ⚙️';
+                case 'community': return 'Community & Events 📍';
+                case 'tips': return 'Tips & Methods 💡';
+                default: return 'General News 📰';
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
+        function escapeAttr(str) {
+            if (!str) return '';
+            return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        // --- REACTION HANDLER ---
+        window.handleReaction = function(articleId, reactType) {
+            const article = newsArticles.find(a => a.id === articleId);
+            if (!article) return;
+            if (!article.reactions) article.reactions = { fire: 0, rocket: 0, clap: 0, heart: 0 };
+
+            const reactionKey = articleId + '_' + reactType;
+            if (userReactions[reactionKey]) {
+                // User already reacted, decrement
+                article.reactions[reactType] = Math.max(0, (article.reactions[reactType] || 1) - 1);
+                delete userReactions[reactionKey];
+            } else {
+                // Increment
+                article.reactions[reactType] = (article.reactions[reactType] || 0) + 1;
+                userReactions[reactionKey] = true;
+                showToast(`Reacted with ${reactType === 'fire' ? '🔥' : reactType === 'rocket' ? '🚀' : reactType === 'clap' ? '👏' : '❤️'}!`);
+            }
+
+            localStorage.setItem('cube4fun_news_user_reactions', JSON.stringify(userReactions));
+            saveArticlesLocally();
+            renderArticles();
+        };
+
+        // --- SHARE HANDLER ---
+        window.shareArticle = function(id, title) {
+            const url = window.location.origin + window.location.pathname + '#article-' + id;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast("Article link copied to clipboard! 📋");
+                }).catch(() => {
+                    prompt("Copy link:", url);
+                });
+            } else {
+                prompt("Copy link:", url);
+            }
+        };
+
+        // --- SEARCH & CATEGORY FILTERS ---
+        if (newsSearchInput) {
+            newsSearchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderArticles();
+            });
+        }
+
+        if (categoryTabs) {
+            categoryTabs.addEventListener('click', (e) => {
+                const btn = e.target.closest('.cat-tab');
+                if (!btn) return;
+                document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-cat');
+                renderArticles();
+            });
+        }
+
+        window.clearNewsFilters = function() {
+            currentFilter = 'all';
+            searchQuery = '';
+            if (newsSearchInput) newsSearchInput.value = '';
+            document.querySelectorAll('.cat-tab').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-cat') === 'all');
+            });
+            renderArticles();
+        };
+
+        // --- COMPOSER & EDITING LOGIC ---
+        function updateLivePreview() {
+            const text = composerContent.value.replace(/\n/g, '<br>');
+            composerPreview.innerHTML = text || 'Live preview will show here...';
+        }
+
+        composerContent.addEventListener('input', updateLivePreview);
+
+        window.insertNewsEmoji = function(emoji) {
+            const start = composerContent.selectionStart;
+            const end = composerContent.selectionEnd;
+            composerContent.value = composerContent.value.substring(0, start) + emoji + composerContent.value.substring(end);
+            composerContent.focus();
+            composerContent.selectionStart = composerContent.selectionEnd = start + emoji.length;
+            updateLivePreview();
+        };
+
+        window.handleNewsImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Please pick an image smaller than 2MB!");
+                return;
+            }
+
+            uploadStatusText.textContent = "Loading image... ⏳";
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const base64 = evt.target.result;
+                composerImage.value = base64;
+                uploadStatusText.textContent = "✅ Image loaded! (Saved as image)";
+            };
+            reader.readAsDataURL(file);
+            event.target.value = "";
+        };
+
+        btnOpenComposer.addEventListener('click', () => {
+            editingArticleId = null;
+            composerTitleLabel.textContent = "✍️ Publish News Story";
+            composerTitle.value = "";
+            composerCategory.value = "records";
+            composerBadge.value = "";
+            composerAuthor.value = "Cole (Admin)";
+            composerImage.value = "";
+            composerContent.value = "";
+            composerPreview.innerHTML = "Live preview will show here...";
+            uploadStatusText.textContent = "Direct image upload (max 2MB)";
+            btnSaveNews.textContent = "🚀 Publish Story";
+            composerModal.style.display = 'flex';
+        });
+
+        composerCloseBtn.addEventListener('click', () => {
+            composerModal.style.display = 'none';
+        });
+
+        btnCancelComposer.addEventListener('click', () => {
+            composerModal.style.display = 'none';
+        });
+
+        // Edit Article
+        window.editArticle = function(id) {
+            const item = newsArticles.find(a => a.id === id);
+            if (!item) return;
+
+            editingArticleId = id;
+            composerTitleLabel.textContent = "✏️ Edit News Story";
+            composerTitle.value = item.title;
+            composerCategory.value = item.category || "records";
+            composerBadge.value = item.badge || "";
+            composerAuthor.value = item.author || "Cole (Admin)";
+            composerImage.value = item.imageUrl || "";
+            composerContent.value = item.content.replace(/<br\s*\/?>/gi, '\n');
+            updateLivePreview();
+            uploadStatusText.textContent = item.imageUrl ? "Current image active" : "Direct image upload (max 2MB)";
+            btnSaveNews.textContent = "💾 Save Changes";
+            composerModal.style.display = 'flex';
+        };
+
+        // Save / Publish News
+        btnSaveNews.addEventListener('click', async () => {
+            const title = composerTitle.value.trim();
+            const category = composerCategory.value;
+            const badge = composerBadge.value.trim() || getCategoryName(category).toUpperCase();
+            const author = composerAuthor.value.trim() || "Cole (Admin)";
+            const imageUrl = composerImage.value.trim();
+            const rawContent = composerContent.value.trim();
+
+            if (!title || !rawContent) {
+                alert("Please provide both a headline title and story content!");
+                return;
+            }
+
+            const formattedContent = rawContent.replace(/\n/g, '<br>');
+            const todayStr = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            if (editingArticleId) {
+                // Update existing
+                const index = newsArticles.findIndex(a => a.id === editingArticleId);
+                if (index !== -1) {
+                    newsArticles[index] = {
+                        ...newsArticles[index],
+                        title,
+                        category,
+                        badge,
+                        author,
+                        imageUrl,
+                        content: formattedContent
+                    };
+                }
+                showToast("News story updated! ✏️");
+            } else {
+                // Create new
+                const newStory = {
+                    id: "news-" + Date.now(),
+                    title,
+                    category,
+                    badge,
+                    author,
+                    date: todayStr,
+                    imageUrl,
+                    content: formattedContent,
+                    isFeatured: false,
+                    reactions: { fire: 0, rocket: 0, clap: 0, heart: 0 }
+                };
+                newsArticles.unshift(newStory);
+                showToast("New story published! 🚀");
+            }
+
+            saveArticlesLocally();
+            composerModal.style.display = 'none';
+            renderArticles();
+        });
+
+        // Delete Article
+        window.deleteArticle = function(id) {
+            if (!confirm("Are you sure you want to delete this news article? This cannot be undone!")) return;
+            newsArticles = newsArticles.filter(a => a.id !== id);
+            saveArticlesLocally();
+            showToast("Article deleted! 🗑️");
+            renderArticles();
+        };
+
+        // Reset to Default News
+        btnResetNews.addEventListener('click', () => {
+            if (confirm("Reset news to official default stories? Any custom news you added locally will be reset.")) {
+                newsArticles = getDefaultNews();
+                saveArticlesLocally();
+                showToast("News reset to defaults! 🔄");
+                renderArticles();
+            }
+        });
+
+        // --- INITIALIZE ON DOM LOAD ---
+        window.addEventListener('DOMContentLoaded', async () => {
+            await updateAdminUI();
+            await loadArticles();
+        });
+    </script>
+</body>
+</html>
