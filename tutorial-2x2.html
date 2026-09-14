@@ -6,8 +6,13 @@
     <meta name="description" content="Learn how to solve a 2x2 Rubik's Cube step-by-step with Cole Hua. Follow the steps, watch looping videos, and download the original PPTX.">
     <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, 2x2 Rubik's Cube tutorial, speedcubing, sexy move, PLL, OLL">
     <title>2x2 Rubik's Cube Tutorial - Cole Hua WCA</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         :root {
             --cyan-blob: #00E5FF;
             --yellow-blob: #FAED27;
@@ -146,17 +151,235 @@
             transform: scale(1.02);
         }
 
-        .center-text { text-align: center; }
+        /* STEP PROGRESS TRACKER */
+        .step-tracker-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 4px solid #1e272e;
+            border-radius: 24px;
+            padding: 22px 28px;
+            margin-bottom: 35px;
+            box-shadow: 0px 8px 0px #1e272e;
+        }
 
-        @media (max-width: 768px) {
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        .step-tracker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .step-tracker-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.3em;
+            color: #FF9F43;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-progress-bar-bg {
+            height: 16px;
+            background: #e2e8f0;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .step-progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF9F43 0%, #2ECC71 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .step-pills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .step-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            border: 2px solid #1e272e;
+            border-radius: 14px;
+            padding: 8px 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.9em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e272e;
+            transition: all 0.15s;
+            user-select: none;
+        }
+
+        .step-pill:hover {
+            transform: translateY(-2px);
+        }
+
+        .step-pill.completed {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        /* GLOBAL SITE FOOTER */
+        .site-footer {
+            background: #1e272e;
+            color: #f1f5f9;
+            border-top: 5px solid #00E5FF;
+            margin-top: 60px;
+            padding: 45px 20px 25px 20px;
+            font-family: 'Outfit', sans-serif;
+            position: relative;
+            z-index: 10;
+        }
+        .footer-container {
+            max-width: 1050px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.8fr 1.1fr 1.2fr 1.2fr;
+            gap: 30px;
+            margin-bottom: 35px;
+        }
+        @media (max-width: 900px) {
+            .footer-container { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .footer-container { grid-template-columns: 1fr; }
+        }
+        .footer-logo {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            color: #FAED27;
+            margin-bottom: 12px;
+        }
+        .footer-desc {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+        .footer-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .footer-badge {
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 12px;
+            color: white;
+            transition: transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .footer-badge:hover { transform: translateY(-2px); }
+        .footer-badge.wca { background: #0066FF; }
+        .footer-badge.china { background: #029347; }
+        .footer-badge.yt { background: #FF0000; }
+        .footer-col h4 {
+            font-family: 'DynaPuff', cursive;
+            color: #00E5FF;
+            font-size: 1.15em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #475569;
+            padding-bottom: 6px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .footer-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: color 0.15s, padding-left 0.15s;
+            display: inline-block;
+        }
+        .footer-links a:hover {
+            color: #FAED27;
+            padding-left: 4px;
+        }
+        .footer-col.info-col p {
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-top: 0;
+        }
+        .btn-scroll-top {
+            background: #FAED27;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #000;
+            transition: all 0.15s;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .btn-scroll-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #000;
+            background: #00E5FF;
+        }
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #94a3b8;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="nav-button">🔙 Back to Home</a>
-        <h1 style="font-family: 'DynaPuff', cursive; font-size: 4em; color: #ffffff; text-align: center; -webkit-text-stroke: 3px #1e272e; text-shadow: 6px 6px 0px #1e272e; margin-top: 10px; margin-bottom: 25px;">2x2 Tutorial</h1>
+        <!-- TOP NAVIGATION -->
+        <div class="nav-buttons" style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
+            <a href="index.html" class="nav-button" style="margin-bottom: 0;">🏠 Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob); margin-bottom: 0;">⏱️ Timer</a>
+            <a href="challenges.html" class="nav-button" style="background-color: var(--accent-pink); color: white; margin-bottom: 0;">🏆 Challenges</a>
+            <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white; margin-bottom: 0;">📰 News</a>
+            <a href="blog.html" class="nav-button" style="background-color: #FFD3B6; margin-bottom: 0;">✍️ Blog</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF; margin-bottom: 0;">🧩 Algorithms</a>
+            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1; margin-bottom: 0;">🧠 Trainer</a>
+            <a href="tutorial-3x3.html" class="nav-button" style="background-color: #FF6B6B; color: white; margin-bottom: 0;">🧊 Switch to 3x3</a>
+        </div>
+
+        <h1 style="font-family: 'DynaPuff', cursive; font-size: 3.8em; color: #ffffff; text-align: center; -webkit-text-stroke: 3px #1e272e; text-shadow: 6px 6px 0px #1e272e; margin-top: 10px; margin-bottom: 15px;">2x2 Tutorial 🧊</h1>
+        
+        <!-- STEP PROGRESS TRACKER -->
+        <div class="step-tracker-card">
+            <div class="step-tracker-header">
+                <span class="step-tracker-title">🎯 2x2 Step Mastery Progress:</span>
+                <span id="step-tracker-count" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #1e272e;">0 / 3 Steps Mastered (0%)</span>
+            </div>
+            <div class="step-progress-bar-bg">
+                <div id="step-tracker-fill" class="step-progress-bar-fill"></div>
+            </div>
+            <div class="step-pills-list">
+                <span class="step-pill" onclick="toggleTutorialStep(1)" id="step-pill-1">🧱 Step 1: First Layer White Side</span>
+                <span class="step-pill" onclick="toggleTutorialStep(2)" id="step-pill-2">🎯 Step 2: Orient Top Yellow Face</span>
+                <span class="step-pill" onclick="toggleTutorialStep(3)" id="step-pill-3">🎉 Step 3: Permute Corners & Solve!</span>
+            </div>
+        </div>
         
         <!-- YOUTUBE BANNER -->
         <div style="text-align: center; margin: 20px auto; max-width: 800px;">
@@ -356,11 +579,104 @@
             </div>
         </div>
 
+        <div style="text-align: center; margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Practice on Speedcubing Timer</a>
+            <a href="challenges.html" class="nav-button" style="background-color: var(--accent-pink); color: white;">🏆 Try Cubing Challenges ♾️</a>
+            <a href="tutorial-3x3.html" class="nav-button" style="background-color: #FF6B6B; color: white;">🧊 Learn 3x3 Tutorial!</a>
+        </div>
+
     </div>
     
+    <!-- GLOBAL SITE FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-logo">Learn Cube 4 Fun 🧊</div>
+                <p class="footer-desc">
+                    Free, kid-friendly Rubik's cube learning platform created by Cole Hua (Grade 4 speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
+                </p>
+                <div class="footer-badges">
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                </div>
+            </div>
+            <div class="footer-col links-col">
+                <h4>🧭 Explore Tools</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">🏠 Home</a></li>
+                    <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
+                    <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="news.html">📰 Cubing News & Updates</a></li>
+                    <li><a href="blog.html">✍️ Cole's Blog</a></li>
+                    <li><a href="play.html">🎮 3D Virtual Cube</a></li>
+                </ul>
+            </div>
+            <div class="footer-col links-col">
+                <h4>📖 Tutorials & Guides</h4>
+                <ul class="footer-links">
+                    <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
+                    <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
+                    <li><a href="algorithms.html">🧩 Algorithms Guide</a></li>
+                    <li><a href="trainer.html">🧠 Case Recognition Trainer</a></li>
+                    <li><a href="guide.html">📖 Finger Tricks & Guide</a></li>
+                    <li><a href="notation.html">📖 Notation Guide</a></li>
+                </ul>
+            </div>
+            <div class="footer-col info-col">
+                <h4>📍 In-Person Classes</h4>
+                <p><strong>Wesbrook Community Centre</strong><br>
+                Wednesdays 7:00 PM – 8:00 PM<br>
+                UBC Campus, Vancouver BC</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! 🚀</p>
+        </div>
+    </footer>
+
     <script>
+        // STEP PROGRESS TRACKER LOGIC
+        let masteredSteps = JSON.parse(localStorage.getItem('cube_tutorial_2x2_progress') || '[]');
+
+        function updateTrackerUI() {
+            const countElem = document.getElementById('step-tracker-count');
+            const fillElem = document.getElementById('step-tracker-fill');
+            const total = 3;
+            const count = masteredSteps.length;
+            const pct = Math.round((count / total) * 100);
+
+            if (countElem) countElem.textContent = `${count} / ${total} Steps Mastered (${pct}%)`;
+            if (fillElem) fillElem.style.width = pct + '%';
+
+            for (let i = 1; i <= total; i++) {
+                const pill = document.getElementById('step-pill-' + i);
+                if (pill) {
+                    if (masteredSteps.includes(i)) {
+                        pill.classList.add('completed');
+                    } else {
+                        pill.classList.remove('completed');
+                    }
+                }
+            }
+        }
+
+        window.toggleTutorialStep = function(stepNum) {
+            const idx = masteredSteps.indexOf(stepNum);
+            if (idx !== -1) {
+                masteredSteps.splice(idx, 1);
+            } else {
+                masteredSteps.push(stepNum);
+            }
+            localStorage.setItem('cube_tutorial_2x2_progress', JSON.stringify(masteredSteps));
+            updateTrackerUI();
+        };
+
         // Programmatically set all tutorial videos to loop and play in 50% slow motion
         document.addEventListener('DOMContentLoaded', () => {
+            updateTrackerUI();
+
             const videos = document.querySelectorAll('video');
             videos.forEach(video => {
                 video.loop = true;

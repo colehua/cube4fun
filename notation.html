@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Learn Rubik's Cube scramble notation (R, L, U, D, F, B). Interactive move guide for speedcubing beginners.">
     <title>Rubik's Cube Notation Guide - Learn Cube 4 Fun</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         :root {
             --cyan-blob: #00E5FF;
             --yellow-blob: #FAED27;
@@ -371,18 +375,143 @@
             font-weight: 700;
             color: #1e272e;
         }
+
+        /* GLOBAL SITE FOOTER */
+        .site-footer {
+            background: #1e272e;
+            color: #f1f5f9;
+            border-top: 5px solid #00E5FF;
+            margin-top: 60px;
+            padding: 45px 20px 25px 20px;
+            font-family: 'Outfit', sans-serif;
+            position: relative;
+            z-index: 10;
+        }
+        .footer-container {
+            max-width: 1050px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.8fr 1.1fr 1.2fr 1.2fr;
+            gap: 30px;
+            margin-bottom: 35px;
+        }
+        @media (max-width: 900px) {
+            .footer-container { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .footer-container { grid-template-columns: 1fr; }
+        }
+        .footer-logo {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            color: #FAED27;
+            margin-bottom: 12px;
+        }
+        .footer-desc {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+        .footer-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .footer-badge {
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 12px;
+            color: white;
+            transition: transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .footer-badge:hover { transform: translateY(-2px); }
+        .footer-badge.wca { background: #0066FF; }
+        .footer-badge.china { background: #029347; }
+        .footer-badge.yt { background: #FF0000; }
+        .footer-col h4 {
+            font-family: 'DynaPuff', cursive;
+            color: #00E5FF;
+            font-size: 1.15em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #475569;
+            padding-bottom: 6px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .footer-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: color 0.15s, padding-left 0.15s;
+            display: inline-block;
+        }
+        .footer-links a:hover {
+            color: #FAED27;
+            padding-left: 4px;
+        }
+        .footer-col.info-col p {
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-top: 0;
+        }
+        .btn-scroll-top {
+            background: #FAED27;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #000;
+            transition: all 0.15s;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .btn-scroll-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #000;
+            background: #00E5FF;
+        }
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         
         <div class="nav-buttons">
-            <a href="index.html" class="nav-button">🔙 Home</a>
-            <a href="timer.html" class="nav-button" style="background-color: var(--yellow-blob);">⏱️ Playful Timer</a>
-            <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white;">🏆 Challenges</a>
+            <a href="index.html" class="nav-button">🏠 Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Timer</a>
+            <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white;">🏆 Challenges ♾️</a>
             <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white;">📰 News</a>
-            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 Virtual 3D Play</a>
-            <a href="tutorial-3x3.html" class="nav-button">🧊 3x3 Tutorial</a>
+            <a href="blog.html" class="nav-button" style="background-color: #FAED27;">✍️ Blog</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #a29bfe; color: white;">🧩 Algorithms</a>
+            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Trainer</a>
+            <a href="tutorial-3x3.html" class="nav-button" style="background-color: #ffeaa7;">🧊 3x3 Tutorial</a>
+            <a href="tutorial-2x2.html" class="nav-button" style="background-color: #a8e6cf;">🧊 2x2 Tutorial</a>
+            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 3D Play</a>
+            <a href="guide.html" class="nav-button" style="background-color: #E2C2FF;">📖 Finger Tricks</a>
         </div>
 
         <h1 class="main-title">Cube Notation Guide 📖</h1>
@@ -1300,5 +1429,54 @@
         drawCubeNet();
         update3dCube();
     </script>
+
+    <!-- GLOBAL SITE FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-logo">Learn Cube 4 Fun 🧊</div>
+                <p class="footer-desc">
+                    Free, kid-friendly Rubik's cube learning platform created by Cole Hua (Grade 4 speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
+                </p>
+                <div class="footer-badges">
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                </div>
+            </div>
+            <div class="footer-col links-col">
+                <h4>🧭 Explore Tools</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">🏠 Home</a></li>
+                    <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
+                    <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="news.html">📰 Cubing News & Updates</a></li>
+                    <li><a href="blog.html">✍️ Cole's Blog</a></li>
+                    <li><a href="play.html">🎮 3D Virtual Cube</a></li>
+                </ul>
+            </div>
+            <div class="footer-col links-col">
+                <h4>📖 Tutorials & Guides</h4>
+                <ul class="footer-links">
+                    <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
+                    <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
+                    <li><a href="algorithms.html">🧩 Algorithms Guide</a></li>
+                    <li><a href="trainer.html">🧠 Case Recognition Trainer</a></li>
+                    <li><a href="guide.html">📖 Finger Tricks & Guide</a></li>
+                    <li><a href="notation.html">📖 Notation Guide</a></li>
+                </ul>
+            </div>
+            <div class="footer-col info-col">
+                <h4>📍 In-Person Classes</h4>
+                <p><strong>Wesbrook Community Centre</strong><br>
+                Wednesdays 7:00 PM – 8:00 PM<br>
+                UBC Campus, Vancouver BC</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! 🚀</p>
+        </div>
+    </footer>
 </body>
 </html>
