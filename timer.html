@@ -3430,6 +3430,17 @@
             }
         }
         triggerNewScramble();
+        try {
+            const customScramble = sessionStorage.getItem('cube_custom_scramble');
+            if (customScramble) {
+                currentScramble = customScramble;
+                scrambleDisplay.textContent = currentScramble;
+                drawCubeNet();
+                updateNavigationButtons();
+                updateBeginnerScrambleText();
+                sessionStorage.removeItem('cube_custom_scramble');
+            }
+        } catch (e) {}
         updateDifficultyButtons();
         loadSolves();
         toggleTimerMode();
