@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Challenges of Cubing - Epic speedcubing milestones, turning handicaps, move restrictions, and creative patterns to test your skills!">
+    <title>Challenges of Cubing 🏆 - Learn Cube 4 Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --primary: #0066FF;
+            --accent-pink: #FF6584;
+            --accent-green: #2ECC71;
+            --accent-orange: #FF9F43;
+            --accent-purple: #9B51E0;
+            --text-dark: #1e272e;
+            --glass-bg: rgba(255, 255, 255, 0.94);
+            --card-border: #1e272e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2eafc 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -120px;
+            left: -10%;
+            width: 120%;
+            height: 280px;
+            background: linear-gradient(90deg, #FF6584 0%, #FF9F43 45%, #FAED27 100%);
+            z-index: -1;
+            opacity: 0.9;
+            filter: blur(14px);
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 25px 20px 80px 20px;
+            position: relative;
+        }
+
+        /* NAVIGATION BAR */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--cyan-blob);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            border: 3px solid #1e272e;
+            box-shadow: 0px 5px 0px #1e272e;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            top: 0;
+        }
+
+        .nav-button:hover {
+            top: 2px;
+            box-shadow: 0px 3px 0px #1e272e;
+            transform: scale(1.02);
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.2em;
+            color: #ffffff;
+            text-align: center;
+            -webkit-text-stroke: 3px #1e272e;
+            text-shadow: 6px 6px 0px #1e272e;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 30px;
+            font-family: 'Comic Neue', sans-serif;
+        }
+
+        /* PROGRESS TRACKER CARD */
+        .progress-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 4px solid var(--card-border);
+            border-radius: 25px;
+            padding: 22px 28px;
+            margin-bottom: 30px;
+            box-shadow: 0px 8px 0px var(--card-border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .progress-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.4em;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 26px;
+            background: #e2e8f0;
+            border: 3px solid #1e272e;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2ECC71 0%, #00E5FF 50%, #FF6584 100%);
+            border-radius: 16px;
+            transition: width 0.4s ease;
+        }
+
+        .reset-btn {
+            background: #ffeaa7;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 6px 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.85em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e272e;
+            transition: all 0.15s;
+        }
+        .reset-btn:hover {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        /* ROULETTE / MYSTERY CHALLENGE GENERATOR */
+        .roulette-card {
+            background: linear-gradient(135deg, #fff7d6 0%, #ffeaa7 100%);
+            border: 4px solid var(--card-border);
+            border-radius: 25px;
+            padding: 24px;
+            margin-bottom: 35px;
+            box-shadow: 0px 8px 0px var(--card-border);
+            text-align: center;
+        }
+
+        .roulette-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            color: #d63031;
+            margin-bottom: 8px;
+        }
+
+        .roulette-desc {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .spin-button {
+            background: #FF6584;
+            color: white;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            padding: 12px 28px;
+            border: 3px solid #1e272e;
+            border-radius: 20px;
+            box-shadow: 0 6px 0 #1e272e;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spin-button:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #1e272e;
+        }
+
+        .mystery-result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 18px 22px;
+            background: white;
+            border: 3px dashed #1e272e;
+            border-radius: 18px;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* FILTER TABS */
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 3px solid #1e272e;
+            border-radius: 16px;
+            padding: 10px 18px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #1e272e;
+            transition: all 0.15s ease;
+        }
+
+        .filter-btn.active {
+            background: #FAED27;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        /* CHALLENGES GRID */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 24px;
+        }
+
+        .challenge-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 4px solid var(--card-border);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0px 7px 0px var(--card-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 10px 0px var(--card-border);
+        }
+
+        .challenge-card.completed {
+            background: #e8f8f0;
+            border-color: #27ae60;
+            box-shadow: 0px 7px 0px #27ae60;
+        }
+
+        .challenge-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .challenge-category-badge {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.78em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 2px solid #1e272e;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .challenge-difficulty {
+            font-size: 0.95em;
+            letter-spacing: 2px;
+        }
+
+        .challenge-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.35em;
+            margin: 0 0 10px 0;
+            color: var(--text-dark);
+            line-height: 1.3;
+        }
+
+        .challenge-desc {
+            font-size: 1.02em;
+            line-height: 1.5;
+            color: #475569;
+            margin-bottom: 14px;
+            font-weight: 500;
+        }
+
+        .challenge-tip {
+            background: rgba(250, 237, 39, 0.25);
+            border-left: 4px solid #FAED27;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.92em;
+            color: #334155;
+            margin-bottom: 16px;
+        }
+
+        .challenge-alg-box {
+            background: #1e272e;
+            color: #00E5FF;
+            font-family: monospace;
+            font-size: 0.95em;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .copy-alg-btn {
+            background: #00E5FF;
+            color: #1e272e;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+        .copy-alg-btn:hover {
+            background: #FAED27;
+        }
+
+        .challenge-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 14px;
+            border-top: 2px dashed #cbd5e1;
+        }
+
+        .complete-toggle-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            user-select: none;
+        }
+
+        .complete-checkbox {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #1e272e;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.15s;
+        }
+
+        .complete-checkbox:checked {
+            background: #2ECC71;
+            border-color: #27ae60;
+        }
+
+        .complete-checkbox:checked::after {
+            content: '✔';
+            position: absolute;
+            color: white;
+            font-size: 16px;
+            left: 4px;
+            top: 0px;
+        }
+
+        .action-link {
+            text-decoration: none;
+            background: #f1f5f9;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.85em;
+            transition: all 0.15s;
+        }
+
+        .action-link:hover {
+            background: #FAED27;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            h1.main-title {
+                font-size: 2.3em;
+            }
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob-top"></div>
+
+    <div class="container">
+        
+        <!-- NAVIGATION BAR -->
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">🏠 Back to Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Speedcubing Timer</a>
+            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Case Trainer</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF;">🧩 Algorithms</a>
+            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 Virtual 3D Cube</a>
+        </div>
+
+        <h1 class="main-title">Challenges of Cubing 🏆</h1>
+        <p class="subtitle">Push your limits with speed milestones, crazy handicaps, move restrictions, and creative pattern art! 🚀</p>
+
+        <!-- PROGRESS CARD -->
+        <div class="progress-card">
+            <div class="progress-header">
+                <div class="progress-title">
+                    <span>🏆</span>
+                    <span id="progress-text">Completed: 0 / 20 Challenges (0%)</span>
+                </div>
+                <button id="btn-reset-progress" class="reset-btn" title="Reset completed challenge checkmarks">🔄 Reset Progress</button>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <!-- MYSTERY / ROULETTE GENERATOR -->
+        <div class="roulette-card">
+            <div class="roulette-title">🎲 Mystery Challenge Wheel</div>
+            <div class="roulette-desc">Can't decide which challenge to conquer next? Let the cube choose your destiny!</div>
+            <button id="btn-spin-challenge" class="spin-button">
+                <span>🎲</span> Spin for a Random Challenge!
+            </button>
+            
+            <div id="mystery-result" class="mystery-result-box">
+                <div style="font-size: 0.9em; font-weight: bold; color: #FF6584; text-transform: uppercase; margin-bottom: 4px;" id="mystery-category">Speed Milestone</div>
+                <h3 style="font-family: 'DynaPuff', cursive; margin: 0 0 8px 0; font-size: 1.5em;" id="mystery-title">Challenge Title</h3>
+                <p style="margin: 0 0 12px 0; color: #475569;" id="mystery-desc">Challenge description</p>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button id="btn-mystery-jump" class="action-link" style="background: #FAED27; cursor: pointer;">🔍 View Challenge Below</button>
+                    <a id="btn-mystery-action" href="timer.html" class="action-link" style="background: #00E5FF;">⏱️ Try on Timer</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTER BUTTONS -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">🌟 All Challenges (20)</button>
+            <button class="filter-btn" data-filter="speed">⚡ Speed Milestones (5)</button>
+            <button class="filter-btn" data-filter="handicap">🖐️ Turning Handicaps (5)</button>
+            <button class="filter-btn" data-filter="restriction">🧩 Move Restrictions (5)</button>
+            <button class="filter-btn" data-filter="pattern">🎨 Pattern Masters (5)</button>
+        </div>
+
+        <!-- CHALLENGES GRID -->
+        <div id="challenges-grid" class="challenges-grid">
+            <!-- Rendered by JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // --- CHALLENGES DATABASE ---
+        const CHALLENGES = [
+            // Category 1: Speed Milestones
+            {
+                id: 'sub60',
+                category: 'speed',
+                categoryName: '⚡ Speed Milestone',
+                title: 'Sub-60: The 1-Minute Barrier 🥉',
+                difficulty: '⭐⭐',
+                desc: 'Solve the 3x3 Rubik\'s Cube completely in under 60.00 seconds using any method you like!',
+                tip: '💡 Tip: Keep the cross on the bottom and learn basic trigger finger tricks (R U R\' U\') to eliminate pausing.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Practice on Timer'
+            },
+            {
+                id: 'sub45',
+                category: 'speed',
+                categoryName: '⚡ Speed Milestone',
+                title: 'Sub-45: The Speedy Solver 🥈',
+                difficulty: '⭐⭐⭐',
+                desc: 'Complete an official scramble on the timer in under 45.00 seconds!',
+                tip: '💡 Tip: Focus on continuous turning rather than fast jerky bursts. Look for your next pair while inserting the current one.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Practice on Timer'
+            },
+            {
+                id: 'sub30',
+                category: 'speed',
+                categoryName: '⚡ Speed Milestone',
+                title: 'Sub-30: The Speed Demon 🥇',
+                difficulty: '⭐⭐⭐',
+                desc: 'Break the half-minute barrier! A sub-30 solve is the hallmark of dedicated speedcubers.',
+                tip: '💡 Tip: Master intuitive F2L and 4-Look Last Layer (2-Look OLL + 2-Look PLL).',
+                actionUrl: 'algorithms.html',
+                actionText: '🧩 Learn 4-Look LL'
+            },
+            {
+                id: 'sub20',
+                category: 'speed',
+                categoryName: '⚡ Speed Milestone',
+                title: 'Sub-20: Speedcubing Master 🚀',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Break the prestigious 20-second barrier on a standard 3x3 single solve!',
+                tip: '💡 Tip: Plan your cross entirely during the 15-second inspection and memorize Full PLL algorithms.',
+                actionUrl: 'trainer.html',
+                actionText: '🧠 Train PLL Recognition'
+            },
+            {
+                id: 'beat_cole',
+                category: 'speed',
+                categoryName: '⚡ Speed Milestone',
+                title: 'Beat Cole\'s 9s Record! 👑',
+                difficulty: '⭐⭐⭐⭐⭐',
+                desc: 'Achieve a legendary single solve faster than Cole Hua\'s personal official WCA single of 9.xx seconds!',
+                tip: '💡 Tip: Full CFOP, fast TPS, zero-pause lookahead, and advanced X-cross planning.',
+                actionUrl: 'timer.html',
+                actionText: '⚡ Beat Cole on Timer'
+            },
+
+            // Category 2: Turning Handicaps
+            {
+                id: 'one_handed',
+                category: 'handicap',
+                categoryName: '🖐️ Turning Handicap',
+                title: 'One-Handed (OH) Solve 🖐️',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Solve the entire 3x3 using ONLY one hand (your non-dominant hand is recommended!). Table sliding is permitted.',
+                tip: '💡 Tip: Rest the bottom of the cube on the table for leverage and use pinky flicks for U moves.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Switch to OH Timer'
+            },
+            {
+                id: 'blind_cross',
+                category: 'handicap',
+                categoryName: '🖐️ Turning Handicap',
+                title: 'Blindfolded Cross 🙈',
+                difficulty: '⭐⭐⭐',
+                desc: 'Inspect the cube for up to 15 seconds, close your eyes completely, and execute the full cross without peeking!',
+                tip: '💡 Tip: Memorize the relative order of the 4 cross edges: Green opposite Blue, Red opposite Orange.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Practice Inspection'
+            },
+            {
+                id: 'mirror_solve',
+                category: 'handicap',
+                categoryName: '🖐️ Turning Handicap',
+                title: 'The Mirror Solve 🪞',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Place a mirror in front of you. Hold the cube below eye level and solve it looking ONLY at the mirror\'s reflection!',
+                tip: '💡 Tip: Everything is inverted horizontally! Your brain will be tricked by clockwise vs counter-clockwise moves.',
+                actionUrl: 'play.html',
+                actionText: '🎮 Try on Virtual Cube'
+            },
+            {
+                id: 'no_inspection',
+                category: 'handicap',
+                categoryName: '🖐️ Turning Handicap',
+                title: 'Zero-Inspection Blitz ⚡',
+                difficulty: '⭐⭐⭐',
+                desc: 'No inspection allowed! Place your hands on the timer, open your eyes, and start turning immediately.',
+                tip: '💡 Tip: Don\'t search for the best cross piece—just grab the first color you see and adapt dynamically.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Try on Timer'
+            },
+            {
+                id: 'whisper_solve',
+                category: 'handicap',
+                categoryName: '🖐️ Turning Handicap',
+                title: 'The Silent Ninja Solve 🤫',
+                difficulty: '⭐⭐',
+                desc: 'Complete a full solve as quietly as possible without letting the plastic pieces click or snap loudly.',
+                tip: '💡 Tip: Forces ultra-smooth turning and fingertip control, drastically improving your turning precision.',
+                actionUrl: 'guide.html',
+                actionText: '📖 Learn Finger Tricks'
+            },
+
+            // Category 3: Move Restrictions
+            {
+                id: 'fmc_35',
+                category: 'restriction',
+                categoryName: '🧩 Move Restriction',
+                title: 'Fewest Moves (Sub-35 FMC) 🧠',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Solve the Rubik\'s Cube in 35 moves or fewer! No speed pressure—just pure mathematical efficiency.',
+                tip: '💡 Tip: Build 2x2x2 and 2x2x3 blocks instead of a traditional cross to save up to 15 moves.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ FMC Mode Timer'
+            },
+            {
+                id: 'no_rotations',
+                category: 'restriction',
+                categoryName: '🧩 Move Restriction',
+                title: 'Zero-Rotation F2L 🔄',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Solve the cross and all 4 F2L pairs without rotating the cube a single time (no y, y\', or y2)!',
+                tip: '💡 Tip: Utilize back-slot insertions like R\' U\' R or L\' U L to insert pairs behind your view.',
+                actionUrl: 'algorithms.html',
+                actionText: '🧩 Explore F2L Pairs'
+            },
+            {
+                id: '2gen_ru',
+                category: 'restriction',
+                categoryName: '🧩 Move Restriction',
+                title: '2-Gen Challenge (<R, U> Only) ✌️',
+                difficulty: '⭐⭐⭐',
+                desc: 'Scramble the cube using ONLY R and U moves. Then solve it using strictly R and U moves!',
+                tip: '💡 Tip: A cube scrambled with only R and U can always be solved with only R and U without affecting bottom/back pieces.',
+                actionUrl: 'play.html',
+                actionText: '🎮 Try in 3D Cube'
+            },
+            {
+                id: 'corners_first',
+                category: 'restriction',
+                categoryName: '🧩 Move Restriction',
+                title: 'Corners-First Solve 📐',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Retro 1980s style! Solve all 8 corners completely first, then slot and orient all 12 edge pieces using M and U turns.',
+                tip: '💡 Tip: Use the classic M2 U M2 U2 M2 U M2 algorithm to swap opposite edges in the middle slice.',
+                actionUrl: 'guide.html',
+                actionText: '📖 Check Slice Notation'
+            },
+            {
+                id: 'sexy_move_blitz',
+                category: 'restriction',
+                categoryName: '🧩 Move Restriction',
+                title: 'Sexy Move Speedrun (6x Trigger) 🔥',
+                difficulty: '⭐⭐',
+                desc: 'Do (R U R\' U\') exactly 6 times in a row. It brings the cube back to solved! Can you do it in under 1.5 seconds?',
+                tip: '💡 Tip: Use index-finger flicks for U and thumb push for R\' to hit maximum turns-per-second (TPS).',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Time Your Triggers'
+            },
+
+            // Category 4: Creative Patterns
+            {
+                id: 'pattern_checkerboard',
+                category: 'pattern',
+                categoryName: '🎨 Pattern Master',
+                title: 'The Classic Checkerboard 🏁',
+                difficulty: '⭐',
+                desc: 'Transform your solved cube into a stunning 6-sided checkerboard in under 3 seconds!',
+                alg: "M2 E2 S2  (or R2 L2 U2 D2 F2 B2)",
+                tip: '💡 Tip: Double-flick the middle layers (M, E, S) or double turn each face.',
+                actionUrl: 'play.html',
+                actionText: '🎮 View on 3D Cube'
+            },
+            {
+                id: 'pattern_cube_in_cube',
+                category: 'pattern',
+                categoryName: '🎨 Pattern Master',
+                title: 'Cube in a Cube 🧊',
+                difficulty: '⭐⭐⭐',
+                desc: 'Create a mini 2x2 cube appearing nestled inside the 3x3 Rubik\'s Cube corner!',
+                alg: "F L F U' R U F2 L2 U' L' B D' B' L2 U",
+                tip: '💡 Tip: Keep the starting white top and green front for the best color contrast.',
+                actionUrl: 'play.html',
+                actionText: '🎮 View on 3D Cube'
+            },
+            {
+                id: 'pattern_donuts',
+                category: 'pattern',
+                categoryName: '🎨 Pattern Master',
+                title: 'The 6-Center Donut / Dots 🍩',
+                difficulty: '⭐',
+                desc: 'Swap every center piece with its opposite side color to create floating dots on all 6 faces.',
+                alg: "U D' R L' F B' U D'",
+                tip: '💡 Tip: Can also be done by repeating M\' E M E\'!',
+                actionUrl: 'play.html',
+                actionText: '🎮 View on 3D Cube'
+            },
+            {
+                id: 'pattern_anaconda',
+                category: 'pattern',
+                categoryName: '🎨 Pattern Master',
+                title: 'The Anaconda Snake 🐍',
+                difficulty: '⭐⭐⭐',
+                desc: 'Wind a vibrant continuous colored stripe seamlessly around all sides of the Rubik\'s Cube!',
+                alg: "L U B' U' R L' B R' F B' D R D' F'",
+                tip: '💡 Tip: Turn smoothly and keep track of your front face orientation while applying the algorithm.',
+                actionUrl: 'play.html',
+                actionText: '🎮 View on 3D Cube'
+            },
+            {
+                id: 'pattern_pluses',
+                category: 'pattern',
+                categoryName: '🎨 Pattern Master',
+                title: 'Six Pluses / Crosses Pattern ➕',
+                difficulty: '⭐⭐',
+                desc: 'Turn all 6 faces into striking bold pluses / cross shapes with contrasting corner colors.',
+                alg: "U2 R2 L2 U2 R2 L2",
+                tip: '💡 Tip: Super easy to remember and undo in competitions or demos!',
+                actionUrl: 'play.html',
+                actionText: '🎮 View on 3D Cube'
+            }
+        ];
+
+        // --- LOCAL STORAGE KEY ---
+        const STORAGE_KEY = 'cube4fun_challenges_completed';
+
+        function loadCompletedChallenges() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                console.error("Failed to read completed challenges", e);
+                return [];
+            }
+        }
+
+        function saveCompletedChallenges(ids) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+            } catch (e) {
+                console.error("Failed to save completed challenges", e);
+            }
+        }
+
+        // --- RENDER CHALLENGES ---
+        let currentFilter = 'all';
+
+        function renderChallenges() {
+            const container = document.getElementById('challenges-grid');
+            container.innerHTML = '';
+
+            const completed = loadCompletedChallenges();
+
+            const filtered = currentFilter === 'all' 
+                ? CHALLENGES 
+                : CHALLENGES.filter(c => c.category === currentFilter);
+
+            filtered.forEach(c => {
+                const isDone = completed.includes(c.id);
+
+                const card = document.createElement('div');
+                card.id = 'card-' + c.id;
+                card.className = 'challenge-card' + (isDone ? ' completed' : '');
+
+                let algHtml = '';
+                if (c.alg) {
+                    algHtml = `
+                        <div class="challenge-alg-box">
+                            <span style="user-select: all;">${c.alg}</span>
+                            <button class="copy-alg-btn" onclick="copyAlg('${c.alg.replace(/'/g, "\\'")}', this)">📋 Copy</button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="challenge-badge-row">
+                            <span class="challenge-category-badge">${c.categoryName}</span>
+                            <span class="challenge-difficulty" title="Difficulty">${c.difficulty}</span>
+                        </div>
+                        <h3 class="challenge-title">${c.title}</h3>
+                        <div class="challenge-desc">${c.desc}</div>
+                        ${algHtml}
+                        <div class="challenge-tip">${c.tip}</div>
+                    </div>
+                    <div class="challenge-footer">
+                        <label class="complete-toggle-label">
+                            <input type="checkbox" class="complete-checkbox" data-id="${c.id}" ${isDone ? 'checked' : ''}>
+                            <span>${isDone ? 'Conquered! 🎉' : 'Mark Done'}</span>
+                        </label>
+                        <a href="${c.actionUrl}" class="action-link">${c.actionText}</a>
+                    </div>
+                `;
+
+                // Event listener on checkbox
+                const chk = card.querySelector('.complete-checkbox');
+                chk.addEventListener('change', (e) => {
+                    toggleChallenge(c.id, e.target.checked);
+                });
+
+                container.appendChild(card);
+            });
+
+            updateProgressBar();
+        }
+
+        // --- TOGGLE CHALLENGE COMPLETION ---
+        function toggleChallenge(id, isChecked) {
+            let completed = loadCompletedChallenges();
+            if (isChecked) {
+                if (!completed.includes(id)) {
+                    completed.push(id);
+                    triggerConfetti();
+                }
+            } else {
+                completed = completed.filter(item => item !== id);
+            }
+            saveCompletedChallenges(completed);
+            renderChallenges();
+        }
+
+        // --- UPDATE PROGRESS BAR ---
+        function updateProgressBar() {
+            const completed = loadCompletedChallenges();
+            const total = CHALLENGES.length;
+            const count = completed.length;
+            const pct = Math.round((count / total) * 100);
+
+            document.getElementById('progress-text').textContent = `Completed: ${count} / ${total} Challenges (${pct}%)`;
+            document.getElementById('progress-bar-fill').style.width = pct + '%';
+        }
+
+        // --- RESET PROGRESS ---
+        document.getElementById('btn-reset-progress').addEventListener('click', () => {
+            if (confirm("Are you sure you want to reset all your challenge achievements?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                renderChallenges();
+            }
+        });
+
+        // --- COPY ALGORITHM HELPER ---
+        window.copyAlg = function(alg, btn) {
+            navigator.clipboard.writeText(alg).then(() => {
+                const orig = btn.textContent;
+                btn.textContent = '✔ Copied!';
+                setTimeout(() => {
+                    btn.textContent = orig;
+                }, 1500);
+            }).catch(err => {
+                console.error("Clipboard error:", err);
+            });
+        };
+
+        // --- FILTER BUTTONS ---
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderChallenges();
+            });
+        });
+
+        // --- CONFETTI CELEBRATION EFFECT ---
+        function triggerConfetti() {
+            const emojis = ['🎉', '🏆', '⭐', '🧊', '✨', '🥇', '👑', '🔥'];
+            for (let i = 0; i < 35; i++) {
+                const particle = document.createElement('div');
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.position = 'fixed';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                particle.style.fontSize = Math.random() * 20 + 20 + 'px';
+                particle.style.zIndex = '99999';
+                particle.style.pointerEvents = 'none';
+                particle.style.transition = 'all ' + (Math.random() * 1.8 + 1.2) + 's ease-out';
+                
+                document.body.appendChild(particle);
+                particle.offsetHeight;
+                
+                particle.style.transform = `translate(${Math.random() * 260 - 130}px, -105vh) rotate(${Math.random() * 360}deg)`;
+                particle.style.opacity = '0';
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 2800);
+            }
+        }
+
+        // --- MYSTERY WHEEL / GENERATOR ---
+        let spinInterval = null;
+        document.getElementById('btn-spin-challenge').addEventListener('click', () => {
+            const resultBox = document.getElementById('mystery-result');
+            resultBox.style.display = 'block';
+
+            let count = 0;
+            if (spinInterval) clearInterval(spinInterval);
+
+            spinInterval = setInterval(() => {
+                const randomChoice = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
+                document.getElementById('mystery-title').textContent = randomChoice.title;
+                document.getElementById('mystery-category').textContent = randomChoice.categoryName;
+                document.getElementById('mystery-desc').textContent = randomChoice.desc;
+                count++;
+
+                if (count > 15) {
+                    clearInterval(spinInterval);
+                    triggerConfetti();
+
+                    // Final chosen challenge
+                    const finalChoice = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
+                    document.getElementById('mystery-title').textContent = finalChoice.title;
+                    document.getElementById('mystery-category').textContent = finalChoice.categoryName;
+                    document.getElementById('mystery-desc').textContent = finalChoice.desc;
+
+                    const jumpBtn = document.getElementById('btn-mystery-jump');
+                    jumpBtn.onclick = () => {
+                        // Switch filter to all if needed
+                        if (currentFilter !== 'all' && currentFilter !== finalChoice.category) {
+                            currentFilter = 'all';
+                            document.querySelectorAll('.filter-btn').forEach(b => {
+                                b.classList.toggle('active', b.dataset.filter === 'all');
+                            });
+                            renderChallenges();
+                        }
+                        const el = document.getElementById('card-' + finalChoice.id);
+                        if (el) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            el.style.transform = 'scale(1.04)';
+                            el.style.borderColor = '#FF6584';
+                            setTimeout(() => {
+                                el.style.transform = '';
+                                el.style.borderColor = '';
+                            }, 2000);
+                        }
+                    };
+
+                    const actionBtn = document.getElementById('btn-mystery-action');
+                    actionBtn.href = finalChoice.actionUrl;
+                    actionBtn.textContent = finalChoice.actionText;
+                }
+            }, 70);
+        });
+
+        // Initialize on load
+        renderChallenges();
+    </script>
+</body>
+</html>
