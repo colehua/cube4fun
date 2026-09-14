@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Challenges of Cubing - Infinite speedcubing challenges, crazy upside-down solves, camping tents, rocking boats, and wild handicaps!">
+    <meta name="description" content="Challenges of Cubing - Infinite speedcubing challenges, built-in stopwatch, audio effects, crazy upside-down solves, camping tents, rocking boats, and wild handicaps!">
     <title>Challenges of Cubing 🏆 - Learn Cube 4 Fun</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -178,6 +178,22 @@
             transition: width 0.4s ease;
         }
 
+        .btn-audio-toggle {
+            background: #ffffff;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 6px 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.85em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e272e;
+            transition: all 0.15s;
+        }
+        .btn-audio-toggle:hover {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
         .reset-btn {
             background: #ffeaa7;
             border: 2px solid #1e272e;
@@ -291,7 +307,7 @@
             border: 3px solid #000000;
             border-radius: 18px;
             padding: 18px 22px;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             box-shadow: inset 0 3px 6px rgba(0,0,0,0.35);
         }
 
@@ -343,6 +359,37 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+        }
+
+        /* INTEGRATED MINI-STOPWATCH */
+        .mini-timer-box {
+            background: rgba(255, 255, 255, 0.85);
+            border: 3px solid #1e272e;
+            border-radius: 18px;
+            padding: 15px 20px;
+            margin-bottom: 22px;
+            text-align: center;
+            box-shadow: 0 4px 0 #1e272e;
+        }
+
+        .mini-timer-display {
+            font-family: 'Outfit', monospace;
+            font-size: 3.4em;
+            font-weight: 800;
+            color: #1e272e;
+            letter-spacing: 2px;
+            margin: 4px 0;
+            user-select: none;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .mini-timer-display.running {
+            color: #2ECC71;
+        }
+
+        .mini-timer-display.ready {
+            color: #e67e22;
         }
 
         /* ACTION BUTTONS */
@@ -402,6 +449,37 @@
         .btn-mark-done {
             background-color: #2ECC71;
             color: #ffffff;
+        }
+
+        .btn-share {
+            background-color: #ffeaa7;
+            color: #1e272e;
+        }
+
+        /* SEARCH BAR */
+        .search-bar-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .challenge-search-bar {
+            width: 100%;
+            max-width: 580px;
+            padding: 14px 22px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15em;
+            border: 3px solid #1e272e;
+            border-radius: 25px;
+            outline: none;
+            box-shadow: 0 5px 0 #1e272e;
+            transition: all 0.2s;
+            background: #ffffff;
+        }
+
+        .challenge-search-bar:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 6px 0 #6c5ce7;
         }
 
         /* FILTER TABS */
@@ -676,6 +754,9 @@
                 width: 100%;
                 justify-content: center;
             }
+            .mini-timer-display {
+                font-size: 2.6em;
+            }
         }
     </style>
 </head>
@@ -707,7 +788,8 @@
                     <span>🏆</span>
                     <span id="progress-text">Completed: 0 / 30 Challenges (0%) ♾️ Infinite Challenges Mode</span>
                 </div>
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-audio-toggle" class="btn-audio-toggle" title="Toggle sound effects">🔊 Sound: ON</button>
                     <button id="btn-quick-plus" class="reset-btn" style="background: #a29bfe; color: white; border-color: #1e272e;" title="Generate a brand new challenge instantly">➕ Plus Challenge</button>
                     <button id="btn-reset-progress" class="reset-btn" title="Reset completed challenge checkmarks">🔄 Reset Progress</button>
                 </div>
@@ -721,7 +803,7 @@
         <div class="challenge-arena" id="active-challenge-arena">
             <div class="arena-top-row">
                 <span class="active-badge-tag" id="active-badge">🤪 Crazy & Wild</span>
-                <span class="active-counter" id="active-counter">Challenge 1 of 30</span>
+                <span class="active-counter" id="active-counter">Challenge 1 of 30 ♾️</span>
                 <span class="active-diff-stars" id="active-diff" title="Difficulty">⭐⭐⭐⭐⭐ (Extreme)</span>
             </div>
 
@@ -746,6 +828,19 @@
                 <div id="active-scramble-text" class="active-scramble-text">Generating scramble...</div>
             </div>
 
+            <!-- INTEGRATED CHALLENGE STOPWATCH -->
+            <div class="mini-timer-box" id="mini-timer-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                    <span style="font-family: 'DynaPuff', cursive; font-size: 0.95em; color: #475569;">⏱️ Integrated Challenge Stopwatch</span>
+                    <span id="mini-timer-hint" style="font-size: 0.85em; color: #94a3b8; font-weight: bold;">(Click display or Hold Spacebar to time your challenge!)</span>
+                </div>
+                <div id="mini-timer-val" class="mini-timer-display" title="Click or Spacebar to Start/Stop">0.00</div>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 6px;">
+                    <button id="btn-mini-timer-toggle" class="scramble-copy-btn" style="background: #2ECC71; color: white; padding: 6px 16px;">▶ Start Stopwatch</button>
+                    <button id="btn-mini-timer-reset" class="scramble-copy-btn" style="background: #e2e8f0; color: #1e272e; padding: 6px 14px;">🔄 Reset</button>
+                </div>
+            </div>
+
             <!-- ACTION BUTTONS: PLUS CHALLENGE, GENERATE RANDOM SCRAMBLE & NEXT -->
             <div class="controls-button-group">
                 <button id="btn-plus-challenge" class="btn-cubing-action btn-plus" title="Generate an infinite new crazy challenge!">
@@ -760,10 +855,18 @@
                 <button id="btn-toggle-active-done" class="btn-cubing-action btn-mark-done">
                     ✔ Mark Done
                 </button>
+                <button id="btn-share-challenge" class="btn-cubing-action btn-share" title="Copy challenge & scramble to share with friends">
+                    📤 Share Challenge
+                </button>
                 <a id="btn-open-timer" href="timer.html" class="btn-cubing-action btn-timer-jump">
                     ⏱️ Open in Timer
                 </a>
             </div>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="search-bar-container">
+            <input type="text" id="challenge-search-input" placeholder="🔍 Instant search any challenge (e.g. tent, boat, upside down, blind, 30s)..." class="challenge-search-bar">
         </div>
 
         <!-- FILTER BUTTONS -->
@@ -786,6 +889,78 @@
     </div>
 
     <script>
+        // --- SOUND ENGINE (WEB AUDIO API) ---
+        let audioCtx = null;
+        let isAudioEnabled = localStorage.getItem('cube4fun_audio_enabled') !== 'false';
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!isAudioEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'scramble') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(640, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'fanfare') {
+                    const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 chord
+                    freqs.forEach((f, idx) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+                        o.type = 'sine';
+                        o.frequency.setValueAtTime(f, now + idx * 0.06);
+                        g.gain.setValueAtTime(0.12, now + idx * 0.06);
+                        g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.06 + 0.35);
+                        o.start(now + idx * 0.06);
+                        o.stop(now + idx * 0.06 + 0.35);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        const audioToggleBtn = document.getElementById('btn-audio-toggle');
+        function updateAudioButtonUI() {
+            audioToggleBtn.textContent = isAudioEnabled ? "🔊 Sound: ON" : "🔇 Sound: OFF";
+            audioToggleBtn.style.background = isAudioEnabled ? "#ffffff" : "#f1f2f6";
+        }
+        updateAudioButtonUI();
+
+        audioToggleBtn.addEventListener('click', () => {
+            isAudioEnabled = !isAudioEnabled;
+            localStorage.setItem('cube4fun_audio_enabled', isAudioEnabled);
+            updateAudioButtonUI();
+            if (isAudioEnabled) playSound('click');
+        });
+
         // --- BASE CHALLENGES DATABASE (30 Core Challenges) ---
         const BASE_CHALLENGES = [
             // Category 0: Crazy & Wild Adventures!
@@ -1364,6 +1539,7 @@
         function generateNewActiveScramble() {
             const c = CHALLENGES[activeChallengeIndex];
             currentActiveScramble = generateScrambleForChallenge(c);
+            playSound('scramble');
             
             const scrambleDisplay = document.getElementById('active-scramble-text');
             scrambleDisplay.style.opacity = '0.3';
@@ -1393,6 +1569,7 @@
 
         // HANDLER FOR PLUS CHALLENGE (GET INFINITE CHALLENGES)
         function triggerPlusChallenge() {
+            playSound('fanfare');
             const newC = generateProceduralChallenge();
             triggerConfetti();
             showToast(`🚀 New Challenge: ${newC.title}!`);
@@ -1419,6 +1596,7 @@
 
         // BUTTON: NEXT CHALLENGE
         document.getElementById('btn-next-challenge').addEventListener('click', () => {
+            playSound('click');
             const arena = document.getElementById('active-challenge-arena');
             arena.style.transform = 'scale(0.98)';
             setTimeout(() => {
@@ -1437,6 +1615,14 @@
             updateActiveChallenge(activeChallengeIndex, false);
         });
 
+        // BUTTON: SHARE CHALLENGE
+        document.getElementById('btn-share-challenge').addEventListener('click', (e) => {
+            const c = CHALLENGES[activeChallengeIndex];
+            const shareText = `🏆 Cubing Challenge: ${c.title}\n📜 Rules: ${c.desc}\n🎲 Scramble: ${currentActiveScramble}\nCan you conquer this challenge? https://colehua.github.io/cube4fun/challenges.html`;
+            copyTextToClipboard(shareText, e.target);
+            showToast("📤 Challenge copied! Share with your cuber friends!");
+        });
+
         // BUTTON: COPY SCRAMBLE
         document.getElementById('btn-copy-scramble').addEventListener('click', (e) => {
             if (currentActiveScramble) {
@@ -1448,6 +1634,7 @@
             navigator.clipboard.writeText(text).then(() => {
                 const orig = btn.textContent;
                 btn.textContent = '✔ Copied!';
+                playSound('click');
                 setTimeout(() => {
                     btn.textContent = orig;
                 }, 1500);
@@ -1455,6 +1642,104 @@
                 console.error("Clipboard error:", err);
             });
         }
+
+        // --- INTEGRATED MINI STOPWATCH ---
+        let miniTimerState = 'IDLE'; // IDLE, RUNNING
+        let miniTimerStartTime = 0;
+        let miniTimerInterval = null;
+        const miniTimerVal = document.getElementById('mini-timer-val');
+        const btnMiniToggle = document.getElementById('btn-mini-timer-toggle');
+        const btnMiniReset = document.getElementById('btn-mini-timer-reset');
+
+        function formatStopwatchTime(ms) {
+            const s = Math.floor(ms / 1000);
+            const m = Math.floor(s / 60);
+            const remS = s % 60;
+            const hundredths = Math.floor((ms % 1000) / 10);
+            const hStr = hundredths < 10 ? '0' + hundredths : hundredths;
+            if (m > 0) {
+                const sStr = remS < 10 ? '0' + remS : remS;
+                return `${m}:${sStr}.${hStr}`;
+            }
+            return `${remS}.${hStr}`;
+        }
+
+        function startMiniTimer() {
+            miniTimerState = 'RUNNING';
+            miniTimerStartTime = Date.now();
+            miniTimerVal.className = 'mini-timer-display running';
+            btnMiniToggle.textContent = '⏹ Stop Stopwatch';
+            btnMiniToggle.style.background = '#e74c3c';
+            playSound('click');
+
+            miniTimerInterval = setInterval(() => {
+                const elapsed = Date.now() - miniTimerStartTime;
+                miniTimerVal.textContent = formatStopwatchTime(elapsed);
+            }, 10);
+        }
+
+        function stopMiniTimer() {
+            miniTimerState = 'IDLE';
+            clearInterval(miniTimerInterval);
+            miniTimerVal.className = 'mini-timer-display';
+            btnMiniToggle.textContent = '▶ Start Stopwatch';
+            btnMiniToggle.style.background = '#2ECC71';
+            playSound('fanfare');
+            triggerConfetti();
+
+            // Auto-ask or prompt to complete challenge
+            const c = CHALLENGES[activeChallengeIndex];
+            const completed = loadCompletedChallenges();
+            if (!completed.includes(c.id)) {
+                showToast(`🎉 Solve Complete! Challenge marked as conquered!`);
+                toggleChallenge(c.id, true);
+                updateActiveChallenge(activeChallengeIndex, false);
+            }
+        }
+
+        function resetMiniTimer() {
+            if (miniTimerState === 'RUNNING') {
+                clearInterval(miniTimerInterval);
+                miniTimerState = 'IDLE';
+            }
+            miniTimerVal.textContent = '0.00';
+            miniTimerVal.className = 'mini-timer-display';
+            btnMiniToggle.textContent = '▶ Start Stopwatch';
+            btnMiniToggle.style.background = '#2ECC71';
+            playSound('click');
+        }
+
+        btnMiniToggle.addEventListener('click', () => {
+            if (miniTimerState === 'IDLE') startMiniTimer();
+            else stopMiniTimer();
+        });
+
+        btnMiniReset.addEventListener('click', resetMiniTimer);
+        miniTimerVal.addEventListener('click', () => {
+            if (miniTimerState === 'IDLE') startMiniTimer();
+            else stopMiniTimer();
+        });
+
+        // Spacebar handler for stopwatch
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (miniTimerState === 'RUNNING') {
+                    stopMiniTimer();
+                } else {
+                    startMiniTimer();
+                }
+            }
+        });
+
+        // --- INSTANT SEARCH BAR ---
+        let searchQuery = "";
+        const searchInput = document.getElementById('challenge-search-input');
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            renderChallenges();
+        });
 
         // --- RENDER CHALLENGES GRID ---
         let currentFilter = 'all';
@@ -1470,9 +1755,31 @@
             document.getElementById('count-all').textContent = CHALLENGES.length;
             document.getElementById('count-infinite').textContent = infCount;
 
-            const filtered = currentFilter === 'all' 
+            let filtered = currentFilter === 'all' 
                 ? CHALLENGES 
                 : CHALLENGES.filter(c => c.category === currentFilter);
+
+            // Apply search filter if active
+            if (searchQuery) {
+                filtered = filtered.filter(c => 
+                    c.title.toLowerCase().includes(searchQuery) ||
+                    c.desc.toLowerCase().includes(searchQuery) ||
+                    c.categoryName.toLowerCase().includes(searchQuery) ||
+                    c.tip.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 20px; border: 3px dashed #1e272e;">
+                        <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.5em; margin-bottom: 8px;">No matching challenges found! 🔍</h3>
+                        <p style="color: #64748b; font-size: 1.1em;">Try another search term or click <strong>➕ Plus Challenge</strong> to generate an infinite one!</p>
+                        <button class="btn-cubing-action btn-plus" onclick="triggerPlusChallenge()">➕ Plus Challenge</button>
+                    </div>
+                `;
+                updateProgressBar();
+                return;
+            }
 
             filtered.forEach(c => {
                 const isDone = completed.includes(c.id);
@@ -1544,6 +1851,7 @@
         window.selectChallengeById = function(id) {
             const idx = CHALLENGES.findIndex(c => c.id === id);
             if (idx !== -1) {
+                playSound('click');
                 updateActiveChallenge(idx, true);
                 const arena = document.getElementById('active-challenge-arena');
                 if (arena) {
@@ -1566,10 +1874,12 @@
             if (isChecked) {
                 if (!completed.includes(id)) {
                     completed.push(id);
+                    playSound('fanfare');
                     triggerConfetti();
                 }
             } else {
                 completed = completed.filter(item => item !== id);
+                playSound('click');
             }
             saveCompletedChallenges(completed);
             renderChallenges();
@@ -1589,8 +1899,9 @@
 
         // --- RESET PROGRESS ---
         document.getElementById('btn-reset-progress').addEventListener('click', () => {
-            if (confirm("Are you sure you want to reset all your challenge achievements? (This will clear checkmarks, but your infinite challenges remain saved!)")) {
+            if (confirm("Are you sure you want to reset all your challenge achievements? (Your unlocked infinite challenges remain saved!)")) {
                 localStorage.removeItem(PROGRESS_STORAGE_KEY);
+                playSound('click');
                 renderChallenges();
                 updateActiveChallenge(activeChallengeIndex, false);
             }
@@ -1605,6 +1916,7 @@
         document.querySelectorAll('.filter-btn').forEach(btn => {
             if (btn.id === 'btn-filter-plus') return; // Handled separately
             btn.addEventListener('click', () => {
+                playSound('click');
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilter = btn.dataset.filter;
