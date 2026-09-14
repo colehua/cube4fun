@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Challenges of Cubing - Push your limits with crazy upside-down solves, camping tents, rocking boats, speed milestones, and wild handicaps!">
+    <meta name="description" content="Challenges of Cubing - Infinite speedcubing challenges, crazy upside-down solves, camping tents, rocking boats, and wild handicaps!">
     <title>Challenges of Cubing 🏆 - Learn Cube 4 Fun</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -13,9 +13,9 @@
             --primary: #0066FF;
             --accent-pink: #FF6584;
             --accent-red: #ff4757;
+            --accent-purple: #6c5ce7;
             --accent-green: #2ECC71;
             --accent-orange: #FF9F43;
-            --accent-purple: #9B51E0;
             --text-dark: #1e272e;
             --glass-bg: rgba(255, 255, 255, 0.95);
             --card-border: #1e272e;
@@ -41,7 +41,7 @@
             left: -10%;
             width: 120%;
             height: 280px;
-            background: linear-gradient(90deg, #ff4757 0%, #FF9F43 45%, #FAED27 100%);
+            background: linear-gradient(90deg, #6c5ce7 0%, #ff4757 50%, #FAED27 100%);
             z-index: -1;
             opacity: 0.9;
             filter: blur(14px);
@@ -102,8 +102,31 @@
             font-size: 1.25em;
             font-weight: 700;
             color: #475569;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-family: 'Comic Neue', sans-serif;
+        }
+
+        /* TOAST NOTIFICATION */
+        #infinite-toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 18px;
+            border: 3px solid #1e272e;
+            box-shadow: 0 8px 0 #1e272e;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            z-index: 100000;
+            display: none;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         /* PROGRESS TRACKER CARD */
@@ -150,7 +173,7 @@
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #ff4757 0%, #FAED27 50%, #2ECC71 100%);
+            background: linear-gradient(90deg, #6c5ce7 0%, #ff4757 50%, #2ECC71 100%);
             border-radius: 16px;
             transition: width 0.4s ease;
         }
@@ -173,7 +196,7 @@
 
         /* ACTIVE CHALLENGE & SCRAMBLE GENERATOR ARENA */
         .challenge-arena {
-            background: linear-gradient(135deg, #ffffff 0%, #fff0f3 50%, #fff7d6 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f3f0ff 40%, #fff7d6 100%);
             border: 4px solid var(--card-border);
             border-radius: 28px;
             padding: 28px;
@@ -198,7 +221,7 @@
             padding: 5px 14px;
             border-radius: 14px;
             border: 2px solid #1e272e;
-            background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+            background: linear-gradient(135deg, #6c5ce7 0%, #8e44ad 100%);
             color: #ffffff;
             letter-spacing: 0.5px;
             box-shadow: 0 3px 0 rgba(0,0,0,0.2);
@@ -322,10 +345,10 @@
             transition: all 0.2s ease;
         }
 
-        /* ACTION BUTTONS (GENERATE RANDOM SCRAMBLE & NEXT) */
+        /* ACTION BUTTONS */
         .controls-button-group {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
@@ -333,8 +356,8 @@
 
         .btn-cubing-action {
             font-family: 'DynaPuff', cursive;
-            font-size: 1.2em;
-            padding: 13px 26px;
+            font-size: 1.15em;
+            padding: 12px 22px;
             border: 3px solid #1e272e;
             border-radius: 20px;
             cursor: pointer;
@@ -352,6 +375,13 @@
             top: 2px;
             box-shadow: 0 4px 0 #1e272e;
             transform: scale(1.02);
+        }
+
+        .btn-plus {
+            background: linear-gradient(135deg, #6c5ce7 0%, #8e44ad 100%);
+            color: #ffffff;
+            font-weight: bold;
+            box-shadow: 0 6px 0 #3b2a82;
         }
 
         .btn-scramble {
@@ -381,13 +411,14 @@
             margin-bottom: 25px;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
         }
 
         .filter-btn {
             background: white;
             border: 3px solid #1e272e;
             border-radius: 16px;
-            padding: 10px 18px;
+            padding: 9px 16px;
             font-family: 'DynaPuff', cursive;
             font-size: 0.95em;
             cursor: pointer;
@@ -401,11 +432,22 @@
             box-shadow: 0 2px 0 #1e272e;
         }
 
+        .filter-btn.btn-infinite-tab {
+            background: #e0dcfc;
+            color: #5f27cd;
+            border-color: #5f27cd;
+        }
+
+        .filter-btn.btn-infinite-tab.active {
+            background: #6c5ce7;
+            color: white;
+            border-color: #1e272e;
+        }
+
         .filter-btn.btn-crazy-tab {
-            background: #ffeaa7;
+            background: #ffeae8;
             border-color: #d63031;
             color: #d63031;
-            font-weight: bold;
         }
 
         .filter-btn.btn-crazy-tab.active {
@@ -440,6 +482,11 @@
             box-shadow: 0px 10px 0px var(--card-border);
         }
 
+        .challenge-card.is-infinite {
+            background: linear-gradient(180deg, #ffffff 0%, #f3efff 100%);
+            border-color: #6c5ce7;
+        }
+
         .challenge-card.is-crazy {
             background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
             border-color: #ff4757;
@@ -452,9 +499,9 @@
         }
 
         .challenge-card.active-selected {
-            border-color: #ff4757;
+            border-color: #6c5ce7;
             border-width: 4px;
-            box-shadow: 0px 8px 0px #ff4757;
+            box-shadow: 0px 8px 0px #6c5ce7;
         }
 
         .challenge-badge-row {
@@ -472,6 +519,12 @@
             border: 2px solid #1e272e;
             background: #e0f2fe;
             color: #0369a1;
+        }
+
+        .challenge-category-badge.badge-infinite {
+            background: #f1edff;
+            color: #5f27cd;
+            border-color: #5f27cd;
         }
 
         .challenge-category-badge.badge-crazy {
@@ -630,6 +683,9 @@
 
     <div class="blob-top"></div>
 
+    <!-- TOAST NOTIFICATION FOR INFINITE CHALLENGES -->
+    <div id="infinite-toast">🚀 New Infinite Challenge Unlocked!</div>
+
     <div class="container">
         
         <!-- NAVIGATION BAR -->
@@ -642,16 +698,19 @@
         </div>
 
         <h1 class="main-title">Challenges of Cubing 🏆</h1>
-        <p class="subtitle">Push your limits with crazy upside-down solves, camping tents, rocking boats, speed milestones, and wild handicaps! 🚀</p>
+        <p class="subtitle">Push your limits with crazy upside-down solves, camping tents, rocking boats, and unlimited procedural challenges! 🚀</p>
 
-        <!-- PROGRESS CARD -->
+        <!-- PROGRESS CARD (INFINITE MODE) -->
         <div class="progress-card">
             <div class="progress-header">
                 <div class="progress-title">
                     <span>🏆</span>
-                    <span id="progress-text">Completed: 0 / 30 Challenges (0%)</span>
+                    <span id="progress-text">Completed: 0 / 30 Challenges (0%) ♾️ Infinite Challenges Mode</span>
                 </div>
-                <button id="btn-reset-progress" class="reset-btn" title="Reset completed challenge checkmarks">🔄 Reset Progress</button>
+                <div style="display: flex; gap: 8px;">
+                    <button id="btn-quick-plus" class="reset-btn" style="background: #a29bfe; color: white; border-color: #1e272e;" title="Generate a brand new challenge instantly">➕ Plus Challenge</button>
+                    <button id="btn-reset-progress" class="reset-btn" title="Reset completed challenge checkmarks">🔄 Reset Progress</button>
+                </div>
             </div>
             <div class="progress-bar-bg">
                 <div id="progress-bar-fill" class="progress-bar-fill"></div>
@@ -687,8 +746,11 @@
                 <div id="active-scramble-text" class="active-scramble-text">Generating scramble...</div>
             </div>
 
-            <!-- ACTION BUTTONS: GENERATE RANDOM SCRAMBLE & NEXT -->
+            <!-- ACTION BUTTONS: PLUS CHALLENGE, GENERATE RANDOM SCRAMBLE & NEXT -->
             <div class="controls-button-group">
+                <button id="btn-plus-challenge" class="btn-cubing-action btn-plus" title="Generate an infinite new crazy challenge!">
+                    ➕ Plus Challenge ♾️
+                </button>
                 <button id="btn-generate-scramble" class="btn-cubing-action btn-scramble">
                     🎲 Generate Random Scramble
                 </button>
@@ -706,12 +768,14 @@
 
         <!-- FILTER BUTTONS -->
         <div class="filter-container">
-            <button class="filter-btn active" data-filter="all">🌟 All Challenges (30)</button>
+            <button class="filter-btn active" data-filter="all">🌟 All Challenges (<span id="count-all">30</span>)</button>
+            <button class="filter-btn btn-infinite-tab" data-filter="infinite">♾️ Infinite Unlocked (<span id="count-infinite">0</span>)</button>
             <button class="filter-btn btn-crazy-tab" data-filter="crazy">🤪 Crazy & Wild (10)</button>
             <button class="filter-btn" data-filter="speed">⚡ Speed Milestones (5)</button>
             <button class="filter-btn" data-filter="handicap">🖐️ Turning Handicaps (5)</button>
             <button class="filter-btn" data-filter="restriction">🧩 Move Restrictions (5)</button>
             <button class="filter-btn" data-filter="pattern">🎨 Pattern Masters (5)</button>
+            <button id="btn-filter-plus" class="filter-btn" style="background: #a29bfe; color: white; border-color: #1e272e; font-weight: bold;">➕ Plus Challenge</button>
         </div>
 
         <!-- CHALLENGES GRID -->
@@ -722,8 +786,8 @@
     </div>
 
     <script>
-        // --- CHALLENGES DATABASE (30 Challenges) ---
-        const CHALLENGES = [
+        // --- BASE CHALLENGES DATABASE (30 Core Challenges) ---
+        const BASE_CHALLENGES = [
             // Category 0: Crazy & Wild Adventures!
             {
                 id: 'upside_down',
@@ -1070,25 +1134,122 @@
             }
         ];
 
-        // --- LOCAL STORAGE PROGRESS ---
-        const STORAGE_KEY = 'cube4fun_challenges_completed';
+        // --- DYNAMIC / INFINITE CHALLENGES ENGINE ---
+        let CHALLENGES = [...BASE_CHALLENGES];
 
-        function loadCompletedChallenges() {
+        const INFINITE_STORAGE_KEY = 'cube4fun_infinite_challenges';
+        const PROGRESS_STORAGE_KEY = 'cube4fun_challenges_completed';
+
+        function loadInfiniteChallenges() {
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
+                const raw = localStorage.getItem(INFINITE_STORAGE_KEY);
                 return raw ? JSON.parse(raw) : [];
             } catch (e) {
-                console.error("Failed to read completed challenges", e);
+                return [];
+            }
+        }
+
+        function saveInfiniteChallenges() {
+            try {
+                const custom = CHALLENGES.filter(c => c.id.startsWith('inf_'));
+                localStorage.setItem(INFINITE_STORAGE_KEY, JSON.stringify(custom));
+            } catch (e) {}
+        }
+
+        // PROCEDURAL GENERATOR FOR UNLIMITED NEW CHALLENGES
+        function generateProceduralChallenge() {
+            const stunts = [
+                { name: "Flamingo Balance", desc: "Balance on one single leg like a flamingo without putting your other foot down", tip: "Engage your core to maintain balance while executing algorithms!" },
+                { name: "Blanket Fort Secret", desc: "Build a blanket fort in your living room and solve illuminated ONLY by a flashlight", tip: "Flashlight beams change color contrast—look closely at yellow vs white!" },
+                { name: "Supermarket Trolley", desc: "Solve while sitting in or walking behind a rolling shopping cart", tip: "Keep your eyes on the aisle between algorithm stages!" },
+                { name: "Skateboard Coast", desc: "Coast on a skateboard, scooter, or rollerblades on a smooth driveway while solving", tip: "Safety first! Coast slowly and focus on smooth turning." },
+                { name: "Swing Set Soar", desc: "Solve while swinging high on a playground swing set", tip: "Turn the cube at the highest point of each swing when you feel weightless!" },
+                { name: "Under the Dining Table", desc: "Crawl completely under the dining table and solve with zero ceiling height", tip: "Keep your elbows tucked tightly against your chest." },
+                { name: "Swivel Chair Cyclone", desc: "Spin around in an office swivel chair while executing your solve", tip: "Keep your eyes locked on the center cap to avoid dizziness!" },
+                { name: "Wall-Sit Thigh Burn", desc: "Hold a 90-degree thigh-burning wall-sit against the wall until the cube is completely solved", tip: "The faster you solve, the sooner your leg burning stops!" },
+                { name: "Plank of Power", desc: "Hold a push-up core plank on the floor, solving the cube directly beneath your face", tip: "Use table-sliding techniques with your fingertips while holding the plank!" },
+                { name: "Elevator Express", desc: "Start the solve on the ground floor of an elevator and finish before reaching your floor", tip: "Keep an eye on the floor indicator dinging above you!" },
+                { name: "Book on Head Zen", desc: "Balance a hardcover book on top of your head without letting it drop once during the solve", tip: "Keep your neck straight and turn the cube at chest level without looking down." },
+                { name: "Backward Hallway Walk", desc: "Walk slowly backwards across the room or hallway while completing the solve", tip: "Clear the floor of shoes and obstacles before beginning!" },
+                { name: "Socks on Hands", desc: "Wear clean fuzzy socks over both hands like mittens and solve without fingertip grip", tip: "Use palm friction and thumb pressure to twist the slippery faces!" },
+                { name: "Pinch-Grip Only", desc: "Turn the cube using ONLY your thumb and index finger (pinch grip only—no other fingers allowed)", tip: "Pure fingertip accuracy! No ring-finger drags." },
+                { name: "Sleeping Pet Stealth", desc: "Solve within 3 feet of a sleeping cat or dog without waking them up", tip: "Smooth, whisper-quiet turning with zero snapping or table thumping!" },
+                { name: "Song Humming Groove", desc: "Loudly hum your favorite song non-stop without breaking rhythm or taking awkward pauses", tip: "Sync your turning TPS with the beat of the song!" },
+                { name: "Dark Sunglasses In Dim Room", desc: "Wear dark sunglasses indoors in a dim room and solve with muted colors", tip: "Blue and Green will look identical—look at center caps to orient yourself!" },
+                { name: "Two Spoons Chopsticks", desc: "Turn the cube using the tips of two spoons or chopsticks without directly touching the plastic", tip: "Delicate balance and leverage are the keys to victory!" },
+                { name: "T-Rex Dinosaur Arms", desc: "Keep your elbows pinned completely to your waist (T-Rex arms) and solve without extending arms", tip: "Your wrists and fingers have to do 100% of the movement!" },
+                { name: "Backward 100 Countdown", desc: "Count out loud backwards from 100 to 1 while solving without pausing your speech", tip: "Separating verbal brainpower from visual recognition trains ultimate lookahead!" },
+                { name: "Ice Water Chill", desc: "Dip your cube hands in ice water for 20 seconds right before inspecting", tip: "Stiff fingers force you to rely on wrist turns and smooth flow!" },
+                { name: "Mid-Air Toss Stunt", desc: "Toss the cube 2 feet into the air between each step, catch it cleanly, and continue", tip: "Gentle vertical loft without spinning gives you time to track faces in the air!" },
+                { name: "Inverted Bat Hang", desc: "Hang completely upside down from monkey bars or sofa and solve against gravity", tip: "Take slow breaths while your blood rushes to your head!" },
+                { name: "Rocking Boat Sailor", desc: "Solve on a floating boat, kayak, or mattress with swaying movement", tip: "Cushion the movements by flexing your knees!" },
+                { name: "Whisper Silent Ninja", desc: "Complete the solve with zero clicking noise under 30 decibels", tip: "Gentle, fluid finger pressure prevents sudden corner snaps." },
+                { name: "One-Handed Leftie", desc: "Solve the entire cube using strictly your non-dominant hand", tip: "Table sliding and pinky flicks are essential for OH." }
+            ];
+
+            const modifiers = [
+                { name: "Blitz Speedrun", goal: "Sub-45s target", stars: "⭐⭐⭐" },
+                { name: "Lightning Turbo", goal: "Sub-30s target", stars: "⭐⭐⭐⭐" },
+                { name: "Master Class", goal: "Sub-20s target", stars: "⭐⭐⭐⭐⭐" },
+                { name: "Zero Rotation", goal: "No cube rotations (y/y') allowed", stars: "⭐⭐⭐⭐" },
+                { name: "Cold Inspection", goal: "Strictly 3 seconds inspection", stars: "⭐⭐⭐" },
+                { name: "No Table Contact", goal: "Mid-air suspended solve only", stars: "⭐⭐" },
+                { name: "Metronome Rhythm", goal: "Constant 2 turns per second tempo", stars: "⭐⭐⭐" },
+                { name: "Full Lookahead", goal: "Zero pauses longer than 1 second", stars: "⭐⭐⭐⭐" }
+            ];
+
+            const scenarios = [
+                "In The Park 🌳", "Secret Agent 🕵️", "Extreme Expedition 🏕️", "Living Room Arena 🛋️",
+                "Space Mission 🚀", "Carnival Circus 🎪", "Olympic Showdown 🥇", "Midnight Mystery 🌙",
+                "Ocean Adventure 🌊", "Ninja Dojo 🥋", "Arcade Mania 🕹️", "Grand Champion 👑"
+            ];
+
+            const stunt = stunts[Math.floor(Math.random() * stunts.length)];
+            const mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+            const scen = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+            const id = 'inf_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            const title = `${stunt.name} [${mod.name}] ♾️`;
+            const desc = `${scen}: ${stunt.desc}. Extra Goal: ${mod.goal}!`;
+            const tip = `💡 Pro Tip: ${stunt.tip}`;
+
+            const newChallenge = {
+                id: id,
+                category: 'infinite',
+                categoryName: '♾️ Infinite Mode',
+                title: title,
+                difficulty: mod.stars + ' ♾️',
+                desc: desc,
+                tip: tip,
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Try on Timer'
+            };
+
+            CHALLENGES.push(newChallenge);
+            saveInfiniteChallenges();
+            return newChallenge;
+        }
+
+        // LOAD PERSISTED INFINITE CHALLENGES
+        const savedInfinite = loadInfiniteChallenges();
+        if (savedInfinite && savedInfinite.length > 0) {
+            CHALLENGES = [...BASE_CHALLENGES, ...savedInfinite];
+        }
+
+        // PROGRESS STORAGE
+        function loadCompletedChallenges() {
+            try {
+                const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
                 return [];
             }
         }
 
         function saveCompletedChallenges(ids) {
             try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-            } catch (e) {
-                console.error("Failed to save completed challenges", e);
-            }
+                localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(ids));
+            } catch (e) {}
         }
 
         // --- ACTIVE CHALLENGE & SCRAMBLE STATE ---
@@ -1150,13 +1311,15 @@
             // Update UI elements
             const badgeEl = document.getElementById('active-badge');
             badgeEl.textContent = c.categoryName;
-            if (c.category === 'crazy') {
+            if (c.category === 'infinite') {
+                badgeEl.style.background = "linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%)";
+            } else if (c.category === 'crazy') {
                 badgeEl.style.background = "linear-gradient(135deg, #ff4757 0%, #ff6b81 100%)";
             } else {
                 badgeEl.style.background = "#FF6584";
             }
 
-            document.getElementById('active-counter').textContent = `Challenge ${activeChallengeIndex + 1} of ${CHALLENGES.length}`;
+            document.getElementById('active-counter').textContent = `Challenge ${activeChallengeIndex + 1} of ${CHALLENGES.length} ♾️`;
             document.getElementById('active-diff').textContent = c.difficulty;
             document.getElementById('active-title').textContent = c.title;
             document.getElementById('active-desc').textContent = c.desc;
@@ -1218,6 +1381,37 @@
             }, 100);
         }
 
+        // SHOW TOAST
+        function showToast(msg) {
+            const toast = document.getElementById('infinite-toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // HANDLER FOR PLUS CHALLENGE (GET INFINITE CHALLENGES)
+        function triggerPlusChallenge() {
+            const newC = generateProceduralChallenge();
+            triggerConfetti();
+            showToast(`🚀 New Challenge: ${newC.title}!`);
+            
+            // Set the newly created challenge as active
+            updateActiveChallenge(CHALLENGES.length - 1, true);
+            renderChallenges();
+
+            const arena = document.getElementById('active-challenge-arena');
+            if (arena) {
+                arena.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // BUTTONS: PLUS CHALLENGE
+        document.getElementById('btn-plus-challenge').addEventListener('click', triggerPlusChallenge);
+        document.getElementById('btn-quick-plus').addEventListener('click', triggerPlusChallenge);
+        document.getElementById('btn-filter-plus').addEventListener('click', triggerPlusChallenge);
+
         // BUTTON: GENERATE RANDOM SCRAMBLE
         document.getElementById('btn-generate-scramble').addEventListener('click', () => {
             generateNewActiveScramble();
@@ -1271,18 +1465,26 @@
 
             const completed = loadCompletedChallenges();
 
+            // Update badge counts in filter buttons
+            const infCount = CHALLENGES.filter(c => c.category === 'infinite').length;
+            document.getElementById('count-all').textContent = CHALLENGES.length;
+            document.getElementById('count-infinite').textContent = infCount;
+
             const filtered = currentFilter === 'all' 
                 ? CHALLENGES 
                 : CHALLENGES.filter(c => c.category === currentFilter);
 
             filtered.forEach(c => {
                 const isDone = completed.includes(c.id);
-                const isActive = CHALLENGES[activeChallengeIndex].id === c.id;
+                const isActive = CHALLENGES[activeChallengeIndex] && CHALLENGES[activeChallengeIndex].id === c.id;
                 const isCrazy = c.category === 'crazy';
+                const isInf = c.category === 'infinite';
 
-                const card = document.createElement('div');
-                card.id = 'card-' + c.id;
-                card.className = 'challenge-card' + (isDone ? ' completed' : '') + (isActive ? ' active-selected' : '') + (isCrazy ? ' is-crazy' : '');
+                let cardClass = 'challenge-card';
+                if (isDone) cardClass += ' completed';
+                if (isActive) cardClass += ' active-selected';
+                if (isInf) cardClass += ' is-infinite';
+                else if (isCrazy) cardClass += ' is-crazy';
 
                 let algHtml = '';
                 if (c.alg) {
@@ -1294,7 +1496,13 @@
                     `;
                 }
 
-                const badgeClass = isCrazy ? 'challenge-category-badge badge-crazy' : 'challenge-category-badge';
+                let badgeClass = 'challenge-category-badge';
+                if (isInf) badgeClass += ' badge-infinite';
+                else if (isCrazy) badgeClass += ' badge-crazy';
+
+                const card = document.createElement('div');
+                card.id = 'card-' + c.id;
+                card.className = cardClass;
 
                 card.innerHTML = `
                     <div>
@@ -1345,6 +1553,7 @@
         };
 
         function highlightActiveCardInGrid() {
+            if (!CHALLENGES[activeChallengeIndex]) return;
             const activeId = CHALLENGES[activeChallengeIndex].id;
             document.querySelectorAll('.challenge-card').forEach(card => {
                 card.classList.toggle('active-selected', card.id === 'card-' + activeId);
@@ -1374,14 +1583,14 @@
             const count = completed.length;
             const pct = Math.round((count / total) * 100);
 
-            document.getElementById('progress-text').textContent = `Completed: ${count} / ${total} Challenges (${pct}%)`;
+            document.getElementById('progress-text').textContent = `Completed: ${count} / ${total} Challenges (${pct}%) ♾️ Infinite Challenges Mode`;
             document.getElementById('progress-bar-fill').style.width = pct + '%';
         }
 
         // --- RESET PROGRESS ---
         document.getElementById('btn-reset-progress').addEventListener('click', () => {
-            if (confirm("Are you sure you want to reset all your challenge achievements?")) {
-                localStorage.removeItem(STORAGE_KEY);
+            if (confirm("Are you sure you want to reset all your challenge achievements? (This will clear checkmarks, but your infinite challenges remain saved!)")) {
+                localStorage.removeItem(PROGRESS_STORAGE_KEY);
                 renderChallenges();
                 updateActiveChallenge(activeChallengeIndex, false);
             }
@@ -1394,6 +1603,7 @@
 
         // --- FILTER BUTTONS ---
         document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.id === 'btn-filter-plus') return; // Handled separately
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
@@ -1404,7 +1614,7 @@
 
         // --- CONFETTI CELEBRATION EFFECT ---
         function triggerConfetti() {
-            const emojis = ['🎉', '🏆', '⭐', '🧊', '✨', '🥇', '👑', '🔥', '🦇', '⛺', '⛵'];
+            const emojis = ['🎉', '🏆', '⭐', '🧊', '✨', '🥇', '👑', '🔥', '🦇', '⛺', '⛵', '♾️', '🚀'];
             for (let i = 0; i < 35; i++) {
                 const particle = document.createElement('div');
                 particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
