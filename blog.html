@@ -772,9 +772,16 @@
                 }
             }
 
-            // Local fallback
+            // Local fallback with version check
+            const CURRENT_BLOG_VERSION = "2026_v2_authentic";
+            const storedVer = localStorage.getItem('cube_blog_version');
             const stored = localStorage.getItem('cube_blog_posts');
-            blogPosts = stored ? JSON.parse(stored) : getMockPosts();
+            if (stored && storedVer === CURRENT_BLOG_VERSION) {
+                blogPosts = JSON.parse(stored);
+            } else {
+                blogPosts = getMockPosts();
+                localStorage.setItem('cube_blog_version', CURRENT_BLOG_VERSION);
+            }
             renderPosts();
         }
 
@@ -784,13 +791,13 @@
                 {
                     id: "mock-1",
                     title: "Welcome to Learn Cube 4 Fun! 🧊",
-                    content: "Hey guys! I'm grade 4 and I love speedcubing. I made this website to share my passion for cubing and to teach you how to solve the Rubik's cube. We hold classes at Wesbrook Community Centre every Wednesday from 7pm to 8pm. Hope to see you there! 🎉",
+                    content: "Hey guys! I'm in Grade 4 and I love speedcubing. I made this website to share my passion for cubing and to teach you how to solve the Rubik's cube. We hold free community classes at Wesbrook Community Centre every Wednesday from 7:00 PM to 8:00 PM. Hope to see you there! 🎉",
                     created_at: new Date(Date.now() - 86400000 * 5).toISOString() // 5 days ago
                 },
                 {
                     id: "mock-2",
-                    title: "My 3x3 speedcubing record! ⏱️",
-                    content: "I'm super happy to share that my official WCA 3x3 record is 9 seconds! You can check out my official profile on the WCA website. I've been practicing fingertricks and looking ahead to spot my F2L pairs faster. Let's practice together! 🚀",
+                    title: "My 3x3 speedcubing journey & official WCA debut! ⏱️",
+                    content: "I'm super happy to share that my practice personal best on 3x3 is 9.00 seconds, and in my official WCA tournament debut at Burnaby Cubes Big & Small 2026, I achieved an official 12.60 second single and 14.43 second average! You can check out my official profile (WCA ID: 2026HUAC01) on the World Cube Association website. I've been practicing fingertricks, lookahead, and efficient F2L pairing so I can break into the single digits officially. Let's practice together! 🚀",
                     created_at: new Date(Date.now() - 86400000 * 2).toISOString() // 2 days ago
                 }
             ];
