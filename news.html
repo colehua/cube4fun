@@ -134,6 +134,71 @@
             background-color: #f1f5f9;
         }
 
+        /* LANGUAGE PICKER */
+        .language-picker {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 14px;
+            border: 2px solid #1e272e;
+            box-shadow: 0px 4px 0px #1e272e;
+            transition: all 0.15s;
+        }
+
+        .language-picker:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 0px #1e272e;
+        }
+
+        .lang-label {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            color: #1e272e;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .lang-select {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95em;
+            color: #0066FF;
+            background: #f1f5f9;
+            border: 2px solid #1e272e;
+            border-radius: 10px;
+            padding: 5px 8px;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.15s;
+        }
+
+        .lang-select:focus {
+            border-color: #0066FF;
+            background: white;
+        }
+
+        /* Clean Google Translate UI */
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-banner-frame,
+        iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        body {
+            top: 0px !important;
+        }
+        #goog-gt-tt, .goog-te-balloon-frame {
+            display: none !important;
+        }
+        .goog-text-highlight {
+            background: none !important;
+            box-shadow: none !important;
+        }
+
         h1.main-title {
             font-family: 'DynaPuff', cursive;
             font-size: 3.5em;
@@ -947,6 +1012,22 @@
             </div>
             
             <div class="nav-group-right">
+                <!-- LANGUAGE PICKER -->
+                <div class="language-picker" title="Change Website Language">
+                    <label for="cube-lang-select" class="lang-label">
+                        <span>🌐</span> <strong>Language:</strong>
+                    </label>
+                    <select id="cube-lang-select" class="lang-select" aria-label="Change Language" onchange="changeLanguage(this.value)">
+                        <option value="en">English 🇺🇸</option>
+                        <option value="zh-CN">中文 (Chinese) 🇨🇳</option>
+                        <option value="fr">Français (French) 🇫🇷</option>
+                        <option value="es">Español (Spanish) 🇪🇸</option>
+                        <option value="ja">日本語 (Japanese) 🇯🇵</option>
+                        <option value="ko">한국어 (Korean) 🇰🇷</option>
+                        <option value="de">Deutsch (German) 🇩🇪</option>
+                    </select>
+                </div>
+
                 <button id="admin-toggle-btn" class="admin-login-link">
                     <span>🔑 Admin Login</span>
                 </button>
@@ -2088,12 +2169,80 @@
             }
         });
 
+        // --- LANGUAGE SWITCHER LOGIC ---
+        window.changeLanguage = function(lang) {
+            if (!lang) return;
+            localStorage.setItem('cube4fun_lang', lang);
+
+            const select = document.getElementById('cube-lang-select');
+            if (select && select.value !== lang) {
+                select.value = lang;
+            }
+
+            const cookieVal = (lang === 'en') ? '' : `/en/${lang}`;
+            const host = window.location.hostname;
+
+            // Clear previous cookies
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            if (host) {
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + host + "; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=." + host + "; path=/;";
+            }
+
+            // Set new cookie if non-English
+            if (lang !== 'en') {
+                document.cookie = "googtrans=" + cookieVal + "; path=/;";
+                if (host) {
+                    document.cookie = "googtrans=" + cookieVal + "; domain=" + host + "; path=/;";
+                    document.cookie = "googtrans=" + cookieVal + "; domain=." + host + "; path=/;";
+                }
+            }
+
+            // Trigger Google Translate combo if already initialized in DOM
+            const googleCombo = document.querySelector('.goog-te-combo');
+            if (googleCombo) {
+                googleCombo.value = lang;
+                googleCombo.dispatchEvent(new Event('change'));
+            } else {
+                window.location.reload();
+            }
+        };
+
+        function initLanguage() {
+            const savedLang = localStorage.getItem('cube4fun_lang') || 'en';
+            const select = document.getElementById('cube-lang-select');
+            if (select) {
+                select.value = savedLang;
+            }
+            if (savedLang !== 'en') {
+                const cookieMatch = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
+                const expectedCookie = `/en/${savedLang}`;
+                if (!cookieMatch || cookieMatch[1] !== expectedCookie) {
+                    document.cookie = "googtrans=" + expectedCookie + "; path=/;";
+                }
+            }
+        }
+
         // --- INITIALIZE ON DOM LOAD ---
         window.addEventListener('DOMContentLoaded', async () => {
+            initLanguage();
             await updateAdminUI();
             await loadArticles();
         });
     </script>
+
+    <!-- Google Translate Element (Hidden) -->
+    <div id="google_translate_element" style="display: none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,zh-CN,fr,es,ja,ko,de',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- GLOBAL SITE FOOTER -->
     <footer class="site-footer">
