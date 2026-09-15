@@ -506,6 +506,57 @@
             background: none !important;
             box-shadow: none !important;
         }
+
+        /* 1 VS 1 BATTLE MODE ARENA */
+        .battle-arena-card {
+            background: #ffffff;
+            border: 4px solid #1e272e;
+            border-radius: 28px;
+            padding: 28px 24px;
+            box-shadow: 0 10px 0 #1e272e;
+            margin-bottom: 45px;
+            position: relative;
+        }
+        .duel-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: stretch;
+        }
+        @media (max-width: 768px) {
+            .duel-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+            .duel-vs-col {
+                order: -1;
+                margin-bottom: 5px;
+            }
+        }
+        @keyframes pulse-vs {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 0 #1e272e; }
+            50% { transform: scale(1.12); box-shadow: 0 8px 18px rgba(255, 0, 85, 0.45); }
+        }
+        @keyframes winner-celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .duel-winner-glow-p1 {
+            border-color: #FAED27 !important;
+            box-shadow: 0 0 25px rgba(250, 237, 39, 0.75), 0 8px 0 #0044CC !important;
+            animation: winner-celebrate 1.5s infinite ease-in-out;
+        }
+        .duel-winner-glow-p2 {
+            border-color: #FAED27 !important;
+            box-shadow: 0 0 25px rgba(250, 237, 39, 0.75), 0 8px 0 #CC1E2F !important;
+            animation: winner-celebrate 1.5s infinite ease-in-out;
+        }
+        .duel-mat {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: none;
+        }
     </style>
 
 </head>
@@ -576,6 +627,9 @@
         <div style="text-align: center; margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
             <a href="timer.html" class="cube-button" style="background-color: #00E5FF; color: #1a1a1a;">
                 <span class="cube-icon">⏱️</span> Speedcubing Timer
+            </a>
+            <a href="#one-vs-one-section" class="cube-button" style="background: linear-gradient(135deg, #FF0055 0%, #7928CA 100%); color: #ffffff;">
+                <span class="cube-icon">⚔️</span> 1 vs 1 Battle Timer
             </a>
             <a href="challenges.html" class="cube-button" style="background: linear-gradient(135deg, #FF6584 0%, #ff4757 100%); color: #ffffff;">
                 <span class="cube-icon">🏆</span> Challenges of Cubing ♾️
@@ -679,7 +733,840 @@
                 </div>
                 <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Play Virtual 3D 🎲</a>
             </div>
+
+            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
+                <div>
+                    <div style="font-size: 2.2em; margin-bottom: 8px;">⚔️</div>
+                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #FF0055;">1 vs 1 Battle Mode</h3>
+                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Race a friend head-to-head with two independent timers, fair shared scramble, live scoreboard, and keyboard/touch mats!</p>
+                </div>
+                <a href="#one-vs-one-section" class="nav-button" style="background: linear-gradient(135deg, #FF0055 0%, #7928CA 100%); color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Start 1 vs 1 Duel ⚔️</a>
+            </div>
         </div>
+
+        <!-- ============================================== -->
+        <!-- 1 VS 1 CUBE BATTLE ARENA (HEAD-TO-HEAD RACING) -->
+        <!-- ============================================== -->
+        <section id="one-vs-one-section" class="battle-arena-card" style="max-width: 1050px; margin: 0 auto 50px auto;">
+            <!-- Header banner -->
+            <div style="text-align: center; margin-bottom: 22px;">
+                <span style="display: inline-block; background: linear-gradient(135deg, #FF0055 0%, #7928CA 100%); color: white; padding: 5px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; box-shadow: 0 3px 0 rgba(0,0,0,0.15);">
+                    ⚡ LIVE HEAD-TO-HEAD SPEEDCUBING
+                </span>
+                <h2 style="font-family: 'DynaPuff', cursive; font-size: 2.3em; margin: 4px 0 8px 0; color: #1e272e; display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;">
+                    <span style="color: #0066FF;">Player 1</span>
+                    <span style="background: #1e272e; color: #FAED27; font-size: 0.75em; padding: 4px 14px; border-radius: 14px; border: 2px solid #FAED27; transform: rotate(-3deg); box-shadow: 0 4px 0 rgba(0,0,0,0.2);">1 VS 1</span>
+                    <span style="color: #FF3838;">Player 2</span>
+                </h2>
+                <p style="font-size: 1.05em; color: #475569; max-width: 760px; margin: 0 auto; line-height: 1.5; font-weight: 500;">
+                    Both cubers use the <strong>exact same fair scramble</strong> below! Place your hands on the mat (or keyboard keys) to get ready. When released, the race begins! 🚀
+                </p>
+            </div>
+
+            <!-- Match Scoreboard & Top Toolbar -->
+            <div style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 18px; padding: 14px 20px; margin-bottom: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;">
+                <!-- Cube Type Switcher -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: 700; font-size: 0.9em; color: #334155; text-transform: uppercase;">Event:</span>
+                    <button id="duel-event-3x3" onclick="duelSetEvent('3x3')" class="nav-button" style="margin: 0; padding: 6px 14px; font-size: 0.9em; background-color: #0066FF; color: white; border-radius: 12px;">3x3 Cube</button>
+                    <button id="duel-event-2x2" onclick="duelSetEvent('2x2')" class="nav-button" style="margin: 0; padding: 6px 14px; font-size: 0.9em; background-color: #e2e8f0; color: #334155; border-radius: 12px;">2x2 Cube</button>
+                </div>
+
+                <!-- Match Score Counter -->
+                <div style="display: flex; align-items: center; gap: 12px; background: white; border: 2px solid #1e272e; padding: 6px 18px; border-radius: 14px; box-shadow: 0 3px 0 #1e272e;">
+                    <div style="text-align: right;">
+                        <span id="duel-p1-header-name" style="font-size: 0.85em; font-weight: 800; color: #0066FF;">Player 1</span>
+                        <div id="duel-p1-score" style="font-family: 'DynaPuff', cursive; font-size: 1.5em; font-weight: 900; color: #0066FF; line-height: 1;">0</div>
+                    </div>
+                    <div style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #94a3b8; padding: 0 4px;">:</div>
+                    <div style="text-align: left;">
+                        <span id="duel-p2-header-name" style="font-size: 0.85em; font-weight: 800; color: #FF3838;">Player 2</span>
+                        <div id="duel-p2-score" style="font-family: 'DynaPuff', cursive; font-size: 1.5em; font-weight: 900; color: #FF3838; line-height: 1;">0</div>
+                    </div>
+                    <div style="margin-left: 8px; font-size: 0.75em; color: #64748b; font-weight: 700; text-transform: uppercase;">
+                        Round <span id="duel-round-display">1</span>
+                    </div>
+                </div>
+
+                <!-- Toolbar Actions -->
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <button id="duel-sound-btn" onclick="duelToggleSound()" class="nav-button" style="margin: 0; padding: 6px 12px; font-size: 0.85em; background: #e0f2fe; color: #0284c7; border-radius: 10px;">🔊 Sound: ON</button>
+                    <button id="duel-mode-btn" onclick="duelToggleHoldMode()" class="nav-button" style="margin: 0; padding: 6px 12px; font-size: 0.85em; background: #fef3c7; color: #b45309; border-radius: 10px;" title="Switch between Stackmat 0.3s hold or Quick Instant Tap">⏱️ Hold: 0.3s</button>
+                    <button onclick="duelResetMatch()" class="nav-button" style="margin: 0; padding: 6px 12px; font-size: 0.85em; background: #f1f5f9; color: #64748b; border-radius: 10px;" title="Reset scores back to 0-0">🔄 Reset Score</button>
+                </div>
+            </div>
+
+            <!-- Fair Shared Scramble Box -->
+            <div style="background: #ffffff; border: 3px solid #1e272e; border-radius: 18px; padding: 16px 20px; margin-bottom: 25px; box-shadow: 0 5px 0 rgba(0,0,0,0.08); text-align: center; position: relative;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #FAED27; color: #1e272e; font-weight: 800; font-size: 0.75em; padding: 3px 10px; border-radius: 8px; border: 1.5px solid #1e272e; text-transform: uppercase;">
+                            Shared Fair Scramble
+                        </span>
+                        <span style="font-size: 0.85em; color: #64748b;">(Both players solve this identical scramble)</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="duelGenerateScramble()" class="nav-button" style="margin: 0; padding: 5px 12px; font-size: 0.85em; background-color: #FAED27; color: #1e272e; border-radius: 10px; border: 2px solid #1e272e;">🎲 New Scramble</button>
+                        <button id="duel-copy-scramble-btn" onclick="duelCopyScramble()" class="nav-button" style="margin: 0; padding: 5px 12px; font-size: 0.85em; background-color: #f1f5f9; color: #334155; border-radius: 10px;">📋 Copy</button>
+                        <button id="duel-countdown-btn" onclick="duelStartSyncCountdown()" class="nav-button" style="margin: 0; padding: 5px 14px; font-size: 0.85em; background: linear-gradient(135deg, #FF0055 0%, #FF6584 100%); color: white; border-radius: 10px; border: 2px solid #1e272e;">📢 3-2-1-GO!</button>
+                    </div>
+                </div>
+                <div id="duel-scramble-text" style="font-family: 'Consolas', 'Courier New', monospace; font-size: 1.35em; font-weight: bold; letter-spacing: 2px; color: #0f172a; line-height: 1.6; word-break: break-word; padding: 10px; background: #f8fafc; border-radius: 12px; border: 1.5px dashed #cbd5e1;">
+                    Generating scramble...
+                </div>
+            </div>
+
+            <!-- Center Countdown Overlay (hidden by default) -->
+            <div id="duel-sync-countdown-banner" style="display: none; background: #1e272e; color: #FAED27; border-radius: 14px; padding: 10px 20px; text-align: center; font-family: 'DynaPuff', cursive; font-size: 1.6em; margin-bottom: 20px; animation: pulse-vs 0.5s infinite alternate; border: 3px solid #FAED27;">
+                🔥 GET READY... 3
+            </div>
+
+            <!-- The Duel Main Grid -->
+            <div class="duel-grid">
+                <!-- ================= PLAYER 1 (BLUE) ================= -->
+                <div id="p1-card" style="background: #f0f7ff; border: 3px solid #0066FF; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #0044CC; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
+                    <div>
+                        <!-- Player 1 Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                <span style="font-size: 1.4em;">🔵</span>
+                                <input id="p1-name-input" type="text" value="Player 1" maxlength="15" style="font-family: 'DynaPuff', cursive; font-size: 1.2em; font-weight: bold; color: #0044CC; border: 2px solid #bfdbfe; border-radius: 10px; padding: 4px 8px; background: white; width: 100%; max-width: 150px;" title="Click to change Player 1 name" onchange="duelUpdatePlayerNames()">
+                            </div>
+                            <span style="background: #0066FF; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">Side A</span>
+                        </div>
+
+                        <!-- Player 1 Digital Timer -->
+                        <div style="background: white; border: 2px solid #0066FF; border-radius: 16px; padding: 16px 10px; text-align: center; margin-bottom: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                            <div id="p1-timer-display" style="font-family: 'Consolas', 'Courier New', monospace; font-size: 3.4em; font-weight: 900; color: #0044CC; letter-spacing: -1px; line-height: 1;">
+                                0.000
+                            </div>
+                            <div id="p1-status-pill" style="display: inline-block; margin-top: 8px; background: #e0f2fe; color: #0369a1; font-weight: 800; font-size: 0.78em; padding: 3px 12px; border-radius: 12px; text-transform: uppercase;">
+                                Ready to Race
+                            </div>
+                        </div>
+
+                        <!-- Player 1 Interactive Mat -->
+                        <div id="p1-mat" class="duel-mat" style="background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); color: white; border: 3px solid #1e3a8a; border-radius: 18px; padding: 22px 14px; text-align: center; cursor: pointer; box-shadow: 0 5px 0 #1e3a8a; transition: transform 0.1s, background 0.15s; margin-bottom: 14px;">
+                            <div style="font-size: 2em; margin-bottom: 4px; pointer-events: none;">✋ ✋</div>
+                            <div id="p1-mat-label" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; font-weight: bold; pointer-events: none;">
+                                HOLD MAT TO READY
+                            </div>
+                            <div style="font-size: 0.75em; opacity: 0.85; margin-top: 4px; pointer-events: none;">
+                                Desktop Keys: <strong>Q, W, A, S, Z, or Space</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Player 1 Footer Stats & Penalties -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: white; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 6px 12px; font-size: 0.85em; font-weight: 600; color: #475569; margin-bottom: 10px;">
+                            <span>Best: <strong id="p1-best-display" style="color: #0044CC;">--</strong></span>
+                            <span>Last: <strong id="p1-last-display" style="color: #0044CC;">--</strong></span>
+                        </div>
+                        <div style="display: flex; gap: 6px; justify-content: center;">
+                            <button onclick="duelAddPenalty(1, '+2')" class="nav-button" style="margin: 0; padding: 4px 10px; font-size: 0.78em; background: #e0f2fe; color: #0284c7; border-radius: 8px;">+2</button>
+                            <button onclick="duelAddPenalty(1, 'DNF')" class="nav-button" style="margin: 0; padding: 4px 10px; font-size: 0.78em; background: #fee2e2; color: #dc2626; border-radius: 8px;">DNF</button>
+                            <button onclick="duelResetPlayerTimer(1)" class="nav-button" style="margin: 0; padding: 4px 10px; font-size: 0.78em; background: #f1f5f9; color: #64748b; border-radius: 8px;">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= CENTER VS COLUMN ================= -->
+                <div class="duel-vs-col" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-width: 170px; padding: 10px 0;">
+                    <div style="background: linear-gradient(135deg, #FF0055 0%, #7928CA 100%); color: #FAED27; font-family: 'DynaPuff', cursive; font-size: 1.8em; font-weight: 900; width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #1e272e; box-shadow: 0 5px 0 #1e272e; animation: pulse-vs 2.5s infinite ease-in-out; margin-bottom: 14px;">
+                        VS
+                    </div>
+
+                    <!-- Round Result / Race Status Banner -->
+                    <div id="duel-result-card" style="background: white; border: 2.5px solid #1e272e; border-radius: 16px; padding: 12px 14px; box-shadow: 0 4px 0 #1e272e; width: 100%; max-width: 220px; margin-bottom: 14px;">
+                        <div style="font-size: 0.75em; text-transform: uppercase; font-weight: 800; color: #64748b; margin-bottom: 4px;">Duel Status</div>
+                        <div id="duel-result-text" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; color: #1e272e; line-height: 1.3;">
+                            Ready to Race! Both cubers get set!
+                        </div>
+                    </div>
+
+                    <!-- Next Round Button -->
+                    <button id="duel-next-round-btn" onclick="duelNextRound()" class="cube-button" style="font-size: 0.95em; padding: 10px 18px; background: linear-gradient(135deg, #2ECC71 0%, #27ae60 100%); color: white; border-radius: 14px; margin: 0; width: 100%; max-width: 200px;">
+                        ⚡ Next Round
+                    </button>
+                </div>
+
+                <!-- ================= PLAYER 2 (RED) ================= -->
+                <div id="p2-card" style="background: #fff5f5; border: 3px solid #FF3838; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #CC1E2F; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
+                    <div>
+                        <!-- Player 2 Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                <span style="font-size: 1.4em;">🔴</span>
+                                <input id="p2-name-input" type="text" value="Player 2" maxlength="15" style="font-family: 'DynaPuff', cursive; font-size: 1.2em; font-weight: bold; color: #CC1E2F; border: 2px solid #fecaca; border-radius: 10px; padding: 4px 8px; background: white; width: 100%; max-width: 150px;" title="Click to change Player 2 name" onchange="duelUpdatePlayerNames()">
+                            </div>
+                            <span style="background: #FF3838; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">Side B</span>
+                        </div>
+
+                        <!-- Player 2 Digital Timer -->
+                        <div style="background: white; border: 2px solid #FF3838; border-radius: 16px; padding: 16px 10px; text-align: center; margin-bottom: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                            <div id="p2-timer-display" style="font-family: 'Consolas', 'Courier New', monospace; font-size: 3.4em; font-weight: 900; color: #CC1E2F; letter-spacing: -1px; line-height: 1;">
+                                0.000
+                            </div>
+                            <div id="p2-status-pill" style="display: inline-block; margin-top: 8px; background: #fee2e2; color: #b91c1c; font-weight: 800; font-size: 0.78em; padding: 3px 12px; border-radius: 12px; text-transform: uppercase;">
+                                Ready to Race
+                            </div>
+                        </div>
+
+                        <!-- Player 2 Interactive Mat -->
+                        <div id="p2-mat" class="duel-mat" style="background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%); color: white; border: 3px solid #991b1b; border-radius: 18px; padding: 22px 14px; text-align: center; cursor: pointer; box-shadow: 0 5px 0 #991b1b; transition: transform 0.1s, background 0.15s; margin-bottom: 14px;">
+                            <div style="font-size: 2em; margin-bottom: 4px; pointer-events: none;">✋ ✋</div>
+                            <div id="p2-mat-label" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; font-weight: bold; pointer-events: none;">
+                                HOLD MAT TO READY
+                            </div>
+                            <div style="font-size: 0.75em; opacity: 0.85; margin-top: 4px; pointer-events: none;">
+                                Desktop Keys: <strong>P, O, L, K, M, or Enter</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Player 2 Footer Stats & Penalties -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: white; border: 1.5px solid #fecaca; border-radius: 10px; padding: 6px 12px; font-size: 0.85em; font-weight: 600; color: #475569; margin-bottom: 10px;">
+                            <span>Best: <strong id="p2-best-display" style="color: #CC1E2F;">--</strong></span>
+                            <span>Last: <strong id="p2-last-display" style="color: #CC1E2F;">--</strong></span>
+                        </div>
+                        <div style="display: flex; gap: 6px; justify-content: center;">
+                            <button onclick="duelAddPenalty(2, '+2')" class="nav-button" style="margin: 0; padding: 4px 10px; font-size: 0.78em; background: #fee2e2; color: #dc2626; border-radius: 8px;">+2</button>
+                            <button onclick="duelAddPenalty(2, 'DNF')" class="nav-button" style="margin: 0; padding: 4px 10px; font-size: 0.78em; background: #fee2e2; color: #dc2626; border-radius: 8px;">DNF</button>
+                            <button onclick="duelResetPlayerTimer(2)" class="nav-button" style="margin: 0; padding: 4px 10px; font-size: 0.78em; background: #f1f5f9; color: #64748b; border-radius: 8px;">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How To Play Instructions Bar -->
+            <div style="margin-top: 24px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 14px 20px; font-size: 0.9em; color: #475569; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.4em;">🎮</span>
+                    <div>
+                        <strong>How to Duel:</strong> Hold your mat until it turns green (or hold keyboard key), then release to start! Tap again when you solve your cube.
+                    </div>
+                </div>
+                <div style="display: flex; gap: 14px; font-size: 0.85em; font-weight: 600;">
+                    <span style="color: #0066FF;">⌨️ P1: [Q] [W] [A] [S] [Z] [Space]</span>
+                    <span style="color: #FF3838;">⌨️ P2: [P] [O] [L] [K] [M] [Enter]</span>
+                    <span>📱 Multi-Touch Enabled</span>
+                </div>
+            </div>
+
+            <!-- Match History Log (Collapsible) -->
+            <details style="margin-top: 16px; background: white; border: 2px solid #e2e8f0; border-radius: 14px; padding: 10px 16px;">
+                <summary style="cursor: pointer; font-weight: 700; color: #1e272e; font-size: 0.9em;">
+                    📜 Match Solve History (<span id="duel-history-count">0</span> rounds)
+                </summary>
+                <div id="duel-history-list" style="margin-top: 10px; max-height: 180px; overflow-y: auto; font-size: 0.85em; color: #334155;">
+                    <div style="color: #94a3b8; font-style: italic;">No rounds completed yet. Start your first duel!</div>
+                </div>
+            </details>
+        </section>
+
+        <!-- 1 VS 1 BATTLE MODE SCRIPT -->
+        <script>
+            const duelState = {
+                event: '3x3',
+                scramble: '',
+                soundEnabled: true,
+                holdMode: true,
+                round: 1,
+                p1: {
+                    name: 'Player 1',
+                    score: 0,
+                    state: 'idle', // idle, holding, ready, running, finished
+                    startTime: 0,
+                    elapsed: 0,
+                    penalty: 0, // 0, '+2', 'DNF'
+                    timerId: null,
+                    holdTimeout: null,
+                    bestTime: null,
+                    lastTime: null,
+                    isHoldingKey: false,
+                    isHoldingTouch: false
+                },
+                p2: {
+                    name: 'Player 2',
+                    score: 0,
+                    state: 'idle',
+                    startTime: 0,
+                    elapsed: 0,
+                    penalty: 0,
+                    timerId: null,
+                    holdTimeout: null,
+                    bestTime: null,
+                    lastTime: null,
+                    isHoldingKey: false,
+                    isHoldingTouch: false
+                }
+            };
+
+            let duelAudioCtx = null;
+            function duelGetAudioCtx() {
+                if (!duelAudioCtx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) duelAudioCtx = new AudioCtx();
+                }
+                if (duelAudioCtx && duelAudioCtx.state === 'suspended') {
+                    duelAudioCtx.resume();
+                }
+                return duelAudioCtx;
+            }
+
+            function duelPlayTone(freq, type = 'sine', duration = 0.15, delay = 0) {
+                if (!duelState.soundEnabled) return;
+                try {
+                    const ctx = duelGetAudioCtx();
+                    if (!ctx) return;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+                    gain.gain.setValueAtTime(0.18, ctx.currentTime + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + duration);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + delay);
+                    osc.stop(ctx.currentTime + delay + duration);
+                } catch(e) {}
+            }
+
+            function duelPlayFanfare() {
+                if (!duelState.soundEnabled) return;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    duelPlayTone(freq, 'triangle', 0.28, idx * 0.12);
+                });
+            }
+
+            function duelFormatTime(seconds) {
+                if (seconds === null || seconds === undefined || isNaN(seconds)) return '--';
+                if (seconds === Infinity) return 'DNF';
+                if (seconds < 60) {
+                    return seconds.toFixed(3);
+                }
+                const mins = Math.floor(seconds / 60);
+                const rem = (seconds % 60).toFixed(3);
+                return `${mins}:${rem < 10 ? '0' : ''}${rem}`;
+            }
+
+            function duelGenerateScramble(type = duelState.event) {
+                let scramble = [];
+                if (type === '2x2') {
+                    const moves = ['R', 'U', 'F'];
+                    const modifiers = ['', "'", '2'];
+                    let lastMove = '';
+                    while (scramble.length < 10) {
+                        const m = moves[Math.floor(Math.random() * moves.length)];
+                        if (m !== lastMove) {
+                            const mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                            scramble.push(m + mod);
+                            lastMove = m;
+                        }
+                    }
+                } else {
+                    const faces = ['R', 'L', 'U', 'D', 'F', 'B'];
+                    const modifiers = ['', "'", '2'];
+                    const opposites = { 'R': 'L', 'L': 'R', 'U': 'D', 'D': 'U', 'F': 'B', 'B': 'F' };
+                    let lastFace = '';
+                    let secondLastFace = '';
+                    while (scramble.length < 20) {
+                        const f = faces[Math.floor(Math.random() * faces.length)];
+                        if (f === lastFace) continue;
+                        if (opposites[f] === lastFace && f === secondLastFace) continue;
+                        const mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                        scramble.push(f + mod);
+                        secondLastFace = lastFace;
+                        lastFace = f;
+                    }
+                }
+                duelState.scramble = scramble.join(' ');
+                const scrambleEl = document.getElementById('duel-scramble-text');
+                if (scrambleEl) scrambleEl.textContent = duelState.scramble;
+                return duelState.scramble;
+            }
+
+            function duelSetEvent(evt) {
+                duelState.event = evt;
+                const btn3 = document.getElementById('duel-event-3x3');
+                const btn2 = document.getElementById('duel-event-2x2');
+                if (evt === '3x3') {
+                    btn3.style.backgroundColor = '#0066FF';
+                    btn3.style.color = '#ffffff';
+                    btn2.style.backgroundColor = '#e2e8f0';
+                    btn2.style.color = '#334155';
+                } else {
+                    btn2.style.backgroundColor = '#0066FF';
+                    btn2.style.color = '#ffffff';
+                    btn3.style.backgroundColor = '#e2e8f0';
+                    btn3.style.color = '#334155';
+                }
+                duelGenerateScramble(evt);
+            }
+
+            function duelToggleSound() {
+                duelState.soundEnabled = !duelState.soundEnabled;
+                const btn = document.getElementById('duel-sound-btn');
+                if (btn) {
+                    btn.textContent = duelState.soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+                    btn.style.color = duelState.soundEnabled ? '#0284c7' : '#64748b';
+                }
+            }
+
+            function duelToggleHoldMode() {
+                duelState.holdMode = !duelState.holdMode;
+                const btn = document.getElementById('duel-mode-btn');
+                if (btn) {
+                    btn.textContent = duelState.holdMode ? '⏱️ Hold: 0.3s' : '⚡ Quick Tap';
+                    btn.style.background = duelState.holdMode ? '#fef3c7' : '#dcfce7';
+                    btn.style.color = duelState.holdMode ? '#b45309' : '#15803d';
+                }
+            }
+
+            function duelCopyScramble() {
+                const text = duelState.scramble;
+                const btn = document.getElementById('duel-copy-scramble-btn');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        if (btn) {
+                            btn.textContent = 'Copied! ✓';
+                            setTimeout(() => { if (btn) btn.textContent = '📋 Copy'; }, 1500);
+                        }
+                    });
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    if (btn) {
+                        btn.textContent = 'Copied! ✓';
+                        setTimeout(() => { if (btn) btn.textContent = '📋 Copy'; }, 1500);
+                    }
+                }
+            }
+
+            function duelStartSyncCountdown() {
+                const banner = document.getElementById('duel-sync-countdown-banner');
+                const btn = document.getElementById('duel-countdown-btn');
+                if (!banner) return;
+                banner.style.display = 'block';
+                if (btn) btn.disabled = true;
+
+                let count = 3;
+                banner.textContent = `🔥 GET READY... ${count}`;
+                duelPlayTone(440, 'sine', 0.2);
+
+                const iv = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        banner.textContent = `🔥 GET READY... ${count}`;
+                        duelPlayTone(440, 'sine', 0.2);
+                    } else if (count === 0) {
+                        banner.textContent = `🚀 GO! GO! GO! 🚀`;
+                        banner.style.background = '#10b981';
+                        banner.style.borderColor = '#059669';
+                        banner.style.color = '#ffffff';
+                        duelPlayTone(880, 'sine', 0.35);
+                    } else {
+                        clearInterval(iv);
+                        setTimeout(() => {
+                            banner.style.display = 'none';
+                            banner.style.background = '#1e272e';
+                            banner.style.borderColor = '#FAED27';
+                            banner.style.color = '#FAED27';
+                            if (btn) btn.disabled = false;
+                        }, 900);
+                    }
+                }, 1000);
+            }
+
+            function duelUpdatePlayerNames() {
+                const p1Val = (document.getElementById('p1-name-input').value || '').trim() || 'Player 1';
+                const p2Val = (document.getElementById('p2-name-input').value || '').trim() || 'Player 2';
+                duelState.p1.name = p1Val;
+                duelState.p2.name = p2Val;
+                document.getElementById('duel-p1-header-name').textContent = p1Val;
+                document.getElementById('duel-p2-header-name').textContent = p2Val;
+            }
+
+            function duelPlayerPressDown(playerNum) {
+                const p = playerNum === 1 ? duelState.p1 : duelState.p2;
+                const mat = document.getElementById(playerNum === 1 ? 'p1-mat' : 'p2-mat');
+                const matLabel = document.getElementById(playerNum === 1 ? 'p1-mat-label' : 'p2-mat-label');
+                const statusPill = document.getElementById(playerNum === 1 ? 'p1-status-pill' : 'p2-status-pill');
+
+                if (p.state === 'running') {
+                    duelPlayerStop(playerNum);
+                    return;
+                }
+
+                if (p.state === 'idle' || p.state === 'finished') {
+                    p.penalty = 0;
+                    if (duelState.holdMode) {
+                        p.state = 'holding';
+                        mat.style.background = '#e67e22';
+                        matLabel.textContent = 'HOLD STEADY...';
+                        statusPill.textContent = 'Holding...';
+                        statusPill.style.background = '#fef3c7';
+                        statusPill.style.color = '#b45309';
+
+                        clearTimeout(p.holdTimeout);
+                        p.holdTimeout = setTimeout(() => {
+                            if (p.state === 'holding') {
+                                p.state = 'ready';
+                                mat.style.background = '#10b981';
+                                matLabel.textContent = 'READY! RELEASE TO GO!';
+                                statusPill.textContent = 'READY!';
+                                statusPill.style.background = '#dcfce7';
+                                statusPill.style.color = '#15803d';
+                                duelPlayTone(660, 'sine', 0.12);
+                            }
+                        }, 300);
+                    } else {
+                        p.state = 'ready';
+                        mat.style.background = '#10b981';
+                        matLabel.textContent = 'READY! RELEASE TO GO!';
+                        statusPill.textContent = 'READY!';
+                        statusPill.style.background = '#dcfce7';
+                        statusPill.style.color = '#15803d';
+                    }
+                }
+            }
+
+            function duelPlayerPressUp(playerNum) {
+                const p = playerNum === 1 ? duelState.p1 : duelState.p2;
+                const mat = document.getElementById(playerNum === 1 ? 'p1-mat' : 'p2-mat');
+                const matLabel = document.getElementById(playerNum === 1 ? 'p1-mat-label' : 'p2-mat-label');
+                const statusPill = document.getElementById(playerNum === 1 ? 'p1-status-pill' : 'p2-status-pill');
+                const timerDisplay = document.getElementById(playerNum === 1 ? 'p1-timer-display' : 'p2-timer-display');
+                const card = document.getElementById(playerNum === 1 ? 'p1-card' : 'p2-card');
+
+                clearTimeout(p.holdTimeout);
+
+                if (p.state === 'ready') {
+                    p.state = 'running';
+                    p.startTime = performance.now();
+                    card.classList.remove('duel-winner-glow-p1', 'duel-winner-glow-p2');
+                    mat.style.background = playerNum === 1 ? 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)' : 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)';
+                    matLabel.textContent = 'TAP HERE TO FINISH!';
+                    statusPill.textContent = 'SOLVING...';
+                    statusPill.style.background = '#e0f2fe';
+                    statusPill.style.color = '#0284c7';
+
+                    clearInterval(p.timerId);
+                    p.timerId = setInterval(() => {
+                        const elapsed = (performance.now() - p.startTime) / 1000;
+                        timerDisplay.textContent = duelFormatTime(elapsed);
+                    }, 10);
+
+                    duelUpdateCenterRaceStatus();
+                } else if (p.state === 'holding') {
+                    p.state = 'idle';
+                    mat.style.background = playerNum === 1 ? 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)' : 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)';
+                    matLabel.textContent = 'HOLD MAT TO READY';
+                    statusPill.textContent = 'Released early!';
+                    statusPill.style.background = '#fef2f2';
+                    statusPill.style.color = '#991b1b';
+                    setTimeout(() => {
+                        if (p.state === 'idle') {
+                            statusPill.textContent = 'Ready to Race';
+                            statusPill.style.background = playerNum === 1 ? '#e0f2fe' : '#fee2e2';
+                            statusPill.style.color = playerNum === 1 ? '#0369a1' : '#b91c1c';
+                        }
+                    }, 1200);
+                }
+            }
+
+            function duelPlayerStop(playerNum) {
+                const p = playerNum === 1 ? duelState.p1 : duelState.p2;
+                if (p.state !== 'running') return;
+
+                clearInterval(p.timerId);
+                p.state = 'finished';
+                p.elapsed = (performance.now() - p.startTime) / 1000;
+
+                const timerDisplay = document.getElementById(playerNum === 1 ? 'p1-timer-display' : 'p2-timer-display');
+                const matLabel = document.getElementById(playerNum === 1 ? 'p1-mat-label' : 'p2-mat-label');
+                const statusPill = document.getElementById(playerNum === 1 ? 'p1-status-pill' : 'p2-status-pill');
+
+                timerDisplay.textContent = duelFormatTime(p.elapsed);
+                matLabel.textContent = 'SOLVED! HOLD FOR NEXT';
+                statusPill.textContent = 'FINISHED!';
+                statusPill.style.background = '#dcfce7';
+                statusPill.style.color = '#15803d';
+
+                duelPlayTone(880, 'sine', 0.18);
+
+                p.lastTime = p.elapsed;
+                if (p.bestTime === null || p.elapsed < p.bestTime) {
+                    p.bestTime = p.elapsed;
+                }
+                document.getElementById(playerNum === 1 ? 'p1-best-display' : 'p2-best-display').textContent = duelFormatTime(p.bestTime);
+                document.getElementById(playerNum === 1 ? 'p1-last-display' : 'p2-last-display').textContent = duelFormatTime(p.lastTime);
+
+                duelCheckOutcome();
+            }
+
+            function duelUpdateCenterRaceStatus() {
+                const p1 = duelState.p1;
+                const p2 = duelState.p2;
+                const resultText = document.getElementById('duel-result-text');
+                if (p1.state === 'running' && p2.state === 'running') {
+                    resultText.innerHTML = `⚡ <strong>RACE IN PROGRESS!</strong><br>Both cubers solving!`;
+                } else if (p1.state === 'running') {
+                    resultText.innerHTML = `⚡ <strong>${p1.name}</strong> is racing!`;
+                } else if (p2.state === 'running') {
+                    resultText.innerHTML = `⚡ <strong>${p2.name}</strong> is racing!`;
+                }
+            }
+
+            function duelCheckOutcome() {
+                const p1 = duelState.p1;
+                const p2 = duelState.p2;
+                const resultText = document.getElementById('duel-result-text');
+                const p1Card = document.getElementById('p1-card');
+                const p2Card = document.getElementById('p2-card');
+
+                if (p1.state === 'finished' && p2.state !== 'finished') {
+                    resultText.innerHTML = `⚡ <strong>${p1.name}</strong> solved in <strong>${duelFormatTime(p1.elapsed)}</strong>!<br><span style="color:#FF3838;">Waiting for ${p2.name}...</span>`;
+                } else if (p2.state === 'finished' && p1.state !== 'finished') {
+                    resultText.innerHTML = `⚡ <strong>${p2.name}</strong> solved in <strong>${duelFormatTime(p2.elapsed)}</strong>!<br><span style="color:#0066FF;">Waiting for ${p1.name}...</span>`;
+                } else if (p1.state === 'finished' && p2.state === 'finished') {
+                    const p1Val = p1.penalty === 'DNF' ? Infinity : p1.elapsed + (p1.penalty === '+2' ? 2 : 0);
+                    const p2Val = p2.penalty === 'DNF' ? Infinity : p2.elapsed + (p2.penalty === '+2' ? 2 : 0);
+
+                    if (p1Val === Infinity && p2Val === Infinity) {
+                        resultText.innerHTML = `⚠️ <strong>Both DNF!</strong><br>Click Next Round!`;
+                    } else if (p1Val < p2Val) {
+                        const diff = p2Val === Infinity ? '' : ` (+${(p2Val - p1Val).toFixed(2)}s faster)`;
+                        p1.score++;
+                        p1Card.classList.add('duel-winner-glow-p1');
+                        p2Card.classList.remove('duel-winner-glow-p2');
+                        resultText.innerHTML = `🏆 <strong>${p1.name} WINS!</strong><br>${duelFormatTime(p1Val)} vs ${duelFormatTime(p2Val)}${diff}`;
+                        duelPlayFanfare();
+                        duelAddHistory(p1.name, p1Val, p2.name, p2Val, p1.name);
+                    } else if (p2Val < p1Val) {
+                        const diff = p1Val === Infinity ? '' : ` (+${(p1Val - p2Val).toFixed(2)}s faster)`;
+                        p2.score++;
+                        p2Card.classList.add('duel-winner-glow-p2');
+                        p1Card.classList.remove('duel-winner-glow-p1');
+                        resultText.innerHTML = `🏆 <strong>${p2.name} WINS!</strong><br>${duelFormatTime(p2Val)} vs ${duelFormatTime(p1Val)}${diff}`;
+                        duelPlayFanfare();
+                        duelAddHistory(p1.name, p1Val, p2.name, p2Val, p2.name);
+                    } else {
+                        resultText.innerHTML = `🤝 <strong>IT'S A TIE!</strong><br>Both solved in ${duelFormatTime(p1Val)}!`;
+                        duelAddHistory(p1.name, p1Val, p2.name, p2Val, 'Tie');
+                    }
+
+                    document.getElementById('duel-p1-score').textContent = p1.score;
+                    document.getElementById('duel-p2-score').textContent = p2.score;
+                }
+            }
+
+            function duelAddPenalty(playerNum, penaltyType) {
+                const p = playerNum === 1 ? duelState.p1 : duelState.p2;
+                if (p.state !== 'finished') return;
+
+                if (p.penalty === penaltyType) {
+                    p.penalty = 0;
+                } else {
+                    p.penalty = penaltyType;
+                }
+
+                const timerDisplay = document.getElementById(playerNum === 1 ? 'p1-timer-display' : 'p2-timer-display');
+                const statusPill = document.getElementById(playerNum === 1 ? 'p1-status-pill' : 'p2-status-pill');
+
+                if (p.penalty === 'DNF') {
+                    timerDisplay.textContent = 'DNF';
+                    statusPill.textContent = 'DNF';
+                    statusPill.style.background = '#fee2e2';
+                    statusPill.style.color = '#dc2626';
+                } else if (p.penalty === '+2') {
+                    timerDisplay.textContent = duelFormatTime(p.elapsed + 2) + ' (+2)';
+                    statusPill.textContent = '+2 SECONDS';
+                    statusPill.style.background = '#fef3c7';
+                    statusPill.style.color = '#b45309';
+                } else {
+                    timerDisplay.textContent = duelFormatTime(p.elapsed);
+                    statusPill.textContent = 'FINISHED!';
+                    statusPill.style.background = '#dcfce7';
+                    statusPill.style.color = '#15803d';
+                }
+
+                if (duelState.p1.state === 'finished' && duelState.p2.state === 'finished') {
+                    duelCheckOutcome();
+                }
+            }
+
+            function duelResetPlayerTimer(playerNum) {
+                const p = playerNum === 1 ? duelState.p1 : duelState.p2;
+                clearInterval(p.timerId);
+                clearTimeout(p.holdTimeout);
+                p.state = 'idle';
+                p.elapsed = 0;
+                p.penalty = 0;
+
+                const timerDisplay = document.getElementById(playerNum === 1 ? 'p1-timer-display' : 'p2-timer-display');
+                const mat = document.getElementById(playerNum === 1 ? 'p1-mat' : 'p2-mat');
+                const matLabel = document.getElementById(playerNum === 1 ? 'p1-mat-label' : 'p2-mat-label');
+                const statusPill = document.getElementById(playerNum === 1 ? 'p1-status-pill' : 'p2-status-pill');
+                const card = document.getElementById(playerNum === 1 ? 'p1-card' : 'p2-card');
+
+                timerDisplay.textContent = '0.000';
+                mat.style.background = playerNum === 1 ? 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)' : 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)';
+                matLabel.textContent = 'HOLD MAT TO READY';
+                statusPill.textContent = 'Ready to Race';
+                statusPill.style.background = playerNum === 1 ? '#e0f2fe' : '#fee2e2';
+                statusPill.style.color = playerNum === 1 ? '#0369a1' : '#b91c1c';
+                card.classList.remove('duel-winner-glow-p1', 'duel-winner-glow-p2');
+            }
+
+            function duelNextRound() {
+                duelState.round++;
+                document.getElementById('duel-round-display').textContent = duelState.round;
+                duelResetPlayerTimer(1);
+                duelResetPlayerTimer(2);
+                duelGenerateScramble();
+                document.getElementById('duel-result-text').textContent = `Ready for Round ${duelState.round}! Scramble and get set!`;
+            }
+
+            function duelResetMatch() {
+                if (confirm('Reset match score and round count back to 0?')) {
+                    duelState.p1.score = 0;
+                    duelState.p2.score = 0;
+                    duelState.round = 1;
+                    document.getElementById('duel-p1-score').textContent = '0';
+                    document.getElementById('duel-p2-score').textContent = '0';
+                    document.getElementById('duel-round-display').textContent = '1';
+                    duelResetPlayerTimer(1);
+                    duelResetPlayerTimer(2);
+                    duelGenerateScramble();
+                    document.getElementById('duel-result-text').textContent = 'New match started! Ready for Round 1!';
+                    const histList = document.getElementById('duel-history-list');
+                    if (histList) histList.innerHTML = '<div style="color: #94a3b8; font-style: italic;">Scores reset. Start your next duel!</div>';
+                    const histCount = document.getElementById('duel-history-count');
+                    if (histCount) histCount.textContent = '0';
+                }
+            }
+
+            const duelHistoryRounds = [];
+            function duelAddHistory(p1Name, p1Time, p2Name, p2Time, winnerName) {
+                const historyList = document.getElementById('duel-history-list');
+                const historyCount = document.getElementById('duel-history-count');
+                if (!historyList) return;
+
+                duelHistoryRounds.unshift({
+                    round: duelState.round,
+                    p1Name,
+                    p1Time: p1Time === Infinity ? 'DNF' : duelFormatTime(p1Time),
+                    p2Name,
+                    p2Time: p2Time === Infinity ? 'DNF' : duelFormatTime(p2Time),
+                    winnerName
+                });
+
+                if (historyCount) historyCount.textContent = duelHistoryRounds.length;
+
+                historyList.innerHTML = duelHistoryRounds.map(r => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 8px; border-bottom: 1px solid #f1f5f9; gap: 8px;">
+                        <span><strong>Round ${r.round}:</strong> ${r.p1Name} (${r.p1Time}) vs ${r.p2Name} (${r.p2Time})</span>
+                        <span style="font-weight: bold; color: ${r.winnerName === 'Tie' ? '#64748b' : '#10b981'};">
+                            ${r.winnerName === 'Tie' ? '🤝 Tie' : `🏆 ${r.winnerName}`}
+                        </span>
+                    </div>
+                `).join('');
+            }
+
+            // Keyboard and Touch listeners
+            const P1_KEYS = ['KeyQ', 'KeyW', 'KeyA', 'KeyS', 'KeyZ', 'Space'];
+            const P2_KEYS = ['KeyP', 'KeyO', 'KeyL', 'KeyK', 'KeyM', 'Enter', 'NumpadEnter'];
+
+            window.addEventListener('keydown', (e) => {
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) return;
+
+                if (P1_KEYS.includes(e.code)) {
+                    if (e.code === 'Space') e.preventDefault();
+                    if (!e.repeat && !duelState.p1.isHoldingKey) {
+                        duelState.p1.isHoldingKey = true;
+                        duelPlayerPressDown(1);
+                    }
+                } else if (P2_KEYS.includes(e.code)) {
+                    if (e.code === 'Enter' || e.code === 'NumpadEnter') e.preventDefault();
+                    if (!e.repeat && !duelState.p2.isHoldingKey) {
+                        duelState.p2.isHoldingKey = true;
+                        duelPlayerPressDown(2);
+                    }
+                }
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) return;
+
+                if (P1_KEYS.includes(e.code)) {
+                    if (e.code === 'Space') e.preventDefault();
+                    duelState.p1.isHoldingKey = false;
+                    duelPlayerPressUp(1);
+                } else if (P2_KEYS.includes(e.code)) {
+                    if (e.code === 'Enter' || e.code === 'NumpadEnter') e.preventDefault();
+                    duelState.p2.isHoldingKey = false;
+                    duelPlayerPressUp(2);
+                }
+            });
+
+            function duelSetupMatListeners() {
+                const p1Mat = document.getElementById('p1-mat');
+                const p2Mat = document.getElementById('p2-mat');
+
+                if (p1Mat) {
+                    p1Mat.addEventListener('pointerdown', (e) => {
+                        e.preventDefault();
+                        duelState.p1.isHoldingTouch = true;
+                        duelPlayerPressDown(1);
+                    });
+                    const handleUp1 = (e) => {
+                        if (duelState.p1.isHoldingTouch) {
+                            e.preventDefault();
+                            duelState.p1.isHoldingTouch = false;
+                            duelPlayerPressUp(1);
+                        }
+                    };
+                    p1Mat.addEventListener('pointerup', handleUp1);
+                    p1Mat.addEventListener('pointercancel', handleUp1);
+                }
+
+                if (p2Mat) {
+                    p2Mat.addEventListener('pointerdown', (e) => {
+                        e.preventDefault();
+                        duelState.p2.isHoldingTouch = true;
+                        duelPlayerPressDown(2);
+                    });
+                    const handleUp2 = (e) => {
+                        if (duelState.p2.isHoldingTouch) {
+                            e.preventDefault();
+                            duelState.p2.isHoldingTouch = false;
+                            duelPlayerPressUp(2);
+                        }
+                    };
+                    p2Mat.addEventListener('pointerup', handleUp2);
+                    p2Mat.addEventListener('pointercancel', handleUp2);
+                }
+            }
+
+            // Auto-initialize on load
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    duelGenerateScramble();
+                    duelSetupMatListeners();
+                });
+            } else {
+                duelGenerateScramble();
+                duelSetupMatListeners();
+            }
+        </script>
 
         <div class="content-grid">
             
@@ -1758,6 +2645,7 @@
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
+                    <li><a href="#one-vs-one-section">⚔️ 1 vs 1 Battle Mode</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
