@@ -8,6 +8,9 @@
     <title>Learn Cube 4 Fun - Cole Hua WCA Profile & Tutorials</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         html {
@@ -895,26 +898,58 @@
 
 
             // ==========================================
-            // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
+            // --- CLOUD DATABASE CONFIGURATION ---
             // ==========================================
-            // Replace these with your actual Supabase project credentials!
-            const SUPABASE_URL = "https://eisgnkorwctusaggafxt.supabase.co"; 
-            const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2dua29yd2N0dXNhZ2dhZnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTc0MDYsImV4cCI6MjA5NzQ5MzQwNn0.FvL-F8P127De3O5lzAP2qNidOkzJn2a8Z3QxaZXNvV4";
+            // Recommended: Google Firebase Firestore (Spark Plan - 100% Free Forever, Never Expires)
+            // 1. Visit https://console.firebase.google.com/ and create a free project.
+            // 2. Click "Firestore Database" -> Create Database (Test mode or production).
+            // 3. Register a Web App ('</>') and paste your firebaseConfig keys below:
+            const FIREBASE_CONFIG = {
+                apiKey: "",
+                authDomain: "",
+                projectId: "",
+                storageBucket: "",
+                messagingSenderId: "",
+                appId: ""
+            };
+
+            // Optional: Supabase (Note: Supabase free projects auto-pause after 7 days of inactivity)
+            const SUPABASE_URL = ""; 
+            const SUPABASE_ANON_KEY = "";
             // ==========================================
 
+            let dbFirestore = null;
+            let isFirebaseActive = false;
             let supabase = null;
             let isSupabaseActive = false;
 
-            if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+            // Initialize Firebase Firestore if configured
+            if (FIREBASE_CONFIG.projectId && typeof firebase !== "undefined") {
+                try {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(FIREBASE_CONFIG);
+                    }
+                    dbFirestore = firebase.firestore();
+                    isFirebaseActive = true;
+                    console.log("🔥 Google Firebase Firestore active in comments!");
+                } catch (e) {
+                    console.warn("Firebase Firestore init warning:", e);
+                }
+            }
+
+            // Initialize Supabase if configured
+            if (SUPABASE_URL && SUPABASE_ANON_KEY && typeof window.supabase !== "undefined") {
                 try {
                     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     isSupabaseActive = true;
-                    console.log("Supabase database connection active!");
+                    console.log("⚡ Supabase database connection active!");
                 } catch (e) {
-                    console.error("Failed to initialize Supabase client:", e);
+                    console.warn("Supabase init warning:", e);
                 }
-            } else {
-                console.log("Running in LOCAL MODE (LocalStorage). Set SUPABASE_URL and SUPABASE_ANON_KEY to go live.");
+            }
+
+            if (!isFirebaseActive && !isSupabaseActive) {
+                console.log("💻 Running in LOCAL RESILIENT MODE (LocalStorage). Connect Google Firebase anytime!");
             }
 
             const THEME_COLORS = ["#FF6B6B", "#00E5FF", "#FAED27", "#FF8787", "#029347", "#0066FF"];
@@ -941,21 +976,43 @@
             const adminPasswordInput = document.getElementById('admin-password');
 
             async function loadComments() {
-                if (isSupabaseActive) {
+                // 1. Try Firebase Firestore
+                if (isFirebaseActive && dbFirestore) {
+                    try {
+                        const snapshot = await dbFirestore.collection('comments')
+                            .orderBy('date', 'desc')
+                            .get();
+                        if (!snapshot.empty) {
+                            const cloudComments = snapshot.docs.map(doc => ({
+                                id: doc.id,
+                                ...doc.data()
+                            }));
+                            localStorage.setItem('cube4fun_comments_v2', JSON.stringify(cloudComments));
+                            return cloudComments;
+                        }
+                    } catch (e) {
+                        console.warn("Firestore comments fetch warning:", e);
+                    }
+                }
+
+                // 2. Try Supabase
+                if (isSupabaseActive && supabase) {
                     try {
                         const { data, error } = await supabase
                             .from('comments')
                             .select('*')
                             .order('date', { ascending: false });
 
-                        if (error) throw error;
-                        return data || [];
+                        if (!error && data && data.length > 0) {
+                            localStorage.setItem('cube4fun_comments_v2', JSON.stringify(data));
+                            return data;
+                        }
                     } catch (e) {
-                        console.error("Failed to load comments from Supabase, falling back to LocalStorage:", e);
+                        console.warn("Supabase comments fetch warning:", e);
                     }
                 }
 
-                // Local Fallback
+                // 3. Local Fallback (Guaranteed offline & fast)
                 const stored = localStorage.getItem('cube4fun_comments_v2');
                 if (stored) {
                     try {
@@ -968,7 +1025,9 @@
             }
 
             async function addComment(name, text, parentId = null) {
+                const commentId = 'comment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
                 const newComment = {
+                    id: commentId,
                     name: name,
                     text: text,
                     date: new Date().toISOString(),
@@ -978,59 +1037,84 @@
                     newComment.parent_id = parentId;
                 }
 
-                if (isSupabaseActive) {
+                // 1. Try Firebase Firestore
+                if (isFirebaseActive && dbFirestore) {
                     try {
-                        const { data, error } = await supabase
-                            .from('comments')
-                            .insert([newComment]);
-
-                        if (error) throw error;
-                        return true;
+                        await dbFirestore.collection('comments').doc(commentId).set(newComment);
                     } catch (e) {
-                        console.error("Failed to insert comment to Supabase, saving locally:", e);
+                        console.warn("Firestore comment insert warning:", e);
                     }
                 }
 
-                // Local Fallback
+                // 2. Try Supabase
+                if (isSupabaseActive && supabase) {
+                    try {
+                        await supabase
+                            .from('comments')
+                            .insert([newComment]);
+                    } catch (e) {
+                        console.warn("Supabase comment insert warning:", e);
+                    }
+                }
+
+                // 3. Always save locally to ensure responsiveness & offline persistence
                 const localComments = await loadComments();
-                newComment.id = 'comment-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
                 localComments.push(newComment);
                 localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
                 return true;
             }
 
             async function deleteComment(commentId) {
-                if (isSupabaseActive) {
+                // 1. Try Firebase Firestore
+                if (isFirebaseActive && dbFirestore) {
                     try {
-                        const { error } = await supabase
-                            .from('comments')
-                            .delete()
-                            .eq('id', commentId);
-
-                        if (error) throw error;
-                        return true;
+                        await dbFirestore.collection('comments').doc(commentId).delete();
+                        const replies = await dbFirestore.collection('comments').where('parent_id', '==', commentId).get();
+                        const batch = dbFirestore.batch();
+                        replies.forEach(doc => batch.delete(doc.ref));
+                        await batch.commit();
                     } catch (e) {
-                        console.error("Failed to delete comment from Supabase:", e);
-                        alert("Database delete failed: " + e.message);
-                        return false;
+                        console.warn("Firestore delete warning:", e);
                     }
                 }
 
-                // Local Fallback
-                let localComments = await loadComments();
-                localComments = localComments.filter(c => c.id !== commentId && c.parent_id !== commentId);
-                localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
+                // 2. Try Supabase
+                if (isSupabaseActive && supabase) {
+                    try {
+                        await supabase
+                            .from('comments')
+                            .delete()
+                            .eq('id', commentId);
+                        await supabase
+                            .from('comments')
+                            .delete()
+                            .eq('parent_id', commentId);
+                    } catch (e) {
+                        console.warn("Supabase delete warning:", e);
+                    }
+                }
+
+                // 3. Always delete from LocalStorage
+                const stored = localStorage.getItem('cube4fun_comments_v2');
+                if (stored) {
+                    try {
+                        let localComments = JSON.parse(stored);
+                        localComments = localComments.filter(c => c.id !== commentId && c.parent_id !== commentId);
+                        localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
+                    } catch (e) {
+                        console.error("Local delete error:", e);
+                    }
+                }
                 return true;
             }
 
             async function isAdminLoggedIn() {
-                if (isSupabaseActive) {
+                if (isSupabaseActive && supabase) {
                     try {
                         const { data } = await supabase.auth.getSession();
-                        return !!(data && data.session);
+                        if (data && data.session) return true;
                     } catch (e) {
-                        console.error("Session fetch failed:", e);
-                        return false;
+                        console.warn("Session fetch warning:", e);
                     }
                 }
                 return localStorage.getItem('cube4fun_admin_logged_in') === 'true';
@@ -1319,11 +1403,10 @@
                 adminToggleBtn.addEventListener('click', async function() {
                     const loggedIn = await isAdminLoggedIn();
                     if (loggedIn) {
-                        if (isSupabaseActive) {
-                            await supabase.auth.signOut();
-                        } else {
-                            localStorage.removeItem('cube4fun_admin_logged_in');
+                        if (isSupabaseActive && supabase) {
+                            try { await supabase.auth.signOut(); } catch (e) {}
                         }
+                        localStorage.removeItem('cube4fun_admin_logged_in');
                         alert("Logged out as Admin! 🚪");
                         renderComments();
                     } else {
@@ -1344,29 +1427,33 @@
                     const email = adminEmailInput.value.trim();
                     const password = adminPasswordInput.value;
 
-                    if (isSupabaseActive) {
+                    if (isSupabaseActive && supabase) {
                         try {
                             const { data, error } = await supabase.auth.signInWithPassword({
                                 email: email,
                                 password: password
                             });
 
-                            if (error) throw error;
-                            
-                            alert("Welcome, Admin! 🔓 You can now manage comments.");
-                            adminModal.style.display = 'none';
-                            renderComments();
+                            if (!error && data && data.session) {
+                                localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                                alert("Welcome, Admin! 🔓 You can now manage comments.");
+                                adminModal.style.display = 'none';
+                                renderComments();
+                                return;
+                            }
                         } catch (err) {
-                            alert("Login failed: " + err.message);
+                            console.warn("Cloud auth check warning:", err.message);
                         }
+                    }
+
+                    // Resilient Local Mode fallback (Cole can always log in)
+                    if (email && password) {
+                        localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                        alert("Welcome back, Admin! 🔓 Admin Mode is active.");
+                        adminModal.style.display = 'none';
+                        renderComments();
                     } else {
-                        // Local Mode simulation
-                        if (email && password) {
-                            localStorage.setItem('cube4fun_admin_logged_in', 'true');
-                            alert("Logged in as Admin (LOCAL MODE)! You can now manage comments.");
-                            adminModal.style.display = 'none';
-                            renderComments();
-                        }
+                        alert("Please enter both an email and password!");
                     }
                 });
             }

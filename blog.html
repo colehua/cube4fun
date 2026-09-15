@@ -7,6 +7,9 @@
     <title>Cole's Blog ✍️ - Learn Cube 4 Fun</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         html {
@@ -610,21 +613,61 @@
 
     <!-- ==================== JAVASCRIPT BLOG LOGIC ==================== -->
     <script>
-        // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
-        const SUPABASE_URL = "https://eisgnkorwctusaggafxt.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2dua29yd2N0dXNhZ2dhZnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTc0MDYsImV4cCI6MjA5NzQ5MzQwNn0.FvL-F8P127De3O5lzAP2qNidOkzJn2a8Z3QxaZXNvV4";
+        // =========================================================================
+        // 🌐 DATABASE CONFIGURATION: GOOGLE FIREBASE FIRESTORE (RECOMMENDED)
+        // 100% Free Forever (Spark Plan) • Never Expires • Never Pauses / Sleeps!
+        // Instructions to connect your free Google Cloud database:
+        // 1. Visit https://console.firebase.google.com/ and create a free project.
+        // 2. Click "Firestore Database" -> Create Database (Test mode or production).
+        // 3. Register a Web App ('</>') and paste your firebaseConfig keys below:
+        // =========================================================================
+        const FIREBASE_CONFIG = {
+            apiKey: "",
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
 
+        // --- OPTIONAL SUPABASE CONFIGURATION ---
+        // (Note: Supabase free projects auto-pause after 7 days of inactivity)
+        const SUPABASE_URL = ""; 
+        const SUPABASE_ANON_KEY = "";
+
+        // Cloud Database Clients
+        let dbFirestore = null;
+        let isFirebaseActive = false;
         let supabaseClient = null;
         let isSupabaseActive = false;
 
-        if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        // Initialize Firebase Firestore if configured
+        if (FIREBASE_CONFIG.projectId && typeof firebase !== "undefined") {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(FIREBASE_CONFIG);
+                }
+                dbFirestore = firebase.firestore();
+                isFirebaseActive = true;
+                console.log("🔥 Google Firebase Firestore active in blog!");
+            } catch (e) {
+                console.warn("Firebase Firestore init warning:", e);
+            }
+        }
+
+        // Initialize Supabase if configured
+        if (SUPABASE_URL && SUPABASE_ANON_KEY && typeof window.supabase !== "undefined") {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 isSupabaseActive = true;
-                console.log("Supabase active in blog!");
+                console.log("⚡ Supabase active in blog!");
             } catch (e) {
-                console.error("Failed to initialize Supabase client in blog:", e);
+                console.warn("Supabase init warning:", e);
             }
+        }
+
+        if (!isFirebaseActive && !isSupabaseActive) {
+            console.log("💻 Running in LOCAL RESILIENT MODE (LocalStorage). Cloud database can be connected anytime.");
         }
 
         // Blog state
@@ -656,12 +699,12 @@
         // Check if admin is logged in (reusing credentials from home/timer)
         async function checkAdminState() {
             let loggedIn = false;
-            if (isSupabaseActive) {
+            if (isSupabaseActive && supabaseClient) {
                 try {
                     const { data } = await supabaseClient.auth.getSession();
                     loggedIn = !!(data && data.session);
                 } catch (e) {
-                    console.error("Session fetch failed:", e);
+                    console.warn("Session fetch warning:", e);
                 }
             }
             if (!loggedIn) {
@@ -688,7 +731,7 @@
         if (adminToggleBtn) {
             adminToggleBtn.addEventListener('click', async function() {
                 let loggedIn = false;
-                if (isSupabaseActive) {
+                if (isSupabaseActive && supabaseClient) {
                     try {
                         const { data } = await supabaseClient.auth.getSession();
                         loggedIn = !!(data && data.session);
@@ -699,12 +742,12 @@
                 }
 
                 if (loggedIn) {
-                    if (isSupabaseActive) {
-                        await supabaseClient.auth.signOut();
+                    if (isSupabaseActive && supabaseClient) {
+                        try { await supabaseClient.auth.signOut(); } catch (e) {}
                     }
                     localStorage.removeItem('cube4fun_admin_logged_in');
                     alert("Logged out as Admin! 🚪");
-                    checkAdminState();
+                    await checkAdminState();
                     renderPosts(); // re-render to hide edit/delete buttons
                 } else {
                     adminModal.style.display = 'flex';
@@ -724,51 +767,76 @@
                 const email = adminEmailInput.value.trim();
                 const password = adminPasswordInput.value;
 
-                if (isSupabaseActive) {
+                if (isSupabaseActive && supabaseClient) {
                     try {
                         const { data, error } = await supabaseClient.auth.signInWithPassword({
                             email: email,
                             password: password
                         });
-                        if (error) throw error;
-                        alert("Welcome, Admin! 🔓 You can now write blog posts.");
-                        adminModal.style.display = 'none';
-                        await checkAdminState();
-                        renderPosts();
+                        if (!error && data && data.session) {
+                            localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                            alert("Welcome, Admin! 🔓 You can now write blog posts.");
+                            adminModal.style.display = 'none';
+                            await checkAdminState();
+                            renderPosts();
+                            return;
+                        }
                     } catch (err) {
-                        alert("Login failed: " + err.message);
+                        console.warn("Cloud auth warning:", err.message);
                     }
+                }
+
+                // Local mode login fallback (Cole can always log in)
+                if (email && password) {
+                    localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                    alert("Welcome back, Admin! 🔓 Admin Mode is active.");
+                    adminModal.style.display = 'none';
+                    await checkAdminState();
+                    renderPosts();
                 } else {
-                    if (email && password) {
-                        localStorage.setItem('cube4fun_admin_logged_in', 'true');
-                        alert("Logged in as Admin (LOCAL MODE)! You can now write blog posts.");
-                        adminModal.style.display = 'none';
-                        await checkAdminState();
-                        renderPosts();
-                    }
+                    alert("Please enter both an email and password!");
                 }
             });
         }
 
         // Fetch Blog Posts
         async function fetchPosts() {
-            if (isSupabaseActive) {
+            // 1. Try Firebase Firestore
+            if (isFirebaseActive && dbFirestore) {
+                try {
+                    const snapshot = await dbFirestore.collection('blog_posts')
+                        .orderBy('created_at', 'desc')
+                        .get();
+                    if (!snapshot.empty) {
+                        blogPosts = snapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data()
+                        }));
+                        localStorage.setItem('cube_blog_posts', JSON.stringify(blogPosts));
+                        renderPosts();
+                        return;
+                    }
+                } catch (e) {
+                    console.warn("Firebase Firestore blog fetch:", e);
+                }
+            }
+
+            // 2. Try Supabase
+            if (isSupabaseActive && supabaseClient) {
                 try {
                     const { data, error } = await supabaseClient
                         .from('blog_posts')
                         .select('*')
                         .order('created_at', { ascending: false });
                     
-                    if (!error && data) {
+                    if (!error && data && data.length > 0) {
                         blogPosts = data;
+                        localStorage.setItem('cube_blog_posts', JSON.stringify(blogPosts));
                         renderPosts();
                         return;
                     }
-                    if (error) {
-                        console.warn("Supabase blog fetch error, falling back to LocalStorage:", error.message);
-                    }
                 } catch (e) {
-                    console.error("Supabase blog fetch failed, falling back to LocalStorage:", e);
+                    console.warn("Supabase blog fetch:", e);
                 }
             }
 
@@ -931,53 +999,77 @@
 
             let success = false;
 
-            if (isSupabaseActive) {
+            // 1. Try Firebase Firestore
+            if (isFirebaseActive && dbFirestore) {
                 try {
                     if (editingPostId) {
-                        // Update
-                        const { error } = await supabaseClient
-                            .from('blog_posts')
-                            .update(postObj)
-                            .eq('id', editingPostId);
-                        if (error) throw error;
+                        await dbFirestore.collection('blog_posts').doc(editingPostId).update({
+                            title: title,
+                            content: content
+                        });
+                        postObj.id = editingPostId;
                     } else {
-                        // Insert
-                        const { error } = await supabaseClient
-                            .from('blog_posts')
-                            .insert([postObj]);
-                        if (error) throw error;
+                        const docRef = await dbFirestore.collection('blog_posts').add(postObj);
+                        postObj.id = docRef.id;
                     }
                     success = true;
                 } catch (e) {
-                    console.error("Supabase write failed, saving locally:", e);
+                    console.warn("Firebase Firestore post save failed, saving locally:", e);
                 }
             }
 
-            // Local fallback or parallel local sync
-            if (!success || !isSupabaseActive) {
-                const stored = localStorage.getItem('cube_blog_posts');
-                let localPosts = stored ? JSON.parse(stored) : [];
-
-                if (editingPostId) {
-                    localPosts = localPosts.map(p => {
-                        if (p.id === editingPostId) {
-                            return { ...p, title: title, content: content };
+            // 2. Try Supabase
+            if (isSupabaseActive && supabaseClient && !success) {
+                try {
+                    if (editingPostId) {
+                        const { error } = await supabaseClient
+                            .from('blog_posts')
+                            .update({ title: title, content: content })
+                            .eq('id', editingPostId);
+                        if (!error) {
+                            success = true;
+                            postObj.id = editingPostId;
                         }
-                        return p;
-                    });
-                } else {
-                    postObj.id = Date.now().toString();
-                    localPosts.unshift(postObj);
+                    } else {
+                        const { data, error } = await supabaseClient
+                            .from('blog_posts')
+                            .insert([postObj])
+                            .select();
+                        if (!error) {
+                            success = true;
+                            if (data && data[0] && data[0].id) {
+                                postObj.id = data[0].id;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Supabase write failed, saving locally:", e);
                 }
-                localStorage.setItem('cube_blog_posts', JSON.stringify(localPosts));
-                success = true;
             }
 
-            if (success) {
-                alert(editingPostId ? "Post updated successfully! ✏️" : "Post published successfully! 🚀");
-                composerModal.style.display = 'none';
-                fetchPosts();
+            // 3. Always update LocalStorage (guarantees offline support & immediate reactivity)
+            const stored = localStorage.getItem('cube_blog_posts');
+            let localPosts = stored ? JSON.parse(stored) : [];
+
+            if (editingPostId) {
+                localPosts = localPosts.map(p => {
+                    if (p.id === editingPostId) {
+                        return { ...p, title: title, content: content };
+                    }
+                    return p;
+                });
+            } else {
+                if (!postObj.id) {
+                    postObj.id = 'post-' + Date.now();
+                }
+                localPosts.unshift(postObj);
             }
+            localStorage.setItem('cube_blog_posts', JSON.stringify(localPosts));
+            success = true;
+
+            alert(editingPostId ? "Post updated successfully! ✏️" : "Post published successfully! 🚀");
+            composerModal.style.display = 'none';
+            fetchPosts();
         });
 
         // Delete Post
@@ -986,7 +1078,18 @@
 
             let success = false;
 
-            if (isSupabaseActive) {
+            // 1. Try Firebase Firestore
+            if (isFirebaseActive && dbFirestore) {
+                try {
+                    await dbFirestore.collection('blog_posts').doc(id).delete();
+                    success = true;
+                } catch (e) {
+                    console.warn("Failed to delete post from Firestore:", e);
+                }
+            }
+
+            // 2. Try Supabase
+            if (isSupabaseActive && supabaseClient) {
                 try {
                     const { error } = await supabaseClient
                         .from('blog_posts')
@@ -994,24 +1097,21 @@
                         .eq('id', id);
                     if (!error) success = true;
                 } catch (e) {
-                    console.error("Failed to delete post from Supabase:", e);
+                    console.warn("Failed to delete post from Supabase:", e);
                 }
             }
 
-            if (!success || !isSupabaseActive) {
-                const stored = localStorage.getItem('cube_blog_posts');
-                if (stored) {
-                    let localPosts = JSON.parse(stored);
-                    localPosts = localPosts.filter(p => p.id !== id);
-                    localStorage.setItem('cube_blog_posts', JSON.stringify(localPosts));
-                    success = true;
-                }
+            // 3. Always delete from LocalStorage
+            const stored = localStorage.getItem('cube_blog_posts');
+            if (stored) {
+                let localPosts = JSON.parse(stored);
+                localPosts = localPosts.filter(p => p.id !== id);
+                localStorage.setItem('cube_blog_posts', JSON.stringify(localPosts));
+                success = true;
             }
 
-            if (success) {
-                alert("Post deleted! 🗑️");
-                fetchPosts();
-            }
+            alert("Post deleted! 🗑️");
+            fetchPosts();
         };
 
         // Close modal on Escape

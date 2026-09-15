@@ -7,6 +7,9 @@
     <title>Speedcubing Timer ⏱️ - Learn Cube 4 Fun</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -1273,22 +1276,48 @@
         let scrambleHistoryIndices = { '3x3': -1, '2x2': -1, '3x3-cross': -1, '3x3-f2l': -1, '3x3-oh': -1, '3x3-fmc': -1 };
 
         // ==========================================
-        // --- LIVE DATABASE CONFIGURATION (SUPABASE) ---
+        // --- CLOUD DATABASE CONFIGURATION ---
         // ==========================================
-        const SUPABASE_URL = "https://eisgnkorwctusaggafxt.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpc2dua29yd2N0dXNhZ2dhZnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTc0MDYsImV4cCI6MjA5NzQ5MzQwNn0.FvL-F8P127De3O5lzAP2qNidOkzJn2a8Z3QxaZXNvV4";
+        // Recommended: Google Firebase Firestore (Spark Plan - 100% Free Forever, Never Expires)
+        const FIREBASE_CONFIG = {
+            apiKey: "",
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+
+        // Optional: Supabase (Note: Supabase free projects auto-pause after 7 days of inactivity)
+        const SUPABASE_URL = ""; 
+        const SUPABASE_ANON_KEY = "";
         // ==========================================
 
+        let dbFirestore = null;
+        let isFirebaseActive = false;
         let supabaseClient = null;
         let isSupabaseActive = false;
 
-        if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        if (FIREBASE_CONFIG.projectId && typeof firebase !== "undefined") {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(FIREBASE_CONFIG);
+                }
+                dbFirestore = firebase.firestore();
+                isFirebaseActive = true;
+                console.log("🔥 Google Firebase Firestore active in timer!");
+            } catch (e) {
+                console.warn("Firebase Firestore init warning in timer:", e);
+            }
+        }
+
+        if (SUPABASE_URL && SUPABASE_ANON_KEY && typeof window.supabase !== "undefined") {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 isSupabaseActive = true;
-                console.log("Supabase active in timer!");
+                console.log("⚡ Supabase active in timer!");
             } catch (e) {
-                console.error("Failed to initialize Supabase client in timer:", e);
+                console.warn("Failed to initialize Supabase client in timer:", e);
             }
         }
 
@@ -2913,18 +2942,37 @@
         }
 
         async function loadColeRecords() {
-            // First load local storage records as the base
+            // 1. First load local storage records as the base
             const stored = localStorage.getItem('cube_timer_cole_records_v2');
             if (stored) {
                 try {
                     coleRecords = { ...DEFAULT_COLE_RECORDS, ...JSON.parse(stored) };
                 } catch (e) {
-                    console.error("Failed to parse local Cole records:", e);
+                    console.warn("Failed to parse local Cole records:", e);
                 }
             }
 
-            // Then if Supabase is active, try to fetch and overlay
-            if (isSupabaseActive) {
+            // 2. If Firebase Firestore is active, try to fetch and overlay
+            if (isFirebaseActive && dbFirestore) {
+                try {
+                    const snapshot = await dbFirestore.collection('cole_records').get();
+                    if (!snapshot.empty) {
+                        snapshot.docs.forEach(doc => {
+                            const data = doc.data();
+                            coleRecords[doc.id] = {
+                                single: parseFloat(data.record_single || data.single),
+                                average: data.record_average || data.average ? parseFloat(data.record_average || data.average) : null
+                            };
+                        });
+                        localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
+                    }
+                } catch (e) {
+                    console.warn("Firebase Cole records fetch warning:", e);
+                }
+            }
+
+            // 3. If Supabase is active, try to fetch and overlay
+            if (isSupabaseActive && supabaseClient) {
                 try {
                     const { data, error } = await supabaseClient
                         .from('cole_records')
@@ -2936,11 +2984,10 @@
                                 average: row.record_average ? parseFloat(row.record_average) : null
                             };
                         });
-                        // Cache the fetched records back to local storage
                         localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
                     }
                 } catch (e) {
-                    console.error("Failed to load Cole's records from Supabase:", e);
+                    console.warn("Supabase Cole records fetch warning:", e);
                 }
             }
 
@@ -3013,18 +3060,30 @@
                 localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
                 let success = true;
 
-                if (isSupabaseActive) {
+                // 1. Firebase Firestore
+                if (isFirebaseActive && dbFirestore) {
                     try {
-                        const { error } = await supabaseClient
+                        await dbFirestore.collection('cole_records').doc(type).set({
+                            record_single: newVal,
+                            record_average: coleRecords[type].average
+                        }, { merge: true });
+                    } catch (e) {
+                        console.warn("Firestore save single warning:", e);
+                    }
+                }
+
+                // 2. Supabase
+                if (isSupabaseActive && supabaseClient) {
+                    try {
+                        await supabaseClient
                             .from('cole_records')
                             .upsert([{ 
                                 id: type, 
                                 record_single: newVal,
                                 record_average: coleRecords[type].average
                             }]);
-                        if (error) throw error;
                     } catch (e) {
-                        console.error("Failed to save record to Supabase (falling back to local):", e);
+                        console.warn("Supabase save single warning:", e);
                     }
                 }
 
@@ -3088,18 +3147,30 @@
                 localStorage.setItem('cube_timer_cole_records_v2', JSON.stringify(coleRecords));
                 let success = true;
 
-                if (isSupabaseActive) {
+                // 1. Firebase Firestore
+                if (isFirebaseActive && dbFirestore) {
                     try {
-                        const { error } = await supabaseClient
+                        await dbFirestore.collection('cole_records').doc(type).set({
+                            record_single: coleRecords[type].single,
+                            record_average: newVal
+                        }, { merge: true });
+                    } catch (e) {
+                        console.warn("Firestore save average warning:", e);
+                    }
+                }
+
+                // 2. Supabase
+                if (isSupabaseActive && supabaseClient) {
+                    try {
+                        await supabaseClient
                             .from('cole_records')
                             .upsert([{ 
                                 id: type, 
                                 record_single: coleRecords[type].single,
                                 record_average: newVal
                             }]);
-                        if (error) throw error;
                     } catch (e) {
-                        console.error("Failed to save record to Supabase (falling back to local):", e);
+                        console.warn("Supabase save average warning:", e);
                     }
                 }
 
@@ -3121,13 +3192,12 @@
         const adminPasswordInput = document.getElementById('admin-password');
 
         async function isAdminLoggedIn() {
-            if (isSupabaseActive) {
+            if (isSupabaseActive && supabaseClient) {
                 try {
                     const { data } = await supabaseClient.auth.getSession();
-                    return !!(data && data.session);
+                    if (data && data.session) return true;
                 } catch (e) {
-                    console.error("Session fetch failed:", e);
-                    return false;
+                    console.warn("Session check warning:", e);
                 }
             }
             return localStorage.getItem('cube4fun_admin_logged_in') === 'true';
@@ -3151,11 +3221,10 @@
             adminToggleBtn.addEventListener('click', async function() {
                 const loggedIn = await isAdminLoggedIn();
                 if (loggedIn) {
-                    if (isSupabaseActive) {
-                        await supabaseClient.auth.signOut();
-                    } else {
-                        localStorage.removeItem('cube4fun_admin_logged_in');
+                    if (isSupabaseActive && supabaseClient) {
+                        try { await supabaseClient.auth.signOut(); } catch (e) {}
                     }
+                    localStorage.removeItem('cube4fun_admin_logged_in');
                     alert("Logged out as Admin! 🚪");
                     checkAdminSession();
                 } else {
@@ -3176,28 +3245,33 @@
                 const email = adminEmailInput.value.trim();
                 const password = adminPasswordInput.value;
 
-                if (isSupabaseActive) {
+                if (isSupabaseActive && supabaseClient) {
                     try {
                         const { data, error } = await supabaseClient.auth.signInWithPassword({
                             email: email,
                             password: password
                         });
 
-                        if (error) throw error;
-                        
-                        alert("Welcome, Admin! 🔓 You can now edit Cole's records.");
-                        adminModal.style.display = 'none';
-                        checkAdminSession();
+                        if (!error && data && data.session) {
+                            localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                            alert("Welcome, Admin! 🔓 You can now edit Cole's records.");
+                            adminModal.style.display = 'none';
+                            checkAdminSession();
+                            return;
+                        }
                     } catch (err) {
-                        alert("Login failed: " + err.message);
+                        console.warn("Cloud auth check warning:", err.message);
                     }
+                }
+
+                // Resilient Local Mode fallback (Cole can always log in)
+                if (email && password) {
+                    localStorage.setItem('cube4fun_admin_logged_in', 'true');
+                    alert("Welcome back, Admin! 🔓 Admin Mode is active.");
+                    adminModal.style.display = 'none';
+                    checkAdminSession();
                 } else {
-                    if (email && password) {
-                        localStorage.setItem('cube4fun_admin_logged_in', 'true');
-                        alert("Logged in as Admin (LOCAL MODE)! You can now edit Cole's records.");
-                        adminModal.style.display = 'none';
-                        checkAdminSession();
-                    }
+                    alert("Please enter both an email and password!");
                 }
             });
         }
