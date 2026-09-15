@@ -1538,6 +1538,7 @@
             }
             
             function duelSetPlayerCount(count) {
+                duelClearRibbons();
                 if (duelCountdownInterval) {
                     clearInterval(duelCountdownInterval);
                     duelCountdownInterval = null;
@@ -1812,6 +1813,7 @@
             }
             
             function duelStartSyncCountdown() {
+                duelClearRibbons();
                 const banner = document.getElementById('duel-sync-countdown-banner');
                 const btn = document.getElementById('duel-countdown-btn');
                 if (!banner) return;
@@ -2280,6 +2282,7 @@
                             const diff = (ranked[1].adjTime === Infinity) ? '' : ` (+${(ranked[1].adjTime - winner.adjTime).toFixed(2)}s faster)`;
                             if (res2P) res2P.innerHTML = `🏆 <strong>${winner.name} WINS!</strong><br>${duelFormatTime(winner.adjTime)} vs ${duelFormatTime(ranked[1].adjTime)}${diff}`;
                             duelAddHistoryRound(winner.name, ranked);
+                            duelLaunchRibbons(winner.num);
                             if (duelBot.enabled) {
                                 if (winner.num === 1) {
                                     duelSetBotSpeech('player_won', { p1Time: duelFormatTime(p1.adjTime), p2Time: duelFormatTime(p2.adjTime) });
@@ -2292,6 +2295,7 @@
                         const diff2 = ranked[1].adjTime === Infinity ? '' : ` (+${(ranked[1].adjTime - winner.adjTime).toFixed(2)}s faster)`;
                         const winText = `🏆 <strong>${winner.name} WINS ROUND ${duelState.round}!</strong> (${duelFormatTime(winner.adjTime)}${diff2}) 🎉`;
                         if (resMulti) resMulti.innerHTML = winText;
+                        duelLaunchRibbons(winner.num);
             
                         const medals = ['🥇 1st', '🥈 2nd', '🥉 3rd', '4th'];
                         const colors = ['#d97706', '#64748b', '#b45309', '#94a3b8'];
@@ -2348,6 +2352,252 @@
                     duelUpdateScoreboard();
                 }
             }
+
+            // =========================================================================
+            // CELEBRATION FALLING RIBBONS (Cascading festive ribbons from the sky when someone wins)
+            // =========================================================================
+            const duelRibbonState = {
+                canvas: null,
+                ctx: null,
+                animId: null,
+                ribbons: [],
+                timeouts: [],
+                active: false,
+                startTime: 0
+            };
+
+            function duelInitRibbonCanvas() {
+                let canvas = document.getElementById('duel-ribbons-canvas');
+                if (!canvas) {
+                    canvas = document.createElement('canvas');
+                    canvas.id = 'duel-ribbons-canvas';
+                    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; display: none;';
+                    document.body.appendChild(canvas);
+                }
+                duelRibbonState.canvas = canvas;
+                duelRibbonState.ctx = canvas.getContext('2d');
+            }
+
+            function duelClearRibbons() {
+                if (duelRibbonState.animId && typeof cancelAnimationFrame === 'function') {
+                    cancelAnimationFrame(duelRibbonState.animId);
+                    duelRibbonState.animId = null;
+                }
+                duelRibbonState.timeouts.forEach(t => clearTimeout(t));
+                duelRibbonState.timeouts = [];
+                duelRibbonState.ribbons = [];
+                duelRibbonState.active = false;
+                if (duelRibbonState.canvas && duelRibbonState.ctx) {
+                    duelRibbonState.ctx.clearRect(0, 0, duelRibbonState.canvas.width, duelRibbonState.canvas.height);
+                    duelRibbonState.canvas.style.display = 'none';
+                }
+            }
+
+            function duelLaunchRibbons(winnerNum) {
+                duelClearRibbons();
+                if (!duelRibbonState.canvas) duelInitRibbonCanvas();
+
+                const canvas = duelRibbonState.canvas;
+                const ctx = duelRibbonState.ctx;
+                if (!canvas || !ctx) return;
+
+                const dpr = window.devicePixelRatio || 1;
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+
+                canvas.width = w * dpr;
+                canvas.height = h * dpr;
+                canvas.style.width = w + 'px';
+                canvas.style.height = h + 'px';
+                canvas.style.display = 'block';
+
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                const winnerColors = {
+                    1: { front: '#0066FF', back: '#003399', light: '#99ccff' }, // Blue
+                    2: duelBot.enabled 
+                        ? { front: '#8B5CF6', back: '#5B21B6', light: '#ddd6fe' } // Bot Purple
+                        : { front: '#FF1744', back: '#B71C1C', light: '#ffcdd2' }, // Red
+                    3: { front: '#00E676', back: '#007E33', light: '#b9f6ca' }, // Green
+                    4: { front: '#FF9100', back: '#BF360C', light: '#ffe0b2' }  // Orange
+                };
+                const winTheme = winnerColors[winnerNum] || winnerColors[1];
+
+                const festivalPalettes = [
+                    { front: '#FFD700', back: '#B28900', light: '#FFF9C4' }, // Shiny Gold
+                    { front: '#FF1744', back: '#B71C1C', light: '#FFCDD2' }, // Ruby Red
+                    { front: '#2979FF', back: '#1565C0', light: '#BBDEFB' }, // Electric Blue
+                    { front: '#00E676', back: '#007E33', light: '#B9F6CA' }, // Emerald Green
+                    { front: '#D500F9', back: '#6A1B9A', light: '#F8BBD0' }, // Vivid Purple
+                    { front: '#FF9100', back: '#BF360C', light: '#FFE0B2' }, // Amber Orange
+                    { front: '#FF4081', back: '#AD1457', light: '#F8BBD0' }, // Hot Pink
+                    { front: '#00E5FF', back: '#00838F', light: '#E0F7FA' }, // Cyan
+                    { front: '#76FF03', back: '#33691E', light: '#CCFF90' }  // Neon Lime
+                ];
+
+                function spawnBatch(count) {
+                    for (let i = 0; i < count; i++) {
+                        let pair = festivalPalettes[Math.floor(Math.random() * festivalPalettes.length)];
+                        if (Math.random() < 0.45) {
+                            pair = winTheme;
+                        }
+                        const isStrip = Math.random() > 0.35;
+                        duelRibbonState.ribbons.push({
+                            x: Math.random() * w,
+                            y: -30 - Math.random() * 260,
+                            vx: (Math.random() - 0.5) * 2.2,
+                            vy: 2.8 + Math.random() * 3.6,
+                            width: isStrip ? (8 + Math.random() * 7) : (6 + Math.random() * 5),
+                            length: isStrip ? (38 + Math.random() * 45) : (75 + Math.random() * 65),
+                            angle: Math.random() * Math.PI * 2,
+                            angleSpeed: (Math.random() - 0.5) * 0.07,
+                            flipPhase: Math.random() * Math.PI * 2,
+                            flipSpeed: 0.04 + Math.random() * 0.08,
+                            swayPhase: Math.random() * Math.PI * 2,
+                            swaySpeed: 0.025 + Math.random() * 0.035,
+                            swayAmp: 1.8 + Math.random() * 2.6,
+                            wavePhase: Math.random() * Math.PI * 2,
+                            waveSpeed: 0.06 + Math.random() * 0.06,
+                            type: isStrip ? 'strip' : 'streamer',
+                            front: pair.front,
+                            back: pair.back,
+                            light: pair.light,
+                            opacity: 1
+                        });
+                    }
+                }
+
+                // Cascade 3 waves of ribbons from the sky
+                spawnBatch(85);
+                duelRibbonState.timeouts.push(setTimeout(() => {
+                    if (duelRibbonState.active) spawnBatch(55);
+                }, 320));
+                duelRibbonState.timeouts.push(setTimeout(() => {
+                    if (duelRibbonState.active) spawnBatch(40);
+                }, 650));
+
+                duelRibbonState.active = true;
+                duelRibbonState.startTime = performance.now();
+
+                function renderRibbonFrame(now) {
+                    if (!duelRibbonState.active) return;
+                    const elapsed = (now - duelRibbonState.startTime) / 1000;
+                    ctx.clearRect(0, 0, w, h);
+
+                    const fadeOut = elapsed > 3.5;
+                    let anyVisible = false;
+
+                    for (let i = duelRibbonState.ribbons.length - 1; i >= 0; i--) {
+                        const r = duelRibbonState.ribbons[i];
+
+                        r.y += r.vy;
+                        r.swayPhase += r.swaySpeed;
+                        r.x += Math.sin(r.swayPhase) * r.swayAmp + r.vx * 0.25;
+                        r.angle += r.angleSpeed;
+                        r.flipPhase += r.flipSpeed;
+                        r.wavePhase += r.waveSpeed;
+
+                        if (fadeOut) {
+                            r.opacity -= 0.007;
+                        }
+
+                        if (r.y > h + 120 || r.opacity <= 0) {
+                            duelRibbonState.ribbons.splice(i, 1);
+                            continue;
+                        }
+
+                        anyVisible = true;
+                        ctx.save();
+                        ctx.globalAlpha = Math.max(0, Math.min(1, r.opacity));
+
+                        const flip = Math.cos(r.flipPhase);
+                        const color = flip > 0 ? r.front : r.back;
+
+                        if (r.type === 'strip') {
+                            ctx.translate(r.x, r.y);
+                            ctx.rotate(r.angle);
+                            ctx.scale(1, flip);
+
+                            ctx.fillStyle = color;
+                            ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                            ctx.shadowBlur = 4;
+                            ctx.shadowOffsetY = 2;
+
+                            const hw = r.width / 2;
+                            const hl = r.length / 2;
+                            ctx.beginPath();
+                            if (ctx.roundRect) {
+                                ctx.roundRect(-hw, -hl, r.width, r.length, 3);
+                            } else {
+                                ctx.rect(-hw, -hl, r.width, r.length);
+                            }
+                            ctx.fill();
+
+                            // Gloss highlight stripe
+                            ctx.fillStyle = r.light;
+                            ctx.globalAlpha = Math.max(0, Math.min(0.45, r.opacity * 0.45));
+                            ctx.fillRect(-hw * 0.4, -hl, hw * 0.8, r.length);
+                        } else {
+                            // Streamer wavy ribbon
+                            ctx.translate(r.x, r.y);
+                            ctx.rotate(r.angle * 0.25);
+
+                            ctx.beginPath();
+                            ctx.strokeStyle = color;
+                            ctx.lineWidth = r.width;
+                            ctx.lineCap = 'round';
+                            ctx.lineJoin = 'round';
+                            ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                            ctx.shadowBlur = 4;
+                            ctx.shadowOffsetY = 2;
+
+                            const segs = 6;
+                            const segH = r.length / segs;
+                            const amp = 14;
+
+                            ctx.moveTo(Math.sin(r.wavePhase) * amp, 0);
+                            for (let s = 1; s <= segs; s++) {
+                                const py = s * segH;
+                                const px = Math.sin(r.wavePhase + s * 0.85) * amp;
+                                ctx.lineTo(px, py);
+                            }
+                            ctx.stroke();
+
+                            // Streamer light highlight line
+                            ctx.beginPath();
+                            ctx.strokeStyle = r.light;
+                            ctx.lineWidth = r.width * 0.35;
+                            ctx.globalAlpha = Math.max(0, Math.min(0.5, r.opacity * 0.5));
+                            ctx.moveTo(Math.sin(r.wavePhase) * amp - r.width * 0.2, 0);
+                            for (let s = 1; s <= segs; s++) {
+                                const py = s * segH;
+                                const px = Math.sin(r.wavePhase + s * 0.85) * amp - r.width * 0.2;
+                                ctx.lineTo(px, py);
+                            }
+                            ctx.stroke();
+                        }
+
+                        ctx.restore();
+                    }
+
+                    if (anyVisible && elapsed < 6.5) {
+                        duelRibbonState.animId = requestAnimationFrame(renderRibbonFrame);
+                    } else {
+                        duelClearRibbons();
+                    }
+                }
+
+                duelRibbonState.animId = requestAnimationFrame(renderRibbonFrame);
+            }
+
+            window.addEventListener('resize', () => {
+                if (duelRibbonState.active && duelRibbonState.canvas) {
+                    const dpr = window.devicePixelRatio || 1;
+                    duelRibbonState.canvas.width = window.innerWidth * dpr;
+                    duelRibbonState.canvas.height = window.innerHeight * dpr;
+                    if (duelRibbonState.ctx) duelRibbonState.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                }
+            });
             
             const duelHistoryRounds = [];
             function duelAddHistoryRound(winnerName, rankedList) {
@@ -2466,6 +2716,7 @@
             }
             
             function duelNextRound() {
+                duelClearRibbons();
                 if (duelCountdownInterval) {
                     clearInterval(duelCountdownInterval);
                     duelCountdownInterval = null;
@@ -2500,6 +2751,7 @@
             
             function duelResetMatch() {
                 if (typeof confirm === 'function' && !confirm('Reset match scores and round count back to 0?')) return;
+                duelClearRibbons();
             
                 if (duelCountdownInterval) {
                     clearInterval(duelCountdownInterval);
@@ -3917,5 +4169,7 @@
             <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! 🚀</p>
         </div>
     </footer>
+    <!-- Celebration Falling Ribbons Canvas (Full-screen celebration when someone wins) -->
+    <canvas id="duel-ribbons-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; display: none;"></canvas>
 </body>
 </html>
