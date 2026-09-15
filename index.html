@@ -787,7 +787,7 @@
                 <h2 id="duel-main-title" style="font-family: 'DynaPuff', cursive; font-size: 2.3em; margin: 4px 0 8px 0; color: #1e272e; display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;">
                     <span id="duel-h2-p1" style="color: #0066FF;">Player 1</span>
                     <span style="background: #1e272e; color: #FAED27; font-size: 0.75em; padding: 4px 14px; border-radius: 14px; border: 2px solid #FAED27; transform: rotate(-3deg); box-shadow: 0 4px 0 rgba(0,0,0,0.2);">1 VS 1</span>
-                    <span id="duel-h2-p2" style="color: #8b5cf6;">CubeBot</span>
+                    <span id="duel-h2-p2" style="color: #8b5cf6;">Bot</span>
                 </h2>
                 <p style="font-size: 1.05em; color: #475569; max-width: 760px; margin: 0 auto; line-height: 1.5; font-weight: 500;">
                     All cubers use the <strong>exact same fair scramble</strong> below! Place your hands on the mat (or keyboard keys) to get ready. When released, the race begins! 🚀
@@ -806,16 +806,16 @@
                     <div style="width: 1px; height: 22px; background: #cbd5e1; margin: 0 2px;"></div>
                     
                     <!-- 2 to 4 Players Switcher -->
-                    <span style="font-weight: 700; font-size: 0.85em; color: #334155; text-transform: uppercase;">Racers:</span>
-                    <button id="duel-count-2-btn" onclick="duelSetPlayerCount(2)" class="nav-button" style="margin: 0; padding: 5px 10px; font-size: 0.85em; font-weight: 800; background-color: #0066FF; color: white; border-radius: 10px;" title="2 Players Match">2P</button>
-                    <button id="duel-count-3-btn" onclick="duelSetPlayerCount(3)" class="nav-button" style="margin: 0; padding: 5px 10px; font-size: 0.85em; font-weight: 800; background-color: #e2e8f0; color: #334155; border-radius: 10px;" title="3 Players Match">3P</button>
-                    <button id="duel-count-4-btn" onclick="duelSetPlayerCount(4)" class="nav-button" style="margin: 0; padding: 5px 10px; font-size: 0.85em; font-weight: 800; background-color: #e2e8f0; color: #334155; border-radius: 10px;" title="4 Players Match">4P</button>
+                    <span style="font-weight: 700; font-size: 0.85em; color: #334155; text-transform: uppercase;">Players:</span>
+                    <button id="duel-count-2-btn" onclick="duelSetPlayerCount(2)" class="nav-button" style="margin: 0; padding: 5px 10px; font-size: 0.85em; font-weight: 800; background-color: #0066FF; color: white; border-radius: 10px;" title="2 Players Match">2 Players</button>
+                    <button id="duel-count-3-btn" onclick="duelSetPlayerCount(3)" class="nav-button" style="margin: 0; padding: 5px 10px; font-size: 0.85em; font-weight: 800; background-color: #e2e8f0; color: #334155; border-radius: 10px;" title="3 Players Match">3 Players</button>
+                    <button id="duel-count-4-btn" onclick="duelSetPlayerCount(4)" class="nav-button" style="margin: 0; padding: 5px 10px; font-size: 0.85em; font-weight: 800; background-color: #e2e8f0; color: #334155; border-radius: 10px;" title="4 Players Match">4 Players</button>
 
                     <div style="width: 1px; height: 22px; background: #cbd5e1; margin: 0 2px;"></div>
 
                     <!-- Bot Toggle Button -->
-                    <button id="duel-vs-mode-btn" onclick="duelToggleVsMode()" class="nav-button" style="margin: 0; padding: 5px 12px; font-size: 0.85em; font-weight: 800; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border-radius: 10px; border: 1.5px solid #5b21b6; box-shadow: 0 2px 0 #4c1d95;" title="Switch between VS Adaptive CubeBot or Human Players">
-                        🤖 Mode: VS CubeBot
+                    <button id="duel-vs-mode-btn" onclick="duelToggleVsMode()" class="nav-button" style="margin: 0; padding: 5px 12px; font-size: 0.85em; font-weight: 800; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border-radius: 10px; border: 1.5px solid #5b21b6; box-shadow: 0 2px 0 #4c1d95;" title="Switch between VS Bot or Human Players">
+                        🤖 Mode: VS Bot
                     </button>
                     <div id="bot-level-badge" style="display: inline-flex; align-items: center; gap: 6px; background: #ede9fe; color: #6d28d9; border: 1.5px solid #c4b5fd; padding: 4px 8px; border-radius: 10px; font-size: 0.8em; font-weight: 800;">
                         <span id="bot-level-text">🤖 Bot: Lvl 1 (Super Slow 🐢)</span>
@@ -884,23 +884,11 @@
                 <!-- ================= PLAYER 1 (BLUE) ================= -->
                 <div id="p1-card" style="background: #f0f7ff; border: 3px solid #0066FF; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #0044CC; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
                     <div>
-                        <!-- Player 1 Header (Player Selector) -->
+                        <!-- Player 1 Header -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span style="font-size: 1.3em;">🔵</span>
-                                    <select id="p1-preset-select" onchange="duelSelectPreset(1, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #0044CC; border: 2px solid #bfdbfe; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
-                                        <option value="Player 1" selected>Player 1 👤</option>
-                                        <option value="Cole Hua 🧊">Cole Hua 🧊</option>
-                                        <option value="Mom 👩‍👦">Mom 👩‍👦</option>
-                                        <option value="Dad 👨‍👦">Dad 👨‍👦</option>
-                                        <option value="Liam 🧩">Liam 🧩</option>
-                                        <option value="Sam ⚡">Sam ⚡</option>
-                                        <option value="Maya 🌟">Maya 🌟</option>
-                                        <option value="custom">✏️ Custom Name...</option>
-                                    </select>
-                                </div>
-                                <input id="p1-name-input" type="text" value="Player 1" maxlength="15" style="display: none; font-family: 'DynaPuff', cursive; font-size: 0.9em; font-weight: bold; color: #0044CC; border: 2px solid #bfdbfe; border-radius: 8px; padding: 3px 8px; background: white; width: 100%; max-width: 150px;" placeholder="Enter custom name" oninput="duelUpdatePlayerNames(1)">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.3em;">🔵</span>
+                                <span style="font-family: 'DynaPuff', cursive; font-size: 1.15em; font-weight: 800; color: #0044CC;">Player 1</span>
                             </div>
                             <span style="background: #0066FF; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">Side A</span>
                         </div>
@@ -951,7 +939,7 @@
                     <div id="duel-result-card" style="background: white; border: 2.5px solid #1e272e; border-radius: 16px; padding: 12px 14px; box-shadow: 0 4px 0 #1e272e; width: 100%; max-width: 220px; margin-bottom: 14px;">
                         <div style="font-size: 0.75em; text-transform: uppercase; font-weight: 800; color: #64748b; margin-bottom: 4px;">Duel Status</div>
                         <div id="duel-result-text" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; color: #1e272e; line-height: 1.3;">
-                            Ready to Race! Beat CubeBot to increase its level!
+                            Ready to Race! Beat Bot to increase its level!
                         </div>
                     </div>
 
@@ -964,31 +952,21 @@
                 <!-- ================= PLAYER 2 (RED / BOT PURPLE) ================= -->
                 <div id="p2-card" style="background: #faf5ff; border: 3px solid #8b5cf6; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #6d28d9; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
                     <div>
-                        <!-- Player 2 Header (Player Selector) -->
+                        <!-- Player 2 Header (Player Selector: Bot or Player 2) -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span id="p2-avatar" style="font-size: 1.3em;">🤖</span>
-                                    <select id="p2-preset-select" onchange="duelSelectPreset(2, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #6d28d9; border: 2px solid #c4b5fd; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
-                                        <option value="bot" selected>🤖 CubeBot (AI)</option>
-                                        <option value="Player 2">Player 2 👤</option>
-                                        <option value="Cole Hua 🧊">Cole Hua 🧊</option>
-                                        <option value="Mom 👩‍👦">Mom 👩‍👦</option>
-                                        <option value="Dad 👨‍👦">Dad 👨‍👦</option>
-                                        <option value="Liam 🧩">Liam 🧩</option>
-                                        <option value="Sam ⚡">Sam ⚡</option>
-                                        <option value="Maya 🌟">Maya 🌟</option>
-                                        <option value="custom">✏️ Custom Name...</option>
-                                    </select>
-                                </div>
-                                <input id="p2-name-input" type="text" value="CubeBot" maxlength="15" style="display: none; font-family: 'DynaPuff', cursive; font-size: 0.9em; font-weight: bold; color: #6d28d9; border: 2px solid #c4b5fd; border-radius: 8px; padding: 3px 8px; background: white; width: 100%; max-width: 150px;" placeholder="Enter custom name" oninput="duelUpdatePlayerNames(2)">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span id="p2-avatar" style="font-size: 1.3em;">🤖</span>
+                                <select id="p2-preset-select" onchange="duelSelectPreset(2, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #6d28d9; border: 2px solid #c4b5fd; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
+                                    <option value="bot" selected>🤖 Bot</option>
+                                    <option value="Player 2">Player 2 👤</option>
+                                </select>
                             </div>
-                            <span id="p2-side-tag" style="background: #8b5cf6; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">🤖 AI BOT</span>
+                            <span id="p2-side-tag" style="background: #8b5cf6; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">🤖 BOT</span>
                         </div>
 
-                        <!-- CubeBot Encouraging Speech Bubble -->
+                        <!-- Bot Encouraging Speech Bubble -->
                         <div id="p2-bot-bubble" style="display: block; background: #ede9fe; border: 2px solid #8b5cf6; border-radius: 12px; padding: 7px 12px; margin-bottom: 12px; font-size: 0.82em; color: #5b21b6; font-weight: 700; text-align: center; box-shadow: 0 2px 4px rgba(139,92,246,0.15);">
-                            <span id="p2-bot-speech">🤖 "Beep boop! 👋 I'm CubeBot! On your first game, I'll solve super slow so you can win!"</span>
+                            <span id="p2-bot-speech">🤖 "Beep boop! 👋 I'm Bot! On your first game, I'll solve super slow so you can win!"</span>
                         </div>
 
                         <!-- Player 2 Digital Timer -->
@@ -1005,10 +983,10 @@
                         <div id="p2-mat" class="duel-mat" style="background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%); color: white; border: 3px solid #5b21b6; border-radius: 18px; padding: 22px 14px; text-align: center; cursor: pointer; box-shadow: 0 5px 0 #4c1d95; transition: transform 0.1s, background 0.15s; margin-bottom: 14px;">
                             <div id="p2-mat-icon" style="font-size: 2em; margin-bottom: 4px; pointer-events: none;">🤖 ⚡</div>
                             <div id="p2-mat-label" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; font-weight: bold; pointer-events: none;">
-                                AUTOPILOT (Starts when P1 starts!)
+                                AUTOPILOT (Starts when racers start!)
                             </div>
                             <div id="p2-mat-subtext" style="font-size: 0.75em; opacity: 0.85; margin-top: 4px; pointer-events: none;">
-                                AI adapts to your speed automatically!
+                                Bot adapts to your speed automatically!
                             </div>
                         </div>
                     </div>
@@ -1030,23 +1008,11 @@
                 <!-- ================= PLAYER 3 (GREEN) ================= -->
                 <div id="p3-card" style="display: none; background: #f0fdf4; border: 3px solid #10b981; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #059669; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
                     <div>
-                        <!-- Player 3 Header (Player Selector) -->
+                        <!-- Player 3 Header -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span style="font-size: 1.3em;">🟢</span>
-                                    <select id="p3-preset-select" onchange="duelSelectPreset(3, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #047857; border: 2px solid #bbf7d0; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
-                                        <option value="Player 3" selected>Player 3 👤</option>
-                                        <option value="Liam 🧩">Liam 🧩</option>
-                                        <option value="Sam ⚡">Sam ⚡</option>
-                                        <option value="Maya 🌟">Maya 🌟</option>
-                                        <option value="Cole Hua 🧊">Cole Hua 🧊</option>
-                                        <option value="Mom 👩‍👦">Mom 👩‍👦</option>
-                                        <option value="Dad 👨‍👦">Dad 👨‍👦</option>
-                                        <option value="custom">✏️ Custom Name...</option>
-                                    </select>
-                                </div>
-                                <input id="p3-name-input" type="text" value="Player 3" maxlength="15" style="display: none; font-family: 'DynaPuff', cursive; font-size: 0.9em; font-weight: bold; color: #047857; border: 2px solid #bbf7d0; border-radius: 8px; padding: 3px 8px; background: white; width: 100%; max-width: 150px;" placeholder="Enter custom name" oninput="duelUpdatePlayerNames(3)">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.3em;">🟢</span>
+                                <span style="font-family: 'DynaPuff', cursive; font-size: 1.15em; font-weight: 800; color: #047857;">Player 3</span>
                             </div>
                             <span style="background: #10b981; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">Side C</span>
                         </div>
@@ -1090,23 +1056,11 @@
                 <!-- ================= PLAYER 4 (ORANGE) ================= -->
                 <div id="p4-card" style="display: none; background: #fffbeb; border: 3px solid #f59e0b; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #d97706; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
                     <div>
-                        <!-- Player 4 Header (Player Selector) -->
+                        <!-- Player 4 Header -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
-                            <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span style="font-size: 1.3em;">🟠</span>
-                                    <select id="p4-preset-select" onchange="duelSelectPreset(4, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #b45309; border: 2px solid #fde68a; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
-                                        <option value="Player 4" selected>Player 4 👤</option>
-                                        <option value="Maya 🌟">Maya 🌟</option>
-                                        <option value="Sam ⚡">Sam ⚡</option>
-                                        <option value="Liam 🧩">Liam 🧩</option>
-                                        <option value="Cole Hua 🧊">Cole Hua 🧊</option>
-                                        <option value="Mom 👩‍👦">Mom 👩‍👦</option>
-                                        <option value="Dad 👨‍👦">Dad 👨‍👦</option>
-                                        <option value="custom">✏️ Custom Name...</option>
-                                    </select>
-                                </div>
-                                <input id="p4-name-input" type="text" value="Player 4" maxlength="15" style="display: none; font-family: 'DynaPuff', cursive; font-size: 0.9em; font-weight: bold; color: #b45309; border: 2px solid #fde68a; border-radius: 8px; padding: 3px 8px; background: white; width: 100%; max-width: 150px;" placeholder="Enter custom name" oninput="duelUpdatePlayerNames(4)">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.3em;">🟠</span>
+                                <span style="font-family: 'DynaPuff', cursive; font-size: 1.15em; font-weight: 800; color: #b45309;">Player 4</span>
                             </div>
                             <span style="background: #f59e0b; color: white; font-size: 0.75em; font-weight: 800; padding: 3px 8px; border-radius: 8px; text-transform: uppercase;">Side D</span>
                         </div>
@@ -1176,7 +1130,7 @@
 
         <!-- 1 VS 1 BATTLE MODE SCRIPT -->
         <script>
-            // Test script for duel battle arena (2 to 4 players) with auto-start on "GO!"
+            // Duel battle arena (2 to 4 players) - clean player labels, Bot mode, auto-start on GO
             const duelState = {
                 event: '3x3',
                 scramble: '',
@@ -1201,7 +1155,7 @@
                         color: '#0066FF'
                     },
                     2: {
-                        name: 'CubeBot',
+                        name: 'Bot',
                         score: 0,
                         state: 'idle',
                         startTime: 0,
@@ -1295,7 +1249,7 @@
             }
             
             function duelResetBotStats() {
-                if (typeof confirm === 'function' && !confirm("Reset CubeBot back to Level 1 (Super Slow)?")) return;
+                if (typeof confirm === 'function' && !confirm("Reset Bot back to Level 1 (Super Slow)?")) return;
                 duelBot.stats = {
                     gamesPlayed: 0,
                     playerTimes: [],
@@ -1338,7 +1292,7 @@
                     }
                 }
             
-                // 2. THE BOT SEES HOW FAST YOU ARE:
+                // 2. THE BOT SEES HOW FAST PLAYERS ARE:
                 const sorted = [...times].sort((a, b) => a - b);
                 const mid = Math.floor(sorted.length / 2);
                 const playerMedian = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
@@ -1360,7 +1314,7 @@
                 const jitter = (Math.random() * 0.06 - 0.03) * target;
                 target += jitter;
             
-                // 4. SAFETY GUARDRAILS ("dont make it to hard"):
+                // 4. SAFETY GUARDRAILS:
                 const maxSpeed = Math.max(evt === '2x2' ? 3.8 : 12.0, playerPb * 0.92);
                 if (target < maxSpeed) {
                     target = maxSpeed;
@@ -1460,7 +1414,7 @@
             
                 if (situation === 'welcome') {
                     if (duelBot.stats.gamesPlayed === 0) {
-                        speechEl.textContent = '🤖 "Beep boop! 👋 I\'m CubeBot! On your first game, I\'ll solve super slow so you can win!"';
+                        speechEl.textContent = '🤖 "Beep boop! 👋 I\'m Bot! On your first game, I\'ll solve super slow so you can win!"';
                     } else {
                         const info = duelGetBotLevelInfo(duelBot.stats.gamesPlayed);
                         speechEl.textContent = `🤖 "I'm ready! Current rank: ${info.name}. Let's see your speed! ⚡"`;
@@ -1656,7 +1610,7 @@
             function duelUpdateKeysHint() {
                 const hintContainer = document.getElementById('duel-keys-hint');
                 if (!hintContainer) return;
-                const p2KeyLabel = duelBot.enabled ? '🤖 CubeBot AI' : '[P] [O] [L] [K] [M] [Enter]';
+                const p2KeyLabel = duelBot.enabled ? '🤖 Bot' : '[P] [O] [L] [K] [M] [Enter]';
                 let html = `
                     <span style="color: #0066FF;">⌨️ P1: [Q] [W] [A] [S] [Z] [Space]</span>
                     <span style="color: ${duelBot.enabled ? '#8b5cf6' : '#FF3838'};">⌨️ P2: ${p2KeyLabel}</span>
@@ -1801,7 +1755,7 @@
                     }
             
                     if (i === 2 && duelBot.enabled) {
-                        // CubeBot automated solver
+                        // Bot automated solver
                         const targetSeconds = duelBotCalculateTarget(duelState.event);
                         duelBot.targetTime = targetSeconds;
             
@@ -1924,30 +1878,8 @@
             }
             
             function duelSelectPreset(playerNum, val) {
-                const customInput = document.getElementById(`p${playerNum}-name-input`);
-                if (playerNum === 2 && val === 'bot') {
-                    if (customInput) customInput.style.display = 'none';
-                    duelSetVsMode(true);
-                    return;
-                }
-            
-                if (playerNum === 2 && duelBot.enabled) {
-                    duelSetVsMode(false);
-                }
-            
-                if (val === 'custom') {
-                    if (customInput) {
-                        customInput.style.display = 'block';
-                        customInput.focus();
-                    }
-                } else {
-                    if (customInput) {
-                        customInput.style.display = 'none';
-                        customInput.value = val;
-                    }
-                    duelState.players[playerNum].name = val;
-                    duelUpdateMainTitle();
-                    duelUpdateScoreboard();
+                if (playerNum === 2) {
+                    duelSetVsMode(val === 'bot');
                 }
             }
             
@@ -1975,20 +1907,24 @@
             
                 if (isBot) {
                     if (modeBtn) {
-                        modeBtn.textContent = '🤖 Mode: VS CubeBot';
+                        modeBtn.textContent = '🤖 Mode: VS Bot';
                         modeBtn.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)';
                         modeBtn.style.borderColor = '#5b21b6';
                     }
                     if (botBadge) botBadge.style.display = 'inline-flex';
-                    if (p2Preset) p2Preset.value = 'bot';
+                    if (p2Preset) {
+                        p2Preset.value = 'bot';
+                        p2Preset.style.color = '#6d28d9';
+                        p2Preset.style.borderColor = '#c4b5fd';
+                    }
                     if (p2Avatar) p2Avatar.textContent = '🤖';
                     if (p2Tag) {
-                        p2Tag.textContent = '🤖 AI BOT';
+                        p2Tag.textContent = '🤖 BOT';
                         p2Tag.style.background = '#8b5cf6';
                     }
                     if (p2Bubble) p2Bubble.style.display = 'block';
             
-                    duelState.players[2].name = 'CubeBot';
+                    duelState.players[2].name = 'Bot';
             
                     if (p2Card) {
                         p2Card.style.background = '#faf5ff';
@@ -2006,8 +1942,8 @@
                         p2Mat.style.boxShadow = '0 5px 0 #4c1d95';
                     }
                     if (p2MatIcon) p2MatIcon.textContent = '🤖 ⚡';
-                    if (p2MatLabel) p2MatLabel.textContent = 'AUTOPILOT (Starts with human racers!)';
-                    if (p2MatSubtext) p2MatSubtext.textContent = 'AI adapts to your speed automatically!';
+                    if (p2MatLabel) p2MatLabel.textContent = 'AUTOPILOT (Starts when racers start!)';
+                    if (p2MatSubtext) p2MatSubtext.textContent = 'Bot adapts to your speed automatically!';
             
                     duelSetBotSpeech('welcome');
                     duelUpdateBotLevelDisplay();
@@ -2018,7 +1954,11 @@
                         modeBtn.style.borderColor = '#991b1b';
                     }
                     if (botBadge) botBadge.style.display = 'none';
-                    if (p2Preset && p2Preset.value === 'bot') p2Preset.value = 'Player 2';
+                    if (p2Preset) {
+                        p2Preset.value = 'Player 2';
+                        p2Preset.style.color = '#FF3838';
+                        p2Preset.style.borderColor = '#fca5a5';
+                    }
                     if (p2Avatar) p2Avatar.textContent = '🔴';
                     if (p2Tag) {
                         p2Tag.textContent = 'Side B';
@@ -2026,8 +1966,7 @@
                     }
                     if (p2Bubble) p2Bubble.style.display = 'none';
             
-                    const currentP2Name = p2Preset && p2Preset.value !== 'custom' ? p2Preset.value : 'Player 2';
-                    duelState.players[2].name = currentP2Name;
+                    duelState.players[2].name = 'Player 2';
             
                     if (p2Card) {
                         p2Card.style.background = '#fff5f5';
@@ -2058,20 +1997,11 @@
                 }
             }
             
-            function duelUpdatePlayerNames(playerNum) {
-                if (playerNum) {
-                    const inp = document.getElementById(`p${playerNum}-name-input`);
-                    const fallback = playerNum === 2 && duelBot.enabled ? 'CubeBot' : `Player ${playerNum}`;
-                    const val = (inp && inp.value.trim()) || fallback;
-                    duelState.players[playerNum].name = val;
-                } else {
-                    for (let i = 1; i <= 4; i++) {
-                        const inp = document.getElementById(`p${i}-name-input`);
-                        const fallback = i === 2 && duelBot.enabled ? 'CubeBot' : `Player ${i}`;
-                        const val = (inp && inp.value.trim()) || fallback;
-                        duelState.players[i].name = val;
-                    }
-                }
+            function duelUpdatePlayerNames() {
+                duelState.players[1].name = 'Player 1';
+                duelState.players[2].name = duelBot.enabled ? 'Bot' : 'Player 2';
+                duelState.players[3].name = 'Player 3';
+                duelState.players[4].name = 'Player 4';
                 duelUpdateMainTitle();
                 duelUpdateScoreboard();
             }
@@ -2087,7 +2017,7 @@
                 } else if (playerNum === 2) {
                     if (duelBot.enabled) {
                         mat.style.background = 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)';
-                        matLabel.textContent = 'AUTOPILOT (Starts with human racers!)';
+                        matLabel.textContent = 'AUTOPILOT (Starts when racers start!)';
                     } else {
                         mat.style.background = 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)';
                         matLabel.textContent = 'HOLD MAT TO READY';
