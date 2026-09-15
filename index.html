@@ -1862,8 +1862,109 @@
             const adminEmailInput = document.getElementById('admin-email');
             const adminPasswordInput = document.getElementById('admin-password');
 
+            // ==========================================
+            // --- VERIFIED SITE COMMENTS (PUBLIC) ---
+            // ==========================================
+            // These verified comments are bundled directly into the page and in comments.json
+            // so every visitor across the world can see Cole's welcome message and community Q&As!
+            const DEFAULT_COMMENTS = [
+                {
+                    id: "comment-cole-welcome",
+                    name: "Cole Hua 🧊 (Co-Host)",
+                    text: "Welcome to Learn Cube 4 Fun! 🚀 I'm in Grade 4 and love speedcubing (practice PB 9.00s, official WCA 12.60s single). Feel free to ask questions about 3x3, 2x2, finger tricks, or our Wednesday Wesbrook classes!",
+                    date: "2026-06-01T19:00:00.000Z",
+                    avatarcolor: "#0066FF"
+                },
+                {
+                    id: "comment-liam-1",
+                    name: "Liam 🧩",
+                    text: "I practiced the first layer algorithms Cole showed us and managed to solve the white cross in under 30 seconds! See you this Wednesday!",
+                    date: "2026-06-15T10:30:00.000Z",
+                    avatarcolor: "#00E5FF"
+                },
+                {
+                    id: "reply-cole-to-liam",
+                    parent_id: "comment-liam-1",
+                    name: "Cole Hua 🧊 (Co-Host)",
+                    text: "Awesome job Liam! 🎉 That is super fast for the white cross. Next class we will practice corner placement and F2L finger tricks!",
+                    date: "2026-06-15T14:20:00.000Z",
+                    avatarcolor: "#0066FF"
+                },
+                {
+                    id: "comment-sarah-parent",
+                    name: "Sarah (Parent)",
+                    text: "My son absolutely loves this class! Cole is an amazing teacher and makes learning the Rubik's cube so much fun. Highly recommend to any parents at UBC/Wesbrook!",
+                    date: "2026-06-17T20:15:00.000Z",
+                    avatarcolor: "#FAED27"
+                },
+                {
+                    id: "reply-mom-to-sarah",
+                    parent_id: "comment-sarah-parent",
+                    name: "Cole's Mom 👩‍👦",
+                    text: "Thank you Sarah! It is wonderful seeing the kids help each other out and gain confidence solving puzzles! See you Wednesday!",
+                    date: "2026-06-18T09:00:00.000Z",
+                    avatarcolor: "#FF6B6B"
+                },
+                {
+                    id: "comment-david-cube",
+                    name: "David ⚡",
+                    text: "Which cube should I buy to get faster? My current cube gets stuck when I turn fast.",
+                    date: "2026-06-22T16:45:00.000Z",
+                    avatarcolor: "#029347"
+                },
+                {
+                    id: "reply-cole-to-david",
+                    parent_id: "comment-david-cube",
+                    name: "Cole Hua 🧊 (Co-Host)",
+                    text: "Check out the MoYu RS3M V5 (Magnetic) or the Super RS3M! They have corner-cutting and magnets so they never lock up, and they only cost about $9-$14. I also wrote about them on our Cubing News page!",
+                    date: "2026-06-22T18:10:00.000Z",
+                    avatarcolor: "#0066FF"
+                },
+                {
+                    id: "comment-maya-timer",
+                    name: "Maya 🌟",
+                    text: "The new 1 vs 1 Battle Timer on the homepage is so much fun! My brother and I raced each other on our iPad. I won on 2x2! 🏆",
+                    date: "2026-06-25T11:00:00.000Z",
+                    avatarcolor: "#FF8787"
+                },
+                {
+                    id: "reply-cole-to-maya",
+                    parent_id: "comment-maya-timer",
+                    name: "Cole Hua 🧊 (Co-Host)",
+                    text: "Nice win Maya! 2x2 is all about fast recognition and finger tricks. Keep practicing and challenge him to 3x3 next! ⚔️",
+                    date: "2026-06-25T13:30:00.000Z",
+                    avatarcolor: "#0066FF"
+                }
+            ];
+
+            function mergeCommentLists(primary, secondary) {
+                const map = new Map();
+                if (Array.isArray(primary)) {
+                    primary.forEach(c => { if (c && c.id) map.set(c.id, c); });
+                }
+                if (Array.isArray(secondary)) {
+                    secondary.forEach(c => { if (c && c.id) map.set(c.id, c); });
+                }
+                return Array.from(map.values());
+            }
+
             async function loadComments() {
-                // 1. Try Firebase Firestore
+                let masterList = [...DEFAULT_COMMENTS];
+
+                // 1. Try fetching fresh public comments.json directly from GitHub Pages repository
+                try {
+                    const response = await fetch('comments.json?v=' + Date.now());
+                    if (response.ok) {
+                        const jsonComments = await response.json();
+                        if (Array.isArray(jsonComments) && jsonComments.length > 0) {
+                            masterList = jsonComments;
+                        }
+                    }
+                } catch (e) {
+                    console.log("Loaded bundled public comments");
+                }
+
+                // 2. Try Firebase Firestore (if configured)
                 if (isFirebaseActive && dbFirestore) {
                     try {
                         const snapshot = await dbFirestore.collection('comments')
@@ -1874,15 +1975,16 @@
                                 id: doc.id,
                                 ...doc.data()
                             }));
-                            localStorage.setItem('cube4fun_comments_v2', JSON.stringify(cloudComments));
-                            return cloudComments;
+                            const merged = mergeCommentLists(masterList, cloudComments);
+                            localStorage.setItem('cube4fun_comments_v2', JSON.stringify(merged));
+                            return merged;
                         }
                     } catch (e) {
                         console.warn("Firestore comments fetch warning:", e);
                     }
                 }
 
-                // 2. Try Supabase
+                // 3. Try Supabase (if configured)
                 if (isSupabaseActive && supabase) {
                     try {
                         const { data, error } = await supabase
@@ -1891,24 +1993,26 @@
                             .order('date', { ascending: false });
 
                         if (!error && data && data.length > 0) {
-                            localStorage.setItem('cube4fun_comments_v2', JSON.stringify(data));
-                            return data;
+                            const merged = mergeCommentLists(masterList, data);
+                            localStorage.setItem('cube4fun_comments_v2', JSON.stringify(merged));
+                            return merged;
                         }
                     } catch (e) {
                         console.warn("Supabase comments fetch warning:", e);
                     }
                 }
 
-                // 3. Local Fallback (Guaranteed offline & fast)
+                // 4. Merge with local visitor comments from LocalStorage
                 const stored = localStorage.getItem('cube4fun_comments_v2');
                 if (stored) {
                     try {
-                        return JSON.parse(stored);
+                        const localList = JSON.parse(stored);
+                        return mergeCommentLists(masterList, localList);
                     } catch (e) {
                         console.error("Failed to parse local comments:", e);
                     }
                 }
-                return []; // No default comments (clean slate)
+                return masterList;
             }
 
             async function addComment(name, text, parentId = null) {
@@ -1944,10 +2048,10 @@
                     }
                 }
 
-                // 3. Always save locally to ensure responsiveness & offline persistence
-                const localComments = await loadComments();
-                localComments.push(newComment);
-                localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
+                // 3. Save locally and merge with master list
+                const currentComments = await loadComments();
+                const updatedComments = mergeCommentLists(currentComments, [newComment]);
+                localStorage.setItem('cube4fun_comments_v2', JSON.stringify(updatedComments));
                 return true;
             }
 
@@ -1981,17 +2085,10 @@
                     }
                 }
 
-                // 3. Always delete from LocalStorage
-                const stored = localStorage.getItem('cube4fun_comments_v2');
-                if (stored) {
-                    try {
-                        let localComments = JSON.parse(stored);
-                        localComments = localComments.filter(c => c.id !== commentId && c.parent_id !== commentId);
-                        localStorage.setItem('cube4fun_comments_v2', JSON.stringify(localComments));
-                    } catch (e) {
-                        console.error("Local delete error:", e);
-                    }
-                }
+                // 3. Delete from LocalStorage
+                const currentComments = await loadComments();
+                const filtered = currentComments.filter(c => c.id !== commentId && c.parent_id !== commentId);
+                localStorage.setItem('cube4fun_comments_v2', JSON.stringify(filtered));
                 return true;
             }
 
@@ -2007,6 +2104,70 @@
                 return localStorage.getItem('cube4fun_admin_logged_in') === 'true';
             }
 
+            function renderAdminCommentTools(loggedIn) {
+                let adminBar = document.getElementById('admin-comment-tools');
+                if (!adminBar) {
+                    adminBar = document.createElement('div');
+                    adminBar.id = 'admin-comment-tools';
+                    adminBar.style.margin = '0 auto 20px auto';
+                    adminBar.style.maxWidth = '700px';
+                    adminBar.style.background = '#fef3c7';
+                    adminBar.style.border = '2px solid #f59e0b';
+                    adminBar.style.borderRadius = '14px';
+                    adminBar.style.padding = '12px 18px';
+                    adminBar.style.textAlign = 'center';
+                    adminBar.style.boxShadow = '0 3px 0 rgba(0,0,0,0.08)';
+                    commentsContainer.parentNode.insertBefore(adminBar, commentsContainer);
+                }
+
+                if (loggedIn) {
+                    adminBar.style.display = 'block';
+                    adminBar.innerHTML = `
+                        <div style="font-weight: bold; color: #92400e; font-size: 1.05em; margin-bottom: 8px;">
+                            👑 Admin Mode Active (Cole's Comment Manager)
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="adminExportComments()" class="nav-button" style="margin: 0; padding: 6px 14px; font-size: 0.9em; background: #0066FF; color: white; border-radius: 10px; border: 1.5px solid #0044CC;">
+                                📋 Copy Comments for Git (comments.json)
+                            </button>
+                            <button onclick="adminDownloadComments()" class="nav-button" style="margin: 0; padding: 6px 14px; font-size: 0.9em; background: #2ECC71; color: white; border-radius: 10px; border: 1.5px solid #27ae60;">
+                                📥 Download comments.json
+                            </button>
+                        </div>
+                        <div style="font-size: 0.85em; color: #78350f; margin-top: 6px;">
+                            💡 Any comments in comments.json are permanently visible to everybody visiting the site!
+                        </div>
+                    `;
+                } else {
+                    adminBar.style.display = 'none';
+                }
+            }
+
+            window.adminExportComments = async function() {
+                const comments = await loadComments();
+                const jsonStr = JSON.stringify(comments, null, 2);
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(jsonStr);
+                    alert("Copied " + comments.length + " comments to clipboard! 📋 You can now paste into comments.json and push to GitHub.");
+                } else {
+                    prompt("Copy your comments JSON below:", jsonStr);
+                }
+            };
+
+            window.adminDownloadComments = async function() {
+                const comments = await loadComments();
+                const jsonStr = JSON.stringify(comments, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'comments.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
             async function renderComments() {
                 if (!commentsContainer) return;
                 const comments = await loadComments();
@@ -2016,6 +2177,8 @@
                     adminToggleBtn.textContent = loggedIn ? "🚪 Admin Logout" : "🔑 Admin Login";
                     adminToggleBtn.style.color = loggedIn ? "#FF6B6B" : "#0066FF";
                 }
+
+                renderAdminCommentTools(loggedIn);
 
                 commentsContainer.innerHTML = '';
 
