@@ -818,8 +818,8 @@
                         🤖 Mode: VS Bot
                     </button>
                     <div id="bot-level-badge" style="display: inline-flex; align-items: center; gap: 6px; background: #ede9fe; color: #6d28d9; border: 1.5px solid #c4b5fd; padding: 4px 8px; border-radius: 10px; font-size: 0.8em; font-weight: 800;">
-                        <span id="bot-level-text">🤖 Bot: Lvl 1 (Super Slow 🐢)</span>
-                        <button onclick="duelResetBotStats()" title="Reset Bot Level back to Super Slow" style="background: none; border: none; cursor: pointer; font-size: 0.9em; padding: 0 2px; line-height: 1;" aria-label="Reset bot level">🔄</button>
+                        <span id="bot-level-text">🤖 Bot: Very Slow 🐢 (First Start)</span>
+                        <button onclick="duelResetBotStats()" title="Reset Bot back to Very Slow (First Start)" style="background: none; border: none; cursor: pointer; font-size: 0.9em; padding: 0 2px; line-height: 1;" aria-label="Reset bot speed">🔄</button>
                     </div>
                 </div>
 
@@ -966,7 +966,7 @@
 
                         <!-- Bot Encouraging Speech Bubble -->
                         <div id="p2-bot-bubble" style="display: block; background: #ede9fe; border: 2px solid #8b5cf6; border-radius: 12px; padding: 7px 12px; margin-bottom: 12px; font-size: 0.82em; color: #5b21b6; font-weight: 700; text-align: center; box-shadow: 0 2px 4px rgba(139,92,246,0.15);">
-                            <span id="p2-bot-speech">🤖 "Beep boop! 👋 I'm Bot! On your first game, I'll solve super slow so you can win!"</span>
+                            <span id="p2-bot-speech">🤖 "Beep boop! 👋 I'm Bot! On your first game, I'll solve very slow! If you're fast, I'll go fast—if you're slow, I'll turn slow!"</span>
                         </div>
 
                         <!-- Player 2 Digital Timer -->
@@ -1249,7 +1249,7 @@
             }
             
             function duelResetBotStats() {
-                if (typeof confirm === 'function' && !confirm("Reset Bot back to Level 1 (Super Slow)?")) return;
+                if (typeof confirm === 'function' && !confirm("Reset Bot back to Very Slow (First Start)?")) return;
                 duelBot.stats = {
                     gamesPlayed: 0,
                     playerTimes: [],
@@ -1261,17 +1261,56 @@
                 duelResetPlayerTimer(2);
             }
             
-            function duelGetBotLevelInfo(games) {
-                if (games <= 0) return { level: 1, name: 'Lvl 1 (Super Slow 🐢)' };
-                if (games === 1) return { level: 2, name: 'Lvl 2 (Gentle 🚶)' };
-                if (games === 2) return { level: 3, name: 'Lvl 3 (Easy 🏃)' };
-                if (games === 3) return { level: 4, name: 'Lvl 4 (Challenger ⚔️)' };
-                const lvl = Math.min(games + 1, 10);
-                return { level: lvl, name: `Lvl ${lvl} (Speed Match ⚡)` };
+            function duelGetPlayerCurrentSpeed() {
+                const times = duelBot.stats.playerTimes;
+                if (!times || times.length === 0) return null;
+                if (times.length === 1) return times[0];
+                const last = times[times.length - 1];
+                const prevAvg = times.slice(0, -1).reduce((a, b) => a + b, 0) / (times.length - 1);
+                return Math.round(((last * 0.70) + (prevAvg * 0.30)) * 1000) / 1000;
+            }
+
+            function duelGetBotLevelInfo() {
+                const playerSpeed = duelGetPlayerCurrentSpeed();
+                const evt = duelState.event || '3x3';
+                if (playerSpeed === null) {
+                    return {
+                        mode: 'first_start',
+                        name: 'Very Slow 🐢 (First Start)',
+                        shortName: 'Very Slow 🐢',
+                        targetDisplay: evt === '2x2' ? '~28s' : '~70s'
+                    };
+                }
+
+                const fastThreshold = evt === '2x2' ? 6.0 : 20.0;
+                const slowThreshold = evt === '2x2' ? 14.0 : 45.0;
+
+                if (playerSpeed <= fastThreshold) {
+                    return {
+                        mode: 'fast',
+                        name: `Fast ⚡ (~${playerSpeed.toFixed(1)}s)`,
+                        shortName: 'Fast ⚡',
+                        targetDisplay: `~${playerSpeed.toFixed(1)}s`
+                    };
+                } else if (playerSpeed >= slowThreshold) {
+                    return {
+                        mode: 'slow',
+                        name: `Slow 🐢 (~${playerSpeed.toFixed(1)}s)`,
+                        shortName: 'Slow 🐢',
+                        targetDisplay: `~${playerSpeed.toFixed(1)}s`
+                    };
+                } else {
+                    return {
+                        mode: 'moderate',
+                        name: `Moderate 🏃 (~${playerSpeed.toFixed(1)}s)`,
+                        shortName: 'Moderate 🏃',
+                        targetDisplay: `~${playerSpeed.toFixed(1)}s`
+                    };
+                }
             }
             
             function duelUpdateBotLevelDisplay() {
-                const info = duelGetBotLevelInfo(duelBot.stats.gamesPlayed);
+                const info = duelGetBotLevelInfo();
                 const badgeText = document.getElementById('bot-level-text');
                 if (badgeText) {
                     badgeText.textContent = `🤖 Bot: ${info.name}`;
@@ -1279,52 +1318,37 @@
             }
             
             function duelBotCalculateTarget(evt = duelState.event) {
-                const stats = duelBot.stats;
-                const times = stats.playerTimes;
-                const games = stats.gamesPlayed;
+                const playerSpeed = duelGetPlayerCurrentSpeed();
             
-                // 1. FIRST TIME PLAYED: SUPER SLOW!
-                if (games === 0 || times.length === 0) {
+                // 1. FIRST TIME PLAYED: VERY SLOW!
+                if (playerSpeed === null) {
                     if (evt === '2x2') {
-                        return Math.round((20.0 + Math.random() * 5.0) * 1000) / 1000;
+                        return Math.round((26.0 + Math.random() * 6.0) * 1000) / 1000;
                     } else {
-                        return Math.round((55.0 + Math.random() * 10.0) * 1000) / 1000;
+                        return Math.round((65.0 + Math.random() * 10.0) * 1000) / 1000;
                     }
                 }
             
-                // 2. THE BOT SEES HOW FAST PLAYERS ARE:
-                const sorted = [...times].sort((a, b) => a - b);
-                const mid = Math.floor(sorted.length / 2);
-                const playerMedian = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-                const playerPb = sorted[0];
-            
-                // 3. PROGRESSIVE DIFFICULTY:
-                let multiplier = 1.30;
-                if (games === 1) {
-                    multiplier = 1.30;
-                } else if (games === 2) {
-                    multiplier = 1.18;
-                } else if (games === 3) {
-                    multiplier = 1.08;
+                // 2. DYNAMICALLY ADAPT TO PLAYER SPEED:
+                // If player is fast -> bot will also go fast!
+                // If player is slow -> bot will turn slow!
+                let factor = 1.02;
+                if (duelBot.stats.botWinsStreak >= 1) {
+                    // Bot won last round: ease up so player can win back!
+                    factor = 1.07 + Math.random() * 0.05;
+                } else if (duelBot.stats.playerWinsStreak >= 2) {
+                    // Player won multiple times: challenge closely (neck-and-neck)!
+                    factor = 0.98 + Math.random() * 0.04;
                 } else {
-                    multiplier = 0.99 + (Math.random() * 0.05);
+                    // Very close race pacing
+                    factor = 1.00 + (Math.random() * 0.06 - 0.02);
                 }
             
-                let target = playerMedian * multiplier;
-                const jitter = (Math.random() * 0.06 - 0.03) * target;
+                let target = playerSpeed * factor;
+                const jitter = (Math.random() * 0.8 - 0.4);
                 target += jitter;
             
-                // 4. SAFETY GUARDRAILS:
-                const maxSpeed = Math.max(evt === '2x2' ? 3.8 : 12.0, playerPb * 0.92);
-                if (target < maxSpeed) {
-                    target = maxSpeed;
-                }
-            
-                if (stats.botWinsStreak >= 2) {
-                    target = target * 1.16;
-                }
-            
-                const floor = evt === '2x2' ? 3.5 : 11.5;
+                const floor = evt === '2x2' ? 2.5 : 6.0;
                 if (target < floor) {
                     target = floor;
                 }
@@ -1379,7 +1403,20 @@
                         const elapsed = (performance.now() - p2.startTime) / 1000;
                         if (p2TimerDisplay) p2TimerDisplay.textContent = duelFormatTime(elapsed);
             
-                        const ratio = elapsed / targetSeconds;
+                        // In-race adaptation: If human racers are still running beyond the bot's target time,
+                        // the bot turns slow too so it never runs away from a slow solve!
+                        let anyHumanRunning = false;
+                        for (let i = 1; i <= duelState.playerCount; i++) {
+                            if (i !== 2 && duelState.players[i].state === 'running') {
+                                anyHumanRunning = true;
+                                break;
+                            }
+                        }
+                        if (anyHumanRunning && elapsed >= duelBot.targetTime - 0.4 && elapsed < 180) {
+                            duelBot.targetTime += 0.03;
+                        }
+            
+                        const ratio = Math.min(0.99, elapsed / duelBot.targetTime);
                         if (p2Pill) {
                             if (ratio < 0.20) {
                                 p2Pill.textContent = '🤖 Planning & Cross...';
@@ -1391,13 +1428,14 @@
                                 p2Pill.textContent = '🤖 PLL Final Layer...';
                             }
                         }
-                    }, 15);
             
-                    duelBot.solveTimeout = setTimeout(() => {
-                        if (p2.state === 'running') {
-                            duelPlayerStop(2);
+                        if (elapsed >= duelBot.targetTime) {
+                            clearInterval(p2.timerId);
+                            if (p2.state === 'running') {
+                                duelPlayerStop(2);
+                            }
                         }
-                    }, targetSeconds * 1000);
+                    }, 15);
             
                 }, reactionMs);
             }
@@ -1411,30 +1449,27 @@
             function duelSetBotSpeech(situation, extra = {}) {
                 const speechEl = document.getElementById('p2-bot-speech');
                 if (!speechEl) return;
+                const info = duelGetBotLevelInfo();
             
                 if (situation === 'welcome') {
-                    if (duelBot.stats.gamesPlayed === 0) {
-                        speechEl.textContent = '🤖 "Beep boop! 👋 I\'m Bot! On your first game, I\'ll solve super slow so you can win!"';
+                    if (info.mode === 'first_start') {
+                        speechEl.textContent = '🤖 "Beep boop! 👋 I\'m Bot! On your first game, I\'ll solve very slow! If you\'re fast, I\'ll go fast—if you\'re slow, I\'ll turn slow!"';
+                    } else if (info.mode === 'fast') {
+                        speechEl.textContent = `🤖 "⚡ Whoa, you're fast! I'm speeding up to match your pace (${info.targetDisplay})! Let's race!"`;
+                    } else if (info.mode === 'slow') {
+                        speechEl.textContent = `🤖 "🐢 Taking it nice and steady! I'm turning slow to match your speed (${info.targetDisplay})! Have fun!"`;
                     } else {
-                        const info = duelGetBotLevelInfo(duelBot.stats.gamesPlayed);
-                        speechEl.textContent = `🤖 "I'm ready! Current rank: ${info.name}. Let's see your speed! ⚡"`;
+                        speechEl.textContent = `🤖 "🎯 Pacing at ${info.targetDisplay} to match your solve speed! Let's race!"`;
                     }
                 } else if (situation === 'player_won') {
-                    if (duelBot.stats.gamesPlayed === 1) {
-                        speechEl.textContent = `🤖 "🎉 Amazing solve (${extra.p1Time || extra.winnerTime}s)! You won! I analyzed your speed—I'll step it up just a bit next round! 🚀"`;
-                    } else {
-                        speechEl.textContent = `🤖 "🏆 Wow, ${extra.p1Time || extra.winnerTime}s is fast! You won! I'll try a little harder on Round ${duelState.round + 1}! 🔥"`;
-                    }
+                    const timeStr = extra.p1Time || extra.winnerTime;
+                    speechEl.textContent = `🤖 "🎉 Nice win (${timeStr}s)! I saw how fast you solved—I'll adapt to stay right with you! 🚀"`;
                 } else if (situation === 'bot_won') {
-                    if (duelBot.stats.botWinsStreak >= 2) {
-                        speechEl.textContent = `🤖 "Whew! My cooling fans are spinning! 🧊 I'll slow down on the next round so you can catch up!"`;
-                    } else {
-                        speechEl.textContent = `🤖 "Beep! Good game! ${extra.p2Time || extra.botTime}s vs ${extra.p1Time || extra.runnerUpTime}s. Super close—you can get me next round! 👏"`;
-                    }
+                    speechEl.textContent = `🤖 "Beep! Super close race (${extra.p2Time || extra.botTime}s vs ${extra.p1Time || extra.runnerUpTime}s)! I'll pace so you can get me next round! 👏"`;
                 } else if (situation === 'tie') {
                     speechEl.textContent = `🤖 "⚡ An exact tie! That was an epic race! Let's go again! 🤝"`;
                 } else if (situation === 'reset') {
-                    speechEl.textContent = `🤖 "I've reset back to Level 1 (Super Slow)! Let's race! 🐢"`;
+                    speechEl.textContent = `🤖 "I've reset back to Very Slow (First Start)! Ready when you are! 🐢"`;
                 }
             }
             
@@ -1535,6 +1570,8 @@
                     if (btn3) { btn3.style.backgroundColor = '#e2e8f0'; btn3.style.color = '#334155'; }
                 }
                 duelGenerateScramble(evt);
+                duelUpdateBotLevelDisplay();
+                if (duelBot.enabled) duelSetBotSpeech('welcome');
             }
             
             function duelSetPlayerCount(count) {
@@ -2336,7 +2373,7 @@
                         if (humanTimes.length > 0) {
                             const fastestHuman = Math.min(...humanTimes);
                             duelBot.stats.playerTimes.push(fastestHuman);
-                            if (duelBot.stats.playerTimes.length > 15) duelBot.stats.playerTimes.shift();
+                            if (duelBot.stats.playerTimes.length > 5) duelBot.stats.playerTimes.shift();
                         }
                         duelBot.stats.gamesPlayed++;
                         if (winner.num === 2) {
