@@ -1153,7 +1153,7 @@
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 1.4em;">🎮</span>
                     <div>
-                        <strong>How to Duel:</strong> Hold your mat until it turns green (or hold keyboard key), then release to start! Tap again when you solve your cube.
+                        <strong>How to Duel:</strong> Click <strong>📢 3-2-1-GO!</strong> to start all racers' timers automatically together, or hold your mat to ready up! Tap your mat when you solve your cube.
                     </div>
                 </div>
                 <div id="duel-keys-hint" style="display: flex; gap: 14px; font-size: 0.85em; font-weight: 600; flex-wrap: wrap;">
@@ -1176,7 +1176,7 @@
 
         <!-- 1 VS 1 BATTLE MODE SCRIPT -->
         <script>
-            // Test script for duel battle arena (2 to 4 players)
+            // Test script for duel battle arena (2 to 4 players) with auto-start on "GO!"
             const duelState = {
                 event: '3x3',
                 scramble: '',
@@ -1264,6 +1264,8 @@
                     playerWinsStreak: 0
                 }
             };
+            
+            let duelCountdownInterval = null;
             
             function duelLoadBotStats() {
                 try {
@@ -1582,6 +1584,15 @@
             }
             
             function duelSetPlayerCount(count) {
+                if (duelCountdownInterval) {
+                    clearInterval(duelCountdownInterval);
+                    duelCountdownInterval = null;
+                    const banner = document.getElementById('duel-sync-countdown-banner');
+                    const btn = document.getElementById('duel-countdown-btn');
+                    if (banner) banner.style.display = 'none';
+                    if (btn) btn.disabled = false;
+                }
+            
                 count = Math.max(2, Math.min(4, parseInt(count) || 2));
                 duelState.playerCount = count;
             
@@ -1759,37 +1770,155 @@
                 }
             }
             
+            function duelStartAllActivePlayers() {
+                const now = performance.now();
+            
+                // Hide any previous podium
+                const podiumEl = document.getElementById('duel-multi-podium');
+                if (podiumEl) {
+                    podiumEl.innerHTML = '';
+                    podiumEl.style.display = 'none';
+                }
+            
+                for (let i = 1; i <= duelState.playerCount; i++) {
+                    const p = duelState.players[i];
+                    clearTimeout(p.holdTimeout);
+                    clearInterval(p.timerId);
+            
+                    p.state = 'running';
+                    p.startTime = now;
+                    p.elapsed = 0;
+                    p.penalty = 0;
+            
+                    const card = document.getElementById(`p${i}-card`);
+                    const mat = document.getElementById(`p${i}-mat`);
+                    const matLabel = document.getElementById(`p${i}-mat-label`);
+                    const statusPill = document.getElementById(`p${i}-status-pill`);
+                    const timerDisplay = document.getElementById(`p${i}-timer-display`);
+            
+                    if (card) {
+                        card.classList.remove('duel-winner-glow-p1', 'duel-winner-glow-p2', 'duel-winner-glow-bot', 'duel-winner-glow-p3', 'duel-winner-glow-p4');
+                    }
+            
+                    if (i === 2 && duelBot.enabled) {
+                        // CubeBot automated solver
+                        const targetSeconds = duelBotCalculateTarget(duelState.event);
+                        duelBot.targetTime = targetSeconds;
+            
+                        if (mat) mat.style.background = 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)';
+                        if (matLabel) matLabel.textContent = '🤖 BOT SOLVING...';
+                        if (statusPill) {
+                            statusPill.textContent = '🤖 Planning & Cross...';
+                            statusPill.style.background = '#ede9fe';
+                            statusPill.style.color = '#6d28d9';
+                        }
+            
+                        p.timerId = setInterval(() => {
+                            const elapsed = (performance.now() - p.startTime) / 1000;
+                            if (timerDisplay) timerDisplay.textContent = duelFormatTime(elapsed);
+                            const ratio = elapsed / targetSeconds;
+                            if (statusPill) {
+                                if (ratio < 0.20) statusPill.textContent = '🤖 Planning & Cross...';
+                                else if (ratio < 0.60) statusPill.textContent = '🤖 Solving F2L...';
+                                else if (ratio < 0.85) statusPill.textContent = '🤖 OLL Algorithm...';
+                                else statusPill.textContent = '🤖 PLL Final Layer...';
+                            }
+                        }, 15);
+            
+                        clearTimeout(duelBot.solveTimeout);
+                        clearTimeout(duelBot.reactionTimeout);
+                        duelBot.solveTimeout = setTimeout(() => {
+                            if (p.state === 'running') {
+                                duelPlayerStop(2);
+                            }
+                        }, targetSeconds * 1000);
+                    } else {
+                        // Human player
+                        const runningBg = i === 1 ? 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)'
+                            : (i === 2 ? 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)'
+                            : (i === 3 ? 'linear-gradient(180deg, #10b981 0%, #059669 100%)'
+                            : 'linear-gradient(180deg, #f59e0b 0%, #d97706 100%)'));
+            
+                        if (mat) mat.style.background = runningBg;
+                        if (matLabel) matLabel.textContent = 'TAP HERE TO FINISH!';
+                        if (statusPill) {
+                            statusPill.textContent = 'SOLVING...';
+                            statusPill.style.background = '#e0f2fe';
+                            statusPill.style.color = '#0284c7';
+                        }
+            
+                        p.timerId = setInterval(() => {
+                            const elapsed = (performance.now() - p.startTime) / 1000;
+                            if (timerDisplay) timerDisplay.textContent = duelFormatTime(elapsed);
+                        }, 10);
+                    }
+                }
+            
+                duelUpdateRaceStatus();
+            }
+            
             function duelStartSyncCountdown() {
                 const banner = document.getElementById('duel-sync-countdown-banner');
                 const btn = document.getElementById('duel-countdown-btn');
                 if (!banner) return;
+            
+                if (duelCountdownInterval) {
+                    clearInterval(duelCountdownInterval);
+                    duelCountdownInterval = null;
+                }
+            
+                // Reset all player timers to 0 so everyone starts fresh at GO!
+                for (let i = 1; i <= 4; i++) {
+                    duelResetPlayerTimer(i);
+                }
+                const podiumEl = document.getElementById('duel-multi-podium');
+                if (podiumEl) {
+                    podiumEl.innerHTML = '';
+                    podiumEl.style.display = 'none';
+                }
+            
                 banner.style.display = 'block';
                 if (btn) btn.disabled = true;
             
                 let count = 3;
                 banner.textContent = `🔥 GET READY... ${count}`;
+                banner.style.background = '#1e272e';
+                banner.style.borderColor = '#FAED27';
+                banner.style.color = '#FAED27';
                 duelPlayTone(440, 'sine', 0.2);
             
-                const iv = setInterval(() => {
+                const res2P = document.getElementById('duel-result-text');
+                const resMulti = document.getElementById('duel-multi-status-text');
+                const prepMsg = `🔥 <strong>COUNTDOWN!</strong> Hands on cubes... Starting in 3s!`;
+                if (res2P) res2P.innerHTML = prepMsg;
+                if (resMulti) resMulti.innerHTML = prepMsg;
+            
+                duelCountdownInterval = setInterval(() => {
                     count--;
                     if (count > 0) {
                         banner.textContent = `🔥 GET READY... ${count}`;
                         duelPlayTone(440, 'sine', 0.2);
+                        if (res2P) res2P.innerHTML = `🔥 <strong>COUNTDOWN!</strong> Starting in ${count}...`;
+                        if (resMulti) resMulti.innerHTML = `🔥 <strong>COUNTDOWN!</strong> Starting in ${count}...`;
                     } else if (count === 0) {
                         banner.textContent = `🚀 GO! GO! GO! 🚀`;
                         banner.style.background = '#10b981';
                         banner.style.borderColor = '#059669';
                         banner.style.color = '#ffffff';
                         duelPlayTone(880, 'sine', 0.35);
+            
+                        // AUTO START TIMERS FOR ALL ACTIVE PLAYERS!
+                        duelStartAllActivePlayers();
                     } else {
-                        clearInterval(iv);
+                        clearInterval(duelCountdownInterval);
+                        duelCountdownInterval = null;
                         setTimeout(() => {
                             banner.style.display = 'none';
                             banner.style.background = '#1e272e';
                             banner.style.borderColor = '#FAED27';
                             banner.style.color = '#FAED27';
                             if (btn) btn.disabled = false;
-                        }, 900);
+                        }, 1200);
                     }
                 }, 1000);
             }
@@ -1973,6 +2102,11 @@
             }
             
             function duelPlayerPressDown(playerNum) {
+                if (duelCountdownInterval) {
+                    // Countdown is currently ticking down to GO! - don't trigger false-start
+                    return;
+                }
+            
                 const p = duelState.players[playerNum];
                 if (!p) return;
                 const mat = document.getElementById(`p${playerNum}-mat`);
@@ -2024,6 +2158,10 @@
             }
             
             function duelPlayerPressUp(playerNum) {
+                if (duelCountdownInterval) {
+                    return;
+                }
+            
                 const p = duelState.players[playerNum];
                 if (!p) return;
                 const mat = document.getElementById(`p${playerNum}-mat`);
@@ -2136,7 +2274,7 @@
                 if (active.length === 0) {
                     text = 'Ready to Race! All cubers hold mats to ready!';
                 } else if (active.length === duelState.playerCount) {
-                    text = `⚡ <strong>RACE IN PROGRESS!</strong> All ${active.length} cubers solving!`;
+                    text = `⚡ <strong>RACE IN PROGRESS!</strong> All ${active.length} cubers solving! Tap your mat when finished!`;
                 } else {
                     text = `⚡ <strong>Solving:</strong> ${active.join(', ')}`;
                 }
@@ -2398,6 +2536,15 @@
             }
             
             function duelNextRound() {
+                if (duelCountdownInterval) {
+                    clearInterval(duelCountdownInterval);
+                    duelCountdownInterval = null;
+                    const banner = document.getElementById('duel-sync-countdown-banner');
+                    const btn = document.getElementById('duel-countdown-btn');
+                    if (banner) banner.style.display = 'none';
+                    if (btn) btn.disabled = false;
+                }
+            
                 duelState.round++;
                 for (let i = 1; i <= 4; i++) {
                     duelResetPlayerTimer(i);
@@ -2423,6 +2570,16 @@
             
             function duelResetMatch() {
                 if (typeof confirm === 'function' && !confirm('Reset match scores and round count back to 0?')) return;
+            
+                if (duelCountdownInterval) {
+                    clearInterval(duelCountdownInterval);
+                    duelCountdownInterval = null;
+                    const banner = document.getElementById('duel-sync-countdown-banner');
+                    const btn = document.getElementById('duel-countdown-btn');
+                    if (banner) banner.style.display = 'none';
+                    if (btn) btn.disabled = false;
+                }
+            
                 for (let i = 1; i <= 4; i++) {
                     duelState.players[i].score = 0;
                     duelResetPlayerTimer(i);
