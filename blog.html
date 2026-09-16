@@ -11,6 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db-config.js"></script>
     <style>
         html {
             scroll-behavior: smooth;
@@ -621,7 +622,7 @@
         // 2. Click "Firestore Database" -> Create Database (Test mode or production).
         // 3. Register a Web App ('</>') and paste your firebaseConfig keys below:
         // =========================================================================
-        const FIREBASE_CONFIG = {
+        const FIREBASE_CONFIG = window.CUBE_FIREBASE_CONFIG || {
             apiKey: "",
             authDomain: "",
             projectId: "",
@@ -632,8 +633,8 @@
 
         // --- OPTIONAL SUPABASE CONFIGURATION ---
         // (Note: Supabase free projects auto-pause after 7 days of inactivity)
-        const SUPABASE_URL = ""; 
-        const SUPABASE_ANON_KEY = "";
+        const SUPABASE_URL = (window.CUBE_SUPABASE_CONFIG && window.CUBE_SUPABASE_CONFIG.url) || ""; 
+        const SUPABASE_ANON_KEY = (window.CUBE_SUPABASE_CONFIG && window.CUBE_SUPABASE_CONFIG.anonKey) || "";
 
         // Cloud Database Clients
         let dbFirestore = null;
