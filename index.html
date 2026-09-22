@@ -13,6 +13,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db-config.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
     <style>
         html {
             scroll-behavior: smooth;
@@ -581,8 +583,13 @@
 
     <div class="container">
         
-        <!-- TOP UTILITY BAR (LANGUAGE PICKER) -->
-        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px; position: relative; z-index: 10;">
+        <!-- TOP UTILITY BAR (LANGUAGE PICKER & THEME TOGGLE) -->
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 12px; position: relative; z-index: 10; flex-wrap: wrap;">
+            <!-- Dark Mode Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙">
+                <span class="theme-toggle-icon">🌙</span>
+                <span class="theme-toggle-text">Dark Mode</span>
+            </button>
             <div class="language-picker" title="Change Website Language">
                 <label for="cube-lang-select" class="lang-label">
                     <span>🌐</span> <strong>Language:</strong>

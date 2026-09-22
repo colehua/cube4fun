@@ -1,0 +1,261 @@
+/* =========================================================================
+   🧊 LEARN CUBE 4 FUN - THEME SYSTEM (DARK & LIGHT MODE)
+   ========================================================================= */
+
+/* Smooth transitions for theme switching */
+body, 
+.text-section, 
+.hub-card, 
+.battle-arena-card, 
+.poster-container, 
+.slide, 
+.schedule-box, 
+.language-picker, 
+.theme-toggle-btn,
+.floating-theme-toggle,
+.modal-content,
+.comment-card,
+.nav-button,
+.cube-button,
+.alg-card,
+.challenge-card,
+.news-card,
+input, 
+select, 
+textarea {
+    transition: background-color 0.25s ease, 
+                border-color 0.25s ease, 
+                color 0.25s ease, 
+                box-shadow 0.25s ease;
+}
+
+/* -------------------------------------------------------------
+   THEME TOGGLE BUTTON STYLES
+   ------------------------------------------------------------- */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #1e272e;
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: 2.5px solid #1e272e;
+    box-shadow: 0px 4px 0px #1e272e;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+    user-select: none;
+    line-height: 1.2;
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 0px #1e272e;
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0px 2px 0px #1e272e;
+}
+
+.theme-toggle-icon {
+    font-size: 1.15em;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle-btn:hover .theme-toggle-icon,
+.floating-theme-toggle:hover .theme-toggle-icon {
+    transform: rotate(20deg) scale(1.15);
+}
+
+/* Floating theme toggle button (Always accessible) */
+.floating-theme-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 99998;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #1e272e;
+    border: 3px solid #1e272e;
+    border-radius: 35px;
+    padding: 10px 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 4px 0 #1e272e;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    user-select: none;
+}
+
+.floating-theme-toggle:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 7px 0 #1e272e;
+}
+
+.floating-theme-toggle:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 0 #1e272e;
+}
+
+/* -------------------------------------------------------------
+   🌙 DARK MODE ACTIVE STYLES
+   ------------------------------------------------------------- */
+html.dark-mode,
+body.dark-mode {
+    --text-dark: #f8fafc;
+    --primary-light: #1e293b;
+    --glass-bg: rgba(15, 23, 42, 0.90);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+    color: #f1f5f9;
+}
+
+body.dark-mode {
+    background-color: #060911 !important;
+    background-image: linear-gradient(rgba(6, 9, 17, 0.72), rgba(6, 9, 17, 0.72)), url('dragon_cube_bg.jpg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
+}
+
+/* Buttons in Dark Mode */
+body.dark-mode .theme-toggle-btn,
+body.dark-mode .floating-theme-toggle {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #64748b !important;
+    box-shadow: 0px 4px 0px #090d16 !important;
+}
+
+body.dark-mode .theme-toggle-btn:hover,
+body.dark-mode .floating-theme-toggle:hover {
+    border-color: #FAED27 !important;
+    box-shadow: 0px 6px 0px #090d16, 0 0 14px rgba(250, 237, 39, 0.25) !important;
+}
+
+body.dark-mode .theme-toggle-btn:active,
+body.dark-mode .floating-theme-toggle:active {
+    box-shadow: 0px 2px 0px #090d16 !important;
+}
+
+/* Glass cards, sections, containers in Dark Mode */
+body.dark-mode .text-section,
+body.dark-mode .poster-container,
+body.dark-mode .hub-card,
+body.dark-mode .battle-arena-card,
+body.dark-mode .slide,
+body.dark-mode .admin-bar,
+body.dark-mode .modal-content,
+body.dark-mode .comment-card,
+body.dark-mode .language-picker,
+body.dark-mode .schedule-box,
+body.dark-mode .news-card,
+body.dark-mode .post-card,
+body.dark-mode .alg-card,
+body.dark-mode .challenge-card,
+body.dark-mode .card,
+body.dark-mode .duel-mat,
+body.dark-mode .learning-tip-card {
+    background: rgba(17, 24, 39, 0.92) !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+    box-shadow: 0 6px 0 #090d16, 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Headlines and Text in Dark Mode */
+body.dark-mode h1.main-title {
+    color: #ffffff !important;
+    -webkit-text-stroke: 3px #0f172a !important;
+    text-shadow: 6px 6px 0px #020617, 0 0 25px rgba(0, 229, 255, 0.35) !important;
+}
+
+body.dark-mode h2.black-bubbly,
+body.dark-mode h3.black-bubbly,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4 {
+    color: #f8fafc !important;
+}
+
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode .hub-card p,
+body.dark-mode .schedule-box li {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode strong,
+body.dark-mode b {
+    color: #ffffff !important;
+}
+
+body.dark-mode .schedule-box {
+    border-color: #334155 !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .schedule-box li {
+    border-bottom: 2px dotted #334155 !important;
+}
+
+/* Inputs, Textareas, and Dropdowns in Dark Mode */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+    border-color: #00E5FF !important;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.35) !important;
+}
+
+body.dark-mode .lang-select {
+    background: #0f172a !important;
+    color: #00E5FF !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .lang-label {
+    color: #f8fafc !important;
+}
+
+/* Footer in Dark Mode */
+body.dark-mode .site-footer {
+    background: #090e17 !important;
+    border-top: 5px solid #00E5FF !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .footer-col h4 {
+    color: #00E5FF !important;
+    border-bottom: 2px dashed #334155 !important;
+}
+
+body.dark-mode .footer-desc,
+body.dark-mode .footer-col.info-col p {
+    color: #94a3b8 !important;
+}
+
+/* Highlight badge */
+body.dark-mode .highlight-yellow {
+    color: #0f172a !important;
+}
