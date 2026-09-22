@@ -35,37 +35,19 @@
             margin: 0;
             padding: 0;
             font-family: 'Outfit', sans-serif; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
+            background: #0d1117 url('dragon_cube_bg.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: var(--text-dark);
             min-height: 100vh;
             overflow-x: hidden; 
         }
  
         .blob-top {
-            position: absolute;
-            top: -120px;
-            left: -10%;
-            width: 120%;
-            height: 280px;
-            background: linear-gradient(90deg, #00E5FF 0%, #0088FF 100%);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.95;
-            filter: blur(10px);
+            display: none;
         }
  
         .blob-bottom {
-            position: fixed;
-            bottom: -200px;
-            right: -150px;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, var(--yellow-blob) 0%, #FFF59D 100%);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.8;
-            filter: blur(20px);
-            animation: float-slow 15s infinite alternate ease-in-out;
+            display: none;
         }
 
         @keyframes float-slow {
@@ -711,8 +693,10 @@
         </div>
 
         <!-- LEARNING ORDER TIP -->
-        <div style="text-align: center; margin-bottom: 25px; font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #1e272e;">
-            💡 <span style="color: #FF6B6B;">Learning Tip:</span> Learn the <a href="tutorial-3x3.html" style="color: #0066FF; text-decoration: underline;">3x3 Tutorial</a> first, then the <a href="tutorial-2x2.html" style="color: #FF9F43; text-decoration: underline;">2x2 Tutorial</a>! 🧊
+        <div style="text-align: center; margin-bottom: 25px;">
+            <div style="display: inline-block; background: #ffffff; border: 3px solid #1e272e; border-radius: 20px; padding: 8px 22px; font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #1e272e; box-shadow: 0 4px 0 #1e272e;">
+                💡 <span style="color: #FF6B6B;">Learning Tip:</span> Learn the <a href="tutorial-3x3.html" style="color: #0066FF; text-decoration: underline;">3x3 Tutorial</a> first, then the <a href="tutorial-2x2.html" style="color: #FF9F43; text-decoration: underline;">2x2 Tutorial</a>! 🧊
+            </div>
         </div>
 
         <!-- Total Solves Counter Badge -->
