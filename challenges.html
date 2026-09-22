@@ -957,6 +957,10 @@
                     <span style="font-family: 'DynaPuff', cursive; font-size: 0.95em; color: #475569;">⏱️ Integrated Challenge Stopwatch</span>
                     <span id="mini-timer-hint" style="font-size: 0.85em; color: #94a3b8; font-weight: bold;">(Click display or Hold Spacebar to time your challenge!)</span>
                 </div>
+                <!-- RED LIGHT GREEN LIGHT LIVE INDICATOR (Activates on Red Light Green Light challenge) -->
+                <div id="red-light-indicator" style="display: none; text-align: center; margin: 8px auto 10px auto; padding: 10px 18px; border-radius: 18px; font-family: 'DynaPuff', cursive; font-size: 1.25em; font-weight: 800; border: 3px solid #1e272e; box-shadow: 0 4px 0 #1e272e; transition: all 0.25s ease;">
+                    <span id="red-light-text">🟢 GREEN LIGHT - READY TO SOLVE! 🟢</span>
+                </div>
                 <div id="mini-timer-val" class="mini-timer-display" title="Click or Spacebar to Start/Stop">0.00</div>
                 <div style="display: flex; gap: 10px; justify-content: center; margin-top: 6px;">
                     <button id="btn-mini-timer-toggle" class="scramble-copy-btn" style="background: #2ECC71; color: white; padding: 6px 16px;">▶ Start Stopwatch</button>
@@ -989,18 +993,18 @@
 
         <!-- SEARCH BAR -->
         <div class="search-bar-container">
-            <input type="text" id="challenge-search-input" placeholder="🔍 Instant search any challenge (e.g. tent, boat, upside down, blind, 30s)..." class="challenge-search-bar">
+            <input type="text" id="challenge-search-input" placeholder="🔍 Instant search any challenge (e.g. animal, toy box, red light, tent, boat)..." class="challenge-search-bar">
         </div>
 
         <!-- FILTER BUTTONS -->
         <div class="filter-container">
-            <button class="filter-btn active" data-filter="all">🌟 All Challenges (<span id="count-all">30</span>)</button>
+            <button class="filter-btn active" data-filter="all">🌟 All Challenges (<span id="count-all">33</span>)</button>
             <button class="filter-btn btn-infinite-tab" data-filter="infinite">♾️ Infinite Unlocked (<span id="count-infinite">0</span>)</button>
-            <button class="filter-btn btn-crazy-tab" data-filter="crazy">🤪 Crazy & Wild (10)</button>
-            <button class="filter-btn" data-filter="speed">⚡ Speed Milestones (5)</button>
-            <button class="filter-btn" data-filter="handicap">🖐️ Turning Handicaps (5)</button>
-            <button class="filter-btn" data-filter="restriction">🧩 Move Restrictions (5)</button>
-            <button class="filter-btn" data-filter="pattern">🎨 Pattern Masters (5)</button>
+            <button class="filter-btn btn-crazy-tab" data-filter="crazy">🤪 Crazy & Wild (<span id="count-crazy">13</span>)</button>
+            <button class="filter-btn" data-filter="speed">⚡ Speed Milestones (<span id="count-speed">5</span>)</button>
+            <button class="filter-btn" data-filter="handicap">🖐️ Turning Handicaps (<span id="count-handicap">5</span>)</button>
+            <button class="filter-btn" data-filter="restriction">🧩 Move Restrictions (<span id="count-restriction">5</span>)</button>
+            <button class="filter-btn" data-filter="pattern">🎨 Pattern Masters (<span id="count-pattern">5</span>)</button>
             <button id="btn-filter-plus" class="filter-btn" style="background: #a29bfe; color: white; border-color: #1e272e; font-weight: bold;">➕ Plus Challenge</button>
         </div>
 
@@ -1196,6 +1200,39 @@
                 tip: '💡 Tip: Practice gentle, non-spinning straight vertical tosses so the cube stays in your line of sight!',
                 actionUrl: 'timer.html',
                 actionText: '⏱️ Toss Challenge'
+            },
+            {
+                id: 'wild_animal',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Wild Animal Solve 🦁',
+                difficulty: '⭐⭐⭐⭐⭐',
+                desc: 'Solve the Rubik\'s Cube right next to a wild animal! Head to a zoo, safari park, petting farm, or spot a wild squirrel or Canadian goose at the park, and complete your solve right beside it without dropping your cube!',
+                tip: '💡 Tip: Animals are curious! Keep your turns smooth, stay at a safe distance, and don\'t make sudden jerky movements so the animal doesn\'t get startled or mistake your bright cube for food!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Wild Animal Solve'
+            },
+            {
+                id: 'toy_box',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'The Toy Box Challenge 🧸',
+                difficulty: '⭐⭐⭐',
+                desc: 'Climb up and sit right on top of a toy box (or playroom toy trunk) and solve the Rubik\'s Cube completely while balancing on the lid without touching the floor or falling off!',
+                tip: '💡 Tip: Keep your posture centered and feet tucked up! Balance requires a stable core so you don\'t wobble off the chest when executing fast wrist turns.',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Toy Box Solve'
+            },
+            {
+                id: 'red_light_green_light',
+                category: 'crazy',
+                categoryName: '🤪 Crazy & Wild',
+                title: 'Red Light, Green Light 🚦',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'Squid Game style cubing! You can ONLY turn the cube while the light is GREEN! The instant it turns RED, you must freeze completely like a statue. Can you solve the entire cube before time runs out?',
+                tip: '💡 Tip: Execute high TPS during green intervals, and hold your fingers firmly against the cube face the moment red flashes so you don\'t commit a false turn!',
+                actionUrl: 'timer.html',
+                actionText: '⏱️ Green Light Blitz'
             },
 
             // Category 1: Speed Milestones
@@ -1656,6 +1693,9 @@
             }
 
             highlightActiveCardInGrid();
+            if (typeof checkRedLightMode === 'function') {
+                checkRedLightMode(false);
+            }
         }
 
         // GENERATE NEW RANDOM SCRAMBLE FOR ACTIVE CHALLENGE
@@ -1766,13 +1806,77 @@
             });
         }
 
-        // --- INTEGRATED MINI STOPWATCH ---
+        // --- INTEGRATED MINI STOPWATCH & RED LIGHT GREEN LIGHT MODE ---
         let miniTimerState = 'IDLE'; // IDLE, RUNNING
         let miniTimerStartTime = 0;
         let miniTimerInterval = null;
         const miniTimerVal = document.getElementById('mini-timer-val');
         const btnMiniToggle = document.getElementById('btn-mini-timer-toggle');
         const btnMiniReset = document.getElementById('btn-mini-timer-reset');
+
+        let redLightTimer = null;
+        let isLightGreen = true;
+
+        function checkRedLightMode(isStarting) {
+            const indicator = document.getElementById('red-light-indicator');
+            const textEl = document.getElementById('red-light-text');
+            const c = CHALLENGES[activeChallengeIndex];
+            
+            if (!indicator || !c || c.id !== 'red_light_green_light') {
+                if (indicator) indicator.style.display = 'none';
+                if (redLightTimer) {
+                    clearTimeout(redLightTimer);
+                    redLightTimer = null;
+                }
+                return;
+            }
+
+            indicator.style.display = 'block';
+
+            if (!isStarting) {
+                if (redLightTimer) {
+                    clearTimeout(redLightTimer);
+                    redLightTimer = null;
+                }
+                indicator.style.background = '#2ECC71';
+                indicator.style.borderColor = '#1e272e';
+                indicator.style.color = '#ffffff';
+                if (textEl) textEl.textContent = '🟢 GREEN LIGHT - READY TO SOLVE! 🟢';
+                return;
+            }
+
+            // Start cycling green and red lights
+            isLightGreen = true;
+            indicator.style.background = '#2ECC71';
+            indicator.style.borderColor = '#1e272e';
+            indicator.style.color = '#ffffff';
+            if (textEl) textEl.textContent = '🟢 GREEN LIGHT - SOLVE NOW! 🟢';
+
+            function cycle() {
+                const nextDelay = isLightGreen 
+                    ? Math.floor(Math.random() * 3000) + 4000  // Green for 4 - 7 seconds
+                    : Math.floor(Math.random() * 2000) + 2500; // Red for 2.5 - 4.5 seconds
+
+                redLightTimer = setTimeout(() => {
+                    if (miniTimerState !== 'RUNNING') return;
+                    isLightGreen = !isLightGreen;
+                    if (isLightGreen) {
+                        indicator.style.background = '#2ECC71';
+                        indicator.style.color = '#ffffff';
+                        if (textEl) textEl.textContent = '🟢 GREEN LIGHT - SOLVE NOW! 🟢';
+                        playSound('click');
+                    } else {
+                        indicator.style.background = '#ff4757';
+                        indicator.style.color = '#ffffff';
+                        if (textEl) textEl.textContent = '🔴 RED LIGHT - FREEZE! 🔴';
+                        playSound('scramble');
+                    }
+                    cycle();
+                }, nextDelay);
+            }
+
+            cycle();
+        }
 
         function formatStopwatchTime(ms) {
             const s = Math.floor(ms / 1000);
@@ -1795,6 +1899,8 @@
             btnMiniToggle.style.background = '#e74c3c';
             playSound('click');
 
+            checkRedLightMode(true);
+
             miniTimerInterval = setInterval(() => {
                 const elapsed = Date.now() - miniTimerStartTime;
                 miniTimerVal.textContent = formatStopwatchTime(elapsed);
@@ -1809,6 +1915,8 @@
             btnMiniToggle.style.background = '#2ECC71';
             playSound('fanfare');
             triggerConfetti();
+
+            checkRedLightMode(false);
 
             // Auto-ask or prompt to complete challenge
             const c = CHALLENGES[activeChallengeIndex];
@@ -1830,6 +1938,8 @@
             btnMiniToggle.textContent = '▶ Start Stopwatch';
             btnMiniToggle.style.background = '#2ECC71';
             playSound('click');
+
+            checkRedLightMode(false);
         }
 
         btnMiniToggle.addEventListener('click', () => {
@@ -1875,8 +1985,19 @@
 
             // Update badge counts in filter buttons
             const infCount = CHALLENGES.filter(c => c.category === 'infinite').length;
-            document.getElementById('count-all').textContent = CHALLENGES.length;
-            document.getElementById('count-infinite').textContent = infCount;
+            const crazyCount = CHALLENGES.filter(c => c.category === 'crazy').length;
+            const speedCount = CHALLENGES.filter(c => c.category === 'speed').length;
+            const handicapCount = CHALLENGES.filter(c => c.category === 'handicap').length;
+            const restrictionCount = CHALLENGES.filter(c => c.category === 'restriction').length;
+            const patternCount = CHALLENGES.filter(c => c.category === 'pattern').length;
+
+            if (document.getElementById('count-all')) document.getElementById('count-all').textContent = CHALLENGES.length;
+            if (document.getElementById('count-infinite')) document.getElementById('count-infinite').textContent = infCount;
+            if (document.getElementById('count-crazy')) document.getElementById('count-crazy').textContent = crazyCount;
+            if (document.getElementById('count-speed')) document.getElementById('count-speed').textContent = speedCount;
+            if (document.getElementById('count-handicap')) document.getElementById('count-handicap').textContent = handicapCount;
+            if (document.getElementById('count-restriction')) document.getElementById('count-restriction').textContent = restrictionCount;
+            if (document.getElementById('count-pattern')) document.getElementById('count-pattern').textContent = patternCount;
 
             let filtered = currentFilter === 'all' 
                 ? CHALLENGES 
