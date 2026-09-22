@@ -125,7 +125,7 @@ body.dark-mode {
 
 body.dark-mode {
     background-color: #060911 !important;
-    background-image: linear-gradient(rgba(6, 9, 17, 0.72), rgba(6, 9, 17, 0.72)), url('dragon_cube_bg.jpg') !important;
+    background-image: linear-gradient(rgba(6, 9, 17, 0.72), rgba(6, 9, 17, 0.72)), url('dragon_bg.jpg') !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
     background-attachment: fixed !important;
