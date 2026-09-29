@@ -73,7 +73,8 @@
         body.timer-active .corner-scramble-widget,
         body.timer-active .cs-site-nav,
         body.timer-active .main-title,
-        body.timer-active .site-footer {
+        body.timer-active .site-footer,
+        body.timer-active .floating-theme-toggle {
             opacity: 0.04 !important;
             pointer-events: none !important;
             transition: opacity 0.15s ease;
@@ -81,6 +82,38 @@
 
         body.timer-active .timer-instructions {
             opacity: 0 !important;
+        }
+
+        /* SPEEDCUBING TIMER: Move dark mode toggle to the TOP-LEFT corner so it NEVER blocks the scramble preview */
+        .floating-theme-toggle {
+            top: 16px !important;
+            left: 16px !important;
+            bottom: auto !important;
+            right: auto !important;
+            z-index: 99999 !important;
+            padding: 8px 16px !important;
+            font-size: 0.9em !important;
+            border-radius: 20px !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 3px 0 #1e272e !important;
+        }
+
+        .floating-theme-toggle:hover {
+            transform: translateY(-2px) scale(1.02) !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), 0 4px 0 #1e272e !important;
+        }
+
+        .floating-theme-toggle:active {
+            transform: translateY(2px) scale(0.98) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 1px 0 #1e272e !important;
+        }
+
+        @media (max-width: 600px) {
+            .floating-theme-toggle {
+                top: 10px !important;
+                left: 10px !important;
+                padding: 6px 10px !important;
+                font-size: 0.8em !important;
+            }
         }
 
         /* Top Navigation Row */
@@ -1447,7 +1480,10 @@
             <aside class="cs-sidebar-left">
                 <!-- Summary Stats Card -->
                 <div class="card-section">
-                    <h3 class="cs-card-title">Session Stats 📊</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h3 class="cs-card-title" style="margin-bottom: 0;">Session Stats 📊</h3>
+                        <button id="btn-reset-average" class="btn-action" style="background-color: #ff7675; color: white; padding: 4px 10px; font-size: 0.82em; border-radius: 10px; box-shadow: 0 3px 0 #1e272e;" title="Reset current session average and clear solves">Reset Average 🔄</button>
+                    </div>
                     <div class="cs-quick-stats-grid">
                         <div class="cs-stat-cell">
                             <span class="cs-cell-label">Solves</span>
@@ -1499,7 +1535,7 @@
                 <div class="card-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <h3 class="cs-card-title" style="margin-bottom: 0;">Solve History 📋</h3>
-                        <button id="btn-clear-session" class="btn-action" style="background-color: #ff8585; color: white; padding: 4px 12px; font-size: 0.85em; box-shadow: 0 3px 0 #1e272e;">Clear 🗑️</button>
+                        <button id="btn-clear-session" class="btn-action" style="background-color: #ff7675; color: white; padding: 4px 10px; font-size: 0.82em; border-radius: 10px; box-shadow: 0 3px 0 #1e272e;" title="Clear all solves in this session">Clear 🗑️</button>
                     </div>
                     <div class="solves-container" style="max-height: 200px;">
                         <table class="solves-table">
@@ -4383,12 +4419,28 @@
             });
         });
 
-        clearSessionBtn.addEventListener('click', () => {
-            if (confirm("Are you sure you want to clear your entire " + scrambleTypeSelect.value + " solve history? This cannot be undone!")) {
+        function resetAverageSession() {
+            if (solves.length === 0) {
+                alert("Your solve session is already empty!");
+                return;
+            }
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            if (confirm("Reset current average and clear all " + solves.length + " solves for " + type + "? This cannot be undone!")) {
                 solves = [];
                 saveSolves();
+                if (timerDisplay && timerState === 'IDLE') {
+                    timerDisplay.textContent = "0.00";
+                }
             }
-        });
+        }
+
+        const btnResetAvg = document.getElementById('btn-reset-average');
+        if (btnResetAvg) {
+            btnResetAvg.addEventListener('click', resetAverageSession);
+        }
+        if (clearSessionBtn) {
+            clearSessionBtn.addEventListener('click', resetAverageSession);
+        }
 
         // --- INITIALIZATION ---
         initAnimatorControls();
