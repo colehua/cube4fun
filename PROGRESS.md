@@ -1,31 +1,32 @@
 Status: COMPLETE
 Summary:
-- Upgraded guide.html subtitle under "Cube Guide & Finger Tricks 📖" from muted grey (#475569) to vibrant royal blue (#0066FF) inside a crisp, high-contrast white pill badge with a 3.5px border and 5px shadow, ensuring perfect readability.
-- Enhanced callout badge text inside the 3D exploded anatomy diagram to bold high-contrast navy/black (#0f172a), and updated the diagram card container to clean solid white.
-- Restored the original clean, bright kid-friendly gradient background (`linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%)`) and decorative floating blobs across all 12 website HTML pages, removing the dark grey dragon image.
-- Updated theme.css so dark mode uses a sleek, deep modern midnight gradient and light mode uses the restored original background.
+- Expanded the "Pattern Master" challenge category in challenges.html from 5 to 21 iconic, visually striking Rubik's Cube patterns (Cube in a Cube in a Cube, The Godly Superflip, Twisted Rings Spiral, Vertical Racing Stripes, Six T's, Crosses & Dots, Picture Frames, Tetris Blocks, The Wire, St. Andrew's Cross, Twisted Peaks, Scottish Tartan Tablecloth, Union Jack Flag, Twin Serpents, Center Black Hole, and Six Two-Color Bars).
+- Verified all algorithms with CubeEngine for 100% valid WCA notation and flawless virtual execution.
+- Added difficulty stars, descriptive tips, copy-to-clipboard functionality, and direct links to 3D cube view for each pattern.
+- Updated filter count badges (Pattern Masters from 5 to 21, All Challenges from 33 to 49) and verified live card rendering and instant search.
 
 Goal / Definition of done:
-1. In guide.html, replace the muted grey subtitle and labels under "Cube Guide & Finger Tricks" with high-contrast, vivid, crystal-clear colors and badges (vibrant blue/cyan, bold black text) that are completely legible on any background. (DONE)
-2. Restore the original website background to what it looked like before (clean, bright kid-friendly gradient `linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%)` with colorful animated top/bottom blobs) across all HTML pages, removing the dark grey dragon image. (DONE)
-3. Update theme.css so dark mode uses a sleek, deep modern midnight gradient and light mode uses the original clean background. (DONE)
-4. Verify all pages and push changes to remote repository. (DONE)
+1. Add an extensive collection of iconic, visually striking, non-boring Rubik's Cube patterns to the "Pattern Master" category in challenges.html (expanding from 5 to 21 patterns). (DONE)
+2. Ensure every pattern has verified 100% valid WCA notation, difficulty rating, clear kid-friendly description, pro speedcubing tip, copy button, and link to 3D cube preview. (DONE)
+3. Update filter button counts and test search and rendering. (DONE)
+4. Verify all tests pass, commit and push to remote repository. (DONE)
 
 Next step: Completed and pushed to remote main branch.
 Tasks:
-- [x] Upgrade guide.html subtitle under "Cube Guide & Finger Tricks" to high-contrast, vibrant badge styling and fix grey text
-- [x] Restore original light gradient background and decorative blobs across all 12 HTML files
-- [x] Update theme.css to use a clean modern midnight theme without dragon_bg.jpg
-- [x] Verify pages, test syntax and visual layout
-- [x] Commit and push to remote main
+- [x] Curate 16 new top-tier Rubik's Cube patterns (Cube in Cube in Cube, Superflip, Twisted Rings Spiral, Vertical Racing Stripes, Six T's, Crosses & Dots, Picture Frames, Tetris, Wire, St. Andrew's Cross, Twisted Peaks, Tartan Tablecloth, Union Jack, Twin Serpents, Black Hole, Six Bars)
+- [x] Test all pattern algorithms with CubeEngine to ensure notation validity
+- [x] Add patterns to challenges.html BASE_CHALLENGES and update count in UI
+- [x] Verify challenges.html syntax, card rendering, and search filter
+- [x] Commit and push changes to remote main
 
 Assumptions:
-- "What it looked like before" refers to the original clean, bright gradient background with the cyan/yellow floating blobs prior to commit ba9c9ba.
-- "Words that it grey... change into a colour easier to see" refers to the subtitle under "Cube Guide & Finger Tricks" and muted badge text in guide.html.
+- Only curated, visually impressive, non-boring patterns are included (avoiding trivial or near-duplicate states).
+- All pattern algorithms are verified in 3D Rubik's cube simulation.
 Blockers (what I need to do):
 - None.
 Found, not done:
 - None.
 Log (newest first, one line each):
-- Completed subtitle contrast overhaul and restored original clean background across all 12 pages and theme.css
-- Starting restoration of original background and high-contrast subtitle updates
+- Verified all 21 pattern challenges in challenges.html and confirmed 0 errors
+- Expanded Pattern Master challenges with 16 iconic patterns in challenges.html
+- Initialized Pattern Master expansion task in challenges.html
