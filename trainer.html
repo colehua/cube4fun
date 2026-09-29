@@ -3302,305 +3302,550 @@
             });
         }
 
-        // SVG Renderer
-        function generateCubeSvg(item) {
-            const name = item.name;
-            const cat = item.cat;
-            
-            // Render an isometric 3D Rubik's cube SVG
-            let svg = `<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">`;
-            
-            // Add arrowhead marker definition for PLL arrows
-            svg += `<defs>
-                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />
-                </marker>
-            </defs>`;
-            
-            const YELLOW = '#FFFF00';
-            const WHITE = '#FFFFFF';
-            const RED = '#FF3B30';
-            const GREEN = '#4CD964';
-            const BLUE = '#007AFF';
-            const ORANGE = '#FF9500';
-            const GREY = '#57606f';
-            
-            // 1. Initialize solved Rubik's cube state (Yellow top, White bottom, Green front, Blue back, Orange left, Red right)
-            let simState = {
-                U: Array(9).fill(YELLOW),
-                D: Array(9).fill(WHITE),
-                F: Array(9).fill(GREEN),
-                B: Array(9).fill(BLUE),
-                L: Array(9).fill(ORANGE),
-                R: Array(9).fill(RED)
-            };
-            
-            // Helper to invert algorithm moves
-            function invertAlgorithmLocal(movesStr) {
-                const moves = movesStr.trim().split(/\s+/).filter(m => m !== "");
-                const inverted = [];
-                for (let i = moves.length - 1; i >= 0; i--) {
-                    const move = moves[i];
-                    if (move.endsWith("'")) {
-                        inverted.push(move.slice(0, -1));
-                    } else if (move.endsWith("2")) {
-                        inverted.push(move);
+        class CubeEngine {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.faces = {
+                    U: Array(9).fill('Y'),
+                    D: Array(9).fill('W'),
+                    F: Array(9).fill('G'),
+                    B: Array(9).fill('B'),
+                    L: Array(9).fill('O'),
+                    R: Array(9).fill('R')
+                };
+            }
+            clone() {
+                const c = new CubeEngine();
+                for (let f in this.faces) c.faces[f] = [...this.faces[f]];
+                return c;
+            }
+            rotateFaceCW(face) {
+                const f = this.faces[face];
+                const copy = [...f];
+                f[0] = copy[6]; f[1] = copy[3]; f[2] = copy[0];
+                f[3] = copy[7]; f[4] = copy[4]; f[5] = copy[1];
+                f[6] = copy[8]; f[7] = copy[5]; f[8] = copy[2];
+            }
+            moveU() {
+                this.rotateFaceCW('U');
+                const f = this.faces;
+                const temp = [f.F[0], f.F[1], f.F[2]];
+                f.F[0] = f.R[0]; f.F[1] = f.R[1]; f.F[2] = f.R[2];
+                f.R[0] = f.B[0]; f.R[1] = f.B[1]; f.R[2] = f.B[2];
+                f.B[0] = f.L[0]; f.B[1] = f.L[1]; f.B[2] = f.L[2];
+                f.L[0] = temp[0]; f.L[1] = temp[1]; f.L[2] = temp[2];
+            }
+            moveD() {
+                this.rotateFaceCW('D');
+                const f = this.faces;
+                const temp = [f.F[6], f.F[7], f.F[8]];
+                f.F[6] = f.L[6]; f.F[7] = f.L[7]; f.F[8] = f.L[8];
+                f.L[6] = f.B[6]; f.L[7] = f.B[7]; f.L[8] = f.B[8];
+                f.B[6] = f.R[6]; f.B[7] = f.R[7]; f.B[8] = f.R[8];
+                f.R[6] = temp[0]; f.R[7] = temp[1]; f.R[8] = temp[2];
+            }
+            moveF() {
+                this.rotateFaceCW('F');
+                const f = this.faces;
+                const temp = [f.U[6], f.U[7], f.U[8]];
+                f.U[6] = f.L[8]; f.U[7] = f.L[5]; f.U[8] = f.L[2];
+                f.L[2] = f.D[0]; f.L[5] = f.D[1]; f.L[8] = f.D[2];
+                f.D[0] = f.R[6]; f.D[1] = f.R[3]; f.D[2] = f.R[0];
+                f.R[0] = temp[0]; f.R[3] = temp[1]; f.R[6] = temp[2];
+            }
+            moveB() {
+                this.rotateFaceCW('B');
+                const f = this.faces;
+                const temp = [f.U[0], f.U[1], f.U[2]];
+                f.U[0] = f.R[2]; f.U[1] = f.R[5]; f.U[2] = f.R[8];
+                f.R[2] = f.D[8]; f.R[5] = f.D[7]; f.R[8] = f.D[6];
+                f.D[6] = f.L[0]; f.D[7] = f.L[3]; f.D[8] = f.L[6];
+                f.L[0] = temp[2]; f.L[3] = temp[1]; f.L[6] = temp[0];
+            }
+            moveL() {
+                this.rotateFaceCW('L');
+                const f = this.faces;
+                const temp = [f.U[0], f.U[3], f.U[6]];
+                f.U[0] = f.B[8]; f.U[3] = f.B[5]; f.U[6] = f.B[2];
+                f.B[2] = f.D[6]; f.B[5] = f.D[3]; f.B[8] = f.D[0];
+                f.D[0] = f.F[0]; f.D[3] = f.F[3]; f.D[6] = f.F[6];
+                f.F[0] = temp[0]; f.F[3] = temp[1]; f.F[6] = temp[2];
+            }
+            moveR() {
+                this.rotateFaceCW('R');
+                const f = this.faces;
+                const temp = [f.U[2], f.U[5], f.U[8]];
+                f.U[2] = f.F[2]; f.U[5] = f.F[5]; f.U[8] = f.F[8];
+                f.F[2] = f.D[2]; f.F[5] = f.D[5]; f.F[8] = f.D[8];
+                f.D[2] = f.B[6]; f.D[5] = f.B[3]; f.D[8] = f.B[0];
+                f.B[0] = temp[2]; f.B[3] = temp[1]; f.B[6] = temp[0];
+            }
+            moveM() {
+                const f = this.faces;
+                const temp = [f.U[1], f.U[4], f.U[7]];
+                f.U[1] = f.B[7]; f.U[4] = f.B[4]; f.U[7] = f.B[1];
+                f.B[1] = f.D[7]; f.B[4] = f.D[4]; f.B[7] = f.D[1];
+                f.D[1] = f.F[1]; f.D[4] = f.F[4]; f.D[7] = f.F[7];
+                f.F[1] = temp[0]; f.F[4] = temp[1]; f.F[7] = temp[2];
+            }
+            moveE() {
+                const f = this.faces;
+                const temp = [f.F[3], f.F[4], f.F[5]];
+                f.F[3] = f.L[3]; f.F[4] = f.L[4]; f.F[5] = f.L[5];
+                f.L[3] = f.B[3]; f.L[4] = f.B[4]; f.L[5] = f.B[5];
+                f.B[3] = f.R[3]; f.B[4] = f.R[4]; f.B[5] = f.R[5];
+                f.R[3] = temp[0]; f.R[4] = temp[1]; f.R[5] = temp[2];
+            }
+            moveS() {
+                const f = this.faces;
+                const temp = [f.U[3], f.U[4], f.U[5]];
+                f.U[3] = f.L[7]; f.U[4] = f.L[4]; f.U[5] = f.L[1];
+                f.L[1] = f.D[3]; f.L[4] = f.D[4]; f.L[7] = f.D[5];
+                f.D[3] = f.R[7]; f.D[4] = f.R[4]; f.D[5] = f.R[1];
+                f.R[1] = temp[0]; f.R[4] = temp[1]; f.R[7] = temp[2];
+            }
+            rotX() {
+                this.moveR();
+                this.moveM(); this.moveM(); this.moveM();
+                this.moveL(); this.moveL(); this.moveL();
+            }
+            rotY() {
+                this.moveU();
+                this.moveE(); this.moveE(); this.moveE();
+                this.moveD(); this.moveD(); this.moveD();
+            }
+            rotZ() {
+                this.moveF();
+                this.moveS();
+                this.moveB(); this.moveB(); this.moveB();
+            }
+            applyMove(move) {
+                let m = move.replace(/[()[]{}]/g, '').trim();
+                if (!m) return;
+                let base = m[0];
+                let rest = m.slice(1);
+                let isWide = false;
+                if (base === 'r' || base === 'l' || base === 'u' || base === 'd' || base === 'f' || base === 'b') {
+                    base = base.toUpperCase();
+                    isWide = true;
+                } else if (rest.startsWith('w')) {
+                    isWide = true;
+                    rest = rest.slice(1);
+                }
+                let times = 1;
+                if (rest === '2' || rest === "2'") times = 2;
+                else if (rest === "'" || rest === "3") times = 3;
+
+                for (let i = 0; i < times; i++) {
+                    if (isWide) {
+                        if (base === 'R') { this.rotX(); this.moveL(); }
+                        else if (base === 'L') { this.rotX(); this.rotX(); this.rotX(); this.moveR(); }
+                        else if (base === 'U') { this.rotY(); this.moveD(); }
+                        else if (base === 'D') { this.rotY(); this.rotY(); this.rotY(); this.moveU(); }
+                        else if (base === 'F') { this.rotZ(); this.moveB(); }
+                        else if (base === 'B') { this.rotZ(); this.rotZ(); this.rotZ(); this.moveF(); }
                     } else {
-                        inverted.push(move + "'");
+                        if (base === 'U') this.moveU();
+                        else if (base === 'D') this.moveD();
+                        else if (base === 'F') this.moveF();
+                        else if (base === 'B') this.moveB();
+                        else if (base === 'L') this.moveL();
+                        else if (base === 'R') this.moveR();
+                        else if (base === 'M') this.moveM();
+                        else if (base === 'E') this.moveE();
+                        else if (base === 'S') this.moveS();
+                        else if (base === 'x' || base === 'X') this.rotX();
+                        else if (base === 'y' || base === 'Y') this.rotY();
+                        else if (base === 'z' || base === 'Z') this.rotZ();
                     }
                 }
-                return inverted;
             }
-            
-            // 2. Apply scramble (inverse of algorithm moves) to reach target case state
-            if (item.moves) {
-                try {
-                    const inverted = invertAlgorithmLocal(item.moves);
-                    inverted.forEach(move => {
-                        let base = move;
-                        let modifier = '';
-                        if (move.endsWith("'")) {
-                            modifier = "'";
-                            base = move.slice(0, -1);
-                        } else if (move.endsWith("2")) {
-                            modifier = '2';
-                            base = move.slice(0, -1);
-                        }
-                        
-                        if (base === 'r') base = 'Rw';
-                        else if (base === 'l') base = 'Lw';
-                        else if (base === 'u') base = 'Uw';
-                        else if (base === 'd') base = 'Dw';
-                        else if (base === 'f') base = 'Fw';
-                        else if (base === 'b') base = 'Bw';
-                        
-                        let count = 1;
-                        if (modifier === "'") count = 3;
-                        else if (modifier === '2') count = 2;
-                        
-                        for (let c = 0; c < count; c++) {
-                            const temp = {
-                                U: [...simState.U], D: [...simState.D], F: [...simState.F],
-                                B: [...simState.B], L: [...simState.L], R: [...simState.R]
-                            };
-                            
-                            function rotFaceCW(face) {
-                                const copy = [...face];
-                                face[0] = copy[6]; face[1] = copy[3]; face[2] = copy[0];
-                                face[3] = copy[7];                   face[5] = copy[1];
-                                face[6] = copy[8]; face[7] = copy[5]; face[8] = copy[2];
-                            }
-                            
-                            function rotCol(dir) {
-                                let count = dir === 1 ? 1 : 3;
-                                for (let i = 0; i < count; i++) {
-                                    let t = [simState.U[1], simState.U[4], simState.U[7]];
-                                    simState.U[1] = simState.B[7]; simState.U[4] = simState.B[4]; simState.U[7] = simState.B[1];
-                                    simState.B[7] = simState.D[1]; simState.B[4] = simState.D[4]; simState.B[1] = simState.D[7];
-                                    simState.D[1] = simState.F[1]; simState.D[4] = simState.F[4]; simState.D[7] = simState.F[7];
-                                    simState.F[1] = t[0]; simState.F[4] = t[1]; simState.F[7] = t[2];
-                                }
-                            }
-                            function rotRow(dir) {
-                                let count = dir === 1 ? 1 : 3;
-                                for (let i = 0; i < count; i++) {
-                                    let t = [simState.R[3], simState.R[4], simState.R[5]];
-                                    simState.R[3] = simState.F[3]; simState.R[4] = simState.F[4]; simState.R[5] = simState.F[5];
-                                    simState.F[3] = simState.L[3]; simState.F[4] = simState.L[4]; simState.F[5] = simState.L[5];
-                                    simState.L[3] = simState.B[3]; simState.L[4] = simState.B[4]; simState.L[5] = simState.B[5];
-                                    simState.B[3] = t[0]; simState.B[4] = t[1]; simState.B[5] = t[2];
-                                }
-                            }
-                            function rotRing(dir) {
-                                let count = dir === 1 ? 1 : 3;
-                                for (let i = 0; i < count; i++) {
-                                    let t = [simState.U[3], simState.U[4], simState.U[5]];
-                                    simState.U[3] = simState.L[7]; simState.U[4] = simState.L[4]; simState.U[5] = simState.L[1];
-                                    simState.L[1] = simState.D[3]; simState.L[4] = simState.D[4]; simState.L[7] = simState.D[5];
-                                    simState.D[3] = simState.R[7]; simState.D[4] = simState.R[4]; simState.D[5] = simState.R[1];
-                                    simState.R[1] = t[0]; simState.R[4] = t[1]; simState.R[7] = t[2];
-                                }
-                            }
+            applyAlg(algStr) {
+                if (!algStr) return;
+                const tokens = algStr.trim().split(/\s+/);
+                for (let token of tokens) this.applyMove(token);
+            }
+        }
 
-                            if (base === 'U') {
-                                rotFaceCW(simState.U);
-                                simState.L[0] = temp.F[0]; simState.L[1] = temp.F[1]; simState.L[2] = temp.F[2];
-                                simState.F[0] = temp.R[0]; simState.F[1] = temp.R[1]; simState.F[2] = temp.R[2];
-                                simState.R[0] = temp.B[0]; simState.R[1] = temp.B[1]; simState.R[2] = temp.B[2];
-                                simState.B[0] = temp.L[0]; simState.B[1] = temp.L[1]; simState.B[2] = temp.L[2];
-                            } else if (base === 'D') {
-                                rotFaceCW(simState.D);
-                                simState.R[6] = temp.F[6]; simState.R[7] = temp.F[7]; simState.R[8] = temp.F[8];
-                                simState.F[6] = temp.L[6]; simState.F[7] = temp.L[7]; simState.F[8] = temp.L[8];
-                                simState.L[6] = temp.B[6]; simState.L[7] = temp.B[7]; simState.L[8] = temp.B[8];
-                                simState.B[6] = temp.R[6]; simState.B[7] = temp.R[7]; simState.B[8] = temp.R[8];
-                            } else if (base === 'F') {
-                                rotFaceCW(simState.F);
-                                simState.U[6] = temp.L[8]; simState.U[7] = temp.L[5]; simState.U[8] = temp.L[2];
-                                simState.L[2] = temp.D[0]; simState.L[5] = temp.D[1]; simState.L[8] = temp.D[2];
-                                simState.D[0] = temp.R[6]; simState.D[1] = temp.R[3]; simState.D[2] = temp.R[0];
-                                simState.R[0] = temp.U[6]; simState.R[3] = temp.U[7]; simState.R[6] = temp.U[8];
-                            } else if (base === 'B') {
-                                rotFaceCW(simState.B);
-                                simState.U[0] = temp.R[2]; simState.U[1] = temp.R[5]; simState.U[2] = temp.R[8];
-                                simState.R[2] = temp.D[8]; simState.R[5] = temp.D[7]; simState.R[8] = temp.D[6];
-                                simState.D[6] = temp.L[0]; simState.D[7] = temp.L[3]; simState.D[8] = temp.L[6];
-                                simState.L[0] = temp.U[2]; simState.L[3] = temp.U[1]; simState.L[6] = temp.U[0];
-                            } else if (base === 'L') {
-                                rotFaceCW(simState.L);
-                                simState.U[0] = temp.B[8]; simState.U[3] = temp.B[5]; simState.U[6] = temp.B[2];
-                                simState.B[2] = temp.D[6]; simState.B[5] = temp.D[3]; simState.B[8] = temp.D[0];
-                                simState.D[0] = temp.F[0]; simState.D[3] = temp.F[3]; simState.D[6] = temp.F[6];
-                                simState.F[0] = temp.U[0]; simState.F[3] = temp.U[3]; simState.F[6] = temp.U[6];
-                            } else if (base === 'R') {
-                                rotFaceCW(simState.R);
-                                simState.U[2] = temp.F[2]; simState.U[5] = temp.F[5]; simState.U[8] = temp.F[8];
-                                simState.F[2] = temp.D[2]; simState.F[5] = temp.D[5]; simState.F[8] = temp.D[8];
-                                simState.D[2] = temp.B[6]; simState.D[5] = temp.B[3]; simState.D[8] = temp.B[0];
-                                simState.B[0] = temp.U[2]; simState.B[3] = temp.U[5]; simState.B[6] = temp.U[8];
-                            } else if (base === 'M') {
-                                rotCol(1);
-                            } else if (base === 'E') {
-                                rotRow(1);
-                            } else if (base === 'S') {
-                                rotRing(1);
-                            } else if (base === 'Uw') {
-                                rotFaceCW(simState.U);
-                                rotRow(-1);
-                            } else if (base === 'Dw') {
-                                rotFaceCW(simState.D);
-                                rotRow(1);
-                            } else if (base === 'Fw') {
-                                rotFaceCW(simState.F);
-                                rotRing(1);
-                            } else if (base === 'Bw') {
-                                rotFaceCW(simState.B);
-                                rotRing(-1);
-                            } else if (base === 'Lw') {
-                                rotFaceCW(simState.L);
-                                rotCol(1);
-                            } else if (base === 'Rw') {
-                                rotFaceCW(simState.R);
-                                rotCol(-1);
-                            }
-                        }
+        function invertAlgorithm(movesStr) {
+            if (!movesStr) return [];
+            const clean = movesStr.replace(/[()[]{}]/g, ' ').trim();
+            const tokens = clean.split(/\s+/).filter(t => t.length > 0);
+            const inverted = [];
+            for (let i = tokens.length - 1; i >= 0; i--) {
+                let t = tokens[i];
+                if (t.endsWith('2') || t.endsWith("2'")) inverted.push(t.replace("'", ''));
+                else if (t.endsWith("'")) inverted.push(t.slice(0, -1));
+                else inverted.push(t + "'");
+            }
+            return inverted;
+        }
+
+        // Color mapping for SVG rendering
+        const SVG_COLORS = {
+            'Y': '#FFE600',
+            'W': '#FFFFFF',
+            'G': '#2ecc71',
+            'B': '#3498db',
+            'O': '#e67e22',
+            'R': '#e74c3c',
+            'GREY': '#4b5563',
+            'DARK': '#374151'
+        };
+
+        const U_CORNER_DEFS = [
+            { name: 'UBL', pos: { x: 50.0, y: 10.8 }, facelets: [['U', 0], ['B', 2], ['L', 0]], solvedColors: 'YBO' },
+            { name: 'UBR', pos: { x: 73.3, y: 22.5 }, facelets: [['U', 2], ['R', 2], ['B', 0]], solvedColors: 'YRB' },
+            { name: 'UFR', pos: { x: 50.0, y: 34.2 }, facelets: [['U', 8], ['F', 2], ['R', 0]], solvedColors: 'YGR' },
+            { name: 'UFL', pos: { x: 26.7, y: 22.5 }, facelets: [['U', 6], ['L', 2], ['F', 0]], solvedColors: 'YOG' }
+        ];
+
+        const U_EDGE_DEFS = [
+            { name: 'UB', pos: { x: 61.7, y: 16.7 }, facelets: [['U', 1], ['B', 1]], solvedColors: 'YB' },
+            { name: 'UR', pos: { x: 61.7, y: 28.3 }, facelets: [['U', 5], ['R', 1]], solvedColors: 'YR' },
+            { name: 'UF', pos: { x: 38.3, y: 28.3 }, facelets: [['U', 7], ['F', 1]], solvedColors: 'YG' },
+            { name: 'UL', pos: { x: 38.3, y: 16.7 }, facelets: [['U', 3], ['L', 1]], solvedColors: 'YO' }
+        ];
+
+        function computePermutationArrows(sim) {
+            const cTarget = {};
+            U_CORNER_DEFS.forEach(cur => {
+                const curClrs = cur.facelets.map(([f, i]) => sim.faces[f][i]);
+                const target = U_CORNER_DEFS.find(orig => curClrs.includes('Y') && curClrs.includes(orig.solvedColors[1]) && curClrs.includes(orig.solvedColors[2]));
+                if (target && target.name !== cur.name) cTarget[cur.name] = target.name;
+            });
+
+            const eTarget = {};
+            U_EDGE_DEFS.forEach(cur => {
+                const curClrs = cur.facelets.map(([f, i]) => sim.faces[f][i]);
+                const target = U_EDGE_DEFS.find(orig => curClrs.includes('Y') && curClrs.includes(orig.solvedColors[1]));
+                if (target && target.name !== cur.name) eTarget[cur.name] = target.name;
+            });
+
+            const arrows = [];
+            const cornerSlots = Object.fromEntries(U_CORNER_DEFS.map(s => [s.name, s]));
+            const edgeSlots = Object.fromEntries(U_EDGE_DEFS.map(s => [s.name, s]));
+
+            // Corners: mutual swaps vs cycles
+            const visitedCorners = new Set();
+            for (let from in cTarget) {
+                if (visitedCorners.has(from)) continue;
+                const to = cTarget[from];
+                if (cTarget[to] === from) {
+                    arrows.push({
+                        from: cornerSlots[from].pos,
+                        to: cornerSlots[to].pos,
+                        double: true,
+                        type: 'corner'
                     });
-                } catch (e) {
-                    console.error("Cube simulation scramble failed:", e);
+                    visitedCorners.add(from);
+                    visitedCorners.add(to);
+                } else {
+                    arrows.push({
+                        from: cornerSlots[from].pos,
+                        to: cornerSlots[to].pos,
+                        double: false,
+                        type: 'corner'
+                    });
+                    visitedCorners.add(from);
                 }
             }
+
+            // Edges: mutual swaps vs cycles
+            const visitedEdges = new Set();
+            for (let from in eTarget) {
+                if (visitedEdges.has(from)) continue;
+                const to = eTarget[from];
+                if (eTarget[to] === from) {
+                    arrows.push({
+                        from: edgeSlots[from].pos,
+                        to: edgeSlots[to].pos,
+                        double: true,
+                        type: 'edge'
+                    });
+                    visitedEdges.add(from);
+                    visitedEdges.add(to);
+                } else {
+                    arrows.push({
+                        from: edgeSlots[from].pos,
+                        to: edgeSlots[to].pos,
+                        double: false,
+                        type: 'edge'
+                    });
+                    visitedEdges.add(from);
+                }
+            }
+
+            return arrows;
+        }
+
+        function drawArrowSvg(arrow) {
+            const dx = arrow.to.x - arrow.from.x;
+            const dy = arrow.to.y - arrow.from.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 1) return "";
+
+            const ux = dx / dist;
+            const uy = dy / dist;
+            const nx = -uy;
+            const ny = ux;
+
+            const padStart = arrow.double ? 4.5 : 3.2;
+            const padEnd = 4.5;
             
-            // Helper functions for 3D Isometric Projection
-            function mapToIso(x, y) {
-                const dx = x - 35;
-                const dy = y - 35;
-                const rx = 50 + (7 / 6) * dx - (7 / 6) * dy;
-                const ry = 22.5 + (7 / 12) * dx + (7 / 12) * dy;
-                return { x: rx, y: ry };
+            const x1 = arrow.from.x + ux * padStart;
+            const y1 = arrow.from.y + uy * padStart;
+            const x2 = arrow.to.x - ux * padEnd;
+            const y2 = arrow.to.y - uy * padEnd;
+
+            const arrowHeadLen = 4.0;
+            const arrowHeadWidth = 2.6;
+
+            let res = "";
+            res += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#111827" stroke-width="3.2" stroke-linecap="round" />`;
+            res += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ff3838" stroke-width="2.2" stroke-linecap="round" />`;
+
+            const tipX = arrow.to.x - ux * 1.0;
+            const tipY = arrow.to.y - uy * 1.0;
+            const baseEndX = tipX - ux * arrowHeadLen;
+            const baseEndY = tipY - uy * arrowHeadLen;
+            const leftX = baseEndX + nx * arrowHeadWidth;
+            const leftY = baseEndY + ny * arrowHeadWidth;
+            const rightX = baseEndX - nx * arrowHeadWidth;
+            const rightY = baseEndY - ny * arrowHeadWidth;
+            res += `<polygon points="${tipX.toFixed(1)},${tipY.toFixed(1)} ${leftX.toFixed(1)},${leftY.toFixed(1)} ${rightX.toFixed(1)},${rightY.toFixed(1)}" fill="#ff3838" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />`;
+
+            if (arrow.double) {
+                const tipX0 = arrow.from.x + ux * 1.0;
+                const tipY0 = arrow.from.y + uy * 1.0;
+                const baseStartX = tipX0 + ux * arrowHeadLen;
+                const baseStartY = tipY0 + uy * arrowHeadLen;
+                const leftX0 = baseStartX + nx * arrowHeadWidth;
+                const leftY0 = baseStartY + ny * arrowHeadWidth;
+                const rightX0 = baseStartX - nx * arrowHeadWidth;
+                const rightY0 = baseStartY - ny * arrowHeadWidth;
+                res += `<polygon points="${tipX0.toFixed(1)},${tipY0.toFixed(1)} ${leftX0.toFixed(1)},${leftY0.toFixed(1)} ${rightX0.toFixed(1)},${rightY0.toFixed(1)}" fill="#ff3838" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />`;
             }
 
-            function getUStickerPath(row, col) {
-                const ox = 50, oy = 5;
-                const rx = 35 / 3, ry = 17.5 / 3;
-                const lx = -35 / 3, ly = 17.5 / 3;
-                const x0 = ox + row * lx + col * rx;
-                const y0 = oy + row * ly + col * ry;
-                return `M ${x0},${y0} L ${x0 + rx},${y0 + ry} L ${x0 + rx + lx},${y0 + ry + ly} L ${x0 + lx},${y0 + ly} Z`;
-            }
+            return res;
+        }
 
-            function getFStickerPath(row, col) {
-                const ox = 15, oy = 22.5;
-                const hx = 35 / 3, hy = 17.5 / 3;
-                const vx = 0, vy = 35 / 3;
-                const x0 = ox + col * hx + row * vx;
-                const y0 = oy + col * hy + row * vy;
-                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
-            }
-
-            function getRStickerPath(row, col) {
-                const ox = 50, oy = 40;
-                const hx = 35 / 3, hy = -17.5 / 3;
-                const vx = 0, vy = 35 / 3;
-                const x0 = ox + col * hx + row * vx;
-                const y0 = oy + col * hy + row * vy;
-                return `M ${x0},${y0} L ${x0 + hx},${y0 + hy} L ${x0 + hx + vx},${y0 + hy + vy} L ${x0 + vx},${y0 + vy} Z`;
-            }
-            
-            // F2L/ZBLS specific target piece isolation
-            let isF2lOrZbls = (cat === "F2L" || cat === "ZBLS");
-            let targetCornerIdx = -1;
-            let targetEdgeIdx = -1;
-            
-            const corners = [
-                { id: 0, faces: ['U', 'B', 'L'], indices: [0, 2, 0] },
-                { id: 1, faces: ['U', 'B', 'R'], indices: [2, 0, 2] },
-                { id: 2, faces: ['U', 'F', 'R'], indices: [8, 2, 0] },
-                { id: 3, faces: ['U', 'F', 'L'], indices: [6, 0, 2] },
-                { id: 4, faces: ['D', 'F', 'L'], indices: [0, 6, 8] },
-                { id: 5, faces: ['D', 'F', 'R'], indices: [2, 8, 6] },
-                { id: 6, faces: ['D', 'B', 'R'], indices: [8, 6, 8] },
-                { id: 7, faces: ['D', 'B', 'L'], indices: [6, 8, 6] }
-            ];
-
-            const edges = [
-                { id: 0, faces: ['U', 'B'], indices: [1, 1] },
-                { id: 1, faces: ['U', 'R'], indices: [5, 1] },
-                { id: 2, faces: ['U', 'F'], indices: [7, 1] },
-                { id: 3, faces: ['U', 'L'], indices: [3, 1] },
-                { id: 4, faces: ['F', 'L'], indices: [3, 5] },
-                { id: 5, faces: ['F', 'R'], indices: [5, 3] },
-                { id: 6, faces: ['B', 'R'], indices: [3, 5] },
-                { id: 7, faces: ['B', 'L'], indices: [5, 3] },
-                { id: 8, faces: ['D', 'F'], indices: [1, 7] },
-                { id: 9, faces: ['D', 'R'], indices: [5, 7] },
-                { id: 10, faces: ['D', 'B'], indices: [7, 7] },
-                { id: 11, faces: ['D', 'L'], indices: [3, 7] }
-            ];
-
-            if (isF2lOrZbls) {
-                // Target slot pieces are White-Green-Red corner (DFR) and Green-Red edge (FR)
-                for (let c of corners) {
-                    let colors = c.faces.map((f, idx) => simState[f][c.indices[idx]]);
-                    if (colors.includes(WHITE) && colors.includes(GREEN) && colors.includes(RED)) {
-                        targetCornerIdx = c.id;
-                        break;
-                    }
+        function drawCornerTwistArrow(corner, dir) {
+            if (corner.name === 'UFR') {
+                if (dir === 'CCW') {
+                    return `<path d="M 45,39 Q 46,34 49,33" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="49,33 45,30 47,35" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 55,39 Q 54,34 51,33" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="51,33 53,35 55,30" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
                 }
-                for (let e of edges) {
-                    let colors = e.faces.map((f, idx) => simState[f][e.indices[idx]]);
-                    if (colors.includes(GREEN) && colors.includes(RED)) {
-                        targetEdgeIdx = e.id;
-                        break;
-                    }
+            } else if (corner.name === 'UFL') {
+                if (dir === 'CW') {
+                    return `<path d="M 23,26 Q 24,22 27,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="27,22 23,20 24,25" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 21,19 Q 23,21 26,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="26,22 23,25 25,20" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                }
+            } else if (corner.name === 'UBR') {
+                if (dir === 'CCW') {
+                    return `<path d="M 77,26 Q 76,22 73,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="73,22 77,20 76,25" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 79,19 Q 77,21 74,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="74,22 77,25 75,20" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                }
+            } else if (corner.name === 'UBL') {
+                if (dir === 'CW') {
+                    return `<path d="M 45,9 Q 47,10 50,11" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="50,11 46,9 47,14" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 55,9 Q 53,10 50,11" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="50,11 54,9 53,14" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
                 }
             }
+            return "";
+        }
 
-            function isFaceletTarget(face, index) {
-                if (!isF2lOrZbls) return true;
-                for (let c of corners) {
-                    if (c.id === targetCornerIdx) {
-                        for (let idx = 0; idx < 3; idx++) {
-                            if (c.faces[idx] === face && c.indices[idx] === index) return true;
-                        }
-                    }
-                }
-                for (let e of edges) {
-                    if (e.id === targetEdgeIdx) {
-                        for (let idx = 0; idx < 2; idx++) {
-                            if (e.faces[idx] === face && e.indices[idx] === index) return true;
-                        }
-                    }
-                }
-                return false;
+        function drawEdgeFlipArrow(edge) {
+            const cx = edge.pos.x;
+            const cy = edge.pos.y;
+            return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.2" fill="#f59e0b" stroke="#111827" stroke-width="1.2"/>` +
+                   `<path d="M ${(cx - 1.8).toFixed(1)},${cy.toFixed(1)} L ${(cx + 1.8).toFixed(1)},${cy.toFixed(1)}" stroke="#111827" stroke-width="1.2" stroke-linecap="round"/>`;
+        }
+
+        function computeCornerTwistArrows(sim) {
+            let res = "";
+            if (sim.faces.F[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[2], 'CCW');
+            else if (sim.faces.R[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[2], 'CW');
+
+            if (sim.faces.F[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[3], 'CW');
+            else if (sim.faces.L[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[3], 'CCW');
+
+            if (sim.faces.B[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[1], 'CCW');
+            else if (sim.faces.R[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[1], 'CW');
+
+            if (sim.faces.B[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[0], 'CW');
+            else if (sim.faces.L[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[0], 'CCW');
+
+            return res;
+        }
+
+        function computeEdgeFlipIndicators(sim) {
+            let res = "";
+            if (sim.faces.U[7] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[2]);
+            if (sim.faces.U[5] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[1]);
+            if (sim.faces.U[1] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[0]);
+            if (sim.faces.U[3] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[3]);
+            return res;
+        }
+
+        function computeF2lArrow(item, sim) {
+            const name = (item.name || "").toLowerCase();
+            const isExtract = name.includes("stuck") || name.includes("extract") || name.includes("in slot");
+            if (isExtract) {
+                return `<path d="M 50,54 Q 56,38 46,24" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />` +
+                       `<polygon points="46,24 49,29 53,26" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />`;
+            } else {
+                return `<path d="M 40,22 Q 40,38 49,49" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />` +
+                       `<polygon points="50,51 45,46 49,44" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />`;
+            }
+        }
+
+        function computeLseArrows(item, sim) {
+            const name = (item.name || "").toLowerCase();
+            let res = "";
+            if (name.includes("4b") || name.includes("ul") || name.includes("ur")) {
+                res += drawArrowSvg({ from: U_EDGE_DEFS[3].pos, to: U_EDGE_DEFS[1].pos, double: true });
+            } else if (name.includes("4c") || name.includes("m-slice") || name.includes("dots") || name.includes("uf") || name.includes("ub")) {
+                res += drawArrowSvg({ from: U_EDGE_DEFS[2].pos, to: U_EDGE_DEFS[0].pos, double: true });
+            } else {
+                if (sim.faces.U[7] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[2]);
+                if (sim.faces.U[1] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[0]);
+            }
+            return res;
+        }
+
+        function getUStickerPath(row, col) {
+            const ox = 50, oy = 5;
+            const rx = 35 / 3, ry = 17.5 / 3;
+            const lx = -35 / 3, ly = 17.5 / 3;
+            const x0 = ox + row * lx + col * rx;
+            const y0 = oy + row * ly + col * ry;
+            return `M ${x0.toFixed(1)},${y0.toFixed(1)} L ${(x0 + rx).toFixed(1)},${(y0 + ry).toFixed(1)} L ${(x0 + rx + lx).toFixed(1)},${(y0 + ry + ly).toFixed(1)} L ${(x0 + lx).toFixed(1)},${(y0 + ly).toFixed(1)} Z`;
+        }
+
+        function getFStickerPath(row, col) {
+            const ox = 15, oy = 22.5;
+            const hx = 35 / 3, hy = 17.5 / 3;
+            const vx = 0, vy = 35 / 3;
+            const x0 = ox + col * hx + row * vx;
+            const y0 = oy + col * hy + row * vy;
+            return `M ${x0.toFixed(1)},${y0.toFixed(1)} L ${(x0 + hx).toFixed(1)},${(y0 + hy).toFixed(1)} L ${(x0 + hx + vx).toFixed(1)},${(y0 + hy + vy).toFixed(1)} L ${(x0 + vx).toFixed(1)},${(y0 + vy).toFixed(1)} Z`;
+        }
+
+        function getRStickerPath(row, col) {
+            const ox = 50, oy = 40;
+            const hx = 35 / 3, hy = -17.5 / 3;
+            const vx = 0, vy = 35 / 3;
+            const x0 = ox + col * hx + row * vx;
+            const y0 = oy + col * hy + row * vy;
+            return `M ${x0.toFixed(1)},${y0.toFixed(1)} L ${(x0 + hx).toFixed(1)},${(y0 + hy).toFixed(1)} L ${(x0 + hx + vx).toFixed(1)},${(y0 + hy + vy).toFixed(1)} L ${(x0 + vx).toFixed(1)},${(y0 + vy).toFixed(1)} Z`;
+        }
+
+        // ==========================================
+        // --- 100% ACCURATE SVG DIAGRAM GENERATOR ---
+        // ==========================================
+        function generateCubeSvg(item) {
+            const name = item.name || "";
+            const cat = item.cat || "";
+
+            const sim = new CubeEngine();
+            if (item.moves) {
+                const inv = invertAlgorithm(item.moves);
+                inv.forEach(m => sim.applyMove(m));
             }
 
-            // Draw external yellow bars for back faces (L and B) if not F2L
-            if (!isF2lOrZbls) {
-                // Draw L-face yellow bars (floating left)
+            let svg = `<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">`;
+
+            const isF2l = (cat === "F2L" || cat === "ZBLS");
+            const isPll = (cat === "PLL" || name.includes("Perm"));
+            const isOll = (cat === "OLL" || cat === "WV" || cat === "VLS");
+            const isCmll = (cat === "CMLL");
+            const isLse = (cat === "LSE" || (cat === "ROUX" && (name.includes("4a") || name.includes("4b") || name.includes("4c") || name.includes("LSE") || name.includes("Flip") || name.includes("Insert") || name.includes("Dots") || name.includes("Bars") || name.includes("Swap"))));
+
+            // Piece isolation for F2L
+            let isTarget = (face, index) => true;
+            if (isF2l) {
+                const CORNERS = [
+                    { id: 0, p: [['U', 0], ['B', 2], ['L', 0]] },
+                    { id: 1, p: [['U', 2], ['R', 2], ['B', 0]] },
+                    { id: 2, p: [['U', 8], ['F', 2], ['R', 0]] },
+                    { id: 3, p: [['U', 6], ['L', 2], ['F', 0]] },
+                    { id: 4, p: [['D', 0], ['F', 6], ['L', 8]] },
+                    { id: 5, p: [['D', 2], ['R', 6], ['F', 8]] },
+                    { id: 6, p: [['D', 8], ['B', 6], ['R', 8]] },
+                    { id: 7, p: [['D', 6], ['L', 6], ['B', 8]] }
+                ];
+                const EDGES = [
+                    { id: 0, p: [['U', 1], ['B', 1]] },
+                    { id: 1, p: [['U', 5], ['R', 1]] },
+                    { id: 2, p: [['U', 7], ['F', 1]] },
+                    { id: 3, p: [['U', 3], ['L', 1]] },
+                    { id: 4, p: [['F', 5], ['R', 3]] },
+                    { id: 5, p: [['F', 3], ['L', 5]] },
+                    { id: 6, p: [['B', 5], ['L', 3]] },
+                    { id: 7, p: [['B', 3], ['R', 5]] },
+                    { id: 8, p: [['D', 1], ['F', 7]] },
+                    { id: 9, p: [['D', 5], ['R', 7]] },
+                    { id: 10, p: [['D', 7], ['B', 7]] },
+                    { id: 11, p: [['D', 3], ['L', 7]] }
+                ];
+                let targetCorner = CORNERS.find(cr => {
+                    const clrs = cr.p.map(([f, i]) => sim.faces[f][i]);
+                    return clrs.includes('W') && clrs.includes('G') && clrs.includes('R');
+                });
+                let targetEdge = EDGES.find(ed => {
+                    const clrs = ed.p.map(([f, i]) => sim.faces[f][i]);
+                    return clrs.includes('G') && clrs.includes('R');
+                });
+
+                isTarget = (face, index) => {
+                    if (targetCorner && targetCorner.p.some(([f, i]) => f === face && i === index)) return true;
+                    if (targetEdge && targetEdge.p.some(([f, i]) => f === face && i === index)) return true;
+                    return false;
+                };
+            }
+
+            // Draw external indicator bars on B and L
+            if (!isF2l) {
+                // L face top row indicators
                 for (let row = 0; row < 3; row++) {
-                    if (simState.L[row] === YELLOW) {
+                    const stickerColor = sim.faces.L[row];
+                    let showIndicator = false;
+                    let fill = SVG_COLORS[stickerColor] || SVG_COLORS.GREY;
+
+                    if (isOll) {
+                        if (stickerColor === 'Y') {
+                            showIndicator = true;
+                            fill = SVG_COLORS.Y;
+                        }
+                    } else if (isCmll) {
+                        if (row === 0 || row === 2) {
+                            showIndicator = true;
+                        }
+                    } else if (isLse) {
+                        if (row === 1) {
+                            showIndicator = true;
+                        }
+                    } else {
+                        showIndicator = true;
+                    }
+
+                    if (showIndicator) {
                         const ox = 50, oy = 5;
-                        const rx = 35 / 3, ry = 17.5 / 3;
                         const lx = -35 / 3, ly = 17.5 / 3;
                         const x0 = ox + row * lx;
                         const y0 = oy + row * ly;
@@ -3608,164 +3853,187 @@
                         const p2x = x0 + lx, p2y = y0 + ly;
                         const p3x = p2x - 2.5, p3y = p2y - 1.25;
                         const p4x = p1x - 2.5, p4y = p1y - 1.25;
-                        svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                        svg += `<polygon points="${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)} ${p3x.toFixed(1)},${p3y.toFixed(1)} ${p4x.toFixed(1)},${p4y.toFixed(1)}" fill="${fill}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
                     }
                 }
-
-                // Draw B-face yellow bars (floating right)
+                // B face top row indicators
                 for (let col = 0; col < 3; col++) {
-                    if (simState.B[2 - col] === YELLOW) {
+                    const stickerColor = sim.faces.B[2 - col];
+                    let showIndicator = false;
+                    let fill = SVG_COLORS[stickerColor] || SVG_COLORS.GREY;
+
+                    if (isOll) {
+                        if (stickerColor === 'Y') {
+                            showIndicator = true;
+                            fill = SVG_COLORS.Y;
+                        }
+                    } else if (isCmll) {
+                        if (col === 0 || col === 2) {
+                            showIndicator = true;
+                        }
+                    } else if (isLse) {
+                        if (col === 1) {
+                            showIndicator = true;
+                        }
+                    } else {
+                        showIndicator = true;
+                    }
+
+                    if (showIndicator) {
                         const ox = 50, oy = 5;
                         const rx = 35 / 3, ry = 17.5 / 3;
-                        const lx = -35 / 3, ly = 17.5 / 3;
                         const x0 = ox + col * rx;
                         const y0 = oy + col * ry;
                         const p1x = x0, p1y = y0;
                         const p2x = x0 + rx, p2y = y0 + ry;
                         const p3x = p2x + 2.5, p3y = p2y - 1.25;
                         const p4x = p1x + 2.5, p4y = p1y - 1.25;
-                        svg += `<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}" fill="${YELLOW}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
+                        svg += `<polygon points="${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)} ${p3x.toFixed(1)},${p3y.toFixed(1)} ${p4x.toFixed(1)},${p4y.toFixed(1)}" fill="${fill}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
                     }
-                }
-            }
-            
-            // 1. Draw U Face (Top Rhombus)
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = GREY;
-                    if (isF2lOrZbls) {
-                        color = isFaceletTarget('U', row * 3 + col) ? simState.U[row * 3 + col] : GREY;
-                    } else {
-                        color = simState.U[row * 3 + col] === YELLOW ? YELLOW : GREY;
-                    }
-                    const path = getUStickerPath(row, col);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
                 }
             }
 
-            // 2. Draw F Face (Front-Left Face)
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = GREY;
-                    if (isF2lOrZbls) {
-                        color = isFaceletTarget('F', row * 3 + col) ? simState.F[row * 3 + col] : GREY;
-                    } else {
-                        if (row === 0) {
-                            let isOllBased = (cat === "OLL" || cat === "WV" || cat === "VLS" || cat === "ELL");
-                            let stickerColor = simState.F[col];
-                            color = stickerColor === YELLOW ? YELLOW : (isOllBased ? GREY : stickerColor);
+            // 1. U Face Stickers
+            for (let r = 0; r < 3; r++) {
+                for (let cl = 0; cl < 3; cl++) {
+                    const idx = r * 3 + cl;
+                    let color = SVG_COLORS.GREY;
+                    if (isPll) {
+                        color = SVG_COLORS.Y;
+                    } else if (isF2l) {
+                        color = isTarget('U', idx) ? (SVG_COLORS[sim.faces.U[idx]] || SVG_COLORS.GREY) : SVG_COLORS.GREY;
+                    } else if (isCmll) {
+                        if (idx === 0 || idx === 2 || idx === 6 || idx === 8) {
+                            color = sim.faces.U[idx] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
                         } else {
-                            color = GREEN;
+                            color = SVG_COLORS.DARK;
                         }
+                    } else if (isLse) {
+                        if (idx === 0 || idx === 2 || idx === 6 || idx === 8 || idx === 4) {
+                            color = SVG_COLORS.Y;
+                        } else {
+                            color = SVG_COLORS[sim.faces.U[idx]] || SVG_COLORS.Y;
+                        }
+                    } else {
+                        color = sim.faces.U[idx] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
                     }
-                    const path = getFStickerPath(row, col);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                    const path = getUStickerPath(r, cl);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.1" stroke-linejoin="round" />`;
                 }
             }
 
-            // 3. Draw R Face (Front-Right Face)
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    let color = GREY;
-                    if (isF2lOrZbls) {
-                        color = isFaceletTarget('R', row * 3 + col) ? simState.R[row * 3 + col] : GREY;
-                    } else {
-                        if (row === 0) {
-                            let isOllBased = (cat === "OLL" || cat === "WV" || cat === "VLS" || cat === "ELL");
-                            let stickerColor = simState.R[col];
-                            color = stickerColor === YELLOW ? YELLOW : (isOllBased ? GREY : stickerColor);
+            // 2. F Face Stickers
+            for (let r = 0; r < 3; r++) {
+                for (let cl = 0; cl < 3; cl++) {
+                    const idx = r * 3 + cl;
+                    let color = SVG_COLORS.GREY;
+                    if (isF2l) {
+                        color = isTarget('F', idx) ? (SVG_COLORS[sim.faces.F[idx]] || SVG_COLORS.GREY) : (r > 0 && cl < 2 ? SVG_COLORS.G : SVG_COLORS.GREY);
+                    } else if (isCmll) {
+                        if (r === 0 && (cl === 0 || cl === 2)) {
+                            color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.G;
                         } else {
-                            color = RED;
+                            color = SVG_COLORS.DARK;
                         }
+                    } else if (isLse) {
+                        if (r === 0 && cl === 1) {
+                            color = SVG_COLORS[sim.faces.F[1]] || SVG_COLORS.G;
+                        } else {
+                            color = SVG_COLORS.G;
+                        }
+                    } else if (r === 0) {
+                        if (isOll) {
+                            color = sim.faces.F[cl] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
+                        } else {
+                            color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.G;
+                        }
+                    } else {
+                        color = SVG_COLORS.G;
                     }
-                    const path = getRStickerPath(row, col);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.2" stroke-linejoin="round" />`;
+                    const path = getFStickerPath(r, cl);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.1" stroke-linejoin="round" />`;
                 }
             }
-            
-            // PLL permutation direction arrows
-            let arrows = [];
-            if (cat === "PLL" || name.includes("Perm")) {
-                if (name.includes("T Perm")) {
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Y Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("H Perm")) {
-                    arrows = [{x1: 35, y1: 20, x2: 35, y2: 50, double: true}, {x1: 20, y1: 35, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Ua Perm")) {
-                    arrows = [{x1: 50, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 20, y2: 35, double: false}, {x1: 20, y1: 35, x2: 50, y2: 35, double: false}];
-                } else if (name.includes("Ub Perm")) {
-                    arrows = [{x1: 20, y1: 35, x2: 35, y2: 20, double: false}, {x1: 35, y1: 20, x2: 50, y2: 35, double: false}, {x1: 50, y1: 35, x2: 20, y2: 35, double: false}];
-                } else if (name.includes("Z Perm")) {
-                    arrows = [{x1: 35, y1: 20, x2: 50, y2: 35, double: true}, {x1: 20, y1: 35, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("E Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 20, x2: 50, y2: 50, double: true}];
-                } else if (name.includes("F Perm")) {
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("Ja Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Jb Perm")) {
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Ra Perm")) {
-                    arrows = [{x1: 50, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Rb Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 20, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("V Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Na Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 35, y2: 50, double: true}];
-                } else if (name.includes("Nb Perm")) {
-                    arrows = [{x1: 50, y1: 20, x2: 20, y2: 50, double: true}, {x1: 50, y1: 35, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Aa Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 20, double: false}];
-                } else if (name.includes("Ab Perm")) {
-                    arrows = [{x1: 20, y1: 50, x2: 50, y2: 20, double: false}, {x1: 50, y1: 20, x2: 50, y2: 50, double: false}, {x1: 50, y1: 50, x2: 20, y2: 50, double: false}];
-                } else if (name.includes("Ga Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 50, x2: 20, y2: 35, double: true}];
-                } else if (name.includes("Gb Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 50, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Gc Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 50, y2: 35, double: true}];
-                } else if (name.includes("Gd Perm")) {
-                    arrows = [{x1: 20, y1: 20, x2: 50, y2: 50, double: true}, {x1: 35, y1: 20, x2: 20, y2: 35, double: true}];
+
+            // 3. R Face Stickers
+            for (let r = 0; r < 3; r++) {
+                for (let cl = 0; cl < 3; cl++) {
+                    const idx = r * 3 + cl;
+                    let color = SVG_COLORS.GREY;
+                    if (isF2l) {
+                        color = isTarget('R', idx) ? (SVG_COLORS[sim.faces.R[idx]] || SVG_COLORS.GREY) : (r > 0 && cl > 0 ? SVG_COLORS.R : SVG_COLORS.GREY);
+                    } else if (isCmll) {
+                        if (r === 0 && (cl === 0 || cl === 2)) {
+                            color = SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R;
+                        } else {
+                            color = SVG_COLORS.DARK;
+                        }
+                    } else if (isLse) {
+                        if (r === 0 && cl === 1) {
+                            color = SVG_COLORS[sim.faces.R[1]] || SVG_COLORS.R;
+                        } else {
+                            color = SVG_COLORS.R;
+                        }
+                    } else if (r === 0) {
+                        if (isOll) {
+                            color = sim.faces.R[cl] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
+                        } else {
+                            color = SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R;
+                        }
+                    } else {
+                        color = SVG_COLORS.R;
+                    }
+                    const path = getRStickerPath(r, cl);
+                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.1" stroke-linejoin="round" />`;
                 }
             }
-            
-            arrows.forEach(a => {
-                const start = mapToIso(a.x1, a.y1);
-                const end = mapToIso(a.x2, a.y2);
-                svg += `<line x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" stroke="#ff3838" stroke-width="2.5" marker-end="url(#arrow)" marker-start="${a.double ? 'url(#arrow)' : 'none'}" stroke-linecap="round" />`;
-            });
-            
+
+            // 4. Direction & Permutation Arrows for ALL Methods
+            if (isPll || cat === "ELL" || cat === "ZBLL" || cat === "COLL") {
+                const arrows = computePermutationArrows(sim);
+                arrows.forEach(a => {
+                    svg += drawArrowSvg(a);
+                });
+                if (arrows.length === 0 && (cat === "COLL" || cat === "ZBLL")) {
+                    svg += computeCornerTwistArrows(sim);
+                }
+            } else if (isCmll) {
+                const cornerArrows = computePermutationArrows(sim).filter(a => a.type === 'corner');
+                cornerArrows.forEach(a => {
+                    svg += drawArrowSvg(a);
+                });
+                if (cornerArrows.length === 0) {
+                    svg += computeCornerTwistArrows(sim);
+                }
+            } else if (isOll) {
+                svg += computeCornerTwistArrows(sim);
+                svg += computeEdgeFlipIndicators(sim);
+            } else if (isF2l) {
+                svg += computeF2lArrow(item, sim);
+            } else if (isLse) {
+                svg += computeLseArrows(item, sim);
+            }
+
             svg += `</svg>`;
             return svg;
         }
 
-        function invertAlgorithm(movesStr) {
-            const moves = movesStr.trim().split(/\s+/).filter(m => m !== "");
-            const inverted = [];
-            for (let i = moves.length - 1; i >= 0; i--) {
-                const move = moves[i];
-                if (move.endsWith("'")) {
-                    inverted.push(move.slice(0, -1));
-                } else if (move.endsWith("2")) {
-                    inverted.push(move);
-                } else {
-                    inverted.push(move + "'");
-                }
-            }
-            return inverted.join(" ");
-        }
-
-        // --- SESSION MANAGEMENT ---
-        function startPracticeSession() {
+                // --- SESSION MANAGEMENT ---
+        function syncSelectedCases() {
             selectedCases = [];
             const checkboxes = document.querySelectorAll('#cases-list-container input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 if (cb.checked) {
-                    selectedCases.push(JSON.parse(cb.value));
+                    try {
+                        selectedCases.push(JSON.parse(cb.value));
+                    } catch (e) {}
                 }
             });
+            return selectedCases;
+        }
+
+        function startPracticeSession() {
+            syncSelectedCases();
 
             if (selectedCases.length === 0) {
                 alert("Please select at least one case to practice!");
@@ -3780,7 +4048,11 @@
         }
 
         function loadNextScramble() {
-            if (selectedCases.length === 0) return;
+            syncSelectedCases();
+            if (selectedCases.length === 0) {
+                alert("Please select at least one case to practice!");
+                return;
+            }
             const randIdx = Math.floor(Math.random() * selectedCases.length);
             activeCase = selectedCases[randIdx];
 
@@ -3792,16 +4064,26 @@
             document.getElementById('active-case-desc').innerHTML = "&nbsp;";
             document.getElementById('active-case-answer').style.display = "none";
 
-            // Calculate scramble
-            activeScramble = invertAlgorithm(activeCase.moves);
-            document.getElementById('active-case-scramble').textContent = activeScramble;
+            // Calculate scramble (clean space-separated inverted moves)
+            const invMoves = invertAlgorithm(activeCase.moves);
+            activeScramble = Array.isArray(invMoves) ? invMoves.join(" ") : invMoves;
+            document.getElementById('active-case-scramble').textContent = activeScramble || "(Solved state)";
 
             // State Reset
+            if (timerInterval) clearInterval(timerInterval);
             trainerState = "READY";
             document.getElementById('timer-display-text').textContent = "0.00";
-            document.getElementById('timer-display-text').style.color = "#1e272e";
+            document.getElementById('timer-display-text').style.color = "inherit";
             document.getElementById('timer-status-text').textContent = "Press Space / Tap to Start!";
             document.getElementById('timer-status-text').className = "timer-status";
+        }
+
+        function revealCaseManually() {
+            if (!activeCase) return;
+            document.getElementById('active-case-name').textContent = activeCase.name;
+            document.getElementById('active-case-desc').textContent = activeCase.desc || "";
+            document.getElementById('active-case-alg-text').textContent = activeCase.moves;
+            document.getElementById('active-case-answer').style.display = "block";
         }
 
         // Timer Trigger Logic
@@ -3844,15 +4126,12 @@
                 const totalTime = recogTime + solveTime;
                 
                 document.getElementById('timer-display-text').textContent = totalTime.toFixed(2);
-                document.getElementById('timer-display-text').style.color = "#1e272e";
+                document.getElementById('timer-display-text').style.color = "inherit";
                 document.getElementById('timer-status-text').textContent = "Done! Press Space to next scramble";
                 document.getElementById('timer-status-text').className = "timer-status";
 
                 // Reveal case identity and correct algorithm moves after solving
-                document.getElementById('active-case-name').textContent = activeCase.name;
-                document.getElementById('active-case-desc').textContent = activeCase.desc || "";
-                document.getElementById('active-case-alg-text').textContent = activeCase.moves;
-                document.getElementById('active-case-answer').style.display = "block";
+                revealCaseManually();
 
                 // Log score to table
                 logScoreToTable(activeCase.name, recogTime, solveTime, totalTime);

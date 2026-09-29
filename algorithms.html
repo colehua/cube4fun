@@ -4789,7 +4789,8 @@
                     arrows.push({
                         from: cornerSlots[from].pos,
                         to: cornerSlots[to].pos,
-                        double: true
+                        double: true,
+                        type: 'corner'
                     });
                     visitedCorners.add(from);
                     visitedCorners.add(to);
@@ -4797,7 +4798,8 @@
                     arrows.push({
                         from: cornerSlots[from].pos,
                         to: cornerSlots[to].pos,
-                        double: false
+                        double: false,
+                        type: 'corner'
                     });
                     visitedCorners.add(from);
                 }
@@ -4812,7 +4814,8 @@
                     arrows.push({
                         from: edgeSlots[from].pos,
                         to: edgeSlots[to].pos,
-                        double: true
+                        double: true,
+                        type: 'edge'
                     });
                     visitedEdges.add(from);
                     visitedEdges.add(to);
@@ -4820,7 +4823,8 @@
                     arrows.push({
                         from: edgeSlots[from].pos,
                         to: edgeSlots[to].pos,
-                        double: false
+                        double: false,
+                        type: 'edge'
                     });
                     visitedEdges.add(from);
                 }
@@ -4880,6 +4884,102 @@
             return res;
         }
 
+        function drawCornerTwistArrow(corner, dir) {
+            if (corner.name === 'UFR') {
+                if (dir === 'CCW') {
+                    return `<path d="M 45,39 Q 46,34 49,33" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="49,33 45,30 47,35" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 55,39 Q 54,34 51,33" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="51,33 53,35 55,30" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                }
+            } else if (corner.name === 'UFL') {
+                if (dir === 'CW') {
+                    return `<path d="M 23,26 Q 24,22 27,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="27,22 23,20 24,25" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 21,19 Q 23,21 26,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="26,22 23,25 25,20" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                }
+            } else if (corner.name === 'UBR') {
+                if (dir === 'CCW') {
+                    return `<path d="M 77,26 Q 76,22 73,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="73,22 77,20 76,25" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 79,19 Q 77,21 74,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="74,22 77,25 75,20" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                }
+            } else if (corner.name === 'UBL') {
+                if (dir === 'CW') {
+                    return `<path d="M 45,9 Q 47,10 50,11" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="50,11 46,9 47,14" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                } else {
+                    return `<path d="M 55,9 Q 53,10 50,11" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
+                           `<polygon points="50,11 54,9 53,14" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
+                }
+            }
+            return "";
+        }
+
+        function drawEdgeFlipArrow(edge) {
+            const cx = edge.pos.x;
+            const cy = edge.pos.y;
+            return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.2" fill="#f59e0b" stroke="#111827" stroke-width="1.2"/>` +
+                   `<path d="M ${(cx - 1.8).toFixed(1)},${cy.toFixed(1)} L ${(cx + 1.8).toFixed(1)},${cy.toFixed(1)}" stroke="#111827" stroke-width="1.2" stroke-linecap="round"/>`;
+        }
+
+        function computeCornerTwistArrows(sim) {
+            let res = "";
+            if (sim.faces.F[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[2], 'CCW');
+            else if (sim.faces.R[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[2], 'CW');
+
+            if (sim.faces.F[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[3], 'CW');
+            else if (sim.faces.L[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[3], 'CCW');
+
+            if (sim.faces.B[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[1], 'CCW');
+            else if (sim.faces.R[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[1], 'CW');
+
+            if (sim.faces.B[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[0], 'CW');
+            else if (sim.faces.L[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[0], 'CCW');
+
+            return res;
+        }
+
+        function computeEdgeFlipIndicators(sim) {
+            let res = "";
+            if (sim.faces.U[7] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[2]);
+            if (sim.faces.U[5] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[1]);
+            if (sim.faces.U[1] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[0]);
+            if (sim.faces.U[3] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[3]);
+            return res;
+        }
+
+        function computeF2lArrow(item, sim) {
+            const name = (item.name || "").toLowerCase();
+            const isExtract = name.includes("stuck") || name.includes("extract") || name.includes("in slot");
+            if (isExtract) {
+                return `<path d="M 50,54 Q 56,38 46,24" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />` +
+                       `<polygon points="46,24 49,29 53,26" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />`;
+            } else {
+                return `<path d="M 40,22 Q 40,38 49,49" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />` +
+                       `<polygon points="50,51 45,46 49,44" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />`;
+            }
+        }
+
+        function computeLseArrows(item, sim) {
+            const name = (item.name || "").toLowerCase();
+            let res = "";
+            if (name.includes("4b") || name.includes("ul") || name.includes("ur")) {
+                res += drawArrowSvg({ from: U_EDGE_DEFS[3].pos, to: U_EDGE_DEFS[1].pos, double: true });
+            } else if (name.includes("4c") || name.includes("m-slice") || name.includes("dots") || name.includes("uf") || name.includes("ub")) {
+                res += drawArrowSvg({ from: U_EDGE_DEFS[2].pos, to: U_EDGE_DEFS[0].pos, double: true });
+            } else {
+                if (sim.faces.U[7] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[2]);
+                if (sim.faces.U[1] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[0]);
+            }
+            return res;
+        }
+
         function getUStickerPath(row, col) {
             const ox = 50, oy = 5;
             const rx = 35 / 3, ry = 17.5 / 3;
@@ -4925,7 +5025,8 @@
             const isF2l = (cat === "F2L" || cat === "ZBLS");
             const isPll = (cat === "PLL" || name.includes("Perm"));
             const isOll = (cat === "OLL" || cat === "WV" || cat === "VLS");
-            const isRoux = (cat === "CMLL" || cat === "ROUX");
+            const isCmll = (cat === "CMLL");
+            const isLse = (cat === "LSE" || (cat === "ROUX" && (name.includes("4a") || name.includes("4b") || name.includes("4c") || name.includes("LSE") || name.includes("Flip") || name.includes("Insert") || name.includes("Dots") || name.includes("Bars") || name.includes("Swap"))));
 
             // Piece isolation for F2L
             let isTarget = (face, index) => true;
@@ -4983,8 +5084,12 @@
                             showIndicator = true;
                             fill = SVG_COLORS.Y;
                         }
-                    } else if (isRoux) {
+                    } else if (isCmll) {
                         if (row === 0 || row === 2) {
+                            showIndicator = true;
+                        }
+                    } else if (isLse) {
+                        if (row === 1) {
                             showIndicator = true;
                         }
                     } else {
@@ -5014,8 +5119,12 @@
                             showIndicator = true;
                             fill = SVG_COLORS.Y;
                         }
-                    } else if (isRoux) {
+                    } else if (isCmll) {
                         if (col === 0 || col === 2) {
+                            showIndicator = true;
+                        }
+                    } else if (isLse) {
+                        if (col === 1) {
                             showIndicator = true;
                         }
                     } else {
@@ -5045,11 +5154,17 @@
                         color = SVG_COLORS.Y;
                     } else if (isF2l) {
                         color = isTarget('U', idx) ? (SVG_COLORS[sim.faces.U[idx]] || SVG_COLORS.GREY) : SVG_COLORS.GREY;
-                    } else if (isRoux) {
+                    } else if (isCmll) {
                         if (idx === 0 || idx === 2 || idx === 6 || idx === 8) {
                             color = sim.faces.U[idx] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
                         } else {
                             color = SVG_COLORS.DARK;
+                        }
+                    } else if (isLse) {
+                        if (idx === 0 || idx === 2 || idx === 6 || idx === 8 || idx === 4) {
+                            color = SVG_COLORS.Y;
+                        } else {
+                            color = SVG_COLORS[sim.faces.U[idx]] || SVG_COLORS.Y;
                         }
                     } else {
                         color = sim.faces.U[idx] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
@@ -5066,11 +5181,17 @@
                     let color = SVG_COLORS.GREY;
                     if (isF2l) {
                         color = isTarget('F', idx) ? (SVG_COLORS[sim.faces.F[idx]] || SVG_COLORS.GREY) : (r > 0 && cl < 2 ? SVG_COLORS.G : SVG_COLORS.GREY);
-                    } else if (isRoux) {
+                    } else if (isCmll) {
                         if (r === 0 && (cl === 0 || cl === 2)) {
                             color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.G;
                         } else {
                             color = SVG_COLORS.DARK;
+                        }
+                    } else if (isLse) {
+                        if (r === 0 && cl === 1) {
+                            color = SVG_COLORS[sim.faces.F[1]] || SVG_COLORS.G;
+                        } else {
+                            color = SVG_COLORS.G;
                         }
                     } else if (r === 0) {
                         if (isOll) {
@@ -5093,11 +5214,17 @@
                     let color = SVG_COLORS.GREY;
                     if (isF2l) {
                         color = isTarget('R', idx) ? (SVG_COLORS[sim.faces.R[idx]] || SVG_COLORS.GREY) : (r > 0 && cl > 0 ? SVG_COLORS.R : SVG_COLORS.GREY);
-                    } else if (isRoux) {
+                    } else if (isCmll) {
                         if (r === 0 && (cl === 0 || cl === 2)) {
                             color = SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R;
                         } else {
                             color = SVG_COLORS.DARK;
+                        }
+                    } else if (isLse) {
+                        if (r === 0 && cl === 1) {
+                            color = SVG_COLORS[sim.faces.R[1]] || SVG_COLORS.R;
+                        } else {
+                            color = SVG_COLORS.R;
                         }
                     } else if (r === 0) {
                         if (isOll) {
@@ -5113,12 +5240,30 @@
                 }
             }
 
-            // 4. Direction / Permutation Arrows
-            if (isPll || cat === "ELL") {
+            // 4. Direction & Permutation Arrows for ALL Methods
+            if (isPll || cat === "ELL" || cat === "ZBLL" || cat === "COLL") {
                 const arrows = computePermutationArrows(sim);
                 arrows.forEach(a => {
                     svg += drawArrowSvg(a);
                 });
+                if (arrows.length === 0 && (cat === "COLL" || cat === "ZBLL")) {
+                    svg += computeCornerTwistArrows(sim);
+                }
+            } else if (isCmll) {
+                const cornerArrows = computePermutationArrows(sim).filter(a => a.type === 'corner');
+                cornerArrows.forEach(a => {
+                    svg += drawArrowSvg(a);
+                });
+                if (cornerArrows.length === 0) {
+                    svg += computeCornerTwistArrows(sim);
+                }
+            } else if (isOll) {
+                svg += computeCornerTwistArrows(sim);
+                svg += computeEdgeFlipIndicators(sim);
+            } else if (isF2l) {
+                svg += computeF2lArrow(item, sim);
+            } else if (isLse) {
+                svg += computeLseArrows(item, sim);
             }
 
             svg += `</svg>`;

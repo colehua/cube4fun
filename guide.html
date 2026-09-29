@@ -379,36 +379,127 @@
                     </p>
                 </div>
                 <div style="text-align: center;">
-                    <!-- SVG Visual representation of Cube Anatomy -->
-                    <svg viewBox="0 0 200 200" width="220" height="220" style="background:none;">
-                        <!-- Center Core Graphic -->
-                        <circle cx="100" cy="100" r="15" fill="#34495e" stroke="#1e272e" stroke-width="3"/>
-                        
-                        <!-- Core Axes -->
-                        <line x1="100" y1="50" x2="100" y2="150" stroke="#2c3e50" stroke-width="6"/>
-                        <line x1="50" y1="100" x2="150" y2="100" stroke="#2c3e50" stroke-width="6"/>
-                        
-                        <!-- Center Pieces -->
-                        <rect x="90" y="35" width="20" height="20" rx="4" fill="#FFFF00" stroke="#1e272e" stroke-width="2"/>
-                        <rect x="90" y="145" width="20" height="20" rx="4" fill="#FFFFFF" stroke="#1e272e" stroke-width="2"/>
-                        <rect x="35" y="90" width="20" height="20" rx="4" fill="#FF9500" stroke="#1e272e" stroke-width="2"/>
-                        <rect x="145" y="90" width="20" height="20" rx="4" fill="#FF3B30" stroke="#1e272e" stroke-width="2"/>
-                        
-                        <text x="100" y="25" text-anchor="middle" font-family="'DynaPuff'" font-size="10" fill="#1e272e" font-weight="bold">Center</text>
-                        
-                        <!-- Corner piece illustration -->
-                        <rect x="140" y="30" width="22" height="22" rx="4" fill="#4CD964" stroke="#1e272e" stroke-width="2.5"/>
-                        <path d="M140,30 L150,20 L172,20 L162,30 Z" fill="#007AFF" stroke="#1e272e" stroke-width="2"/>
-                        <path d="M162,30 L172,20 L172,42 L162,52 Z" fill="#FF3B30" stroke="#1e272e" stroke-width="2"/>
-                        <text x="195" y="15" text-anchor="end" font-family="'DynaPuff'" font-size="10" fill="#1e272e" font-weight="bold">Corner</text>
-                        
-                        <!-- Edge piece illustration -->
-                        <rect x="30" y="130" width="22" height="22" rx="4" fill="#007AFF" stroke="#1e272e" stroke-width="2.5"/>
-                        <path d="M30,130 L40,120 L62,120 L52,130 Z" fill="#FF9500" stroke="#1e272e" stroke-width="2"/>
-                        <text x="25" y="165" font-family="'DynaPuff'" font-size="10" fill="#1e272e" font-weight="bold">Edge</text>
-                    </svg>
-                    <br>
-                    <span class="anatomy-label" style="background-color: var(--cyan-blob);">Fixed Center Core Mechanic</span>
+                    <!-- 3D Exploded Anatomy of the Rubik's Cube -->
+                    <div style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); border: 2.5px solid #cbd5e1; border-radius: 20px; padding: 15px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                        <svg viewBox="0 0 460 330" width="100%" height="280" style="max-width: 460px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.08));" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#475569" />
+                                    <stop offset="70%" stop-color="#1e293b" />
+                                    <stop offset="100%" stop-color="#0f172a" />
+                                </radialGradient>
+                                <linearGradient id="metalStalk" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#cbd5e1" />
+                                    <stop offset="50%" stop-color="#94a3b8" />
+                                    <stop offset="100%" stop-color="#64748b" />
+                                </linearGradient>
+                                <linearGradient id="yellowFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ffea00" />
+                                    <stop offset="100%" stop-color="#ffd000" />
+                                </linearGradient>
+                                <linearGradient id="greenFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#2ecc71" />
+                                    <stop offset="100%" stop-color="#27ae60" />
+                                </linearGradient>
+                                <linearGradient id="redFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ff4757" />
+                                    <stop offset="100%" stop-color="#e84118" />
+                                </linearGradient>
+                                <linearGradient id="blueFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#3498db" />
+                                    <stop offset="100%" stop-color="#2980b9" />
+                                </linearGradient>
+                                <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="120%">
+                                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.12" />
+                                </filter>
+                            </defs>
+
+                            <!-- Ghost Outline of Assembled Cube -->
+                            <g opacity="0.22" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3 3" fill="none">
+                                <polygon points="210,95 285,135 210,175 135,135" />
+                                <polygon points="135,135 210,175 210,255 135,215" />
+                                <polygon points="210,175 285,135 285,215 210,255" />
+                            </g>
+
+                            <!-- Central 6-Axis Core & Screws -->
+                            <g>
+                                <line x1="210" y1="175" x2="210" y2="70" stroke="url(#metalStalk)" stroke-width="7" stroke-linecap="round" />
+                                <line x1="210" y1="175" x2="210" y2="280" stroke="url(#metalStalk)" stroke-width="7" stroke-linecap="round" />
+                                <line x1="210" y1="175" x2="100" y2="225" stroke="url(#metalStalk)" stroke-width="7" stroke-linecap="round" />
+                                <line x1="210" y1="175" x2="320" y2="125" stroke="url(#metalStalk)" stroke-width="7" stroke-linecap="round" />
+                                <line x1="210" y1="175" x2="120" y2="125" stroke="url(#metalStalk)" stroke-width="7" stroke-linecap="round" />
+                                <line x1="210" y1="175" x2="300" y2="225" stroke="url(#metalStalk)" stroke-width="7" stroke-linecap="round" />
+
+                                <rect x="207" y="90" width="6" height="24" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1" />
+                                <rect x="280" y="132" width="20" height="6" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1" transform="rotate(-28 290 135)" />
+                                <rect x="120" y="217" width="20" height="6" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1" transform="rotate(28 130 220)" />
+
+                                <circle cx="210" cy="175" r="22" fill="url(#coreGlow)" stroke="#0f172a" stroke-width="2.5" />
+                                <circle cx="210" cy="175" r="8" fill="#38bdf8" />
+                            </g>
+
+                            <!-- Exploded Center Piece (Upward) -->
+                            <g transform="translate(0, -32)">
+                                <line x1="210" y1="78" x2="210" y2="52" stroke="#0066FF" stroke-width="2" stroke-dasharray="3 3" />
+                                <path d="M 205,52 L 205,62 L 215,62 L 215,52 Z" fill="#64748b" stroke="#1e293b" stroke-width="1.5" />
+                                <polygon points="210,18 245,36 210,54 175,36" fill="url(#yellowFace)" stroke="#1e293b" stroke-width="2" stroke-linejoin="round" />
+                                <polygon points="175,36 210,54 210,60 175,42" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" />
+                                <polygon points="210,54 245,36 245,42 210,60" fill="#1e293b" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" />
+                                <ellipse cx="210" cy="36" rx="6" ry="3" fill="#ffe066" opacity="0.6" />
+                            </g>
+
+                            <!-- Exploded Edge Piece (Bottom Left) -->
+                            <g transform="translate(-75, 45)">
+                                <line x1="165" y1="180" x2="140" y2="195" stroke="#00E5FF" stroke-width="2" stroke-dasharray="3 3" />
+                                <path d="M 140,195 Q 155,185 150,175 Q 140,180 135,190 Z" fill="#475569" stroke="#1e293b" stroke-width="1.2" />
+                                <polygon points="105,175 140,195 140,235 105,215" fill="url(#greenFace)" stroke="#1e293b" stroke-width="2" stroke-linejoin="round" />
+                                <polygon points="105,215 140,235 120,248 85,228" fill="#f8fafc" stroke="#1e293b" stroke-width="2" stroke-linejoin="round" />
+                            </g>
+
+                            <!-- Exploded Corner Piece (Top Right) -->
+                            <g transform="translate(75, -25)">
+                                <line x1="285" y1="135" x2="315" y2="115" stroke="#FF6B6B" stroke-width="2" stroke-dasharray="3 3" />
+                                <path d="M 305,120 L 290,135 L 298,142 L 315,125 Z" fill="#475569" stroke="#1e293b" stroke-width="1.2" />
+                                <polygon points="330,85 365,103 330,121 295,103" fill="url(#yellowFace)" stroke="#1e293b" stroke-width="2" stroke-linejoin="round" />
+                                <polygon points="330,121 365,103 365,143 330,161" fill="url(#redFace)" stroke="#1e293b" stroke-width="2" stroke-linejoin="round" />
+                                <polygon points="365,103 390,88 390,128 365,143" fill="url(#blueFace)" stroke="#1e293b" stroke-width="2" stroke-linejoin="round" />
+                            </g>
+
+                            <!-- Callout Badges -->
+                            <g filter="url(#badgeShadow)">
+                                <rect x="15" y="10" width="135" height="42" rx="10" fill="#ffffff" stroke="#0066FF" stroke-width="2.5" />
+                                <text x="82" y="27" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#0066FF">CENTER (6)</text>
+                                <text x="82" y="42" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">1 Color • Core Anchor</text>
+                                <path d="M 150,31 L 180,31" stroke="#0066FF" stroke-width="2" stroke-linecap="round" />
+                                <circle cx="180" cy="31" r="3" fill="#0066FF" />
+                            </g>
+
+                            <g filter="url(#badgeShadow)">
+                                <rect x="310" y="15" width="135" height="42" rx="10" fill="#ffffff" stroke="#FF6B6B" stroke-width="2.5" />
+                                <text x="377" y="32" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#FF6B6B">CORNER (8)</text>
+                                <text x="377" y="47" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">3 Colors • 8 Vertices</text>
+                                <path d="M 345,57 L 345,75" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round" />
+                                <circle cx="345" cy="75" r="3" fill="#FF6B6B" />
+                            </g>
+
+                            <g filter="url(#badgeShadow)">
+                                <rect x="15" y="275" width="135" height="42" rx="10" fill="#ffffff" stroke="#00E5FF" stroke-width="2.5" />
+                                <text x="82" y="292" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#0284c7">EDGE (12)</text>
+                                <text x="82" y="307" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">2 Colors • Locking Wings</text>
+                                <path d="M 150,296 L 165,296 L 175,280" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" />
+                                <circle cx="175" cy="280" r="3" fill="#00E5FF" />
+                            </g>
+
+                            <g filter="url(#badgeShadow)">
+                                <rect x="305" y="275" width="140" height="42" rx="10" fill="#ffffff" stroke="#1e272e" stroke-width="2.5" />
+                                <text x="375" y="292" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#1e272e">SPIDER CORE ⚙️</text>
+                                <text x="375" y="307" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">6 Springs & Screws</text>
+                                <path d="M 305,296 L 255,245 L 240,210" stroke="#1e272e" stroke-width="2" stroke-linecap="round" fill="none" />
+                                <circle cx="240" cy="210" r="3" fill="#1e272e" />
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="anatomy-label" style="background-color: var(--cyan-blob);">3D Exploded Anatomy & Core Mechanics</span>
                 </div>
             </div>
         </div>
@@ -462,32 +553,194 @@
             </p>
             
             <div class="trick-grid">
+                <!-- Trick 1: Index Flick -->
                 <div class="trick-card">
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; margin-bottom: 12px; display: flex; justify-content: center;">
+                        <svg viewBox="0 0 240 160" width="100%" height="130" style="background:none;" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="cyanArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#0066FF" />
+                                </marker>
+                            </defs>
+                            <g fill="#1e293b" stroke="#0f172a" stroke-width="1.2">
+                                <polygon points="50,75 110,105 110,140 50,110" fill="#2ecc71" opacity="0.85" />
+                                <polygon points="110,105 170,75 170,110 110,140" fill="#e74c3c" opacity="0.85" />
+                                <line x1="70" y1="85" x2="70" y2="120" stroke="#0f172a" />
+                                <line x1="90" y1="95" x2="90" y2="130" stroke="#0f172a" />
+                                <line x1="130" y1="95" x2="130" y2="130" stroke="#0f172a" />
+                                <line x1="150" y1="85" x2="150" y2="120" stroke="#0f172a" />
+                            </g>
+                            <g stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round">
+                                <polygon points="110,20 170,50 110,80 50,50" fill="#ffea00" />
+                                <line x1="90" y1="30" x2="150" y2="60" stroke="#0f172a" />
+                                <line x1="70" y1="40" x2="130" y2="70" stroke="#0f172a" />
+                                <line x1="130" y1="30" x2="70" y2="60" stroke="#0f172a" />
+                                <line x1="150" y1="40" x2="90" y2="70" stroke="#0f172a" />
+                                <polygon points="50,50 110,80 110,75 50,45" fill="#27ae60" />
+                                <polygon points="110,80 170,50 170,45 110,75" fill="#c0392b" />
+                            </g>
+                            <path d="M 165,42 Q 135,15 75,35" fill="none" stroke="#0066FF" stroke-width="3.5" stroke-linecap="round" marker-end="url(#cyanArrow)" />
+                            <g transform="translate(160, 25)">
+                                <ellipse cx="14" cy="14" rx="14" ry="10" fill="#0066FF" opacity="0.2" />
+                                <circle cx="14" cy="14" r="8" fill="#0066FF" stroke="#ffffff" stroke-width="2" />
+                                <text x="14" y="18" font-family="'DynaPuff', cursive" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+                            </g>
+                            <text x="120" y="152" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#0066FF" text-anchor="middle">Flick from UBR corner forward</text>
+                        </svg>
+                    </div>
                     <div class="trick-icon">☝️</div>
                     <h4 class="trick-name">Index Finger Flick (U / U')</h4>
                     <p>
                         Place your index fingers on the back corners of the top layer. Flick your **right index finger** forward to do a <code>U'</code>, or flick your **left index finger** forward to do a <code>U</code>.
                     </p>
                 </div>
+
+                <!-- Trick 2: U2 Double Flick -->
                 <div class="trick-card">
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; margin-bottom: 12px; display: flex; justify-content: center;">
+                        <svg viewBox="0 0 240 160" width="100%" height="130" style="background:none;" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="orangeArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff7f50" />
+                                </marker>
+                                <marker id="cyanArrow2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#00E5FF" />
+                                </marker>
+                            </defs>
+                            <g fill="#1e293b" stroke="#0f172a" stroke-width="1.2">
+                                <polygon points="50,75 110,105 110,140 50,110" fill="#2ecc71" opacity="0.85" />
+                                <polygon points="110,105 170,75 170,110 110,140" fill="#e74c3c" opacity="0.85" />
+                                <line x1="70" y1="85" x2="70" y2="120" stroke="#0f172a" />
+                                <line x1="90" y1="95" x2="90" y2="130" stroke="#0f172a" />
+                                <line x1="130" y1="95" x2="130" y2="130" stroke="#0f172a" />
+                                <line x1="150" y1="85" x2="150" y2="120" stroke="#0f172a" />
+                            </g>
+                            <g stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round">
+                                <polygon points="110,20 170,50 110,80 50,50" fill="#ffea00" />
+                                <line x1="90" y1="30" x2="150" y2="60" stroke="#0f172a" />
+                                <line x1="70" y1="40" x2="130" y2="70" stroke="#0f172a" />
+                                <line x1="130" y1="30" x2="70" y2="60" stroke="#0f172a" />
+                                <line x1="150" y1="40" x2="90" y2="70" stroke="#0f172a" />
+                            </g>
+                            <path d="M 165,45 Q 140,20 110,25" fill="none" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" marker-end="url(#cyanArrow2)" />
+                            <path d="M 110,25 Q 75,30 55,50" fill="none" stroke="#ff7f50" stroke-width="3" stroke-linecap="round" marker-end="url(#orangeArrow)" />
+                            <g transform="translate(170, 32)">
+                                <circle cx="8" cy="8" r="8" fill="#00E5FF" stroke="#1e272e" stroke-width="1.5" />
+                                <text x="8" y="12" font-family="'DynaPuff', cursive" font-size="9" font-weight="bold" fill="#1e272e" text-anchor="middle">1st</text>
+                            </g>
+                            <g transform="translate(125, 6)">
+                                <circle cx="8" cy="8" r="8" fill="#ff7f50" stroke="#1e272e" stroke-width="1.5" />
+                                <text x="8" y="12" font-family="'DynaPuff', cursive" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">2nd</text>
+                            </g>
+                            <text x="120" y="152" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#ea580c" text-anchor="middle">Index ➔ Middle in 1 fluid motion (180°)</text>
+                        </svg>
+                    </div>
                     <div class="trick-icon">✌️</div>
                     <h4 class="trick-name">U2 Double Flick (U2)</h4>
                     <p>
                         Instead of flicking twice with one finger, execute a U2 turn by flicking with your **index finger** immediately followed by your **middle finger** in one fast, sweeping motion!
                     </p>
                 </div>
+
+                <!-- Trick 3: Ring Finger Flick -->
                 <div class="trick-card">
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; margin-bottom: 12px; display: flex; justify-content: center;">
+                        <svg viewBox="0 0 240 160" width="100%" height="130" style="background:none;" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="greenArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#10b981" />
+                                </marker>
+                            </defs>
+                            <g fill="#1e293b" stroke="#0f172a" stroke-width="1.2">
+                                <polygon points="110,20 170,50 110,80 50,50" fill="#ffea00" />
+                                <polygon points="50,50 110,80 110,110 50,80" fill="#2ecc71" />
+                                <polygon points="110,80 170,50 170,80 110,110" fill="#e74c3c" />
+                                <line x1="70" y1="60" x2="70" y2="90" stroke="#0f172a" />
+                                <line x1="90" y1="70" x2="90" y2="100" stroke="#0f172a" />
+                                <line x1="130" y1="70" x2="130" y2="100" stroke="#0f172a" />
+                                <line x1="150" y1="60" x2="150" y2="90" stroke="#0f172a" />
+                            </g>
+                            <g stroke="#0f172a" stroke-width="1.5">
+                                <polygon points="50,80 110,110 110,135 50,105" fill="#a7f3d0" />
+                                <polygon points="110,110 170,80 170,105 110,135" fill="#fecaca" />
+                                <path d="M 165,102 Q 130,135 60,105" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" marker-end="url(#greenArrow)" />
+                            </g>
+                            <g transform="translate(170, 95)">
+                                <circle cx="8" cy="8" r="9" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+                                <text x="8" y="12" font-family="'DynaPuff', cursive" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">🤙</text>
+                            </g>
+                            <text x="120" y="152" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#059669" text-anchor="middle">Ring finger pushes D layer from below</text>
+                        </svg>
+                    </div>
                     <div class="trick-icon">🤙</div>
                     <h4 class="trick-name">Ring Finger Flick (D / D')</h4>
                     <p>
                         Place your ring fingers on the bottom back corners. Flick your **right ring finger** forward for <code>D</code>, or **left ring finger** for <code>D'</code>. This allows seamless bottom layer execution without wrist regrips.
                     </p>
                 </div>
+
+                <!-- Trick 4: Thumb Push -->
                 <div class="trick-card">
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; margin-bottom: 12px; display: flex; justify-content: center;">
+                        <svg viewBox="0 0 240 160" width="100%" height="130" style="background:none;" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="redArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff4757" />
+                                </marker>
+                            </defs>
+                            <g stroke="#0f172a" stroke-width="1.2">
+                                <polygon points="110,20 170,50 110,80 50,50" fill="#ffea00" />
+                                <polygon points="110,80 170,50 170,115 110,145" fill="#e74c3c" opacity="0.8" />
+                                <polygon points="50,50 110,80 110,145 50,115" fill="#2ecc71" stroke-width="1.8" />
+                                <line x1="70" y1="60" x2="70" y2="125" stroke="#0f172a" />
+                                <line x1="90" y1="70" x2="90" y2="135" stroke="#0f172a" />
+                                <line x1="50" y1="72" x2="110" y2="102" stroke="#0f172a" />
+                                <line x1="50" y1="94" x2="110" y2="124" stroke="#0f172a" />
+                            </g>
+                            <path d="M 105,135 Q 115,100 102,70" fill="none" stroke="#ff4757" stroke-width="3.5" stroke-linecap="round" marker-end="url(#redArrow)" />
+                            <g transform="translate(105, 125)">
+                                <circle cx="8" cy="8" r="9" fill="#ff4757" stroke="#ffffff" stroke-width="2" />
+                                <text x="8" y="12" font-family="'DynaPuff', cursive" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">👍</text>
+                            </g>
+                            <text x="120" y="152" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#e11d48" text-anchor="middle">Thumb pushes F layer upward smoothly</text>
+                        </svg>
+                    </div>
                     <div class="trick-icon">👍</div>
                     <h4 class="trick-name">Thumb Push (F / F')</h4>
                     <p>
                         Keep your thumbs on the front center face. Push the front-left edge upward with your right thumb to do an <code>F'</code>, or do the same on the front-right to do an <code>F</code>.
+                    </p>
+                </div>
+
+                <!-- Trick 5: M-Slice Ring/Middle Flick -->
+                <div class="trick-card">
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; margin-bottom: 12px; display: flex; justify-content: center;">
+                        <svg viewBox="0 0 240 160" width="100%" height="130" style="background:none;" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="purpleArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#8b5cf6" />
+                                </marker>
+                            </defs>
+                            <g stroke="#0f172a" stroke-width="1.2">
+                                <polygon points="50,50 70,60 70,125 50,115" fill="#2ecc71" opacity="0.6" />
+                                <polygon points="90,70 110,80 110,145 90,135" fill="#2ecc71" opacity="0.6" />
+                                <polygon points="110,80 170,50 170,115 110,145" fill="#e74c3c" opacity="0.6" />
+                                <polygon points="110,20 170,50 110,80 50,50" fill="#ffea00" opacity="0.6" />
+                                <polygon points="70,60 90,70 90,135 70,125" fill="#8b5cf6" stroke="#4c1d95" stroke-width="2" />
+                                <polygon points="90,30 110,40 110,80 90,70" fill="#c084fc" stroke="#4c1d95" stroke-width="1.5" />
+                            </g>
+                            <path d="M 80,142 Q 72,100 80,55" fill="none" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" marker-end="url(#purpleArrow)" />
+                            <g transform="translate(68, 132)">
+                                <circle cx="12" cy="12" r="10" fill="#8b5cf6" stroke="#ffffff" stroke-width="2" />
+                                <text x="12" y="16" font-family="'DynaPuff', cursive" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">M'</text>
+                            </g>
+                            <text x="120" y="152" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="middle">Ring/Middle finger pulls DB up to UB</text>
+                        </svg>
+                    </div>
+                    <div class="trick-icon">⚡</div>
+                    <h4 class="trick-name">M-Slice Flick (M' / M2)</h4>
+                    <p>
+                        From the back of the cube, use your **left or right ring/middle finger** to pull the bottom-back edge upward. Essential for Roux, H Perm, and Z Perm!
                     </p>
                 </div>
             </div>
