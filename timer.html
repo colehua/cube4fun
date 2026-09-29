@@ -61,10 +61,43 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 15px 20px 40px 20px;
             position: relative;
+        }
+
+        /* csTimer Distraction-Free Active Solving State */
+        body.timer-active .cs-top-bar,
+        body.timer-active .cs-sidebar-left,
+        body.timer-active .corner-scramble-widget,
+        body.timer-active .cs-site-nav,
+        body.timer-active .main-title,
+        body.timer-active .site-footer {
+            opacity: 0.04 !important;
+            pointer-events: none !important;
+            transition: opacity 0.15s ease;
+        }
+
+        body.timer-active .timer-instructions {
+            opacity: 0 !important;
+        }
+
+        /* Top Navigation Row */
+        .cs-site-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .cs-site-nav .nav-button {
+            margin-bottom: 0;
+            padding: 8px 16px;
+            font-size: 0.95em;
+            border-radius: 14px;
         }
 
         .nav-button {
@@ -92,90 +125,102 @@
 
         h1.main-title {
             font-family: 'DynaPuff', cursive;
-            font-size: 4em;
+            font-size: 2.8em;
             color: #ffffff;
             text-align: center;
-            -webkit-text-stroke: 3px #1e272e;
-            text-shadow: 6px 6px 0px #1e272e;
+            -webkit-text-stroke: 2px #1e272e;
+            text-shadow: 4px 4px 0px #1e272e;
             margin-top: 0px;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             line-height: 1.1;
+        }
+
+        /* Scramble on Top Card */
+        .cs-top-bar {
+            background: rgba(18, 24, 32, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            padding: 14px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            transition: opacity 0.2s ease;
         }
 
         .timer-settings {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
         }
 
         .select-style {
             font-family: 'DynaPuff', cursive;
-            font-size: 1.15em;
-            padding: 10px 20px;
-            border-radius: 16px;
-            border: 4px solid #1e272e;
+            font-size: 1.05em;
+            padding: 8px 16px;
+            border-radius: 14px;
+            border: 3px solid #1e272e;
             background-color: #fff;
             cursor: pointer;
-            box-shadow: 0px 6px 0px #1e272e;
+            box-shadow: 0px 4px 0px #1e272e;
             transition: all 0.2s;
             outline: none;
         }
 
         .select-style:hover {
             transform: translateY(-2px);
-            box-shadow: 0px 8px 0px #1e272e;
+            box-shadow: 0px 6px 0px #1e272e;
         }
 
         .btn-action {
             font-family: 'DynaPuff', cursive;
-            font-size: 1.1em;
-            padding: 10px 20px;
-            border-radius: 16px;
-            border: 4px solid #1e272e;
+            font-size: 1em;
+            padding: 8px 16px;
+            border-radius: 14px;
+            border: 3px solid #1e272e;
             background-color: var(--yellow-blob);
             cursor: pointer;
-            box-shadow: 0px 6px 0px #1e272e;
+            box-shadow: 0px 4px 0px #1e272e;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             outline: none;
         }
 
         .btn-action:hover {
             transform: translateY(-2px);
-            box-shadow: 0px 8px 0px #1e272e;
+            box-shadow: 0px 6px 0px #1e272e;
         }
 
         .scramble-box {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 24px;
-            border-radius: 24px;
-            border: 4px dashed var(--primary);
+            background: rgba(0, 0, 0, 0.35);
+            padding: 14px 20px;
+            border-radius: 16px;
+            border: 2px dashed #00E5FF;
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: var(--card-shadow);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .scramble-box:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--hover-shadow);
+            transform: translateY(-1px);
         }
 
         .scramble-text {
-            font-size: 1.6em;
+            font-family: 'Outfit', monospace, sans-serif;
+            font-size: clamp(1.3rem, 2.5vw, 1.9rem);
             font-weight: 800;
-            letter-spacing: 1.5px;
-            line-height: 1.4;
+            letter-spacing: 2px;
+            line-height: 1.35;
             margin: 0;
-            min-height: 60px;
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-dark);
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            user-select: text;
         }
 
         /* 2D CUBE PREVIEW NET */
@@ -248,94 +293,457 @@
             transition: background-color 0.2s;
         }
 
-        /* TIMER AREA */
-        .timer-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 50px 20px;
-            border-radius: 24px;
-            box-shadow: var(--card-shadow);
-            border: 4px dashed var(--accent-pink);
-            text-align: center;
-            margin-bottom: 35px;
-            cursor: pointer;
-            position: relative;
-            transition: background-color 0.15s, transform 0.2s;
-        }
-
-        .timer-card:hover {
-            transform: scale(1.01);
-        }
-
-        .timer-card:active {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .timer-display {
-            font-family: 'DynaPuff', cursive;
-            font-size: 7em;
-            color: var(--text-dark);
-            margin: 0;
-            line-height: 1.1;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
-            transition: color 0.1s;
-        }
-
-        .timer-display.ready {
-            color: #4CD964;
-            text-shadow: 0 0 15px rgba(76, 217, 100, 0.4);
-        }
-
-        .timer-display.hold {
-            color: #FF3B30;
-            text-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
-        }
-
-        .timer-instructions {
-            font-size: 1.25em;
-            color: #475569;
-            margin-top: 20px;
-            margin-bottom: 0;
-            font-weight: 700;
-        }
-
-        /* GRID FOR STATS & HISTORY */
-        .stats-grid {
+        /* CS-TIMER WORKSPACE LAYOUT */
+        .cs-workspace-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 30px;
-            margin-bottom: 60px;
+            grid-template-columns: 370px 1fr;
+            gap: 25px;
+            align-items: stretch;
+            min-height: 520px;
+            margin-bottom: 35px;
         }
 
-        @media (max-width: 768px) {
-            .stats-grid {
+        @media (max-width: 980px) {
+            .cs-workspace-grid {
                 grid-template-columns: 1fr;
+            }
+            .cs-sidebar-left {
+                order: 2;
+            }
+            .cs-timer-center {
+                order: 1;
             }
         }
 
+        /* LEFT SIDEBAR: STATS, AO5 & AO12 GRAPH, HISTORY, RECORDS */
+        .cs-sidebar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: opacity 0.2s ease;
+        }
+
+        .cs-card-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2em;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Summary Stats Grid */
+        .cs-quick-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .cs-stat-cell {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 8px 6px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cs-cell-label {
+            font-size: 0.74em;
+            color: #94a3b8;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .cs-cell-val {
+            font-size: 1.15em;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: monospace;
+        }
+
+        .cs-cell-val.highlight {
+            color: #2ed573;
+        }
+
+        .cs-cell-val.ao5-text {
+            color: #00E5FF;
+        }
+
+        .cs-cell-val.ao12-text {
+            color: #FFA502;
+        }
+
+        /* AO5 & AO12 TREND GRAPH (LEFT SIDE) */
+        .cs-graph-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 16px;
+        }
+
+        .cs-graph-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .cs-graph-legend {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .legend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #cbd5e1;
+        }
+
+        .legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .cs-canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: #0f172a;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        #cs-ao-graph {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: crosshair;
+        }
+
+        .cs-graph-tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            color: #fff;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: 0.78em;
+            border: 1px solid #00E5FF;
+            pointer-events: none;
+            z-index: 20;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: none;
+            font-family: monospace;
+            line-height: 1.35;
+        }
+
+        .cs-graph-bests {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #94a3b8;
+            padding-top: 4px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        /* CENTER TIMER STAGE */
+        .cs-timer-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .timer-card {
+            width: 100%;
+            height: 100%;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(18, 24, 32, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 28px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            padding: 50px 20px;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .timer-card:hover {
+            border-color: rgba(0, 229, 255, 0.45);
+        }
+
+        .timer-display {
+            font-family: 'DynaPuff', monospace, sans-serif;
+            font-size: clamp(5.5rem, 15vw, 10.5rem);
+            color: #ffffff;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+            text-shadow: 0 6px 25px rgba(0,0,0,0.6);
+            letter-spacing: 2px;
+            transition: color 0.08s ease, transform 0.08s ease;
+            user-select: none;
+        }
+
+        .timer-display.ready {
+            color: #2ed573 !important;
+            text-shadow: 0 0 45px rgba(46, 213, 115, 0.9) !important;
+            transform: scale(1.02);
+        }
+
+        .timer-display.hold {
+            color: #ff4757 !important;
+            text-shadow: 0 0 45px rgba(255, 71, 87, 0.9) !important;
+        }
+
+        .timer-instructions {
+            margin-top: 30px;
+            font-size: 1.15em;
+            color: #94a3b8;
+            font-weight: 600;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.5;
+            transition: opacity 0.15s ease;
+        }
+
+        /* SCRAMBLE PREVIEW IN BOTTOM-RIGHT CORNER */
+        .corner-scramble-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 998;
+            background: rgba(18, 24, 32, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 3px solid #00E5FF;
+            border-radius: 20px;
+            padding: 12px 14px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            max-width: 280px;
+            user-select: none;
+            color: #fff;
+        }
+
+        .corner-scramble-widget.minimized {
+            padding: 8px 14px;
+            cursor: pointer;
+        }
+
+        .corner-scramble-widget.minimized .corner-content {
+            display: none;
+        }
+
+        .corner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .corner-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92em;
+            color: #00E5FF;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .corner-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .corner-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            border-radius: 8px;
+            padding: 3px 8px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        .corner-btn:hover {
+            background: #00E5FF;
+            color: #1e272e;
+        }
+
+        .corner-hint {
+            font-size: 0.74em;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        /* 2D Net in Corner Sizing */
+        .corner-scramble-widget .cube-net-3x3 {
+            display: grid;
+            grid-template-columns: repeat(4, 52px);
+            grid-template-rows: repeat(3, 52px);
+            gap: 5px;
+            background: #1e272e;
+            padding: 6px;
+            border-radius: 12px;
+            border: 2px solid #334155;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        .corner-scramble-widget .cube-net-2x2 {
+            display: grid;
+            grid-template-columns: repeat(4, 42px);
+            grid-template-rows: repeat(3, 42px);
+            gap: 5px;
+            background: #1e272e;
+            padding: 6px;
+            border-radius: 12px;
+            border: 2px solid #334155;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        .corner-scramble-widget .face-grid-3x3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            background: #000;
+            padding: 2px;
+            border-radius: 5px;
+            width: 48px;
+            height: 48px;
+        }
+
+        .corner-scramble-widget .face-grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 2px;
+            background: #000;
+            padding: 2px;
+            border-radius: 5px;
+            width: 38px;
+            height: 38px;
+        }
+
+        .corner-scramble-widget .sticker {
+            border-radius: 3px;
+        }
+
+        /* MODAL FOR 3D SCRAMBLE VIDEO ANIMATOR */
+        .cs-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10006;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .cs-modal.open {
+            display: flex;
+        }
+
+        .cs-modal-card {
+            position: relative;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .cs-modal-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #ff4757;
+            color: white;
+            border: 3px solid #1e272e;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.15s;
+        }
+
+        .cs-modal-close:hover {
+            transform: scale(1.12);
+        }
+
         .card-section {
-            background: var(--glass-bg);
+            background: rgba(18, 24, 32, 0.88);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            padding: 28px;
-            border-radius: 24px;
-            border: 2px solid var(--glass-border);
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: #ffffff;
         }
 
         .card-section:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .section-title {
             font-family: 'DynaPuff', cursive;
-            font-size: 2.2em;
-            color: var(--text-dark);
+            font-size: 1.5em;
+            color: #ffffff;
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         /* SOLVES LOG TABLE */
@@ -963,277 +1371,320 @@
 
     <div class="container">
         
-        <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
-            <a href="index.html" class="nav-button" style="margin-bottom: 0;">🏠 Home</a>
-            <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white; margin-bottom: 0;">🏆 Challenges ♾️</a>
-            <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white; margin-bottom: 0;">📰 News</a>
-            <a href="blog.html" class="nav-button" style="background-color: #FAED27; margin-bottom: 0;">✍️ Blog</a>
-            <a href="tutorial-3x3.html" class="nav-button" style="margin-bottom: 0;">🧊 3x3 Tutorial</a>
-            <a href="tutorial-2x2.html" class="nav-button" style="background-color: #ffeaa7; margin-bottom: 0;">🧊 2x2 Tutorial</a>
-            <a href="algorithms.html" class="nav-button" style="background-color: #a29bfe; color: white; margin-bottom: 0;">🧩 Algorithms</a>
-            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1; margin-bottom: 0;">🧠 Trainer</a>
-            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white; margin-bottom: 0;">🎮 3D Play</a>
-            <a href="guide.html" class="nav-button" style="background-color: #E2C2FF; margin-bottom: 0;">📖 Finger Tricks</a>
-            <a href="notation.html" class="nav-button" style="background-color: #dfe6e9; margin-bottom: 0;">📖 Notation</a>
+        <div class="cs-site-nav">
+            <a href="index.html" class="nav-button">🏠 Home</a>
+            <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white;">🏆 Challenges ♾️</a>
+            <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white;">📰 News</a>
+            <a href="blog.html" class="nav-button" style="background-color: #FAED27;">✍️ Blog</a>
+            <a href="tutorial-3x3.html" class="nav-button">🧊 3x3 Tutorial</a>
+            <a href="tutorial-2x2.html" class="nav-button" style="background-color: #ffeaa7;">🧊 2x2 Tutorial</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #a29bfe; color: white;">🧩 Algorithms</a>
+            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Trainer</a>
+            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 3D Play</a>
+            <a href="guide.html" class="nav-button" style="background-color: #E2C2FF;">📖 Finger Tricks</a>
+            <a href="notation.html" class="nav-button" style="background-color: #dfe6e9;">📖 Notation</a>
         </div>
         
         <h1 class="main-title">Speedcubing Timer ⏱️</h1>
 
-        <!-- SETTINGS AND CONTROLS -->
-        <div class="timer-settings" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;">
-            <select id="scramble-type-select" class="select-style">
-                <option value="3x3">3x3x3 Rubik's Cube</option>
-                <option value="2x2">2x2x2 Rubik's Cube</option>
-                <option value="3x3-cross">3x3x3 Cross Practice</option>
-                <option value="3x3-f2l">3x3x3 F2L Practice</option>
-                <option value="3x3-oh">3x3x3 One-Handed</option>
-                <option value="3x3-fmc">3x3x3 Fewest Moves (FMC)</option>
-            </select>
-            <div style="display: inline-flex; align-items: center; gap: 8px;">
-                <label for="scramble-length-input" style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.1em; color: var(--text-dark);">Length:</label>
-                <input type="number" id="scramble-length-input" class="select-style" min="1" max="100" value="15" style="width: 75px; text-align: center; box-sizing: border-box;">
+        <!-- CS TIMER TOP BAR (TOOLBAR & SCRAMBLE ON TOP) -->
+        <div class="cs-top-bar">
+            <!-- Settings and Controls Toolbar -->
+            <div class="timer-settings">
+                <select id="scramble-type-select" class="select-style">
+                    <option value="3x3">3x3x3 Rubik's Cube</option>
+                    <option value="2x2">2x2x2 Rubik's Cube</option>
+                    <option value="3x3-cross">3x3x3 Cross Practice</option>
+                    <option value="3x3-f2l">3x3x3 F2L Practice</option>
+                    <option value="3x3-oh">3x3x3 One-Handed</option>
+                    <option value="3x3-fmc">3x3x3 Fewest Moves (FMC)</option>
+                </select>
+                <div style="display: inline-flex; align-items: center; gap: 8px;">
+                    <label for="scramble-length-input" style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #ffffff;">Length:</label>
+                    <input type="number" id="scramble-length-input" class="select-style" min="1" max="100" value="15" style="width: 75px; text-align: center; box-sizing: border-box;">
+                </div>
+                <button id="btn-prev-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Previous Scramble">◀ Prev</button>
+                <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
+                <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
+                <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
+                <a href="challenges.html" class="btn-action" style="background-color: #ff4757; color: white; text-decoration: none;" title="Go to Challenges of Cubing">🏆 Challenges ♾️</a>
             </div>
-            <button id="btn-prev-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Previous Scramble">◀ Prev</button>
-            <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
-            <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
-            <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
-            <a href="challenges.html" class="btn-action" style="background-color: #ff4757; color: white; text-decoration: none;" title="Go to Challenges of Cubing">🏆 Challenges ♾️</a>
+
+            <!-- Difficulty Selection Bar -->
+            <div class="difficulty-bar-container" style="margin-bottom: 12px;">
+                <span style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #ffffff; display: inline-flex; align-items: center; gap: 6px;">
+                    Scramble Difficulty:
+                </span>
+                <div class="difficulty-options">
+                    <button class="diff-btn" data-difficulty="easy" title="Short scramble, restricted faces (U, R, F)">🟢 Easy</button>
+                    <button class="diff-btn" data-difficulty="medium" title="Medium length scramble">🟡 Medium</button>
+                    <button class="diff-btn" data-difficulty="hard" title="Standard WCA length scramble">🔴 Hard</button>
+                    <button class="diff-btn" data-difficulty="advanced" title="Extra long scramble for advanced practice">🟣 Advanced</button>
+                    <button class="diff-btn" data-difficulty="random" title="Randomize difficulty for every scramble">🎲 Random</button>
+                </div>
+            </div>
+
+            <!-- SCRAMBLE DISPLAY (ON TOP) -->
+            <div class="scramble-box" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <p id="scramble-display-text" class="scramble-text" style="margin-bottom: 0;">Loading scramble...</p>
+                <p id="scramble-inverse-text" style="font-size: 1.2em; color: #ff7675; font-weight: bold; margin: 0; text-align: center; display: none;"></p>
+                <p id="scramble-beginner-text" style="font-size: 1.1em; color: #cbd5e1; font-weight: bold; margin: 0; text-align: center; font-style: italic;"></p>
+                <div style="display: flex; gap: 15px; align-items: center; margin-top: 4px;">
+                    <label style="font-weight: bold; font-size: 0.95em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: #e2e8f0;">
+                        <input type="checkbox" id="chk-beginner-mode" style="transform: scale(1.2); cursor: pointer;" checked>
+                        Translate Scramble 🗣️
+                    </label>
+                    <span style="color: #64748b;">|</span>
+                    <a href="notation.html" target="_blank" style="font-size: 0.95em; color: #00E5FF; font-weight: bold; text-decoration: underline;">Notation Guide 📖</a>
+                </div>
+            </div>
         </div>
 
-        <!-- DIFFICULTY SELECTION BAR -->
-        <div class="difficulty-bar-container">
-            <span style="font-weight: bold; font-family: 'DynaPuff', cursive; font-size: 1.15em; color: var(--text-dark); display: inline-flex; align-items: center; gap: 6px;">
-                Scramble Difficulty:
-            </span>
-            <div class="difficulty-options">
-                <button class="diff-btn" data-difficulty="easy" title="Short scramble, restricted faces (U, R, F)">🟢 Easy</button>
-                <button class="diff-btn" data-difficulty="medium" title="Medium length scramble">🟡 Medium</button>
-                <button class="diff-btn" data-difficulty="hard" title="Standard WCA length scramble">🔴 Hard</button>
-                <button class="diff-btn" data-difficulty="advanced" title="Extra long scramble for advanced practice">🟣 Advanced</button>
-                <button class="diff-btn" data-difficulty="random" title="Randomize difficulty for every scramble">🎲 Random</button>
-            </div>
+        <!-- MAIN CS-TIMER WORKSPACE: LEFT = STATS & AO5/AO12 GRAPH, CENTER = TIMER IN MIDDLE -->
+        <div class="cs-workspace-grid">
+            
+            <!-- LEFT SIDEBAR: STATS, AO5 & AO12 GRAPH, SOLVE HISTORY, COLE'S RECORDS -->
+            <aside class="cs-sidebar-left">
+                <!-- Summary Stats Card -->
+                <div class="card-section">
+                    <h3 class="cs-card-title">Session Stats 📊</h3>
+                    <div class="cs-quick-stats-grid">
+                        <div class="cs-stat-cell">
+                            <span class="cs-cell-label">Solves</span>
+                            <span id="stat-session-count" class="cs-cell-val">0</span>
+                        </div>
+                        <div class="cs-stat-cell">
+                            <span class="cs-cell-label">Best Single</span>
+                            <span id="stat-best" class="cs-cell-val highlight">-</span>
+                        </div>
+                        <div class="cs-stat-cell">
+                            <span class="cs-cell-label">Session Mean</span>
+                            <span id="stat-mean" class="cs-cell-val">-</span>
+                        </div>
+                        <div class="cs-stat-cell">
+                            <span class="cs-cell-label">Current Ao5</span>
+                            <span id="stat-ao5" class="cs-cell-val ao5-text">-</span>
+                        </div>
+                        <div class="cs-stat-cell">
+                            <span class="cs-cell-label">Current Ao12</span>
+                            <span id="stat-ao12" class="cs-cell-val ao12-text">-</span>
+                        </div>
+                        <div class="cs-stat-cell">
+                            <span class="cs-cell-label">Total Solves</span>
+                            <span id="stat-total-solves" class="cs-cell-val">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AO5 & AO12 TREND GRAPH (EXACTLY AS REQUESTED ON THE LEFT SIDE) -->
+                <div class="card-section cs-graph-card">
+                    <div class="cs-graph-header">
+                        <h3 class="cs-card-title" style="margin-bottom: 0;">Ao5 & Ao12 Graph 📈</h3>
+                        <div class="cs-graph-legend">
+                            <span class="legend-badge"><span class="legend-dot" style="background: #00E5FF;"></span> Ao5</span>
+                            <span class="legend-badge"><span class="legend-dot" style="background: #FFA502;"></span> Ao12</span>
+                        </div>
+                    </div>
+                    <div class="cs-canvas-wrapper">
+                        <canvas id="cs-ao-graph"></canvas>
+                        <div id="cs-graph-tooltip" class="cs-graph-tooltip"></div>
+                    </div>
+                    <div class="cs-graph-bests">
+                        <span>Best Ao5: <strong id="graph-best-ao5" style="color: #00E5FF;">-</strong></span>
+                        <span>Best Ao12: <strong id="graph-best-ao12" style="color: #FFA502;">-</strong></span>
+                    </div>
+                </div>
+
+                <!-- SOLVE HISTORY TABLE -->
+                <div class="card-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 class="cs-card-title" style="margin-bottom: 0;">Solve History 📋</h3>
+                        <button id="btn-clear-session" class="btn-action" style="background-color: #ff8585; color: white; padding: 4px 12px; font-size: 0.85em; box-shadow: 0 3px 0 #1e272e;">Clear 🗑️</button>
+                    </div>
+                    <div class="solves-container" style="max-height: 200px;">
+                        <table class="solves-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35px;">#</th>
+                                    <th>Time</th>
+                                    <th style="width: 110px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="solves-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- COLE'S RECORDS & ASSISTANT BUDDY -->
+                <div class="card-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h3 class="cs-card-title" style="margin-bottom: 0;">Cole's Records ⚡</h3>
+                        <button id="admin-toggle-btn" style="background: none; border: none; color: #00E5FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 0.95em; font-weight: bold; cursor: pointer; text-decoration: underline; outline: none;">
+                            🔑 Admin Login
+                        </button>
+                    </div>
+                    <ul class="stats-list" style="font-size: 0.92em;">
+                        <li class="stats-item" style="padding: 6px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                            <span>Cole's Single:</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span id="stat-cole-single" style="color: #FF6B6B; font-weight: bold;">9.00 ⚡</span>
+                                <div id="edit-cole-single-container" style="display: none; align-items: center; gap: 4px;">
+                                    <input type="number" step="0.01" id="input-cole-single" style="width: 70px; font-size: 0.85em; padding: 2px 4px; border-radius: 6px; border: 2px solid #333;">
+                                    <button id="btn-save-cole-single" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 2px 6px;">Save</button>
+                                    <button id="btn-cancel-cole-single" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 2px 6px;">✕</button>
+                                </div>
+                                <button id="btn-edit-cole-single" style="display: none; background: none; border: none; cursor: pointer; font-size: 1em; padding: 0;" title="Edit Cole's Single">✏️</button>
+                            </div>
+                        </li>
+                        <li class="stats-item" style="padding: 6px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                            <span id="label-cole-average">Cole's Average:</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span id="stat-cole-average" style="color: #FF6B6B; font-weight: bold;">11.50 ⚡</span>
+                                <div id="edit-cole-average-container" style="display: none; align-items: center; gap: 4px;">
+                                    <input type="number" step="0.01" id="input-cole-average" style="width: 70px; font-size: 0.85em; padding: 2px 4px; border-radius: 6px; border: 2px solid #333;">
+                                    <button id="btn-save-cole-average" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 2px 6px;">Save</button>
+                                    <button id="btn-cancel-cole-average" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 2px 6px;">✕</button>
+                                </div>
+                                <button id="btn-edit-cole-average" style="display: none; background: none; border: none; cursor: pointer; font-size: 1em; padding: 0;" title="Edit Cole's Average">✏️</button>
+                            </div>
+                        </li>
+                        <li id="wca-single-item" class="stats-item" style="padding: 6px 0; display: flex; align-items: center; justify-content: space-between;">
+                            <span>Cole's WCA Single:</span>
+                            <span id="stat-wca-single" style="color: #00E5FF; font-weight: bold;">-</span>
+                        </li>
+                        <li id="wca-average-item" class="stats-item" style="padding: 6px 0; display: flex; align-items: center; justify-content: space-between;">
+                            <span id="label-wca-average">Cole's WCA Average:</span>
+                            <span id="stat-wca-average" style="color: #00E5FF; font-weight: bold;">-</span>
+                        </li>
+                    </ul>
+
+                    <!-- Buddy Widget -->
+                    <div class="buddy-container" style="margin-top: 12px; padding: 8px 12px;">
+                        <div class="buddy-face" style="font-size: 2em;">🤖</div>
+                        <div id="buddy-bubble-text" class="buddy-bubble" style="font-size: 0.9em; padding: 6px 10px;">
+                            Welcome to Cole's Timer! Can you beat my record? ⚡
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MIDDLE AREA: TIMER IN THE MIDDLE (AND TIME TOO) -->
+            <main class="cs-timer-center">
+                <!-- Large Centered csTimer Card -->
+                <div id="timer-tap-zone" class="timer-card">
+                    <div id="timer-val" class="timer-display">0.00</div>
+                    <p id="timer-instructions" class="timer-instructions">
+                        Hold Spacebar (Turns Green) and Release to Start! Press any key to stop.<br>
+                        <span style="font-size: 0.85em; color: #94a3b8;">(Mobile / Touch: Tap & hold this box to ready, release to start, tap anywhere to stop!)</span>
+                    </p>
+                </div>
+
+                <!-- FMC MODE CONTAINER -->
+                <div id="fmc-container" class="timer-card" style="display: none; border-color: #0066FF;">
+                    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; text-align: left; width: 100%;">
+                        <!-- Left: FMC timer and Submission -->
+                        <div>
+                            <h3 style="font-family: 'DynaPuff', cursive; color: #00E5FF; font-size: 1.8em; margin-top: 0; margin-bottom: 10px;">FMC Solve Panel</h3>
+                            <div style="font-size: 2.5em; font-weight: bold; font-family: monospace; margin-bottom: 10px; text-align: center; color: #fff;" id="fmc-timer-val">60:00</div>
+                            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                                <button id="btn-fmc-start" class="btn-action" style="background-color: #2ecc71; color: white;">Start ⏱️</button>
+                                <button id="btn-fmc-pause" class="btn-action" style="background-color: #ff7675; color: white; display: none;">Pause ⏸️</button>
+                                <button id="btn-fmc-reset" class="btn-action" style="background-color: #74b9ff; color: white;">Reset 🔄</button>
+                            </div>
+
+                            <label style="font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 5px; color: #fff;">Enter your solution:</label>
+                            <input type="text" id="input-fmc-solution" placeholder="e.g. R U R' U'" style="width: 100%; font-size: 1.2em; padding: 10px; border-radius: 10px; border: 3px solid #333; font-family: monospace; box-sizing: border-box; margin-bottom: 10px;">
+                            <div style="font-size: 1.15em; font-weight: bold; margin-bottom: 15px; color: #00E5FF;" id="fmc-moves-count">Moves: 0 (OBTM)</div>
+
+                            <button id="btn-fmc-submit" class="btn-action" style="background-color: var(--cyan-blob); width: 100%;">Submit FMC Solve 🏆</button>
+                        </div>
+
+                        <!-- Right: Educational Tips -->
+                        <div style="background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.15); border-radius: 15px; padding: 15px; overflow-y: auto; max-height: 350px; color: #e2e8f0;">
+                            <h4 style="font-family: 'DynaPuff', cursive; color: #00E5FF; margin-top: 0; margin-bottom: 10px; font-size: 1.3em;">💡 FMC Beginner Guide</h4>
+                            <p style="margin: 0 0 10px 0; font-size: 0.95em; line-height: 1.4;">
+                                FMC (Fewest Moves Challenge) is about finding the shortest solution in 1 hour.
+                            </p>
+                            <ul style="padding-left: 20px; margin: 0; font-size: 0.95em; line-height: 1.4; display: flex; flex-direction: column; gap: 8px;">
+                                <li><strong>EO (Edge Orientation)</strong>: Orienting edges makes the rest of the solve much easier. Count bad edges on the Front/Back faces.</li>
+                                <li><strong>Blockbuilding</strong>: Don't do cross + F2L! Try to build a 2x2x1 corner-edge block, then expand it to a 2x2x2 block.</li>
+                                <li><strong>NISS (Normal-Inverse Switch)</strong>: If you get stuck, apply your moves to the cube, then swap to the <em>Inverse Scramble</em> to solve the remaining pieces!</li>
+                                <li><strong>Learn Skeletons & insertions</strong>: Solve the corners/edges, leaving 3 corners unsolved, and insert a 3-cycle commutator to finish.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
 
-        <!-- SCRAMBLE DISPLAY -->
-        <div class="scramble-box" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-            <p id="scramble-display-text" class="scramble-text" style="margin-bottom: 0;">Loading scramble...</p>
-            <p id="scramble-inverse-text" style="font-size: 1.25em; color: #d63031; font-weight: bold; margin: 0; text-align: center; display: none;"></p>
-            <p id="scramble-beginner-text" style="font-size: 1.15em; color: #555; font-weight: bold; margin: 0; text-align: center; font-style: italic;"></p>
-            <div style="display: flex; gap: 15px; align-items: center; margin-top: 5px;">
-                <label style="font-weight: bold; font-size: 1em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-                    <input type="checkbox" id="chk-beginner-mode" style="transform: scale(1.2); cursor: pointer;" checked>
-                    Translate Scramble 🗣️
-                </label>
-                <span style="color: #ccc;">|</span>
-                <a href="notation.html" target="_blank" style="font-size: 1em; color: #0066FF; font-weight: bold; text-decoration: underline;">Notation Guide 📖</a>
+        <!-- DOCKED BOTTOM-RIGHT CORNER: WHAT THE SCRAMBLE LOOKS LIKE -->
+        <div id="corner-scramble-preview" class="corner-scramble-widget">
+            <div class="corner-header">
+                <span class="corner-title">🧊 Scramble Preview</span>
+                <div class="corner-actions">
+                    <button id="btn-open-animator" class="corner-btn" title="Open 3D Scramble Video Player">🎥 3D Video</button>
+                    <button id="btn-corner-toggle" class="corner-btn" title="Minimize / Expand preview">−</button>
+                </div>
             </div>
-        </div>
-
-        <!-- PREVIEWS CONTAINER -->
-        <div class="previews-container">
-            <!-- 2D Net Preview Card -->
-            <div class="preview-card">
-                <div class="preview-title">Scrambled State Preview (2D Net)</div>
+            <div id="corner-content" class="corner-content">
                 <div id="cube-net-container">
                     <!-- Net will be rendered here dynamically based on 2x2/3x3 -->
                 </div>
+                <div class="corner-hint">Hold White on Top, Green Front</div>
             </div>
+        </div>
 
-            <!-- 3D Scramble Animator Video Card -->
-            <div class="video-player-card">
-                <div class="video-header">
-                    <h3 class="video-title">Scramble Video 🎥</h3>
-                    <div class="video-status">
-                        <span id="animator-status-dot" class="status-dot"></span>
-                        <span id="animator-status-text">READY</span>
+        <!-- MODAL FOR 3D SCRAMBLE ANIMATOR VIDEO -->
+        <div id="animator-modal" class="cs-modal">
+            <div class="cs-modal-card">
+                <button id="btn-close-animator" class="cs-modal-close" title="Close Video">✕</button>
+                <div class="video-player-card" style="margin: 0 auto; width: 100%;">
+                    <div class="video-header">
+                        <h3 class="video-title">Scramble Video 🎥</h3>
+                        <div class="video-status">
+                            <span id="animator-status-dot" class="status-dot"></span>
+                            <span id="animator-status-text">READY</span>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="video-screen">
-                    <!-- 3D Cube View -->
-                    <div class="scene-3d" id="animator-cube-container" style="cursor: grab;">
-                        <div class="cube-3d" id="animator-cube-3d">
-                            <!-- 3D Cube faces will be generated dynamically -->
+                    
+                    <div class="video-screen">
+                        <!-- 3D Cube View -->
+                        <div class="scene-3d" id="animator-cube-container" style="cursor: grab;">
+                            <div class="cube-3d" id="animator-cube-3d">
+                                <!-- 3D Cube faces will be generated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Scramble Moves Overlay/Display -->
+                        <div id="animator-moves-list" class="scramble-moves-display">
+                            <!-- Scramble moves will be rendered here with highlighting -->
                         </div>
                     </div>
 
-                    <!-- Scramble Moves Overlay/Display -->
-                    <div id="animator-moves-list" class="scramble-moves-display">
-                        <!-- Scramble moves will be rendered here with highlighting -->
-                    </div>
-                </div>
-
-                <div class="video-controls">
-                    <button id="btn-animator-prev" class="video-btn" title="Previous Move">⏮</button>
-                    <button id="btn-animator-play" class="video-btn play-btn" title="Play / Pause">▶ Play</button>
-                    <button id="btn-animator-next" class="video-btn" title="Next Move">⏭</button>
-                    <button id="btn-animator-reset" class="video-btn" title="Reset to Start">🔄</button>
-                    
-                    <select id="animator-speed-select" class="select-style" style="background-color: #34495e; color: white; border-color: #2c3e50; font-family: monospace; font-size: 0.95em; padding: 6px 10px; border-radius: 8px;" title="Playback Speed">
-                        <option value="3000">0.25x (Super Slow)</option>
-                        <option value="2000">0.5x (Slow)</option>
-                        <option value="1500" selected>1.0x (Clear Playback)</option>
-                        <option value="1000">1.5x (Normal)</option>
-                        <option value="600">2.0x (Fast)</option>
-                    </select>
-                </div>
-
-                <!-- Cole's Sign: Hold White on Top, Green on Bottom -->
-                <div class="video-sign-banner">
-                    ⚠️ Hold White on Top, Green on Bottom when scrambling!
-                </div>
-            </div>
-        </div>
-
-        <!-- TIMER CONTAINER -->
-        <div id="timer-tap-zone" class="timer-card">
-            <div id="timer-val" class="timer-display">0.00</div>
-            <p id="timer-instructions" class="timer-instructions">
-                Hold Spacebar for 1 Second (Turns Green) and Release to Start! Press any key to stop.<br>
-                <span style="font-size: 0.85em; color: #999;">(On Mobile/Tablet: Tap and hold this box for 1 second to ready, release to start, tap anywhere to stop!)</span>
-            </p>
-        </div>
-
-        <!-- FMC MODE CONTAINER -->
-        <div id="fmc-container" class="timer-card" style="display: none; border-color: #0066FF;">
-            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; text-align: left;">
-                <!-- Left: FMC timer and Submission -->
-                <div>
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #0033CC; font-size: 1.8em; margin-top: 0; margin-bottom: 10px;">FMC Solve Panel</h3>
-                    <div style="font-size: 2.5em; font-weight: bold; font-family: monospace; margin-bottom: 10px; text-align: center;" id="fmc-timer-val">60:00</div>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                        <button id="btn-fmc-start" class="btn-action" style="background-color: #2ecc71; color: white;">Start ⏱️</button>
-                        <button id="btn-fmc-pause" class="btn-action" style="background-color: #ff7675; color: white; display: none;">Pause ⏸️</button>
-                        <button id="btn-fmc-reset" class="btn-action" style="background-color: #74b9ff; color: white;">Reset 🔄</button>
+                    <div class="video-controls">
+                        <button id="btn-animator-prev" class="video-btn" title="Previous Move">⏮</button>
+                        <button id="btn-animator-play" class="video-btn play-btn" title="Play / Pause">▶ Play</button>
+                        <button id="btn-animator-next" class="video-btn" title="Next Move">⏭</button>
+                        <button id="btn-animator-reset" class="video-btn" title="Reset to Start">🔄</button>
+                        
+                        <select id="animator-speed-select" class="select-style" style="background-color: #34495e; color: white; border-color: #2c3e50; font-family: monospace; font-size: 0.95em; padding: 6px 10px; border-radius: 8px;" title="Playback Speed">
+                            <option value="3000">0.25x (Super Slow)</option>
+                            <option value="2000">0.5x (Slow)</option>
+                            <option value="1500" selected>1.0x (Clear Playback)</option>
+                            <option value="1000">1.5x (Normal)</option>
+                            <option value="600">2.0x (Fast)</option>
+                        </select>
                     </div>
 
-                    <label style="font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 5px;">Enter your solution:</label>
-                    <input type="text" id="input-fmc-solution" placeholder="e.g. R U R' U'" style="width: 100%; font-size: 1.2em; padding: 10px; border-radius: 10px; border: 3px solid #333; font-family: monospace; box-sizing: border-box; margin-bottom: 10px;">
-                    <div style="font-size: 1.15em; font-weight: bold; margin-bottom: 15px;" id="fmc-moves-count">Moves: 0 (OBTM)</div>
-
-                    <button id="btn-fmc-submit" class="btn-action" style="background-color: var(--cyan-blob); width: 100%;">Submit FMC Solve 🏆</button>
-                </div>
-
-                <!-- Right: Educational Tips -->
-                <div style="background: #e8f4fd; border: 3px solid #333; border-radius: 15px; padding: 15px; overflow-y: auto; max-height: 350px; color: #1a1a1a;">
-                    <h4 style="font-family: 'DynaPuff', cursive; color: #0066FF; margin-top: 0; margin-bottom: 10px; font-size: 1.3em;">💡 FMC Beginner Guide</h4>
-                    <p style="margin: 0 0 10px 0; font-size: 0.95em; line-height: 1.4;">
-                        FMC (Fewest Moves Challenge) is about finding the shortest solution in 1 hour.
-                    </p>
-                    <ul style="padding-left: 20px; margin: 0; font-size: 0.95em; line-height: 1.4; display: flex; flex-direction: column; gap: 8px;">
-                        <li><strong>EO (Edge Orientation)</strong>: Orienting edges makes the rest of the solve much easier. Count bad edges on the Front/Back faces.</li>
-                        <li><strong>Blockbuilding</strong>: Don't do cross + F2L! Try to build a 2x2x1 corner-edge block, then expand it to a 2x2x2 block.</li>
-                        <li><strong>NISS (Normal-Inverse Switch)</strong>: If you get stuck, apply your moves to the cube, then swap to the <em>Inverse Scramble</em> to solve the remaining pieces!</li>
-                        <li><strong>Learn Skeletons & insertions</strong>: Solve the corners/edges, leaving 3 corners unsolved, and insert a 3-cycle commutator to finish.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- GRID FOR SOLVES AND STATS -->
-        <div class="stats-grid">
-            
-            <!-- Solve History -->
-            <div class="card-section">
-                <h2 class="section-title">Solve History 📊</h2>
-                <div class="solves-container">
-                    <table class="solves-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Time</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="solves-tbody">
-                            <!-- Table entries generated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="clear-btn-container">
-                    <button id="btn-clear-session" class="btn-action" style="background-color: #ff8585; color: white;">Clear History 🗑️</button>
-                </div>
-            </div>
-
-            <!-- Stats & Buddy -->
-            <div class="card-section" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <h2 class="section-title">Stats & Records 🏆</h2>
-                    <ul class="stats-list">
-                        <li class="stats-item">
-                            <span>Best Solve:</span>
-                            <span id="stat-best" class="stats-value">-</span>
-                        </li>
-                        <li class="stats-item">
-                            <span>Average of 5 (Ao5):</span>
-                            <span id="stat-ao5" class="stats-value">-</span>
-                        </li>
-                        <li class="stats-item">
-                            <span>Average of 12 (Ao12):</span>
-                            <span id="stat-ao12" class="stats-value">-</span>
-                        </li>
-                        <li class="stats-item">
-                            <span>Session Mean:</span>
-                            <span id="stat-mean" class="stats-value">-</span>
-                        </li>
-                        <li class="stats-item" style="border-top: 2px dotted #eee; padding-top: 10px; margin-top: 10px;">
-                            <span>Total Solves (All):</span>
-                            <span id="stat-total-solves" class="stats-value" style="color: #0066FF;">0</span>
-                        </li>
-                        <li class="stats-item" style="border-top: 3px solid #ccc; margin-top: 15px; padding-top: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-                            <span>Cole's Single:</span>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="stat-cole-single" style="color: #FF6B6B; font-weight: bold;">9.00 ⚡</span>
-                                <div id="edit-cole-single-container" style="display: none; align-items: center; gap: 5px;">
-                                    <input type="number" step="0.01" id="input-cole-single" style="width: 85px; font-size: 0.9em; padding: 4px 6px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif;">
-                                    <button id="btn-save-cole-single" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 3px 8px; margin: 0;">Save</button>
-                                    <button id="btn-cancel-cole-single" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 3px 8px; margin: 0;">✕</button>
-                                </div>
-                                <button id="btn-edit-cole-single" style="display: none; background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 0; outline: none;" title="Edit Cole's Single Record">✏️</button>
-                            </div>
-                        </li>
-                        <li class="stats-item" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-                            <span id="label-cole-average">Cole's Average:</span>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="stat-cole-average" style="color: #FF6B6B; font-weight: bold;">11.50 ⚡</span>
-                                <div id="edit-cole-average-container" style="display: none; align-items: center; gap: 5px;">
-                                    <input type="number" step="0.01" id="input-cole-average" style="width: 85px; font-size: 0.9em; padding: 4px 6px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif;">
-                                    <button id="btn-save-cole-average" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 3px 8px; margin: 0;">Save</button>
-                                    <button id="btn-cancel-cole-average" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 3px 8px; margin: 0;">✕</button>
-                                </div>
-                                <button id="btn-edit-cole-average" style="display: none; background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 0; outline: none;" title="Edit Cole's Average Record">✏️</button>
-                            </div>
-                        </li>
-                        <li id="wca-single-item" class="stats-item" style="border-top: 2px dashed #ccc; margin-top: 10px; padding-top: 10px; display: flex; align-items: center; justify-content: space-between;">
-                            <span>Cole's WCA Single:</span>
-                            <span id="stat-wca-single" style="color: #0066FF; font-weight: bold;">-</span>
-                        </li>
-                        <li id="wca-average-item" class="stats-item" style="display: flex; align-items: center; justify-content: space-between;">
-                            <span id="label-wca-average">Cole's WCA Average:</span>
-                            <span id="stat-wca-average" style="color: #0066FF; font-weight: bold;">-</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Buddy Widget -->
-                <div class="buddy-container">
-                    <div class="buddy-face">🤖</div>
-                    <div id="buddy-bubble-text" class="buddy-bubble">
-                        Welcome to Cole's Timer! Can you beat my record? ⚡
+                    <!-- Cole's Sign: Hold White on Top, Green on Bottom -->
+                    <div class="video-sign-banner">
+                        ⚠️ Hold White on Top, Green on Bottom when scrambling!
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <!-- Admin Access Link -->
-        <div style="text-align: center; margin-top: 25px;">
-            <button id="admin-toggle-btn" style="background: none; border: none; color: #0066FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; font-weight: bold; cursor: pointer; text-decoration: underline; outline: none;">
-                🔑 Admin Login
-            </button>
-        </div>
-
-    </div>
 
     <!-- Admin Login Modal -->
     <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: center; justify-content: center; box-sizing: border-box; user-select: none; touch-action: none;">
@@ -2616,11 +3067,16 @@
             const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             const suffix = type === '3x3-fmc' ? ' moves' : '';
 
+            // Update solve count in quick stats
+            const sessionCountElem = document.getElementById('stat-session-count');
+            if (sessionCountElem) sessionCountElem.textContent = solves.length;
+
             if (solves.length === 0) {
                 statBest.textContent = "-";
                 statMean.textContent = "-";
                 statAo5.textContent = "-";
                 statAo12.textContent = "-";
+                renderAoGraph();
                 return;
             }
 
@@ -2660,6 +3116,8 @@
                 statAo5.textContent = calculateAoX(5);
                 statAo12.textContent = calculateAoX(12);
             }
+
+            renderAoGraph();
         }
 
         function calculateAoX(x) {
@@ -2682,6 +3140,239 @@
 
             const sum = trimmed.reduce((acc, val) => acc + val, 0);
             return formatTime(sum / (x - 2));
+        }
+
+        // --- AO5 & AO12 CANVAS GRAPH RENDERER (LEFT SIDE) ---
+        function renderAoGraph() {
+            const canvas = document.getElementById('cs-ao-graph');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            const width = rect.width || 330;
+            const height = rect.height || 180;
+            
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (!solves || solves.length === 0) {
+                ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+                ctx.font = "12px 'Outfit', sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("Complete solves to view Ao5 & Ao12 graphs ⏱️", width / 2, height / 2);
+                
+                const bAo5 = document.getElementById('graph-best-ao5');
+                const bAo12 = document.getElementById('graph-best-ao12');
+                if (bAo5) bAo5.textContent = "-";
+                if (bAo12) bAo12.textContent = "-";
+                return;
+            }
+
+            const ao5Series = [];
+            const ao12Series = [];
+            const solveTimes = [];
+            let bestAo5Val = Infinity;
+            let bestAo12Val = Infinity;
+
+            for (let i = 0; i < solves.length; i++) {
+                const s = solves[i];
+                const t = s.dnf ? Infinity : s.time + (s.plusTwo ? 2 : 0);
+                solveTimes.push(t);
+
+                // Rolling Ao5
+                if (i >= 4) {
+                    const sub = solves.slice(i - 4, i + 1);
+                    let dnfCount = 0;
+                    const subTimes = sub.map(item => {
+                        if (item.dnf) { dnfCount++; return Infinity; }
+                        return item.time + (item.plusTwo ? 2 : 0);
+                    });
+                    if (dnfCount > 1) {
+                        ao5Series.push(null);
+                    } else {
+                        subTimes.sort((a, b) => a - b);
+                        const trimmed = subTimes.slice(1, 4);
+                        if (trimmed.includes(Infinity)) {
+                            ao5Series.push(null);
+                        } else {
+                            const avg = (trimmed[0] + trimmed[1] + trimmed[2]) / 3;
+                            ao5Series.push(avg);
+                            if (avg < bestAo5Val) bestAo5Val = avg;
+                        }
+                    }
+                } else {
+                    ao5Series.push(null);
+                }
+
+                // Rolling Ao12
+                if (i >= 11) {
+                    const sub = solves.slice(i - 11, i + 1);
+                    let dnfCount = 0;
+                    const subTimes = sub.map(item => {
+                        if (item.dnf) { dnfCount++; return Infinity; }
+                        return item.time + (item.plusTwo ? 2 : 0);
+                    });
+                    if (dnfCount > 1) {
+                        ao12Series.push(null);
+                    } else {
+                        subTimes.sort((a, b) => a - b);
+                        const trimmed = subTimes.slice(1, 11);
+                        if (trimmed.includes(Infinity)) {
+                            ao12Series.push(null);
+                        } else {
+                            const sum = trimmed.reduce((a, b) => a + b, 0);
+                            const avg = sum / 10;
+                            ao12Series.push(avg);
+                            if (avg < bestAo12Val) bestAo12Val = avg;
+                        }
+                    }
+                } else {
+                    ao12Series.push(null);
+                }
+            }
+
+            const bestAo5Elem = document.getElementById('graph-best-ao5');
+            const bestAo12Elem = document.getElementById('graph-best-ao12');
+            if (bestAo5Elem) bestAo5Elem.textContent = bestAo5Val !== Infinity ? formatTime(bestAo5Val) : "-";
+            if (bestAo12Elem) bestAo12Elem.textContent = bestAo12Val !== Infinity ? formatTime(bestAo12Val) : "-";
+
+            const validValues = [];
+            ao5Series.forEach(v => { if (v !== null) validValues.push(v); });
+            ao12Series.forEach(v => { if (v !== null) validValues.push(v); });
+            solveTimes.forEach(v => { if (v !== Infinity) validValues.push(v); });
+
+            if (validValues.length === 0) {
+                ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+                ctx.font = "12px 'Outfit', sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("All solves are DNF", width / 2, height / 2);
+                return;
+            }
+
+            let minVal = Math.min(...validValues);
+            let maxVal = Math.max(...validValues);
+            if (minVal === maxVal) {
+                minVal = Math.max(0, minVal - 2);
+                maxVal = maxVal + 2;
+            } else {
+                const pad = (maxVal - minVal) * 0.15;
+                minVal = Math.max(0, minVal - pad);
+                maxVal = maxVal + pad;
+            }
+
+            const padding = { top: 12, right: 12, bottom: 20, left: 34 };
+            const chartW = width - padding.left - padding.right;
+            const chartH = height - padding.top - padding.bottom;
+
+            const getX = (idx) => {
+                if (solves.length === 1) return padding.left + chartW / 2;
+                return padding.left + (idx / (solves.length - 1)) * chartW;
+            };
+            const getY = (val) => {
+                return padding.top + chartH - ((val - minVal) / (maxVal - minVal)) * chartH;
+            };
+
+            // Horizontal Grid Lines
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.font = "9px monospace";
+            ctx.textAlign = "right";
+            ctx.textBaseline = "middle";
+
+            const gridSteps = 3;
+            for (let g = 0; g <= gridSteps; g++) {
+                const val = minVal + (g / gridSteps) * (maxVal - minVal);
+                const y = getY(val);
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(width - padding.right, y);
+                ctx.stroke();
+                ctx.fillText(val.toFixed(1) + "s", padding.left - 4, y);
+            }
+
+            // Raw Solve Times (faint line & dots)
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            let rawStarted = false;
+            for (let i = 0; i < solves.length; i++) {
+                const t = solveTimes[i];
+                if (t === Infinity) continue;
+                const x = getX(i);
+                const y = getY(t);
+                if (!rawStarted) { ctx.moveTo(x, y); rawStarted = true; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            for (let i = 0; i < solves.length; i++) {
+                const t = solveTimes[i];
+                if (t === Infinity) continue;
+                ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+                ctx.beginPath();
+                ctx.arc(getX(i), getY(t), 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Ao12 Curve (Orange #FFA502)
+            ctx.strokeStyle = "#FFA502";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            let ao12Started = false;
+            for (let i = 0; i < ao12Series.length; i++) {
+                const val = ao12Series[i];
+                if (val === null) { ao12Started = false; continue; }
+                const x = getX(i);
+                const y = getY(val);
+                if (!ao12Started) { ctx.moveTo(x, y); ao12Started = true; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = "#FFA502";
+            for (let i = 0; i < ao12Series.length; i++) {
+                const val = ao12Series[i];
+                if (val === null) continue;
+                ctx.beginPath();
+                ctx.arc(getX(i), getY(val), 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Ao5 Curve (Cyan #00E5FF)
+            ctx.strokeStyle = "#00E5FF";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            let ao5Started = false;
+            for (let i = 0; i < ao5Series.length; i++) {
+                const val = ao5Series[i];
+                if (val === null) { ao5Started = false; continue; }
+                const x = getX(i);
+                const y = getY(val);
+                if (!ao5Started) { ctx.moveTo(x, y); ao5Started = true; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = "#00E5FF";
+            for (let i = 0; i < ao5Series.length; i++) {
+                const val = ao5Series[i];
+                if (val === null) continue;
+                ctx.beginPath();
+                ctx.arc(getX(i), getY(val), 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            canvas._graphData = {
+                solves, solveTimes, ao5Series, ao12Series, getX, getY, padding, chartW, chartH, width, height
+            };
         }
 
         // --- EMOJI CONFETTI CELEBRATION ---
@@ -2741,11 +3432,9 @@
             timerDisplay.className = 'timer-display';
             timerInterval = setInterval(updateTimerDisplay, 10);
             
-            const previewsContainer = document.querySelector('.previews-container') || document.querySelector('.preview-section');
-            if (previewsContainer) previewsContainer.style.opacity = '0.1';
-            
-            const scrambleBox = document.querySelector('.scramble-box');
-            if (scrambleBox) scrambleBox.style.opacity = '0.1';
+            document.body.classList.add('timer-active');
+            const cornerWidget = document.getElementById('corner-scramble-preview');
+            if (cornerWidget) cornerWidget.classList.add('timer-solving');
         }
 
         function stopTimer() {
@@ -2754,11 +3443,9 @@
             const elapsed = (Date.now() - startTime) / 1000;
             timerDisplay.textContent = formatTime(elapsed);
 
-            const previewsContainer = document.querySelector('.previews-container') || document.querySelector('.preview-section');
-            if (previewsContainer) previewsContainer.style.opacity = '1';
-            
-            const scrambleBox = document.querySelector('.scramble-box');
-            if (scrambleBox) scrambleBox.style.opacity = '1';
+            document.body.classList.remove('timer-active');
+            const cornerWidget = document.getElementById('corner-scramble-preview');
+            if (cornerWidget) cornerWidget.classList.remove('timer-solving');
 
             const newSolve = {
                 time: elapsed,
@@ -3304,7 +3991,7 @@
                     clearInterval(holdInterval);
                     holdInterval = setInterval(() => {
                         let elapsed = Date.now() - holdStart;
-                        if (elapsed >= 1000) { // 1 second hold instead of 2
+                        if (elapsed >= 350) { // 350ms snappy csTimer hold
                             clearInterval(holdInterval);
                             timerState = 'READY';
                             timerDisplay.className = 'timer-display ready';
@@ -3352,7 +4039,7 @@
                 clearInterval(holdInterval);
                 holdInterval = setInterval(() => {
                     let elapsed = Date.now() - holdStart;
-                    if (elapsed >= 1000) { // 1 second hold instead of 2
+                    if (elapsed >= 350) { // 350ms snappy csTimer hold
                         clearInterval(holdInterval);
                         timerState = 'READY';
                         timerDisplay.className = 'timer-display ready';
@@ -3376,7 +4063,7 @@
         });
 
         tapZone.addEventListener('mousedown', (e) => {
-            if (e.target.tagName === 'BUTTON') return;
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
             if (timerState === 'RUNNING') {
                 stopTimer();
             } else if (timerState === 'IDLE') {
@@ -3388,7 +4075,7 @@
                 clearInterval(holdInterval);
                 holdInterval = setInterval(() => {
                     let elapsed = Date.now() - holdStart;
-                    if (elapsed >= 1000) { // 1 second hold instead of 2
+                    if (elapsed >= 350) { // 350ms snappy csTimer hold
                         clearInterval(holdInterval);
                         timerState = 'READY';
                         timerDisplay.className = 'timer-display ready';
@@ -3399,7 +4086,7 @@
         });
 
         tapZone.addEventListener('mouseup', (e) => {
-            if (e.target.tagName === 'BUTTON') return;
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
             clearInterval(holdInterval);
             if (timerState === 'READY') {
                 startTimer();
@@ -3407,6 +4094,101 @@
                 timerState = 'IDLE';
                 timerDisplay.className = 'timer-display';
                 timerDisplay.textContent = getLastSolveTimeStr();
+            }
+        });
+
+        // --- CORNER SCRAMBLE PREVIEW WIDGET (BOTTOM-RIGHT) ---
+        const btnCornerToggle = document.getElementById('btn-corner-toggle');
+        const cornerScrambleWidget = document.getElementById('corner-scramble-preview');
+        if (btnCornerToggle && cornerScrambleWidget) {
+            btnCornerToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cornerScrambleWidget.classList.toggle('minimized');
+                btnCornerToggle.textContent = cornerScrambleWidget.classList.contains('minimized') ? '+' : '−';
+            });
+            cornerScrambleWidget.addEventListener('click', (e) => {
+                if (cornerScrambleWidget.classList.contains('minimized') && e.target !== btnCornerToggle) {
+                    cornerScrambleWidget.classList.remove('minimized');
+                    btnCornerToggle.textContent = '−';
+                }
+            });
+        }
+
+        // --- 3D SCRAMBLE VIDEO MODAL ---
+        const btnOpenAnimator = document.getElementById('btn-open-animator');
+        const btnCloseAnimator = document.getElementById('btn-close-animator');
+        const animatorModal = document.getElementById('animator-modal');
+        if (btnOpenAnimator && animatorModal) {
+            btnOpenAnimator.addEventListener('click', (e) => {
+                e.stopPropagation();
+                animatorModal.classList.add('open');
+                initScrambleAnimator();
+            });
+        }
+        if (btnCloseAnimator && animatorModal) {
+            btnCloseAnimator.addEventListener('click', () => {
+                animatorModal.classList.remove('open');
+                if (animatorPlaybackInterval) {
+                    clearInterval(animatorPlaybackInterval);
+                    animatorPlaybackInterval = null;
+                }
+            });
+        }
+        if (animatorModal) {
+            animatorModal.addEventListener('click', (e) => {
+                if (e.target === animatorModal) {
+                    animatorModal.classList.remove('open');
+                    if (animatorPlaybackInterval) {
+                        clearInterval(animatorPlaybackInterval);
+                        animatorPlaybackInterval = null;
+                    }
+                }
+            });
+        }
+
+        // --- AO5 & AO12 GRAPH TOOLTIP INTERACTION ---
+        const aoCanvas = document.getElementById('cs-ao-graph');
+        if (aoCanvas) {
+            aoCanvas.addEventListener('mousemove', function(e) {
+                const data = aoCanvas._graphData;
+                if (!data || !data.solves || data.solves.length === 0) return;
+                const rect = aoCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                
+                let closestIdx = 0;
+                let minDist = Infinity;
+                for (let i = 0; i < data.solves.length; i++) {
+                    const x = data.getX(i);
+                    const dist = Math.abs(x - mouseX);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        closestIdx = i;
+                    }
+                }
+                
+                const solve = data.solves[closestIdx];
+                const solveTimeStr = solve.dnf ? "DNF" : formatTime(solve.time + (solve.plusTwo ? 2 : 0)) + (solve.plusTwo ? " (+2)" : "");
+                const ao5Str = (data.ao5Series[closestIdx] !== null && data.ao5Series[closestIdx] !== undefined) ? formatTime(data.ao5Series[closestIdx]) : "-";
+                const ao12Str = (data.ao12Series[closestIdx] !== null && data.ao12Series[closestIdx] !== undefined) ? formatTime(data.ao12Series[closestIdx]) : "-";
+                
+                const tooltip = document.getElementById('cs-graph-tooltip');
+                if (tooltip) {
+                    tooltip.innerHTML = `<strong>#${closestIdx + 1}: ${solveTimeStr}</strong><br><span style="color:#00E5FF;">Ao5: ${ao5Str}</span> | <span style="color:#FFA502;">Ao12: ${ao12Str}</span>`;
+                    tooltip.style.display = 'block';
+                    const tipX = Math.min(Math.max(10, mouseX - 60), rect.width - 130);
+                    tooltip.style.left = tipX + 'px';
+                    tooltip.style.top = '10px';
+                }
+            });
+            aoCanvas.addEventListener('mouseleave', function() {
+                const tooltip = document.getElementById('cs-graph-tooltip');
+                if (tooltip) tooltip.style.display = 'none';
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            if (typeof renderAoGraph === 'function') {
+                renderAoGraph();
             }
         });
 
