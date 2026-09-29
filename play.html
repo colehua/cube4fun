@@ -1347,6 +1347,24 @@
         resetCubeState3x3();
         init3dCube();
         update3dCube();
+
+        // Check for custom pattern scramble from challenges or URL parameter
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const algParam = urlParams.get('alg') || sessionStorage.getItem('cube_custom_scramble');
+            if (algParam) {
+                const moves = algParam.split(/\s+/);
+                moves.forEach(m => {
+                    if (m) rotate3x3(m);
+                });
+                update3dCube();
+                const statusEl = document.getElementById('playground-status');
+                if (statusEl) {
+                    statusEl.textContent = `Pattern Loaded! (${algParam})`;
+                }
+                sessionStorage.removeItem('cube_custom_scramble');
+            }
+        } catch(e) {}
     </script>
 
     <!-- GLOBAL SITE FOOTER -->
