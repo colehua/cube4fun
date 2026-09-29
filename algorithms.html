@@ -1236,9 +1236,9 @@
         },
         {
             "name": "Z Perm",
-            "moves": "M2' U M2' U M' U2 M2' U2 M'",
+            "moves": "M2' U M2' U M' U2 M2' U2 M' U2",
             "algs": [
-                "M2' U M2' U M' U2 M2' U2 M'",
+                "M2' U M2' U M' U2 M2' U2 M' U2",
                 "M' U M2' U M2' U M' U2 M2'"
             ],
             "desc": "Adjacent edge swap (front-right and back-left).",
@@ -1346,10 +1346,10 @@
         },
         {
             "name": "Jb Perm",
-            "moves": "R U R' F' R U R' U' R' F R2 U' R'",
+            "moves": "R U R' F' R U R' U' R' F R2 U' R' U'",
             "algs": [
-                "R U R' F' R U R' U' R' F R2 U' R'",
-                "R U R' F' R U R' U' R' F R2 U' R' U'"
+                "R U R' F' R U R' U' R' F R2 U' R' U'",
+                "R U R' F' R U R' U' R' F R2 U' R'"
             ],
             "desc": "Solved 1x3 bar on left, swaps front-right corner and edge.",
             "cat": "PLL",
@@ -1357,9 +1357,9 @@
         },
         {
             "name": "Ra Perm",
-            "moves": "R U R' F' R U2 R' U2 R' F R U R U2 R'",
+            "moves": "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
             "algs": [
-                "R U R' F' R U2 R' U2 R' F R U R U2 R'",
+                "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
                 "R U' R' U' R U R D R' U' R D' R' U2 R'"
             ],
             "desc": "Headlights on left, 2x1 block on front-right.",
@@ -1368,9 +1368,9 @@
         },
         {
             "name": "Rb Perm",
-            "moves": "R' U2 R' D' R U' R' D R U R U' R' U' R",
+            "moves": "R' U2 R' D' R U' R' D R U R U' R' U' R U'",
             "algs": [
-                "R' U2 R' D' R U' R' D R U R U' R' U' R",
+                "R' U2 R' D' R U' R' D R U R U' R' U' R U'",
                 "R' U2 R U2 R' F R U R' U' R' F' R2 U' R'"
             ],
             "desc": "Headlights on right, 2x1 block on front-left.",
@@ -4744,92 +4744,138 @@
             'DARK': '#374151'
         };
 
-        const U_STICKER_CENTERS = {
-            BL: { x: 50.0, y: 10.8 },
-            UB: { x: 61.7, y: 16.7 },
-            BR: { x: 73.3, y: 22.5 },
-            UL: { x: 38.3, y: 16.7 },
-            C:  { x: 50.0, y: 22.5 },
-            UR: { x: 61.7, y: 28.3 },
-            FL: { x: 26.7, y: 22.5 },
-            UF: { x: 38.3, y: 28.3 },
-            FR: { x: 50.0, y: 34.2 }
-        };
+        const U_CORNER_DEFS = [
+            { name: 'UBL', pos: { x: 50.0, y: 10.8 }, facelets: [['U', 0], ['B', 2], ['L', 0]], solvedColors: 'YBO' },
+            { name: 'UBR', pos: { x: 73.3, y: 22.5 }, facelets: [['U', 2], ['R', 2], ['B', 0]], solvedColors: 'YRB' },
+            { name: 'UFR', pos: { x: 50.0, y: 34.2 }, facelets: [['U', 8], ['F', 2], ['R', 0]], solvedColors: 'YGR' },
+            { name: 'UFL', pos: { x: 26.7, y: 22.5 }, facelets: [['U', 6], ['L', 2], ['F', 0]], solvedColors: 'YOG' }
+        ];
 
-        const PLL_PERM_ARROWS = {
-            "T Perm": [
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UR, double: true }
-            ],
-            "Y Perm": [
-                { from: U_STICKER_CENTERS.FL, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UR, double: true }
-            ],
-            "H Perm": [
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UB, double: true },
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UR, double: true }
-            ],
-            "Z Perm": [
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UR, double: true },
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UB, double: true }
-            ],
-            "Ua Perm": [
-                { from: U_STICKER_CENTERS.UR, to: U_STICKER_CENTERS.UL, double: false },
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UF, double: false },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UR, double: false }
-            ],
-            "Ub Perm": [
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UR, double: false },
-                { from: U_STICKER_CENTERS.UR, to: U_STICKER_CENTERS.UF, double: false },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UL, double: false }
-            ],
-            "Aa Perm": [
-                { from: U_STICKER_CENTERS.BL, to: U_STICKER_CENTERS.FR, double: false },
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BR, double: false },
-                { from: U_STICKER_CENTERS.BR, to: U_STICKER_CENTERS.BL, double: false }
-            ],
-            "Ab Perm": [
-                { from: U_STICKER_CENTERS.BR, to: U_STICKER_CENTERS.FR, double: false },
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BL, double: false },
-                { from: U_STICKER_CENTERS.BL, to: U_STICKER_CENTERS.BR, double: false }
-            ],
-            "E Perm": [
-                { from: U_STICKER_CENTERS.FL, to: U_STICKER_CENTERS.BL, double: true },
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BR, double: true }
-            ],
-            "F Perm": [
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UB, double: true }
-            ],
-            "Ja Perm": [
-                { from: U_STICKER_CENTERS.FL, to: U_STICKER_CENTERS.BL, double: true },
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UB, double: true }
-            ],
-            "Jb Perm": [
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UR, double: true }
-            ],
-            "Ra Perm": [
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UF, double: true }
-            ],
-            "Rb Perm": [
-                { from: U_STICKER_CENTERS.FL, to: U_STICKER_CENTERS.BL, double: true },
-                { from: U_STICKER_CENTERS.UR, to: U_STICKER_CENTERS.UF, double: true }
-            ],
-            "V Perm": [
-                { from: U_STICKER_CENTERS.FL, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UR, double: true }
-            ],
-            "Na Perm": [
-                { from: U_STICKER_CENTERS.FR, to: U_STICKER_CENTERS.BL, double: true },
-                { from: U_STICKER_CENTERS.UF, to: U_STICKER_CENTERS.UB, double: true }
-            ],
-            "Nb Perm": [
-                { from: U_STICKER_CENTERS.FL, to: U_STICKER_CENTERS.BR, double: true },
-                { from: U_STICKER_CENTERS.UL, to: U_STICKER_CENTERS.UR, double: true }
-            ]
-        };
+        const U_EDGE_DEFS = [
+            { name: 'UB', pos: { x: 61.7, y: 16.7 }, facelets: [['U', 1], ['B', 1]], solvedColors: 'YB' },
+            { name: 'UR', pos: { x: 61.7, y: 28.3 }, facelets: [['U', 5], ['R', 1]], solvedColors: 'YR' },
+            { name: 'UF', pos: { x: 38.3, y: 28.3 }, facelets: [['U', 7], ['F', 1]], solvedColors: 'YG' },
+            { name: 'UL', pos: { x: 38.3, y: 16.7 }, facelets: [['U', 3], ['L', 1]], solvedColors: 'YO' }
+        ];
+
+        function computePermutationArrows(sim) {
+            const cTarget = {};
+            U_CORNER_DEFS.forEach(cur => {
+                const curClrs = cur.facelets.map(([f, i]) => sim.faces[f][i]);
+                const target = U_CORNER_DEFS.find(orig => curClrs.includes('Y') && curClrs.includes(orig.solvedColors[1]) && curClrs.includes(orig.solvedColors[2]));
+                if (target && target.name !== cur.name) cTarget[cur.name] = target.name;
+            });
+
+            const eTarget = {};
+            U_EDGE_DEFS.forEach(cur => {
+                const curClrs = cur.facelets.map(([f, i]) => sim.faces[f][i]);
+                const target = U_EDGE_DEFS.find(orig => curClrs.includes('Y') && curClrs.includes(orig.solvedColors[1]));
+                if (target && target.name !== cur.name) eTarget[cur.name] = target.name;
+            });
+
+            const arrows = [];
+            const cornerSlots = Object.fromEntries(U_CORNER_DEFS.map(s => [s.name, s]));
+            const edgeSlots = Object.fromEntries(U_EDGE_DEFS.map(s => [s.name, s]));
+
+            // Corners: mutual swaps vs cycles
+            const visitedCorners = new Set();
+            for (let from in cTarget) {
+                if (visitedCorners.has(from)) continue;
+                const to = cTarget[from];
+                if (cTarget[to] === from) {
+                    arrows.push({
+                        from: cornerSlots[from].pos,
+                        to: cornerSlots[to].pos,
+                        double: true
+                    });
+                    visitedCorners.add(from);
+                    visitedCorners.add(to);
+                } else {
+                    arrows.push({
+                        from: cornerSlots[from].pos,
+                        to: cornerSlots[to].pos,
+                        double: false
+                    });
+                    visitedCorners.add(from);
+                }
+            }
+
+            // Edges: mutual swaps vs cycles
+            const visitedEdges = new Set();
+            for (let from in eTarget) {
+                if (visitedEdges.has(from)) continue;
+                const to = eTarget[from];
+                if (eTarget[to] === from) {
+                    arrows.push({
+                        from: edgeSlots[from].pos,
+                        to: edgeSlots[to].pos,
+                        double: true
+                    });
+                    visitedEdges.add(from);
+                    visitedEdges.add(to);
+                } else {
+                    arrows.push({
+                        from: edgeSlots[from].pos,
+                        to: edgeSlots[to].pos,
+                        double: false
+                    });
+                    visitedEdges.add(from);
+                }
+            }
+
+            return arrows;
+        }
+
+        function drawArrowSvg(arrow) {
+            const dx = arrow.to.x - arrow.from.x;
+            const dy = arrow.to.y - arrow.from.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 1) return "";
+
+            const ux = dx / dist;
+            const uy = dy / dist;
+            const nx = -uy;
+            const ny = ux;
+
+            const padStart = arrow.double ? 4.5 : 3.2;
+            const padEnd = 4.5;
+            
+            const x1 = arrow.from.x + ux * padStart;
+            const y1 = arrow.from.y + uy * padStart;
+            const x2 = arrow.to.x - ux * padEnd;
+            const y2 = arrow.to.y - uy * padEnd;
+
+            const arrowHeadLen = 4.0;
+            const arrowHeadWidth = 2.6;
+
+            let res = "";
+            res += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#111827" stroke-width="3.2" stroke-linecap="round" />`;
+            res += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ff3838" stroke-width="2.2" stroke-linecap="round" />`;
+
+            const tipX = arrow.to.x - ux * 1.0;
+            const tipY = arrow.to.y - uy * 1.0;
+            const baseEndX = tipX - ux * arrowHeadLen;
+            const baseEndY = tipY - uy * arrowHeadLen;
+            const leftX = baseEndX + nx * arrowHeadWidth;
+            const leftY = baseEndY + ny * arrowHeadWidth;
+            const rightX = baseEndX - nx * arrowHeadWidth;
+            const rightY = baseEndY - ny * arrowHeadWidth;
+            res += `<polygon points="${tipX.toFixed(1)},${tipY.toFixed(1)} ${leftX.toFixed(1)},${leftY.toFixed(1)} ${rightX.toFixed(1)},${rightY.toFixed(1)}" fill="#ff3838" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />`;
+
+            if (arrow.double) {
+                const tipX0 = arrow.from.x + ux * 1.0;
+                const tipY0 = arrow.from.y + uy * 1.0;
+                const baseStartX = tipX0 + ux * arrowHeadLen;
+                const baseStartY = tipY0 + uy * arrowHeadLen;
+                const leftX0 = baseStartX + nx * arrowHeadWidth;
+                const leftY0 = baseStartY + ny * arrowHeadWidth;
+                const rightX0 = baseStartX - nx * arrowHeadWidth;
+                const rightY0 = baseStartY - ny * arrowHeadWidth;
+                res += `<polygon points="${tipX0.toFixed(1)},${tipY0.toFixed(1)} ${leftX0.toFixed(1)},${leftY0.toFixed(1)} ${rightX0.toFixed(1)},${rightY0.toFixed(1)}" fill="#ff3838" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />`;
+            }
+
+            return res;
+        }
 
         function getUStickerPath(row, col) {
             const ox = 50, oy = 5;
@@ -4872,11 +4918,6 @@
             }
 
             let svg = `<svg viewBox="0 0 100 80" width="80" height="64" style="background:none;">`;
-            svg += `<defs>
-                <marker id="arrow-${name.replace(/[^a-zA-Z0-9]/g, '')}" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ff3838" />
-                </marker>
-            </defs>`;
 
             const isF2l = (cat === "F2L" || cat === "ZBLS");
             const isPll = (cat === "PLL" || name.includes("Perm"));
@@ -4931,9 +4972,24 @@
                 // L face top row indicators
                 for (let row = 0; row < 3; row++) {
                     const stickerColor = sim.faces.L[row];
-                    if (stickerColor === 'Y' || (isPll && stickerColor)) {
+                    let showIndicator = false;
+                    let fill = SVG_COLORS[stickerColor] || SVG_COLORS.GREY;
+
+                    if (isOll) {
+                        if (stickerColor === 'Y') {
+                            showIndicator = true;
+                            fill = SVG_COLORS.Y;
+                        }
+                    } else if (isRoux) {
+                        if (row === 0 || row === 2) {
+                            showIndicator = true;
+                        }
+                    } else {
+                        showIndicator = true;
+                    }
+
+                    if (showIndicator) {
                         const ox = 50, oy = 5;
-                        const rx = 35 / 3, ry = 17.5 / 3;
                         const lx = -35 / 3, ly = 17.5 / 3;
                         const x0 = ox + row * lx;
                         const y0 = oy + row * ly;
@@ -4941,24 +4997,37 @@
                         const p2x = x0 + lx, p2y = y0 + ly;
                         const p3x = p2x - 2.5, p3y = p2y - 1.25;
                         const p4x = p1x - 2.5, p4y = p1y - 1.25;
-                        const fill = isPll ? (SVG_COLORS[stickerColor] || SVG_COLORS.GREY) : SVG_COLORS.Y;
                         svg += `<polygon points="${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)} ${p3x.toFixed(1)},${p3y.toFixed(1)} ${p4x.toFixed(1)},${p4y.toFixed(1)}" fill="${fill}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
                     }
                 }
                 // B face top row indicators
                 for (let col = 0; col < 3; col++) {
                     const stickerColor = sim.faces.B[2 - col];
-                    if (stickerColor === 'Y' || (isPll && stickerColor)) {
+                    let showIndicator = false;
+                    let fill = SVG_COLORS[stickerColor] || SVG_COLORS.GREY;
+
+                    if (isOll) {
+                        if (stickerColor === 'Y') {
+                            showIndicator = true;
+                            fill = SVG_COLORS.Y;
+                        }
+                    } else if (isRoux) {
+                        if (col === 0 || col === 2) {
+                            showIndicator = true;
+                        }
+                    } else {
+                        showIndicator = true;
+                    }
+
+                    if (showIndicator) {
                         const ox = 50, oy = 5;
                         const rx = 35 / 3, ry = 17.5 / 3;
-                        const lx = -35 / 3, ly = 17.5 / 3;
                         const x0 = ox + col * rx;
                         const y0 = oy + col * ry;
                         const p1x = x0, p1y = y0;
                         const p2x = x0 + rx, p2y = y0 + ry;
                         const p3x = p2x + 2.5, p3y = p2y - 1.25;
                         const p4x = p1x + 2.5, p4y = p1y - 1.25;
-                        const fill = isPll ? (SVG_COLORS[stickerColor] || SVG_COLORS.GREY) : SVG_COLORS.Y;
                         svg += `<polygon points="${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)} ${p3x.toFixed(1)},${p3y.toFixed(1)} ${p4x.toFixed(1)},${p4y.toFixed(1)}" fill="${fill}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
                     }
                 }
@@ -4994,6 +5063,12 @@
                     let color = SVG_COLORS.GREY;
                     if (isF2l) {
                         color = isTarget('F', idx) ? (SVG_COLORS[sim.faces.F[idx]] || SVG_COLORS.GREY) : (r > 0 && cl < 2 ? SVG_COLORS.G : SVG_COLORS.GREY);
+                    } else if (isRoux) {
+                        if (r === 0 && (cl === 0 || cl === 2)) {
+                            color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.G;
+                        } else {
+                            color = SVG_COLORS.DARK;
+                        }
                     } else if (r === 0) {
                         if (isOll) {
                             color = sim.faces.F[cl] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
@@ -5015,6 +5090,12 @@
                     let color = SVG_COLORS.GREY;
                     if (isF2l) {
                         color = isTarget('R', idx) ? (SVG_COLORS[sim.faces.R[idx]] || SVG_COLORS.GREY) : (r > 0 && cl > 0 ? SVG_COLORS.R : SVG_COLORS.GREY);
+                    } else if (isRoux) {
+                        if (r === 0 && (cl === 0 || cl === 2)) {
+                            color = SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R;
+                        } else {
+                            color = SVG_COLORS.DARK;
+                        }
                     } else if (r === 0) {
                         if (isOll) {
                             color = sim.faces.R[cl] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
@@ -5029,18 +5110,12 @@
                 }
             }
 
-            // 4. PLL Direction Arrows
-            if (isPll) {
-                const markerId = `url(#arrow-${name.replace(/[^a-zA-Z0-9]/g, '')})`;
-                for (let key in PLL_PERM_ARROWS) {
-                    if (name.includes(key)) {
-                        const arrows = PLL_PERM_ARROWS[key];
-                        arrows.forEach(a => {
-                            svg += `<line x1="${a.from.x}" y1="${a.from.y}" x2="${a.to.x}" y2="${a.to.y}" stroke="#ff3838" stroke-width="2.5" marker-end="${markerId}" marker-start="${a.double ? markerId : 'none'}" stroke-linecap="round" />`;
-                        });
-                        break;
-                    }
-                }
+            // 4. Direction / Permutation Arrows
+            if (isPll || cat === "ELL") {
+                const arrows = computePermutationArrows(sim);
+                arrows.forEach(a => {
+                    svg += drawArrowSvg(a);
+                });
             }
 
             svg += `</svg>`;
