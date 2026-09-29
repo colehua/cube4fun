@@ -1,36 +1,31 @@
 Status: COMPLETE
 Summary:
-- Upgraded algorithms.html with comprehensive arrow rendering engine across all speedcubing methods (CFOP: PLL, OLL, F2L; Roux: CMLL, LSE; ZZ/ZBLL, COLL, ELL).
-- Fixed trainer.html case recognition trainer: rebuilt simulator with full CubeEngine, fixed scramble generator to strip parentheses/brackets and output clean inverse moves that authentically set up selected cases, upgraded case SVG preview to 3D isometric with accurate arrows, and added manual Reveal and Next Case controls.
-- Overhauled guide.html: replaced basic 2D anatomy circle graphic with a 3D exploded view of the 6-axis spider core, center, edge, and corner pieces; added dedicated 3D isometric vector SVG diagrams for all 5 pro finger tricks (Index flick, U2 double flick, Ring flick, Thumb push, and M-slice flick).
+- Upgraded guide.html subtitle under "Cube Guide & Finger Tricks 📖" from muted grey (#475569) to vibrant royal blue (#0066FF) inside a crisp, high-contrast white pill badge with a 3.5px border and 5px shadow, ensuring perfect readability.
+- Enhanced callout badge text inside the 3D exploded anatomy diagram to bold high-contrast navy/black (#0f172a), and updated the diagram card container to clean solid white.
+- Restored the original clean, bright kid-friendly gradient background (`linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%)`) and decorative floating blobs across all 12 website HTML pages, removing the dark grey dragon image.
+- Updated theme.css so dark mode uses a sleek, deep modern midnight gradient and light mode uses the restored original background.
 
 Goal / Definition of done:
-1. Upgrade algorithms.html: ensure all methods (CFOP, Roux, ZZ, ZBLL) have accurate, high-quality visual diagrams with clear directional arrows for piece movements. (DONE)
-2. Upgrade trainer.html: fix case recognition trainer so scrambles mathematically set up the selected cases (using exact inversions/setups), pictures accurately match the cases with correct arrows/stickers, and only selected cases are drawn randomly. (DONE)
-3. Upgrade guide.html: replace weird/basic cubing anatomy and finger tricks diagrams with stunning, polished, modern 3D vector SVG diagrams illustrating cube mechanics and pro finger tricks. (DONE)
-4. Upgrade site-wide polish and push all verified changes to git repository. (DONE)
+1. In guide.html, replace the muted grey subtitle and labels under "Cube Guide & Finger Tricks" with high-contrast, vivid, crystal-clear colors and badges (vibrant blue/cyan, bold black text) that are completely legible on any background. (DONE)
+2. Restore the original website background to what it looked like before (clean, bright kid-friendly gradient `linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%)` with colorful animated top/bottom blobs) across all HTML pages, removing the dark grey dragon image. (DONE)
+3. Update theme.css so dark mode uses a sleek, deep modern midnight gradient and light mode uses the original clean background. (DONE)
+4. Verify all pages and push changes to remote repository. (DONE)
 
 Next step: Completed and pushed to remote main branch.
 Tasks:
-- [x] Inspect algorithms.html: analyze methods, case data structures, SVG/canvas diagram generation, and arrow rendering
-- [x] Upgrade algorithms.html: ensure every method (CFOP F2L/OLL/PLL, Roux FB/SB/CMLL/LSE, ZZ/ZB) has accurate diagrams and clear arrows
-- [x] Inspect trainer.html: examine scramble generation algorithm, case selection mechanism, and case visualization
-- [x] Upgrade trainer.html: implement exact scramble generators (invert algs with AUF/orientations) that genuinely set up the selected case, and ensure case preview pictures match 100%
-- [x] Inspect guide.html: examine current anatomy and finger trick illustrations
-- [x] Upgrade guide.html: create beautiful, professional SVG illustrations for cube anatomy (core, centers, edges, corners) and hand/finger trick grips & flick motions (index flick, push, U2 double flick, etc.)
-- [x] Verification across all pages (tests, syntax checks, visual layout, dark/light mode compatibility)
-- [x] Commit and push changes to remote repository
+- [x] Upgrade guide.html subtitle under "Cube Guide & Finger Tricks" to high-contrast, vibrant badge styling and fix grey text
+- [x] Restore original light gradient background and decorative blobs across all 12 HTML files
+- [x] Update theme.css to use a clean modern midnight theme without dragon_bg.jpg
+- [x] Verify pages, test syntax and visual layout
+- [x] Commit and push to remote main
 
 Assumptions:
-- Scramble generation in trainer.html mathematically inverts the case algorithm to produce the authentic scramble state.
-- 3D exploded cube anatomy and pro finger trick diagrams provide clear, kid-friendly and speedcuber-accurate visual intuition.
+- "What it looked like before" refers to the original clean, bright gradient background with the cyan/yellow floating blobs prior to commit ba9c9ba.
+- "Words that it grey... change into a colour easier to see" refers to the subtitle under "Cube Guide & Finger Tricks" and muted badge text in guide.html.
 Blockers (what I need to do):
 - None.
 Found, not done:
 - None.
 Log (newest first, one line each):
-- Completed site-wide upgrade and verification across algorithms.html, trainer.html, and guide.html
-- Replaced guide.html anatomy and finger trick graphics with 3D exploded and motion-arrow vector illustrations
-- Rebuilt trainer.html with full CubeEngine, accurate case SVGs with arrows, clean inverse scrambles, and syncSelectedCases
-- Enhanced algorithms.html with directional and permutation arrows for all methods (PLL, OLL, F2L, CMLL, LSE, ZBLL, COLL, ELL)
-- Initialized comprehensive upgrade task list for algorithms, trainer, and guide
+- Completed subtitle contrast overhaul and restored original clean background across all 12 pages and theme.css
+- Starting restoration of original background and high-contrast subtitle updates

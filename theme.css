@@ -137,13 +137,18 @@ body.dark-mode {
 
 /* 1. Deep Midnight Atmosphere */
 body.dark-mode {
-    background-color: #040711 !important;
-    background-image: linear-gradient(rgba(4, 7, 17, 0.80), rgba(4, 7, 17, 0.80)), url('dragon_bg.jpg') !important;
+    background-color: #0b0f19 !important;
+    background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b0f19 80%) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
     background-attachment: fixed !important;
     background-size: cover !important;
     color: #e2e8f0 !important;
+}
+
+body.dark-mode .blob-top,
+body.dark-mode .blob-bottom {
+    opacity: 0.15 !important;
 }
 
 /* 2. Theme Toggle Buttons */
@@ -341,9 +346,15 @@ body.dark-mode p,
 body.dark-mode li,
 body.dark-mode .hub-card p,
 body.dark-mode .schedule-box li,
-body.dark-mode .active-challenge-desc,
-body.dark-mode .subtitle {
+body.dark-mode .active-challenge-desc {
     color: #cbd5e1 !important;
+}
+
+body.dark-mode .subtitle {
+    background: #0f172a !important;
+    color: #00E5FF !important;
+    border-color: #00E5FF !important;
+    box-shadow: 0 4px 0 #020617 !important;
 }
 
 body.dark-mode strong,

@@ -27,15 +27,22 @@
             margin: 0;
             padding: 0;
             font-family: 'Outfit', sans-serif;
-            background: #0d1117 url('dragon_bg.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
             color: var(--text-dark);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
         .blob-top {
-            display: none;
+            position: absolute;
+            top: -120px;
+            left: -10%;
+            width: 120%;
+            height: 280px;
+            background: linear-gradient(90deg, #FAED27 0%, #FF9500 100%);
+            z-index: -1;
+            opacity: 0.95;
+            filter: blur(10px);
         }
 
         .container {
@@ -89,8 +96,14 @@
             text-align: center;
             font-size: 1.25em;
             font-weight: 800;
-            color: #475569;
-            margin-bottom: 40px;
+            color: #0066FF;
+            margin: 0;
+            display: inline-block;
+            background: #ffffff;
+            border: 3.5px solid #1e272e;
+            border-radius: 20px;
+            padding: 10px 28px;
+            box-shadow: 0 5px 0 #1e272e;
         }
 
         .card {
@@ -205,8 +218,8 @@
         }
 
         .trigger-desc {
-            font-weight: 700;
-            color: #475569;
+            font-weight: 800;
+            color: #0f172a;
         }
 
         /* GLOBAL SITE FOOTER */
@@ -353,7 +366,9 @@
         </div>
 
         <h1 class="main-title">Cube Guide & Finger Tricks 📖</h1>
-        <p class="subtitle">Understand the magic of the Rubik's Cube and turn it like a pro speedcuber!</p>
+        <div style="text-align: center; margin-bottom: 35px;">
+            <p class="subtitle">✨ Understand the magic of the Rubik's Cube and turn it like a pro speedcuber! ⚡</p>
+        </div>
 
         <!-- SECTION 1: ANATOMY OF THE CUBE -->
         <div class="card" style="border-color: #FAED27;">
@@ -380,7 +395,7 @@
                 </div>
                 <div style="text-align: center;">
                     <!-- 3D Exploded Anatomy of the Rubik's Cube -->
-                    <div style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); border: 2.5px solid #cbd5e1; border-radius: 20px; padding: 15px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                    <div style="background: #ffffff; border: 3px solid #1e272e; border-radius: 20px; padding: 15px; margin-bottom: 12px; box-shadow: 0 6px 0 #1e272e;">
                         <svg viewBox="0 0 460 330" width="100%" height="280" style="max-width: 460px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.08));" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
@@ -469,7 +484,7 @@
                             <g filter="url(#badgeShadow)">
                                 <rect x="15" y="10" width="135" height="42" rx="10" fill="#ffffff" stroke="#0066FF" stroke-width="2.5" />
                                 <text x="82" y="27" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#0066FF">CENTER (6)</text>
-                                <text x="82" y="42" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">1 Color • Core Anchor</text>
+                                <text x="82" y="42" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#0f172a" font-weight="bold">1 Color • Core Anchor</text>
                                 <path d="M 150,31 L 180,31" stroke="#0066FF" stroke-width="2" stroke-linecap="round" />
                                 <circle cx="180" cy="31" r="3" fill="#0066FF" />
                             </g>
@@ -477,7 +492,7 @@
                             <g filter="url(#badgeShadow)">
                                 <rect x="310" y="15" width="135" height="42" rx="10" fill="#ffffff" stroke="#FF6B6B" stroke-width="2.5" />
                                 <text x="377" y="32" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#FF6B6B">CORNER (8)</text>
-                                <text x="377" y="47" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">3 Colors • 8 Vertices</text>
+                                <text x="377" y="47" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#0f172a" font-weight="bold">3 Colors • 8 Vertices</text>
                                 <path d="M 345,57 L 345,75" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round" />
                                 <circle cx="345" cy="75" r="3" fill="#FF6B6B" />
                             </g>
@@ -485,7 +500,7 @@
                             <g filter="url(#badgeShadow)">
                                 <rect x="15" y="275" width="135" height="42" rx="10" fill="#ffffff" stroke="#00E5FF" stroke-width="2.5" />
                                 <text x="82" y="292" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#0284c7">EDGE (12)</text>
-                                <text x="82" y="307" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">2 Colors • Locking Wings</text>
+                                <text x="82" y="307" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#0f172a" font-weight="bold">2 Colors • Locking Wings</text>
                                 <path d="M 150,296 L 165,296 L 175,280" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" />
                                 <circle cx="175" cy="280" r="3" fill="#00E5FF" />
                             </g>
@@ -493,7 +508,7 @@
                             <g filter="url(#badgeShadow)">
                                 <rect x="305" y="275" width="140" height="42" rx="10" fill="#ffffff" stroke="#1e272e" stroke-width="2.5" />
                                 <text x="375" y="292" text-anchor="middle" font-family="'DynaPuff', cursive" font-size="12" font-weight="bold" fill="#1e272e">SPIDER CORE ⚙️</text>
-                                <text x="375" y="307" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#64748b">6 Springs & Screws</text>
+                                <text x="375" y="307" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="10" font-weight="700" fill="#0f172a" font-weight="bold">6 Springs & Screws</text>
                                 <path d="M 305,296 L 255,245 L 240,210" stroke="#1e272e" stroke-width="2" stroke-linecap="round" fill="none" />
                                 <circle cx="240" cy="210" r="3" fill="#1e272e" />
                             </g>
