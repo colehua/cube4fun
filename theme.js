@@ -86,19 +86,29 @@
             }
         }
 
-        // Check if floating theme toggle already exists; if not, create one
-        if (!document.querySelector('.floating-theme-toggle')) {
-            const floatBtn = document.createElement('button');
-            floatBtn.className = 'floating-theme-toggle';
-            floatBtn.setAttribute('aria-label', 'Toggle Dark/Light Mode');
-            floatBtn.setAttribute('title', dark ? 'Switch to Light Mode ☀️' : 'Switch to Dark Mode 🌙');
-            floatBtn.onclick = window.toggleTheme;
-            floatBtn.innerHTML = `
-                <span class="theme-toggle-icon">${dark ? '☀️' : '🌙'}</span>
-                <span class="theme-toggle-text">${dark ? 'Light Mode' : 'Dark Mode'}</span>
-            `;
-            document.body.appendChild(floatBtn);
+        // Check if theme toggle button already exists
+        let existingBtn = document.querySelector('#theme-toggle, .theme-toggle-btn');
+        if (!existingBtn) {
+            // Find top navigation bar to integrate cleanly into the layout without blocking any UI elements
+            const navContainer = document.querySelector('.cs-site-nav, .nav-buttons, .nav-group-right, nav');
+            if (navContainer) {
+                const toggleBtn = document.createElement('button');
+                toggleBtn.id = 'theme-toggle';
+                toggleBtn.className = 'nav-button theme-toggle-btn';
+                toggleBtn.setAttribute('aria-label', 'Toggle Dark/Light Mode');
+                toggleBtn.setAttribute('title', dark ? 'Switch to Light Mode ☀️' : 'Switch to Dark Mode 🌙');
+                toggleBtn.onclick = window.toggleTheme;
+                toggleBtn.style.cursor = 'pointer';
+                toggleBtn.innerHTML = `
+                    <span class="theme-toggle-icon">${dark ? '☀️' : '🌙'}</span>
+                    <span class="theme-toggle-text">${dark ? 'Light Mode' : 'Dark Mode'}</span>
+                `;
+                navContainer.appendChild(toggleBtn);
+            }
         }
+
+        // Cleanly remove any floating toggle elements so they never block or overlap screen content
+        document.querySelectorAll('.floating-theme-toggle').forEach(el => el.remove());
 
         updateThemeButtons();
     }

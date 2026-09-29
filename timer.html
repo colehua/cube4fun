@@ -74,7 +74,8 @@
         body.timer-active .cs-site-nav,
         body.timer-active .main-title,
         body.timer-active .site-footer,
-        body.timer-active .floating-theme-toggle {
+        body.timer-active #theme-toggle,
+        body.timer-active .theme-toggle-btn {
             opacity: 0.04 !important;
             pointer-events: none !important;
             transition: opacity 0.15s ease;
@@ -82,38 +83,6 @@
 
         body.timer-active .timer-instructions {
             opacity: 0 !important;
-        }
-
-        /* SPEEDCUBING TIMER: Move dark mode toggle to the TOP-LEFT corner so it NEVER blocks the scramble preview */
-        .floating-theme-toggle {
-            top: 16px !important;
-            left: 16px !important;
-            bottom: auto !important;
-            right: auto !important;
-            z-index: 99999 !important;
-            padding: 8px 16px !important;
-            font-size: 0.9em !important;
-            border-radius: 20px !important;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 3px 0 #1e272e !important;
-        }
-
-        .floating-theme-toggle:hover {
-            transform: translateY(-2px) scale(1.02) !important;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), 0 4px 0 #1e272e !important;
-        }
-
-        .floating-theme-toggle:active {
-            transform: translateY(2px) scale(0.98) !important;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 1px 0 #1e272e !important;
-        }
-
-        @media (max-width: 600px) {
-            .floating-theme-toggle {
-                top: 10px !important;
-                left: 10px !important;
-                padding: 6px 10px !important;
-                font-size: 0.8em !important;
-            }
         }
 
         /* Top Navigation Row */
@@ -1416,6 +1385,9 @@
             <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 3D Play</a>
             <a href="guide.html" class="nav-button" style="background-color: #E2C2FF;">📖 Finger Tricks</a>
             <a href="notation.html" class="nav-button" style="background-color: #dfe6e9;">📖 Notation</a>
+            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="background-color: #f1f2f6; cursor: pointer;">
+                <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark Mode</span>
+            </button>
         </div>
         
         <h1 class="main-title">Speedcubing Timer ⏱️</h1>

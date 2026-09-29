@@ -76,38 +76,48 @@ textarea {
     transform: rotate(20deg) scale(1.15);
 }
 
-/* Floating theme toggle button (Always accessible) */
-.floating-theme-toggle {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 99998;
+/* Navigation theme toggle button (Integrated into header/nav - Never blocks content) */
+.nav-buttons .theme-toggle-btn,
+.cs-site-nav .theme-toggle-btn,
+.nav-button.theme-toggle-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background: #ffffff;
+    gap: 6px;
+    background-color: #f1f2f6;
     color: #1e272e;
-    border: 3px solid #1e272e;
-    border-radius: 35px;
-    padding: 10px 18px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 4px 0 #1e272e;
+    border: 3.5px solid #1e272e;
+    border-radius: 14px;
+    padding: 8px 16px;
+    box-shadow: 0px 4px 0px #1e272e;
     font-family: 'DynaPuff', cursive;
     font-size: 0.95em;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 0;
     user-select: none;
+    vertical-align: middle;
 }
 
-.floating-theme-toggle:hover {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 7px 0 #1e272e;
+.nav-buttons .theme-toggle-btn:hover,
+.cs-site-nav .theme-toggle-btn:hover,
+.nav-button.theme-toggle-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0px 6px 0px #1e272e;
 }
 
-.floating-theme-toggle:active {
+.nav-buttons .theme-toggle-btn:active,
+.cs-site-nav .theme-toggle-btn:active,
+.nav-button.theme-toggle-btn:active {
     transform: translateY(2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 0 #1e272e;
+    box-shadow: 0px 2px 0px #1e272e;
+}
+
+/* Floating theme toggle disabled to guarantee zero UI obstructions */
+.floating-theme-toggle {
+    display: none !important;
 }
 
 /* =============================================================
