@@ -886,6 +886,379 @@
             font-size: 0.9em;
             color: #94a3b8;
         }
+
+        /* =========================================================
+           3D PATTERN VIDEO ANIMATOR MODAL
+           ========================================================= */
+        .pattern-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .pattern-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .pattern-modal-container {
+            background: #ffffff;
+            border: 4px solid #1e272e;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 720px;
+            box-shadow: 0 20px 0 #1e272e;
+            padding: 26px 28px;
+            transform: translateY(30px) scale(0.96);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            box-sizing: border-box;
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+
+        .pattern-modal-overlay.show .pattern-modal-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .pattern-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 2.2em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+            transition: color 0.15s, transform 0.15s;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .pattern-modal-close:hover {
+            color: #ef4444;
+            transform: scale(1.15) rotate(90deg);
+        }
+
+        .pattern-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-right: 25px;
+        }
+
+        .pattern-modal-badge {
+            display: inline-block;
+            background: #FF6584;
+            color: #ffffff;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.82em;
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 2px solid #1e272e;
+            margin-bottom: 6px;
+        }
+
+        .pattern-modal-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.8em;
+            color: var(--primary);
+            margin: 4px 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .pattern-modal-subtitle {
+            font-family: monospace;
+            font-size: 0.95em;
+            color: #64748b;
+            font-weight: 700;
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .pattern-modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1.25fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (max-width: 680px) {
+            .pattern-modal-body {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+        }
+
+        /* 3D SCENE & CUBE */
+        .pattern-modal-3d-pane {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pattern-scene-3d {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            perspective: 600px;
+            user-select: none;
+            cursor: grab;
+        }
+
+        .pattern-scene-3d:active {
+            cursor: grabbing;
+        }
+
+        .pattern-cube-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-25deg) rotateY(-45deg);
+            transition: transform 0.1s ease-out;
+        }
+
+        .pattern-face-3d {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            left: 30px;
+            top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4px;
+            background: #111;
+            padding: 5px;
+            box-sizing: border-box;
+            border: 2px solid #111;
+            border-radius: 10px;
+            backface-visibility: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .pattern-face-3d.face-U { transform: rotateX(90deg) translateZ(70px); }
+        .pattern-face-3d.face-D { transform: rotateX(-90deg) translateZ(70px); }
+        .pattern-face-3d.face-F { transform: rotateY(0deg) translateZ(70px); }
+        .pattern-face-3d.face-B { transform: rotateY(180deg) translateZ(70px); }
+        .pattern-face-3d.face-L { transform: rotateY(-90deg) translateZ(70px); }
+        .pattern-face-3d.face-R { transform: rotateY(90deg) translateZ(70px); }
+
+        .pattern-face-3d.highlight-active {
+            box-shadow: 0 0 20px rgba(250, 237, 39, 0.95), 0 0 10px #00E5FF;
+            border-color: #FAED27;
+        }
+
+        .pattern-sticker-3d {
+            border-radius: 5px;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.35), 0 1px 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(0, 0, 0, 0.25);
+            transition: background-color 0.35s ease-in-out;
+        }
+
+        .pattern-3d-hint {
+            font-size: 0.8em;
+            color: #64748b;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        /* CONTROLS PANEL */
+        .pattern-modal-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .pattern-step-indicator {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #1e272e;
+            background: #f1f5f9;
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            text-align: center;
+        }
+
+        .pattern-moves-display {
+            font-family: monospace;
+            font-size: 1.05em;
+            background: #f8fafc;
+            border: 2.5px solid #1e272e;
+            border-radius: 14px;
+            padding: 10px 12px;
+            max-height: 75px;
+            overflow-x: auto;
+            white-space: nowrap;
+            text-align: center;
+            font-weight: 800;
+            box-sizing: border-box;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .pattern-move-pill {
+            display: inline-block;
+            padding: 3px 8px;
+            margin: 0 3px;
+            border-radius: 8px;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #64748b;
+            background: transparent;
+        }
+
+        .pattern-move-pill.active {
+            background: #FAED27;
+            color: #1e272e;
+            transform: scale(1.18);
+            border: 2px solid #1e272e;
+            box-shadow: 0 3px 0 #1e272e;
+        }
+
+        .pattern-move-pill.completed {
+            color: #10b981;
+        }
+
+        .pattern-modal-btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pattern-control-btn {
+            padding: 10px 16px;
+            border: 3px solid #1e272e;
+            border-radius: 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92em;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 0 #1e272e;
+            outline: none;
+        }
+
+        .pattern-control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e272e;
+        }
+
+        .pattern-control-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #1e272e;
+        }
+
+        .pattern-control-btn.btn-primary {
+            background: #FAED27;
+            color: #1e272e;
+            flex: 1.2;
+            min-width: 130px;
+        }
+
+        .pattern-control-btn.btn-secondary {
+            background: #e2e8f0;
+            color: #1e272e;
+            flex: 0.8;
+        }
+
+        .pattern-speed-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .pattern-speed-row input[type="range"] {
+            cursor: pointer;
+            accent-color: #0066FF;
+            width: 100%;
+        }
+
+        .pattern-modal-links-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-modal-subaction {
+            flex: 1;
+            padding: 7px 10px;
+            border: 2px solid #1e272e;
+            border-radius: 10px;
+            font-size: 0.82em;
+            font-weight: 700;
+            background: #ffffff;
+            color: #1e272e;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s;
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        .btn-modal-subaction:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 #1e272e;
+            background: #f1f5f9;
+        }
+
+        /* DARK MODE SUPPORT */
+        body.dark-mode .pattern-modal-container {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: #64748b;
+            box-shadow: 0 20px 0 #0f172a;
+        }
+        body.dark-mode .pattern-modal-title {
+            color: #38bdf8;
+        }
+        body.dark-mode .pattern-modal-subtitle {
+            color: #94a3b8;
+        }
+        body.dark-mode .pattern-step-indicator {
+            background: #334155;
+            color: #f8fafc;
+            border-color: #475569;
+        }
+        body.dark-mode .pattern-moves-display {
+            background: #0f172a;
+            border-color: #64748b;
+        }
+        body.dark-mode .pattern-move-pill.active {
+            background: #FAED27;
+            color: #0f172a;
+        }
+        body.dark-mode .pattern-speed-row {
+            background: #334155;
+            border-color: #475569;
+        }
+        body.dark-mode .btn-modal-subaction {
+            background: #334155;
+            color: #f8fafc;
+            border-color: #64748b;
+        }
+        body.dark-mode .pattern-control-btn.btn-secondary {
+            background: #334155;
+            color: #f8fafc;
+            border-color: #64748b;
+        }
     </style>
 </head>
 <body>
@@ -894,6 +1267,67 @@
 
     <!-- TOAST NOTIFICATION FOR INFINITE CHALLENGES -->
     <div id="infinite-toast">🚀 New Infinite Challenge Unlocked!</div>
+
+    <!-- 3D PATTERN VIDEO ANIMATOR MODAL -->
+    <div id="pattern-video-modal" class="pattern-modal-overlay" onclick="if(event.target===this) closePattern3dModal()">
+        <div class="pattern-modal-container">
+            <button class="pattern-modal-close" onclick="closePattern3dModal()" title="Close">&times;</button>
+            <div class="pattern-modal-header">
+                <span class="pattern-modal-badge" id="pattern-modal-badge">🎨 Pattern Master</span>
+                <h3 id="pattern-modal-title" class="pattern-modal-title">Pattern 3D Video</h3>
+                <p id="pattern-modal-subtitle" class="pattern-modal-subtitle">Loading moves...</p>
+            </div>
+            
+            <div class="pattern-modal-body">
+                <!-- Left: 3D Scene Viewport -->
+                <div class="pattern-modal-3d-pane">
+                    <div class="pattern-scene-3d" id="pattern-modal-scene">
+                        <div class="pattern-cube-3d" id="pattern-modal-cube">
+                            <!-- Faces & stickers dynamically injected -->
+                        </div>
+                    </div>
+                    <div class="pattern-3d-hint">👆 Drag to rotate 3D view in any direction</div>
+                </div>
+
+                <!-- Right: Video Playback & Controls Panel -->
+                <div class="pattern-modal-controls">
+                    <div class="pattern-step-indicator" id="pattern-step-indicator">
+                        Step <strong>0</strong> of <strong>0</strong> • Solved Cube
+                    </div>
+
+                    <!-- Horizontal Scrolling Move Pills -->
+                    <div id="pattern-modal-moves" class="pattern-moves-display">
+                        <!-- Move pills with active state -->
+                    </div>
+
+                    <!-- Playback Action Buttons -->
+                    <div class="pattern-modal-btn-row">
+                        <button class="pattern-control-btn btn-secondary" onclick="resetPatternModal()" title="Reset to Solved Cube">⏪ Reset</button>
+                        <button class="pattern-control-btn btn-secondary" onclick="stepPatternModal(-1)" title="Step Back">◀ Prev</button>
+                        <button class="pattern-control-btn btn-primary" id="btn-pattern-play" onclick="togglePatternModalPlayback()" title="Play / Pause Animation">▶ Play Video</button>
+                        <button class="pattern-control-btn btn-secondary" onclick="stepPatternModal(1)" title="Step Forward">Next ▶</button>
+                    </div>
+
+                    <!-- Speed Control -->
+                    <div class="pattern-speed-row">
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85em; color: #475569;">
+                            <span>🐢 Slower</span>
+                            <span>Playback Speed</span>
+                            <span>Faster 🐇</span>
+                        </div>
+                        <input type="range" min="300" max="1800" step="100" value="900" id="pattern-speed-slider" oninput="changePatternSpeed(this.value)">
+                    </div>
+
+                    <!-- External Quick Action Links -->
+                    <div class="pattern-modal-links-row">
+                        <button class="btn-modal-subaction" id="btn-modal-copy-alg" onclick="copyCurrentPatternAlg(this)">📋 Copy Moves</button>
+                        <a id="link-modal-playground" href="play.html" class="btn-modal-subaction" style="text-decoration: none;">🎮 3D Playground</a>
+                        <a id="link-modal-timer" href="timer.html" class="btn-modal-subaction" style="text-decoration: none;">⏱️ Try on Timer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         
@@ -948,6 +1382,7 @@
                 <div class="active-alg-box">
                     <span id="active-alg-text" style="user-select: all;">M2 E2 S2</span>
                     <button class="copy-alg-btn" id="btn-copy-active-alg">📋 Copy Alg</button>
+                    <button class="copy-alg-btn" id="btn-watch-active-video" style="background: #00E5FF; color: #1e272e;">🎬 Watch 3D Video</button>
                 </div>
             </div>
 
@@ -1446,9 +1881,9 @@
                 id: 'pattern_donuts',
                 category: 'pattern',
                 categoryName: '🎨 Pattern Master',
-                title: 'The 6-Center Donut / Dots 🍩',
+                title: 'Six Spots (The Donut) 🍩',
                 difficulty: '⭐',
-                desc: 'Swap every center piece with its opposite side color to create floating dots on all 6 faces.',
+                desc: 'Swap every center piece with its opposite side color to create floating donut dots on all 6 faces.',
                 alg: "U D' R L' F B' U D'",
                 tip: '💡 Tip: Can also be performed using slice moves M\' E M E\'!',
                 actionUrl: "play.html?alg=U%20D'%20R%20L'%20F%20B'%20U%20D'",
@@ -1542,7 +1977,7 @@
                 id: 'pattern_cross_dots',
                 category: 'pattern',
                 categoryName: '🎨 Pattern Master',
-                title: 'Four Spots / Floating Center Dots 🎯',
+                title: 'Four Spots (Two Solid Sides) 🎯',
                 difficulty: '⭐⭐',
                 desc: 'Creates floating center dots on all four side faces while keeping the top and bottom faces completely solid!',
                 alg: "F2 B2 U D' R2 L2 U D'",
@@ -1587,15 +2022,15 @@
                 actionText: '🎮 View on 3D Cube'
             },
             {
-                id: 'pattern_pillars',
+                id: 'pattern_twister',
                 category: 'pattern',
                 categoryName: '🎨 Pattern Master',
-                title: 'Architectural Columns & Pillars 🏛️',
-                difficulty: '⭐⭐',
-                desc: 'Erects elegant 3-column architectural pillars around all 4 sides with top and bottom fully solved.',
-                alg: "R2 F2 L2 R2 F2 L2",
-                tip: '💡 Tip: Only 6 double turns! Symmetrical, rhythmic, and incredibly satisfying to drill.',
-                actionUrl: "play.html?alg=R2%20F2%20L2%20R2%20F2%20L2",
+                title: 'The Pinwheel Twister 🌀',
+                difficulty: '⭐⭐⭐',
+                desc: 'Spins colorful corner pinwheels around center panels, creating a mesmerizing rotational optical illusion.',
+                alg: "F R' U L F' L' F U' R U L' U' L F'",
+                tip: '💡 Tip: 14 smooth moves create a spinning pinwheel galaxy across the cube!',
+                actionUrl: "play.html?alg=F%20R'%20U%20L%20F'%20L'%20F%20U'%20R%20U%20L'%20U'%20L%20F'",
                 actionText: '🎮 View on 3D Cube'
             },
             {
@@ -1638,24 +2073,24 @@
                 id: 'pattern_twin_serpents',
                 category: 'pattern',
                 categoryName: '🎨 Pattern Master',
-                title: 'Twin Serpents / Double Snake 🐍🐍',
+                title: 'Parallel Railroad Tracks 🛤️',
                 difficulty: '⭐⭐⭐',
-                desc: 'Two colorful snakes winding parallel to each other across all faces of the cube.',
+                desc: 'Symmetrical parallel twin tracks running continuously across all four side faces.',
                 alg: "R2 B2 U2 L2 B2 R2 F2 D2 L2 F2",
-                tip: '💡 Tip: 10 double-turns sequence that creates continuous flowing parallel color lines.',
+                tip: '💡 Tip: 10 double-turns sequence creating continuous flowing parallel tracks.',
                 actionUrl: "play.html?alg=R2%20B2%20U2%20L2%20B2%20R2%20F2%20D2%20L2%20F2",
                 actionText: '🎮 View on 3D Cube'
             },
             {
-                id: 'pattern_black_hole',
+                id: 'pattern_spiral',
                 category: 'pattern',
                 categoryName: '🎨 Pattern Master',
-                title: 'Center Sinkhole / The Hole 🕳️',
-                difficulty: '⭐⭐⭐',
-                desc: 'Centers appear recessed and sunken deep into an optical illusion frame in just 6 moves!',
-                alg: "R L' F' B D U'",
-                tip: '💡 Tip: Quick 6-move sequence that creates deep optical perspective on each face.',
-                actionUrl: "play.html?alg=R%20L'%20F'%20B%20D%20U'",
+                title: 'The Spiral / Gift Box 🎁',
+                difficulty: '⭐⭐⭐⭐',
+                desc: 'A continuous spiral ribbon winding around all faces of the cube, like a beautifully wrapped present!',
+                alg: "L' B' D U R U' R' D2 R2 D L D' L' R' F U",
+                tip: '💡 Tip: One of the most famous and hypnotic patterns ever created for the 3x3 Rubik\'s Cube!',
+                actionUrl: "play.html?alg=L'%20B'%20D%20U%20R%20U'%20R'%20D2%20R2%20D%20L%20D'%20L'%20R'%20F%20U",
                 actionText: '🎮 View on 3D Cube'
             },
             {
@@ -1878,6 +2313,12 @@
                 document.getElementById('btn-copy-active-alg').onclick = (e) => {
                     copyTextToClipboard(c.alg, e.target);
                 };
+                const btnWatchVideo = document.getElementById('btn-watch-active-video');
+                if (btnWatchVideo) {
+                    btnWatchVideo.onclick = () => {
+                        openPattern3dModal(c.id);
+                    };
+                }
             } else {
                 algWrapper.style.display = 'none';
             }
@@ -1892,11 +2333,19 @@
                 btnDone.style.backgroundColor = "#2ECC71";
             }
 
-            // Open in Timer link
+            // Open in Timer link or Watch 3D Video Modal
             const btnTimer = document.getElementById('btn-open-timer');
             btnTimer.href = c.actionUrl;
             if (c.actionText) {
-                btnTimer.textContent = c.actionText;
+                btnTimer.textContent = c.category === 'pattern' ? '🎬 View on 3D Cube' : c.actionText;
+            }
+            if (c.category === 'pattern') {
+                btnTimer.onclick = (e) => {
+                    e.preventDefault();
+                    openPattern3dModal(c.id);
+                };
+            } else {
+                btnTimer.onclick = null;
             }
 
             // Generate Scramble if requested
@@ -2251,10 +2700,16 @@
 
                 let algHtml = '';
                 if (c.alg) {
+                    const videoBtn = c.category === 'pattern'
+                        ? `<button class="copy-alg-btn" onclick="window.openPattern3dModal('${c.id}')" style="background: #00E5FF; color: #1e272e; font-weight: 800;" title="Watch 3D Animation Video">🎬 3D</button>`
+                        : '';
                     algHtml = `
                         <div class="challenge-alg-box">
                             <span style="user-select: all;">${c.alg}</span>
-                            <button class="copy-alg-btn" onclick="window.copyAlg('${c.alg.replace(/'/g, "\\'")}', this)">📋 Copy</button>
+                            <div style="display: flex; gap: 4px;">
+                                ${videoBtn}
+                                <button class="copy-alg-btn" onclick="window.copyAlg('${c.alg.replace(/'/g, "\\'")}', this)">📋 Copy</button>
+                            </div>
                         </div>
                     `;
                 }
@@ -2285,7 +2740,9 @@
                         </label>
                         <div style="display: flex; gap: 6px;">
                             <button class="action-link" style="background: #FAED27;" onclick="window.selectChallengeById('${c.id}')">🎯 Select</button>
-                            <a href="${c.actionUrl}" class="action-link">${c.actionText}</a>
+                            ${c.category === 'pattern'
+                                ? `<button class="action-link" style="background: #00E5FF; color: #1e272e; font-weight: 800; cursor: pointer; border: 2.5px solid #1e272e;" onclick="window.openPattern3dModal('${c.id}')">🎬 View on 3D Cube</button>`
+                                : `<a href="${c.actionUrl}" class="action-link">${c.actionText}</a>`}
                         </div>
                     </div>
                 `;
@@ -2405,6 +2862,542 @@
                 }, 2800);
             }
         }
+
+        // ==========================================
+        // --- 3D PATTERN VIDEO ANIMATOR (MODAL) ---
+        // ==========================================
+        class PatternCubeEngine {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                // Solved state: U: White, D: Yellow, F: Green, B: Blue, L: Orange, R: Red
+                this.faces = {
+                    U: Array(9).fill('W'),
+                    D: Array(9).fill('Y'),
+                    F: Array(9).fill('G'),
+                    B: Array(9).fill('B'),
+                    L: Array(9).fill('O'),
+                    R: Array(9).fill('R')
+                };
+            }
+            clone() {
+                const c = new PatternCubeEngine();
+                for (let f in this.faces) c.faces[f] = [...this.faces[f]];
+                return c;
+            }
+            rotateFaceCW(face) {
+                const f = this.faces[face];
+                const copy = [...f];
+                f[0] = copy[6]; f[1] = copy[3]; f[2] = copy[0];
+                f[3] = copy[7]; f[4] = copy[4]; f[5] = copy[1];
+                f[6] = copy[8]; f[7] = copy[5]; f[8] = copy[2];
+            }
+            moveU() {
+                this.rotateFaceCW('U');
+                const f = this.faces;
+                const temp = [f.F[0], f.F[1], f.F[2]];
+                f.F[0] = f.R[0]; f.F[1] = f.R[1]; f.F[2] = f.R[2];
+                f.R[0] = f.B[0]; f.R[1] = f.B[1]; f.R[2] = f.B[2];
+                f.B[0] = f.L[0]; f.B[1] = f.L[1]; f.B[2] = f.L[2];
+                f.L[0] = temp[0]; f.L[1] = temp[1]; f.L[2] = temp[2];
+            }
+            moveD() {
+                this.rotateFaceCW('D');
+                const f = this.faces;
+                const temp = [f.F[6], f.F[7], f.F[8]];
+                f.F[6] = f.L[6]; f.F[7] = f.L[7]; f.F[8] = f.L[8];
+                f.L[6] = f.B[6]; f.L[7] = f.B[7]; f.L[8] = f.B[8];
+                f.B[6] = f.R[6]; f.B[7] = f.R[7]; f.B[8] = f.R[8];
+                f.R[6] = temp[0]; f.R[7] = temp[1]; f.R[8] = temp[2];
+            }
+            moveF() {
+                this.rotateFaceCW('F');
+                const f = this.faces;
+                const temp = [f.U[6], f.U[7], f.U[8]];
+                f.U[6] = f.L[8]; f.U[7] = f.L[5]; f.U[8] = f.L[2];
+                f.L[2] = f.D[0]; f.L[5] = f.D[1]; f.L[8] = f.D[2];
+                f.D[0] = f.R[6]; f.D[1] = f.R[3]; f.D[2] = f.R[0];
+                f.R[0] = temp[0]; f.R[3] = temp[1]; f.R[6] = temp[2];
+            }
+            moveB() {
+                this.rotateFaceCW('B');
+                const f = this.faces;
+                const temp = [f.U[0], f.U[1], f.U[2]];
+                f.U[0] = f.R[2]; f.U[1] = f.R[5]; f.U[2] = f.R[8];
+                f.R[2] = f.D[8]; f.R[5] = f.D[7]; f.R[8] = f.D[6];
+                f.D[6] = f.L[0]; f.D[7] = f.L[3]; f.D[8] = f.L[6];
+                f.L[0] = temp[2]; f.L[3] = temp[1]; f.L[6] = temp[0];
+            }
+            moveL() {
+                this.rotateFaceCW('L');
+                const f = this.faces;
+                const temp = [f.U[0], f.U[3], f.U[6]];
+                f.U[0] = f.B[8]; f.U[3] = f.B[5]; f.U[6] = f.B[2];
+                f.B[2] = f.D[6]; f.B[5] = f.D[3]; f.B[8] = f.D[0];
+                f.D[0] = f.F[0]; f.D[3] = f.F[3]; f.D[6] = f.F[6];
+                f.F[0] = temp[0]; f.F[3] = temp[1]; f.F[6] = temp[2];
+            }
+            moveR() {
+                this.rotateFaceCW('R');
+                const f = this.faces;
+                const temp = [f.U[2], f.U[5], f.U[8]];
+                f.U[2] = f.F[2]; f.U[5] = f.F[5]; f.U[8] = f.F[8];
+                f.F[2] = f.D[2]; f.F[5] = f.D[5]; f.F[8] = f.D[8];
+                f.D[2] = f.B[6]; f.D[5] = f.B[3]; f.D[8] = f.B[0];
+                f.B[0] = temp[2]; f.B[3] = temp[1]; f.B[6] = temp[0];
+            }
+            moveM() {
+                const f = this.faces;
+                const temp = [f.U[1], f.U[4], f.U[7]];
+                f.U[1] = f.B[7]; f.U[4] = f.B[4]; f.U[7] = f.B[1];
+                f.B[7] = f.D[7]; f.B[4] = f.D[4]; f.B[7] = f.D[1];
+                f.D[1] = f.F[1]; f.D[4] = f.F[4]; f.D[7] = f.F[7];
+                f.F[1] = temp[0]; f.F[4] = temp[1]; f.F[7] = temp[2];
+            }
+            moveE() {
+                const f = this.faces;
+                const temp = [f.F[3], f.F[4], f.F[5]];
+                f.F[3] = f.L[3]; f.F[4] = f.L[4]; f.F[5] = f.L[5];
+                f.L[3] = f.B[3]; f.L[4] = f.B[4]; f.L[5] = f.B[5];
+                f.B[3] = f.R[3]; f.B[4] = f.R[4]; f.B[5] = f.R[5];
+                f.R[3] = temp[0]; f.R[4] = temp[1]; f.R[5] = temp[2];
+            }
+            moveS() {
+                const f = this.faces;
+                const temp = [f.U[3], f.U[4], f.U[5]];
+                f.U[3] = f.L[7]; f.U[4] = f.L[4]; f.U[5] = f.L[1];
+                f.L[1] = f.D[3]; f.L[4] = f.D[4]; f.L[7] = f.D[5];
+                f.D[3] = f.R[7]; f.D[4] = f.R[4]; f.D[5] = f.R[1];
+                f.R[1] = temp[0]; f.R[4] = temp[1]; f.R[7] = temp[2];
+            }
+            applyMove(move) {
+                let m = move.replace(/[()\[\]{}]/g, '').trim();
+                if (!m) return;
+                let base = m[0];
+                let rest = m.slice(1);
+                let times = 1;
+                if (rest === '2' || rest === "2'") times = 2;
+                else if (rest === "'" || rest === "3") times = 3;
+
+                for (let t = 0; t < times; t++) {
+                    if (base === 'U') this.moveU();
+                    else if (base === 'D') this.moveD();
+                    else if (base === 'F') this.moveF();
+                    else if (base === 'B') this.moveB();
+                    else if (base === 'L') this.moveL();
+                    else if (base === 'R') this.moveR();
+                    else if (base === 'M') this.moveM();
+                    else if (base === 'E') this.moveE();
+                    else if (base === 'S') this.moveS();
+                }
+            }
+        }
+
+        const PATTERN_STICKER_COLORS = {
+            'W': '#FFFFFF',
+            'Y': '#FFFF00',
+            'G': '#00D084',
+            'B': '#007AFF',
+            'O': '#FF9500',
+            'R': '#FF3B30'
+        };
+
+        const patternFaceTransforms = {
+            U: 'rotateX(90deg) translateZ(70px)',
+            D: 'rotateX(-90deg) translateZ(70px)',
+            F: 'rotateY(0deg) translateZ(70px)',
+            B: 'rotateY(180deg) translateZ(70px)',
+            L: 'rotateY(-90deg) translateZ(70px)',
+            R: 'rotateY(90deg) translateZ(70px)'
+        };
+
+        let patternCubeEngine = new PatternCubeEngine();
+        let patternPlaybackInterval = null;
+        let patternCurrentStep = -1;
+        let patternMoves = [];
+        let patternIsPlaying = false;
+        let patternSpeed = 900;
+        let patternModalRotation = { x: -25, y: -45 };
+        let patternActiveTimeout = null;
+        let pendingPatternMoveToApply = null;
+        let pendingPatternFaceToReset = null;
+        let currentPatternId = null;
+        let currentPatternAlgClean = "";
+        let currentPatternFullAlg = "";
+        let isPatternDragging = false;
+        let previousPatternMousePos = { x: 0, y: 0 };
+
+        function renderPattern3dCubeDOM() {
+            const cubeEl = document.getElementById('pattern-modal-cube');
+            if (!cubeEl) return;
+            cubeEl.innerHTML = "";
+
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            faces.forEach(fName => {
+                const faceEl = document.createElement('div');
+                faceEl.className = `pattern-face-3d face-${fName}`;
+
+                for (let i = 0; i < 9; i++) {
+                    const sticker = document.createElement('div');
+                    sticker.className = `pattern-sticker-3d pattern-sticker-${fName}-${i}`;
+                    faceEl.appendChild(sticker);
+                }
+                cubeEl.appendChild(faceEl);
+            });
+
+            cubeEl.style.transform = `rotateX(${patternModalRotation.x}deg) rotateY(${patternModalRotation.y}deg)`;
+        }
+
+        function updatePattern3dCubeVisuals() {
+            const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            faces.forEach(fName => {
+                const state = patternCubeEngine.faces[fName];
+                for (let i = 0; i < 9; i++) {
+                    const colorCode = state[i];
+                    const hexColor = PATTERN_STICKER_COLORS[colorCode] || colorCode;
+                    const stickerEl = document.querySelector(`.pattern-sticker-${fName}-${i}`);
+                    if (stickerEl) {
+                        stickerEl.style.backgroundColor = hexColor;
+                    }
+                }
+            });
+        }
+
+        function updatePatternMovesDisplay() {
+            const container = document.getElementById('pattern-modal-moves');
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (patternMoves.length === 0) {
+                container.textContent = "No moves";
+                return;
+            }
+
+            patternMoves.forEach((move, idx) => {
+                const span = document.createElement('span');
+                span.className = 'pattern-move-pill';
+                if (idx === patternCurrentStep) {
+                    span.className += ' active';
+                }
+                span.textContent = `${idx + 1}. ${move}`;
+                span.onclick = () => {
+                    jumpToPatternStep(idx);
+                };
+                container.appendChild(span);
+            });
+
+            const activeSpan = container.querySelector('.pattern-move-pill.active');
+            if (activeSpan) {
+                container.scrollTo({
+                    left: activeSpan.offsetLeft - (container.clientWidth / 2) + (activeSpan.clientWidth / 2),
+                    behavior: 'smooth'
+                });
+            }
+
+            // Update step indicator text
+            const indicator = document.getElementById('pattern-step-indicator');
+            if (indicator) {
+                if (patternCurrentStep === -1) {
+                    indicator.innerHTML = `Step <strong>0</strong> of <strong>${patternMoves.length}</strong> • 🏁 Solved Cube`;
+                } else if (patternCurrentStep === patternMoves.length - 1) {
+                    indicator.innerHTML = `Step <strong>${patternMoves.length}</strong> of <strong>${patternMoves.length}</strong> • 🎉 Pattern Complete!`;
+                } else {
+                    const activeMove = patternMoves[patternCurrentStep];
+                    indicator.innerHTML = `Step <strong>${patternCurrentStep + 1}</strong> of <strong>${patternMoves.length}</strong> • Turn <strong>${activeMove}</strong>`;
+                }
+            }
+        }
+
+        function finishPatternActiveAnimation() {
+            if (patternActiveTimeout) {
+                clearTimeout(patternActiveTimeout);
+                patternActiveTimeout = null;
+            }
+            if (pendingPatternMoveToApply && pendingPatternFaceToReset) {
+                patternCubeEngine.applyMove(pendingPatternMoveToApply);
+                updatePattern3dCubeVisuals();
+
+                const faceEl = document.querySelector(`#pattern-modal-cube .face-${pendingPatternFaceToReset}`);
+                if (faceEl) {
+                    faceEl.style.transition = 'none';
+                    faceEl.style.transform = patternFaceTransforms[pendingPatternFaceToReset];
+                    faceEl.classList.remove('highlight-active');
+                }
+
+                pendingPatternMoveToApply = null;
+                pendingPatternFaceToReset = null;
+            }
+        }
+
+        function playPatternNextStep() {
+            if (patternMoves.length === 0) return;
+
+            finishPatternActiveAnimation();
+
+            if (patternCurrentStep >= patternMoves.length - 1) {
+                stopPatternModalPlayback();
+                return;
+            }
+
+            patternCurrentStep++;
+            const move = patternMoves[patternCurrentStep];
+
+            const faceName = move ? move[0] : '';
+            if (['U', 'D', 'F', 'B', 'L', 'R'].includes(faceName)) {
+                let modifier = move.slice(1);
+                let angle = '90deg';
+                if (modifier === '2' || modifier === "2'") angle = '180deg';
+                else if (modifier === "'") angle = '-90deg';
+
+                const faceEl = document.querySelector(`#pattern-modal-cube .face-${faceName}`);
+                if (faceEl) {
+                    pendingPatternMoveToApply = move;
+                    pendingPatternFaceToReset = faceName;
+
+                    const animDuration = Math.max(160, Math.min(450, Math.floor(patternSpeed * 0.55)));
+                    faceEl.style.transition = `transform ${animDuration}ms ease-in-out`;
+                    faceEl.style.transform = `${patternFaceTransforms[faceName]} rotate(${angle})`;
+                    faceEl.classList.add('highlight-active');
+
+                    patternActiveTimeout = setTimeout(() => {
+                        finishPatternActiveAnimation();
+                    }, animDuration);
+                } else {
+                    patternCubeEngine.applyMove(move);
+                    updatePattern3dCubeVisuals();
+                }
+            } else {
+                patternCubeEngine.applyMove(move);
+                updatePattern3dCubeVisuals();
+            }
+
+            updatePatternMovesDisplay();
+
+            if (patternCurrentStep === patternMoves.length - 1) {
+                stopPatternModalPlayback();
+            }
+        }
+
+        function stepPatternModal(delta) {
+            finishPatternActiveAnimation();
+            if (patternMoves.length === 0) return;
+
+            stopPatternModalPlayback();
+
+            const targetStep = Math.max(-1, Math.min(patternMoves.length - 1, patternCurrentStep + delta));
+            jumpToPatternStep(targetStep);
+        }
+
+        function jumpToPatternStep(targetStep) {
+            finishPatternActiveAnimation();
+            stopPatternModalPlayback();
+
+            patternCurrentStep = targetStep;
+
+            patternCubeEngine.reset();
+            for (let i = 0; i <= patternCurrentStep; i++) {
+                patternCubeEngine.applyMove(patternMoves[i]);
+            }
+
+            updatePattern3dCubeVisuals();
+            updatePatternMovesDisplay();
+        }
+
+        function resetPatternModal() {
+            stopPatternModalPlayback();
+            finishPatternActiveAnimation();
+            patternCurrentStep = -1;
+            patternCubeEngine.reset();
+            updatePattern3dCubeVisuals();
+            updatePatternMovesDisplay();
+        }
+
+        function startPatternModalPlayback() {
+            if (patternIsPlaying || patternMoves.length === 0) return;
+
+            if (patternCurrentStep >= patternMoves.length - 1) {
+                resetPatternModal();
+            }
+
+            patternIsPlaying = true;
+            const playBtn = document.getElementById('btn-pattern-play');
+            if (playBtn) playBtn.innerHTML = '⏸ Pause';
+
+            patternPlaybackInterval = setInterval(() => {
+                playPatternNextStep();
+            }, patternSpeed);
+        }
+
+        function stopPatternModalPlayback() {
+            if (!patternIsPlaying && !patternPlaybackInterval) return;
+            patternIsPlaying = false;
+            if (patternPlaybackInterval) {
+                clearInterval(patternPlaybackInterval);
+                patternPlaybackInterval = null;
+            }
+            const playBtn = document.getElementById('btn-pattern-play');
+            if (playBtn) playBtn.innerHTML = '▶ Play Video';
+        }
+
+        function togglePatternModalPlayback() {
+            if (patternIsPlaying) {
+                stopPatternModalPlayback();
+            } else {
+                startPatternModalPlayback();
+            }
+        }
+
+        function changePatternSpeed(val) {
+            // Left slider is Slower (large ms), Right slider is Faster (small ms)
+            patternSpeed = (1800 + 300) - Number(val);
+            if (patternIsPlaying) {
+                stopPatternModalPlayback();
+                startPatternModalPlayback();
+            }
+        }
+
+        function copyCurrentPatternAlg(btn) {
+            const textToCopy = currentPatternFullAlg || currentPatternAlgClean;
+            if (!textToCopy) return;
+            copyTextToClipboard(textToCopy, btn);
+        }
+
+        function openPattern3dModal(patternId) {
+            const c = CHALLENGES.find(item => item.id === patternId) || CHALLENGES[activeChallengeIndex];
+            if (!c) return;
+
+            currentPatternId = c.id;
+            currentPatternFullAlg = c.alg || "";
+            currentPatternAlgClean = currentPatternFullAlg.split('(')[0].trim();
+
+            document.getElementById('pattern-modal-badge').textContent = `🎨 ${c.categoryName || 'Pattern Master'}`;
+            document.getElementById('pattern-modal-title').textContent = c.title;
+            document.getElementById('pattern-modal-subtitle').textContent = `Algorithm: ${c.alg}`;
+
+            // Configure external links
+            const playgroundLink = document.getElementById('link-modal-playground');
+            if (playgroundLink) {
+                playgroundLink.href = `play.html?patternScramble=${encodeURIComponent(currentPatternAlgClean)}`;
+            }
+            const timerLink = document.getElementById('link-modal-timer');
+            if (timerLink) {
+                timerLink.href = `timer.html`;
+                timerLink.onclick = () => {
+                    try {
+                        sessionStorage.setItem('cube_custom_scramble', currentPatternAlgClean);
+                    } catch (e) {}
+                };
+            }
+
+            // Parse moves
+            patternMoves = currentPatternAlgClean.replace(/[()\[\]{}]/g, ' ').split(/\s+/).filter(m => m !== '');
+
+            // Reset state & render cube
+            resetPatternModal();
+            renderPattern3dCubeDOM();
+            updatePattern3dCubeVisuals();
+            updatePatternMovesDisplay();
+
+            // Show modal overlay
+            const overlay = document.getElementById('pattern-video-modal');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                setTimeout(() => {
+                    overlay.classList.add('show');
+                }, 10);
+            }
+
+            // Auto-start video playback after smooth open
+            setTimeout(() => {
+                startPatternModalPlayback();
+            }, 350);
+        }
+
+        function closePattern3dModal() {
+            stopPatternModalPlayback();
+            finishPatternActiveAnimation();
+
+            const overlay = document.getElementById('pattern-video-modal');
+            if (overlay) {
+                overlay.classList.remove('show');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 250);
+            }
+        }
+
+        function initPatternDragListeners() {
+            const scene = document.getElementById('pattern-modal-scene');
+            const cube = document.getElementById('pattern-modal-cube');
+            if (!scene || !cube) return;
+
+            scene.addEventListener('mousedown', (e) => {
+                isPatternDragging = true;
+                previousPatternMousePos = { x: e.clientX, y: e.clientY };
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isPatternDragging) return;
+                const deltaX = e.clientX - previousPatternMousePos.x;
+                const deltaY = e.clientY - previousPatternMousePos.y;
+
+                patternModalRotation.y += deltaX * 0.55;
+                patternModalRotation.x -= deltaY * 0.55;
+
+                cube.style.transform = `rotateX(${patternModalRotation.x}deg) rotateY(${patternModalRotation.y}deg)`;
+                previousPatternMousePos = { x: e.clientX, y: e.clientY };
+            });
+
+            window.addEventListener('mouseup', () => {
+                isPatternDragging = false;
+            });
+
+            scene.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isPatternDragging = true;
+                    previousPatternMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isPatternDragging || e.touches.length === 0) return;
+                const deltaX = e.touches[0].clientX - previousPatternMousePos.x;
+                const deltaY = e.touches[0].clientY - previousPatternMousePos.y;
+
+                patternModalRotation.y += deltaX * 0.55;
+                patternModalRotation.x -= deltaY * 0.55;
+
+                cube.style.transform = `rotateX(${patternModalRotation.x}deg) rotateY(${patternModalRotation.y}deg)`;
+                previousPatternMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }, { passive: true });
+
+            window.addEventListener('touchend', () => {
+                isPatternDragging = false;
+            });
+
+            // Close on Escape key
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const overlay = document.getElementById('pattern-video-modal');
+                    if (overlay && overlay.classList.contains('show')) {
+                        closePattern3dModal();
+                    }
+                }
+            });
+        }
+
+        // Expose globally
+        window.openPattern3dModal = openPattern3dModal;
+        window.closePattern3dModal = closePattern3dModal;
+        window.resetPatternModal = resetPatternModal;
+        window.stepPatternModal = stepPatternModal;
+        window.togglePatternModalPlayback = togglePatternModalPlayback;
+        window.changePatternSpeed = changePatternSpeed;
+        window.copyCurrentPatternAlg = copyCurrentPatternAlg;
+
+        // Initialize drag listeners
+        initPatternDragListeners();
 
         // Initialize on load
         updateActiveChallenge(0, true);
