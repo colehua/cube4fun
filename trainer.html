@@ -501,6 +501,44 @@
         .btn-next:hover {
             background-color: #67e8f9;
         }
+        .btn-next-scramble-mini {
+            background: #00E5FF;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-size: 0.8em;
+            font-family: 'DynaPuff', cursive;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-next-scramble-mini:hover {
+            background: #67e8f9;
+            transform: scale(1.05);
+        }
+        .trainer-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            background: #1e272e;
+            color: #FAED27;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 3px solid #FAED27;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1em;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 9999;
+        }
+        .trainer-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
         .btn-copy-scramble {
             background: #e2e8f0;
             color: #1e293b;
@@ -603,7 +641,12 @@
                         <!-- Checkboxes will be populated dynamically -->
                     </div>
 
-                    <button class="practice-btn" onclick="startPracticeSession()">🚀 Start Practice Session</button>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+                        <button class="practice-btn" onclick="startPracticeSession()" style="margin: 0;">🚀 Start Practice Session</button>
+                        <button id="btn-next-case-setup" class="btn-trainer-action btn-next" onclick="nextCaseAction(event)" title="Get a different case from your selected cases" style="width: 100%; box-sizing: border-box; justify-content: center; font-size: 1.05em; padding: 11px;">
+                            ⏭️ Next Case (Different Selected Case)
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -615,7 +658,10 @@
                     <div id="welcome-message" style="text-align: center; padding: 40px 10px;">
                         <span style="font-size: 3.5em;">🏁</span>
                         <h3 style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0;">Ready to train?</h3>
-                        <p style="color: #64748b; margin: 0;">Configure your cases on the left and click start to begin your custom session!</p>
+                        <p style="color: #64748b; margin: 0 0 16px 0;">Configure your cases on the left and click Next Case to begin your custom session!</p>
+                        <button class="btn-trainer-action btn-next" onclick="nextCaseAction(event)" style="font-size: 1.1em; padding: 12px 24px;" title="Start session with a different selected case">
+                            ⏭️ Next Case (Start Practice) 🚀
+                        </button>
                     </div>
 
                     <div id="trainer-workspace" style="display: none;">
@@ -624,7 +670,7 @@
                             <div id="case-mystery-placeholder" class="mystery-case-box">
                                 <span class="mystery-icon">❓</span>
                                 <div class="mystery-title">Mystery Case</div>
-                                <div class="mystery-sub">Scramble & inspect your cube!</div>
+                                <div class="mystery-sub" id="mystery-sub-text">Scramble & inspect your cube!</div>
                             </div>
 
                             <!-- Revealed SVG Container (Shown ONLY at the end or on reveal) -->
@@ -635,15 +681,23 @@
                             <h3 id="active-case-name" style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0; text-align: center;">???</h3>
                             <div id="active-case-desc" style="font-size: 0.9em; color: #64748b; font-weight: 700; text-align: center;">&nbsp;</div>
                             <div id="active-case-answer" style="margin-top: 15px; font-weight: 800; font-size: 1.1em; color: var(--primary); text-align: center; display: none;">
-                                Alg: <span id="active-case-alg-text" style="font-family: monospace; background: #e0f2fe; padding: 6px 12px; border-radius: 8px; border: 2px solid #bae6fd; font-size: 1.1em; word-break: break-all;">-</span>
+                                <div style="margin-bottom: 12px;">
+                                    Alg: <span id="active-case-alg-text" style="font-family: monospace; background: #e0f2fe; padding: 6px 12px; border-radius: 8px; border: 2px solid #bae6fd; font-size: 1.1em; word-break: break-all;">-</span>
+                                </div>
+                                <button class="btn-trainer-action btn-next" onclick="nextCaseAction(event)" style="font-size: 0.95em; padding: 8px 18px;" title="Get a different case from your selected cases">
+                                    ⏭️ Next Case (Different Case)
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Scramble Box with Copy Button -->
+                        <!-- Scramble Box with Copy & Next Case Buttons -->
                         <div class="scramble-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                 <div style="font-size: 0.8em; text-transform: uppercase; color: #64748b; font-weight: 800;">Scramble to make case:</div>
-                                <button id="btn-copy-scramble" class="btn-copy-scramble" onclick="copyScramble(event)" title="Copy scramble to clipboard">📋 Copy</button>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <button id="btn-copy-scramble" class="btn-copy-scramble" onclick="copyScramble(event)" title="Copy scramble to clipboard">📋 Copy</button>
+                                    <button id="btn-next-case-scramble" class="btn-next-scramble-mini" onclick="nextCaseAction(event)" title="Get a different case from your selected cases">⏭️ Next Case</button>
+                                </div>
                             </div>
                             <span id="active-case-scramble">-</span>
                         </div>
@@ -653,8 +707,8 @@
                             <button id="btn-reveal-case" class="btn-trainer-action btn-reveal" onclick="revealCaseAction(event)" title="Reveal case picture, name, and algorithm">
                                 👁️ Reveal Case
                             </button>
-                            <button id="btn-next-case" class="btn-trainer-action btn-next" onclick="nextCaseAction(event)" title="Advance to the next random case">
-                                ⏭️ Next Case
+                            <button id="btn-next-case" class="btn-trainer-action btn-next" onclick="nextCaseAction(event)" title="Advance to a different selected case">
+                                ⏭️ Next Case (Different Case)
                             </button>
                         </div>
 
@@ -4072,6 +4126,7 @@
 
         // --- TRAINER CONTROLLER ENGINE ---
         let selectedCases = [];
+        let unvisitedSelectedCases = [];
         let activeCase = null;
         let activeScramble = "";
         let isRevealed = false;
@@ -4087,6 +4142,8 @@
             const method = document.getElementById('method-select').value;
             const container = document.getElementById('cases-list-container');
             container.innerHTML = "";
+            unvisitedSelectedCases = [];
+            activeCase = null;
 
             let cases = [];
             if (ALGORITHMS[method]) {
@@ -4790,6 +4847,22 @@
         }
 
         // --- SESSION MANAGEMENT & RECOGNITION WORKFLOW ---
+        function showTrainerToast(msg) {
+            let toast = document.getElementById('trainer-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'trainer-toast';
+                toast.className = 'trainer-toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.classList.add('show');
+            if (toast._timer) clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1800);
+        }
+
         function syncSelectedCases() {
             selectedCases = [];
             const checkboxes = document.querySelectorAll('#cases-list-container input[type="checkbox"]');
@@ -4800,20 +4873,61 @@
                     } catch (e) {}
                 }
             });
+
+            // Retain only currently selected cases in unvisited pool
+            unvisitedSelectedCases = unvisitedSelectedCases.filter(u =>
+                selectedCases.some(s => s.name === u.name && s.moves === u.moves)
+            );
+
             return selectedCases;
         }
 
-        function getRandomCase() {
+        // Guarantees selecting a DIFFERENT case from user's selection every single time
+        function getDifferentSelectedCase() {
+            syncSelectedCases();
             if (selectedCases.length === 0) return null;
             if (selectedCases.length === 1) return selectedCases[0];
-            let candidate = activeCase;
-            let attempts = 0;
-            while (candidate === activeCase && attempts < 10) {
-                const randIdx = Math.floor(Math.random() * selectedCases.length);
-                candidate = selectedCases[randIdx];
-                attempts++;
+
+            // 1. Filter unvisited cases that are DIFFERENT from activeCase
+            const unvisitedExcludingActive = unvisitedSelectedCases.filter(c =>
+                !activeCase || (c.name !== activeCase.name && c.moves !== activeCase.moves)
+            );
+
+            // 2. If unvisited pool has no other cases left, refill with all selected cases
+            if (unvisitedExcludingActive.length === 0) {
+                unvisitedSelectedCases = selectedCases.slice();
             }
-            return candidate;
+
+            // 3. Candidate pool: must be DIFFERENT from activeCase
+            let candidatePool = unvisitedSelectedCases.filter(c =>
+                !activeCase || (c.name !== activeCase.name && c.moves !== activeCase.moves)
+            );
+
+            // 4. Fallback if candidate pool is empty: pick any case from selectedCases that is different
+            if (candidatePool.length === 0) {
+                candidatePool = selectedCases.filter(c =>
+                    !activeCase || (c.name !== activeCase.name && c.moves !== activeCase.moves)
+                );
+            }
+
+            // 5. Ultimate fallback (only identical duplicates selected)
+            if (candidatePool.length === 0) {
+                return selectedCases[0];
+            }
+
+            // 6. Select randomly from candidates to give good variety
+            const randIdx = Math.floor(Math.random() * candidatePool.length);
+            const chosen = candidatePool[randIdx];
+
+            // 7. Remove chosen case from unvisited pool so each selected case is visited before repeating
+            const removeIdx = unvisitedSelectedCases.findIndex(c =>
+                c.name === chosen.name && c.moves === chosen.moves
+            );
+            if (removeIdx !== -1) {
+                unvisitedSelectedCases.splice(removeIdx, 1);
+            }
+
+            return chosen;
         }
 
         function startPracticeSession() {
@@ -4838,7 +4952,14 @@
                 return;
             }
 
-            activeCase = getRandomCase();
+            // Ensure workspace is visible
+            const welcomeMsg = document.getElementById('welcome-message');
+            const workspace = document.getElementById('trainer-workspace');
+            if (welcomeMsg) welcomeMsg.style.display = "none";
+            if (workspace) workspace.style.display = "block";
+
+            // GUARANTEED DIFFERENT CASE FROM SELECTED
+            activeCase = getDifferentSelectedCase();
             isRevealed = false;
 
             // 1. HIDE PICTURE & CASE DETAILS DURING ACTIVE TRAINING
@@ -4851,7 +4972,10 @@
             }
             
             document.getElementById('active-case-name').textContent = "❓ Mystery Case";
-            document.getElementById('active-case-desc').textContent = "Scramble your cube & test your recognition!";
+            const subElem = document.getElementById('mystery-sub-text') || document.getElementById('active-case-desc');
+            if (subElem) {
+                subElem.textContent = "Scramble & inspect your cube! (" + selectedCases.length + " case" + (selectedCases.length > 1 ? "s" : "") + " selected)";
+            }
             document.getElementById('active-case-answer').style.display = "none";
             document.getElementById('active-case-alg-text').textContent = "-";
 
@@ -4873,6 +4997,8 @@
             document.getElementById('timer-display-text').style.color = "inherit";
             document.getElementById('timer-status-text').textContent = "Press Spacebar / Tap to Start!";
             document.getElementById('timer-status-text').className = "timer-status";
+
+            showTrainerToast("⏭️ Next case loaded (" + selectedCases.length + " selected in pool)");
         }
 
         function revealCase() {
@@ -5073,5 +5199,6 @@
             <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! 🚀</p>
         </div>
     </footer>
+    <div id="trainer-toast" class="trainer-toast"></div>
 </body>
 </html>
