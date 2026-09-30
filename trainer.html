@@ -417,7 +417,128 @@
             font-size: 0.9em;
             color: #94a3b8;
         }
-    </style>
+    
+        /* MYSTERY CASE & TRAINER ACTION CONTROLS */
+        .mystery-case-box {
+            width: 150px;
+            height: 120px;
+            border: 3px dashed #94a3b8;
+            border-radius: 16px;
+            background: rgba(241, 245, 249, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            user-select: none;
+            transition: all 0.25s ease;
+        }
+        .mystery-icon {
+            font-size: 2.6em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
+            animation: bounce-slow 2s infinite ease-in-out;
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .mystery-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            color: #475569;
+            margin-top: 5px;
+            font-weight: 700;
+        }
+        .mystery-sub {
+            font-size: 0.75em;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+        .trainer-actions-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+        .btn-trainer-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            border: 3px solid #1e272e;
+            box-shadow: 0 4px 0 #1e272e;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+        .btn-trainer-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e272e;
+        }
+        .btn-trainer-action:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1e272e;
+        }
+        .btn-reveal {
+            background-color: #FAED27;
+            color: #1e272e;
+        }
+        .btn-reveal:hover {
+            background-color: #fef08a;
+        }
+        .btn-next {
+            background-color: #00E5FF;
+            color: #1e272e;
+        }
+        .btn-next:hover {
+            background-color: #67e8f9;
+        }
+        .btn-copy-scramble {
+            background: #e2e8f0;
+            color: #1e293b;
+            border: 2px solid #94a3b8;
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-size: 0.8em;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-copy-scramble:hover {
+            background: #cbd5e1;
+            transform: scale(1.05);
+        }
+        /* Dark mode overrides for trainer elements */
+        body.dark-mode .mystery-case-box {
+            border-color: #475569;
+            background: rgba(15, 23, 42, 0.7);
+        }
+        body.dark-mode .mystery-title {
+            color: #cbd5e1;
+        }
+        body.dark-mode .mystery-sub {
+            color: #64748b;
+        }
+        body.dark-mode .btn-copy-scramble {
+            background: #334155;
+            color: #f8fafc;
+            border-color: #64748b;
+        }
+        body.dark-mode #active-case-alg-text {
+            background: #1e293b !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+</style>
 </head>
 <body>
     <div class="blob-top"></div>
@@ -460,6 +581,7 @@
                         <option value="cmll">CMLL (Roux Corners)</option>
                         <option value="zbll">ZBLL (ZB Last Layer)</option>
                         <option value="zbls">ZBLS (ZB Last Slot)</option>
+                        <option value="lse">LSE (Roux Last Six Edges)</option>
                         <option value="wv">Winter Variation (WV)</option>
                         <option value="vls">VLS (Valk Last Slot)</option>
                         <option value="ell">ELL (Edges of Last Layer)</option>
@@ -497,9 +619,18 @@
 
                     <div id="trainer-workspace" style="display: none;">
                         <div class="workspace-area">
-                            <div id="case-svg-container" style="width: 140px; height: 112px;">
+                            <!-- Hidden Mystery Card (Shown during recognition/solving) -->
+                            <div id="case-mystery-placeholder" class="mystery-case-box">
+                                <span class="mystery-icon">❓</span>
+                                <div class="mystery-title">Mystery Case</div>
+                                <div class="mystery-sub">Scramble & inspect your cube!</div>
+                            </div>
+
+                            <!-- Revealed SVG Container (Shown ONLY at the end or on reveal) -->
+                            <div id="case-svg-container" style="display: none; width: 140px; height: 112px; justify-content: center; align-items: center;">
                                 <!-- Dynamic SVG -->
                             </div>
+
                             <h3 id="active-case-name" style="font-family: 'DynaPuff', cursive; margin: 15px 0 5px 0; text-align: center;">???</h3>
                             <div id="active-case-desc" style="font-size: 0.9em; color: #64748b; font-weight: 700; text-align: center;">&nbsp;</div>
                             <div id="active-case-answer" style="margin-top: 15px; font-weight: 800; font-size: 1.1em; color: var(--primary); text-align: center; display: none;">
@@ -507,18 +638,35 @@
                             </div>
                         </div>
 
+                        <!-- Scramble Box with Copy Button -->
                         <div class="scramble-box">
-                            <div style="font-size: 0.8em; text-transform: uppercase; color: #64748b; font-weight: 800; margin-bottom: 4px;">Scramble to make case:</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <div style="font-size: 0.8em; text-transform: uppercase; color: #64748b; font-weight: 800;">Scramble to make case:</div>
+                                <button id="btn-copy-scramble" class="btn-copy-scramble" onclick="copyScramble(event)" title="Copy scramble to clipboard">📋 Copy</button>
+                            </div>
                             <span id="active-case-scramble">-</span>
                         </div>
 
-                        <div class="timer-display" id="timer-display-text">0.00</div>
-                        <div class="timer-status" id="timer-status-text">Press Spacebar / Tap to Start!</div>
-                        
-                        <div id="timer-helper-txt" style="text-align: center; font-size: 0.85em; font-weight: 800; color: #94a3b8; margin-top: 10px;">
-                            (Click/Tap this area or press Space to trigger the timer)
+                        <!-- Action Buttons Bar: Reveal Case & Next Case -->
+                        <div class="trainer-actions-bar">
+                            <button id="btn-reveal-case" class="btn-trainer-action btn-reveal" onclick="revealCaseAction(event)" title="Reveal case picture, name, and algorithm">
+                                👁️ Reveal Case
+                            </button>
+                            <button id="btn-next-case" class="btn-trainer-action btn-next" onclick="nextCaseAction(event)" title="Advance to the next random case">
+                                ⏭️ Next Case
+                            </button>
                         </div>
-                    </div>
+
+                        <!-- Timer Clickable Section -->
+                        <div id="timer-clickable-area" style="cursor: pointer; padding: 10px 0; border-radius: 12px; transition: background 0.15s;">
+                            <div class="timer-display" id="timer-display-text">0.00</div>
+                            <div class="timer-status" id="timer-status-text">Press Spacebar / Tap to Start!</div>
+                            
+                            <div id="timer-helper-txt" style="text-align: center; font-size: 0.85em; font-weight: 800; color: #94a3b8; margin-top: 10px;">
+                                (Click/Tap here or press Space to trigger the timer)
+                            </div>
+                        </div>
+                    </div></div>
                 </div>
 
                 <!-- SESSION LOG -->
@@ -560,7 +708,7 @@
             ],
             "desc": "Headlights on left side, solved 2x1 block on back-right.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "adjacent corner swap, t perm"
         },
         {
             "name": "Y Perm",
@@ -570,197 +718,216 @@
             ],
             "desc": "Diagonal corner swap. Two adjacent 2x1 blocks on front and right.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "diagonal corner swap, y perm"
         },
         {
             "name": "H Perm",
             "moves": "M2' U M2' U2 M2' U M2'",
             "algs": [
-                "M2' U M2' U2 M2' U M2'"
+                "M2' U M2' U2 M2' U M2'",
+                "M2' U' M2' U2 M2' U' M2'"
             ],
-            "desc": "Opposite edge swap (cross shape swap on all 4 sides).",
+            "desc": "Opposite edge swap (cross swap on all 4 sides).",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "edges only, h perm"
         },
         {
             "name": "Ua Perm",
             "moves": "R U' R U R U R U' R' U' R2",
             "algs": [
-                "R U' R U R U R U' R' U' R2"
+                "R U' R U R U R U' R' U' R2",
+                "M2' U M U2 M' U M2'"
             ],
-            "desc": "3-cycle edges swap clockwise. Fully solved bar on back.",
+            "desc": "3-cycle edges clockwise. Solved 1x3 bar on back.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "edges only, ua perm"
         },
         {
             "name": "Ub Perm",
             "moves": "R2 U R U R' U' R' U' R' U R'",
             "algs": [
-                "R2 U R U R' U' R' U' R' U R'"
+                "R2 U R U R' U' R' U' R' U R'",
+                "M2' U' M U2 M' U' M2'"
             ],
-            "desc": "3-cycle edges swap counter-clockwise. Fully solved bar on back.",
+            "desc": "3-cycle edges counter-clockwise. Solved 1x3 bar on back.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "edges only, ub perm"
         },
         {
             "name": "Z Perm",
             "moves": "M2' U M2' U M' U2 M2' U2 M' U2",
             "algs": [
-                "M2' U M2' U M' U2 M2' U2 M' U2"
+                "M2' U M2' U M' U2 M2' U2 M' U2",
+                "M' U M2' U M2' U M' U2 M2'"
             ],
-            "desc": "Adjacent edge swap (cross swap on left/front and right/back).",
+            "desc": "Adjacent edge swap (front-right and back-left).",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "edges only, z perm"
         },
         {
             "name": "E Perm",
             "moves": "x' R U' R' D R U R' D' R U R' D R U' R' D' x",
             "algs": [
-                "x' R U' R' D R U R' D' R U R' D R U' R' D' x"
+                "x' R U' R' D R U R' D' R U R' D R U' R' D' x",
+                "y x' R U' R' D R U R' D' R U R' D R U' R' D' x y'"
             ],
-            "desc": "Swaps UFL-UBL and UFR-UBR corners.",
+            "desc": "Diagonal corner swap on both sides, edges already solved.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "corners only, e perm"
         },
         {
             "name": "F Perm",
             "moves": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
             "algs": [
-                "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R"
+                "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
+                "y R' U2 R' d' R' F' R2 U' R' U R' F R U' F"
             ],
-            "desc": "Swaps UFL-UFR corners and UB-UF edges (adjacent swap).",
+            "desc": "Solved 1x3 bar on left, swaps remaining 2 corners and 2 edges.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "adjacent swap, f perm"
         },
         {
             "name": "Aa Perm",
-            "moves": "x L D' L U2 L' D L U2 L2 x'",
+            "moves": "x R' U R' D2 R U' R' D2 R2 x'",
             "algs": [
-                "x L D' L U2 L' D L U2 L2 x'"
+                "x R' U R' D2 R U' R' D2 R2 x'",
+                "l' U R' D2 R U' R' D2 R2 x'"
             ],
-            "desc": "Swaps UBL-UFR-UBR corners clockwise.",
+            "desc": "3-cycle corners clockwise. Solved headlights on back.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "corners only, aa perm"
         },
         {
             "name": "Ab Perm",
-            "moves": "x L2 U2 L D L' U2 L D' L x'",
+            "moves": "x R2 D2 R U R' D2 R U' R x'",
             "algs": [
-                "x L2 U2 L D L' U2 L D' L x'"
+                "x R2 D2 R U R' D2 R U' R x'",
+                "x' R2 D2 R' U' R D2 R' U R' x"
             ],
-            "desc": "Swaps UBL-UFR-UBR corners counter-clockwise.",
+            "desc": "3-cycle corners counter-clockwise. Solved headlights on back.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "corners only, ab perm"
         },
         {
             "name": "Ga Perm",
-            "moves": "R2 U R' U R' U' R U' R2 D U' R U' R' D'",
+            "moves": "R2 U R' U R' U' R U' R2 U' D R' U R D'",
             "algs": [
+                "R2 U R' U R' U' R U' R2 U' D R' U R D'",
                 "R2 U R' U R' U' R U' R2 D U' R U' R' D'"
             ],
-            "desc": "Adjacent corner swap with a 2x1 block on left front.",
+            "desc": "Headlights on left, 2x1 block on back-right.",
             "cat": "PLL",
-            "vis": "000110010 000 001 000 100"
+            "tags": "g perm, ga perm"
         },
         {
             "name": "Gb Perm",
-            "moves": "F' U' F R2 D R' U R U' R D' R2",
+            "moves": "R' U' R U D' R2 U R' U R U' R U' R2 D",
             "algs": [
-                "F' U' F R2 D R' U R U' R D' R2"
+                "R' U' R U D' R2 U R' U R U' R U' R2 D",
+                "F' U' F R2 u R' U R U' R u' R2"
             ],
-            "desc": "Adjacent corner swap with a 2x1 block on left back.",
+            "desc": "Headlights on front, 2x1 block on front-right.",
             "cat": "PLL",
-            "vis": "010010110 100 000 000 000"
+            "tags": "g perm, gb perm"
         },
         {
             "name": "Gc Perm",
-            "moves": "R2 U' R U' R U R' U R2 D' U R' U R D",
+            "moves": "R2 U' R U' R U R' U R2 U D' R U' R' D",
             "algs": [
-                "R2 U' R U' R U R' U R2 D' U R' U R D"
+                "R2 U' R U' R U R' U R2 U D' R U' R' D",
+                "R2' u' R U' R U R' u R2 y R U' R'"
             ],
-            "desc": "Adjacent corner swap with a 2x1 block on right front.",
+            "desc": "Headlights on right, 2x1 block on front-left.",
             "cat": "PLL",
-            "vis": "010110000 000 100 000 001"
+            "tags": "g perm, gc perm"
         },
         {
             "name": "Gd Perm",
-            "moves": "R U R' F' R U R' U' R' F R2 U' R' U'",
+            "moves": "R U R' U' D R2 U' R U' R' U R' U R2 D'",
             "algs": [
-                "R U R' F' R U R' U' R' F R2 U' R' U'"
+                "R U R' U' D R2 U' R U' R' U R' U R2 D'",
+                "R U R' y' R2 u' R U' R' U R' u R2"
             ],
-            "desc": "Adjacent corner swap with a 2x1 block on right back.",
+            "desc": "Headlights on front, 2x1 block on back-left.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "g perm, gd perm"
         },
         {
             "name": "Ja Perm",
-            "moves": "x R2 F R F' R U2' r' U r U2' x'",
+            "moves": "x R2 F R F' R U2 r' U r U2 x'",
             "algs": [
-                "x R2 F R F' R U2' r' U r U2' x'"
+                "x R2 F R F' R U2 r' U r U2 x'",
+                "y' L' U' L F L' U' L U L F' L2' U L"
             ],
-            "desc": "Swaps UFL-UBL corners and UL-UF edges.",
+            "desc": "Solved 1x3 bar on right, swaps front-left corner and edge.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "adjacent swap, ja perm"
         },
         {
             "name": "Jb Perm",
             "moves": "R U R' F' R U R' U' R' F R2 U' R' U'",
             "algs": [
-                "R U R' F' R U R' U' R' F R2 U' R' U'"
+                "R U R' F' R U R' U' R' F R2 U' R' U'",
+                "R U R' F' R U R' U' R' F R2 U' R'"
             ],
-            "desc": "Swaps UFR-UBR corners and UR-UF edges.",
+            "desc": "Solved 1x3 bar on left, swaps front-right corner and edge.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "adjacent swap, jb perm"
         },
         {
             "name": "Ra Perm",
-            "moves": "R U' R' U' R U R D R' U' R D' R' U2 R'",
+            "moves": "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
             "algs": [
+                "R U R' F' R U2 R' U2 R' F R U R U2 R' U'",
                 "R U' R' U' R U R D R' U' R D' R' U2 R'"
             ],
-            "desc": "Swaps UFL-UFR corners and UL-UR edges.",
+            "desc": "Headlights on left, 2x1 block on front-right.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "adjacent swap, ra perm"
         },
         {
             "name": "Rb Perm",
-            "moves": "R' U2 R U2 R' F R U R' U' R' F' R2 U' R'",
+            "moves": "R' U2 R' D' R U' R' D R U R U' R' U' R U'",
             "algs": [
+                "R' U2 R' D' R U' R' D R U R U' R' U' R U'",
                 "R' U2 R U2 R' F R U R' U' R' F' R2 U' R'"
             ],
-            "desc": "Swaps UBL-UBR corners and UL-UR edges.",
+            "desc": "Headlights on right, 2x1 block on front-left.",
             "cat": "PLL",
-            "vis": "011111100 000 000 000 001"
+            "tags": "adjacent swap, rb perm"
         },
         {
             "name": "V Perm",
-            "moves": "R' U R' d' R' F' R2 U' R' U R' F R F",
+            "moves": "R' U R' U' y R' F' R2 U' R' U R' F R F y'",
             "algs": [
-                "R' U R' d' R' F' R2 U' R' U R' F R F"
+                "R' U R' U' y R' F' R2 U' R' U R' F R F y'",
+                "R' U R' U' B' R' B2 U' B' U B' R B R"
             ],
-            "desc": "Swaps UFR-UBL corners and UF-UR edges.",
+            "desc": "Diagonal corner swap, solved 2x2 block on back-left.",
             "cat": "PLL",
-            "vis": "101110110 000 000 000 000"
+            "tags": "diagonal swap, v perm"
         },
         {
             "name": "Na Perm",
             "moves": "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
             "algs": [
-                "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'"
+                "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
+                "z U R' D R2 U' R D' U R' D R2 U' R D' z'"
             ],
-            "desc": "Diagonal corner swap, outer blocks line swap.",
+            "desc": "Solved 2x1 blocks on left and right, diagonal corner swap.",
             "cat": "PLL",
-            "vis": "111111111 000 000 000 000"
+            "tags": "diagonal swap, na perm"
         },
         {
             "name": "Nb Perm",
-            "moves": "R' (U' L' U R) (U' R' U L) U2 (R U R' U R U2 R')",
+            "moves": "R' U R U' R' F' U' F R U R' F R' F' R U' R",
             "algs": [
-                "R' (U' L' U R) (U' R' U L) U2 (R U R' U R U2 R')"
+                "R' U R U' R' F' U' F R U R' F R' F' R U' R",
+                "z U' R D' R2 U R' D U' R D' R2 U R' D z'"
             ],
-            "desc": "Diagonal corner swap, mirror Nb Perm.",
+            "desc": "Solved 2x1 blocks on front and back, diagonal corner swap.",
             "cat": "PLL",
-            "vis": "000010010 001 100 000 100"
+            "tags": "diagonal swap, nb perm"
         }
     ],
     "oll": [
@@ -776,9 +943,10 @@
         },
         {
             "name": "OLL 2",
-            "moves": "r U r' U2 r U2 r' U2 r U' r'",
+            "moves": "F R U R' U' F' f R U R' U' f'",
             "algs": [
-                "r U r' U2 r U2 r' U2 r U' r'"
+                "F R U R' U' F' f R U R' U' f'",
+                "y' F R U R' U' S R U R' U' f'"
             ],
             "desc": "Dot: no oriented edges, opposite corners unoriented",
             "cat": "OLL",
@@ -896,9 +1064,10 @@
         },
         {
             "name": "OLL 14",
-            "moves": "R' F R U R' F' R y' R2 U' R",
+            "moves": "r U R' U' r' R U R U' R'",
             "algs": [
-                "R' F R U R' F' R y' R2 U' R"
+                "r U R' U' r' R U R U' R'",
+                "R' F R U R' F' R F U R U' R' F'"
             ],
             "desc": "Knight shape: knight move layout mirrored",
             "cat": "OLL",
@@ -936,9 +1105,10 @@
         },
         {
             "name": "OLL 18",
-            "moves": "r U R' U R U2 r' U' r U' r'",
+            "moves": "r U R' U R U2' r' r' U' R U' R' U2' r",
             "algs": [
-                "r U R' U R U2 r' U' r U' r'"
+                "r U R' U R U2' r' r' U' R U' R' U2' r",
+                "M U R U R' U' M' R' F R F'"
             ],
             "desc": "Dot case: corner and edge oriented mirrored",
             "cat": "OLL",
@@ -956,9 +1126,9 @@
         },
         {
             "name": "OLL 20",
-            "moves": "r U R' U' M2 U R U' r'",
+            "moves": "M U R U R' U' M2' U R U' r'",
             "algs": [
-                "r U R' U' M2 U R U' r'"
+                "M U R U R' U' M2' U R U' r'"
             ],
             "desc": "Dot case: two adjacent oriented edges",
             "cat": "OLL",
@@ -966,9 +1136,10 @@
         },
         {
             "name": "OLL 21",
-            "moves": "RU R' U R U' R' U R U2 R'",
+            "moves": "R U2' R' U' R U R' U' R U' R'",
             "algs": [
-                "RU R' U R U' R' U R U2 R'"
+                "R U2' R' U' R U R' U' R U' R'",
+                "R U R' U R U' R' U R U2' R'"
             ],
             "desc": "Cross shape (H): double headlights front/back",
             "cat": "OLL",
@@ -1046,9 +1217,10 @@
         },
         {
             "name": "OLL 29",
-            "moves": "r2 U' r D' r' U r D r2",
+            "moves": "R U R' U' R U' R' F' U' F R U R'",
             "algs": [
-                "r2 U' r D' r' U r D r2"
+                "R U R' U' R U' R' F' U' F R U R'",
+                "M U R U R' U' R' F R F' M'"
             ],
             "desc": "Awkward shape: 2 corners oriented, 2 edges unoriented mirrored",
             "cat": "OLL",
@@ -1056,9 +1228,10 @@
         },
         {
             "name": "OLL 30",
-            "moves": "r2 U r' D r U' r' D' r2",
+            "moves": "F R' F R2 U' R' U' R U R' F2",
             "algs": [
-                "r2 U r' D r U' r' D' r2"
+                "F R' F R2 U' R' U' R U R' F2",
+                "r' D' r U' r' D r U r U' r'"
             ],
             "desc": "Awkward shape: 2 corners oriented, 2 edges unoriented #2",
             "cat": "OLL",
@@ -1116,9 +1289,10 @@
         },
         {
             "name": "OLL 36",
-            "moves": "R' U' R' F R F' R U2 R'",
+            "moves": "R' U' R U' R' U R U R B' R' B",
             "algs": [
-                "R' U' R' F R F' R U2 R'"
+                "R' U' R U' R' U R U R B' R' B",
+                "L' U' L U' L' U L U L F' L' F"
             ],
             "desc": "Fish shape: fish tail oriented, corners unoriented mirrored",
             "cat": "OLL",
@@ -1228,7 +1402,8 @@
             "name": "OLL 47",
             "moves": "F' L' U' L U L' U' L U F",
             "algs": [
-                "F' L' U' L U L' U' L U F"
+                "F' L' U' L U L' U' L U F",
+                "R' U' R' F R F' R' F R F' U R"
             ],
             "desc": "L-shape: 2 adjacent edges oriented, 2 adjacent corners oriented",
             "cat": "OLL",
@@ -1276,9 +1451,10 @@
         },
         {
             "name": "OLL 52",
-            "moves": "R' U' R' F R F' R' U' R' F R F' U R",
+            "moves": "R' U' R' F R F' R U' R' U2 R",
             "algs": [
-                "R' U' R' F R F' R' U' R' F R F' U R"
+                "R' U' R' F R F' R U' R' U2 R",
+                "R U R' U R U' B U' B' R'"
             ],
             "desc": "Line: 3 edges oriented in line, corners unoriented mirrored",
             "cat": "OLL",
@@ -1286,9 +1462,10 @@
         },
         {
             "name": "OLL 53",
-            "moves": "r U R' U' r' R U R' U' r U R' U' r'",
+            "moves": "l' U2' L U L' U' L U L' U l",
             "algs": [
-                "r U R' U' r' R U R' U' r U R' U' r'"
+                "l' U2' L U L' U' L U L' U l",
+                "r' U' R U' R' U R U' R' U2 r"
             ],
             "desc": "Line: 3 edges oriented in line, 2 corners oriented",
             "cat": "OLL",
@@ -1296,9 +1473,9 @@
         },
         {
             "name": "OLL 54",
-            "moves": "r' U' R U r R' U' R U r' U' r",
+            "moves": "r U R' U R U' R' U R U2' r'",
             "algs": [
-                "r' U' R U r R' U' R U r' U' r"
+                "r U R' U R U' R' U R U2' r'"
             ],
             "desc": "Line: 3 edges oriented in line, 2 corners oriented mirrored",
             "cat": "OLL",
@@ -1337,84 +1514,455 @@
     ],
     "f2l": [
         {
-            "name": "F2L 1 (Easy Insert)",
+            "name": "F2L 1 (Basic Insert Right)",
             "moves": "U R U' R'",
             "algs": [
-                "U R U' R'"
+                "U R U' R'",
+                "y' U' R' U R"
             ],
-            "desc": "Basic corner-edge pair insert.",
+            "desc": "Corner and edge paired in U layer, ready for direct right-slot insert.",
             "cat": "F2L",
-            "vis": "110110110 000 001 000 000"
+            "tags": "easy, basic"
         },
         {
-            "name": "F2L 2 (Corner facing right)",
-            "moves": "R U R'",
+            "name": "F2L 2 (Basic Insert Left)",
+            "moves": "y' U' R' U R",
             "algs": [
-                "R U R'"
-            ],
-            "desc": "Corner facing right, edge in top layer.",
-            "cat": "F2L",
-            "vis": "001111110 000 000 000 001"
-        },
-        {
-            "name": "F2L 3 (Corner facing front)",
-            "moves": "F' U' F",
-            "algs": [
+                "y' U' R' U R",
                 "F' U' F"
             ],
-            "desc": "Corner facing front, edge in top layer.",
+            "desc": "Corner and edge paired in U layer, ready for direct left-slot insert.",
             "cat": "F2L",
-            "vis": "011011110 100 000 000 000"
+            "tags": "easy, basic"
         },
         {
-            "name": "F2L 4 (Corner facing up)",
+            "name": "F2L 3 (Basic Split Insert)",
+            "moves": "y' R' U R",
+            "algs": [
+                "y' R' U R",
+                "F' U F"
+            ],
+            "desc": "Corner and edge split in U layer, 3-move right insert.",
+            "cat": "F2L",
+            "tags": "easy, 3-move"
+        },
+        {
+            "name": "F2L 4 (Basic 3-Move Insert)",
+            "moves": "R U' R'",
+            "algs": [
+                "R U' R'",
+                "y' U R' U' R"
+            ],
+            "desc": "Corner and edge split in U layer, 3-move front insert.",
+            "cat": "F2L",
+            "tags": "easy, 3-move"
+        },
+        {
+            "name": "F2L 5",
+            "moves": "U' R U R' U2 R U' R'",
+            "algs": [
+                "U' R U R' U2 R U' R'",
+                "y' U R' U' R U2' R' U R"
+            ],
+            "desc": "White facing side, edge in U with different top color.",
+            "cat": "F2L",
+            "tags": "split, diff top"
+        },
+        {
+            "name": "F2L 6",
+            "moves": "y' U R' U' R U2' R' U R",
+            "algs": [
+                "y' U R' U' R U2' R' U R",
+                "U' R U R' U2 R U' R'"
+            ],
+            "desc": "White facing side, edge in U with different top color (mirror).",
+            "cat": "F2L",
+            "tags": "split, diff top"
+        },
+        {
+            "name": "F2L 7",
+            "moves": "U' R U2' R' U2 R U' R'",
+            "algs": [
+                "U' R U2' R' U2 R U' R'",
+                "R U' R' U2 R U R'"
+            ],
+            "desc": "Corner facing front, edge disconnected in U layer.",
+            "cat": "F2L",
+            "tags": "split, diff top"
+        },
+        {
+            "name": "F2L 8",
+            "moves": "y' U R' U2 R U2' R' U R",
+            "algs": [
+                "y' U R' U2 R U2' R' U R",
+                "y' R' U R U2' R' U' R"
+            ],
+            "desc": "Corner facing right, edge disconnected in U layer (mirror).",
+            "cat": "F2L",
+            "tags": "split, diff top"
+        },
+        {
+            "name": "F2L 9",
+            "moves": "y' R' U' R U2' R' U R",
+            "algs": [
+                "y' R' U' R U2' R' U R",
+                "U' R U R' U R U R'"
+            ],
+            "desc": "Corner facing right, edge in opposite position.",
+            "cat": "F2L",
+            "tags": "split, diff top"
+        },
+        {
+            "name": "F2L 10",
+            "moves": "R U R' U2 R U' R'",
+            "algs": [
+                "R U R' U2 R U' R'",
+                "y' U R' U' R U' R' U' R"
+            ],
+            "desc": "Corner facing front, edge in opposite position (mirror).",
+            "cat": "F2L",
+            "tags": "split, diff top"
+        },
+        {
+            "name": "F2L 11",
+            "moves": "U' R U' R' U y' R' U' R",
+            "algs": [
+                "U' R U' R' U y' R' U' R",
+                "U' R U' R' U F' U' F"
+            ],
+            "desc": "Corner and edge have same top color, white facing right.",
+            "cat": "F2L",
+            "tags": "same top"
+        },
+        {
+            "name": "F2L 12",
+            "moves": "y' U R' U R U' R' U' R",
+            "algs": [
+                "y' U R' U R U' R' U' R",
+                "U R U R' U' R U' R'"
+            ],
+            "desc": "Corner and edge have same top color, white facing front.",
+            "cat": "F2L",
+            "tags": "same top"
+        },
+        {
+            "name": "F2L 13",
+            "moves": "y' U R' U2 R U' y R U R'",
+            "algs": [
+                "y' U R' U2 R U' y R U R'",
+                "U' R U2' R' U y' R' U' R"
+            ],
+            "desc": "Corner and edge separated, white facing right.",
+            "cat": "F2L",
+            "tags": "same top"
+        },
+        {
+            "name": "F2L 14",
+            "moves": "U' R U2' R' U y' R' U' R",
+            "algs": [
+                "U' R U2' R' U y' R' U' R",
+                "y' U R' U2 R U' y R U R'"
+            ],
+            "desc": "Corner and edge separated, white facing front.",
+            "cat": "F2L",
+            "tags": "same top"
+        },
+        {
+            "name": "F2L 15",
+            "moves": "y' R' U2 R U R' U' R",
+            "algs": [
+                "y' R' U2 R U R' U' R",
+                "U R U2' R' U R U' R'"
+            ],
+            "desc": "Corner and edge adjacent, incorrectly oriented.",
+            "cat": "F2L",
+            "tags": "same top"
+        },
+        {
+            "name": "F2L 16",
+            "moves": "R U2' R' U' R U R'",
+            "algs": [
+                "R U2' R' U' R U R'",
+                "y' U' R' U2 R U' R' U R"
+            ],
+            "desc": "Corner and edge adjacent, incorrectly oriented (mirror).",
+            "cat": "F2L",
+            "tags": "same top"
+        },
+        {
+            "name": "F2L 17",
             "moves": "R U2 R' U' R U R'",
             "algs": [
+                "R U2 R' U' R U R'",
+                "y' R' U2 R U R' U' R"
+            ],
+            "desc": "White facing up, edge matches front center.",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 18",
+            "moves": "y' R' U2 R U R' U' R",
+            "algs": [
+                "y' R' U2 R U R' U' R",
                 "R U2 R' U' R U R'"
             ],
-            "desc": "Corner white facing up, edge in top layer.",
+            "desc": "White facing up, edge matches right center.",
             "cat": "F2L",
-            "vis": "110110010 001 000 100 000"
+            "tags": "white up"
         },
         {
-            "name": "F2L 5 (Corner in bottom, edge top)",
+            "name": "F2L 19",
+            "moves": "U R U2' R' U R U' R'",
+            "algs": [
+                "U R U2' R' U R U' R'",
+                "y' U' R' U2 R U' R' U R"
+            ],
+            "desc": "White facing up, edge disconnected at back-right.",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 20",
+            "moves": "y' U' R' U2 R U' R' U R",
+            "algs": [
+                "y' U' R' U2 R U' R' U R",
+                "U R U2' R' U R U' R'"
+            ],
+            "desc": "White facing up, edge disconnected at front-left.",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 21",
+            "moves": "R U2' R' U' R U2' R' U y' R' U' R",
+            "algs": [
+                "R U2' R' U' R U2' R' U y' R' U' R",
+                "U2 R2 U2 R' U' R U' R2"
+            ],
+            "desc": "White facing up, edge opposite target slot.",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 22",
+            "moves": "R U' R' U2 R U R'",
+            "algs": [
+                "R U' R' U2 R U R'",
+                "y' R' U R U2' R' U' R"
+            ],
+            "desc": "White facing up, edge adjacent to corner.",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 23",
+            "moves": "U2 R2 U2 R' U' R U' R2",
+            "algs": [
+                "U2 R2 U2 R' U' R U' R2",
+                "R U2' R' U' R U2' R' U y' R' U' R"
+            ],
+            "desc": "White facing up, edge paired wrongly.",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 24",
+            "moves": "y' U2 R2' U2 R U R' U R2",
+            "algs": [
+                "y' U2 R2' U2 R U R' U R2",
+                "y' R' U2 R U R' U2 R U' R' U' R"
+            ],
+            "desc": "White facing up, edge paired wrongly (mirror).",
+            "cat": "F2L",
+            "tags": "white up"
+        },
+        {
+            "name": "F2L 25",
+            "moves": "U' R' F R F' R U' R'",
+            "algs": [
+                "U' R' F R F' R U' R'",
+                "R' F' R U R U' R' F"
+            ],
+            "desc": "Corner in slot (white front), edge in U layer.",
+            "cat": "F2L",
+            "tags": "corner in slot"
+        },
+        {
+            "name": "F2L 26",
+            "moves": "U R U' R' U' R U R'",
+            "algs": [
+                "U R U' R' U' R U R'",
+                "y' U' R' U R U R' U' R"
+            ],
+            "desc": "Corner in slot (white right), edge in U layer.",
+            "cat": "F2L",
+            "tags": "corner in slot"
+        },
+        {
+            "name": "F2L 27",
             "moves": "R U' R' U R U' R'",
             "algs": [
+                "R U' R' U R U' R'",
+                "y' R' U R U' R' U R"
+            ],
+            "desc": "Corner in slot (white front), edge ready to pair.",
+            "cat": "F2L",
+            "tags": "corner in slot"
+        },
+        {
+            "name": "F2L 28",
+            "moves": "y' R' U R U' R' U R",
+            "algs": [
+                "y' R' U R U' R' U R",
                 "R U' R' U R U' R'"
             ],
-            "desc": "Corner is in bottom slot, edge is in top layer.",
+            "desc": "Corner in slot (white right), edge ready to pair.",
             "cat": "F2L",
-            "vis": "110110010 000 001 101 000"
+            "tags": "corner in slot"
         },
         {
-            "name": "F2L 19 (Split case)",
-            "moves": "R U' R' U2 R U' R'",
+            "name": "F2L 29",
+            "moves": "R U R' U' R U R'",
             "algs": [
-                "R U' R' U2 R U' R'"
+                "R U R' U' R U R'",
+                "y' R' U' R U R' U' R"
             ],
-            "desc": "Corner white faces up, edge in top layer separated.",
+            "desc": "Corner in slot (white front), edge connected.",
             "cat": "F2L",
-            "vis": "110111010 000 100 100 000"
+            "tags": "corner in slot"
         },
         {
-            "name": "F2L 24 (Stuck edge)",
-            "moves": "R U R' U' R U2 R' U' R U R'",
+            "name": "F2L 30",
+            "moves": "y' R' U' R U R' U' R",
             "algs": [
-                "R U R' U' R U2 R' U' R U R'"
+                "y' R' U' R U R' U' R",
+                "R U R' U' R U R'"
             ],
-            "desc": "Corner in top layer, edge is stuck in front-right slot.",
+            "desc": "Corner in slot (white right), edge connected.",
             "cat": "F2L",
-            "vis": "011111010 100 000 101 000"
+            "tags": "corner in slot"
         },
         {
-            "name": "F2L 36 (Both in slot)",
-            "moves": "R U' R' U R U2 R' U R U' R'",
+            "name": "F2L 31",
+            "moves": "U' R' F R F' R U R'",
             "algs": [
-                "R U' R' U R U2 R' U R U' R'"
+                "U' R' F R F' R U R'",
+                "R U' R' U R U2' R' U R U' R'"
             ],
-            "desc": "Corner and edge are in slot but mismatched.",
+            "desc": "Edge trapped in slot, corner in U with white right.",
             "cat": "F2L",
-            "vis": "010111110 000 101 000 001"
+            "tags": "edge in slot"
+        },
+        {
+            "name": "F2L 32",
+            "moves": "R U R' U' R U' R' U2 y' R' U' R",
+            "algs": [
+                "R U R' U' R U' R' U2 y' R' U' R",
+                "U R U' R' U R U' R' U R U' R'"
+            ],
+            "desc": "Edge trapped in slot, corner in U with white front.",
+            "cat": "F2L",
+            "tags": "edge in slot"
+        },
+        {
+            "name": "F2L 33",
+            "moves": "U' R U' R' U2 R U' R'",
+            "algs": [
+                "U' R U' R' U2 R U' R'",
+                "y' U R' U R U2' R' U R"
+            ],
+            "desc": "Edge trapped inverted in slot, corner white right.",
+            "cat": "F2L",
+            "tags": "edge in slot"
+        },
+        {
+            "name": "F2L 34",
+            "moves": "U R U R' U2 R U R'",
+            "algs": [
+                "U R U R' U2 R U R'",
+                "y' U' R' U' R U2' R' U' R"
+            ],
+            "desc": "Edge trapped inverted in slot, corner white front.",
+            "cat": "F2L",
+            "tags": "edge in slot"
+        },
+        {
+            "name": "F2L 35",
+            "moves": "R U' R' U' R U R' U2 R U' R'",
+            "algs": [
+                "R U' R' U' R U R' U2 R U' R'",
+                "y' R' U R U R' U' R U2' R' U R"
+            ],
+            "desc": "Edge trapped in slot, corner white top.",
+            "cat": "F2L",
+            "tags": "edge in slot"
+        },
+        {
+            "name": "F2L 36",
+            "moves": "y' R' U R U R' U' R U2' R' U R",
+            "algs": [
+                "y' R' U R U R' U' R U2' R' U R",
+                "R U' R' U' R U R' U2 R U' R'"
+            ],
+            "desc": "Edge trapped inverted, corner white top.",
+            "cat": "F2L",
+            "tags": "edge in slot"
+        },
+        {
+            "name": "F2L 37",
+            "moves": "R U' R' U' R U R' U2 R U' R'",
+            "algs": [
+                "R U' R' U' R U R' U2 R U' R'",
+                "R U' R' U y' R' U2 R U2' R' U R"
+            ],
+            "desc": "Edge solved, corner twisted in slot (white front).",
+            "cat": "F2L",
+            "tags": "both in slot"
+        },
+        {
+            "name": "F2L 38",
+            "moves": "R U R' U' R U' R' U2 y' R' U' R",
+            "algs": [
+                "R U R' U' R U' R' U2 y' R' U' R",
+                "R U R' U2' R U' R' U R U' R'"
+            ],
+            "desc": "Edge solved, corner twisted in slot (white right).",
+            "cat": "F2L",
+            "tags": "both in slot"
+        },
+        {
+            "name": "F2L 39",
+            "moves": "R U' R' U y' R' U2 R U2' R' U R",
+            "algs": [
+                "R U' R' U y' R' U2 R U2' R' U R",
+                "R U' R' U' R U R' U2 R U' R'"
+            ],
+            "desc": "Corner solved, edge flipped in slot.",
+            "cat": "F2L",
+            "tags": "both in slot"
+        },
+        {
+            "name": "F2L 40",
+            "moves": "R U' R' U R U2' R' U R U' R'",
+            "algs": [
+                "R U' R' U R U2' R' U R U' R'",
+                "R U R' U' R U' R' U2 y' R' U' R"
+            ],
+            "desc": "Corner twisted, edge flipped in slot (case 1).",
+            "cat": "F2L",
+            "tags": "both in slot"
+        },
+        {
+            "name": "F2L 41",
+            "moves": "R U' R' r' U' R U M'",
+            "algs": [
+                "R U' R' r' U' R U M'",
+                "R U R' U' R U' R' U' R U R'"
+            ],
+            "desc": "Corner twisted, edge flipped in slot (case 2).",
+            "cat": "F2L",
+            "tags": "both in slot"
         }
     ],
     "cmll": [
@@ -2269,9 +2817,9 @@
                 "algs": [
                     "R U2 R' U' R U' R2 F R F' R U R'"
                 ],
-                "desc": "T-case corner orientation with adjacent corner permutation.",
+                "desc": "T-case with opposite corners and matching headlights.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 001 000 001"
+                "tags": "zbll, t"
             },
             {
                 "name": "ZBLL-T 2",
@@ -2279,9 +2827,9 @@
                 "algs": [
                     "R U2 R2 F R F' R U2 R'"
                 ],
-                "desc": "T-case corner orientation with diagonal corner permutation.",
+                "desc": "T-case with 2x1 block on back.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 001 000 001"
+                "tags": "zbll, t"
             },
             {
                 "name": "ZBLL-T 3",
@@ -2289,19 +2837,39 @@
                 "algs": [
                     "F R U' R' U' R U R' F' R U R' U' R' F R F'"
                 ],
-                "desc": "T-case corner orientation with solved corners permutation.",
+                "desc": "T-case with diagonal corner swap.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 001 000 001"
+                "tags": "zbll, t"
             },
             {
-                "name": "ZBLL-T 12",
+                "name": "ZBLL-T 4",
+                "moves": "R' U' R U' R' U2 R2 U R' U R U2 R'",
+                "algs": [
+                    "R' U' R U' R' U2 R2 U R' U R U2 R'"
+                ],
+                "desc": "T-case pure corner 3-cycle.",
+                "cat": "ZBLL",
+                "tags": "zbll, t"
+            },
+            {
+                "name": "ZBLL-T 5",
                 "moves": "r U' r' U' r U r' F' R U R'",
                 "algs": [
                     "r U' r' U' r U r' F' R U R'"
                 ],
-                "desc": "T-case corner orientation with headlights swap.",
+                "desc": "T-case with 2x2 block on front-right.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 001 000 001"
+                "tags": "zbll, t"
+            },
+            {
+                "name": "ZBLL-T 6",
+                "moves": "R U R' U R U2' R' U R' U' R U' R' U2 R",
+                "algs": [
+                    "R U R' U R U2' R' U R' U' R U' R' U2 R"
+                ],
+                "desc": "T-case double Sune combination.",
+                "cat": "ZBLL",
+                "tags": "zbll, t"
             }
         ],
         "U": [
@@ -2311,9 +2879,9 @@
                 "algs": [
                     "R' U2 R F U' R' U' R U F' R'"
                 ],
-                "desc": "U-case corner orientation with headlights on front side, back corners oriented.",
+                "desc": "U-case with headlights on front and opposite edges.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 000 101 000"
+                "tags": "zbll, u"
             },
             {
                 "name": "ZBLL-U 2",
@@ -2321,19 +2889,39 @@
                 "algs": [
                     "R U2 R' U' F' L' U' L U F"
                 ],
-                "desc": "U-case corner orientation with headlights on front side, back corners oriented (different edge permutation).",
+                "desc": "U-case with solved block on left.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 000 101 000"
+                "tags": "zbll, u"
             },
             {
-                "name": "ZBLL-U 5",
+                "name": "ZBLL-U 3",
                 "moves": "r U r' U2 r U' r' F R' F' R",
                 "algs": [
                     "r U r' U2 r U' r' F R' F' R"
                 ],
-                "desc": "U-case corner orientation with headlights on front side, back corners oriented (different corner/edge swap).",
+                "desc": "U-case with solved 1x3 bar on back.",
                 "cat": "ZBLL",
-                "vis": "111111010 000 000 101 000"
+                "tags": "zbll, u"
+            },
+            {
+                "name": "ZBLL-U 4",
+                "moves": "R' U' R U' R2' F' R U R U' R' F U2 R",
+                "algs": [
+                    "R' U' R U' R2' F' R U R U' R' F U2 R"
+                ],
+                "desc": "U-case with headlights on back.",
+                "cat": "ZBLL",
+                "tags": "zbll, u"
+            },
+            {
+                "name": "ZBLL-U 5",
+                "moves": "R U R' U R U' R' U R U2' R2' U' R U' R' U2 R",
+                "algs": [
+                    "R U R' U R U' R' U R U2' R2' U' R U' R' U2 R"
+                ],
+                "desc": "U-case pure edge 3-cycle.",
+                "cat": "ZBLL",
+                "tags": "zbll, u"
             }
         ],
         "L": [
@@ -2343,9 +2931,9 @@
                 "algs": [
                     "R' U2 R U R' U' R U R' U' R U R' U R"
                 ],
-                "desc": "L-case corner orientation with diagonal corner permutation.",
+                "desc": "L-case with headlights on right.",
                 "cat": "ZBLL",
-                "vis": "011111110 000 000 001 001"
+                "tags": "zbll, l"
             },
             {
                 "name": "ZBLL-L 2",
@@ -2353,9 +2941,9 @@
                 "algs": [
                     "R' U2 R' D' R U2 R' D R2"
                 ],
-                "desc": "L-case corner orientation with adjacent corner permutation (D-slide 1).",
+                "desc": "L-case A9 commutator (pure corners).",
                 "cat": "ZBLL",
-                "vis": "011111110 000 000 001 001"
+                "tags": "zbll, l"
             },
             {
                 "name": "ZBLL-L 3",
@@ -2363,9 +2951,9 @@
                 "algs": [
                     "R U2 R D R' U2 R D' R2"
                 ],
-                "desc": "L-case corner orientation with adjacent corner permutation (D-slide 2).",
+                "desc": "L-case inverse A9 commutator.",
                 "cat": "ZBLL",
-                "vis": "011111110 000 000 001 001"
+                "tags": "zbll, l"
             },
             {
                 "name": "ZBLL-L 4",
@@ -2373,9 +2961,9 @@
                 "algs": [
                     "F R' F' r U R U' r'"
                 ],
-                "desc": "L-case corner orientation with solved corner permutation (wide-F).",
+                "desc": "L-case with matching block on front.",
                 "cat": "ZBLL",
-                "vis": "011111110 000 000 001 001"
+                "tags": "zbll, l"
             },
             {
                 "name": "ZBLL-L 5",
@@ -2383,9 +2971,9 @@
                 "algs": [
                     "F' r U R' U' r' F R"
                 ],
-                "desc": "L-case corner orientation with solved corner permutation (D-commutator).",
+                "desc": "L-case with bow-tie corner swap.",
                 "cat": "ZBLL",
-                "vis": "011111110 000 000 001 001"
+                "tags": "zbll, l"
             },
             {
                 "name": "ZBLL-L 6",
@@ -2393,9 +2981,9 @@
                 "algs": [
                     "R' U' R U R' F' R U R' U' R' F R2"
                 ],
-                "desc": "L-case corner orientation with solved corner permutation (F-commutator).",
+                "desc": "L-case with solved 1x3 bar on left.",
                 "cat": "ZBLL",
-                "vis": "011111110 000 000 001 001"
+                "tags": "zbll, l"
             }
         ],
         "H": [
@@ -2405,9 +2993,9 @@
                 "algs": [
                     "R U2 R' U' R U R' U' R U' R'"
                 ],
-                "desc": "H-case corner orientation with headlights on front/back.",
+                "desc": "H-case pure corner orientation (COLL H1).",
                 "cat": "ZBLL",
-                "vis": "010111010 101 000 101 000"
+                "tags": "zbll, h"
             },
             {
                 "name": "ZBLL-H 2",
@@ -2415,9 +3003,29 @@
                 "algs": [
                     "F R U R' U' R U R' U' R U R' U' F'"
                 ],
-                "desc": "H-case corner orientation with headlights on left/right.",
+                "desc": "H-case with opposite corners swap.",
                 "cat": "ZBLL",
-                "vis": "010111010 101 000 101 000"
+                "tags": "zbll, h"
+            },
+            {
+                "name": "ZBLL-H 3",
+                "moves": "R U R' U R U' R' U R U2' R'",
+                "algs": [
+                    "R U R' U R U2' R'"
+                ],
+                "desc": "H-case Sune-based trigger.",
+                "cat": "ZBLL",
+                "tags": "zbll, h"
+            },
+            {
+                "name": "ZBLL-H 4",
+                "moves": "R U2' R2' U' R2 U' R2' U2' R",
+                "algs": [
+                    "R U2' R2' U' R2 U' R2' U2' R"
+                ],
+                "desc": "H-case with matching side blocks.",
+                "cat": "ZBLL",
+                "tags": "zbll, h"
             }
         ],
         "Pi": [
@@ -2427,9 +3035,9 @@
                 "algs": [
                     "R U2 R2 U' R2 U' R2 U2 R"
                 ],
-                "desc": "Pi-case corner orientation with diagonal corners swap.",
+                "desc": "Pi-case with headlights on front and back (COLL Pi1).",
                 "cat": "ZBLL",
-                "vis": "010111010 100 000 001 101"
+                "tags": "zbll, pi"
             },
             {
                 "name": "ZBLL-Pi 2",
@@ -2437,9 +3045,29 @@
                 "algs": [
                     "R U' R' U2 R U2 R' U' F' U F"
                 ],
-                "desc": "Pi-case corner orientation with adjacent corners swap.",
+                "desc": "Pi-case with opposite corners swap.",
                 "cat": "ZBLL",
-                "vis": "010111010 100 000 001 101"
+                "tags": "zbll, pi"
+            },
+            {
+                "name": "ZBLL-Pi 3",
+                "moves": "r U' r2' U r2 U r2' U' r",
+                "algs": [
+                    "r U' r2' U r2 U r2' U' r"
+                ],
+                "desc": "Pi-case wide move trigger.",
+                "cat": "ZBLL",
+                "tags": "zbll, pi"
+            },
+            {
+                "name": "ZBLL-Pi 4",
+                "moves": "R' U2 R2 U R2' U R2 U2 R'",
+                "algs": [
+                    "R' U2 R2 U R2' U R2 U2 R'"
+                ],
+                "desc": "Pi-case mirror symmetrical.",
+                "cat": "ZBLL",
+                "tags": "zbll, pi"
             }
         ],
         "Sune": [
@@ -2449,9 +3077,9 @@
                 "algs": [
                     "R U R' U R U2 R'"
                 ],
-                "desc": "Sune corner orientation with corner cycle.",
+                "desc": "Standard Sune with solved edges.",
                 "cat": "ZBLL",
-                "vis": "010111110 001 100 000 100"
+                "tags": "zbll, sune"
             },
             {
                 "name": "ZBLL-Sune 2",
@@ -2459,9 +3087,29 @@
                 "algs": [
                     "R U2 R' U' R U' R' U' F' U F"
                 ],
-                "desc": "Sune corner orientation with edge cycle.",
+                "desc": "Sune with diagonal corner swap.",
                 "cat": "ZBLL",
-                "vis": "010111110 001 100 000 100"
+                "tags": "zbll, sune"
+            },
+            {
+                "name": "ZBLL-Sune 3",
+                "moves": "R U R' U R U2' R' U' R' U' R U' R' U2 R",
+                "algs": [
+                    "R U R' U R U2' R' U' R' U' R U' R' U2 R"
+                ],
+                "desc": "Sune combined with Anti-Sune (pure edges).",
+                "cat": "ZBLL",
+                "tags": "zbll, sune"
+            },
+            {
+                "name": "ZBLL-Sune 4",
+                "moves": "R' U2 R U R' U R F R' F' R",
+                "algs": [
+                    "R' U2 R U R' U R F R' F' R"
+                ],
+                "desc": "Sune with adjacent corners swap.",
+                "cat": "ZBLL",
+                "tags": "zbll, sune"
             }
         ],
         "ASune": [
@@ -2471,9 +3119,9 @@
                 "algs": [
                     "R U2 R' U' R U' R'"
                 ],
-                "desc": "Anti-Sune corner orientation with corner cycle.",
+                "desc": "Standard Anti-Sune with solved edges.",
                 "cat": "ZBLL",
-                "vis": "010111011 100 001 100 000"
+                "tags": "zbll, asune"
             },
             {
                 "name": "ZBLL-ASune 2",
@@ -2481,52 +3129,236 @@
                 "algs": [
                     "R' U' R U' R' U2 R U F U' F'"
                 ],
-                "desc": "Anti-Sune corner orientation with edge cycle.",
+                "desc": "Anti-Sune with diagonal corner swap.",
                 "cat": "ZBLL",
-                "vis": "010111011 100 001 100 000"
+                "tags": "zbll, asune"
+            },
+            {
+                "name": "ZBLL-ASune 3",
+                "moves": "L' U' L U' L' U2 L",
+                "algs": [
+                    "L' U' L U' L' U2 L"
+                ],
+                "desc": "Left-handed Anti-Sune mirror.",
+                "cat": "ZBLL",
+                "tags": "zbll, asune"
+            },
+            {
+                "name": "ZBLL-ASune 4",
+                "moves": "R U2' R' U' R U' R' F' U' F R U R'",
+                "algs": [
+                    "R U2' R' U' R U' R' F' U' F R U R'"
+                ],
+                "desc": "Anti-Sune with adjacent corners swap.",
+                "cat": "ZBLL",
+                "tags": "zbll, asune"
             }
         ]
     },
     "zbls": [
         {
-            "name": "ZBLS 1 (Corner in top, edge top)",
-            "moves": "U' R U2 R' U R U R'",
+            "name": "ZBLS Case 1 (Basic Insertion)",
+            "moves": "U' R U2' R' U R U R'",
             "algs": [
-                "U' R U2 R' U R U R'"
+                "U' R U2' R' U R U R'"
             ],
-            "desc": "Corner in top, edge in top layer, orienting 2 edges.",
+            "desc": "Corner in U, edge in U. Solves slot and orients all last layer edges.",
             "cat": "ZBLS",
-            "vis": "011111110 000 000 000 001"
+            "tags": "zbls, basic"
         },
         {
-            "name": "ZBLS 2 (Corner facing right)",
-            "moves": "R U' R' U R U2 R'",
+            "name": "ZBLS Case 2 (Corner White Right)",
+            "moves": "R U' R' U R U2' R'",
             "algs": [
-                "R U' R' U R U2 R'"
+                "R U' R' U R U2' R'"
             ],
-            "desc": "Corner white facing right, edge in top, orienting 4 edges.",
+            "desc": "Corner facing right, edge in U. Edge orientation preserved.",
             "cat": "ZBLS",
-            "vis": "010011110 000 001 001 000"
+            "tags": "zbls, corner-right"
         },
         {
-            "name": "ZBLS 15 (Orienting two edges)",
-            "moves": "y' U R' U' R U2 R' U' R",
+            "name": "ZBLS Case 3 (Two Edges Flip)",
+            "moves": "y' U R' U' R U2' R' U' R y",
             "algs": [
-                "y' U R' U' R U2 R' U' R"
+                "y' U R' U' R U2' R' U' R y"
             ],
-            "desc": "Corner white facing front, edge in top, orienting 2 edges.",
+            "desc": "Orients 2 flipped top edges while completing F2L slot.",
             "cat": "ZBLS",
-            "vis": "010111011 001 000 100 000"
+            "tags": "zbls, 2-edge"
         },
         {
-            "name": "ZBLS 42 (Orienting all edges)",
+            "name": "ZBLS Case 4 (All Edges Flip)",
             "moves": "R U R' U' R U' R' U2 R U' R'",
             "algs": [
                 "R U R' U' R U' R' U2 R U' R'"
             ],
-            "desc": "Corner in slot, edge in top layer, orienting all edges.",
+            "desc": "Orients all 4 edges on last layer simultaneously during slotting.",
             "cat": "ZBLS",
-            "vis": "001111011 000 000 100 000"
+            "tags": "zbls, 4-edge"
+        },
+        {
+            "name": "ZBLS Case 5 (Connected Pair in U)",
+            "moves": "U' R' F R F' R U' R'",
+            "algs": [
+                "U' R' F R F' R U' R'"
+            ],
+            "desc": "Connected pair in U layer. Sledgehammer-based edge orientation.",
+            "cat": "ZBLS",
+            "tags": "zbls, connected"
+        },
+        {
+            "name": "ZBLS Case 6 (Edge in Slot Inverted)",
+            "moves": "R U' R' U' R U R' U2 R U' R'",
+            "algs": [
+                "R U' R' U' R U R' U2 R U' R'"
+            ],
+            "desc": "Edge trapped in slot, orienting top edges upon extraction and re-insertion.",
+            "cat": "ZBLS",
+            "tags": "zbls, edge-in-slot"
+        },
+        {
+            "name": "ZBLS Case 7 (White Top Sledge)",
+            "moves": "R U2' R' U' R U R' F' U' F",
+            "algs": [
+                "R U2' R' U' R U R' F' U' F"
+            ],
+            "desc": "White facing up, orienting edges into a full cross.",
+            "cat": "ZBLS",
+            "tags": "zbls, white-top"
+        },
+        {
+            "name": "ZBLS Case 8 (Corner in Slot)",
+            "moves": "R U R' U' R U' R' U2 y' R' U' R y",
+            "algs": [
+                "R U R' U' R U' R' U2 y' R' U' R y"
+            ],
+            "desc": "Corner in slot, orienting remaining edges.",
+            "cat": "ZBLS",
+            "tags": "zbls, corner-in-slot"
+        }
+    ],
+    "lse": [
+        {
+            "name": "LSE 4a: Arrow Case",
+            "moves": "M' U M'",
+            "algs": [
+                "M' U M'",
+                "M' U' M'"
+            ],
+            "desc": "3 edges oriented on U, 1 oriented on D (or vice versa). Standard EO trigger.",
+            "cat": "ROUX",
+            "tags": "lse, eo"
+        },
+        {
+            "name": "LSE 4a: 4-Flip (Top)",
+            "moves": "M' U2' M' U2' M' U M'",
+            "algs": [
+                "M' U2' M' U2' M' U M'",
+                "M' U M' U2' M' U M'"
+            ],
+            "desc": "All 4 top layer edges flipped.",
+            "cat": "ROUX",
+            "tags": "lse, eo"
+        },
+        {
+            "name": "LSE 4a: 2-Flip (Opposite)",
+            "moves": "M' U2' M'",
+            "algs": [
+                "M' U2' M'"
+            ],
+            "desc": "Opposite edges flipped on U (UF and UB).",
+            "cat": "ROUX",
+            "tags": "lse, eo"
+        },
+        {
+            "name": "LSE 4a: 2-Flip (Adjacent)",
+            "moves": "M' U' M' U2' M' U' M'",
+            "algs": [
+                "M' U' M' U2' M' U' M'"
+            ],
+            "desc": "Adjacent edges flipped on U (UF and UR/UL).",
+            "cat": "ROUX",
+            "tags": "lse, eo"
+        },
+        {
+            "name": "LSE 4a: 2-Flip (Bottom)",
+            "moves": "M2' U2' M2'",
+            "algs": [
+                "M2' U2' M2'"
+            ],
+            "desc": "Both bottom edges flipped (DF and DB).",
+            "cat": "ROUX",
+            "tags": "lse, eo"
+        },
+        {
+            "name": "LSE 4a: 6-Flip (All)",
+            "moves": "M' U' M' U2' M' U' M' U2' M' U' M'",
+            "algs": [
+                "M' U' M' U2' M' U' M' U2' M' U' M'"
+            ],
+            "desc": "All 6 edges (4 top, 2 bottom) flipped.",
+            "cat": "ROUX",
+            "tags": "lse, eo"
+        },
+        {
+            "name": "LSE 4b: UL/UR Insertion",
+            "moves": "M2' U2' M2'",
+            "algs": [
+                "M2' U2' M2'"
+            ],
+            "desc": "Swap UL and UR to their correct side blocks.",
+            "cat": "ROUX",
+            "tags": "lse, ul-ur"
+        },
+        {
+            "name": "LSE 4b: Top-Bottom Separation",
+            "moves": "M' U2' M",
+            "algs": [
+                "M' U2' M"
+            ],
+            "desc": "Separate UL and UR when one is on top and one on bottom.",
+            "cat": "ROUX",
+            "tags": "lse, ul-ur"
+        },
+        {
+            "name": "LSE 4b: Standard Insert",
+            "moves": "U2' M' U2' M",
+            "algs": [
+                "U2' M' U2' M"
+            ],
+            "desc": "Place both UL and UR edges simultaneously into their side slots.",
+            "cat": "ROUX",
+            "tags": "lse, ul-ur"
+        },
+        {
+            "name": "LSE 4c: Dots (Opposite Swap)",
+            "moves": "M2' U2' M2' U2'",
+            "algs": [
+                "M2' U2' M2' U2'"
+            ],
+            "desc": "Opposite edges swap in M-slice (H-perm style on M).",
+            "cat": "ROUX",
+            "tags": "lse, ep"
+        },
+        {
+            "name": "LSE 4c: Bars (Adjacent Swap)",
+            "moves": "U2' M2' U2' M2'",
+            "algs": [
+                "U2' M2' U2' M2'"
+            ],
+            "desc": "Adjacent edges swap in M-slice (U-perm style on M).",
+            "cat": "ROUX",
+            "tags": "lse, ep"
+        },
+        {
+            "name": "LSE 4c: Column Swap",
+            "moves": "M2'",
+            "algs": [
+                "M2'"
+            ],
+            "desc": "Final 180° M-slice turn to complete the cube.",
+            "cat": "ROUX",
+            "tags": "lse, ep"
         }
     ],
     "wv": [
@@ -3241,6 +4073,7 @@
         let selectedCases = [];
         let activeCase = null;
         let activeScramble = "";
+        let isRevealed = false;
         let trainerState = "READY"; // READY, RECOG, SOLVE, DONE
         let recogStartTime = 0;
         let recogTime = 0;
@@ -3255,13 +4088,16 @@
             container.innerHTML = "";
 
             let cases = [];
-            if (method === "zbll") {
-                // Combine ZBLL subsets
-                for (let sub in ALGORITHMS.zbll) {
-                    cases = cases.concat(ALGORITHMS.zbll[sub]);
+            if (ALGORITHMS[method]) {
+                if (Array.isArray(ALGORITHMS[method])) {
+                    cases = ALGORITHMS[method];
+                } else if (typeof ALGORITHMS[method] === 'object') {
+                    for (let sub in ALGORITHMS[method]) {
+                        if (Array.isArray(ALGORITHMS[method][sub])) {
+                            cases = cases.concat(ALGORITHMS[method][sub]);
+                        }
+                    }
                 }
-            } else {
-                cases = ALGORITHMS[method] || [];
             }
 
             cases.forEach((item, index) => {
@@ -3430,7 +4266,8 @@
                 this.moveB(); this.moveB(); this.moveB();
             }
             applyMove(move) {
-                let m = move.replace(/[()[]{}]/g, '').trim();
+                if (!move) return;
+                let m = move.replace(/[()[\]{},/]/g, '').replace(/[’′]/g, "'").trim();
                 if (!m) return;
                 let base = m[0];
                 let rest = m.slice(1);
@@ -3472,21 +4309,30 @@
             }
             applyAlg(algStr) {
                 if (!algStr) return;
-                const tokens = algStr.trim().split(/\s+/);
+                const tokens = cleanAlg(algStr);
                 for (let token of tokens) this.applyMove(token);
             }
         }
 
+        function cleanAlg(str) {
+            if (!str) return [];
+            const clean = str.replace(/[()[\]{},/]/g, ' ').replace(/[’′]/g, "'").trim();
+            return clean.split(/\s+/).filter(t => t.length > 0);
+        }
+
         function invertAlgorithm(movesStr) {
             if (!movesStr) return [];
-            const clean = movesStr.replace(/[()[]{}]/g, ' ').trim();
-            const tokens = clean.split(/\s+/).filter(t => t.length > 0);
+            const tokens = cleanAlg(movesStr);
             const inverted = [];
             for (let i = tokens.length - 1; i >= 0; i--) {
                 let t = tokens[i];
-                if (t.endsWith('2') || t.endsWith("2'")) inverted.push(t.replace("'", ''));
-                else if (t.endsWith("'")) inverted.push(t.slice(0, -1));
-                else inverted.push(t + "'");
+                if (t.endsWith('2') || t.endsWith("2'")) {
+                    inverted.push(t.replace("'", ''));
+                } else if (t.endsWith("'")) {
+                    inverted.push(t.slice(0, -1));
+                } else {
+                    inverted.push(t + "'");
+                }
             }
             return inverted;
         }
@@ -3518,71 +4364,64 @@
         ];
 
         function computePermutationArrows(sim) {
-            const cTarget = {};
-            U_CORNER_DEFS.forEach(cur => {
-                const curClrs = cur.facelets.map(([f, i]) => sim.faces[f][i]);
-                const target = U_CORNER_DEFS.find(orig => curClrs.includes('Y') && curClrs.includes(orig.solvedColors[1]) && curClrs.includes(orig.solvedColors[2]));
-                if (target && target.name !== cur.name) cTarget[cur.name] = target.name;
-            });
-
-            const eTarget = {};
-            U_EDGE_DEFS.forEach(cur => {
-                const curClrs = cur.facelets.map(([f, i]) => sim.faces[f][i]);
-                const target = U_EDGE_DEFS.find(orig => curClrs.includes('Y') && curClrs.includes(orig.solvedColors[1]));
-                if (target && target.name !== cur.name) eTarget[cur.name] = target.name;
-            });
-
             const arrows = [];
-            const cornerSlots = Object.fromEntries(U_CORNER_DEFS.map(s => [s.name, s]));
-            const edgeSlots = Object.fromEntries(U_EDGE_DEFS.map(s => [s.name, s]));
+            const corners = U_CORNER_DEFS;
+            const currentCorners = corners.map(def => {
+                const cols = def.facelets.map(([face, idx]) => sim.faces[face][idx]).join('');
+                return corners.findIndex(orig => {
+                    const sc = orig.solvedColors;
+                    return (cols === sc || cols === sc[1]+sc[2]+sc[0] || cols === sc[2]+sc[0]+sc[1]);
+                });
+            });
 
-            // Corners: mutual swaps vs cycles
-            const visitedCorners = new Set();
-            for (let from in cTarget) {
-                if (visitedCorners.has(from)) continue;
-                const to = cTarget[from];
-                if (cTarget[to] === from) {
-                    arrows.push({
-                        from: cornerSlots[from].pos,
-                        to: cornerSlots[to].pos,
-                        double: true,
-                        type: 'corner'
-                    });
-                    visitedCorners.add(from);
-                    visitedCorners.add(to);
-                } else {
-                    arrows.push({
-                        from: cornerSlots[from].pos,
-                        to: cornerSlots[to].pos,
-                        double: false,
-                        type: 'corner'
-                    });
-                    visitedCorners.add(from);
+            for (let i = 0; i < 4; i++) {
+                const target = currentCorners[i];
+                if (target !== -1 && target !== i && i < target) {
+                    if (currentCorners[target] === i) {
+                        arrows.push({ from: corners[i].pos, to: corners[target].pos, double: true });
+                    }
                 }
             }
 
-            // Edges: mutual swaps vs cycles
-            const visitedEdges = new Set();
-            for (let from in eTarget) {
-                if (visitedEdges.has(from)) continue;
-                const to = eTarget[from];
-                if (eTarget[to] === from) {
-                    arrows.push({
-                        from: edgeSlots[from].pos,
-                        to: edgeSlots[to].pos,
-                        double: true,
-                        type: 'edge'
-                    });
-                    visitedEdges.add(from);
-                    visitedEdges.add(to);
-                } else {
-                    arrows.push({
-                        from: edgeSlots[from].pos,
-                        to: edgeSlots[to].pos,
-                        double: false,
-                        type: 'edge'
-                    });
-                    visitedEdges.add(from);
+            const cornerCycleChecked = [false, false, false, false];
+            for (let i = 0; i < 4; i++) {
+                if (arrows.some(a => (a.from === corners[i].pos || a.to === corners[i].pos) && a.double)) continue;
+                if (!cornerCycleChecked[i]) {
+                    const to = currentCorners[i];
+                    if (to !== -1 && to !== i && currentCorners[to] !== i) {
+                        arrows.push({ from: corners[i].pos, to: corners[to].pos, double: false });
+                        cornerCycleChecked[i] = true;
+                    }
+                }
+            }
+
+            const edges = U_EDGE_DEFS;
+            const currentEdges = edges.map(def => {
+                const cols = def.facelets.map(([face, idx]) => sim.faces[face][idx]).join('');
+                return edges.findIndex(orig => {
+                    const sc = orig.solvedColors;
+                    return (cols === sc || cols === sc[1]+sc[0]);
+                });
+            });
+
+            for (let i = 0; i < 4; i++) {
+                const target = currentEdges[i];
+                if (target !== -1 && target !== i && i < target) {
+                    if (currentEdges[target] === i) {
+                        arrows.push({ from: edges[i].pos, to: edges[target].pos, double: true });
+                    }
+                }
+            }
+
+            const edgeCycleChecked = [false, false, false, false];
+            for (let i = 0; i < 4; i++) {
+                if (arrows.some(a => (a.from === edges[i].pos || a.to === edges[i].pos) && a.double)) continue;
+                if (!edgeCycleChecked[i]) {
+                    const to = currentEdges[i];
+                    if (to !== -1 && to !== i && currentEdges[to] !== i) {
+                        arrows.push({ from: edges[i].pos, to: edges[to].pos, double: false });
+                        edgeCycleChecked[i] = true;
+                    }
                 }
             }
 
@@ -3592,133 +4431,105 @@
         function drawArrowSvg(arrow) {
             const dx = arrow.to.x - arrow.from.x;
             const dy = arrow.to.y - arrow.from.y;
-            const dist = Math.hypot(dx, dy);
-            if (dist < 1) return "";
+            const len = Math.hypot(dx, dy);
+            if (len < 0.1) return '';
 
-            const ux = dx / dist;
-            const uy = dy / dist;
-            const nx = -uy;
-            const ny = ux;
+            const shorten = 3.2;
+            const startRatio = shorten / len;
+            const endRatio = (len - shorten) / len;
 
-            const padStart = arrow.double ? 4.5 : 3.2;
-            const padEnd = 4.5;
-            
-            const x1 = arrow.from.x + ux * padStart;
-            const y1 = arrow.from.y + uy * padStart;
-            const x2 = arrow.to.x - ux * padEnd;
-            const y2 = arrow.to.y - uy * padEnd;
+            const sx = arrow.from.x + dx * startRatio;
+            const sy = arrow.from.y + dy * startRatio;
+            const ex = arrow.from.x + dx * endRatio;
+            const ey = arrow.from.y + dy * endRatio;
 
-            const arrowHeadLen = 4.0;
-            const arrowHeadWidth = 2.6;
+            const angle = Math.atan2(dy, dx);
+            const headLen = 4.0;
+            const headAngle = Math.PI / 6;
 
-            let res = "";
-            res += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#111827" stroke-width="3.2" stroke-linecap="round" />`;
-            res += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ff3838" stroke-width="2.2" stroke-linecap="round" />`;
+            const x1 = ex - headLen * Math.cos(angle - headAngle);
+            const y1 = ey - headLen * Math.sin(angle - headAngle);
+            const x2 = ex - headLen * Math.cos(angle + headAngle);
+            const y2 = ey - headLen * Math.sin(angle + headAngle);
 
-            const tipX = arrow.to.x - ux * 1.0;
-            const tipY = arrow.to.y - uy * 1.0;
-            const baseEndX = tipX - ux * arrowHeadLen;
-            const baseEndY = tipY - uy * arrowHeadLen;
-            const leftX = baseEndX + nx * arrowHeadWidth;
-            const leftY = baseEndY + ny * arrowHeadWidth;
-            const rightX = baseEndX - nx * arrowHeadWidth;
-            const rightY = baseEndY - ny * arrowHeadWidth;
-            res += `<polygon points="${tipX.toFixed(1)},${tipY.toFixed(1)} ${leftX.toFixed(1)},${leftY.toFixed(1)} ${rightX.toFixed(1)},${rightY.toFixed(1)}" fill="#ff3838" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />`;
+            let res = '<line x1="' + sx.toFixed(1) + '" y1="' + sy.toFixed(1) + '" x2="' + ex.toFixed(1) + '" y2="' + ey.toFixed(1) + '" stroke="#ff0055" stroke-width="2.6" stroke-linecap="round" />';
+            res += '<polygon points="' + ex.toFixed(1) + ',' + ey.toFixed(1) + ' ' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' ' + x2.toFixed(1) + ',' + y2.toFixed(1) + '" fill="#ff0055" stroke="#ffffff" stroke-width="0.6" />';
 
             if (arrow.double) {
-                const tipX0 = arrow.from.x + ux * 1.0;
-                const tipY0 = arrow.from.y + uy * 1.0;
-                const baseStartX = tipX0 + ux * arrowHeadLen;
-                const baseStartY = tipY0 + uy * arrowHeadLen;
-                const leftX0 = baseStartX + nx * arrowHeadWidth;
-                const leftY0 = baseStartY + ny * arrowHeadWidth;
-                const rightX0 = baseStartX - nx * arrowHeadWidth;
-                const rightY0 = baseStartY - ny * arrowHeadWidth;
-                res += `<polygon points="${tipX0.toFixed(1)},${tipY0.toFixed(1)} ${leftX0.toFixed(1)},${leftY0.toFixed(1)} ${rightX0.toFixed(1)},${rightY0.toFixed(1)}" fill="#ff3838" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />`;
+                const backAngle = angle + Math.PI;
+                const bx1 = sx - headLen * Math.cos(backAngle - headAngle);
+                const by1 = sy - headLen * Math.sin(backAngle - headAngle);
+                const bx2 = sx - headLen * Math.cos(backAngle + headAngle);
+                const by2 = sy - headLen * Math.sin(backAngle + headAngle);
+                res += '<polygon points="' + sx.toFixed(1) + ',' + sy.toFixed(1) + ' ' + bx1.toFixed(1) + ',' + by1.toFixed(1) + ' ' + bx2.toFixed(1) + ',' + by2.toFixed(1) + '" fill="#ff0055" stroke="#ffffff" stroke-width="0.6" />';
             }
 
             return res;
         }
 
         function drawCornerTwistArrow(corner, dir) {
-            if (corner.name === 'UFR') {
-                if (dir === 'CCW') {
-                    return `<path d="M 45,39 Q 46,34 49,33" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="49,33 45,30 47,35" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                } else {
-                    return `<path d="M 55,39 Q 54,34 51,33" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="51,33 53,35 55,30" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                }
-            } else if (corner.name === 'UFL') {
-                if (dir === 'CW') {
-                    return `<path d="M 23,26 Q 24,22 27,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="27,22 23,20 24,25" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                } else {
-                    return `<path d="M 21,19 Q 23,21 26,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="26,22 23,25 25,20" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                }
-            } else if (corner.name === 'UBR') {
-                if (dir === 'CCW') {
-                    return `<path d="M 77,26 Q 76,22 73,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="73,22 77,20 76,25" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                } else {
-                    return `<path d="M 79,19 Q 77,21 74,22" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="74,22 77,25 75,20" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                }
-            } else if (corner.name === 'UBL') {
-                if (dir === 'CW') {
-                    return `<path d="M 45,9 Q 47,10 50,11" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="50,11 46,9 47,14" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                } else {
-                    return `<path d="M 55,9 Q 53,10 50,11" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>` +
-                           `<polygon points="50,11 54,9 53,14" fill="#f59e0b" stroke="#111827" stroke-width="0.6"/>`;
-                }
-            }
-            return "";
+            const p = corner.pos;
+            const sweep = dir === 'CW' ? 1 : 0;
+            const r = 4.2;
+            const startAngle = dir === 'CW' ? 0 : Math.PI;
+            const endAngle = dir === 'CW' ? Math.PI * 1.3 : -Math.PI * 0.3;
+
+            const sx = p.x + r * Math.cos(startAngle);
+            const sy = p.y + r * Math.sin(startAngle);
+            const ex = p.x + r * Math.cos(endAngle);
+            const ey = p.y + r * Math.sin(endAngle);
+
+            let path = '<path d="M ' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ' A ' + r + ' ' + r + ' 0 0 ' + sweep + ' ' + ex.toFixed(1) + ' ' + ey.toFixed(1) + '" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" />';
+            const tangAngle = endAngle + (dir === 'CW' ? Math.PI/2 : -Math.PI/2);
+            const headLen = 3.2;
+            const hx1 = ex - headLen * Math.cos(tangAngle - 0.5);
+            const hy1 = ey - headLen * Math.sin(tangAngle - 0.5);
+            const hx2 = ex - headLen * Math.cos(tangAngle + 0.5);
+            const hy2 = ey - headLen * Math.sin(tangAngle + 0.5);
+            path += '<polygon points="' + ex.toFixed(1) + ',' + ey.toFixed(1) + ' ' + hx1.toFixed(1) + ',' + hy1.toFixed(1) + ' ' + hx2.toFixed(1) + ',' + hy2.toFixed(1) + '" fill="#2563eb" />';
+            return path;
         }
 
         function drawEdgeFlipArrow(edge) {
-            const cx = edge.pos.x;
-            const cy = edge.pos.y;
-            return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.2" fill="#f59e0b" stroke="#111827" stroke-width="1.2"/>` +
-                   `<path d="M ${(cx - 1.8).toFixed(1)},${cy.toFixed(1)} L ${(cx + 1.8).toFixed(1)},${cy.toFixed(1)}" stroke="#111827" stroke-width="1.2" stroke-linecap="round"/>`;
+            const p = edge.pos;
+            return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="2.8" fill="#e11d48" stroke="#ffffff" stroke-width="0.8" />' +
+                   '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="1.1" fill="#ffffff" />';
         }
 
         function computeCornerTwistArrows(sim) {
-            let res = "";
-            if (sim.faces.F[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[2], 'CCW');
-            else if (sim.faces.R[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[2], 'CW');
-
-            if (sim.faces.F[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[3], 'CW');
-            else if (sim.faces.L[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[3], 'CCW');
-
-            if (sim.faces.B[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[1], 'CCW');
-            else if (sim.faces.R[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[1], 'CW');
-
-            if (sim.faces.B[2] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[0], 'CW');
-            else if (sim.faces.L[0] === 'Y') res += drawCornerTwistArrow(U_CORNER_DEFS[0], 'CCW');
-
+            let res = '';
+            U_CORNER_DEFS.forEach(c => {
+                const uSticker = sim.faces.U[c.facelets[0][1]];
+                if (uSticker !== 'Y') {
+                    if (sim.faces[c.facelets[1][0]][c.facelets[1][1]] === 'Y') {
+                        res += drawCornerTwistArrow(c, 'CCW');
+                    } else if (sim.faces[c.facelets[2][0]][c.facelets[2][1]] === 'Y') {
+                        res += drawCornerTwistArrow(c, 'CW');
+                    }
+                }
+            });
             return res;
         }
 
         function computeEdgeFlipIndicators(sim) {
-            let res = "";
-            if (sim.faces.U[7] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[2]);
-            if (sim.faces.U[5] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[1]);
-            if (sim.faces.U[1] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[0]);
-            if (sim.faces.U[3] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[3]);
+            let res = '';
+            U_EDGE_DEFS.forEach(e => {
+                const uSticker = sim.faces.U[e.facelets[0][1]];
+                if (uSticker !== 'Y') {
+                    res += drawEdgeFlipArrow(e);
+                }
+            });
             return res;
         }
 
         function computeF2lArrow(item, sim) {
             const name = (item.name || "").toLowerCase();
-            const isExtract = name.includes("stuck") || name.includes("extract") || name.includes("in slot");
-            if (isExtract) {
-                return `<path d="M 50,54 Q 56,38 46,24" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />` +
-                       `<polygon points="46,24 49,29 53,26" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />`;
+            if (name.includes("left") || name.includes("f2l 2")) {
+                return '<path d="M 60,22 Q 60,38 51,49" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />' +
+                       '<polygon points="50,51 55,46 51,44" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />';
             } else {
-                return `<path d="M 40,22 Q 40,38 49,49" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />` +
-                       `<polygon points="50,51 45,46 49,44" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />`;
+                return '<path d="M 40,22 Q 40,38 49,49" fill="none" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round" />' +
+                       '<polygon points="50,51 45,46 49,44" fill="#3b82f6" stroke="#111827" stroke-width="0.7" />';
             }
         }
 
@@ -3729,43 +4540,55 @@
                 res += drawArrowSvg({ from: U_EDGE_DEFS[3].pos, to: U_EDGE_DEFS[1].pos, double: true });
             } else if (name.includes("4c") || name.includes("m-slice") || name.includes("dots") || name.includes("uf") || name.includes("ub")) {
                 res += drawArrowSvg({ from: U_EDGE_DEFS[2].pos, to: U_EDGE_DEFS[0].pos, double: true });
-            } else {
-                if (sim.faces.U[7] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[2]);
-                if (sim.faces.U[1] !== 'Y') res += drawEdgeFlipArrow(U_EDGE_DEFS[0]);
             }
             return res;
         }
 
         function getUStickerPath(row, col) {
-            const ox = 50, oy = 5;
-            const rx = 35 / 3, ry = 17.5 / 3;
-            const lx = -35 / 3, ly = 17.5 / 3;
-            const x0 = ox + row * lx + col * rx;
-            const y0 = oy + row * ly + col * ry;
-            return `M ${x0.toFixed(1)},${y0.toFixed(1)} L ${(x0 + rx).toFixed(1)},${(y0 + ry).toFixed(1)} L ${(x0 + rx + lx).toFixed(1)},${(y0 + ry + ly).toFixed(1)} L ${(x0 + lx).toFixed(1)},${(y0 + ly).toFixed(1)} Z`;
+            const p = (r, c) => ({
+                x: 50.0 + (c - r) * 23.33,
+                y: 5.0 + (c + r) * 11.67
+            });
+            const p0 = p(row, col);
+            const p1 = p(row, col + 1);
+            const p2 = p(row + 1, col + 1);
+            const p3 = p(row + 1, col);
+            return 'M ' + p0.x.toFixed(1) + ',' + p0.y.toFixed(1) + ' ' +
+                   'L ' + p1.x.toFixed(1) + ',' + p1.y.toFixed(1) + ' ' +
+                   'L ' + p2.x.toFixed(1) + ',' + p2.y.toFixed(1) + ' ' +
+                   'L ' + p3.x.toFixed(1) + ',' + p3.y.toFixed(1) + ' Z';
         }
 
         function getFStickerPath(row, col) {
-            const ox = 15, oy = 22.5;
-            const hx = 35 / 3, hy = 17.5 / 3;
-            const vx = 0, vy = 35 / 3;
-            const x0 = ox + col * hx + row * vx;
-            const y0 = oy + col * hy + row * vy;
-            return `M ${x0.toFixed(1)},${y0.toFixed(1)} L ${(x0 + hx).toFixed(1)},${(y0 + hy).toFixed(1)} L ${(x0 + hx + vx).toFixed(1)},${(y0 + hy + vy).toFixed(1)} L ${(x0 + vx).toFixed(1)},${(y0 + vy).toFixed(1)} Z`;
+            const p = (r, c) => ({
+                x: 3.33 + c * 23.33,
+                y: 40.0 + r * 11.67 + c * 11.67
+            });
+            const p0 = p(row, col);
+            const p1 = p(row, col + 1);
+            const p2 = p(row + 1, col + 1);
+            const p3 = p(row + 1, col);
+            return 'M ' + p0.x.toFixed(1) + ',' + p0.y.toFixed(1) + ' ' +
+                   'L ' + p1.x.toFixed(1) + ',' + p1.y.toFixed(1) + ' ' +
+                   'L ' + p2.x.toFixed(1) + ',' + p2.y.toFixed(1) + ' ' +
+                   'L ' + p3.x.toFixed(1) + ',' + p3.y.toFixed(1) + ' Z';
         }
 
         function getRStickerPath(row, col) {
-            const ox = 50, oy = 40;
-            const hx = 35 / 3, hy = -17.5 / 3;
-            const vx = 0, vy = 35 / 3;
-            const x0 = ox + col * hx + row * vx;
-            const y0 = oy + col * hy + row * vy;
-            return `M ${x0.toFixed(1)},${y0.toFixed(1)} L ${(x0 + hx).toFixed(1)},${(y0 + hy).toFixed(1)} L ${(x0 + hx + vx).toFixed(1)},${(y0 + hy + vy).toFixed(1)} L ${(x0 + vx).toFixed(1)},${(y0 + vy).toFixed(1)} Z`;
+            const p = (r, c) => ({
+                x: 73.33 - c * 23.33,
+                y: 40.0 + r * 11.67 + (2 - c) * 11.67
+            });
+            const p0 = p(row, col);
+            const p1 = p(row, col + 1);
+            const p2 = p(row + 1, col + 1);
+            const p3 = p(row + 1, col);
+            return 'M ' + p0.x.toFixed(1) + ',' + p0.y.toFixed(1) + ' ' +
+                   'L ' + p1.x.toFixed(1) + ',' + p1.y.toFixed(1) + ' ' +
+                   'L ' + p2.x.toFixed(1) + ',' + p2.y.toFixed(1) + ' ' +
+                   'L ' + p3.x.toFixed(1) + ',' + p3.y.toFixed(1) + ' Z';
         }
 
-        // ==========================================
-        // --- 100% ACCURATE SVG DIAGRAM GENERATOR ---
-        // ==========================================
         function generateCubeSvg(item) {
             const name = item.name || "";
             const cat = item.cat || "";
@@ -3776,7 +4599,7 @@
                 inv.forEach(m => sim.applyMove(m));
             }
 
-            let svg = `<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">`;
+            let svg = '<svg viewBox="0 0 100 80" width="100%" height="100%" style="background:none;">';
 
             const isF2l = (cat === "F2L" || cat === "ZBLS");
             const isPll = (cat === "PLL" || name.includes("Perm"));
@@ -3784,7 +4607,6 @@
             const isCmll = (cat === "CMLL");
             const isLse = (cat === "LSE" || (cat === "ROUX" && (name.includes("4a") || name.includes("4b") || name.includes("4c") || name.includes("LSE") || name.includes("Flip") || name.includes("Insert") || name.includes("Dots") || name.includes("Bars") || name.includes("Swap"))));
 
-            // Piece isolation for F2L
             let isTarget = (face, index) => true;
             if (isF2l) {
                 const CORNERS = [
@@ -3792,10 +4614,10 @@
                     { id: 1, p: [['U', 2], ['R', 2], ['B', 0]] },
                     { id: 2, p: [['U', 8], ['F', 2], ['R', 0]] },
                     { id: 3, p: [['U', 6], ['L', 2], ['F', 0]] },
-                    { id: 4, p: [['D', 0], ['F', 6], ['L', 8]] },
-                    { id: 5, p: [['D', 2], ['R', 6], ['F', 8]] },
-                    { id: 6, p: [['D', 8], ['B', 6], ['R', 8]] },
-                    { id: 7, p: [['D', 6], ['L', 6], ['B', 8]] }
+                    { id: 4, p: [['D', 6], ['F', 6], ['L', 8]] },
+                    { id: 5, p: [['D', 8], ['R', 6], ['F', 8]] },
+                    { id: 6, p: [['D', 2], ['B', 6], ['R', 8]] },
+                    { id: 7, p: [['D', 0], ['L', 6], ['B', 8]] }
                 ];
                 const EDGES = [
                     { id: 0, p: [['U', 1], ['B', 1]] },
@@ -3803,173 +4625,130 @@
                     { id: 2, p: [['U', 7], ['F', 1]] },
                     { id: 3, p: [['U', 3], ['L', 1]] },
                     { id: 4, p: [['F', 5], ['R', 3]] },
-                    { id: 5, p: [['F', 3], ['L', 5]] },
+                    { id: 5, p: [['B', 3], ['R', 5]] },
                     { id: 6, p: [['B', 5], ['L', 3]] },
-                    { id: 7, p: [['B', 3], ['R', 5]] },
-                    { id: 8, p: [['D', 1], ['F', 7]] },
-                    { id: 9, p: [['D', 5], ['R', 7]] },
-                    { id: 10, p: [['D', 7], ['B', 7]] },
-                    { id: 11, p: [['D', 3], ['L', 7]] }
+                    { id: 7, p: [['F', 3], ['L', 5]] }
                 ];
-                let targetCorner = CORNERS.find(cr => {
-                    const clrs = cr.p.map(([f, i]) => sim.faces[f][i]);
-                    return clrs.includes('W') && clrs.includes('G') && clrs.includes('R');
+
+                let targetCornerId = -1;
+                let targetEdgeId = -1;
+
+                CORNERS.forEach(c => {
+                    const colors = c.p.map(([f, i]) => sim.faces[f][i]);
+                    const hasW = colors.includes('W');
+                    const hasG = colors.includes('G');
+                    const hasR = colors.includes('R');
+                    if (hasW && hasG && hasR) targetCornerId = c.id;
                 });
-                let targetEdge = EDGES.find(ed => {
-                    const clrs = ed.p.map(([f, i]) => sim.faces[f][i]);
-                    return clrs.includes('G') && clrs.includes('R');
+
+                EDGES.forEach(e => {
+                    const colors = e.p.map(([f, i]) => sim.faces[f][i]);
+                    const hasG = colors.includes('G');
+                    const hasR = colors.includes('R');
+                    if (hasG && hasR) targetEdgeId = e.id;
                 });
 
                 isTarget = (face, index) => {
-                    if (targetCorner && targetCorner.p.some(([f, i]) => f === face && i === index)) return true;
-                    if (targetEdge && targetEdge.p.some(([f, i]) => f === face && i === index)) return true;
+                    if (targetCornerId !== -1) {
+                        const corner = CORNERS[targetCornerId];
+                        for (let [f, i] of corner.p) {
+                            if (f === face && i === index) return true;
+                        }
+                    }
+                    if (targetEdgeId !== -1) {
+                        const edge = EDGES[targetEdgeId];
+                        for (let [f, i] of edge.p) {
+                            if (f === face && i === index) return true;
+                        }
+                    }
+                    if (face === 'F' && index === 4) return true;
+                    if (face === 'R' && index === 4) return true;
+                    if (face === 'U' && index === 4) return true;
                     return false;
                 };
             }
 
-            // Draw external indicator bars on B and L
-            if (!isF2l) {
-                // L face top row indicators
-                for (let row = 0; row < 3; row++) {
-                    const stickerColor = sim.faces.L[row];
-                    let showIndicator = false;
-                    let fill = SVG_COLORS[stickerColor] || SVG_COLORS.GREY;
-
-                    if (isOll) {
-                        if (stickerColor === 'Y') {
-                            showIndicator = true;
-                            fill = SVG_COLORS.Y;
-                        }
-                    } else if (isCmll) {
-                        if (row === 0 || row === 2) {
-                            showIndicator = true;
-                        }
-                    } else if (isLse) {
-                        if (row === 1) {
-                            showIndicator = true;
-                        }
-                    } else {
-                        showIndicator = true;
-                    }
-
-                    if (showIndicator) {
-                        const ox = 50, oy = 5;
-                        const lx = -35 / 3, ly = 17.5 / 3;
-                        const x0 = ox + row * lx;
-                        const y0 = oy + row * ly;
-                        const p1x = x0, p1y = y0;
-                        const p2x = x0 + lx, p2y = y0 + ly;
-                        const p3x = p2x - 2.5, p3y = p2y - 1.25;
-                        const p4x = p1x - 2.5, p4y = p1y - 1.25;
-                        svg += `<polygon points="${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)} ${p3x.toFixed(1)},${p3y.toFixed(1)} ${p4x.toFixed(1)},${p4y.toFixed(1)}" fill="${fill}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
-                    }
-                }
-                // B face top row indicators
-                for (let col = 0; col < 3; col++) {
-                    const stickerColor = sim.faces.B[2 - col];
-                    let showIndicator = false;
-                    let fill = SVG_COLORS[stickerColor] || SVG_COLORS.GREY;
-
-                    if (isOll) {
-                        if (stickerColor === 'Y') {
-                            showIndicator = true;
-                            fill = SVG_COLORS.Y;
-                        }
-                    } else if (isCmll) {
-                        if (col === 0 || col === 2) {
-                            showIndicator = true;
-                        }
-                    } else if (isLse) {
-                        if (col === 1) {
-                            showIndicator = true;
-                        }
-                    } else {
-                        showIndicator = true;
-                    }
-
-                    if (showIndicator) {
-                        const ox = 50, oy = 5;
-                        const rx = 35 / 3, ry = 17.5 / 3;
-                        const x0 = ox + col * rx;
-                        const y0 = oy + col * ry;
-                        const p1x = x0, p1y = y0;
-                        const p2x = x0 + rx, p2y = y0 + ry;
-                        const p3x = p2x + 2.5, p3y = p2y - 1.25;
-                        const p4x = p1x + 2.5, p4y = p1y - 1.25;
-                        svg += `<polygon points="${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)} ${p3x.toFixed(1)},${p3y.toFixed(1)} ${p4x.toFixed(1)},${p4y.toFixed(1)}" fill="${fill}" stroke="#1e272e" stroke-width="0.8" stroke-linejoin="round" />`;
-                    }
-                }
-            }
-
-            // 1. U Face Stickers
+            // Draw U face
             for (let r = 0; r < 3; r++) {
-                for (let cl = 0; cl < 3; cl++) {
-                    const idx = r * 3 + cl;
-                    let color = SVG_COLORS.GREY;
-                    if (isPll) {
-                        color = SVG_COLORS.Y;
-                    } else if (isF2l) {
-                        color = isTarget('U', idx) ? (SVG_COLORS[sim.faces.U[idx]] || SVG_COLORS.GREY) : SVG_COLORS.GREY;
+                for (let c = 0; c < 3; c++) {
+                    const idx = r * 3 + c;
+                    const sticker = sim.faces.U[idx];
+                    let color = SVG_COLORS[sticker] || SVG_COLORS.DARK;
+
+                    if (isF2l) {
+                        if (!isTarget('U', idx)) color = SVG_COLORS.DARK;
                     } else if (isCmll) {
-                        if (idx === 0 || idx === 2 || idx === 6 || idx === 8) {
-                            color = sim.faces.U[idx] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
+                        if (r === 1 || c === 1) {
+                            color = SVG_COLORS.DARK;
+                        } else {
+                            color = SVG_COLORS[sticker] || SVG_COLORS.Y;
+                        }
+                    } else if (isLse) {
+                        if (r === 1 && c === 1) {
+                            color = SVG_COLORS.Y;
+                        } else if (r === 0 && c === 1) {
+                            color = (sticker === 'Y' || sticker === 'W') ? SVG_COLORS.Y : SVG_COLORS.GREY;
+                        } else if (r === 2 && c === 1) {
+                            color = (sticker === 'Y' || sticker === 'W') ? SVG_COLORS.Y : SVG_COLORS.GREY;
+                        } else if (r === 1 && (c === 0 || c === 2)) {
+                            color = (sticker === 'Y' || sticker === 'W') ? SVG_COLORS.Y : SVG_COLORS.GREY;
                         } else {
                             color = SVG_COLORS.DARK;
                         }
-                    } else if (isLse) {
-                        if (idx === 0 || idx === 2 || idx === 6 || idx === 8 || idx === 4) {
-                            color = SVG_COLORS.Y;
-                        } else {
-                            color = SVG_COLORS[sim.faces.U[idx]] || SVG_COLORS.Y;
-                        }
-                    } else {
-                        color = sim.faces.U[idx] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
+                    } else if (isOll) {
+                        color = (sticker === 'Y') ? SVG_COLORS.Y : SVG_COLORS.DARK;
                     }
-                    const path = getUStickerPath(r, cl);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.1" stroke-linejoin="round" />`;
+
+                    svg += '<path d="' + getUStickerPath(r, c) + '" fill="' + color + '" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />';
                 }
             }
 
-            // 2. F Face Stickers
+            // Draw F face
             for (let r = 0; r < 3; r++) {
                 for (let cl = 0; cl < 3; cl++) {
                     const idx = r * 3 + cl;
-                    let color = SVG_COLORS.GREY;
+                    const sticker = sim.faces.F[idx];
+                    let color = SVG_COLORS[sticker] || SVG_COLORS.DARK;
+
                     if (isF2l) {
-                        color = isTarget('F', idx) ? (SVG_COLORS[sim.faces.F[idx]] || SVG_COLORS.GREY) : (r > 0 && cl < 2 ? SVG_COLORS.G : SVG_COLORS.GREY);
+                        if (!isTarget('F', idx)) color = SVG_COLORS.DARK;
+                    } else if (isPll) {
+                        color = (r === 0) ? (SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.F) : SVG_COLORS.DARK;
+                    } else if (isOll) {
+                        color = (r === 0 && sim.faces.F[cl] === 'Y') ? SVG_COLORS.Y : SVG_COLORS.DARK;
                     } else if (isCmll) {
                         if (r === 0 && (cl === 0 || cl === 2)) {
-                            color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.G;
+                            color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.F;
                         } else {
                             color = SVG_COLORS.DARK;
                         }
                     } else if (isLse) {
                         if (r === 0 && cl === 1) {
-                            color = SVG_COLORS[sim.faces.F[1]] || SVG_COLORS.G;
+                            color = SVG_COLORS[sim.faces.F[1]] || SVG_COLORS.F;
                         } else {
-                            color = SVG_COLORS.G;
-                        }
-                    } else if (r === 0) {
-                        if (isOll) {
-                            color = sim.faces.F[cl] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
-                        } else {
-                            color = SVG_COLORS[sim.faces.F[cl]] || SVG_COLORS.G;
+                            color = SVG_COLORS.DARK;
                         }
                     } else {
-                        color = SVG_COLORS.G;
+                        if (r > 0) color = SVG_COLORS.DARK;
                     }
-                    const path = getFStickerPath(r, cl);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.1" stroke-linejoin="round" />`;
+
+                    svg += '<path d="' + getFStickerPath(r, cl) + '" fill="' + color + '" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />';
                 }
             }
 
-            // 3. R Face Stickers
+            // Draw R face
             for (let r = 0; r < 3; r++) {
                 for (let cl = 0; cl < 3; cl++) {
                     const idx = r * 3 + cl;
-                    let color = SVG_COLORS.GREY;
+                    const sticker = sim.faces.R[idx];
+                    let color = SVG_COLORS[sticker] || SVG_COLORS.DARK;
+
                     if (isF2l) {
-                        color = isTarget('R', idx) ? (SVG_COLORS[sim.faces.R[idx]] || SVG_COLORS.GREY) : (r > 0 && cl > 0 ? SVG_COLORS.R : SVG_COLORS.GREY);
+                        if (!isTarget('R', idx)) color = SVG_COLORS.DARK;
+                    } else if (isPll) {
+                        color = (r === 0) ? (SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R) : SVG_COLORS.DARK;
+                    } else if (isOll) {
+                        color = (r === 0 && sim.faces.R[cl] === 'Y') ? SVG_COLORS.Y : SVG_COLORS.DARK;
                     } else if (isCmll) {
                         if (r === 0 && (cl === 0 || cl === 2)) {
                             color = SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R;
@@ -3980,39 +4759,22 @@
                         if (r === 0 && cl === 1) {
                             color = SVG_COLORS[sim.faces.R[1]] || SVG_COLORS.R;
                         } else {
-                            color = SVG_COLORS.R;
-                        }
-                    } else if (r === 0) {
-                        if (isOll) {
-                            color = sim.faces.R[cl] === 'Y' ? SVG_COLORS.Y : SVG_COLORS.GREY;
-                        } else {
-                            color = SVG_COLORS[sim.faces.R[cl]] || SVG_COLORS.R;
+                            color = SVG_COLORS.DARK;
                         }
                     } else {
-                        color = SVG_COLORS.R;
+                        if (r > 0) color = SVG_COLORS.DARK;
                     }
-                    const path = getRStickerPath(r, cl);
-                    svg += `<path d="${path}" fill="${color}" stroke="#1e272e" stroke-width="1.1" stroke-linejoin="round" />`;
+
+                    svg += '<path d="' + getRStickerPath(r, cl) + '" fill="' + color + '" stroke="#111827" stroke-width="0.8" stroke-linejoin="round" />';
                 }
             }
 
-            // 4. Direction & Permutation Arrows for ALL Methods
-            if (isPll || cat === "ELL" || cat === "ZBLL" || cat === "COLL") {
+            // Dynamic Indicators & Arrows
+            if (isPll || isCmll) {
                 const arrows = computePermutationArrows(sim);
-                arrows.forEach(a => {
-                    svg += drawArrowSvg(a);
+                arrows.forEach(arr => {
+                    svg += drawArrowSvg(arr);
                 });
-                if (arrows.length === 0 && (cat === "COLL" || cat === "ZBLL")) {
-                    svg += computeCornerTwistArrows(sim);
-                }
-            } else if (isCmll) {
-                const cornerArrows = computePermutationArrows(sim).filter(a => a.type === 'corner');
-                cornerArrows.forEach(a => {
-                    svg += drawArrowSvg(a);
-                });
-                if (cornerArrows.length === 0) {
-                    svg += computeCornerTwistArrows(sim);
-                }
             } else if (isOll) {
                 svg += computeCornerTwistArrows(sim);
                 svg += computeEdgeFlipIndicators(sim);
@@ -4022,11 +4784,11 @@
                 svg += computeLseArrows(item, sim);
             }
 
-            svg += `</svg>`;
+            svg += '</svg>';
             return svg;
         }
 
-                // --- SESSION MANAGEMENT ---
+        // --- SESSION MANAGEMENT & RECOGNITION WORKFLOW ---
         function syncSelectedCases() {
             selectedCases = [];
             const checkboxes = document.querySelectorAll('#cases-list-container input[type="checkbox"]');
@@ -4038,6 +4800,19 @@
                 }
             });
             return selectedCases;
+        }
+
+        function getRandomCase() {
+            if (selectedCases.length === 0) return null;
+            if (selectedCases.length === 1) return selectedCases[0];
+            let candidate = activeCase;
+            let attempts = 0;
+            while (candidate === activeCase && attempts < 10) {
+                const randIdx = Math.floor(Math.random() * selectedCases.length);
+                candidate = selectedCases[randIdx];
+                attempts++;
+            }
+            return candidate;
         }
 
         function startPracticeSession() {
@@ -4061,37 +4836,92 @@
                 alert("Please select at least one case to practice!");
                 return;
             }
-            const randIdx = Math.floor(Math.random() * selectedCases.length);
-            activeCase = selectedCases[randIdx];
 
-            // Render SVG diagram
-            document.getElementById('case-svg-container').innerHTML = generateCubeSvg(activeCase);
+            activeCase = getRandomCase();
+            isRevealed = false;
+
+            // 1. HIDE PICTURE & CASE DETAILS DURING ACTIVE TRAINING
+            const mysteryBox = document.getElementById('case-mystery-placeholder');
+            const svgContainer = document.getElementById('case-svg-container');
+            if (mysteryBox) mysteryBox.style.display = "flex";
+            if (svgContainer) {
+                svgContainer.style.display = "none";
+                svgContainer.innerHTML = "";
+            }
             
-            // Mask case details during active practice
-            document.getElementById('active-case-name').textContent = "???";
-            document.getElementById('active-case-desc').innerHTML = "&nbsp;";
+            document.getElementById('active-case-name').textContent = "❓ Mystery Case";
+            document.getElementById('active-case-desc').textContent = "Scramble your cube & test your recognition!";
             document.getElementById('active-case-answer').style.display = "none";
+            document.getElementById('active-case-alg-text').textContent = "-";
 
-            // Calculate scramble (clean space-separated inverted moves)
+            const revBtn = document.getElementById('btn-reveal-case');
+            if (revBtn) {
+                revBtn.innerHTML = "👁️ Reveal Case";
+                revBtn.disabled = false;
+            }
+
+            // 2. CALCULATE 100% CORRECT SCRAMBLE (INVERTED MOVES)
             const invMoves = invertAlgorithm(activeCase.moves);
-            activeScramble = Array.isArray(invMoves) ? invMoves.join(" ") : invMoves;
+            activeScramble = invMoves.join(" ");
             document.getElementById('active-case-scramble').textContent = activeScramble || "(Solved state)";
 
-            // State Reset
+            // 3. RESET TIMER STATE
             if (timerInterval) clearInterval(timerInterval);
             trainerState = "READY";
             document.getElementById('timer-display-text').textContent = "0.00";
             document.getElementById('timer-display-text').style.color = "inherit";
-            document.getElementById('timer-status-text').textContent = "Press Space / Tap to Start!";
+            document.getElementById('timer-status-text').textContent = "Press Spacebar / Tap to Start!";
             document.getElementById('timer-status-text').className = "timer-status";
         }
 
-        function revealCaseManually() {
-            if (!activeCase) return;
+        function revealCase() {
+            if (!activeCase || isRevealed) return;
+            isRevealed = true;
+
+            // Hide mystery placeholder & reveal 100% accurate SVG
+            const mysteryBox = document.getElementById('case-mystery-placeholder');
+            const svgContainer = document.getElementById('case-svg-container');
+            if (mysteryBox) mysteryBox.style.display = "none";
+            if (svgContainer) {
+                svgContainer.innerHTML = generateCubeSvg(activeCase);
+                svgContainer.style.display = "flex";
+            }
+
+            // Reveal true case name, description, and solving algorithm
             document.getElementById('active-case-name').textContent = activeCase.name;
-            document.getElementById('active-case-desc').textContent = activeCase.desc || "";
+            document.getElementById('active-case-desc').textContent = activeCase.desc || (activeCase.cat ? activeCase.cat + " Case" : "");
             document.getElementById('active-case-alg-text').textContent = activeCase.moves;
             document.getElementById('active-case-answer').style.display = "block";
+
+            const revBtn = document.getElementById('btn-reveal-case');
+            if (revBtn) {
+                revBtn.innerHTML = "✅ Revealed";
+            }
+        }
+
+        function revealCaseAction(e) {
+            if (e) e.stopPropagation();
+            revealCase();
+        }
+
+        function nextCaseAction(e) {
+            if (e) e.stopPropagation();
+            loadNextScramble();
+        }
+
+        function copyScramble(e) {
+            if (e) e.stopPropagation();
+            if (!activeScramble) return;
+            navigator.clipboard.writeText(activeScramble).then(() => {
+                const btn = document.getElementById('btn-copy-scramble');
+                if (btn) {
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = "Copied! ✅";
+                    setTimeout(() => { btn.innerHTML = orig; }, 1500);
+                }
+            }).catch(() => {
+                prompt("Copy scramble:", activeScramble);
+            });
         }
 
         // Timer Trigger Logic
@@ -4101,7 +4931,7 @@
                 trainerState = "RECOG";
                 recogStartTime = performance.now();
                 document.getElementById('timer-display-text').style.color = "var(--primary)";
-                document.getElementById('timer-status-text').textContent = "Recognizing (Press Space when done!)";
+                document.getElementById('timer-status-text').textContent = "🧠 Recognizing (Press Space when done!)";
                 document.getElementById('timer-status-text').className = "timer-status recognizing";
 
                 timerInterval = setInterval(() => {
@@ -4117,7 +4947,7 @@
                 trainerState = "SOLVE";
                 solveStartTime = performance.now();
                 document.getElementById('timer-display-text').style.color = "#10b981";
-                document.getElementById('timer-status-text').textContent = "Solving (Press Space when solved!)";
+                document.getElementById('timer-status-text').textContent = "⚡ Solving (Press Space when solved!)";
                 document.getElementById('timer-status-text').className = "timer-status solving";
 
                 timerInterval = setInterval(() => {
@@ -4135,11 +4965,11 @@
                 
                 document.getElementById('timer-display-text').textContent = totalTime.toFixed(2);
                 document.getElementById('timer-display-text').style.color = "inherit";
-                document.getElementById('timer-status-text').textContent = "Done! Press Space to next scramble";
+                document.getElementById('timer-status-text').textContent = "🏁 Done! Press Space or click Next Case ⏭️";
                 document.getElementById('timer-status-text').className = "timer-status";
 
-                // Reveal case identity and correct algorithm moves after solving
-                revealCaseManually();
+                // REVEAL CASE AT THE END!
+                revealCase();
 
                 // Log score to table
                 logScoreToTable(activeCase.name, recogTime, solveTime, totalTime);
@@ -4150,8 +4980,6 @@
 
         function logScoreToTable(name, recog, solve, total) {
             const tbody = document.getElementById('session-log-body');
-            
-            // Remove helper row if present
             if (tbody.textContent.includes("No solves")) {
                 tbody.innerHTML = "";
             }
@@ -4164,35 +4992,35 @@
             tbody.insertBefore(tr, tbody.firstChild);
         }
 
-        // Attach listeners
+        // Keyboard navigation
         window.addEventListener('keydown', (e) => {
+            if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA")) {
+                return;
+            }
             if (e.code === "Space") {
-                // Avoid scrolling page when pressing spacebar
                 e.preventDefault();
                 handleTimerTrigger();
+            } else if (e.code === "KeyN") {
+                e.preventDefault();
+                loadNextScramble();
+            } else if (e.code === "KeyR") {
+                e.preventDefault();
+                revealCase();
             }
         });
 
-        // Tap area trigger
+        // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             onMethodChanged();
             
-            const workspace = document.querySelector('.workspace-area');
-            if (workspace) {
-                workspace.style.cursor = "pointer";
-                workspace.addEventListener('click', () => {
-                    handleTimerTrigger();
-                });
-            }
-            
-            const timerTxt = document.getElementById('timer-display-text');
-            if (timerTxt) {
-                timerTxt.style.cursor = "pointer";
-                timerTxt.addEventListener('click', () => {
+            const timerClickArea = document.getElementById('timer-clickable-area');
+            if (timerClickArea) {
+                timerClickArea.addEventListener('click', () => {
                     handleTimerTrigger();
                 });
             }
         });
+    
     </script>
 
     <!-- GLOBAL SITE FOOTER -->
