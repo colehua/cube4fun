@@ -1179,11 +1179,61 @@
         .pattern-speed-row {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             background: #f8fafc;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 12px;
             border: 2px solid #e2e8f0;
+        }
+
+        .pattern-speed-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pattern-speed-title {
+            font-weight: 800;
+            font-size: 0.88em;
+            color: #1e272e;
+        }
+
+        .pattern-speed-btn-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-speed-preset {
+            padding: 5px 12px;
+            border: 2px solid #1e272e;
+            border-radius: 8px;
+            font-size: 0.82em;
+            font-weight: 800;
+            background: #ffffff;
+            color: #1e272e;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        .btn-speed-preset:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 0 #1e272e;
+            background: #f1f5f9;
+        }
+
+        .btn-speed-preset:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 0 #1e272e;
+        }
+
+        .btn-speed-preset.active {
+            background: #FAED27;
+            color: #1e272e;
+            box-shadow: 0 2px 0 #1e272e;
+            border-color: #1e272e;
         }
 
         .pattern-speed-row input[type="range"] {
@@ -1249,6 +1299,23 @@
             background: #334155;
             border-color: #475569;
         }
+        body.dark-mode .pattern-speed-title {
+            color: #f8fafc;
+        }
+        body.dark-mode .btn-speed-preset {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: #64748b;
+            box-shadow: 0 2px 0 #0f172a;
+        }
+        body.dark-mode .btn-speed-preset:hover {
+            background: #475569;
+        }
+        body.dark-mode .btn-speed-preset.active {
+            background: #FAED27;
+            color: #0f172a;
+            border-color: #FAED27;
+        }
         body.dark-mode .btn-modal-subaction {
             background: #334155;
             color: #f8fafc;
@@ -1308,14 +1375,21 @@
                         <button class="pattern-control-btn btn-secondary" onclick="stepPatternModal(1)" title="Step Forward">Next ▶</button>
                     </div>
 
-                    <!-- Speed Control -->
+                    <!-- Speed Control with Slow, Normal, Fast Buttons -->
                     <div class="pattern-speed-row">
-                        <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85em; color: #475569;">
-                            <span>🐢 Slower</span>
-                            <span>Playback Speed</span>
-                            <span>Faster 🐇</span>
+                        <div class="pattern-speed-header">
+                            <span class="pattern-speed-title">⏱️ Video Speed:</span>
+                            <div class="pattern-speed-btn-group">
+                                <button type="button" class="btn-speed-preset" id="btn-speed-slow" onclick="setPatternSpeedPreset('slow')" title="Slow Playback (0.5x)">🐢 Slow</button>
+                                <button type="button" class="btn-speed-preset active" id="btn-speed-normal" onclick="setPatternSpeedPreset('normal')" title="Normal Playback (1x)">🚶 Normal</button>
+                                <button type="button" class="btn-speed-preset" id="btn-speed-fast" onclick="setPatternSpeedPreset('fast')" title="Fast Playback (2x)">⚡ Fast</button>
+                            </div>
                         </div>
-                        <input type="range" min="300" max="1800" step="100" value="900" id="pattern-speed-slider" oninput="changePatternSpeed(this.value)">
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.78em; color: #64748b; margin-top: 4px;">
+                            <span>Fine Tune:</span>
+                            <span id="pattern-speed-label">Normal (0.85s)</span>
+                        </div>
+                        <input type="range" min="300" max="1800" step="50" value="850" id="pattern-speed-slider" oninput="changePatternSpeed(this.value)">
                     </div>
 
                     <!-- External Quick Action Links -->
@@ -3248,9 +3322,52 @@
             }
         }
 
+        function setPatternSpeedPreset(preset) {
+            document.querySelectorAll('.btn-speed-preset').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(`btn-speed-${preset}`);
+            if (btn) btn.classList.add('active');
+
+            const speedLabel = document.getElementById('pattern-speed-label');
+            const slider = document.getElementById('pattern-speed-slider');
+
+            if (preset === 'slow') {
+                patternSpeed = 1400;
+                if (speedLabel) speedLabel.textContent = 'Slow (1.4s)';
+                if (slider) slider.value = 1400;
+            } else if (preset === 'fast') {
+                patternSpeed = 400;
+                if (speedLabel) speedLabel.textContent = 'Fast (0.4s)';
+                if (slider) slider.value = 400;
+            } else { // normal
+                patternSpeed = 850;
+                if (speedLabel) speedLabel.textContent = 'Normal (0.85s)';
+                if (slider) slider.value = 850;
+            }
+
+            if (patternIsPlaying) {
+                stopPatternModalPlayback();
+                startPatternModalPlayback();
+            }
+        }
+
         function changePatternSpeed(val) {
-            // Left slider is Slower (large ms), Right slider is Faster (small ms)
-            patternSpeed = (1800 + 300) - Number(val);
+            patternSpeed = Number(val);
+            const speedLabel = document.getElementById('pattern-speed-label');
+            if (speedLabel) {
+                speedLabel.textContent = `${(patternSpeed / 1000).toFixed(2)}s`;
+            }
+            document.querySelectorAll('.btn-speed-preset').forEach(b => b.classList.remove('active'));
+            if (patternSpeed >= 1200) {
+                const b = document.getElementById('btn-speed-slow');
+                if (b) b.classList.add('active');
+            } else if (patternSpeed <= 550) {
+                const b = document.getElementById('btn-speed-fast');
+                if (b) b.classList.add('active');
+            } else {
+                const b = document.getElementById('btn-speed-normal');
+                if (b) b.classList.add('active');
+            }
+
             if (patternIsPlaying) {
                 stopPatternModalPlayback();
                 startPatternModalPlayback();
@@ -3293,8 +3410,9 @@
             // Parse moves
             patternMoves = currentPatternAlgClean.replace(/[()\[\]{}]/g, ' ').split(/\s+/).filter(m => m !== '');
 
-            // Reset state & render cube
+            // Reset state, speed preset & render cube
             resetPatternModal();
+            setPatternSpeedPreset('normal');
             renderPattern3dCubeDOM();
             updatePattern3dCubeVisuals();
             updatePatternMovesDisplay();
@@ -3394,6 +3512,7 @@
         window.stepPatternModal = stepPatternModal;
         window.togglePatternModalPlayback = togglePatternModalPlayback;
         window.changePatternSpeed = changePatternSpeed;
+        window.setPatternSpeedPreset = setPatternSpeedPreset;
         window.copyCurrentPatternAlg = copyCurrentPatternAlg;
 
         // Initialize drag listeners
