@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Practice Speed Timer with adaptive goals and visual scramble preview. Push your speedcubing times with dynamic goals that adapt to your speed!">
+    <meta name="keywords" content="practice speed, speedcubing timer, cube goals, adaptive timer, rubiks cube speed practice, Cole Hua, learn cube 4 fun">
+    <title>Practice Speed ⚡🎯 - Speedcubing Timer with Adaptive Goals</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700&family=Outfit:wght@500;700;800;900&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <style>
+        :root {
+            --cyan-blob: #00E5FF;
+            --yellow-blob: #FAED27;
+            --primary: #0066FF;
+            --primary-light: #e8f0fe;
+            --accent-pink: #FF6B6B;
+            --accent-green: #2ED573;
+            --text-dark: #1e272e;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+            --white-sticker: #ffffff;
+            --yellow-sticker: #FFFF00;
+            --green-sticker: #2ecc71;
+            --blue-sticker: #007AFF;
+            --orange-sticker: #FF9500;
+            --red-sticker: #FF3B30;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf5 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .blob-top {
+            position: absolute;
+            top: -120px;
+            left: -10%;
+            width: 120%;
+            height: 260px;
+            background: linear-gradient(90deg, #2ED573 0%, #00E5FF 50%, #0088FF 100%);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.9;
+            filter: blur(12px);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px 20px 60px 20px;
+            position: relative;
+        }
+
+        /* SITE NAVIGATION */
+        .cs-site-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .nav-button {
+            text-decoration: none;
+            color: #1e272e;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            border: 3px solid #1e272e;
+            box-shadow: 0 4px 0 #1e272e;
+            transition: all 0.15s ease;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e272e;
+        }
+
+        .nav-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1e272e;
+        }
+
+        .nav-button.active {
+            background-color: var(--accent-green) !important;
+            color: #ffffff !important;
+        }
+
+        /* PAGE TITLE */
+        .page-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 3.2em;
+            color: #ffffff;
+            -webkit-text-stroke: 3px #1e272e;
+            text-shadow: 5px 5px 0px #1e272e;
+            margin: 0 0 8px 0;
+            line-height: 1.15;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #475569;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* TOP TOOLBAR: SCRAMBLE CONFIG & CONTROLS */
+        .ps-toolbar-card {
+            background: #ffffff;
+            border: 3.5px solid #1e272e;
+            border-radius: 20px;
+            box-shadow: 0 8px 0 #1e272e;
+            padding: 16px 20px;
+            margin-bottom: 22px;
+        }
+
+        .ps-toolbar-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .ps-select-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .ps-select {
+            padding: 8px 14px;
+            border: 2.5px solid #1e272e;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95em;
+            font-weight: 700;
+            background: #f8fafc;
+            color: #1e272e;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #1e272e;
+            background: #ffffff;
+            border: 2.5px solid #1e272e;
+            box-shadow: 0 3px 0 #1e272e;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #1e272e;
+        }
+
+        .btn-action:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #1e272e;
+        }
+
+        .btn-new-scramble {
+            background-color: var(--cyan-blob);
+        }
+
+        .btn-sound-toggle {
+            background-color: #f1f2f6;
+        }
+
+        /* SCRAMBLE + VISUALIZER SPLIT GRID */
+        .scramble-section-grid {
+            display: grid;
+            grid-template-columns: 1fr 310px;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 880px) {
+            .scramble-section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .scramble-box-card {
+            background: #ffffff;
+            border: 3.5px solid #1e272e;
+            border-radius: 20px;
+            box-shadow: 0 8px 0 #1e272e;
+            padding: 18px 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .scramble-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .scramble-title {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .scramble-text-display {
+            font-family: monospace;
+            font-size: 1.45em;
+            font-weight: 800;
+            line-height: 1.5;
+            color: #0f172a;
+            word-spacing: 4px;
+            margin: 0;
+            user-select: all;
+        }
+
+        .scramble-hint-text {
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        /* VISUAL SCRAMBLE PREVIEW CARD ("WHAT THE SCRAMBLE LOOKS LIKE") */
+        .preview-card {
+            background: #ffffff;
+            border: 3.5px solid #1e272e;
+            border-radius: 20px;
+            box-shadow: 0 8px 0 #1e272e;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .preview-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .preview-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            color: #1e272e;
+            font-weight: 700;
+        }
+
+        .view-toggle-btns {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-view-toggle {
+            padding: 3px 8px;
+            border: 1.5px solid #1e272e;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 700;
+            background: #f1f5f9;
+            cursor: pointer;
+        }
+
+        .btn-view-toggle.active {
+            background: #00E5FF;
+            color: #1e272e;
+        }
+
+        #net-preview-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 145px;
+            width: 100%;
+        }
+
+        /* 2D Cube Net styling */
+        .cube-net-3x3 {
+            display: grid;
+            grid-template-columns: repeat(4, 42px);
+            grid-template-rows: repeat(3, 42px);
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .face-grid-3x3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 1.5px;
+            background: #111827;
+            padding: 2px;
+            border-radius: 4px;
+            width: 42px;
+            height: 42px;
+            box-sizing: border-box;
+        }
+
+        .cube-net-2x2 {
+            display: grid;
+            grid-template-columns: repeat(4, 38px);
+            grid-template-rows: repeat(3, 38px);
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .face-grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1.5px;
+            background: #111827;
+            padding: 2px;
+            border-radius: 4px;
+            width: 38px;
+            height: 38px;
+            box-sizing: border-box;
+        }
+
+        .sticker {
+            border-radius: 1.5px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .preview-footer-hint {
+            font-size: 0.78em;
+            color: #64748b;
+            font-weight: 700;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        /* 3D SCENE MINI PREVIEW */
+        .scene-3d-mini {
+            width: 140px;
+            height: 140px;
+            perspective: 600px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .cube-3d-mini {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-24deg) rotateY(32deg);
+            transition: transform 0.1s ease-out;
+        }
+
+        .face-3d-mini {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid #111827;
+            background: #000;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        /* GOAL DASHBOARD HUD */
+        .goal-dashboard-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            border: 3.5px solid #1e272e;
+            border-radius: 20px;
+            box-shadow: 0 8px 0 #1e272e;
+            padding: 18px 24px;
+            margin-bottom: 22px;
+        }
+
+        .goal-hud-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 14px;
+        }
+
+        .goal-target-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .goal-target-icon {
+            font-size: 2.8em;
+            line-height: 1;
+        }
+
+        .goal-target-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            color: #475569;
+            margin-bottom: 2px;
+        }
+
+        .goal-target-number {
+            font-family: monospace;
+            font-size: 2.4em;
+            font-weight: 900;
+            color: #059669;
+            line-height: 1;
+        }
+
+        .goal-mode-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.82em;
+            font-weight: 700;
+            border: 2px solid #1e272e;
+            box-shadow: 0 2px 0 #1e272e;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .goal-mode-adaptive {
+            background-color: #FAED27;
+            color: #1e272e;
+        }
+
+        .goal-mode-custom {
+            background-color: #00E5FF;
+            color: #1e272e;
+        }
+
+        .goal-buttons-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-set-goal {
+            background-color: #FAED27;
+            color: #1e272e;
+            padding: 10px 18px;
+            font-size: 1.05em;
+        }
+
+        .btn-give-goals {
+            background-color: #2ED573;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 1.05em;
+        }
+
+        /* Streak & Stats Row */
+        .goal-stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 2px dashed #cbd5e1;
+        }
+
+        .goal-stat-badge {
+            background: #ffffff;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 8px 12px;
+            text-align: center;
+            box-shadow: 0 3px 0 #1e272e;
+        }
+
+        .goal-stat-label {
+            font-size: 0.78em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #64748b;
+        }
+
+        .goal-stat-val {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #1e272e;
+            margin-top: 2px;
+        }
+
+        /* MAIN COMPETITION TIMER CARD */
+        .timer-arena-card {
+            background: #ffffff;
+            border: 4px solid #1e272e;
+            border-radius: 24px;
+            box-shadow: 0 10px 0 #1e272e;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+
+        .timer-arena-card:hover {
+            box-shadow: 0 12px 0 #1e272e;
+        }
+
+        .timer-target-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e0f2fe;
+            border: 2px solid #0284c7;
+            color: #0369a1;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1em;
+            margin-bottom: 12px;
+        }
+
+        .timer-digits-display {
+            font-family: monospace;
+            font-size: 6.5em;
+            font-weight: 900;
+            color: #1e272e;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.08);
+            line-height: 1;
+            margin: 15px 0;
+            transition: color 0.1s ease;
+        }
+
+        @media (max-width: 600px) {
+            .timer-digits-display {
+                font-size: 4.5em;
+            }
+        }
+
+        .timer-digits-display.readying {
+            color: #f59e0b !important;
+        }
+
+        .timer-digits-display.ready {
+            color: #10b981 !important;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .timer-digits-display.running {
+            color: #0284c7 !important;
+        }
+
+        .timer-status-msg {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .timer-sub-hint {
+            font-size: 0.88em;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        /* LAST SOLVE RESULT BANNER */
+        #last-result-banner {
+            display: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            border: 3px solid #1e272e;
+            margin-top: 15px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            font-weight: bold;
+            animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .result-passed {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-color: #059669;
+        }
+
+        .result-missed {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border-color: #dc2626;
+        }
+
+        /* SESSION SOLVES & GOALS TABLE CARD */
+        .history-card {
+            background: #ffffff;
+            border: 3.5px solid #1e272e;
+            border-radius: 20px;
+            box-shadow: 0 8px 0 #1e272e;
+            padding: 20px;
+            margin-bottom: 35px;
+        }
+
+        .history-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.4em;
+            color: #1e272e;
+            margin: 0;
+        }
+
+        .solves-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        .solves-table th, .solves-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 700;
+        }
+
+        .solves-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+
+        .badge-passed {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #d1fae5;
+            color: #047857;
+            border-radius: 8px;
+            border: 1.5px solid #10b981;
+            font-size: 0.85em;
+        }
+
+        .badge-missed {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 8px;
+            border: 1.5px solid #ef4444;
+            font-size: 0.85em;
+        }
+
+        /* MODALS */
+        .ps-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+
+        .ps-modal-box {
+            background: #ffffff;
+            border: 4px solid #1e272e;
+            border-radius: 24px;
+            box-shadow: 0 12px 0 #1e272e;
+            padding: 28px 24px;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+        }
+
+        .ps-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .chip-btn {
+            background: #f1f5f9;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.9em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .chip-btn:hover {
+            background: #00E5FF;
+            transform: translateY(-2px);
+        }
+
+        .goal-input-style {
+            width: 180px;
+            padding: 10px 14px;
+            font-family: monospace;
+            font-size: 1.8em;
+            font-weight: 900;
+            text-align: center;
+            border: 3px solid #1e272e;
+            border-radius: 14px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        /* CONFETTI CANVAS */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        /* DARK MODE OVERRIDES */
+        body.dark-mode .ps-toolbar-card,
+        body.dark-mode .scramble-box-card,
+        body.dark-mode .preview-card,
+        body.dark-mode .goal-dashboard-card,
+        body.dark-mode .timer-arena-card,
+        body.dark-mode .history-card,
+        body.dark-mode .ps-modal-box {
+            background: #0d131f !important;
+            background-color: #0d131f !important;
+            border-color: #1e293b !important;
+            color: #f1f5f9 !important;
+            box-shadow: 0 6px 0 #020617, 0 12px 30px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        body.dark-mode .scramble-text-display {
+            color: #38bdf8 !important;
+        }
+
+        body.dark-mode .timer-digits-display {
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode .goal-target-title,
+        body.dark-mode .scramble-title,
+        body.dark-mode .preview-title,
+        body.dark-mode .history-title {
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode .goal-stat-badge {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode .goal-stat-val {
+            color: #38bdf8 !important;
+        }
+
+        body.dark-mode .solves-table th {
+            background: #1e293b !important;
+            color: #94a3b8 !important;
+        }
+
+        body.dark-mode .solves-table td {
+            border-bottom-color: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-mode .ps-select,
+        body.dark-mode .goal-input-style {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
+
+        body.dark-mode .chip-btn {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
+
+        /* GLOBAL SITE FOOTER */
+        .site-footer {
+            background: #1e272e;
+            color: #f1f5f9;
+            border-top: 5px solid #2ED573;
+            margin-top: 60px;
+            padding: 45px 20px 25px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        .footer-container {
+            max-width: 1050px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.8fr 1.1fr 1.2fr 1.2fr;
+            gap: 30px;
+            margin-bottom: 35px;
+        }
+        @media (max-width: 900px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        .footer-logo {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.8em;
+            color: #2ED573;
+            margin-bottom: 12px;
+        }
+        .footer-desc {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+        .footer-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .footer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.15s;
+        }
+        .footer-badge:hover {
+            transform: translateY(-2px);
+        }
+        .footer-badge.wca { background: #0066FF; }
+        .footer-badge.china { background: #e74c3c; }
+        .footer-badge.yt { background: #c0392b; }
+        .footer-col h4 {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2em;
+            color: #FAED27;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        .footer-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: color 0.15s, padding-left 0.15s;
+            display: inline-block;
+        }
+        .footer-links a:hover {
+            color: #2ED573;
+            padding-left: 4px;
+        }
+        .footer-col.info-col p {
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-top: 0;
+        }
+        .btn-scroll-top {
+            background: #2ED573;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #000;
+            transition: all 0.15s;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .btn-scroll-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #000;
+            background: #00E5FF;
+        }
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+    <div class="blob-top"></div>
+
+    <div class="container">
+        
+        <!-- SITE NAVIGATION -->
+        <div class="cs-site-nav">
+            <a href="index.html" class="nav-button">🏠 Home</a>
+            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Timer</a>
+            <a href="practice-speed.html" class="nav-button active" style="background-color: var(--accent-green); color: white;">⚡ Practice Speed</a>
+            <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white;">🏆 Challenges ♾️</a>
+            <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white;">📰 News</a>
+            <a href="blog.html" class="nav-button" style="background-color: #FAED27;">✍️ Blog</a>
+            <a href="algorithms.html" class="nav-button" style="background-color: #a29bfe; color: white;">🧩 Algorithms</a>
+            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Trainer</a>
+            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 3D Play</a>
+            <a href="guide.html" class="nav-button" style="background-color: #E2C2FF;">📖 Finger Tricks</a>
+            <a href="notation.html" class="nav-button" style="background-color: #dfe6e9;">📖 Notation</a>
+            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="background-color: #f1f2f6; cursor: pointer;">
+                <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark Mode</span>
+            </button>
+        </div>
+
+        <div class="page-header">
+            <h1 class="main-title">Practice Speed ⚡🎯</h1>
+            <p class="subtitle">Set your targets, get auto-adjusting goals, inspect the scramble, and push your solve times faster!</p>
+        </div>
+
+        <!-- 1. TOOLBAR: PUZZLE & SCRAMBLE CONTROLS -->
+        <div class="ps-toolbar-card">
+            <div class="ps-toolbar-row">
+                <div class="ps-select-group">
+                    <select id="scramble-puzzle-select" class="ps-select" onchange="onPuzzleChanged()">
+                        <option value="3x3" selected>3x3x3 Rubik's Cube</option>
+                        <option value="2x2">2x2x2 Rubik's Cube</option>
+                    </select>
+
+                    <select id="scramble-difficulty-select" class="ps-select" onchange="onDifficultyChanged()">
+                        <option value="easy">🟢 Easy (Fewer moves)</option>
+                        <option value="medium">🟡 Medium</option>
+                        <option value="hard" selected>🔴 Hard (WCA Standard)</option>
+                        <option value="random">🎲 Random Difficulty</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn-action btn-new-scramble" onclick="generateNewScramble()">New Scramble 🔄</button>
+                    <button class="btn-action" onclick="copyScramble()">Copy 📋</button>
+                    <button id="btn-sound-toggle" class="btn-action btn-sound-toggle" onclick="toggleSound()">🔊 Sound: ON</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. SCRAMBLE TEXT & WHAT THE SCRAMBLE LOOKS LIKE (PREVIEW) -->
+        <div class="scramble-section-grid">
+            <!-- Scramble Display -->
+            <div class="scramble-box-card">
+                <div class="scramble-header">
+                    <span class="scramble-title">🧩 Scramble (from solved cube):</span>
+                    <span id="scramble-move-count" style="font-size: 0.85em; font-weight: bold; color: #64748b;">15 moves</span>
+                </div>
+                <p id="scramble-text" class="scramble-text-display">Loading scramble...</p>
+                <div class="scramble-hint-text">Hold White on Top, Green on Front when scrambling.</div>
+            </div>
+
+            <!-- What the Scramble Looks Like (Visual Preview) -->
+            <div class="preview-card">
+                <div class="preview-card-header">
+                    <span class="preview-title">🧊 Scramble Look</span>
+                    <div class="view-toggle-btns">
+                        <button id="btn-view-net" class="btn-view-toggle active" onclick="switchPreviewMode('net')">2D Net</button>
+                        <button id="btn-view-3d" class="btn-view-toggle" onclick="switchPreviewMode('3d')">3D Cube</button>
+                    </div>
+                </div>
+
+                <!-- 2D Cube Net Display -->
+                <div id="net-preview-container">
+                    <div id="cube-net-render"></div>
+                </div>
+
+                <!-- 3D Mini Cube Scene (Rotatable with mouse/touch) -->
+                <div id="scene-3d-container" class="scene-3d-mini">
+                    <div id="cube-3d-obj" class="cube-3d-mini">
+                        <!-- Populated by script -->
+                    </div>
+                </div>
+
+                <div class="preview-footer-hint">Verify your physical cube matches this state!</div>
+            </div>
+        </div>
+
+        <!-- 3. GOAL DASHBOARD HUD (CUSTOM GOAL + ADAPTIVE "GIVE GOALS") -->
+        <div class="goal-dashboard-card">
+            <div class="goal-hud-top">
+                <div class="goal-target-box">
+                    <div class="goal-target-icon">🎯</div>
+                    <div>
+                        <div class="goal-target-title">
+                            Current Speed Goal:
+                            <span id="goal-mode-badge" class="goal-mode-pill goal-mode-custom">✏️ Custom Goal</span>
+                        </div>
+                        <div class="goal-target-number" id="goal-target-display">20.00s</div>
+                    </div>
+                </div>
+
+                <div class="goal-buttons-group">
+                    <button class="btn-action btn-set-goal" onclick="openSetGoalModal()">
+                        🎯 Set Goal
+                    </button>
+                    <button class="btn-action btn-give-goals" onclick="activateGiveGoals()">
+                        🤖 Give Goals
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats & Streaks Row -->
+            <div class="goal-stats-row">
+                <div class="goal-stat-badge">
+                    <div class="goal-stat-label">Goals Beaten 🏆</div>
+                    <div class="goal-stat-val" id="stat-goals-passed">0</div>
+                </div>
+                <div class="goal-stat-badge">
+                    <div class="goal-stat-label">Current Streak 🔥</div>
+                    <div class="goal-stat-val" id="stat-current-streak">0</div>
+                </div>
+                <div class="goal-stat-badge">
+                    <div class="goal-stat-label">Best Goal Beaten ⭐</div>
+                    <div class="goal-stat-val" id="stat-best-goal">-</div>
+                </div>
+                <div class="goal-stat-badge">
+                    <div class="goal-stat-label">Session Average 📊</div>
+                    <div class="goal-stat-val" id="stat-session-avg">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. COMPETITION SPEED TIMER ARENA -->
+        <div id="timer-arena" class="timer-arena-card">
+            <div class="timer-target-banner" id="timer-live-target">
+                <span>🎯 Target to Beat: Under</span> <span id="timer-target-pill-val">20.00s</span>
+            </div>
+
+            <div id="timer-display" class="timer-digits-display">0.00</div>
+
+            <div id="timer-status-msg" class="timer-status-msg">Hold Spacebar / Tap & Hold to Ready!</div>
+            <div id="timer-sub-hint" class="timer-sub-hint">(Turns Green ➔ Release to Solve ➔ Tap/Press Space to Stop!)</div>
+
+            <!-- Instant Solve Goal Result Banner -->
+            <div id="last-result-banner"></div>
+        </div>
+
+        <!-- 5. SOLVE HISTORY & GOAL OUTCOME LOG -->
+        <div class="history-card">
+            <div class="history-card-header">
+                <h3 class="history-title">Goal Progression Log 📊</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" style="padding: 4px 10px; font-size: 0.85em;" onclick="clearHistory()">Clear Solves 🗑️</button>
+                </div>
+            </div>
+
+            <div style="max-height: 280px; overflow-y: auto;">
+                <table class="solves-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 45px;">#</th>
+                            <th style="width: 100px;">Time</th>
+                            <th style="width: 110px;">Target Goal</th>
+                            <th>Outcome 🏁</th>
+                            <th style="width: 80px;">Time Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody id="solves-log-body">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">
+                                No practice solves yet. Hold Spacebar or tap the timer above to start your first run! 🚀
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SET GOAL MODAL -->
+    <div id="modal-set-goal" class="ps-modal-overlay">
+        <div class="ps-modal-box">
+            <button class="ps-modal-close" onclick="closeSetGoalModal()">✕</button>
+            <div style="font-size: 2.8em; margin-bottom: 5px;">🎯</div>
+            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.6em; margin: 0 0 8px 0;">Set Your Speed Goal</h3>
+            <p style="color: #64748b; font-size: 0.95em; margin: 0 0 15px 0;">Choose a quick speed target or write your own custom seconds:</p>
+
+            <div class="chips-container">
+                <button class="chip-btn" onclick="selectGoalChip(60)">60s</button>
+                <button class="chip-btn" onclick="selectGoalChip(45)">45s</button>
+                <button class="chip-btn" onclick="selectGoalChip(30)">30s</button>
+                <button class="chip-btn" onclick="selectGoalChip(25)">25s</button>
+                <button class="chip-btn" onclick="selectGoalChip(20)">20s</button>
+                <button class="chip-btn" onclick="selectGoalChip(18)">18s</button>
+                <button class="chip-btn" onclick="selectGoalChip(15)">15s</button>
+                <button class="chip-btn" onclick="selectGoalChip(12)">12s</button>
+                <button class="chip-btn" onclick="selectGoalChip(10)">10s</button>
+            </div>
+
+            <div>
+                <input type="number" step="0.1" min="1" max="300" id="input-custom-goal" class="goal-input-style" value="20.0">
+                <span style="font-family: 'DynaPuff', cursive; font-weight: bold; font-size: 1.2em;"> sec</span>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button class="btn-action btn-give-goals" onclick="saveCustomGoal()">Save Goal 🎯</button>
+                <button class="btn-action" onclick="closeSetGoalModal()">Cancel ✕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOAL PASSED CELEBRATION MODAL -->
+    <div id="modal-goal-passed" class="ps-modal-overlay">
+        <div class="ps-modal-box" style="border-color: #10b981;">
+            <button class="ps-modal-close" onclick="closeGoalPassedModal()">✕</button>
+            <div style="font-size: 3.5em; line-height: 1; margin-bottom: 10px; animation: bounce-slow 1.5s infinite;">🏆🎉</div>
+            <h2 style="font-family: 'DynaPuff', cursive; font-size: 2em; color: #059669; margin: 0 0 8px 0;">Goal Achieved!</h2>
+            <p id="passed-modal-desc" style="font-size: 1.15em; font-weight: 700; color: #1e293b; margin: 0 0 15px 0;">
+                You crushed your goal of 20.00s with a 19.45s solve! ⚡
+            </p>
+
+            <div id="passed-next-goal-area" style="background: #f0fdf4; border: 2.5px solid #10b981; border-radius: 16px; padding: 15px; margin-bottom: 20px;">
+                <div style="font-size: 0.9em; font-weight: 800; color: #047857; text-transform: uppercase;">Next Target Challenge:</div>
+                <div id="passed-suggested-goal-num" style="font-family: monospace; font-size: 2.6em; font-weight: 900; color: #059669; margin: 4px 0;">18.00s</div>
+                <div id="passed-suggested-goal-note" style="font-size: 0.85em; color: #065f46; font-weight: 600;">
+                    Ready to push yourself faster? Level up your goal!
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button id="btn-accept-next-goal" class="btn-action btn-give-goals" onclick="acceptSuggestedGoal()">
+                    ⚡ Set Goal to <span id="btn-next-goal-val">18.00s</span>
+                </button>
+                <button class="btn-action" onclick="closeGoalPassedModal()">Keep Practicing 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GLOBAL SITE FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-logo">Learn Cube 4 Fun 🧊</div>
+                <p class="footer-desc">
+                    Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
+                </p>
+                <div class="footer-badges">
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                </div>
+            </div>
+            <div class="footer-col links-col">
+                <h4>🧭 Explore Tools</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">🏠 Home</a></li>
+                    <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
+                    <li><a href="practice-speed.html">⚡ Practice Speed Mode</a></li>
+                    <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="news.html">📰 Cubing News & Updates</a></li>
+                    <li><a href="blog.html">✍️ Cole's Blog</a></li>
+                    <li><a href="play.html">🎮 3D Virtual Cube</a></li>
+                </ul>
+            </div>
+            <div class="footer-col links-col">
+                <h4>📖 Tutorials & Guides</h4>
+                <ul class="footer-links">
+                    <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
+                    <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
+                    <li><a href="algorithms.html">🧩 Algorithms Guide</a></li>
+                    <li><a href="trainer.html">🧠 Case Recognition Trainer</a></li>
+                    <li><a href="guide.html">📖 Finger Tricks & Guide</a></li>
+                    <li><a href="notation.html">📖 Notation Guide</a></li>
+                </ul>
+            </div>
+            <div class="footer-col info-col">
+                <h4>📍 In-Person Classes</h4>
+                <p><strong>Wesbrook Community Centre</strong><br>
+                Wednesdays 7:00 PM – 8:00 PM<br>
+                UBC Campus, Vancouver BC</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Learn Cube 4 Fun • Keep practicing, set high goals, and solve fast! 🚀</p>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ENGINE ==================== -->
+    <script>
+        // --- 1. CUBE STATE & SCRAMBLE VISUALIZER SIMULATOR ---
+        let currentScramble = "";
+        let currentPuzzle = "3x3";
+        let currentDifficulty = "hard";
+        let previewMode = "net"; // 'net' or '3d'
+        let soundEnabled = true;
+
+        const colorMap = {
+            'white': '#ffffff',
+            'yellow': '#FFFF00',
+            'green': '#2ecc71',
+            'blue': '#007AFF',
+            'orange': '#FF9500',
+            'red': '#FF3B30'
+        };
+
+        const cube3 = {
+            U: Array(9).fill('white'),
+            D: Array(9).fill('yellow'),
+            F: Array(9).fill('green'),
+            B: Array(9).fill('blue'),
+            L: Array(9).fill('orange'),
+            R: Array(9).fill('red')
+        };
+
+        const cube2 = {
+            U: Array(4).fill('white'),
+            D: Array(4).fill('yellow'),
+            F: Array(4).fill('green'),
+            B: Array(4).fill('blue'),
+            L: Array(4).fill('orange'),
+            R: Array(4).fill('red')
+        };
+
+        function resetCube3() {
+            cube3.U.fill('white');
+            cube3.D.fill('yellow');
+            cube3.F.fill('green');
+            cube3.B.fill('blue');
+            cube3.L.fill('orange');
+            cube3.R.fill('red');
+        }
+
+        function resetCube2() {
+            cube2.U.fill('white');
+            cube2.D.fill('yellow');
+            cube2.F.fill('green');
+            cube2.B.fill('blue');
+            cube2.L.fill('orange');
+            cube2.R.fill('red');
+        }
+
+        function rotateFaceCW(faceArr) {
+            const copy = [...faceArr];
+            faceArr[0] = copy[6]; faceArr[1] = copy[3]; faceArr[2] = copy[0];
+            faceArr[3] = copy[7]; faceArr[4] = copy[4]; faceArr[5] = copy[1];
+            faceArr[6] = copy[8]; faceArr[7] = copy[5]; faceArr[8] = copy[2];
+        }
+
+        function rotateFaceCW2(faceArr) {
+            const copy = [...faceArr];
+            faceArr[0] = copy[2]; faceArr[1] = copy[0];
+            faceArr[2] = copy[3]; faceArr[3] = copy[1];
+        }
+
+        function rotate3x3(face) {
+            if (face === 'U') {
+                rotateFaceCW(cube3.U);
+                let temp = [...cube3.F.slice(0, 3)];
+                cube3.F[0] = cube3.R[0]; cube3.F[1] = cube3.R[1]; cube3.F[2] = cube3.R[2];
+                cube3.R[0] = cube3.B[0]; cube3.R[1] = cube3.B[1]; cube3.R[2] = cube3.B[2];
+                cube3.B[0] = cube3.L[0]; cube3.B[1] = cube3.L[1]; cube3.B[2] = cube3.L[2];
+                cube3.L[0] = temp[0]; cube3.L[1] = temp[1]; cube3.L[2] = temp[2];
+            } else if (face === 'D') {
+                rotateFaceCW(cube3.D);
+                let temp = [...cube3.F.slice(6, 9)];
+                cube3.F[6] = cube3.L[6]; cube3.F[7] = cube3.L[7]; cube3.F[8] = cube3.L[8];
+                cube3.L[6] = cube3.B[6]; cube3.L[7] = cube3.B[7]; cube3.L[8] = cube3.B[8];
+                cube3.B[6] = cube3.R[6]; cube3.B[7] = cube3.R[7]; cube3.B[8] = cube3.R[8];
+                cube3.R[6] = temp[0]; cube3.R[7] = temp[1]; cube3.R[8] = temp[2];
+            } else if (face === 'F') {
+                rotateFaceCW(cube3.F);
+                let temp = [cube3.U[6], cube3.U[7], cube3.U[8]];
+                cube3.U[6] = cube3.L[8]; cube3.U[7] = cube3.L[5]; cube3.U[8] = cube3.L[2];
+                cube3.L[2] = cube3.D[0]; cube3.L[5] = cube3.D[1]; cube3.L[8] = cube3.D[2];
+                cube3.D[0] = cube3.R[6]; cube3.D[1] = cube3.R[3]; cube3.D[2] = cube3.R[0];
+                cube3.R[0] = temp[0]; cube3.R[3] = temp[1]; cube3.R[6] = temp[2];
+            } else if (face === 'B') {
+                rotateFaceCW(cube3.B);
+                let temp = [cube3.U[0], cube3.U[1], cube3.U[2]];
+                cube3.U[0] = cube3.R[2]; cube3.U[1] = cube3.R[5]; cube3.U[2] = cube3.R[8];
+                cube3.R[2] = cube3.D[8]; cube3.R[5] = cube3.D[7]; cube3.R[8] = cube3.D[6];
+                cube3.D[6] = cube3.L[0]; cube3.D[7] = cube3.L[3]; cube3.D[8] = cube3.L[6];
+                cube3.L[0] = temp[2]; cube3.L[3] = temp[1]; cube3.L[6] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCW(cube3.L);
+                let temp = [cube3.U[0], cube3.U[3], cube3.U[6]];
+                cube3.U[0] = cube3.B[8]; cube3.U[3] = cube3.B[5]; cube3.U[6] = cube3.B[2];
+                cube3.B[2] = cube3.D[6]; cube3.B[5] = cube3.D[3]; cube3.B[8] = cube3.D[0];
+                cube3.D[0] = cube3.F[0]; cube3.D[3] = cube3.F[3]; cube3.D[6] = cube3.F[6];
+                cube3.F[0] = temp[0]; cube3.F[3] = temp[1]; cube3.F[6] = temp[2];
+            } else if (face === 'R') {
+                rotateFaceCW(cube3.R);
+                let temp = [cube3.U[2], cube3.U[5], cube3.U[8]];
+                cube3.U[2] = cube3.F[2]; cube3.U[5] = cube3.F[5]; cube3.U[8] = cube3.F[8];
+                cube3.F[2] = cube3.D[2]; cube3.F[5] = cube3.D[5]; cube3.F[8] = cube3.D[8];
+                cube3.D[2] = cube3.B[6]; cube3.D[5] = cube3.B[3]; cube3.D[8] = cube3.B[0];
+                cube3.B[0] = temp[2]; cube3.B[3] = temp[1]; cube3.B[6] = temp[0];
+            }
+        }
+
+        function rotate2x2(face) {
+            if (face === 'U') {
+                rotateFaceCW2(cube2.U);
+                let temp = [...cube2.F.slice(0, 2)];
+                cube2.F[0] = cube2.R[0]; cube2.F[1] = cube2.R[1];
+                cube2.R[0] = cube2.B[0]; cube2.R[1] = cube2.B[1];
+                cube2.B[0] = cube2.L[0]; cube2.B[1] = cube2.L[1];
+                cube2.L[0] = temp[0]; cube2.L[1] = temp[1];
+            } else if (face === 'D') {
+                rotateFaceCW2(cube2.D);
+                let temp = [...cube2.R.slice(2, 4)];
+                cube2.R[2] = cube2.F[2]; cube2.R[3] = cube2.F[3];
+                cube2.F[2] = cube2.L[2]; cube2.F[3] = cube2.L[3];
+                cube2.L[2] = cube2.B[2]; cube2.L[3] = cube2.B[3];
+                cube2.B[2] = temp[0]; cube2.B[3] = temp[1];
+            } else if (face === 'F') {
+                rotateFaceCW2(cube2.F);
+                let temp = [cube2.U[2], cube2.U[3]];
+                cube2.U[2] = cube2.L[3]; cube2.U[3] = cube2.L[1];
+                cube2.L[1] = cube2.D[0]; cube2.L[3] = cube2.D[1];
+                cube2.D[0] = cube2.R[2]; cube2.D[1] = cube2.R[0];
+                cube2.R[0] = temp[0]; cube2.R[2] = temp[1];
+            } else if (face === 'B') {
+                rotateFaceCW2(cube2.B);
+                let temp = [cube2.U[0], cube2.U[1]];
+                cube2.U[0] = cube2.R[1]; cube2.U[1] = cube2.R[3];
+                cube2.R[1] = cube2.D[3]; cube2.R[3] = cube2.D[2];
+                cube2.D[2] = cube2.L[0]; cube2.D[3] = cube2.L[2];
+                cube2.L[0] = temp[1]; cube2.L[2] = temp[0];
+            } else if (face === 'L') {
+                rotateFaceCW2(cube2.L);
+                let temp = [cube2.U[0], cube2.U[2]];
+                cube2.U[0] = cube2.B[3]; cube2.U[2] = cube2.B[1];
+                cube2.B[1] = cube2.D[2]; cube2.B[3] = cube2.D[0];
+                cube2.D[0] = cube2.F[0]; cube2.D[2] = cube2.F[2];
+                cube2.F[0] = temp[0]; cube2.F[2] = temp[1];
+            } else if (face === 'R') {
+                rotateFaceCW2(cube2.R);
+                let temp = [cube2.U[1], cube2.U[3]];
+                cube2.U[1] = cube2.F[1]; cube2.U[3] = cube2.F[3];
+                cube2.F[1] = cube2.D[1]; cube2.F[3] = cube2.D[3];
+                cube2.D[1] = cube2.B[2]; cube2.D[3] = cube2.B[0];
+                cube2.B[0] = temp[1]; cube2.B[2] = temp[0];
+            }
+        }
+
+        function applyScramble3x3(scrambleStr) {
+            resetCube3();
+            if (!scrambleStr) return;
+            const moves = scrambleStr.trim().split(/\s+/);
+            for (let m of moves) {
+                if (!m) continue;
+                let base = m[0];
+                let mod = m.slice(1);
+                let times = 1;
+                if (mod === '2' || mod === "2'") times = 2;
+                else if (mod === "'") times = 3;
+                for (let i = 0; i < times; i++) rotate3x3(base);
+            }
+        }
+
+        function applyScramble2x2(scrambleStr) {
+            resetCube2();
+            if (!scrambleStr) return;
+            const moves = scrambleStr.trim().split(/\s+/);
+            for (let m of moves) {
+                if (!m) continue;
+                let base = m[0];
+                let mod = m.slice(1);
+                let times = 1;
+                if (mod === '2' || mod === "2'") times = 2;
+                else if (mod === "'") times = 3;
+                for (let i = 0; i < times; i++) rotate2x2(base);
+            }
+        }
+
+        // Draw 2D Net
+        function renderCubeNet() {
+            const container = document.getElementById('cube-net-render');
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (currentPuzzle === '3x3') {
+                applyScramble3x3(currentScramble);
+                const net = document.createElement('div');
+                net.className = 'cube-net-3x3';
+
+                const faceLayouts = [
+                    { row: 1, col: 2, state: cube3.U },
+                    { row: 2, col: 1, state: cube3.L },
+                    { row: 2, col: 2, state: cube3.F },
+                    { row: 2, col: 3, state: cube3.R },
+                    { row: 2, col: 4, state: cube3.B },
+                    { row: 3, col: 2, state: cube3.D }
+                ];
+
+                faceLayouts.forEach(layout => {
+                    const cell = document.createElement('div');
+                    cell.style.gridRow = layout.row;
+                    cell.style.gridColumn = layout.col;
+                    const faceGrid = document.createElement('div');
+                    faceGrid.className = 'face-grid-3x3';
+                    layout.state.forEach(color => {
+                        const st = document.createElement('div');
+                        st.className = 'sticker';
+                        st.style.backgroundColor = colorMap[color] || color;
+                        faceGrid.appendChild(st);
+                    });
+                    cell.appendChild(faceGrid);
+                    net.appendChild(cell);
+                });
+                container.appendChild(net);
+            } else {
+                applyScramble2x2(currentScramble);
+                const net = document.createElement('div');
+                net.className = 'cube-net-2x2';
+
+                const faceLayouts = [
+                    { row: 1, col: 2, state: cube2.U },
+                    { row: 2, col: 1, state: cube2.L },
+                    { row: 2, col: 2, state: cube2.F },
+                    { row: 2, col: 3, state: cube2.R },
+                    { row: 2, col: 4, state: cube2.B },
+                    { row: 3, col: 2, state: cube2.D }
+                ];
+
+                faceLayouts.forEach(layout => {
+                    const cell = document.createElement('div');
+                    cell.style.gridRow = layout.row;
+                    cell.style.gridColumn = layout.col;
+                    const faceGrid = document.createElement('div');
+                    faceGrid.className = 'face-grid-2x2';
+                    layout.state.forEach(color => {
+                        const st = document.createElement('div');
+                        st.className = 'sticker';
+                        st.style.backgroundColor = colorMap[color] || color;
+                        faceGrid.appendChild(st);
+                    });
+                    cell.appendChild(faceGrid);
+                    net.appendChild(cell);
+                });
+                container.appendChild(net);
+            }
+
+            render3dMiniCube();
+        }
+
+        // Draw 3D Mini Cube
+        function render3dMiniCube() {
+            const cubeObj = document.getElementById('cube-3d-obj');
+            if (!cubeObj) return;
+            cubeObj.innerHTML = "";
+
+            if (currentPuzzle === '3x3') {
+                const faces = [
+                    { name: 'U', state: cube3.U, transform: 'rotateX(90deg) translateZ(40px)' },
+                    { name: 'D', state: cube3.D, transform: 'rotateX(-90deg) translateZ(40px)' },
+                    { name: 'F', state: cube3.F, transform: 'translateZ(40px)' },
+                    { name: 'B', state: cube3.B, transform: 'rotateY(180deg) translateZ(40px)' },
+                    { name: 'L', state: cube3.L, transform: 'rotateY(-90deg) translateZ(40px)' },
+                    { name: 'R', state: cube3.R, transform: 'rotateY(90deg) translateZ(40px)' }
+                ];
+
+                faces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = 'face-3d-mini';
+                    faceDiv.style.transform = f.transform;
+                    f.state.forEach(color => {
+                        const st = document.createElement('div');
+                        st.className = 'sticker';
+                        st.style.backgroundColor = colorMap[color] || color;
+                        faceDiv.appendChild(st);
+                    });
+                    cubeObj.appendChild(faceDiv);
+                });
+            }
+        }
+
+        function switchPreviewMode(mode) {
+            previewMode = mode;
+            const btnNet = document.getElementById('btn-view-net');
+            const btn3d = document.getElementById('btn-view-3d');
+            const netCont = document.getElementById('net-preview-container');
+            const sceneCont = document.getElementById('scene-3d-container');
+
+            if (mode === 'net') {
+                btnNet.classList.add('active');
+                btn3d.classList.remove('active');
+                netCont.style.display = "flex";
+                sceneCont.style.display = "none";
+            } else {
+                btn3d.classList.add('active');
+                btnNet.classList.remove('active');
+                netCont.style.display = "none";
+                sceneCont.style.display = "flex";
+            }
+        }
+
+        // Mouse drag rotate for 3D mini cube
+        let is3dDragging = false;
+        let prevMouseX = 0;
+        let prevMouseY = 0;
+        let rotX = -24;
+        let rotY = 32;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const scene = document.getElementById('scene-3d-container');
+            const cube = document.getElementById('cube-3d-obj');
+
+            if (scene && cube) {
+                scene.addEventListener('mousedown', (e) => {
+                    is3dDragging = true;
+                    prevMouseX = e.clientX;
+                    prevMouseY = e.clientY;
+                });
+                window.addEventListener('mouseup', () => { is3dDragging = false; });
+                window.addEventListener('mousemove', (e) => {
+                    if (!is3dDragging) return;
+                    const deltaX = e.clientX - prevMouseX;
+                    const deltaY = e.clientY - prevMouseY;
+                    rotY += deltaX * 0.8;
+                    rotX -= deltaY * 0.8;
+                    cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+                    prevMouseX = e.clientX;
+                    prevMouseY = e.clientY;
+                });
+                
+                // Touch drag for mobile
+                scene.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) {
+                        is3dDragging = true;
+                        prevMouseX = e.touches[0].clientX;
+                        prevMouseY = e.touches[0].clientY;
+                    }
+                });
+                window.addEventListener('touchend', () => { is3dDragging = false; });
+                window.addEventListener('touchmove', (e) => {
+                    if (!is3dDragging || e.touches.length !== 1) return;
+                    const deltaX = e.touches[0].clientX - prevMouseX;
+                    const deltaY = e.touches[0].clientY - prevMouseY;
+                    rotY += deltaX * 0.8;
+                    rotX -= deltaY * 0.8;
+                    cube.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+                    prevMouseX = e.touches[0].clientX;
+                    prevMouseY = e.touches[0].clientY;
+                });
+            }
+        });
+
+        // --- 2. SCRAMBLE GENERATOR ---
+        function generateScramble(puzzle, diff) {
+            puzzle = puzzle || currentPuzzle;
+            diff = diff || currentDifficulty;
+
+            if (diff === 'random') {
+                const choices = ['easy', 'medium', 'hard'];
+                diff = choices[Math.floor(Math.random() * choices.length)];
+            }
+
+            let len = 15;
+            if (puzzle === '2x2') {
+                if (diff === 'easy') len = 6;
+                else if (diff === 'medium') len = 9;
+                else len = 11;
+            } else {
+                if (diff === 'easy') len = 8;
+                else if (diff === 'medium') len = 14;
+                else len = 20; // WCA standard
+            }
+
+            let faces;
+            if (puzzle === '2x2' || (diff === 'easy' && puzzle === '3x3')) {
+                faces = ['U', 'R', 'F'];
+            } else {
+                faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            }
+
+            const modifiers = ['', "'", '2'];
+            const moves = [];
+            let lastFace = '';
+            let secondLastFace = '';
+
+            for (let i = 0; i < len; i++) {
+                let available = faces.filter(f => f !== lastFace);
+                if (faces.length === 6 && lastFace && secondLastFace) {
+                    const opposites = { 'U':'D', 'D':'U', 'L':'R', 'R':'L', 'F':'B', 'B':'F' };
+                    if (opposites[lastFace] === secondLastFace) {
+                        available = available.filter(f => f !== secondLastFace);
+                    }
+                }
+                const chosenFace = available[Math.floor(Math.random() * available.length)];
+                const chosenMod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                moves.push(chosenFace + chosenMod);
+                secondLastFace = lastFace;
+                lastFace = chosenFace;
+            }
+
+            return moves.join(' ');
+        }
+
+        function generateNewScramble() {
+            currentScramble = generateScramble();
+            document.getElementById('scramble-text').textContent = currentScramble;
+            const moveCount = currentScramble.trim().split(/\s+/).length;
+            document.getElementById('scramble-move-count').textContent = moveCount + ' moves';
+            renderCubeNet();
+        }
+
+        function onPuzzleChanged() {
+            currentPuzzle = document.getElementById('scramble-puzzle-select').value;
+            generateNewScramble();
+        }
+
+        function onDifficultyChanged() {
+            currentDifficulty = document.getElementById('scramble-difficulty-select').value;
+            generateNewScramble();
+        }
+
+        function copyScramble() {
+            if (!currentScramble) return;
+            navigator.clipboard.writeText(currentScramble).then(() => {
+                showToast("Scramble copied to clipboard! 📋", "success");
+            }).catch(() => {
+                prompt("Copy scramble:", currentScramble);
+            });
+        }
+
+        // --- 3. GOAL MANAGEMENT & ADAPTIVE "GIVE GOALS" ENGINE ---
+        let currentGoal = 20.00;
+        let isAdaptive = false;
+        let consecutiveBeats = 0;
+        let consecutiveMisses = 0;
+        let totalGoalsPassed = 0;
+        let currentStreak = 0;
+        let bestStreak = 0;
+        let bestGoalPassed = null;
+        let solvesHistory = [];
+        let pendingSuggestedGoal = 18.00;
+
+        function loadGoalData() {
+            try {
+                const raw = localStorage.getItem('cube_practice_speed_data');
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    if (typeof data.currentGoal === 'number' && !isNaN(data.currentGoal)) currentGoal = data.currentGoal;
+                    if (typeof data.isAdaptive === 'boolean') isAdaptive = data.isAdaptive;
+                    if (typeof data.totalGoalsPassed === 'number') totalGoalsPassed = data.totalGoalsPassed;
+                    if (typeof data.currentStreak === 'number') currentStreak = data.currentStreak;
+                    if (typeof data.bestStreak === 'number') bestStreak = data.bestStreak;
+                    if (typeof data.bestGoalPassed === 'number') bestGoalPassed = data.bestGoalPassed;
+                    if (Array.isArray(data.solvesHistory)) solvesHistory = data.solvesHistory;
+                }
+            } catch (e) {}
+        }
+
+        function saveGoalData() {
+            try {
+                const data = {
+                    currentGoal,
+                    isAdaptive,
+                    totalGoalsPassed,
+                    currentStreak,
+                    bestStreak,
+                    bestGoalPassed,
+                    solvesHistory: solvesHistory.slice(0, 100)
+                };
+                localStorage.setItem('cube_practice_speed_data', JSON.stringify(data));
+            } catch (e) {}
+        }
+
+        function updateGoalUI() {
+            // Update Goal Number
+            const goalDisplay = document.getElementById('goal-target-display');
+            if (goalDisplay) goalDisplay.textContent = currentGoal.toFixed(2) + 's';
+
+            // Update live timer target pill
+            const pillVal = document.getElementById('timer-target-pill-val');
+            if (pillVal) pillVal.textContent = currentGoal.toFixed(2) + 's';
+
+            // Update badge (Adaptive vs Custom)
+            const badge = document.getElementById('goal-mode-badge');
+            if (badge) {
+                if (isAdaptive) {
+                    badge.textContent = "🤖 Adaptive Goals";
+                    badge.className = "goal-mode-pill goal-mode-adaptive";
+                } else {
+                    badge.textContent = "✏️ Custom Goal";
+                    badge.className = "goal-mode-pill goal-mode-custom";
+                }
+            }
+
+            // Update streak & count stats
+            const statPassed = document.getElementById('stat-goals-passed');
+            if (statPassed) statPassed.textContent = totalGoalsPassed;
+
+            const statStreak = document.getElementById('stat-current-streak');
+            if (statStreak) statStreak.textContent = currentStreak + (currentStreak >= 3 ? ' 🔥' : '');
+
+            const statBest = document.getElementById('stat-best-goal');
+            if (statBest) statBest.textContent = bestGoalPassed ? bestGoalPassed.toFixed(2) + 's' : '-';
+
+            // Calculate session mean
+            const statAvg = document.getElementById('stat-session-avg');
+            if (statAvg) {
+                if (solvesHistory.length > 0) {
+                    const avg = solvesHistory.reduce((acc, s) => acc + s.time, 0) / solvesHistory.length;
+                    statAvg.textContent = avg.toFixed(2) + 's';
+                } else {
+                    statAvg.textContent = '-';
+                }
+            }
+        }
+
+        // User clicks "Set Goal" button
+        function openSetGoalModal() {
+            const input = document.getElementById('input-custom-goal');
+            if (input) input.value = currentGoal.toFixed(1);
+            document.getElementById('modal-set-goal').style.display = 'flex';
+        }
+
+        function closeSetGoalModal() {
+            document.getElementById('modal-set-goal').style.display = 'none';
+        }
+
+        function selectGoalChip(sec) {
+            document.getElementById('input-custom-goal').value = sec.toFixed(1);
+        }
+
+        function saveCustomGoal() {
+            const input = document.getElementById('input-custom-goal');
+            const val = parseFloat(input.value);
+            if (isNaN(val) || val <= 0) {
+                alert("Please enter a valid positive number in seconds.");
+                return;
+            }
+            currentGoal = Math.round(val * 100) / 100;
+            isAdaptive = false; // explicitly switched to custom
+            consecutiveBeats = 0;
+            consecutiveMisses = 0;
+            saveGoalData();
+            updateGoalUI();
+            closeSetGoalModal();
+            showToast('🎯 Goal updated to ' + currentGoal.toFixed(2) + 's! Go for it!', 'success');
+        }
+
+        // User clicks "Give Goals" button (Adaptive Auto-Goal Engine)
+        function activateGiveGoals() {
+            isAdaptive = true;
+            consecutiveBeats = 0;
+            consecutiveMisses = 0;
+
+            // Start with a super easy number as requested!
+            let startGoal = 60.00;
+            if (solvesHistory.length >= 3) {
+                // If user already solved, set goal comfortably above recent average
+                const recent = solvesHistory.slice(0, 5).map(s => s.time);
+                const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
+                startGoal = Math.max(30, Math.ceil((avg * 1.35) / 5) * 5);
+            }
+
+            currentGoal = startGoal;
+            saveGoalData();
+            updateGoalUI();
+            showToast('🤖 Adaptive Goals Activated!\nStarting with an easy goal of ' + startGoal.toFixed(1) + 's. Goals will go faster or slower based on your speed! 🚀', 'info');
+        }
+
+        // Calculate next tighter goal when beating target
+        function calculateTighterGoal(cur, solveTime) {
+            let next;
+            // If crushed by a huge margin (e.g. goal was 60s, solved in 32s):
+            if (solveTime < cur * 0.75) {
+                next = Math.max(5, Math.ceil((solveTime + 2.0) / 2) * 2);
+            } else if (cur > 30) {
+                next = cur - 5;
+            } else if (cur >= 18) {
+                // e.g. 20s -> 18s -> 16s (User's exact example in prompt!)
+                next = cur - 2;
+            } else if (cur > 12) {
+                next = cur - 1;
+            } else if (cur > 8) {
+                next = cur - 0.5;
+            } else {
+                next = Math.max(3, cur - 0.25);
+            }
+            return Math.round(next * 100) / 100;
+        }
+
+        // Calculate easier goal when user is struggling
+        function calculateEasierGoal(cur) {
+            let next;
+            if (cur < 15) next = cur + 1.5;
+            else if (cur < 25) next = cur + 2.5;
+            else next = cur + 5.0;
+            return Math.round(next * 100) / 100;
+        }
+
+        // When a solve finishes, evaluate against current goal
+        function evaluateSolveGoal(time) {
+            const goal = currentGoal;
+            const diff = time - goal; // <= 0 means under goal!
+            const passed = (diff <= 0.005);
+
+            const record = {
+                id: Date.now(),
+                time: time,
+                goal: goal,
+                passed: passed,
+                diff: diff,
+                isAdaptive: isAdaptive
+            };
+            solvesHistory.unshift(record);
+
+            const banner = document.getElementById('last-result-banner');
+
+            if (passed) {
+                // PASSED!
+                totalGoalsPassed++;
+                currentStreak++;
+                if (currentStreak > bestStreak) bestStreak = currentStreak;
+                if (!bestGoalPassed || goal < bestGoalPassed) bestGoalPassed = goal;
+                consecutiveBeats++;
+                consecutiveMisses = 0;
+
+                triggerConfetti();
+                playGoalSuccessSound();
+
+                const underBy = Math.abs(diff).toFixed(2);
+                banner.className = "result-passed";
+                banner.style.display = "block";
+                banner.innerHTML = '🎉 GOAL BEATEN! You solved in <strong>' + time.toFixed(2) + 's</strong> (' + underBy + 's faster than your ' + goal.toFixed(2) + 's goal!)';
+
+                const nextGoal = calculateTighterGoal(goal, time);
+                pendingSuggestedGoal = nextGoal;
+
+                if (isAdaptive) {
+                    // Automatically adjust tighter in adaptive mode
+                    const oldGoal = currentGoal;
+                    currentGoal = nextGoal;
+                    saveGoalData();
+                    updateGoalUI();
+
+                    showGoalPassedModal({
+                        time: time,
+                        oldGoal: oldGoal,
+                        newGoal: nextGoal,
+                        isAdaptive: true,
+                        underBy: underBy
+                    });
+                } else {
+                    // Custom goal mode: prompt user with suggested goal (e.g. 18s if 20s)
+                    saveGoalData();
+                    updateGoalUI();
+
+                    showGoalPassedModal({
+                        time: time,
+                        oldGoal: goal,
+                        suggestedGoal: nextGoal,
+                        isAdaptive: false,
+                        underBy: underBy
+                    });
+                }
+            } else {
+                // MISSED
+                currentStreak = 0;
+                consecutiveBeats = 0;
+                consecutiveMisses++;
+                playGoalMissSound();
+
+                const overBy = diff.toFixed(2);
+                banner.className = "result-missed";
+                banner.style.display = "block";
+
+                if (isAdaptive && (consecutiveMisses >= 3 || diff > 10.0)) {
+                    // Automatically ease goal slower so user is never discouraged!
+                    const easedGoal = calculateEasierGoal(goal);
+                    banner.innerHTML = '🐢 Close! (' + time.toFixed(2) + 's, +' + overBy + 's). Adjusting goal to <strong>' + easedGoal.toFixed(2) + 's</strong> so you can regain your groove!';
+                    currentGoal = easedGoal;
+                    consecutiveMisses = 0;
+                    saveGoalData();
+                    updateGoalUI();
+                } else {
+                    banner.innerHTML = '💪 Good effort! You solved in <strong>' + time.toFixed(2) + 's</strong> (+' + overBy + 's from goal). Keep practicing!';
+                    saveGoalData();
+                    updateGoalUI();
+                }
+            }
+
+            renderSolvesTable();
+        }
+
+        function showGoalPassedModal(info) {
+            const modal = document.getElementById('modal-goal-passed');
+            const desc = document.getElementById('passed-modal-desc');
+            const num = document.getElementById('passed-suggested-goal-num');
+            const btnVal = document.getElementById('btn-next-goal-val');
+            const note = document.getElementById('passed-suggested-goal-note');
+
+            if (info.isAdaptive) {
+                desc.innerHTML = 'You crushed your ' + info.oldGoal.toFixed(2) + 's goal with a <strong>' + info.time.toFixed(2) + 's</strong> solve! (Beat by ' + info.underBy + 's) 🚀';
+                num.textContent = info.newGoal.toFixed(2) + 's';
+                btnVal.textContent = info.newGoal.toFixed(2) + 's';
+                note.textContent = '🤖 Adaptive mode automatically leveled up your goal based on your speed!';
+            } else {
+                desc.innerHTML = 'You crushed your ' + info.oldGoal.toFixed(2) + 's goal with a <strong>' + info.time.toFixed(2) + 's</strong> solve! (Beat by ' + info.underBy + 's) 🚀';
+                num.textContent = info.suggestedGoal.toFixed(2) + 's';
+                btnVal.textContent = info.suggestedGoal.toFixed(2) + 's';
+                note.textContent = 'Ready for your next challenge? Click below to level up!';
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeGoalPassedModal() {
+            document.getElementById('modal-goal-passed').style.display = 'none';
+        }
+
+        function acceptSuggestedGoal() {
+            currentGoal = pendingSuggestedGoal;
+            saveGoalData();
+            updateGoalUI();
+            closeGoalPassedModal();
+            showToast('⚡ New Goal set to ' + currentGoal.toFixed(2) + 's! Level up!', 'success');
+        }
+
+        function renderSolvesTable() {
+            const tbody = document.getElementById('solves-log-body');
+            if (!tbody) return;
+            if (solvesHistory.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">No solves yet. Start practicing above! 🚀</td></tr>';
+                return;
+            }
+
+            let html = "";
+            solvesHistory.forEach((s, idx) => {
+                const solveNum = solvesHistory.length - idx;
+                const isPassed = s.passed;
+                const diffStr = (s.diff <= 0 ? '-' : '+') + Math.abs(s.diff).toFixed(2) + 's';
+                const badge = isPassed ? 
+                    '<span class="badge-passed">🎉 PASSED (' + s.time.toFixed(2) + 's)</span>' : 
+                    '<span class="badge-missed">Missed (' + s.time.toFixed(2) + 's)</span>';
+
+                html += '<tr>' +
+                        '<td>#' + solveNum + '</td>' +
+                        '<td style="font-family: monospace; font-size: 1.1em; font-weight: 800;">' + s.time.toFixed(2) + 's</td>' +
+                        '<td style="font-family: monospace; color: #0284c7;">' + s.goal.toFixed(2) + 's</td>' +
+                        '<td>' + badge + '</td>' +
+                        '<td style="font-family: monospace; font-weight: bold; color: ' + (isPassed ? '#059669' : '#dc2626') + ';">' + diffStr + '</td>' +
+                        '</tr>';
+            });
+            tbody.innerHTML = html;
+        }
+
+        function clearHistory() {
+            if (solvesHistory.length === 0) return;
+            if (confirm("Clear all practice speed solves in this session?")) {
+                solvesHistory = [];
+                currentStreak = 0;
+                saveGoalData();
+                updateGoalUI();
+                renderSolvesTable();
+                showToast("Solves history cleared.", "info");
+            }
+        }
+
+        // --- 4. TIMER LOGIC (COMPETITION READY) ---
+        let timerState = "STOPPED"; // STOPPED, READYING, READY, RUNNING
+        let timerStartTime = 0;
+        let timerElapsed = 0;
+        let timerInterval = null;
+        let readyTimeout = null;
+
+        function startTimer() {
+            timerState = "RUNNING";
+            timerStartTime = performance.now();
+            const display = document.getElementById('timer-display');
+            const statusMsg = document.getElementById('timer-status-msg');
+            const hint = document.getElementById('timer-sub-hint');
+
+            display.className = "timer-digits-display running";
+            statusMsg.textContent = "⏱️ Solving! Press Spacebar or Tap to Stop!";
+            statusMsg.style.color = "var(--primary)";
+            hint.textContent = "";
+
+            document.getElementById('last-result-banner').style.display = "none";
+
+            timerInterval = setInterval(() => {
+                const now = performance.now();
+                timerElapsed = (now - timerStartTime) / 1000;
+                display.textContent = timerElapsed.toFixed(2);
+            }, 10);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            const finalTime = Math.round(timerElapsed * 100) / 100;
+            timerState = "STOPPED";
+
+            const display = document.getElementById('timer-display');
+            const statusMsg = document.getElementById('timer-status-msg');
+            const hint = document.getElementById('timer-sub-hint');
+
+            display.textContent = finalTime.toFixed(2);
+            display.className = "timer-digits-display";
+            statusMsg.textContent = "Done! Hold Spacebar or Tap to start next solve!";
+            statusMsg.style.color = "#64748b";
+            hint.textContent = "(New scramble ready!)";
+
+            // Evaluate Goal!
+            evaluateSolveGoal(finalTime);
+
+            // Auto-advance to new scramble for next run
+            generateNewScramble();
+        }
+
+        // Keyboard Handling
+        window.addEventListener('keydown', (e) => {
+            // Ignore if in inputs
+            if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
+            
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (timerState === 'RUNNING') {
+                    stopTimer();
+                } else if (timerState === 'STOPPED') {
+                    timerState = 'READYING';
+                    const display = document.getElementById('timer-display');
+                    const statusMsg = document.getElementById('timer-status-msg');
+                    display.className = "timer-digits-display readying";
+                    display.textContent = "0.00";
+                    statusMsg.textContent = "Holding... (Keep holding)";
+
+                    readyTimeout = setTimeout(() => {
+                        if (timerState === 'READYING') {
+                            timerState = 'READY';
+                            display.className = "timer-digits-display ready";
+                            statusMsg.textContent = "🟢 READY! Release Spacebar to Solve!";
+                            playReadyBeep();
+                        }
+                    }, 300);
+                }
+            } else {
+                // Any other key stops running timer
+                if (timerState === 'RUNNING') {
+                    stopTimer();
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) return;
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (timerState === 'READY') {
+                    startTimer();
+                } else if (timerState === 'READYING') {
+                    // Released too early
+                    clearTimeout(readyTimeout);
+                    timerState = 'STOPPED';
+                    const display = document.getElementById('timer-display');
+                    const statusMsg = document.getElementById('timer-status-msg');
+                    display.className = "timer-digits-display";
+                    statusMsg.textContent = "Hold for 0.3s until green, then release!";
+                }
+            }
+        });
+
+        // Touch & Tap Handling
+        document.addEventListener('DOMContentLoaded', () => {
+            const arena = document.getElementById('timer-arena');
+            if (arena) {
+                // Mouse/Touch down
+                const onStartHold = (e) => {
+                    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+                    if (timerState === 'RUNNING') {
+                        stopTimer();
+                        return;
+                    }
+                    if (timerState === 'STOPPED') {
+                        timerState = 'READYING';
+                        const display = document.getElementById('timer-display');
+                        const statusMsg = document.getElementById('timer-status-msg');
+                        display.className = "timer-digits-display readying";
+                        display.textContent = "0.00";
+                        statusMsg.textContent = "Holding... (Keep holding)";
+
+                        readyTimeout = setTimeout(() => {
+                            if (timerState === 'READYING') {
+                                timerState = 'READY';
+                                display.className = "timer-digits-display ready";
+                                statusMsg.textContent = "🟢 READY! Release to Solve!";
+                                playReadyBeep();
+                            }
+                        }, 300);
+                    }
+                };
+
+                const onEndHold = (e) => {
+                    if (timerState === 'READY') {
+                        startTimer();
+                    } else if (timerState === 'READYING') {
+                        clearTimeout(readyTimeout);
+                        timerState = 'STOPPED';
+                        const display = document.getElementById('timer-display');
+                        const statusMsg = document.getElementById('timer-status-msg');
+                        display.className = "timer-digits-display";
+                        statusMsg.textContent = "Hold until green, then release!";
+                    }
+                };
+
+                arena.addEventListener('mousedown', onStartHold);
+                window.addEventListener('mouseup', onEndHold);
+
+                arena.addEventListener('touchstart', (e) => {
+                    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+                    e.preventDefault();
+                    onStartHold(e);
+                }, { passive: false });
+
+                window.addEventListener('touchend', (e) => {
+                    onEndHold(e);
+                });
+            }
+        });
+
+        // --- 5. CONFETTI CELEBRATION ENGINE ---
+        function triggerConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#00E5FF', '#FAED27', '#2ED573', '#FF6B6B', '#A29BFE', '#FFA502'];
+
+            for (let i = 0; i < 90; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height * 0.3,
+                    w: Math.random() * 12 + 6,
+                    h: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: Math.random() * 4 + 2,
+                    rot: Math.random() * 360,
+                    vrot: (Math.random() - 0.5) * 10
+                });
+            }
+
+            let start = performance.now();
+            function drawFrame(now) {
+                const elapsed = now - start;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.rot += p.vrot;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rot * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                });
+
+                if (elapsed < 2400) {
+                    requestAnimationFrame(drawFrame);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // --- 6. WEB AUDIO SOUND EFFECTS ---
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioClass) audioCtx = new AudioClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playReadyBeep() {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(520, ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.1);
+            } catch (e) {}
+        }
+
+        function playGoalSuccessSound() {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                // Ascending 4-tone victory chime
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const t = ctx.currentTime + idx * 0.12;
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, t);
+                    gain.gain.setValueAtTime(0.2, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(t);
+                    osc.stop(t + 0.3);
+                });
+            } catch (e) {}
+        }
+
+        function playGoalMissSound() {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const notes = [392.00, 329.63];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const t = ctx.currentTime + idx * 0.14;
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, t);
+                    gain.gain.setValueAtTime(0.1, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(t);
+                    osc.stop(t + 0.25);
+                });
+            } catch (e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btn-sound-toggle');
+            if (btn) btn.textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+            showToast(soundEnabled ? 'Sound enabled 🔊' : 'Sound muted 🔇', 'info');
+        }
+
+        // --- 7. TOAST NOTIFICATIONS ---
+        function showToast(msg, type) {
+            let toast = document.getElementById('ps-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'ps-toast';
+                toast.style.cssText = "position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e272e; color: #fff; border: 3px solid #2ED573; border-radius: 14px; padding: 10px 20px; font-family: 'DynaPuff', cursive; font-size: 0.95em; z-index: 10001; box-shadow: 0 6px 20px rgba(0,0,0,0.3); text-align: center; transition: opacity 0.3s; pointer-events: none;";
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = "1";
+            toast.style.display = "block";
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => { toast.style.display = "none"; }, 300);
+            }, 3000);
+        }
+
+        // --- 8. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGoalData();
+            updateGoalUI();
+            renderSolvesTable();
+            generateNewScramble();
+        });
+    </script>
+</body>
+</html>

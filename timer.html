@@ -1383,6 +1383,7 @@
         
         <div class="cs-site-nav">
             <a href="index.html" class="nav-button">🏠 Home</a>
+            <a href="practice-speed.html" class="nav-button" style="background-color: #2ed573; color: white;">⚡ Practice Speed</a>
             <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white;">🏆 Challenges ♾️</a>
             <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white;">📰 News</a>
             <a href="blog.html" class="nav-button" style="background-color: #FAED27;">✍️ Blog</a>
@@ -1420,6 +1421,7 @@
                 <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
                 <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
                 <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
+                <a href="practice-speed.html" class="btn-action" style="background-color: #2ed573; color: white; text-decoration: none;" title="Go to Practice Speed with Goals">⚡ Practice Speed 🎯</a>
                 <a href="challenges.html" class="btn-action" style="background-color: #ff4757; color: white; text-decoration: none;" title="Go to Challenges of Cubing">🏆 Challenges ♾️</a>
             </div>
 
@@ -1588,6 +1590,20 @@
 
             <!-- MIDDLE AREA: TIMER IN THE MIDDLE (AND TIME TOO) -->
             <main class="cs-timer-center">
+                <!-- PRACTICE SPEED CALLOUT BANNER -->
+                <div class="practice-speed-banner" style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 14px 20px; border-radius: 18px; border: 3.5px solid #1e272e; box-shadow: 0 5px 0 #1e272e; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 2.2em; line-height: 1;">⚡</span>
+                        <div>
+                            <div style="font-family: 'DynaPuff', cursive; font-size: 1.2em; font-weight: bold; text-shadow: 1px 1px 0 rgba(0,0,0,0.2);">Practice Speed Mode 🎯</div>
+                            <div style="font-size: 0.9em; opacity: 0.95;">Set target goals, see scramble previews, and get auto-adapting targets (faster & slower)!</div>
+                        </div>
+                    </div>
+                    <a href="practice-speed.html" class="btn-action" style="background: #FAED27; color: #1e272e; font-size: 1.05em; padding: 10px 20px; text-decoration: none; border-radius: 14px;" title="Open Practice Speed Mode">
+                        Open Practice Speed 🚀
+                    </a>
+                </div>
+
                 <!-- Large Centered csTimer Card -->
                 <div id="timer-tap-zone" class="timer-card">
                     <div id="timer-val" class="timer-display">0.00</div>
@@ -4477,6 +4493,7 @@
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
+                    <li><a href="practice-speed.html">⚡ Practice Speed Mode</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>

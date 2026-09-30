@@ -1,37 +1,40 @@
+# Practice Speed Mode with Adaptive Goals & Scramble Preview
+
+**Summary:**
+- Created dedicated `practice-speed.html` page featuring:
+  - Professional speedcubing competition timer (Spacebar hold-to-ready green indicator, touch/tap support, 15s WCA inspection beeps).
+  - WCA standard scramble generator (3x3, 2x2, easy/medium/hard) with 2D unfolded Cube Net visualizer and interactive 3D mini cube preview showing exactly what the scramble looks like.
+  - "🎯 Set Goal" custom goal manager with presets (e.g., 20s). When a solve beats the goal (e.g. 19.45s), triggers victory chimes, confetti burst, celebratory modal, and prompts next tighter goal (e.g. 18s, "goes on and on").
+  - "🤖 Give Goals" adaptive auto-goal system: starts with an easy goal (60s) and automatically adjusts dynamically faster (if you beat the goal) or slower (if struggling/misses consecutive times) depending on your speed.
+  - Solve history table, Ao5, Ao12, best time, streaks, and localStorage persistence.
+- Added prominent "Practice Speed ⚡" callout banner, action toolbar button, and site navigation links in `timer.html`.
+- Added Practice Speed links and cards to `index.html`, `trainer.html`, and `challenges.html`.
+- Verified 100% JS syntax and link integrity across all modified files; passed simulation test suite.
+
 Status: COMPLETE
-Summary:
-- Upgraded Case Recognition Trainer (`trainer.html`) to hide case pictures, names, and algorithms during practice until revealed at the end or on reveal button click.
-- Implemented Mystery Case visual card (`❓ Mystery Case - Scramble & inspect your cube!`) shown during scramble, recognition, and solve phases.
-- Verified 100% accurate case pictures (SVGs) rendered upon reveal with dynamic permutation arrows, corner twist arrows, and edge flip indicators.
-- Fixed scramble generation: corrected `invertAlgorithm` token parsing and bracket stripping, replaced duplicate Gd Perm algorithm, and fixed OLL 21 notation.
-- Added dedicated `⏭️ Next Case` button to instantly load the next random case from selected subsets and reset the hidden state.
-- Added `👁️ Reveal Case` button and `📋 Copy` scramble button.
-- Synced the audited competition database containing 325 cases across all 14 methods (PLL, OLL, F2L, CMLL, COLL, ZBLL, ZBLS, LSE, WV, VLS, OH, BLD, FMC, ELL).
-- Verified 325 / 325 cases with automated Node.js test suite with 0 errors.
-- Pushed changes to origin main branch.
-
 Goal / Definition of done:
-1. Hide case picture, name, and algorithm during training; reveal only at the end or on reveal button click. (DONE)
-2. Ensure scrambles are 100% mathematically correct and set up the exact case from a solved cube. (DONE)
-3. Add a dedicated "Next Case" button to transition to the next case. (DONE)
-4. Ensure all SVG pictures are 100% mathematically and visually accurate. (DONE)
-5. Verify with automated test scripts, commit and push to origin main. (DONE)
+1. Create a dedicated "Practice Speed" page (`practice-speed.html`) featuring:
+   - Full competition timer with keyboard Spacebar and touch/tap controls, inspection mode, and scramble generator.
+   - Visual scramble preview ("what the scramble looks like"): interactive 2D net / 3D facelet preview showing the scrambled cube state.
+   - Goal Setting feature ("Goal Button"): allows user to set target time (e.g. 20s). When user gets under goal, celebrate passing and prompt/advance to next tighter target (e.g. 18s).
+   - "Give Goals" button (Adaptive Auto-Goal system): starts with an easy goal (60s) and automatically adjusts dynamically faster or slower based on the user's recent solve speed.
+2. In `timer.html`, add a prominent, stylish "Practice Speed ⚡" space / button / banner linking seamlessly to `practice-speed.html`.
+3. Support dark/light mode, mobile friendliness, celebratory animations/confetti on beating goals, sound effects/toasts, and persistent local storage.
+4. Verify with automated tests, commit, and push to origin main.
 
-Next step: Completed and pushed to remote main branch.
+Next step: Completed and pushed to origin main.
 Tasks:
-- [x] Hide case picture and name in trainer.html during scramble / recognition phase
-- [x] Add Mystery Case card placeholder with sleek styling
-- [x] Fix invertAlgorithm move parsing, brackets, and quotes normalization
-- [x] Audit and sync all 325 cases from algorithms.html (including all 41 F2L cases, Roux LSE, and fixed Gd/OLL 21)
-- [x] Implement revealCase logic for solve completion and manual reveal button
-- [x] Add dedicated Next Case button and keyboard shortcuts (Space / N / R)
-- [x] Add Copy Scramble button with toast feedback
-- [x] Run Node.js validation test suite (325/325 cases verified with 0 errors)
-- [x] Commit and push changes to remote main branch
+- [x] Inspect timer.html and scramble preview mechanisms
+- [x] Design and implement practice-speed.html with timer, scramble visualizer, custom goal manager, and adaptive "Give Goals" engine
+- [x] Add prominent "Practice Speed ⚡" button/space in timer.html
+- [x] Add navigation and hub links in index.html, challenges.html, and trainer.html
+- [x] Verify functionality, syntax, responsiveness, and link validity with automated test suite
+- [x] Commit and push to origin main
 
 Assumptions:
-- Random case selection prevents back-to-back duplicate cases when practicing a list with multiple cases.
-- Reveal can be triggered automatically upon solve completion or manually via the "Reveal Case" button.
+- "Practice speed" in timer.html should have a prominent button and hero callout banner so users can easily launch it.
+- "what the scramble looks like" means rendering the cube state net / visual diagram of the scrambled cube, identical to standard speedcubing timers like csTimer.
+- "give goals" dynamically adapts: starts with an easy goal (60s), tightens when solves beat it, and eases up (slower) if user repeatedly misses, tracking streaks and progress.
 
 Blockers (what I need to do):
 - None.
@@ -40,9 +43,8 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Upgraded trainer.html: hidden picture until reveal, accurate scrambles, next case button, 100% verified pictures, and pushed to origin main
-- Added Slow, Normal, and Fast speed buttons to pattern 3D video modal, verified and pushed to origin main
-- Verified all 21 pattern challenges are 100% unique, tested syntax, committed and pushed to origin main
-- Replaced duplicate patterns with The Pinwheel Twister and The Spiral Gift Box; updated titles and algorithms
-- Added interactive 3D video animator modal for Pattern Master challenges in challenges.html
-- Verified 21/21 pattern challenges in challenges.html with 0 errors and confirmed 3D view in play.html
+- Completed Practice Speed page and adaptive goal engine, verified with simulation tests, committed and pushed to origin main
+- Added Practice Speed cards and links to index.html, timer.html, challenges.html, and trainer.html
+- Verified 100% JS syntax and link integrity across all modified HTML files
+- Implemented practice-speed.html with 2D/3D scramble visualizer, goal progression modal, and Give Goals adaptive engine
+- Starting Practice Speed feature for timer.html and new practice-speed.html
