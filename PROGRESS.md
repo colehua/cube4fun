@@ -1,36 +1,36 @@
-# Case Trainer: Next Button for Different Selected Cases
+# Integrate Cole's New Presentation in "How It Works & Finger Tricks"
 
 **Summary:**
-- Upgraded `trainer.html` to guarantee getting a different case from the user's selected cases on every "Next Case" click:
-  - Replaced random case picker with `getDifferentSelectedCase()`: filters out the current active case and uses an unvisited tracking pool so consecutive duplicate cases are mathematically impossible when multiple cases are selected, and every selected case is visited.
-  - Added dedicated Next Case buttons across the UI:
-    - Setup Session card: `⏭️ Next Case (Different Selected Case)` button right under the case selection list.
-    - Welcome message card: `⏭️ Next Case (Start Practice) 🚀` button for immediate 1-click launch.
-    - Scramble Box header: quick `⏭️ Next Case` mini-button next to the Copy Scramble button.
-    - Trainer Actions Bar: `⏭️ Next Case (Different Case)` button.
-    - Revealed Case answer box: `⏭️ Next Case (Different Case)` button.
-  - Added automated workspace display logic so clicking any Next Case button opens and initializes the workspace immediately.
-  - Added visual toast notification (`showTrainerToast`) confirming when a different case is loaded.
-  - Verified with full automated test suite (100% pass on 2, 3, 5, and 21 cases with zero consecutive repeats).
+- Successfully integrated Cole's new PowerPoint presentation (`Finger tricks and how a Rubiks cube works.pptx`) into `guide.html` ("How It Works & Finger Tricks"):
+  - Copied presentation file to repository root (`Finger tricks and how a Rubiks cube works.pptx`, 6.5 MB) and added prominent download buttons.
+  - Extracted slide media assets into `media/guide_ppt/`.
+  - Built an interactive **Slide Deck Viewer** on `guide.html` showcasing all 7 slides with Cole's original commentary and photography (cover, corner pieces, edge pieces, center caps, center cores, finger tricks, thanks for watching) with Previous/Next controls, 7 jump dots, slide counter badge, and keyboard arrow navigation.
+  - Added **Cole's Real Cube Anatomy Photos & Tips** gallery in Section 1 with high-res photos of corner piece (3 stickers), edge piece (2 stickers & locking wing), and center caps removed showing the internal tension screw.
+  - Enriched Section 3 with Cole's specialized finger tricks: D2 pinky-ring double flick (pinky first, then ring; left hand for D2'), B2 ring-middle double flick (left hand for B2, right hand for B2'), and anti-regrip index/ring finger pushes.
+  - Verified 100% JS syntax, image references, PPTX download links, and mobile responsiveness.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. In `trainer.html`, add next button(s) to get a different case from the cases you selected.
-2. Guarantee that each click advances to a different selected case without consecutive duplicates.
-3. Verify with automated simulation tests, commit, and push to origin main.
+1. Copy `Finger tricks and how a Rubiks cube works.pptx` into `cube4fun` and extract media to `cube4fun/media/guide_ppt/`.
+2. Update `guide.html` ("How It Works & Finger Tricks") with:
+   - Interactive slide viewer allowing visitors to flip through all 7 slides with Cole's original text and real cube photos.
+   - Prominent download button for the `.pptx` presentation.
+   - Integrated explanations of piece anatomy (corner pieces, edge pieces, center caps, spider core) and fingertrick techniques (D2, U2, B2 double flicks, anti-regrip pushes).
+3. Verify responsiveness, dark mode, HTML/JS syntax, and asset links.
+4. Commit and push all changes to `origin main`.
 
 Next step: Completed and pushed to origin main.
 Tasks:
-- [x] Analyze trainer case selection and next case workflow
-- [x] Implement getDifferentSelectedCase() with unvisited pool and guaranteed non-duplicate selection
-- [x] Add Next Case buttons in setup panel, welcome screen, scramble box header, actions bar, and revealed box
-- [x] Add toast notifications and automatic workspace opening
-- [x] Verify JS syntax and run full simulation tests (100% pass rate)
-- [x] Commit and push changes to origin main
+- [x] Extract and inspect PPTX slides and media assets
+- [x] Copy PPTX and 25 media assets into `cube4fun`
+- [x] Add interactive Slide Deck Viewer and download button in `guide.html`
+- [x] Incorporate Cole's piece anatomy photos and finger trick tips into `guide.html` sections
+- [x] Verify HTML/JS syntax, links, and mobile responsiveness
+- [x] Commit and push to origin main
 
 Assumptions:
-- "get a different case you selected" means when clicking Next, it must switch to a different case from among the user's checked cases without giving back-to-back duplicates.
-- Providing Next buttons in both setup and workspace areas ensures quick accessibility anywhere on the page.
+- "it works and finger tricks" refers to `guide.html` (titled "Cube Guide & Finger Tricks" / "How It Works & Finger Tricks").
+- Both an interactive web slide viewer and a direct `.pptx` download link provide the best experience for visitors.
 
 Blockers (what I need to do):
 - None.
@@ -39,5 +39,6 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
+- Integrated Cole's new PowerPoint presentation into guide.html with interactive slide viewer, photo gallery, finger tricks, verified and pushed to origin main
+- Starting integration of Cole's new PPTX into guide.html ("How It Works & Finger Tricks")
 - Upgraded case trainer with Next Case buttons across setup and workspace, guaranteed different case selection, verified and pushed to origin main
-- Added Practice Speed mode with adaptive goals and scramble preview, pushed to origin main
