@@ -675,7 +675,7 @@
         </div>
 
         <!-- TUTORIAL BUTTONS & TIMER -->
-        <div style="text-align: center; margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+        <div style="text-align: center; margin-bottom: 35px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
             <a href="timer.html" class="cube-button" style="background-color: #00E5FF; color: #1a1a1a;">
                 <span class="cube-icon">⏱️</span> Speedcubing Timer
             </a>
@@ -718,95 +718,6 @@
             <a href="#" class="cube-button" style="background-color: #ccc; cursor: not-allowed; box-shadow: 0px 4px 0px #999; top: 4px;" onclick="alert('Coming soon!'); return false;">
                 <span class="cube-icon" style="animation: none;">🔒</span> 4x4 Tutorial (Soon)
             </a>
-        </div>
-
-        <!-- LEARNING ORDER TIP -->
-        <div style="text-align: center; margin-bottom: 25px;">
-            <div style="display: inline-block; background: #ffffff; border: 3px solid #1e272e; border-radius: 20px; padding: 8px 22px; font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #1e272e; box-shadow: 0 4px 0 #1e272e;">
-                💡 <span style="color: #FF6B6B;">Learning Tip:</span> Learn the <a href="tutorial-3x3.html" style="color: #0066FF; text-decoration: underline;">3x3 Tutorial</a> first, then the <a href="tutorial-2x2.html" style="color: #FF9F43; text-decoration: underline;">2x2 Tutorial</a>! 🧊
-            </div>
-        </div>
-
-        <!-- Total Solves Counter Badge -->
-        <div style="text-align: center; margin-bottom: 35px;">
-            <span style="display: inline-block; background-color: #ffffff; border: 3px solid #333; padding: 6px 16px; border-radius: 15px; font-family: 'DynaPuff', cursive; font-size: 1.15em; box-shadow: 0px 4px 0px rgba(0,0,0,0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
-                🔥 <span style="color: #0066FF;">Speedcubing Timer:</span> <strong id="home-total-solves" style="color: #FF6B6B;">0</strong> solves completed!
-            </span>
-        </div>
-
-        <!-- SPEEDCUBING HUB FEATURE CARDS -->
-        <div class="hub-cards-container" style="max-width: 1050px; margin: 0 auto 40px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">⏱️</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #0066FF;">Speedcubing Timer</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Practice with real WCA scramble generation, 15-second inspection audio beeps, and solve graphs!</p>
-                </div>
-                <a href="timer.html" class="nav-button" style="background-color: #00E5FF; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Launch Timer ▶</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">⚡</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #10b981;">Practice Speed Mode 🎯</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Set your target goal (like sub-20s), see what the scramble looks like in 2D & 3D, and use the adaptive "Give Goals" engine that gets faster or slower depending on your speed!</p>
-                </div>
-                <a href="practice-speed.html" class="nav-button" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Practice Speed 🚀</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">🏆</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #ff4757;">Challenges of Cubing ♾️</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Infinite procedural challenges, crazy stunts (wild animal solve, toy box, red light green light!), sounds & stopwatch!</p>
-                </div>
-                <a href="challenges.html" class="nav-button" style="background: linear-gradient(135deg, #FF6584 0%, #ff4757 100%); color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Conquer Challenges 🚀</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">📰</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #d35400;">Cubing News & Updates</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Read breaking world records (Teodor's 2.76s & Yiheng's 3.51s), Cole's official WCA results, 2026 new cube releases & prices, and publish stories!</p>
-                </div>
-                <a href="news.html" class="nav-button" style="background: linear-gradient(135deg, #FFA502 0%, #FF6348 100%); color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Read News ⚡</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">🧩</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #27ae60;">Algorithms Guide</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">CFOP (F2L, OLL, PLL), Roux, beginner LBL, 3D visualizers, fingertrick videos, and instant alg copier!</p>
-                </div>
-                <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Browse Algorithms 🧠</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">🧠</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #9b59b6;">Case Recognition Trainer</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Train your eyes to spot cases instantly from any angle before your fingers make the first turn!</p>
-                </div>
-                <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Start Training 🎯</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">🎮</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #2ECC71;">3D Virtual Cube</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Solve, rotate, scramble, and play with a full 3D interactive virtual cube on desktop, tablet, or phone!</p>
-                </div>
-                <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Play Virtual 3D 🎲</a>
-            </div>
-
-            <div class="hub-card" style="background: white; border: 3px solid #1e272e; border-radius: 20px; padding: 22px; box-shadow: 0 6px 0 #1e272e; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 0 #1e272e';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 6px 0 #1e272e';">
-                <div>
-                    <div style="font-size: 2.2em; margin-bottom: 8px;">⚔️</div>
-                    <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.4em; margin: 0 0 8px 0; color: #FF0055;">Battle Timer</h3>
-                    <p style="font-size: 1.05em; color: #475569; margin: 0 0 16px 0; line-height: 1.5; font-weight: 500;">Race a friend head-to-head or vs Bot with independent timers, fair shared scramble, live scoreboard, and keyboard/touch mats!</p>
-                </div>
-                <a href="#one-vs-one-section" class="nav-button" style="background: linear-gradient(135deg, #FF0055 0%, #7928CA 100%); color: white; text-align: center; justify-content: center; margin: 0; font-size: 1em; padding: 10px 18px;">Start Battle Timer ⚔️</a>
-            </div>
         </div>
 
         <!-- ============================================== -->

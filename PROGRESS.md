@@ -1,36 +1,31 @@
-# Integrate Cole's New Presentation in "How It Works & Finger Tricks"
+# Remove Words and Cards Between Homepage Header and Battle Timer
 
 **Summary:**
-- Successfully integrated Cole's new PowerPoint presentation (`Finger tricks and how a Rubiks cube works.pptx`) into `guide.html` ("How It Works & Finger Tricks"):
-  - Copied presentation file to repository root (`Finger tricks and how a Rubiks cube works.pptx`, 6.5 MB) and added prominent download buttons.
-  - Extracted slide media assets into `media/guide_ppt/`.
-  - Built an interactive **Slide Deck Viewer** on `guide.html` showcasing all 7 slides with Cole's original commentary and photography (cover, corner pieces, edge pieces, center caps, center cores, finger tricks, thanks for watching) with Previous/Next controls, 7 jump dots, slide counter badge, and keyboard arrow navigation.
-  - Added **Cole's Real Cube Anatomy Photos & Tips** gallery in Section 1 with high-res photos of corner piece (3 stickers), edge piece (2 stickers & locking wing), and center caps removed showing the internal tension screw.
-  - Enriched Section 3 with Cole's specialized finger tricks: D2 pinky-ring double flick (pinky first, then ring; left hand for D2'), B2 ring-middle double flick (left hand for B2, right hand for B2'), and anti-regrip index/ring finger pushes.
-  - Verified 100% JS syntax, image references, PPTX download links, and mobile responsiveness.
+- Successfully removed the intermediate clutter between the top homepage quick-launch buttons grid and the Battle Timer section on `index.html`:
+  - Removed the Learning Tip banner (`<!-- LEARNING ORDER TIP -->`).
+  - Removed the Total Solves Counter Badge (`<!-- Total Solves Counter Badge -->`).
+  - Removed all 8 duplicate Speedcubing Hub Feature Cards (`.hub-cards-container`).
+  - Adjusted bottom margin of the quick-launch buttons grid to 35px for clean, balanced visual spacing immediately leading into the Battle Timer.
+  - Verified JavaScript syntax across all inline scripts in `index.html` with Node.js `vm.Script`.
+  - Confirmed safe degradation (existing JS guard `if (el)` prevents errors when `home-total-solves` element is absent).
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Copy `Finger tricks and how a Rubiks cube works.pptx` into `cube4fun` and extract media to `cube4fun/media/guide_ppt/`.
-2. Update `guide.html` ("How It Works & Finger Tricks") with:
-   - Interactive slide viewer allowing visitors to flip through all 7 slides with Cole's original text and real cube photos.
-   - Prominent download button for the `.pptx` presentation.
-   - Integrated explanations of piece anatomy (corner pieces, edge pieces, center caps, spider core) and fingertrick techniques (D2, U2, B2 double flicks, anti-regrip pushes).
-3. Verify responsiveness, dark mode, HTML/JS syntax, and asset links.
-4. Commit and push all changes to `origin main`.
+1. Remove all words, banners, and feature cards located between the top homepage buttons and the Battle Timer on `cube4fun/index.html`.
+2. Ensure clean layout transition between the top buttons and `#one-vs-one-section`.
+3. Verify HTML & JavaScript syntax.
+4. Commit and push changes to `origin main`.
 
 Next step: Completed and pushed to origin main.
 Tasks:
-- [x] Extract and inspect PPTX slides and media assets
-- [x] Copy PPTX and 25 media assets into `cube4fun`
-- [x] Add interactive Slide Deck Viewer and download button in `guide.html`
-- [x] Incorporate Cole's piece anatomy photos and finger trick tips into `guide.html` sections
-- [x] Verify HTML/JS syntax, links, and mobile responsiveness
+- [x] Inspect DOM structure in `cube4fun/index.html` between top buttons and battle timer
+- [x] Remove learning tip banner, solves counter badge, and hub cards container
+- [x] Adjust container margins for seamless visual spacing
+- [x] Verify JS parsing and DOM integrity
 - [x] Commit and push to origin main
 
 Assumptions:
-- "it works and finger tricks" refers to `guide.html` (titled "Cube Guide & Finger Tricks" / "How It Works & Finger Tricks").
-- Both an interactive web slide viewer and a direct `.pptx` download link provide the best experience for visitors.
+- "words between the top home page part and the battle timer thingy" refers to the learning tip, total solves badge, and the 8 feature cards that duplicated the quick-launch buttons.
 
 Blockers (what I need to do):
 - None.
@@ -39,6 +34,6 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
+- Removed intermediate words, tip banner, solves badge, and hub cards between top buttons and Battle Timer in index.html; verified and pushed to origin main
 - Integrated Cole's new PowerPoint presentation into guide.html with interactive slide viewer, photo gallery, finger tricks, verified and pushed to origin main
-- Starting integration of Cole's new PPTX into guide.html ("How It Works & Finger Tricks")
 - Upgraded case trainer with Next Case buttons across setup and workspace, guaranteed different case selection, verified and pushed to origin main
