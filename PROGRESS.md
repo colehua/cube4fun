@@ -1,32 +1,33 @@
-# Restore Cole's PPT Drawn Circles on Corner and Edge Pieces
+# Add Cole's Mission Quote to Learn Cube 4 Fun
 
 **Summary:**
-- Restored Cole's hand-drawn red circles on corner and edge pieces across the presentation viewer and photo gallery in `guide.html` ("How It Works & Finger Tricks"):
-  - Extracted OpenXML DrawingML stroke and transform coordinates from `slide2.xml` (Ink 9 & Ink 11, `image4.png` / `image5.png`) and `slide3.xml` (Ink 4, `image7.png`).
-  - Composited Cole's exact red ink circle drawings onto `media/guide_ppt/image3.jpeg` (Corner piece) and `media/guide_ppt/image4.jpeg` (Edge piece) at sub-pixel accuracy.
-  - Added Cole's authentic hand-drawn spider core diagram (`center_core_drawing.png`) to Slide 5 ("Center Cores") with clear labels for the 6-axis core and attached centers.
-  - Updated captions and badges in Slide 2, Slide 3, Slide 5, and the Section 1 Anatomy Photo Gallery.
-  - Verified JavaScript parsing, image existence, and responsive styling.
+- Added Cole's personal mission quote card prominently across the platform:
+  - Added to `index.html` hero section right between the social/channel subscription banner and the class announcement banner.
+  - Added to `blog.html` right below the main blog title.
+  - Features Cole's exact words: *“the reason where i made this website was because i wanted the cubing community to grow better and keep spreading cubing so everybody gets to understand how much fun cubing really is and how interesting it is”*
+  - Styled with vibrant retro cartoon styling (`4px solid #1e272e`, DynaPuff badges, clean typography, responsive font clamps).
+  - Added full dark mode support in `theme.css`.
+  - Verified JavaScript parsing across all inline scripts.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Extract Cole's hand-drawn ink circles from PPTX DrawingML (`slide2.xml` and `slide3.xml`).
-2. Composite the circles onto the corner and edge piece images at the exact coordinates.
-3. Update `guide.html` slides and gallery to show the circled pieces and Cole's hand-drawn center core diagram.
-4. Verify all image links and JS syntax.
+1. Add Cole's mission quote banner to the website using Cole's exact phrasing.
+2. Integrate into `index.html` and `blog.html` with responsive, playful styling.
+3. Ensure dark mode compatibility in `theme.css`.
+4. Verify JS and DOM integrity.
 5. Commit and push changes to `origin main`.
 
 Next step: Completed and pushed to origin main.
 Tasks:
-- [x] Inspect slide2.xml and slide3.xml DrawingML transforms and embedded ink PNGs
-- [x] Composite Cole's drawn circles onto corner (`image3.jpeg`) and edge (`image4.jpeg`) photos
-- [x] Extract and render Cole's hand-drawn center core diagram for Slide 5
-- [x] Update Slide 2, Slide 3, Slide 5, and Anatomy Gallery in `guide.html`
-- [x] Verify images and JavaScript syntax
+- [x] Design Cole's Mission Card with responsive quote typography and DynaPuff badge
+- [x] Insert into `index.html` hero section
+- [x] Insert into `blog.html` intro section
+- [x] Add dark mode rules in `theme.css`
+- [x] Verify inline script syntax and responsiveness
 - [x] Commit and push to origin main
 
 Assumptions:
-- "ppt's circles that i put on the corner and edges are gone" refers to the digital ink strokes (`image4.png`, `image5.png`, `image7.png`) that Cole drew on top of the corner and edge pieces in PowerPoint, which were missing from the raw photo extractions.
+- "put a thing where says..." refers to a dedicated, prominent message/mission card from Cole on the website.
 
 Blockers (what I need to do):
 - None.
@@ -35,6 +36,7 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
+- Added Cole's mission quote card to index.html and blog.html with dark mode support, verified and pushed to origin main
 - Restored Cole's PPT drawn circles on corner and edge pieces, added hand-drawn center core diagram, verified and pushed to origin main
 - Removed intermediate words, tip banner, solves badge, and hub cards between top buttons and Battle Timer in index.html; verified and pushed to origin main
 - Integrated Cole's new PowerPoint presentation into guide.html with interactive slide viewer, photo gallery, finger tricks, verified and pushed to origin main

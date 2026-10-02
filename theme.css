@@ -482,3 +482,21 @@ body.dark-mode [style*="background-color: #fff"] {
 body.dark-mode #home-total-solves {
     color: #FAED27 !important;
 }
+
+/* 13. Cole's Mission Card */
+body.dark-mode .cole-mission-card {
+    background: #0d131f !important;
+    background-color: #0d131f !important;
+    border-color: #1e3a8a !important;
+    box-shadow: 0 6px 0 #020617, 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .cole-mission-card blockquote {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .cole-mission-card .cole-signature-badge {
+    background: #0f172a !important;
+    color: #38bdf8 !important;
+    border-color: #0284c7 !important;
+}
