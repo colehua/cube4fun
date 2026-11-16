@@ -519,3 +519,93 @@ body.dark-mode .tab-btn.active {
     color: #1e272e !important;
     border-color: #1e272e !important;
 }
+
+body.dark-mode .cube-size-btn {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 0 #020617 !important;
+}
+
+body.dark-mode .cube-size-btn.active {
+    background-color: var(--cyan-blob) !important;
+    color: #0f172a !important;
+    border-color: #00E5FF !important;
+}
+
+body.dark-mode #cube-type-label {
+    color: #f8fafc !important;
+}
+
+/* ==========================================================================
+   SECRET PORTAL BUTTON & STEALTH TRIGGERS
+   ========================================================================== */
+.secret-stealth-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    opacity: 0.12;
+    transition: opacity 0.3s ease, transform 0.2s ease, filter 0.3s ease;
+    padding: 6px 8px;
+    border-radius: 8px;
+    line-height: 1;
+    outline: none;
+    user-select: none;
+}
+
+.secret-stealth-button:hover,
+.secret-stealth-button:focus-visible {
+    opacity: 0.95;
+    transform: scale(1.25) rotate(-10deg);
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.85));
+}
+
+.secret-portal-digit {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    transition: transform 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.secret-portal-digit:hover {
+    transform: scale(1.15) rotate(5deg);
+    color: #00E5FF !important;
+    text-shadow: 0 0 16px rgba(0, 229, 255, 0.9);
+}
+
+/* Secret Warp Overlay */
+#secret-warp-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #050b14 0%, #000000 100%);
+    z-index: 9999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #00ffaa;
+    font-family: 'Courier New', monospace;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#secret-warp-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.warp-grid-scan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg, rgba(0, 255, 170, 0.05) 0px, rgba(0, 255, 170, 0.05) 2px, transparent 2px, transparent 6px);
+    pointer-events: none;
+}
+

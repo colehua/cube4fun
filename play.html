@@ -159,6 +159,41 @@
             border-radius: 10px;
             backface-visibility: hidden;
             cursor: grab;
+            transition: all 0.2s ease;
+        }
+
+        .cube-type-selector-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .cube-size-btn {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.02em;
+            font-weight: 700;
+            padding: 9px 16px;
+            border: 3px solid #1e272e;
+            border-radius: 16px;
+            background-color: #ffffff;
+            color: #1e272e;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #1e272e;
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+        }
+
+        .cube-size-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e272e;
+        }
+
+        .cube-size-btn.active {
+            background-color: var(--cyan-blob);
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1e272e;
         }
 
         .face-3d.face-U { transform: rotateX(90deg) translateZ(90px); }
@@ -466,6 +501,21 @@
 
         <h1 class="main-title">3D Virtual Cube Playground 🎮</h1>
 
+        <!-- CUBE TYPE SELECTOR (2x2 to 7x7) -->
+        <div style="text-align: center; margin: 10px auto 26px auto; max-width: 800px; padding: 0 10px;">
+            <div id="cube-type-label" style="font-family: 'DynaPuff', cursive; font-size: 1.15em; font-weight: bold; margin-bottom: 12px; color: #1e272e;">
+                Select Cube: <span id="current-cube-name" style="color: #0066FF; text-decoration: underline;">3x3x3 Rubik's Cube</span>
+            </div>
+            <div class="cube-type-selector-bar">
+                <button class="cube-size-btn" id="cube-btn-2" onclick="switchCubeType(2)" title="2x2x2 Pocket Cube">🧊 2x2x2</button>
+                <button class="cube-size-btn active" id="cube-btn-3" onclick="switchCubeType(3)" title="3x3x3 Rubik's Cube">🧊 3x3x3</button>
+                <button class="cube-size-btn" id="cube-btn-4" onclick="switchCubeType(4)" title="4x4x4 Revenge Cube">🧊 4x4x4</button>
+                <button class="cube-size-btn" id="cube-btn-5" onclick="switchCubeType(5)" title="5x5x5 Professor's Cube">🧊 5x5x5</button>
+                <button class="cube-size-btn" id="cube-btn-6" onclick="switchCubeType(6)" title="6x6x6 V-Cube">🧊 6x6x6</button>
+                <button class="cube-size-btn" id="cube-btn-7" onclick="switchCubeType(7)" title="7x7x7 Master Cube">🧊 7x7x7</button>
+            </div>
+        </div>
+
         <div class="play-grid">
             
             <!-- Left Side: The 3D Cube & Camera Hint -->
@@ -665,8 +715,21 @@
     </div>
 
     <script>
-        // --- SIMULATED CUBE STATE ---
-        let cube3 = {};
+        // --- SIMULATED CUBE STATE (NxN Multi-Cube Engine: 2x2 to 7x7) ---
+        let currentCubeOrder = 3;
+        const cubeTypeNames = {
+            2: "2x2x2 Pocket Cube",
+            3: "3x3x3 Rubik's Cube",
+            4: "4x4x4 Revenge Cube",
+            5: "5x5x5 Professor's Cube",
+            6: "6x6x6 V-Cube 6",
+            7: "7x7x7 Master Cube"
+        };
+
+        let cubeFaces = {
+            U: [], D: [], F: [], B: [], L: [], R: []
+        };
+
         const colorMap = {
             'white': 'var(--white-sticker)',
             'yellow': 'var(--yellow-sticker)',
@@ -727,14 +790,15 @@
         let moveHistory = []; 
         let solutionMoves = []; 
 
-        function resetCubeState3x3() {
-            cube3 = {
-                U: Array(9).fill('white'),
-                D: Array(9).fill('yellow'),
-                F: Array(9).fill('green'),
-                B: Array(9).fill('blue'),
-                L: Array(9).fill('orange'),
-                R: Array(9).fill('red')
+        function resetCubeState(N = currentCubeOrder) {
+            currentCubeOrder = N;
+            cubeFaces = {
+                U: Array(N * N).fill('white'),
+                D: Array(N * N).fill('yellow'),
+                F: Array(N * N).fill('green'),
+                B: Array(N * N).fill('blue'),
+                L: Array(N * N).fill('orange'),
+                R: Array(N * N).fill('red')
             };
             moveHistory = [];
             solutionMoves = [];
@@ -742,47 +806,95 @@
             if (hintBox) hintBox.style.display = 'none';
         }
 
-        function rotateFaceCW(face) {
-            let temp = [...face];
-            face[0] = temp[6]; face[1] = temp[3]; face[2] = temp[0];
-            face[3] = temp[7];                  face[5] = temp[1];
-            face[6] = temp[8]; face[7] = temp[5]; face[8] = temp[2];
+        function rotateFaceCW(face, N) {
+            const next = new Array(N * N);
+            for (let r = 0; r < N; r++) {
+                for (let c = 0; c < N; c++) {
+                    next[c * N + (N - 1 - r)] = face[r * N + c];
+                }
+            }
+            for (let i = 0; i < N * N; i++) face[i] = next[i];
         }
 
-        function rotateMiddleColumn(dir) {
-            let count = dir === 1 ? 1 : 3;
-            for (let c = 0; c < count; c++) {
-                let temp = [cube3.U[1], cube3.U[4], cube3.U[7]];
-                cube3.U[1] = cube3.B[7]; cube3.U[4] = cube3.B[4]; cube3.U[7] = cube3.B[1];
-                cube3.B[7] = cube3.D[1]; cube3.B[4] = cube3.D[4]; cube3.B[1] = cube3.D[7];
-                cube3.D[1] = cube3.F[1]; cube3.D[4] = cube3.F[4]; cube3.D[7] = cube3.F[7];
-                cube3.F[1] = temp[0]; cube3.F[4] = temp[1]; cube3.F[7] = temp[2];
+        function rotateLayerCW(faces, N, faceName, k) {
+            if (k === 0) rotateFaceCW(faces[faceName], N);
+            if (faceName === 'U') {
+                for (let c = 0; c < N; c++) {
+                    let temp = faces.L[k * N + c];
+                    faces.L[k * N + c] = faces.F[k * N + c];
+                    faces.F[k * N + c] = faces.R[k * N + c];
+                    faces.R[k * N + c] = faces.B[k * N + c];
+                    faces.B[k * N + c] = temp;
+                }
+            } else if (faceName === 'D') {
+                let r = N - 1 - k;
+                for (let c = 0; c < N; c++) {
+                    let temp = faces.R[r * N + c];
+                    faces.R[r * N + c] = faces.F[r * N + c];
+                    faces.F[r * N + c] = faces.L[r * N + c];
+                    faces.L[r * N + c] = faces.B[r * N + c];
+                    faces.B[r * N + c] = temp;
+                }
+            } else if (faceName === 'F') {
+                for (let i = 0; i < N; i++) {
+                    let uIdx = (N - 1 - k) * N + i;
+                    let rIdx = i * N + k;
+                    let dIdx = k * N + (N - 1 - i);
+                    let lIdx = (N - 1 - i) * N + (N - 1 - k);
+                    let temp = faces.U[uIdx];
+                    faces.U[uIdx] = faces.L[lIdx];
+                    faces.L[lIdx] = faces.D[dIdx];
+                    faces.D[dIdx] = faces.R[rIdx];
+                    faces.R[rIdx] = temp;
+                }
+            } else if (faceName === 'B') {
+                for (let i = 0; i < N; i++) {
+                    let uIdx = k * N + i;
+                    let rIdx = i * N + (N - 1 - k);
+                    let dIdx = (N - 1 - k) * N + (N - 1 - i);
+                    let lIdx = (N - 1 - i) * N + k;
+                    let temp = faces.U[uIdx];
+                    faces.U[uIdx] = faces.R[rIdx];
+                    faces.R[rIdx] = faces.D[dIdx];
+                    faces.D[dIdx] = faces.L[lIdx];
+                    faces.L[lIdx] = temp;
+                }
+            } else if (faceName === 'L') {
+                for (let i = 0; i < N; i++) {
+                    let uIdx = i * N + k;
+                    let fIdx = i * N + k;
+                    let dIdx = i * N + k;
+                    let bIdx = (N - 1 - i) * N + (N - 1 - k);
+                    let temp = faces.U[uIdx];
+                    faces.U[uIdx] = faces.B[bIdx];
+                    faces.B[bIdx] = faces.D[dIdx];
+                    faces.D[dIdx] = faces.F[fIdx];
+                    faces.F[fIdx] = temp;
+                }
+            } else if (faceName === 'R') {
+                for (let i = 0; i < N; i++) {
+                    let uIdx = i * N + (N - 1 - k);
+                    let bIdx = (N - 1 - i) * N + k;
+                    let dIdx = i * N + (N - 1 - k);
+                    let fIdx = i * N + (N - 1 - k);
+                    let temp = faces.U[uIdx];
+                    faces.U[uIdx] = faces.F[fIdx];
+                    faces.F[fIdx] = faces.D[dIdx];
+                    faces.D[dIdx] = faces.B[bIdx];
+                    faces.B[bIdx] = temp;
+                }
             }
         }
 
-        function rotateMiddleRow(dir) {
-            let count = dir === 1 ? 1 : 3;
-            for (let c = 0; c < count; c++) {
-                let temp = [cube3.R[3], cube3.R[4], cube3.R[5]];
-                cube3.R[3] = cube3.F[3]; cube3.R[4] = cube3.F[4]; cube3.R[5] = cube3.F[5];
-                cube3.F[3] = cube3.L[3]; cube3.F[4] = cube3.L[4]; cube3.F[5] = cube3.L[5];
-                cube3.L[3] = cube3.B[3]; cube3.L[4] = cube3.B[4]; cube3.L[5] = cube3.B[5];
-                cube3.B[3] = temp[0]; cube3.B[4] = temp[1]; cube3.B[5] = temp[2];
+        function rotateNxNLayer(faceName, k, isCW, count = 1) {
+            let times = (count % 4 + 4) % 4;
+            if (!isCW) times = (4 - times) % 4;
+            for (let t = 0; t < times; t++) {
+                rotateLayerCW(cubeFaces, currentCubeOrder, faceName, k);
             }
         }
 
-        function rotateMiddleRing(dir) {
-            let count = dir === 1 ? 1 : 3;
-            for (let c = 0; c < count; c++) {
-                let temp = [cube3.U[3], cube3.U[4], cube3.U[5]];
-                cube3.U[3] = cube3.L[7]; cube3.U[4] = cube3.L[4]; cube3.U[5] = cube3.L[1];
-                cube3.L[1] = cube3.D[3]; cube3.L[4] = cube3.D[4]; cube3.L[7] = cube3.D[5];
-                cube3.D[3] = cube3.R[7]; cube3.D[4] = cube3.R[4]; cube3.D[5] = cube3.R[1];
-                cube3.R[1] = temp[0]; cube3.R[4] = temp[1]; cube3.R[7] = temp[2];
-            }
-        }
-
-        function rotate3x3(move) {
+        function rotateNxN(move) {
             let base = move;
             let isPrime = false;
             let isDouble = false;
@@ -795,77 +907,35 @@
                 base = move.slice(0, -1);
             }
             
-            let count = 1;
-            if (isPrime) count = 3;
-            if (isDouble) count = 2;
+            let count = isDouble ? 2 : (isPrime ? 3 : 1);
+            const N = currentCubeOrder;
             
-            for (let c = 0; c < count; c++) {
-                if (base === 'U') {
-                    rotateFaceCW(cube3.U);
-                    let temp = [...cube3.L.slice(0, 3)];
-                    cube3.L[0] = cube3.F[0]; cube3.L[1] = cube3.F[1]; cube3.L[2] = cube3.F[2];
-                    cube3.F[0] = cube3.R[0]; cube3.F[1] = cube3.R[1]; cube3.F[2] = cube3.R[2];
-                    cube3.R[0] = cube3.B[0]; cube3.R[1] = cube3.B[1]; cube3.R[2] = cube3.B[2];
-                    cube3.B[0] = temp[0]; cube3.B[1] = temp[1]; cube3.B[2] = temp[2];
-                } else if (base === 'D') {
-                    rotateFaceCW(cube3.D);
-                    let temp = [...cube3.R.slice(6, 9)];
-                    cube3.R[6] = cube3.F[6]; cube3.R[7] = cube3.F[7]; cube3.R[8] = cube3.F[8];
-                    cube3.F[6] = cube3.L[6]; cube3.F[7] = cube3.L[7]; cube3.F[8] = cube3.L[8];
-                    cube3.L[6] = cube3.B[6]; cube3.L[7] = cube3.B[7]; cube3.L[8] = cube3.B[8];
-                    cube3.B[6] = temp[0]; cube3.B[7] = temp[1]; cube3.B[8] = temp[2];
-                } else if (base === 'F') {
-                    rotateFaceCW(cube3.F);
-                    let temp = [cube3.U[6], cube3.U[7], cube3.U[8]];
-                    cube3.U[6] = cube3.L[8]; cube3.U[7] = cube3.L[5]; cube3.U[8] = cube3.L[2];
-                    cube3.L[2] = cube3.D[0]; cube3.L[5] = cube3.D[1]; cube3.L[8] = cube3.D[2];
-                    cube3.D[0] = cube3.R[6]; cube3.D[1] = cube3.R[3]; cube3.D[2] = cube3.R[0];
-                    cube3.R[0] = temp[0]; cube3.R[3] = temp[1]; cube3.R[6] = temp[2];
-                } else if (base === 'B') {
-                    rotateFaceCW(cube3.B);
-                    let temp = [cube3.U[0], cube3.U[1], cube3.U[2]];
-                    cube3.U[0] = cube3.R[2]; cube3.U[1] = cube3.R[5]; cube3.U[2] = cube3.R[8];
-                    cube3.R[2] = cube3.D[8]; cube3.R[5] = cube3.D[7]; cube3.R[8] = cube3.D[6];
-                    cube3.D[6] = cube3.L[0]; cube3.D[7] = cube3.L[3]; cube3.D[8] = cube3.L[6];
-                    cube3.L[0] = temp[2]; cube3.L[3] = temp[1]; cube3.L[6] = temp[0];
-                } else if (base === 'L') {
-                    rotateFaceCW(cube3.L);
-                    let temp = [cube3.U[0], cube3.U[3], cube3.U[6]];
-                    cube3.U[0] = cube3.B[8]; cube3.U[3] = cube3.B[5]; cube3.U[6] = cube3.B[2];
-                    cube3.B[2] = cube3.D[6]; cube3.B[5] = cube3.D[3]; cube3.B[8] = cube3.D[0];
-                    cube3.D[0] = cube3.F[0]; cube3.D[3] = cube3.F[3]; cube3.D[6] = cube3.F[6];
-                    cube3.F[0] = temp[0]; cube3.F[3] = temp[1]; cube3.F[6] = temp[2];
-                } else if (base === 'R') {
-                    rotateFaceCW(cube3.R);
-                    let temp = [cube3.U[2], cube3.U[5], cube3.U[8]];
-                    cube3.U[2] = cube3.F[2]; cube3.U[5] = cube3.F[5]; cube3.U[8] = cube3.F[8];
-                    cube3.F[2] = cube3.D[2]; cube3.F[5] = cube3.D[5]; cube3.F[8] = cube3.D[8];
-                    cube3.D[2] = cube3.B[6]; cube3.D[5] = cube3.B[3]; cube3.D[8] = cube3.B[0];
-                    cube3.B[0] = temp[2]; cube3.B[3] = temp[1]; cube3.B[6] = temp[0];
-                } else if (base === 'M') {
-                    rotateMiddleColumn(1);
-                } else if (base === 'E') {
-                    rotateMiddleRow(1);
-                } else if (base === 'S') {
-                    rotateMiddleRing(1);
-                } else if (base === 'Uw') {
-                    rotateFaceCW(cube3.U);
-                    rotateMiddleRow(-1);
-                } else if (base === 'Dw') {
-                    rotateFaceCW(cube3.D);
-                    rotateMiddleRow(1);
-                } else if (base === 'Fw') {
-                    rotateFaceCW(cube3.F);
-                    rotateMiddleRing(1);
-                } else if (base === 'Bw') {
-                    rotateFaceCW(cube3.B);
-                    rotateMiddleRing(-1);
-                } else if (base === 'Lw') {
-                    rotateFaceCW(cube3.L);
-                    rotateMiddleColumn(1);
-                } else if (base === 'Rw') {
-                    rotateFaceCW(cube3.R);
-                    rotateMiddleColumn(-1);
+            // Standard Outer Layer turns
+            if (['U', 'D', 'F', 'B', 'L', 'R'].includes(base)) {
+                rotateNxNLayer(base, 0, true, count);
+            }
+            // Wide turns (turns layers 0 and 1, or multi-layer on big cubes)
+            else if (['Uw', 'Dw', 'Fw', 'Bw', 'Lw', 'Rw'].includes(base)) {
+                let face = base[0];
+                let wideLayers = N >= 6 ? 3 : 2;
+                for (let k = 0; k < wideLayers && k < N; k++) {
+                    rotateNxNLayer(face, k, true, count);
+                }
+            }
+            // Slice turns
+            else if (['M', 'E', 'S'].includes(base)) {
+                if (N >= 3) {
+                    let midStart = Math.floor((N - 1) / 2);
+                    let midEnd = Math.ceil((N - 1) / 2);
+                    for (let k = midStart; k <= midEnd; k++) {
+                        if (base === 'M') {
+                            rotateNxNLayer('L', k, true, count); // M follows L direction
+                        } else if (base === 'E') {
+                            rotateNxNLayer('D', k, true, count); // E follows D direction
+                        } else if (base === 'S') {
+                            rotateNxNLayer('F', k, true, count); // S follows F direction
+                        }
+                    }
                 }
             }
         }
@@ -950,11 +1020,20 @@
         function init3dCube() {
             const cubeEl = document.getElementById('cube-3d');
             cubeEl.innerHTML = "";
+            const N = currentCubeOrder;
             
+            const gap = N <= 3 ? '4px' : (N <= 5 ? '2.5px' : '1.5px');
+            const padding = N <= 3 ? '5px' : (N <= 5 ? '3px' : '2px');
+            const radius = N <= 3 ? '5px' : (N <= 5 ? '3px' : '1.5px');
+
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
             faces.forEach(fName => {
                 const faceEl = document.createElement('div');
                 faceEl.className = `face-3d face-${fName}`;
+                faceEl.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+                faceEl.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+                faceEl.style.gap = gap;
+                faceEl.style.padding = padding;
                 
                 faceEl.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
@@ -962,9 +1041,10 @@
                     playMove(fName + "'");
                 });
 
-                for (let i = 0; i < 9; i++) {
+                for (let i = 0; i < N * N; i++) {
                     const sticker = document.createElement('div');
                     sticker.className = `sticker-3d sticker-${fName}-${i}`;
+                    sticker.style.borderRadius = radius;
                     
                     // Sticker drag/swipe listener setup
                     sticker.addEventListener('mousedown', (e) => {
@@ -995,9 +1075,10 @@
 
         function update3dCube() {
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            const N = currentCubeOrder;
             faces.forEach(fName => {
-                const state = cube3[fName];
-                for (let i = 0; i < 9; i++) {
+                const state = cubeFaces[fName];
+                for (let i = 0; i < N * N; i++) {
                     const color = state[i];
                     const stickerEl = document.querySelector(`.sticker-${fName}-${i}`);
                     if (stickerEl) {
@@ -1007,85 +1088,62 @@
             });
         }
 
-        // --- STICKER SWIPE INTERACTION ---
+        // --- STICKER SWIPE INTERACTION (NxN) ---
         function executeSwipeMove(face, idx, dx, dy) {
             const isHorizontal = Math.abs(dx) > Math.abs(dy);
-            let move = "";
+            const N = currentCubeOrder;
+            const r = Math.floor(idx / N);
+            const c = idx % N;
             
             if (face === 'F') {
                 if (isHorizontal) {
-                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
-                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
-                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                    rotateNxNLayer('U', r, dx < 0);
                 } else {
-                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L'" : "L";
-                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M'" : "M";
-                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R" : "R'";
+                    rotateNxNLayer('R', N - 1 - c, dy < 0);
                 }
             } else if (face === 'R') {
                 if (isHorizontal) {
-                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
-                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
-                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                    rotateNxNLayer('U', r, dx < 0);
                 } else {
-                    if ([0,3,6].includes(idx)) move = dy < 0 ? "F" : "F'";
-                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "S" : "S'";
-                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "B'" : "B";
+                    rotateNxNLayer('B', N - 1 - c, dy < 0);
                 }
             } else if (face === 'U') {
                 if (isHorizontal) {
-                    if ([0,1,2].includes(idx)) move = dx < 0 ? "B" : "B'";
-                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "S'" : "S";
-                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "F'" : "F";
+                    rotateNxNLayer('B', r, dx < 0);
                 } else {
-                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L'" : "L";
-                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M'" : "M";
-                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R" : "R'";
+                    rotateNxNLayer('L', c, dy > 0);
                 }
             } else if (face === 'L') {
                 if (isHorizontal) {
-                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
-                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
-                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                    rotateNxNLayer('U', r, dx < 0);
                 } else {
-                    if ([0,3,6].includes(idx)) move = dy < 0 ? "B" : "B'";
-                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "S'" : "S";
-                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "F'" : "F";
+                    rotateNxNLayer('F', c, dy < 0);
                 }
             } else if (face === 'B') {
                 if (isHorizontal) {
-                    if ([0,1,2].includes(idx)) move = dx < 0 ? "U" : "U'";
-                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "E" : "E'";
-                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "D'" : "D";
+                    rotateNxNLayer('U', r, dx < 0);
                 } else {
-                    if ([0,3,6].includes(idx)) move = dy < 0 ? "R'" : "R";
-                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M" : "M'";
-                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "L" : "L'";
+                    rotateNxNLayer('L', N - 1 - c, dy < 0);
                 }
             } else if (face === 'D') {
                 if (isHorizontal) {
-                    if ([0,1,2].includes(idx)) move = dx < 0 ? "F'" : "F";
-                    else if ([3,4,5].includes(idx)) move = dx < 0 ? "S" : "S'";
-                    else if ([6,7,8].includes(idx)) move = dx < 0 ? "B" : "B'";
+                    rotateNxNLayer('F', r, dx > 0);
                 } else {
-                    if ([0,3,6].includes(idx)) move = dy < 0 ? "L" : "L'";
-                    else if ([1,4,7].includes(idx)) move = dy < 0 ? "M" : "M'";
-                    else if ([2,5,8].includes(idx)) move = dy < 0 ? "R'" : "R";
+                    rotateNxNLayer('R', c, dy > 0);
                 }
             }
-            
-            if (move) {
-                playMove(move);
-            }
+            playClickSound();
+            update3dCube();
+            checkIfSolved();
         }
 
-        // --- HINT GENERATION ---
+        // --- HINT GENERATION (for 3x3) ---
         function updateHintDisplay() {
             const hintBox = document.getElementById('hint-box');
             const listEl = document.getElementById('hint-moves-list');
             
-            if (solutionMoves.length === 0) {
-                hintBox.style.display = 'none';
+            if (currentCubeOrder !== 3 || solutionMoves.length === 0) {
+                if (hintBox) hintBox.style.display = 'none';
                 return;
             }
             
@@ -1102,12 +1160,12 @@
         // --- PLAYGROUND CONTROLS ---
         function playMove(moveStr) {
             playClickSound();
-            rotate3x3(moveStr);
+            rotateNxN(moveStr);
             update3dCube();
 
             document.getElementById('playground-status').innerHTML = explanationMap[moveStr] || `Executed: ${moveStr}`;
             
-            if (solutionMoves.length > 0) {
+            if (currentCubeOrder === 3 && solutionMoves.length > 0) {
                 if (moveStr === solutionMoves[0]) {
                     solutionMoves.shift();
                 } else {
@@ -1120,17 +1178,18 @@
         }
 
         function resetPlayground() {
-            resetCubeState3x3();
+            resetCubeState(currentCubeOrder);
             update3dCube();
-            document.getElementById('playground-status').textContent = "Solved State! Click Scramble to start playing.";
+            document.getElementById('playground-status').textContent = `Solved State (${cubeTypeNames[currentCubeOrder]})! Click Scramble to start playing.`;
         }
 
         function isCubeSolved() {
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+            const N = currentCubeOrder;
             for (let f of faces) {
-                const color = cube3[f][0];
-                for (let i = 1; i < 9; i++) {
-                    if (cube3[f][i] !== color) return false;
+                const color = cubeFaces[f][0];
+                for (let i = 1; i < N * N; i++) {
+                    if (cubeFaces[f][i] !== color) return false;
                 }
             }
             return true;
@@ -1138,22 +1197,58 @@
 
         function checkIfSolved() {
             if (isCubeSolved()) {
-                document.getElementById('playground-status').innerHTML = "🎉 <strong>Congratulations! The cube is fully solved!</strong> 🌟";
+                document.getElementById('playground-status').innerHTML = `🎉 <strong>Congratulations! The ${currentCubeOrder}x${currentCubeOrder}x${currentCubeOrder} cube is fully solved!</strong> 🌟`;
                 solutionMoves = [];
                 updateHintDisplay();
                 triggerSolveCelebration();
             }
         }
 
+        function switchCubeType(order) {
+            order = parseInt(order);
+            if (![2, 3, 4, 5, 6, 7].includes(order)) return;
+            currentCubeOrder = order;
+
+            document.querySelectorAll('.cube-size-btn').forEach(btn => {
+                const btnSize = parseInt(btn.id.replace('cube-btn-', ''));
+                if (btnSize === order) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const nameEl = document.getElementById('current-cube-name');
+            if (nameEl) nameEl.textContent = cubeTypeNames[order] || `${order}x${order}x${order}`;
+
+            // 2x2 has no Wide or Slice moves
+            const wideTab = document.getElementById('tab-wide');
+            const sliceTab = document.getElementById('tab-slice');
+            if (wideTab) wideTab.style.display = order >= 3 ? 'inline-block' : 'none';
+            if (sliceTab) sliceTab.style.display = order >= 3 ? 'inline-block' : 'none';
+            switchMoveTab('basic');
+
+            resetCubeState(order);
+            init3dCube();
+            update3dCube();
+
+            const statusEl = document.getElementById('playground-status');
+            if (statusEl) {
+                statusEl.textContent = `Solved State (${cubeTypeNames[order]})! Click Scramble to start playing.`;
+            }
+        }
+
         function scramblePlayground() {
-            resetCubeState3x3();
-            
+            resetCubeState(currentCubeOrder);
+            const N = currentCubeOrder;
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
             const modifiers = ['', "'", '2'];
             let scrambleMoves = [];
             let prevFace = '';
             let prevPrevFace = '';
-            const scrambleLength = 15;
+            
+            const lengths = { 2: 11, 3: 20, 4: 30, 5: 45, 6: 60, 7: 75 };
+            const scrambleLength = lengths[N] || 25;
             
             while (scrambleMoves.length < scrambleLength) {
                 let face = faces[Math.floor(Math.random() * faces.length)];
@@ -1163,23 +1258,33 @@
                 if (face === prevPrevFace && opposites[face] === prevFace) continue;
                 
                 let mod = modifiers[Math.floor(Math.random() * modifiers.length)];
-                scrambleMoves.push(face + mod);
+                let move = face + mod;
+                if (N >= 4 && Math.random() < 0.35) {
+                    move = face + 'w' + mod;
+                }
+                scrambleMoves.push(move);
                 prevPrevFace = prevFace;
                 prevFace = face;
             }
             
             scrambleMoves.forEach(m => {
-                rotate3x3(m);
+                rotateNxN(m);
             });
             update3dCube();
             
-            solutionMoves = [];
-            for (let i = scrambleMoves.length - 1; i >= 0; i--) {
-                solutionMoves.push(invertMove(scrambleMoves[i]));
+            if (N === 3) {
+                solutionMoves = [];
+                for (let i = scrambleMoves.length - 1; i >= 0; i--) {
+                    solutionMoves.push(invertMove(scrambleMoves[i]));
+                }
+                updateHintDisplay();
+            } else {
+                solutionMoves = [];
+                const hintBox = document.getElementById('hint-box');
+                if (hintBox) hintBox.style.display = 'none';
             }
             
-            updateHintDisplay();
-            document.getElementById('playground-status').textContent = "Cube Scrambled! Try to solve it.";
+            document.getElementById('playground-status').textContent = `${N}x${N}x${N} Cube Scrambled (${scrambleMoves.length} moves)! Try to solve it.`;
         }
 
         function playNextHintMove() {
@@ -1343,19 +1448,21 @@
             }
         });
 
-        // Initialize Cube
-        resetCubeState3x3();
-        init3dCube();
-        update3dCube();
+        // Initialize Cube (defaults to 3x3x3)
+        switchCubeType(3);
 
-        // Check for custom pattern scramble from challenges or URL parameter
+        // Check for custom pattern scramble or cube type from challenges or URL parameter
         try {
             const urlParams = new URLSearchParams(window.location.search);
+            const typeParam = parseInt(urlParams.get('type') || urlParams.get('order'));
+            if ([2, 3, 4, 5, 6, 7].includes(typeParam)) {
+                switchCubeType(typeParam);
+            }
             const algParam = urlParams.get('alg') || sessionStorage.getItem('cube_custom_scramble');
             if (algParam) {
                 const moves = algParam.split(/\s+/);
                 moves.forEach(m => {
-                    if (m) rotate3x3(m);
+                    if (m) rotateNxN(m);
                 });
                 update3dCube();
                 const statusEl = document.getElementById('playground-status');

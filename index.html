@@ -603,6 +603,8 @@
         
         <!-- TOP UTILITY BAR (LANGUAGE PICKER & THEME TOGGLE) -->
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 12px; position: relative; z-index: 10; flex-wrap: wrap;">
+            <!-- Secret Stealth Portal Button -->
+            <button id="secret-portal-button" onclick="activateSecretPortal(event)" class="secret-stealth-button" aria-label="Classified Vault" title="🔒 Top Secret">🕵️‍♂️</button>
             <!-- Dark Mode Toggle Button -->
             <button id="theme-toggle" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙">
                 <span class="theme-toggle-icon">🌙</span>
@@ -624,7 +626,7 @@
             </div>
         </div>
 
-        <h1 class="main-title">Learn cube 4 fun</h1>
+        <h1 class="main-title">Learn cube <span id="secret-portal-4" onclick="activateSecretPortal(event)" class="secret-portal-digit" title="???">4</span> fun</h1>
 
         
         <!-- SOCIAL & PROFILE BANNERS -->
@@ -4154,5 +4156,72 @@
     </footer>
     <!-- Celebration Falling Ribbons Canvas (Full-screen celebration when someone wins) -->
     <canvas id="duel-ribbons-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; display: none;"></canvas>
+
+    <!-- Secret Portal Warp Overlay & Trigger Handler -->
+    <div id="secret-warp-overlay" aria-hidden="true">
+        <div class="warp-grid-scan"></div>
+        <div style="position: relative; z-index: 2; text-align: center; padding: 24px;">
+            <div style="font-size: 52px; margin-bottom: 12px; animation: pulse 0.8s infinite alternate;">🕵️‍♂️ ⚡ 🕶️</div>
+            <h2 style="font-size: 26px; color: #00ffaa; letter-spacing: 3px; margin: 0 0 10px 0; text-transform: uppercase;">Classified Clearance Verified</h2>
+            <p style="font-size: 15px; color: #38bdf8; letter-spacing: 1.5px; margin: 0;">WARPING TO UNDERGROUND SPEEDCUBING VAULT...</p>
+        </div>
+    </div>
+
+    <script>
+        function playSecretChirp() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(320, now);
+                osc.frequency.exponentialRampToValueAtTime(1400, now + 0.35);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.45);
+            } catch (e) {
+                // AudioContext fallback
+            }
+        }
+
+        let isWarping = false;
+        function activateSecretPortal(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (isWarping) return;
+            isWarping = true;
+            playSecretChirp();
+
+            const overlay = document.getElementById('secret-warp-overlay');
+            if (overlay) {
+                overlay.classList.add('active');
+            }
+
+            setTimeout(() => {
+                window.location.href = 'secret.html';
+            }, 600);
+        }
+
+        // Secret keyboard easter egg: type 'secret' or 'vault' or 'cole' anywhere on home page
+        let keyBuffer = '';
+        window.addEventListener('keydown', (ev) => {
+            if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA' || ev.target.tagName === 'SELECT')) {
+                return;
+            }
+            keyBuffer += ev.key.toLowerCase();
+            if (keyBuffer.length > 20) {
+                keyBuffer = keyBuffer.slice(-20);
+            }
+            if (keyBuffer.endsWith('secret') || keyBuffer.endsWith('vault') || keyBuffer.endsWith('cole')) {
+                activateSecretPortal();
+            }
+        });
+    </script>
 </body>
 </html>
