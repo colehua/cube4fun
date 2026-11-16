@@ -111,6 +111,35 @@
         document.querySelectorAll('.floating-theme-toggle').forEach(el => el.remove());
 
         updateThemeButtons();
+        ensureHomeButton();
+    }
+
+    // Automatic Home button for any sub-page or upcoming little pages
+    function ensureHomeButton() {
+        try {
+            const path = window.location.pathname.toLowerCase();
+            const isMainHome = path.endsWith('/index.html') || path.endsWith('/cube4fun/') || path === '/' || path.endsWith('\\index.html');
+            if (isMainHome) return;
+
+            // Check if page already has a link to index.html
+            const existingHome = document.querySelector('a[href*="index.html"], a[href="./"], a[href="/"], .btn-return-home, .floating-home-pill');
+            if (!existingHome) {
+                const nav = document.querySelector('.cs-site-nav, .nav-buttons, nav, .secret-nav');
+                if (nav) {
+                    const btn = document.createElement('a');
+                    btn.href = 'index.html';
+                    btn.className = 'btn-return-home';
+                    btn.innerHTML = '🏠 Home Page';
+                    btn.title = 'Return to Main Home Page';
+                    nav.insertBefore(btn, nav.firstChild);
+                } else {
+                    const bar = document.createElement('div');
+                    bar.className = 'universal-floating-home';
+                    bar.innerHTML = '<a href="index.html" class="floating-home-pill" title="Return to Main Home Page">🏠 Home Page</a>';
+                    document.body.appendChild(bar);
+                }
+            }
+        } catch (err) {}
     }
 
     // Keyboard shortcut (Alt + T or Ctrl + Shift + D) to quickly toggle theme

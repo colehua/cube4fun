@@ -660,3 +660,105 @@ body.dark-mode .secret-red-dot:focus-visible {
     pointer-events: none;
 }
 
+/* ==========================================================================
+   UNIVERSAL HOME BUTTONS (FOR ALL LITTLE PAGES & SUB-PAGES)
+   ========================================================================== */
+.btn-return-home,
+a.btn-return-home {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: #FAED27 !important;
+    color: #1e272e !important;
+    font-family: 'DynaPuff', cursive !important;
+    font-size: 1.05em !important;
+    font-weight: 800 !important;
+    padding: 10px 20px !important;
+    border: 3px solid #1e272e !important;
+    border-radius: 16px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 0 #1e272e !important;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer !important;
+}
+
+.btn-return-home:hover,
+a.btn-return-home:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 0 #1e272e !important;
+    background: #fff033 !important;
+}
+
+.btn-return-home:active,
+a.btn-return-home:active {
+    transform: translateY(2px) !important;
+    box-shadow: 0 2px 0 #1e272e !important;
+}
+
+body.dark-mode .btn-return-home,
+body.dark-mode a.btn-return-home {
+    background: #ffd700 !important;
+    color: #030712 !important;
+    border-color: #f8fafc !important;
+    box-shadow: 0 4px 0 #94a3b8 !important;
+}
+
+/* Secret Home Portal Variant */
+.btn-return-secret-home,
+a.btn-return-secret-home {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, #00f0ff 0%, #b026ff 100%) !important;
+    color: #ffffff !important;
+    font-family: 'DynaPuff', cursive !important;
+    font-size: 1em !important;
+    font-weight: 800 !important;
+    padding: 10px 18px !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 16px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 0 #0055aa, 0 0 15px rgba(0, 240, 255, 0.5) !important;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer !important;
+}
+
+.btn-return-secret-home:hover,
+a.btn-return-secret-home:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 0 #0055aa, 0 0 25px rgba(0, 240, 255, 0.8) !important;
+}
+
+/* Floating Return Home Button (automatically placed on little pages without nav) */
+.universal-floating-home {
+    position: fixed !important;
+    bottom: 24px !important;
+    left: 24px !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+.floating-home-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: #FAED27 !important;
+    color: #1e272e !important;
+    font-family: 'DynaPuff', cursive !important;
+    font-size: 0.95em !important;
+    font-weight: 800 !important;
+    padding: 10px 18px !important;
+    border: 3px solid #1e272e !important;
+    border-radius: 50px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 3px 0 #1e272e !important;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.floating-home-pill:hover {
+    transform: translateY(-3px) scale(1.04) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 5px 0 #1e272e !important;
+}
+

@@ -1,52 +1,45 @@
 # Summary
 - **What changed**:
-  - Removed all occurrences of "AI" in the Cube Solver sections of [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) and [play.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/play.html).
-  - Simplified cube selector buttons to just the cube dimension labels (`2x2x2`, `3x3x3`, `4x4x4`), completely removing "Rubik's cube", "Revenge cube", and "Pocket cube".
-  - Implemented an interactive 3D color-filling cube in [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html):
-    - Starts **fully grey** (`#64748b`) across all faces for 2x2x2 (24 spots), 3x3x3 (54 spots), and 4x4x4 (96 spots).
-    - Clicking any spot on the 3D cube fills it with the selected palette color.
-    - Added mouse and touch drag orbit controls to spin the cube freely in 3D.
-    - Added 1-click camera angle buttons: `Front (F)`, `Top (U)`, `Right (R)`, `Back (B)`, `Left (L)`, `Bottom (D)`, and `3D View`.
-    - Added a synchronized 2D flat net view toggle for alternate editing.
-  - Deleted "Preset Scramble" / "reset scramble" and "Reset Solved" buttons from the solver UI; replaced with `🧹 Reset to Grey`.
-  - Configured exact required error message whenever the cube is unsolvable or invalid:
-    `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`
-  - Hardened [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js) with strict invariant checks (corner/edge validity, orientation sums, parity) and post-solve simulation validation ensuring 100% correct solutions with zero mistakes.
+  - Upgraded [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) into **Agent Cole's Secret Homepage**:
+    1. Branded homepage header with navigation links to every secret room (`Secret Home`, `3D Solver`, `Scramble Lab`, `Reflex Arena`, `Little Pages`, `Audio FX`) and a button to return to the surface main home.
+    2. Secret Homepage Hero Section with level 007 classified status and quick action launch buttons.
+    3. **Secret Underground Portal Directory**: An 8-card visual directory featuring the 3D Cube Solver, Scramble Lab, Reflex Matrix, Agent Dossier, Cyber Timer, Algorithm Vault, Audio Matrix, and Little Pages Lab.
+    4. **Cole's Secret Little Pages Lab** (`#subpages-section`): A dedicated expansion hub for all the little pages Cole is building, with template launch button and copyable home-button code snippet.
+    5. Upgraded homepage footer with dual return buttons to Main Home and Secret Home.
+  - Implemented universal Home button support across all sub-pages and upcoming little pages:
+    1. Styled `.btn-return-home`, `.btn-return-secret-home`, and `.floating-home-pill` in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) with responsive mobile support and dark mode styling.
+    2. Added `ensureHomeButton()` in [theme.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.js): automatically detects any sub-page or upcoming little page without a home link and injects a Home Page button.
+    3. Created [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html) as a ready-to-use starter template for Cole's upcoming little pages, pre-configured with buttons to both Main Home and Secret Home.
 - **How verified**:
-  - Ran comprehensive Node.js automated test suites across all cube sizes testing grey stickers, solvable scrambles, twisted corners, and flipped edges.
-  - Verified in Chrome DevTools MCP: 3D grey cube generation, sticker color painting, camera angle switching, unsolvable error display, and clean console (0 errors).
+  - Validated syntax in Node.js for [theme.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.js), [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html), and [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html).
+  - Tested navigation in Chrome DevTools MCP: verified Secret Homepage header, 8 portal directory cards, and bidirectional navigation between `little-page-template.html`, `index.html`, and `secret.html` with 0 console errors.
 - **What to review**:
-  - Open [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) and navigate to the Quantum Cube Solver.
-  - Check the 3D fully-grey cube, select a color from the palette, and click spots to fill them.
-  - Test the camera angle buttons and drag orbit.
-  - Click "Calculate Fastest Solution" on an incomplete or impossible cube to see the exact error message.
+  - Open [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) to explore the new Secret Homepage design, portal directory, and Little Pages Lab.
+  - Check [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html) to see the starter template for new little pages.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Delete parts where it says "AI" in the cube solver.
-2. Selectors just write the cube (`2x2x2`, `3x3x3`, `4x4x4`), no "Rubik's cube", "Revenge cube", or "Pocket cube".
-3. 3D cube starts fully grey for color filling; user paints spots on the 3D cube.
-4. Delete "Preset Scramble" / "reset scramble" and "Reset Solved".
-5. If unsolvable, display: "ERROR this is a unsolvible case you might want to check if you filled it in correct or not".
-6. Ensure solve solutions are mathematically correct with 0 errors.
-7. Push changes to `origin main`.
+1. Make `secret.html` a complete, rich Secret Home Page.
+2. Provide a universal "Go to Home Page" button for all little pages Cole builds.
+3. Create `little-page-template.html` as a turnkey starter template with Home buttons.
+4. Verify in Node.js and Chrome DevTools MCP.
+5. Commit and push all changes to `origin main`.
 
 Next step: Completed.
 
 Tasks:
-- [x] Analyze requirements and plan implementation
-- [x] Update `cube-solver-engine.js` with invariant validation, simulation verification, and exact error string
-- [x] Implement interactive 3D fully-grey cube in `secret.html` with color filling, orbit drag, face angle shortcuts, and synchronized net
-- [x] Remove "AI" from `secret.html` and `play.html`
-- [x] Update cube selection buttons to `2x2x2`, `3x3x3`, `4x4x4` (delete Rubik's/Revenge/Pocket labels)
-- [x] Remove preset scramble and reset solved buttons
-- [x] Verify 2x2, 3x3, 4x4 solve solutions and error message handling in Node.js and browser
-- [x] Commit and push changes to `origin main`
+- [x] Analyze requirements and plan layout
+- [x] Add universal home button styles to `theme.css`
+- [x] Add automatic home button support to `theme.js`
+- [x] Create `little-page-template.html` starter page
+- [x] Upgrade `secret.html` into a full Secret Homepage with portal directory and little pages lab
+- [x] Verify navigation and links in browser via DevTools MCP
+- [x] Commit and push to `origin main`
 
 Assumptions:
-- Starting state for 3D cube is completely neutral grey (`#64748b`). User selects palette color and clicks 3D stickers to paint.
-- Camera controls allow smooth drag rotation to inspect any face, plus 1-click face view buttons.
+- "make the secret page a home page too": `secret.html` receives a full homepage identity with brand header, portal cards, navigation links, and showcase sections.
+- "make a button that goes to home page in the little pages i will build soon": Universal `.btn-return-home` styling, auto-injection in `theme.js`, and `little-page-template.html` created for Cole.
 
 Blockers (what I need to do):
 - None.
@@ -55,8 +48,8 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Completed and verified all requirements: 3D grey cube, exact error message, clean labels, removed AI
-- Verified 3D sticker painting, camera angles, and error message in Chrome DevTools MCP
-- Hardened cube-solver-engine.js with strict invariant checks and simulation verification
-- Added 3D cube color-filling interface to secret.html
-- Began task to revamp cube solver per user request
+- Completed and verified Secret Homepage and universal little-pages Home buttons
+- Verified bidirectional navigation in Chrome DevTools MCP
+- Created little-page-template.html and added ensureHomeButton() in theme.js
+- Upgraded secret.html with full homepage header, portal cards, and little pages lab
+- Added universal home button styles in theme.css
