@@ -1,54 +1,51 @@
 # Summary
 - **What changed**:
-  1. **Single Smaller Red Dot**:
-     - Removed the secondary red dot from `<h1>` in [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html). There is now strictly **only ONE red dot** on the entire home page (located in the top utility bar).
-     - Reduced the red dot dimensions in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) from 10px to a subtle **6px**.
-     - Expanded the invisible touch target (`.secret-red-dot::before`) to 30px so tapping on mobile or clicking with a mouse remains completely effortless.
-  2. **Comprehensive Review of All Deliverables**:
-     - **"Why I made website" removal**: 0 occurrences in [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html).
-     - **Virtual 3D cube play mode** ([play.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/play.html)): Supports switching between `2x2x2`, `3x3x3`, `4x4x4`, `5x5x5`, `6x6x6`, and `7x7x7`.
-     - **Secret Home Page** ([secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html)): Completely independent underground home page, 0 occurrences of "dossier" or "Secret PBs", prominent "Cube Solving Machine" launch buttons, and return link to main home.
-     - **Dedicated Cube Solving Machine** ([cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html)):
-       - Clean selectors: `2x2x2`, `3x3x3`, `4x4x4` (0 mentions of "AI", "Rubik's cube", "Revenge cube", or "Pocket cube").
-       - Interactive 3D fully-grey cube (`#64748b`) with color painting and orbit drag.
-       - Single `🧹 Reset to Grey` button.
-       - Exact unsolvable error text: `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`.
-       - Fastest mathematically verified solutions with step player and return buttons.
-     - **Universal Home Button**: Tested and verified across [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html), [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css), and [theme.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.js).
+  1. **Discreet 4px Red Dot**:
+     - Reduced the secret red dot dimensions in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) from 6px to a miniature **4px** (`width: 4px !important; height: 4px !important;`).
+     - Maintained a 32px invisible touch target (`.secret-red-dot::before`) ensuring smooth mobile and desktop clicking.
+     - Updated warp overlay text in [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) to `WARPING TO SECRET HOME PAGE...` and button title to `🔴 Secret Home Page`.
+  2. **Two-Step Navigation Flow**:
+     - Clicking the red dot on [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) navigates first to [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) (the Secret Home Page).
+     - On [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html), clicking the prominent **Cube Solving Machine** button opens the dedicated [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
+  3. **Verified Cube Solver Machine**:
+     - Clean selectors for `2x2x2`, `3x3x3`, and `4x4x4` with zero mentions of "AI" or trademarked names.
+     - Interactive 3D fully-grey cube (`#64748b`) with palette painting and single `🧹 Reset to Grey` button.
+     - Exact unsolvable error string: `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`.
+     - Return buttons to both Main Home and Secret Home.
 - **How verified**:
-  - Automated Node.js audit script executed all 25 test assertions across files and mathematical engines (100% passed).
+  - Node.js test audit script executed all 25 assertions across files, selectors, and mathematical solvers (100% passed).
   - Chrome DevTools MCP verified:
-    - Exactly 1 red dot found on [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) with computed width and height of 6px.
-    - Navigation from red dot to [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
-    - Launch from [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) to [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-    - 2x2 and 3x3 solves and error display on [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) with 0 console errors.
+    - Exactly 1 red dot found with computed size of 4px.
+    - Click on red dot loads `secret.html`.
+    - Click on "Cube Solving Machine" loads `cube-solving-machine.html`.
+    - Initial 3D grey cube and error string display tested with 0 console errors.
 - **What to review**:
-  - Open [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) and check the single 6px red dot in the top utility bar.
-  - Click the red dot to confirm navigation to [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
+  - Open [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) and click the 4px red dot in the top utility bar.
+  - Confirm arrival at [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
   - Click "Cube Solving Machine" on [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) to open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Make only ONE red dot on index.html (remove any second red dot).
-2. Make the red dot smaller (6px) with an invisible click target for smooth mobile/desktop tapping.
-3. Comprehensively review and test all features per all of Cole's requests.
-4. Verify in Node.js and Chrome DevTools MCP (0 errors).
-5. Push all changes to origin main.
+1. Make the secret red dot a little more small (reduced from 6px to 4px) in theme.css while keeping a comfortable invisible hit area.
+2. Ensure clicking the red dot navigates to secret.html (the secret home page) first.
+3. On the secret home page (secret.html), ensure the "Cube Solving Machine" button is prominent and opens the dedicated cube-solving-machine.html page.
+4. Verify the end-to-end flow in Node.js and Chrome DevTools MCP.
+5. Commit and push all changes to origin main.
 
-Next step: Completed.
+Next step: Done.
 
 Tasks:
 - [x] Update PROGRESS.md
-- [x] Remove duplicate red dot in index.html (leave exactly ONE red dot)
-- [x] Reduce red dot size in theme.css (to 6px)
-- [x] Run comprehensive automated tests for all historical and current user requests
-- [x] Verify in Chrome DevTools MCP
+- [x] Reduce red dot size in theme.css to 4px
+- [x] Update warp overlay text in index.html to "WARPING TO SECRET HOME PAGE..."
+- [x] Verify secret.html has clear "Cube Solving Machine" button
+- [x] Run automated tests and DevTools MCP verification
 - [x] Commit and push to origin main
 
 Assumptions:
-- Single red dot: Keep the subtle red dot in the top utility bar of index.html, remove the one in the <h1> title.
-- Size: Reduce diameter to 6px with 30px touch hit-box.
+- "make the red dot a little more small": 4px diameter with 32px invisible click target.
+- "when you press it you should first go to home page then press the cube solving machine button": clicking the red dot on index.html loads secret.html (the secret home page) first, where Cole/user clicks the "Cube Solving Machine" button to open cube-solving-machine.html.
 
 Blockers (what I need to do):
 - None.
@@ -57,4 +54,5 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Completed single 6px red dot refinement, passed full comprehensive audit, and pushed to origin main.
+- Completed 4px red dot resize, verified two-step navigation flow via DevTools MCP, and pushed to origin main.
+- Starting 4px red dot sizing and flow verification.
