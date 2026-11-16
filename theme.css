@@ -212,7 +212,7 @@ body.dark-mode .tab-btn,
 body.dark-mode .filter-btn,
 body.dark-mode .reset-btn,
 body.dark-mode .alg-btn-copy,
-body.dark-mode button:not(#theme-toggle):not(.floating-theme-toggle):not(.admin-login-link) {
+body.dark-mode button:not(#theme-toggle):not(.floating-theme-toggle):not(.admin-login-link):not(.secret-red-dot):not(#secret-portal-button):not(#secret-red-dot-btn) {
     background: #111827 !important;
     background-color: #111827 !important;
     color: #f8fafc !important;
@@ -540,6 +540,40 @@ body.dark-mode #cube-type-label {
 /* ==========================================================================
    SECRET PORTAL BUTTON & STEALTH TRIGGERS
    ========================================================================== */
+.secret-red-dot,
+body.dark-mode .secret-red-dot {
+    width: 10px !important;
+    height: 10px !important;
+    min-width: 10px !important;
+    min-height: 10px !important;
+    background-color: #ff2233 !important;
+    background: radial-gradient(circle at 30% 30%, #ff5566 0%, #dd0022 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 6px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    box-shadow: 0 0 8px rgba(255, 0, 50, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s ease !important;
+    outline: none !important;
+    opacity: 0.9 !important;
+}
+
+.secret-red-dot:hover,
+body.dark-mode .secret-red-dot:hover,
+.secret-red-dot:focus-visible,
+body.dark-mode .secret-red-dot:focus-visible {
+    opacity: 1 !important;
+    transform: scale(1.6) !important;
+    box-shadow: 0 0 16px #ff0033, 0 0 25px rgba(255, 0, 50, 0.9) !important;
+}
+
+.secret-red-dot:active {
+    transform: scale(1.2) !important;
+}
+
 .secret-stealth-button {
     background: transparent;
     border: none;
