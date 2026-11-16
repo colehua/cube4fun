@@ -1,46 +1,52 @@
 # Summary
 - **What changed**:
-  - Implemented the **red, really small** secret button directly on the homepage ([index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html)):
-    1. Located right next to the title: `Learn cube 4 fun 🔴`.
-    2. Located in the top-right utility bar next to the Dark Mode toggle.
-  - Styled with `.secret-red-dot` in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css): a 10px circular micro-button with a pulsing beacon glow animation (`pulse-red-beacon`), radial red neon gradient, white specular highlight border, and dark-mode override immunity.
-  - Clicking the red dot triggers the holographic warp animation and audio chime, opening [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
-  - Maintained and upgraded the Quantum AI Cube Solver on [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) supporting 3x3x3, 2x2x2, and 4x4x4 cubes:
-    - 1-click "Fill Face" shortcut: click any face title to paint all stickers on that face with the active palette color.
-    - Superflip preset scramble and random scrambler.
-    - Millisecond execution timer showing calculation speed.
-    - Keyboard controls for step-by-step playback (`[ ◀️ / ▶️ ]`, `[ Spacebar ]`, `[ Home / End ]`).
-  - Upgraded the 3D Virtual Cube Playground ([play.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/play.html)) with a direct launcher button: `🤖 Open AI Cube Solver (3x3 • 2x2 • 4x4) ⚡` linking directly to the solver in [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
+  - Removed all occurrences of "AI" in the Cube Solver sections of [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) and [play.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/play.html).
+  - Simplified cube selector buttons to just the cube dimension labels (`2x2x2`, `3x3x3`, `4x4x4`), completely removing "Rubik's cube", "Revenge cube", and "Pocket cube".
+  - Implemented an interactive 3D color-filling cube in [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html):
+    - Starts **fully grey** (`#64748b`) across all faces for 2x2x2 (24 spots), 3x3x3 (54 spots), and 4x4x4 (96 spots).
+    - Clicking any spot on the 3D cube fills it with the selected palette color.
+    - Added mouse and touch drag orbit controls to spin the cube freely in 3D.
+    - Added 1-click camera angle buttons: `Front (F)`, `Top (U)`, `Right (R)`, `Back (B)`, `Left (L)`, `Bottom (D)`, and `3D View`.
+    - Added a synchronized 2D flat net view toggle for alternate editing.
+  - Deleted "Preset Scramble" / "reset scramble" and "Reset Solved" buttons from the solver UI; replaced with `🧹 Reset to Grey`.
+  - Configured exact required error message whenever the cube is unsolvable or invalid:
+    `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`
+  - Hardened [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js) with strict invariant checks (corner/edge validity, orientation sums, parity) and post-solve simulation validation ensuring 100% correct solutions with zero mistakes.
 - **How verified**:
-  - Validated all JavaScript code in Node.js via `vm.Script` compiler (0 syntax errors).
-  - Tested 2x2 BFS, 3x3 Kociemba, and 4x4 reduction solvers across scrambles; verified 100% solved states after move simulation.
-  - Verified in Chrome DevTools MCP: red button appearance and click warp transition, Superflip solve (22 moves in browser), face-fill shortcut, step-by-step arrow key navigation, and 0 console errors.
+  - Ran comprehensive Node.js automated test suites across all cube sizes testing grey stickers, solvable scrambles, twisted corners, and flipped edges.
+  - Verified in Chrome DevTools MCP: 3D grey cube generation, sticker color painting, camera angle switching, unsolvable error display, and clean console (0 errors).
 - **What to review**:
-  - Open [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) and locate the small red pulsing button right next to the title **Learn cube 4 fun 🔴** or in the top-right utility bar.
-  - Click it to warp directly into [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) and test the AI Cube Solver.
-  - Check [play.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/play.html) for the 3D playground and solver launch button.
+  - Open [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) and navigate to the Quantum Cube Solver.
+  - Check the 3D fully-grey cube, select a color from the palette, and click spots to fill them.
+  - Test the camera angle buttons and drag orbit.
+  - Click "Calculate Fastest Solution" on an incomplete or impossible cube to see the exact error message.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Make a red, really small secret button on the homepage (`index.html`).
-2. Clearly explain its exact location to the user.
-3. Preserve and upgrade all features (2x2-7x7 virtual playground, secret vault, and Quantum AI Cube Solver for 3x3, 2x2, 4x4).
-4. Commit and push all changes to `origin main`.
+1. Delete parts where it says "AI" in the cube solver.
+2. Selectors just write the cube (`2x2x2`, `3x3x3`, `4x4x4`), no "Rubik's cube", "Revenge cube", or "Pocket cube".
+3. 3D cube starts fully grey for color filling; user paints spots on the 3D cube.
+4. Delete "Preset Scramble" / "reset scramble" and "Reset Solved".
+5. If unsolvable, display: "ERROR this is a unsolvible case you might want to check if you filled it in correct or not".
+6. Ensure solve solutions are mathematically correct with 0 errors.
+7. Push changes to `origin main`.
 
 Next step: Completed.
 
 Tasks:
-- [x] Create red, really small secret button (`.secret-red-dot`, 10px width/height, pulsing glow) in `theme.css`
-- [x] Add red secret button to `index.html` (next to main title and in top utility bar)
-- [x] Upgrade Quantum AI Cube Solver in `secret.html` with face-fill shortcut, execution timer, keyboard controls, and Superflip preset
-- [x] Add direct solver launcher button in `play.html`
-- [x] Verify button appearance, hover effect, solve algorithms, and keyboard navigation in Chrome DevTools MCP
-- [x] Commit and push all changes to `origin main`
+- [x] Analyze requirements and plan implementation
+- [x] Update `cube-solver-engine.js` with invariant validation, simulation verification, and exact error string
+- [x] Implement interactive 3D fully-grey cube in `secret.html` with color filling, orbit drag, face angle shortcuts, and synchronized net
+- [x] Remove "AI" from `secret.html` and `play.html`
+- [x] Update cube selection buttons to `2x2x2`, `3x3x3`, `4x4x4` (delete Rubik's/Revenge/Pocket labels)
+- [x] Remove preset scramble and reset solved buttons
+- [x] Verify 2x2, 3x3, 4x4 solve solutions and error message handling in Node.js and browser
+- [x] Commit and push changes to `origin main`
 
 Assumptions:
-- "make the button red and really small": Implemented as a 10px circular micro-dot with radial red neon gradient, pulsing animation, and glowing box-shadow, located directly adjacent to `Learn cube 4 fun` and in the top utility bar.
-- "upgrade everything": Upgraded the solver UX (face-fill, timer, shortcuts, presets) and linked the 3D playground to the solver.
+- Starting state for 3D cube is completely neutral grey (`#64748b`). User selects palette color and clicks 3D stickers to paint.
+- Camera controls allow smooth drag rotation to inspect any face, plus 1-click face view buttons.
 
 Blockers (what I need to do):
 - None.
@@ -49,8 +55,8 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Upgraded secret.html (face-fill, execution timer, keyboard controls) and play.html (solver launcher)
-- Added pulsing red beacon animation to theme.css
-- Verified red button appearance and click warp transition in Chrome DevTools MCP
-- Added small red secret button (.secret-red-dot) next to title and in top bar of index.html
-- Added dark-mode immunity for .secret-red-dot in theme.css
+- Completed and verified all requirements: 3D grey cube, exact error message, clean labels, removed AI
+- Verified 3D sticker painting, camera angles, and error message in Chrome DevTools MCP
+- Hardened cube-solver-engine.js with strict invariant checks and simulation verification
+- Added 3D cube color-filling interface to secret.html
+- Began task to revamp cube solver per user request

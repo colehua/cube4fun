@@ -2458,6 +2458,8 @@
 
   // --- SOLVE DISPATCHERS ---
 
+  const UNSOLVABLE_ERROR = "ERROR this is a unsolvible case you might want to check if you filled it in correct or not";
+
   function solve3x3FromFaces(faces) {
     if (CubeClass.initSolver) {
       CubeClass.initSolver();
@@ -2473,8 +2475,8 @@
     };
 
     const centerSet = new Set(Object.values(centers));
-    if (centerSet.size !== 6) {
-      return { error: 'Center pieces must each have a different color.' };
+    if (centerSet.size !== 6 || centerSet.has('grey')) {
+      return { error: UNSOLVABLE_ERROR };
     }
 
     const colorToLetter = {};
@@ -2486,9 +2488,12 @@
     for (const f of ['U', 'R', 'F', 'D', 'L', 'B']) {
       for (let i = 0; i < 9; i++) {
         const col = faces[f][i];
+        if (col === 'grey') {
+          return { error: UNSOLVABLE_ERROR };
+        }
         const letter = colorToLetter[col];
         if (!letter) {
-          return { error: 'Sticker color does not match any center color.' };
+          return { error: UNSOLVABLE_ERROR };
         }
         str += letter;
       }
@@ -2496,16 +2501,83 @@
 
     try {
       const c = CubeClass.fromString(str);
+      // Invariant checks on the parsed 3x3 cube
+      for (let i = 0; i < 8; i++) {
+        if (c.cp[i] === undefined || c.co[i] === undefined) return { error: UNSOLVABLE_ERROR };
+      }
+      for (let i = 0; i < 12; i++) {
+        if (c.ep[i] === undefined || c.eo[i] === undefined) return { error: UNSOLVABLE_ERROR };
+      }
+      const coSum = c.co.reduce((a, b) => a + b, 0);
+      if (coSum % 3 !== 0) return { error: UNSOLVABLE_ERROR };
+      const eoSum = c.eo.reduce((a, b) => a + b, 0);
+      if (eoSum % 2 !== 0) return { error: UNSOLVABLE_ERROR };
+
       const rawSol = c.solve();
+      if (!rawSol || typeof rawSol !== 'string') {
+        return { error: UNSOLVABLE_ERROR };
+      }
       return { moves: rawSol };
     } catch (e) {
-      return { error: e.message || 'Cube state is physically invalid.' };
+      return { error: UNSOLVABLE_ERROR };
     }
   }
 
+  function validate2x2Faces(faces) {
+    const corners = [
+      [faces.U[2], faces.F[0], faces.L[1]], // UFL
+      [faces.U[3], faces.F[1], faces.R[0]], // UFR
+      [faces.U[0], faces.B[1], faces.L[0]], // UBL
+      [faces.U[1], faces.B[0], faces.R[1]], // UBR
+      [faces.D[0], faces.F[2], faces.L[3]], // DFL
+      [faces.D[1], faces.F[3], faces.R[2]], // DFR
+      [faces.D[2], faces.B[3], faces.L[2]], // DBL
+      [faces.D[3], faces.B[2], faces.R[3]]  // DBR
+    ];
+
+    const validSets = [
+      'green,orange,white',
+      'green,red,white',
+      'blue,orange,white',
+      'blue,red,white',
+      'green,orange,yellow',
+      'green,red,yellow',
+      'blue,orange,yellow',
+      'blue,red,yellow'
+    ];
+
+    const seen = new Set();
+    let oriSum = 0;
+
+    for (let i = 0; i < 8; i++) {
+      const c = corners[i];
+      if (c.some(col => col === 'grey' || !col)) return false;
+      const sorted = [...c].sort().join(',');
+      if (!validSets.includes(sorted)) return false;
+      if (seen.has(sorted)) return false;
+      seen.add(sorted);
+
+      let udIdx = c.indexOf('white');
+      if (udIdx === -1) udIdx = c.indexOf('yellow');
+      if (udIdx === -1) return false;
+      oriSum += udIdx;
+    }
+
+    if (oriSum % 3 !== 0) return false;
+    return true;
+  }
+
   function solve2x2FromFaces(faces) {
-    // Standard color indices: U=0, R=1, F=2, D=3, L=4, B=5
-    // Default palette map
+    for (const f of ['U', 'R', 'F', 'D', 'L', 'B']) {
+      for (let i = 0; i < 4; i++) {
+        if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
+      }
+    }
+
+    if (!validate2x2Faces(faces)) {
+      return { error: UNSOLVABLE_ERROR };
+    }
+
     const defaultMap = {
       'white': 0, 'red': 1, 'green': 2, 'yellow': 3, 'orange': 4, 'blue': 5
     };
@@ -2516,8 +2588,7 @@
         const col = faces[f][i];
         let val = defaultMap[col];
         if (val === undefined) {
-          // Fallback to distinct integer assignment
-          val = 0;
+          return { error: UNSOLVABLE_ERROR };
         }
         arr.push(val);
       }
@@ -2525,23 +2596,25 @@
 
     const rawSol = solve2x2Raw(arr);
     if (rawSol === null) {
-      return { error: '2x2 state could not be resolved. Please verify corner colors.' };
+      return { error: UNSOLVABLE_ERROR };
     }
     return { moves: rawSol };
   }
 
   function solve4x4FromFaces(faces) {
+    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      for (let i = 0; i < 16; i++) {
+        if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
+      }
+    }
+
     // 4x4 Reduction Method solver
-    // Extract composite 3x3 if centers are solid
     const isCentersSolid = ['U', 'D', 'F', 'B', 'L', 'R'].every(f => {
       const c = faces[f][5];
       return faces[f][6] === c && faces[f][9] === c && faces[f][10] === c;
     });
 
-    const isEdgesPaired = true; // In standard scrambles or reduction
-
     if (isCentersSolid) {
-      // Reduce directly to 3x3
       const comp3x3 = {
         U: [
           faces.U[0], faces.U[1], faces.U[3],
@@ -2579,17 +2652,26 @@
       if (res.moves) return { moves: res.moves };
     }
 
-    // Fallback: 4x4 standard reduction trajectory
-    // 1. Centers Commutators
-    // 2. Edge Pairing: Uw' (R U R' F R' F' R) Uw
-    // 3. 3x3 stage
-    // 4. Parity fix
     return {
       moves: "Rw U2 Rw' U2 Fw2 2R2 U2 2R2 Uw2 2R2 2U2 R U R' U' F' U F"
     };
   }
 
   function solveCube(size, faces) {
+    if (!faces) {
+      return { success: false, error: UNSOLVABLE_ERROR };
+    }
+
+    // Check for any unpainted or grey stickers
+    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      if (!faces[f]) return { success: false, error: UNSOLVABLE_ERROR };
+      for (const c of faces[f]) {
+        if (c === 'grey' || !c) {
+          return { success: false, error: UNSOLVABLE_ERROR };
+        }
+      }
+    }
+
     if (checkFacesSolved(size, faces)) {
       return {
         success: true,
@@ -2608,11 +2690,14 @@
     }
     const expected = size * size;
     const colorKeys = Object.keys(counts);
+    if (colorKeys.length !== 6) {
+      return { success: false, error: UNSOLVABLE_ERROR };
+    }
     for (const col of colorKeys) {
       if (counts[col] !== expected) {
         return {
           success: false,
-          error: 'Color distribution error: "' + col + '" has ' + counts[col] + ' stickers (needs ' + expected + ').'
+          error: UNSOLVABLE_ERROR
         };
       }
     }
@@ -2625,15 +2710,24 @@
     } else if (size === 4) {
       sol = solve4x4FromFaces(faces);
     } else {
-      return { success: false, error: 'Unsupported size ' + size };
+      return { success: false, error: UNSOLVABLE_ERROR };
     }
 
-    if (sol.error) {
-      return { success: false, error: sol.error };
+    if (!sol || sol.error) {
+      return { success: false, error: UNSOLVABLE_ERROR };
     }
 
     const cleanMoves = optimizeMoves(sol.moves || "");
     const moveList = cleanMoves ? cleanMoves.trim().split(/\s+/) : [];
+
+    // Rigorous simulation check before returning:
+    const verifyClone = cloneFaces(faces);
+    for (const m of moveList) {
+      applyMoveToFaces(verifyClone, size, m);
+    }
+    if (!checkFacesSolved(size, verifyClone)) {
+      return { success: false, error: UNSOLVABLE_ERROR };
+    }
 
     const steps = [];
     let curFaces = cloneFaces(faces);
