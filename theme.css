@@ -540,6 +540,21 @@ body.dark-mode #cube-type-label {
 /* ==========================================================================
    SECRET PORTAL BUTTON & STEALTH TRIGGERS
    ========================================================================== */
+@keyframes pulse-red-beacon {
+    0% {
+        box-shadow: 0 0 6px rgba(255, 0, 50, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 16px rgba(255, 0, 50, 1), 0 0 22px rgba(255, 50, 80, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+        transform: scale(1.18);
+    }
+    100% {
+        box-shadow: 0 0 6px rgba(255, 0, 50, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+        transform: scale(1);
+    }
+}
+
 .secret-red-dot,
 body.dark-mode .secret-red-dot {
     width: 10px !important;
@@ -556,6 +571,7 @@ body.dark-mode .secret-red-dot {
     display: inline-block !important;
     vertical-align: middle !important;
     box-shadow: 0 0 8px rgba(255, 0, 50, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+    animation: pulse-red-beacon 2.4s infinite ease-in-out !important;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, opacity 0.2s ease !important;
     outline: none !important;
     opacity: 0.9 !important;
@@ -565,6 +581,7 @@ body.dark-mode .secret-red-dot {
 body.dark-mode .secret-red-dot:hover,
 .secret-red-dot:focus-visible,
 body.dark-mode .secret-red-dot:focus-visible {
+    animation: none !important;
     opacity: 1 !important;
     transform: scale(1.6) !important;
     box-shadow: 0 0 16px #ff0033, 0 0 25px rgba(255, 0, 50, 0.9) !important;
