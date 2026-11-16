@@ -1,25 +1,33 @@
-# Update Cole's Mission Quote ("better" -> "bigger")
+# Remove "Why I Made This Website" Section & Verify Virtual 3D Cube
 
 **Summary:**
-- Updated the mission statement wording across `index.html` and `blog.html` from "grow better" to "grow bigger":
-  - *“the reason where i made this website was because i wanted the cubing community to grow bigger and keep spreading cubing so everybody gets to understand how much fun cubing really is and how interesting it is”*
-- Verified JavaScript syntax across all inline scripts.
+- Removed the "Why I Made This Website" mission quote section from `index.html` and `blog.html`.
+- Removed obsolete `.cole-mission-card` rules from `theme.css`.
+- Verified and enhanced the 3D Virtual Cube playground (`play.html`), fixing dark-mode text visibility in `.status-box`, `.hint-box`, and control tips.
+- Verified HTML structure and JavaScript syntax across all modified files.
+- Pushed changes to `origin main`.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Update Cole's mission quote on `index.html` and `blog.html` to say "bigger" instead of "better".
-2. Verify HTML and JavaScript validity.
-3. Commit and push changes to `origin main`.
+1. Remove "Why I Made This Website" mission quote section from `index.html` and `blog.html`.
+2. Clean up obsolete `.cole-mission-card` styles from `theme.css`.
+3. Enhance and verify 3D Virtual Cube (`play.html`) with proper dark mode text contrast on `.status-box`, `.hint-box`, and control tips.
+4. Verify JS/CSS/HTML validity across all modified files.
+5. Commit and push changes to `origin main`.
 
 Next step: Completed and pushed to origin main.
+
 Tasks:
-- [x] Update wording in `index.html`
-- [x] Update wording in `blog.html`
-- [x] Verify inline script syntax
-- [x] Commit and push to origin main
+- [x] Remove "Why I Made This Website" mission card from `index.html`
+- [x] Remove "Why I Made This Website" mission card from `blog.html`
+- [x] Clean up `.cole-mission-card` styling in `theme.css`
+- [x] Fix dark mode styling for `.status-box`, `.hint-box`, and `.keyboard-tip` in `theme.css` / `play.html`
+- [x] Verify HTML and JavaScript syntax across modified files
+- [x] Commit working changes and push to `origin main`
 
 Assumptions:
-- "for the part where says 'better' pls change it into 'bigger' instead" refers to Cole's mission quote: "grow better" -> "grow bigger".
+- "delete the part where says why i made the websit": Refers to Cole's "Why I Made This Website" mission quote card added in commit 7760422 and updated in fb9ce34.
+- "make the virtuak": Refers to "virtual" (the 3D Virtual Cube playground `play.html`), ensuring it is verified, fully functional, and that dark mode contrast issues in `.status-box`, solver hints, and controls are resolved. If Cole had an additional feature or change in mind that was cut off by sending "virtuak", he can follow up with the full detail.
 
 Blockers (what I need to do):
 - None.
@@ -28,8 +36,5 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Updated Cole's mission quote wording to 'grow bigger' on index.html and blog.html, verified and pushed to origin main
-- Added Cole's mission quote card to index.html and blog.html with dark mode support, verified and pushed to origin main
-- Restored Cole's PPT drawn circles on corner and edge pieces, added hand-drawn center core diagram, verified and pushed to origin main
-- Removed intermediate words, tip banner, solves badge, and hub cards between top buttons and Battle Timer in index.html; verified and pushed to origin main
-- Integrated Cole's new PowerPoint presentation into guide.html with interactive slide viewer, photo gallery, finger tricks, verified and pushed to origin main
+- Removed "Why I Made This Website" mission card from index.html and blog.html, enhanced virtual cube dark mode contrast in theme.css, verified and pushed to origin main
+- Initialized PROGRESS.md for deleting mission quote and verifying/improving virtual cube
