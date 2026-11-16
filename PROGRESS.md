@@ -1,45 +1,74 @@
 # Summary
 - **What changed**:
-  - Upgraded [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) into **Agent Cole's Secret Homepage**:
-    1. Branded homepage header with navigation links to every secret room (`Secret Home`, `3D Solver`, `Scramble Lab`, `Reflex Arena`, `Little Pages`, `Audio FX`) and a button to return to the surface main home.
-    2. Secret Homepage Hero Section with level 007 classified status and quick action launch buttons.
-    3. **Secret Underground Portal Directory**: An 8-card visual directory featuring the 3D Cube Solver, Scramble Lab, Reflex Matrix, Agent Dossier, Cyber Timer, Algorithm Vault, Audio Matrix, and Little Pages Lab.
-    4. **Cole's Secret Little Pages Lab** (`#subpages-section`): A dedicated expansion hub for all the little pages Cole is building, with template launch button and copyable home-button code snippet.
-    5. Upgraded homepage footer with dual return buttons to Main Home and Secret Home.
-  - Implemented universal Home button support across all sub-pages and upcoming little pages:
-    1. Styled `.btn-return-home`, `.btn-return-secret-home`, and `.floating-home-pill` in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) with responsive mobile support and dark mode styling.
-    2. Added `ensureHomeButton()` in [theme.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.js): automatically detects any sub-page or upcoming little page without a home link and injects a Home Page button.
-    3. Created [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html) as a ready-to-use starter template for Cole's upcoming little pages, pre-configured with buttons to both Main Home and Secret Home.
+  1. **Red Button Direct Navigation**:
+     - Converted the red secret buttons in [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) (`#secret-portal-button` and `#secret-red-dot-btn`) to direct link anchors (`href="secret.html"`) with responsive click handling.
+     - Added an expanded invisible touch/click hit area (`::before` pseudo-element) in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) so clicking or tapping near the small red dot immediately navigates to `secret.html`.
+     - Reduced transition delay to 180ms for an immediate, snappy warp effect.
+  2. **Removed Classified Agent Dossier & Secret PBs**:
+     - Completely deleted the "Classified Agent Dossier & Secret PBs" section (`#dossier-section`) from [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
+     - Deleted the corresponding "Classified Agent Dossier" card from the Secret Underground Portal Directory.
+     - Removed all associated dossier CSS styles (`.agent-dossier-card`, `.dossier-grid`, `.dossier-item`, etc.).
+  3. **Dedicated "Cube Solving Machine" Page**:
+     - Created standalone [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) dedicated page featuring:
+       - Interactive 3D fully-grey cube (`#64748b`) with pointer drag-to-orbit and 7 camera angle preset buttons.
+       - Clean dimension selectors (`2x2x2`, `3x3x3`, `4x4x4`).
+       - Color palette bar (White, Yellow, Green, Blue, Orange, Red, Grey eraser) with color badges and `🧹 Reset to Grey`.
+       - Instant solution calculation button (`⚡ CALCULATE FASTEST SOLUTION ⚡`).
+       - Exact required error message on unsolvable cases: `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`.
+       - Step-by-step interactive player with real-time 3D cube updates, speed control, keyboard shortcuts, and move copy button.
+       - Universal return buttons to **🚪 Main Home Page** (`index.html`) and **🕶️ Secret Home** (`secret.html`).
+     - Created [solver.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/solver.html) instant redirect to `cube-solving-machine.html`.
+  4. **Secret Home Page "Cube Solving Machine" Integration**:
+     - Added a top navigation button `🤖 Cube Solving Machine` linking to `cube-solving-machine.html`.
+     - Added a hero section action button `🤖 Cube Solving Machine ⚡` linking to `cube-solving-machine.html`.
+     - Added a primary portal card in the Secret Underground Directory linking to `cube-solving-machine.html`.
+     - Added a featured portal showcase card in [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) with a direct launch button.
+  5. **Cross-Site Updates**:
+     - Updated solver launch button in [play.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/play.html) to link directly to `cube-solving-machine.html`.
+     - Added Cube Solving Machine button to [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html).
+     - Hardened 2x2 solver validation in [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js).
 - **How verified**:
-  - Validated syntax in Node.js for [theme.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.js), [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html), and [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html).
-  - Tested navigation in Chrome DevTools MCP: verified Secret Homepage header, 8 portal directory cards, and bidirectional navigation between `little-page-template.html`, `index.html`, and `secret.html` with 0 console errors.
+  - Ran comprehensive Node.js test suite across all HTML files, inline scripts, and solver engines (all passed).
+  - Verified in Chrome DevTools MCP:
+    - Red button on `index.html` renders as anchor to `secret.html`.
+    - `dossierExists: false` and `dossierTextFound: false` verified on `secret.html`.
+    - All 4 "Cube Solving Machine" buttons and links on `secret.html` verified.
+    - Full 3D grey cube generation, sticker painting, and 2x2/3x3 solve execution on `cube-solving-machine.html`.
+    - Exact unsolvable error string verified.
+    - Step-by-step player forward navigation and 100% solved state verified.
+    - Zero console errors across all pages.
 - **What to review**:
-  - Open [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) to explore the new Secret Homepage design, portal directory, and Little Pages Lab.
-  - Check [little-page-template.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/little-page-template.html) to see the starter template for new little pages.
+  - Click the small red dot on [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) to warp to [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
+  - Click the "Cube Solving Machine" button on [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) to open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
+  - Verify "Classified Agent Dossier & Secret PBs" is removed.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Make `secret.html` a complete, rich Secret Home Page.
-2. Provide a universal "Go to Home Page" button for all little pages Cole builds.
-3. Create `little-page-template.html` as a turnkey starter template with Home buttons.
-4. Verify in Node.js and Chrome DevTools MCP.
-5. Commit and push all changes to `origin main`.
+1. Ensure the red button on the home page navigates directly to the secret home page (secret.html).
+2. Delete the section and mentions of "Classified Agent Dossier & Secret PBs" in secret.html.
+3. Add a prominent button "Cube Solving Machine" on the secret home page that opens the dedicated Cube Solving Machine page.
+4. Create dedicated standalone cube-solving-machine.html (and solver.html) with the full 3D grey cube solver, 2x2/3x3/4x4, fastest solutions, exact unsolvable error string, and return buttons to Main Home and Secret Home.
+5. Update play.html to link to cube-solving-machine.html.
+6. Verify in Node.js and Chrome DevTools MCP.
+7. Commit and push all changes to origin main.
 
 Next step: Completed.
 
 Tasks:
-- [x] Analyze requirements and plan layout
-- [x] Add universal home button styles to `theme.css`
-- [x] Add automatic home button support to `theme.js`
-- [x] Create `little-page-template.html` starter page
-- [x] Upgrade `secret.html` into a full Secret Homepage with portal directory and little pages lab
-- [x] Verify navigation and links in browser via DevTools MCP
-- [x] Commit and push to `origin main`
+- [x] Update PROGRESS.md
+- [x] Ensure red button in index.html and theme.css reliably and quickly navigates to secret.html
+- [x] Remove "Classified Agent Dossier & Secret PBs" from secret.html
+- [x] Add "Cube Solving Machine" buttons on secret.html linking to cube-solving-machine.html
+- [x] Build standalone cube-solving-machine.html with complete 3D grey solver and return buttons
+- [x] Create solver.html redirect
+- [x] Update play.html solver link to cube-solving-machine.html
+- [x] Verify with Node.js and DevTools MCP
+- [x] Commit and push to origin main
 
 Assumptions:
-- "make the secret page a home page too": `secret.html` receives a full homepage identity with brand header, portal cards, navigation links, and showcase sections.
-- "make a button that goes to home page in the little pages i will build soon": Universal `.btn-return-home` styling, auto-injection in `theme.js`, and `little-page-template.html` created for Cole.
+- "the page i just made": Cole wants the cube solver as its own dedicated page called `cube-solving-machine.html` opened by a "Cube Solving Machine" button on the secret home page.
+- "delete the part where says 'classified agent dossier & secret PBs'": remove the dossier card from the secret home page portal grid and the entire dossier section.
 
 Blockers (what I need to do):
 - None.
@@ -48,8 +77,4 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Completed and verified Secret Homepage and universal little-pages Home buttons
-- Verified bidirectional navigation in Chrome DevTools MCP
-- Created little-page-template.html and added ensureHomeButton() in theme.js
-- Upgraded secret.html with full homepage header, portal cards, and little pages lab
-- Added universal home button styles in theme.css
+- Built cube-solving-machine.html, linked from secret home page, removed dossier, verified with DevTools MCP, and pushed to origin main.

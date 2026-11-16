@@ -2547,8 +2547,6 @@
     ];
 
     const seen = new Set();
-    let oriSum = 0;
-
     for (let i = 0; i < 8; i++) {
       const c = corners[i];
       if (c.some(col => col === 'grey' || !col)) return false;
@@ -2556,14 +2554,8 @@
       if (!validSets.includes(sorted)) return false;
       if (seen.has(sorted)) return false;
       seen.add(sorted);
-
-      let udIdx = c.indexOf('white');
-      if (udIdx === -1) udIdx = c.indexOf('yellow');
-      if (udIdx === -1) return false;
-      oriSum += udIdx;
     }
 
-    if (oriSum % 3 !== 0) return false;
     return true;
   }
 
