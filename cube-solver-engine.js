@@ -2108,6 +2108,39 @@
     return moves.join(' ');
   }
 
+  function optimizeOrder3Moves(movesStr) {
+    if (!movesStr) return "";
+    let moves = movesStr.trim().split(/\s+/).filter(Boolean);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      const newMoves = [];
+      let i = 0;
+      while (i < moves.length) {
+        if (i + 1 < moves.length) {
+          const m1 = moves[i];
+          const m2 = moves[i + 1];
+          const b1 = m1.replace("'", "");
+          const b2 = m2.replace("'", "");
+          if (b1 === b2) {
+            const p1 = m1.endsWith("'") ? 2 : 1;
+            const p2 = m2.endsWith("'") ? 2 : 1;
+            const total = (p1 + p2) % 3;
+            if (total === 1) newMoves.push(b1);
+            else if (total === 2) newMoves.push(b1 + "'");
+            i += 2;
+            changed = true;
+            continue;
+          }
+        }
+        newMoves.push(moves[i]);
+        i++;
+      }
+      moves = newMoves;
+    }
+    return moves.join(' ');
+  }
+
   // --- MOVE EXPLANATIONS ---
   const MOVE_EXPLANATIONS = {
     'U': 'Top layer 90° Clockwise',
@@ -2450,30 +2483,34 @@
     const times = isPrime ? 2 : 1;
 
     for (let t = 0; t < times; t++) {
-      if (base === 'u') cycle3(p, ['U', 0], ['R', 0], ['L', 0]);
-      else if (base === 'l') cycle3(p, ['U', 4], ['L', 4], ['B', 4]);
-      else if (base === 'r') cycle3(p, ['U', 8], ['R', 8], ['B', 8]);
-      else if (base === 'b') cycle3(p, ['L', 8], ['R', 4], ['B', 0]);
-      else if (base === 'U') {
+      if (base === 'u') {
+        cycle3(p, ['U', 0], ['R', 0], ['L', 0]);
+      } else if (base === 'l') {
+        cycle3(p, ['U', 4], ['L', 8], ['B', 4]);
+      } else if (base === 'r') {
+        cycle3(p, ['U', 8], ['B', 8], ['R', 4]);
+      } else if (base === 'b') {
+        cycle3(p, ['L', 4], ['R', 8], ['B', 0]);
+      } else if (base === 'U') {
         cycle3(p, ['U', 0], ['R', 0], ['L', 0]);
         cycle3(p, ['U', 2], ['R', 2], ['L', 2]);
-        cycle3(p, ['U', 1], ['R', 1], ['L', 3]);
-        cycle3(p, ['U', 3], ['R', 3], ['L', 1]);
-      } else if (base === 'R') {
-        cycle3(p, ['U', 8], ['R', 8], ['B', 8]);
-        cycle3(p, ['U', 6], ['R', 6], ['B', 6]);
-        cycle3(p, ['U', 7], ['R', 7], ['B', 5]);
-        cycle3(p, ['U', 3], ['R', 5], ['B', 7]);
+        cycle3(p, ['U', 1], ['R', 1], ['L', 1]);
+        cycle3(p, ['U', 3], ['R', 3], ['L', 3]);
       } else if (base === 'L') {
-        cycle3(p, ['U', 4], ['L', 4], ['B', 4]);
-        cycle3(p, ['U', 5], ['L', 5], ['B', 2]);
-        cycle3(p, ['U', 1], ['L', 7], ['B', 1]);
-        cycle3(p, ['U', 6], ['L', 6], ['B', 3]);
+        cycle3(p, ['U', 4], ['L', 8], ['B', 4]);
+        cycle3(p, ['U', 5], ['L', 7], ['B', 5]);
+        cycle3(p, ['U', 1], ['L', 6], ['B', 6]);
+        cycle3(p, ['B', 1], ['U', 6], ['L', 3]);
+      } else if (base === 'R') {
+        cycle3(p, ['U', 8], ['B', 8], ['R', 4]);
+        cycle3(p, ['U', 7], ['B', 7], ['R', 5]);
+        cycle3(p, ['R', 1], ['U', 6], ['B', 3]);
+        cycle3(p, ['U', 3], ['B', 6], ['R', 6]);
       } else if (base === 'B') {
-        cycle3(p, ['L', 8], ['R', 4], ['B', 0]);
-        cycle3(p, ['L', 6], ['R', 2], ['B', 2]);
-        cycle3(p, ['L', 5], ['R', 1], ['B', 1]);
-        cycle3(p, ['L', 7], ['R', 3], ['B', 3]);
+        cycle3(p, ['L', 4], ['R', 8], ['B', 0]);
+        cycle3(p, ['L', 5], ['R', 7], ['B', 2]);
+        cycle3(p, ['L', 1], ['R', 6], ['B', 1]);
+        cycle3(p, ['L', 6], ['R', 3], ['B', 3]);
       }
     }
   }
@@ -2494,38 +2531,38 @@
     const tipMoves = [];
     const cur = cloneFaces(faces);
 
-    // Tip u
+    // Tip u: vertex U (U0, R0, L0) with centers U2, R2, L2
     for (const m of ["", "u", "u'"]) {
       const testP = cloneFaces(cur);
       if (m) applyPyraminxMove(testP, m);
-      if (testP.U[0] === testP.U[2] && testP.R[0] === testP.R[2]) {
+      if (testP.U[0] === testP.U[2] && testP.R[0] === testP.R[2] && testP.L[0] === testP.L[2]) {
         if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
         break;
       }
     }
-    // Tip l
+    // Tip l: vertex L (U4, L8, B4) with centers U5, L7, B5
     for (const m of ["", "l", "l'"]) {
       const testP = cloneFaces(cur);
       if (m) applyPyraminxMove(testP, m);
-      if (testP.U[4] === testP.U[6] && testP.L[4] === testP.L[6]) {
+      if (testP.U[4] === testP.U[5] && testP.L[8] === testP.L[7] && testP.B[4] === testP.B[5]) {
         if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
         break;
       }
     }
-    // Tip r
+    // Tip r: vertex R (U8, B8, R4) with centers U7, B7, R5
     for (const m of ["", "r", "r'"]) {
       const testP = cloneFaces(cur);
       if (m) applyPyraminxMove(testP, m);
-      if (testP.R[8] === testP.R[6] && testP.B[8] === testP.B[6]) {
+      if (testP.U[8] === testP.U[7] && testP.B[8] === testP.B[7] && testP.R[4] === testP.R[5]) {
         if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
         break;
       }
     }
-    // Tip b
+    // Tip b: vertex B (L4, R8, B0) with centers L5, R7, B2
     for (const m of ["", "b", "b'"]) {
       const testP = cloneFaces(cur);
       if (m) applyPyraminxMove(testP, m);
-      if (testP.L[8] === testP.L[6] && testP.B[0] === testP.B[2]) {
+      if (testP.L[4] === testP.L[5] && testP.R[8] === testP.R[7] && testP.B[0] === testP.B[2]) {
         if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
         break;
       }
@@ -2539,29 +2576,62 @@
     function serialize(p) {
       return ['U', 'L', 'R', 'B'].map(f => p[f].join('')).join('|');
     }
+    function invertMove(m) {
+      return m.endsWith("'") ? m.replace("'", "") : m + "'";
+    }
 
-    const queue = [{ state: cur, path: [] }];
-    const visited = new Set([serialize(cur)]);
+    const solved = {
+      U: new Array(9).fill('yellow'),
+      L: new Array(9).fill('green'),
+      R: new Array(9).fill('red'),
+      B: new Array(9).fill('blue')
+    };
 
-    while (queue.length > 0) {
-      const node = queue.shift();
-      if (checkPyraminxSolved(node.state)) {
-        return { moves: [...tipMoves, ...node.path].join(' ') };
-      }
-      if (node.path.length >= 8) continue;
+    const fwdVisited = new Map([[serialize(cur), []]]);
+    const bwdVisited = new Map([[serialize(solved), []]]);
 
-      for (const m of moves) {
-        const nextP = cloneFaces(node.state);
-        applyPyraminxMove(nextP, m);
-        const key = serialize(nextP);
-        if (!visited.has(key)) {
-          visited.add(key);
-          if (checkPyraminxSolved(nextP)) {
-            return { moves: [...tipMoves, ...node.path, m].join(' ') };
+    let fwdQueue = [{ state: cur, path: [] }];
+    let bwdQueue = [{ state: solved, path: [] }];
+
+    for (let depth = 0; depth < 6; depth++) {
+      const nextFwd = [];
+      for (const node of fwdQueue) {
+        for (const m of moves) {
+          const nextP = cloneFaces(node.state);
+          applyPyraminxMove(nextP, m);
+          const key = serialize(nextP);
+          if (!fwdVisited.has(key)) {
+            const newPath = [...node.path, m];
+            fwdVisited.set(key, newPath);
+            if (bwdVisited.has(key)) {
+              const bPath = bwdVisited.get(key);
+              return { moves: [...tipMoves, ...newPath, ...bPath].join(' ') };
+            }
+            nextFwd.push({ state: nextP, path: newPath });
           }
-          queue.push({ state: nextP, path: [...node.path, m] });
         }
       }
+      fwdQueue = nextFwd;
+
+      const nextBwd = [];
+      for (const node of bwdQueue) {
+        for (const m of moves) {
+          const invM = invertMove(m);
+          const prevP = cloneFaces(node.state);
+          applyPyraminxMove(prevP, invM);
+          const key = serialize(prevP);
+          if (!bwdVisited.has(key)) {
+            const pathToSolved = [m, ...node.path];
+            bwdVisited.set(key, pathToSolved);
+            if (fwdVisited.has(key)) {
+              const fPath = fwdVisited.get(key);
+              return { moves: [...tipMoves, ...fPath, ...pathToSolved].join(' ') };
+            }
+            nextBwd.push({ state: prevP, path: pathToSolved });
+          }
+        }
+      }
+      bwdQueue = nextBwd;
     }
     return { error: UNSOLVABLE_ERROR };
   }
@@ -2624,14 +2694,7 @@
       return m.endsWith("'") ? m.replace("'", "") : m + "'";
     }
 
-    const forwardVisited = new Map();
-    const backwardVisited = new Map();
-
-    const forwardQueue = [{ state: faces, path: [] }];
-    forwardVisited.set(serialize(faces), []);
-
-    // Standard solved Skewb home colors
-    const solvedSkewb = {
+    const solved = {
       U: Array(5).fill('white'),
       D: Array(5).fill('yellow'),
       F: Array(5).fill('green'),
@@ -2639,52 +2702,52 @@
       L: Array(5).fill('orange'),
       R: Array(5).fill('red')
     };
-    const backwardQueue = [{ state: solvedSkewb, path: [] }];
-    backwardVisited.set(serialize(solvedSkewb), []);
 
-    for (let depth = 0; depth < 5; depth++) {
-      const fLen = forwardQueue.length;
-      for (let i = 0; i < fLen; i++) {
-        const node = forwardQueue.shift();
-        for (const m of moves) {
-          const nextS = cloneFaces(node.state);
-          applySkewbMove(nextS, m);
-          if (checkSkewbSolved(nextS)) {
-            return { moves: [...node.path, m].join(' ') };
-          }
-          const key = serialize(nextS);
-          if (!forwardVisited.has(key)) {
-            const newPath = [...node.path, m];
-            forwardVisited.set(key, newPath);
-            if (backwardVisited.has(key)) {
-              const backPath = backwardVisited.get(key);
-              const invBack = backPath.slice().reverse().map(invertMove);
-              return { moves: [...newPath, ...invBack].join(' ') };
-            }
-            forwardQueue.push({ state: nextS, path: newPath });
-          }
-        }
-      }
+    const fwdVisited = new Map([[serialize(faces), []]]);
+    const bwdVisited = new Map([[serialize(solved), []]]);
 
-      const bLen = backwardQueue.length;
-      for (let i = 0; i < bLen; i++) {
-        const node = backwardQueue.shift();
+    let fwdQueue = [{ state: faces, path: [] }];
+    let bwdQueue = [{ state: solved, path: [] }];
+
+    for (let depth = 0; depth < 6; depth++) {
+      const nextFwd = [];
+      for (const node of fwdQueue) {
         for (const m of moves) {
           const nextS = cloneFaces(node.state);
           applySkewbMove(nextS, m);
           const key = serialize(nextS);
-          if (!backwardVisited.has(key)) {
+          if (!fwdVisited.has(key)) {
             const newPath = [...node.path, m];
-            backwardVisited.set(key, newPath);
-            if (forwardVisited.has(key)) {
-              const fwdPath = forwardVisited.get(key);
-              const invBack = newPath.slice().reverse().map(invertMove);
-              return { moves: [...fwdPath, ...invBack].join(' ') };
+            fwdVisited.set(key, newPath);
+            if (bwdVisited.has(key)) {
+              const bPath = bwdVisited.get(key);
+              return { moves: [...newPath, ...bPath].join(' ') };
             }
-            backwardQueue.push({ state: nextS, path: newPath });
+            nextFwd.push({ state: nextS, path: newPath });
           }
         }
       }
+      fwdQueue = nextFwd;
+
+      const nextBwd = [];
+      for (const node of bwdQueue) {
+        for (const m of moves) {
+          const invM = invertMove(m);
+          const prevS = cloneFaces(node.state);
+          applySkewbMove(prevS, invM);
+          const key = serialize(prevS);
+          if (!bwdVisited.has(key)) {
+            const pathToSolved = [m, ...node.path];
+            bwdVisited.set(key, pathToSolved);
+            if (fwdVisited.has(key)) {
+              const fPath = fwdVisited.get(key);
+              return { moves: [...fPath, ...pathToSolved].join(' ') };
+            }
+            nextBwd.push({ state: prevS, path: pathToSolved });
+          }
+        }
+      }
+      bwdQueue = nextBwd;
     }
     return { error: UNSOLVABLE_ERROR };
   }
@@ -2733,20 +2796,27 @@
 
   function checkFacesSolved(size, faces) {
     if (size === 'pyraminx') {
-      return checkPyraminxSolved(faces);
+      if (!checkPyraminxSolved(faces)) return false;
+      const cSet = new Set(['U', 'L', 'R', 'B'].map(f => faces[f][0]));
+      return cSet.size === 4 && !cSet.has('grey');
     }
     if (size === 'skewb') {
-      return checkSkewbSolved(faces);
+      if (!checkSkewbSolved(faces)) return false;
+      const cSet = new Set(['U', 'D', 'F', 'B', 'L', 'R'].map(f => faces[f][0]));
+      return cSet.size === 6 && !cSet.has('grey');
     }
     const N = size;
+    const cSet = new Set();
     for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
       if (!faces[f]) return false;
       const c = faces[f][0];
       if (c === 'grey' || !c) return false;
+      cSet.add(c);
       for (let i = 1; i < N * N; i++) {
         if (faces[f][i] !== c) return false;
       }
     }
+    if (cSet.size !== 6) return false;
     return true;
   }
 
@@ -3018,6 +3088,18 @@
       }
     }
 
+    // Check distinct colors: MUST have at least 6 distinct colors (4 for Pyraminx)
+    // If all colors are the same, it is an invalid impossible cube!
+    const allStickers = [];
+    for (const f of faceKeys) {
+      for (const c of faces[f]) allStickers.push(c);
+    }
+    const distinctColors = new Set(allStickers);
+    const reqColors = (size === 'pyraminx') ? 4 : 6;
+    if (distinctColors.size !== reqColors) {
+      return { success: false, error: UNSOLVABLE_ERROR };
+    }
+
     if (checkFacesSolved(size, faces)) {
       return {
         success: true,
@@ -3079,7 +3161,9 @@
       return { success: false, error: UNSOLVABLE_ERROR };
     }
 
-    const cleanMoves = optimizeMoves(sol.moves || "");
+    const cleanMoves = (size === 'pyraminx' || size === 'skewb')
+      ? optimizeOrder3Moves(sol.moves || "")
+      : optimizeMoves(sol.moves || "");
     const moveList = cleanMoves ? cleanMoves.trim().split(/\s+/) : [];
 
     // Rigorous simulation check before returning:

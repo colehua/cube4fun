@@ -918,6 +918,30 @@
                 </div>
             </div>
 
+            <!-- CRITICAL ORIENTATION GUIDE BANNER -->
+            <div id="orientation-guide-box" style="margin-bottom: 16px; background: rgba(3, 7, 18, 0.85); border: 2px solid #38bdf8; border-radius: 14px; padding: 14px 18px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 1.4em;">⚠️</span>
+                    <h3 style="margin: 0; color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 1.1em; letter-spacing: 0.5px;">
+                        CRITICAL ORIENTATION: HOLD WHITE ON TOP, GREEN IN FRONT
+                    </h3>
+                </div>
+                <p style="margin: 0 0 10px 0; color: #e2e8f0; font-size: 0.95em; line-height: 1.5;">
+                    To guarantee correct solutions, always hold your physical cube with <strong>WHITE ON TOP (U)</strong> and <strong>GREEN IN FRONT (F)</strong> when filling in colors and when executing the solution moves!
+                </p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.85em; font-weight: 700;">
+                    <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid #ffffff; padding: 4px 10px; border-radius: 8px;">⚪ Top (U): White</span>
+                    <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; padding: 4px 10px; border-radius: 8px;">🟢 Front (F): Green</span>
+                    <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 8px;">🔴 Right (R): Red</span>
+                    <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 8px;">🔵 Back (B): Blue</span>
+                    <span style="background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid #f97316; padding: 4px 10px; border-radius: 8px;">🟠 Left (L): Orange</span>
+                    <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 4px 10px; border-radius: 8px;">🟡 Bottom (D): Yellow</span>
+                </div>
+                <div style="margin-top: 8px; font-size: 0.82em; color: #94a3b8;">
+                    <em>(For Pyraminx: hold Yellow on Top, Green on Left, Red on Right, Blue on Base)</em>
+                </div>
+            </div>
+
             <!-- DIAGNOSTIC / STATUS BANNER -->
             <div id="solver-status-banner" class="solver-banner ready">
                 ℹ️ Click spots on the grey 3D cube to fill in your colors.
@@ -972,6 +996,10 @@
                     <button id="btn-copy-solution" class="btn-cyber btn-green" onclick="copySolutionMoves()" style="padding: 6px 14px; font-size: 0.88em;">
                         📋 Copy Moves
                     </button>
+                </div>
+
+                <div style="background: rgba(56, 189, 248, 0.12); border: 1px solid #38bdf8; border-radius: 10px; padding: 8px 14px; margin-bottom: 12px; font-size: 0.9em; color: #bae6fd; text-align: center;">
+                    ⚠️ <strong>Orientation Reminder:</strong> Always keep holding your cube with <strong>WHITE ON TOP</strong> and <strong>GREEN IN FRONT</strong> while executing each move!
                 </div>
 
                 <div class="solution-moves-display" id="solution-moves-box">
@@ -1705,13 +1733,19 @@
                     banner.className = 'solver-banner warning';
                     banner.innerHTML = `🎯 <strong>Spots filled: ${filledCount}/${totalStickers}.</strong> Click grey spots on the 3D puzzle to fill in all colors!`;
                 } else {
-                    const allOk = activeColors.every(c => counts[c] === expected);
-                    if (allOk) {
-                        banner.className = 'solver-banner ready';
-                        banner.innerHTML = `✅ <strong>All spots filled evenly (${expected} of each color)!</strong> Click <em>Calculate Fastest Solution</em> to solve.`;
+                    const usedColors = activeColors.filter(c => counts[c] > 0);
+                    if (usedColors.length <= 1) {
+                        banner.className = 'solver-banner error';
+                        banner.innerHTML = `🚨 <strong>ERROR this is a unsolvible case you might want to check if you filled it in correct or not</strong>`;
                     } else {
-                        banner.className = 'solver-banner warning';
-                        banner.innerHTML = `⚠️ <strong>Sticker counts uneven:</strong> Every color must have exactly <strong>${expected}</strong> spots.`;
+                        const allOk = activeColors.every(c => counts[c] === expected);
+                        if (allOk) {
+                            banner.className = 'solver-banner ready';
+                            banner.innerHTML = `✅ <strong>All spots filled evenly (${expected} of each color)!</strong> Click <em>Calculate Fastest Solution</em> to solve.`;
+                        } else {
+                            banner.className = 'solver-banner warning';
+                            banner.innerHTML = `⚠️ <strong>Sticker counts uneven:</strong> Every color must have exactly <strong>${expected}</strong> spots.`;
+                        }
                     }
                 }
             }

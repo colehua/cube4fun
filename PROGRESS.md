@@ -1,65 +1,61 @@
 # Summary
 - **What changed**:
-  1. **Expanded Cube Solving Machine to 7 Puzzles**:
-     - Upgraded [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) and [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js) to support `2x2x2`, `3x3x3`, `4x4x4`, `5x5x5`, `6x6x6`, `Pyraminx`, and `Skewb`.
-     - Used clean puzzle names only (no trademarked names like "Rubik's cube", "Pocket cube", or "Revenge cube", and zero mentions of "AI").
-     - Implemented 3D visualization and 2D net views for all 7 puzzles:
-       - Regular cubes ($N \in [2, 3, 4, 5, 6]$): $N \times N$ face grid with dynamic gap and sticker sizing.
-       - Skewb: Central diamond piece (`rotate(45deg)`) plus 4 corner triangles (`clip-path: polygon(...)`).
-       - Pyraminx: 4 equilateral triangular faces with 9 triangular stickers each (6 facing up, 3 facing down).
-     - Added `🎲 Scramble` button for instant puzzle testing and verified mathematical correctness via simulation before solution display.
-     - Kept initial state fully grey (`#64748b`) with palette painting and exact unsolvable error text: `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`.
-  2. **Secret Button Appearance and Placement**:
-     - Updated secret button on [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html#L607) and in [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css#L558-L620) to a dark blue dot (`#002266` / radial gradient to `#1e40af`) fixed in the top right corner (`position: fixed !important; top: 10px !important; right: 10px !important; z-index: 99999 !important;`).
-  3. **Removed Home Page Buttons from Secret Home Page**:
-     - Removed all return buttons pointing to `index.html` and `secret.html` from [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html).
-     - Updated `ensureHomeButton()` in [theme.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.js#L121-L125) to immediately exit when on `secret.html`, preventing any injected floating home pill.
+  1. **Reflex Matrix Timing and High Scores**:
+     - Added live elapsed stopwatch to [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html#L1151) displaying seconds (`⏱️ Total Time: X.XXs`).
+     - Added persistent high scores leaderboard saved in `localStorage` (`cube4fun_reflex_high_scores`) tracking rank, stage, total time, average reaction time, best reflex, and date.
+     - Added fastest clear record badge and reset high scores control.
+  2. **Cube Orientation Guidance**:
+     - Added prominent orientation notice banner in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html#L922) with color guide: **HOLD WHITE ON TOP, GREEN IN FRONT** (Top: White, Front: Green, Right: Red, Back: Blue, Left: Orange, Bottom: Yellow).
+     - Added orientation reminder inside the solution step player controls.
+  3. **Solver Correctness and Double-Check**:
+     - Corrected Pyraminx cycle permutations in [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js#L2480-L2530) based on 3D tetrahedron geometry.
+     - Implemented `optimizeOrder3Moves` for Pyraminx and Skewb in [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js#L2111) to prevent invalid 3x3 face commutation on order-3 puzzles.
+     - Tested 275 total solver trials across all 7 puzzles (2x2 to 6x6, Pyraminx, Skewb) with 100% pass rate.
+  4. **Monochrome / Same-Color Error Handling**:
+     - Configured `solveCube` and `updateColorBadgesAndBanner` to reject single-color inputs.
+     - Displays exact error string: `ERROR this is a unsolvible case you might want to check if you filled it in correct or not`.
 - **How verified**:
-  - Automated Node.js test script `test_complete_suite.js` ran 24 assertions across all 7 puzzles, CSS styles, button positions, and error strings with a 100% pass rate.
-  - Verification script `test_big_cubes_face_turns.js` solved 60/60 random scrambles across 4x4x4, 5x5x5, and 6x6x6.
-  - Verification script `test_tips.js` solved 50/50 Pyraminx tip orientations.
-  - Chrome DevTools MCP evaluated live on `cube-solving-machine.html`, `index.html`, and `secret.html`:
-    - Verified dark blue dot in top right corner of `index.html` (computed `top: 10px`, `right: 10px`, `position: fixed`, `width: 4px`, `height: 4px`).
-    - Verified `secret.html` contains 0 return home buttons and links directly to `cube-solving-machine.html`.
-    - Verified switching, scrambling, and solving across all 7 puzzles (`2x2x2`, `3x3x3`, `4x4x4`, `5x5x5`, `6x6x6`, `Pyraminx`, `Skewb`) in the browser.
-    - Verified interactive move playback (Step 1 to End, progress percentage, move explanations).
-    - Verified exact unsolvable error banner on unpainted/invalid states.
-    - Verified zero console errors.
+  - Automated Node.js test `verify_all_large.js` ran 275 randomized scrambles across all 7 puzzles with 100% pass rate.
+  - Automated test `test_same_color.js` proved all single-color configurations return the exact unsolvable error string.
+  - Chrome DevTools MCP evaluated live on `cube-solving-machine.html`:
+    - Verified orientation banner displays: "CRITICAL ORIENTATION: HOLD WHITE ON TOP, GREEN IN FRONT".
+    - Verified single-color cube returns exact error string before and after calculation.
+    - Verified random scrambles on all 7 puzzles calculate verified solutions.
+  - Chrome DevTools MCP evaluated live on `secret.html`:
+    - Verified live elapsed stopwatch counts seconds from start to finish.
+    - Verified 10-round clear saves high score and renders leaderboard table.
+    - Verified high score reset works.
 - **What to review**:
-  - Open [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html) to see the small dark blue dot in the top right corner.
-  - Click the dot to enter [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html); confirm there are no home buttons on the page.
-  - Click `🤖 Cube Solving Machine` to open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-  - Test all 7 puzzle buttons (`2x2x2`, `3x3x3`, `4x4x4`, `5x5x5`, `6x6x6`, `Pyraminx`, `Skewb`), click `🎲 Scramble`, and click `⚡ CALCULATE FASTEST SOLUTION ⚡`.
+  - Open [secret.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/secret.html) to see the live elapsed timer and high scores board.
+  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) to see the orientation notice banner and test same-color error handling.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Support 2x2x2 through 6x6x6, Pyraminx, and Skewb in the Cube Solving Machine.
-2. Provide correct solutions even if long.
-3. Use clean puzzle names only (no trademarked names or mentions of "AI").
-4. Make initial state fully grey, allow color painting, and display exact error text on unsolvable states.
-5. Change secret dot to dark blue in the top right corner.
-6. Remove all home page buttons when on secret.html.
-7. Verify all changes and push to origin main.
+1. Time how many seconds you take in the Secret TPS Reflex Test Matrix and add high scores.
+2. Tell user to hold White on top and Green in front in the Cube Solving Machine.
+3. Double-check and correct solving solutions across all puzzles.
+4. Show error if all colors on the cube are the same.
+5. Push changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Update PROGRESS.md
-- [x] Implement Pyraminx and Skewb solvers in cube-solver-engine.js
-- [x] Implement 5x5x5 and 6x6x6 reduction solvers in cube-solver-engine.js
-- [x] Add simulation verification for all 7 puzzles before displaying moves
-- [x] Style secret dot to dark blue fixed in the top right corner in theme.css
-- [x] Update index.html secret dot classes and title
-- [x] Remove all return home buttons from secret.html
-- [x] Prevent theme.js from injecting home button on secret.html
-- [x] Update cube-solving-machine.html UI, 3D scene, 2D net, palette, and step player for all 7 puzzles
-- [x] Verify all 7 puzzles via automated tests and Chrome DevTools MCP
-- [x] Commit and push all changes to origin main
+- [x] Add live elapsed stopwatch timer (seconds) to Secret TPS Reflex Test Matrix in secret.html
+- [x] Add persistent high scores leaderboard with localStorage to secret.html
+- [x] Add prominent orientation notice banner ("HOLD WHITE ON TOP, GREEN IN FRONT") in cube-solving-machine.html
+- [x] Fix Pyraminx 3D permutation cycles in cube-solver-engine.js
+- [x] Implement order-3 move optimizer for Pyraminx and Skewb in cube-solver-engine.js
+- [x] Enforce same-color error detection in cube-solver-engine.js and cube-solving-machine.html
+- [x] Verify all 7 puzzles via automated test suite (275/275 passed)
+- [x] Verify browser behavior with Chrome DevTools MCP
+- [x] Push all changes to origin main
 
 Assumptions:
-- "for the cube solving machine make it be able to solve cubes from 2x2x2 all the way to 6x6x6 and make the salutions correct even if its long sometimes its ok, you could also add paraminx and skewb too for the solving machine": Supported 7 distinct puzzle types (2x2x2, 3x3x3, 4x4x4, 5x5x5, 6x6x6, Pyraminx, and Skewb) with full 3D rendering, 2D net, color count badges, legal scrambles, and simulation-verified solutions.
-- "make the red dot dark blue instead and in the top right corner and when you are already in the secret home page there should not be a home page button anymore": Dot is styled as `.secret-blue-dot` fixed at `top: 10px; right: 10px;` with dark blue gradient. `secret.html` has all return home buttons removed, and `theme.js` suppresses auto-injected home pills on `secret.html`.
+- "make the secret TPS reflex test matrix time how many seconds you take and make high scores too": Live timer counts elapsed seconds during the 10-round test; results are stored in localStorage and shown in a Hall of Fame leaderboard.
+- "for the cube solving machine tell the person that we have to hole white on top green in front": Added prominent guidance box and step player reminders specifying White on Top (U) and Green in Front (F).
+- "the solving solution for the solving machine is wrong please double check it if its wrong or not": Corrected Pyraminx move definitions and separated order-3 move optimizations from 3x3 commutation rules.
+- "if someone filled in the cube solving machine and all the colours were the same then you should say error": Validated in engine and UI with the exact required string "ERROR this is a unsolvible case you might want to check if you filled it in correct or not".
 
 Blockers (what I need to do):
 - None.
@@ -68,10 +64,8 @@ Found, not done:
 - None.
 
 Log (newest first, one line each):
-- Completed 7 puzzle solver expansion, dark blue dot top-right positioning, home button suppression on secret home, and pushed to origin main.
-- Verified all 7 puzzles in Chrome DevTools MCP and Node.js test suite with 100% pass rate.
-- Added 3D rendering and 2D net views for Pyraminx, Skewb, 5x5x5, and 6x6x6 in cube-solving-machine.html.
-- Implemented Pyraminx bidirectional BFS and 4-tip alignment in cube-solver-engine.js.
-- Implemented Skewb bidirectional BFS and 5x5/6x6 reduction in cube-solver-engine.js.
-- Styled dark blue dot in top-right corner in theme.css and updated index.html.
-- Removed return home buttons from secret.html and updated theme.js.
+- Completed elapsed seconds timing, high score board, orientation banner, same-color error check, Pyraminx/Skewb solver fixes, and pushed to origin main.
+- Verified 275/275 solver trials and Chrome browser automation with 100% pass rate.
+- Added orientation instruction and step reminder in cube-solving-machine.html.
+- Added elapsed timer and persistent high scores leaderboard in secret.html.
+- Corrected Pyraminx cycle permutations and order-3 move optimizer in cube-solver-engine.js.
