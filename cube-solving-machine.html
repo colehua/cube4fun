@@ -245,25 +245,87 @@
             transform: translateY(0);
         }
 
-        /* COLOR PALETTE */
+        /* 3D CUBE & SIDEBAR PALETTE STAGE */
+        .solver-3d-stage {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .solver-3d-scene-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
         .color-palette-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
             gap: 14px;
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 14px 20px;
-            border-radius: 18px;
-            margin-bottom: 16px;
+            background: rgba(15, 23, 42, 0.88);
+            border: 1.5px solid rgba(0, 240, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(0, 240, 255, 0.08);
+            padding: 16px 18px;
+            border-radius: 20px;
+            min-width: 190px;
+            max-width: 260px;
+            backdrop-filter: blur(8px);
+        }
+
+        .palette-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .palette-title {
+            font-size: 0.98em;
+            color: #38bdf8;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .palette-active-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(3, 7, 18, 0.75);
+            border: 1.5px solid rgba(56, 189, 248, 0.35);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.84em;
+            color: #ffffff;
+            font-weight: 700;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        .active-badge-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            display: inline-block;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+            flex-shrink: 0;
         }
 
         .palette-swatches {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 40px);
+            gap: 10px;
+            justify-content: center;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
         }
 
         .swatch-btn {
@@ -1281,6 +1343,157 @@
             color: #4ade80;
             font-weight: 700;
         }
+
+        /* CAMERA SCANNER 3D CUBE GUIDE AT BOTTOM */
+        .scanner-3d-guide-container {
+            margin-top: 18px;
+            background: rgba(3, 7, 18, 0.85);
+            border: 1.5px solid rgba(56, 189, 248, 0.45);
+            border-radius: 16px;
+            padding: 14px 16px;
+            text-align: center;
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.15);
+        }
+
+        .scanner-3d-guide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .scanner-guide-face-tag {
+            background: rgba(56, 189, 248, 0.22);
+            border: 1.5px solid #38bdf8;
+            color: #38bdf8;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.88em;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .scanner-mini-3d-scene {
+            width: 140px;
+            height: 140px;
+            margin: 10px auto;
+            perspective: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scanner-mini-3d-cube {
+            width: 90px;
+            height: 90px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .scanner-mini-face {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: #0b1120;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            box-sizing: border-box;
+            display: grid;
+            gap: 2px;
+            padding: 3px;
+            cursor: pointer;
+            backface-visibility: visible;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .scanner-mini-face.active-target {
+            border: 2.5px solid #00f0ff !important;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.95), inset 0 0 12px rgba(0, 240, 255, 0.4) !important;
+            animation: targetPulse 1.2s infinite alternate ease-in-out;
+        }
+
+        @keyframes targetPulse {
+            0% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.6), inset 0 0 6px rgba(0, 240, 255, 0.2); }
+            100% { box-shadow: 0 0 22px rgba(0, 240, 255, 1), inset 0 0 14px rgba(0, 240, 255, 0.6); }
+        }
+
+        .scanner-mini-face.face-F { transform: rotateY(0deg) translateZ(45px); }
+        .scanner-mini-face.face-B { transform: rotateY(180deg) translateZ(45px); }
+        .scanner-mini-face.face-R { transform: rotateY(90deg) translateZ(45px); }
+        .scanner-mini-face.face-L { transform: rotateY(-90deg) translateZ(45px); }
+        .scanner-mini-face.face-U { transform: rotateX(90deg) translateZ(45px); }
+        .scanner-mini-face.face-D { transform: rotateX(-90deg) translateZ(45px); }
+
+        .scanner-mini-sticker {
+            border-radius: 2px;
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            background: #475569;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            transition: background-color 0.2s ease;
+        }
+
+        /* 3D PYRAMINX MINI FACE */
+        .scanner-mini-face.face-pyraminx {
+            display: block !important;
+            padding: 0 !important;
+            width: 90px !important;
+            height: 77.94px !important;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%) !important;
+            border: none !important;
+            background: #0b1120 !important;
+            backface-visibility: visible !important;
+        }
+        .scanner-mini-face.face-pyraminx.active-target {
+            filter: drop-shadow(0 0 14px #00f0ff);
+        }
+        .scanner-mini-face.face-pyraminx.face-U { transform: rotateY(0deg) rotateX(19.4712deg) translateZ(18.37px) !important; }
+        .scanner-mini-face.face-pyraminx.face-L { transform: rotateY(-120deg) rotateX(19.4712deg) translateZ(18.37px) !important; }
+        .scanner-mini-face.face-pyraminx.face-R { transform: rotateY(120deg) rotateX(19.4712deg) translateZ(18.37px) !important; }
+        .scanner-mini-face.face-pyraminx.face-B { transform: rotateX(-90deg) rotateZ(180deg) translateZ(18.37px) !important; }
+
+        .scanner-mini-pyra-sticker {
+            position: absolute;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 3D MEGAMINX MINI FACE */
+        .scanner-mini-face.face-megaminx {
+            display: block !important;
+            padding: 0 !important;
+            width: 80px !important;
+            height: 80px !important;
+            left: 5px !important;
+            top: 5px !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            backface-visibility: visible !important;
+        }
+        .scanner-mini-face.face-megaminx.active-target {
+            filter: drop-shadow(0 0 14px #00f0ff);
+        }
+        .scanner-mini-face.face-megaminx.megaminx-U   { transform: rotateX(90deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-F   { transform: rotateY(0deg) rotateX(26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-FR  { transform: rotateY(-72deg) rotateX(26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-BR  { transform: rotateY(-144deg) rotateX(26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-BL  { transform: rotateY(-216deg) rotateX(26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-FL  { transform: rotateY(-288deg) rotateX(26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-D   { transform: rotateX(-90deg) rotateZ(180deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DF  { transform: rotateY(180deg) rotateX(-26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DR  { transform: rotateY(252deg) rotateX(-26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DBR { transform: rotateY(324deg) rotateX(-26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DBL { transform: rotateY(36deg) rotateX(-26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DL  { transform: rotateY(108deg) rotateX(-26.565deg) translateZ(41px) !important; }
+
+        .scanner-3d-guide-hint {
+            font-size: 0.82em;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -1369,32 +1582,7 @@
                 </button>
             </div>
 
-            <!-- 2. COLOR PALETTE BAR -->
-            <div class="color-palette-container">
-                <div class="palette-label" style="display: flex; align-items: center; font-size: 0.98em;">
-                    <span>🎨 <strong>Color Palette:</strong></span>
-                    <span id="active-color-name" style="color: #ffffff; font-weight: bold; margin-left: 8px;">White (Top / U)</span>
-                </div>
-                <div class="palette-swatches">
-                    <button class="swatch-btn active" id="swatch-white" data-color="white" style="background-color: #ffffff;" onclick="selectPaletteColor('white')" title="White (Up Face)"></button>
-                    <button class="swatch-btn" id="swatch-yellow" data-color="yellow" style="background-color: #ffd700;" onclick="selectPaletteColor('yellow')" title="Yellow (Down Face)"></button>
-                    <button class="swatch-btn" id="swatch-green" data-color="green" style="background-color: #22c55e;" onclick="selectPaletteColor('green')" title="Green (Front Face)"></button>
-                    <button class="swatch-btn" id="swatch-blue" data-color="blue" style="background-color: #3b82f6;" onclick="selectPaletteColor('blue')" title="Blue (Back Face)"></button>
-                    <button class="swatch-btn" id="swatch-orange" data-color="orange" style="background-color: #f97316;" onclick="selectPaletteColor('orange')" title="Orange (Left Face)"></button>
-                    <button class="swatch-btn" id="swatch-red" data-color="red" style="background-color: #ef4444;" onclick="selectPaletteColor('red')" title="Red (Right Face)"></button>
-                    <button class="swatch-btn" id="swatch-purple" data-color="purple" style="background-color: #a855f7; display: none;" onclick="selectPaletteColor('purple')" title="Purple (FL Face)"></button>
-                    <button class="swatch-btn" id="swatch-darkblue" data-color="darkblue" style="background-color: #1d4ed8; display: none;" onclick="selectPaletteColor('darkblue')" title="Dark Blue (BR Face)"></button>
-                    <button class="swatch-btn" id="swatch-darkgreen" data-color="darkgreen" style="background-color: #15803d; display: none;" onclick="selectPaletteColor('darkgreen')" title="Dark Green (BL Face)"></button>
-                    <button class="swatch-btn" id="swatch-pink" data-color="pink" style="background-color: #f472b6; display: none;" onclick="selectPaletteColor('pink')" title="Pink (DR Face)"></button>
-                    <button class="swatch-btn" id="swatch-cyan" data-color="cyan" style="background-color: #06b6d4; display: none;" onclick="selectPaletteColor('cyan')" title="Light Blue (DBR Face)"></button>
-                    <button class="swatch-btn" id="swatch-lime" data-color="lime" style="background-color: #84cc16; display: none;" onclick="selectPaletteColor('lime')" title="Light Green (DL Face)"></button>
-                    <button class="swatch-btn" id="swatch-cream" data-color="cream" style="background-color: #fef08a; display: none;" onclick="selectPaletteColor('cream')" title="Cream / Beige (DF Face)"></button>
-                    <button class="swatch-btn" id="swatch-silver" data-color="silver" style="background-color: #94a3b8; display: none;" onclick="selectPaletteColor('silver')" title="Silver / Grey (D Face)"></button>
-                    <button class="swatch-btn" id="swatch-grey" data-color="grey" style="background-color: #64748b;" onclick="selectPaletteColor('grey')" title="Grey (Erase / Clear Spot)"></button>
-                </div>
-            </div>
-
-            <!-- 3. COLOR COUNTS & QUICK ACTIONS -->
+            <!-- 2. COLOR COUNTS & QUICK ACTIONS -->
             <div class="solver-toolbar">
                 <div class="color-count-badges" id="color-count-badges">
                     <!-- Populated dynamically -->
@@ -1422,16 +1610,50 @@
                 ℹ️ Click spots on the grey 3D cube to fill in your colors.
             </div>
 
-            <!-- 4. INTERACTIVE 3D FULLY-GREY CUBE FOR FILLING IN COLOURS -->
+            <!-- 3. INTERACTIVE 3D CUBE & COLOR PALETTE SIDEBAR -->
             <div class="solver-3d-wrapper">
                 <div class="solver-3d-hint">
-                    🎯 <strong>3D Cube Color Filler:</strong> Click any grey spot on the 3D cube to fill in your color. Drag background to spin in 3D!
+                    🎯 <strong>3D Cube Color Filler:</strong> Pick a color from the palette on the right, then click any spot on the 3D cube! Drag background to spin in 3D!
                 </div>
-                <div class="solver-3d-scene" id="solver-3d-scene">
-                    <div class="solver-3d-cube" id="solver-3d-cube">
-                        <!-- 3D faces and stickers generated dynamically -->
+                
+                <div class="solver-3d-stage">
+                    <!-- 3D Cube Scene -->
+                    <div class="solver-3d-scene" id="solver-3d-scene">
+                        <div class="solver-3d-cube" id="solver-3d-cube">
+                            <!-- 3D faces and stickers generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Color Palette Sidebar Right Next to 3D Cube -->
+                    <div class="color-palette-container" id="color-palette-container">
+                        <div class="palette-header">
+                            <div class="palette-title">🎨 <strong>Color Palette</strong></div>
+                            <div class="palette-active-badge">
+                                <span class="active-badge-dot" id="active-badge-dot" style="background-color: #ffffff;"></span>
+                                <span id="active-color-name">White (Top / U)</span>
+                            </div>
+                        </div>
+                        <div class="palette-swatches">
+                            <button class="swatch-btn active" id="swatch-white" data-color="white" style="background-color: #ffffff;" onclick="selectPaletteColor('white')" title="White (Up Face)"></button>
+                            <button class="swatch-btn" id="swatch-yellow" data-color="yellow" style="background-color: #ffd700;" onclick="selectPaletteColor('yellow')" title="Yellow (Down Face)"></button>
+                            <button class="swatch-btn" id="swatch-green" data-color="green" style="background-color: #22c55e;" onclick="selectPaletteColor('green')" title="Green (Front Face)"></button>
+                            <button class="swatch-btn" id="swatch-blue" data-color="blue" style="background-color: #3b82f6;" onclick="selectPaletteColor('blue')" title="Blue (Back Face)"></button>
+                            <button class="swatch-btn" id="swatch-orange" data-color="orange" style="background-color: #f97316;" onclick="selectPaletteColor('orange')" title="Orange (Left Face)"></button>
+                            <button class="swatch-btn" id="swatch-red" data-color="red" style="background-color: #ef4444;" onclick="selectPaletteColor('red')" title="Red (Right Face)"></button>
+                            <button class="swatch-btn" id="swatch-purple" data-color="purple" style="background-color: #a855f7; display: none;" onclick="selectPaletteColor('purple')" title="Purple (FL Face)"></button>
+                            <button class="swatch-btn" id="swatch-darkblue" data-color="darkblue" style="background-color: #1d4ed8; display: none;" onclick="selectPaletteColor('darkblue')" title="Dark Blue (BR Face)"></button>
+                            <button class="swatch-btn" id="swatch-darkgreen" data-color="darkgreen" style="background-color: #15803d; display: none;" onclick="selectPaletteColor('darkgreen')" title="Dark Green (BL Face)"></button>
+                            <button class="swatch-btn" id="swatch-pink" data-color="pink" style="background-color: #f472b6; display: none;" onclick="selectPaletteColor('pink')" title="Pink (DR Face)"></button>
+                            <button class="swatch-btn" id="swatch-cyan" data-color="cyan" style="background-color: #06b6d4; display: none;" onclick="selectPaletteColor('cyan')" title="Light Blue (DBR Face)"></button>
+                            <button class="swatch-btn" id="swatch-lime" data-color="lime" style="background-color: #84cc16; display: none;" onclick="selectPaletteColor('lime')" title="Light Green (DL Face)"></button>
+                            <button class="swatch-btn" id="swatch-cream" data-color="cream" style="background-color: #fef08a; display: none;" onclick="selectPaletteColor('cream')" title="Cream / Beige (DF Face)"></button>
+                            <button class="swatch-btn" id="swatch-silver" data-color="silver" style="background-color: #94a3b8; display: none;" onclick="selectPaletteColor('silver')" title="Silver / Grey (D Face)"></button>
+                            <button class="swatch-btn" id="swatch-grey" data-color="grey" style="background-color: #64748b;" onclick="selectPaletteColor('grey')" title="Grey (Erase / Clear Spot)"></button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Angle View Buttons -->
                 <div class="solver-angle-btns" id="solver-angle-btns">
                     <!-- Populated dynamically by renderAngleButtons() -->
                 </div>
@@ -1755,6 +1977,10 @@
             const nameEl = document.getElementById('active-color-name');
             if (nameEl && PALETTE_COLORS[color]) {
                 nameEl.textContent = PALETTE_COLORS[color].name;
+            }
+            const dotEl = document.getElementById('active-badge-dot');
+            if (dotEl && PALETTE_COLORS[color]) {
+                dotEl.style.backgroundColor = PALETTE_COLORS[color].hex;
             }
             playSound('turn');
         }
@@ -3029,6 +3255,8 @@
             renderScannerReticleGrid();
             renderScannerPaletteStrip();
             renderScannerFacesSummary();
+            renderScanner3DGuideCube();
+            updateScanner3DGuideRotation(scannerCurrentFace);
 
             document.getElementById('scanner-review-panel').style.display = 'none';
             document.getElementById('scanner-all-done-banner').style.display = 'none';
@@ -3270,6 +3498,7 @@
             renderScannerFaceTabs();
             renderScannerReticleGrid();
             renderScannerFacesSummary();
+            updateScanner3DGuideRotation(faceKey);
             startScannerCamera();
         }
 
@@ -3472,6 +3701,209 @@
             }
         }
 
+        function renderScanner3DGuideCube() {
+            const cubeEl = document.getElementById('scanner-mini-3d-cube');
+            if (!cubeEl) return;
+            cubeEl.innerHTML = "";
+
+            if (solverSize === 'pyraminx') {
+                cubeEl.className = 'scanner-mini-3d-cube mini-pyraminx';
+                const pyraFaces = [
+                    { key: 'U', cls: 'pyraminx-U', name: 'Top (Yellow)' },
+                    { key: 'L', cls: 'pyraminx-L', name: 'Left (Green)' },
+                    { key: 'R', cls: 'pyraminx-R', name: 'Right (Red)' },
+                    { key: 'B', cls: 'pyraminx-B', name: 'Bottom (Blue)' }
+                ];
+                const miniCoords = [
+                    { x: 30, y: 0,      dir: 'up' },
+                    { x: 15, y: 25.98,  dir: 'up' },
+                    { x: 30, y: 25.98,  dir: 'down' },
+                    { x: 45, y: 25.98,  dir: 'up' },
+                    { x: 0,  y: 51.96,  dir: 'up' },
+                    { x: 15, y: 51.96,  dir: 'down' },
+                    { x: 30, y: 51.96,  dir: 'up' },
+                    { x: 45, y: 51.96,  dir: 'down' },
+                    { x: 60, y: 51.96,  dir: 'up' }
+                ];
+
+                pyraFaces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `scanner-mini-face face-pyraminx face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
+                    faceDiv.dataset.face = f.key;
+                    faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
+                    faceDiv.onclick = () => setScannerFace(f.key);
+
+                    const colors = solverFaces[f.key] || new Array(9).fill('grey');
+                    for (let i = 0; i < 9; i++) {
+                        const col = colors[i] || 'grey';
+                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#475569';
+                        const st = document.createElement('div');
+                        st.className = `scanner-mini-pyra-sticker pyra-sticker tri-${miniCoords[i].dir}`;
+                        st.style.left = miniCoords[i].x + 'px';
+                        st.style.top = miniCoords[i].y + 'px';
+                        st.style.width = '30px';
+                        st.style.height = '25.98px';
+                        st.style.backgroundColor = hex;
+                        faceDiv.appendChild(st);
+                    }
+                    cubeEl.appendChild(faceDiv);
+                });
+            } else if (solverSize === 'megaminx') {
+                cubeEl.className = 'scanner-mini-3d-cube mini-megaminx';
+                const megaFaces = ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL'];
+                megaFaces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `scanner-mini-face face-megaminx megaminx-${f}` + (f === scannerCurrentFace ? ' active-target' : '');
+                    faceDiv.dataset.face = f;
+                    faceDiv.title = `Face ${f} - Tap to select for scanning`;
+                    faceDiv.onclick = () => setScannerFace(f);
+                    const colors = (solverFaces[f] || new Array(11).fill('grey')).map(c => PALETTE_COLORS[c] ? PALETTE_COLORS[c].hex : '#475569');
+                    faceDiv.innerHTML = createMegaminxSvgMarkup(f, colors).replace('width="160" height="160"', 'width="80" height="80"');
+                    cubeEl.appendChild(faceDiv);
+                });
+            } else if (solverSize === 'skewb') {
+                cubeEl.className = 'scanner-mini-3d-cube mini-cube';
+                const skewbFaces = [
+                    { key: 'F', name: 'Front (Green)' },
+                    { key: 'R', name: 'Right (Red)' },
+                    { key: 'B', name: 'Back (Blue)' },
+                    { key: 'L', name: 'Left (Orange)' },
+                    { key: 'U', name: 'Top (White)' },
+                    { key: 'D', name: 'Bottom (Yellow)' }
+                ];
+                skewbFaces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
+                    faceDiv.dataset.face = f.key;
+                    faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
+                    faceDiv.onclick = () => setScannerFace(f.key);
+                    faceDiv.style.position = 'absolute';
+                    faceDiv.style.overflow = 'hidden';
+
+                    const colors = solverFaces[f.key] || new Array(5).fill('grey');
+                    const centerSt = document.createElement('div');
+                    centerSt.style.position = 'absolute';
+                    centerSt.style.width = '46px';
+                    centerSt.style.height = '46px';
+                    centerSt.style.left = '22px';
+                    centerSt.style.top = '22px';
+                    centerSt.style.transform = 'rotate(45deg)';
+                    centerSt.style.borderRadius = '4px';
+                    centerSt.style.border = '1.5px solid #0f172a';
+                    const cCol = colors[0] || 'grey';
+                    centerSt.style.backgroundColor = PALETTE_COLORS[cCol] ? PALETTE_COLORS[cCol].hex : '#475569';
+                    faceDiv.appendChild(centerSt);
+
+                    const cornerStyles = [
+                        { top: '3px', left: '3px', clip: 'polygon(0 0, 100% 0, 0 100%)' },
+                        { top: '3px', right: '3px', clip: 'polygon(0 0, 100% 0, 100% 100%)' },
+                        { bottom: '3px', left: '3px', clip: 'polygon(0 0, 0 100%, 100% 100%)' },
+                        { bottom: '3px', right: '3px', clip: 'polygon(100% 0, 100% 100%, 0 100%)' }
+                    ];
+                    for (let i = 1; i <= 4; i++) {
+                        const st = document.createElement('div');
+                        st.style.position = 'absolute';
+                        st.style.width = '30px';
+                        st.style.height = '30px';
+                        st.style.border = '1.5px solid #0f172a';
+                        Object.assign(st.style, cornerStyles[i - 1]);
+                        st.style.clipPath = cornerStyles[i - 1].clip;
+                        const col = colors[i] || 'grey';
+                        st.style.backgroundColor = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#475569';
+                        faceDiv.appendChild(st);
+                    }
+                    cubeEl.appendChild(faceDiv);
+                });
+            } else {
+                cubeEl.className = 'scanner-mini-3d-cube mini-cube';
+                const standardFaces = [
+                    { key: 'F', name: 'Front (Green / F)' },
+                    { key: 'R', name: 'Right (Red / R)' },
+                    { key: 'B', name: 'Back (Blue / B)' },
+                    { key: 'L', name: 'Left (Orange / L)' },
+                    { key: 'U', name: 'Top (White / U)' },
+                    { key: 'D', name: 'Bottom (Yellow / D)' }
+                ];
+
+                const N = typeof solverSize === 'number' ? solverSize : 3;
+                standardFaces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
+                    faceDiv.dataset.face = f.key;
+                    faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
+                    faceDiv.onclick = () => setScannerFace(f.key);
+
+                    faceDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+                    faceDiv.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+
+                    const totalStickers = N * N;
+                    const colors = solverFaces[f.key] || new Array(totalStickers).fill('grey');
+                    for (let i = 0; i < totalStickers; i++) {
+                        const col = colors[i] || 'grey';
+                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#475569';
+                        const st = document.createElement('div');
+                        st.className = 'scanner-mini-sticker';
+                        st.style.backgroundColor = hex;
+                        faceDiv.appendChild(st);
+                    }
+                    cubeEl.appendChild(faceDiv);
+                });
+            }
+        }
+
+        function updateScanner3DGuideRotation(faceKey) {
+            const cubeEl = document.getElementById('scanner-mini-3d-cube');
+            const tagEl = document.getElementById('scanner-guide-face-tag');
+            if (!cubeEl) return;
+
+            // Highlight the active target face
+            cubeEl.querySelectorAll('.scanner-mini-face').forEach(el => {
+                el.classList.toggle('active-target', el.dataset.face === faceKey);
+            });
+
+            const faceList = getFaceListForScanner();
+            const curInfo = faceList.find(f => f.key === faceKey);
+            if (tagEl) {
+                tagEl.textContent = `FRONT: ${curInfo ? curInfo.name : faceKey}`;
+            }
+
+            if (solverSize === 'pyraminx') {
+                const pyraRotations = {
+                    U: 'rotateX(-19.5deg) rotateY(0deg)',
+                    L: 'rotateX(-19.5deg) rotateY(120deg)',
+                    R: 'rotateX(-19.5deg) rotateY(-120deg)',
+                    B: 'rotateX(90deg) rotateZ(180deg)'
+                };
+                cubeEl.style.transform = pyraRotations[faceKey] || 'rotateX(-19.5deg) rotateY(0deg)';
+            } else if (solverSize === 'megaminx') {
+                const megaRotations = {
+                    U:   'rotateX(-90deg) rotateY(0deg)',
+                    F:   'rotateX(-26.5deg) rotateY(0deg)',
+                    FR:  'rotateX(-26.5deg) rotateY(72deg)',
+                    BR:  'rotateX(-26.5deg) rotateY(144deg)',
+                    BL:  'rotateX(-26.5deg) rotateY(216deg)',
+                    FL:  'rotateX(-26.5deg) rotateY(288deg)',
+                    D:   'rotateX(90deg) rotateZ(180deg)',
+                    DF:  'rotateX(26.5deg) rotateY(180deg)',
+                    DR:  'rotateX(26.5deg) rotateY(252deg)',
+                    DBR: 'rotateX(26.5deg) rotateY(324deg)',
+                    DBL: 'rotateX(26.5deg) rotateY(36deg)',
+                    DL:  'rotateX(26.5deg) rotateY(108deg)'
+                };
+                cubeEl.style.transform = megaRotations[faceKey] || 'rotateX(0deg) rotateY(0deg)';
+            } else {
+                const cubeRotations = {
+                    F: 'rotateX(0deg) rotateY(0deg)',
+                    R: 'rotateX(0deg) rotateY(-90deg)',
+                    B: 'rotateX(0deg) rotateY(-180deg)',
+                    L: 'rotateX(0deg) rotateY(90deg)',
+                    U: 'rotateX(-90deg) rotateY(0deg)',
+                    D: 'rotateX(90deg) rotateY(0deg)'
+                };
+                cubeEl.style.transform = cubeRotations[faceKey] || 'rotateX(0deg) rotateY(0deg)';
+            }
+        }
+
         function confirmAndApplyScannedFace() {
             if (!scannerDetectedColors || !scannerDetectedColors.length) return;
             if (!solverFaces[scannerCurrentFace]) return;
@@ -3486,6 +3918,7 @@
 
             renderScannerFaceTabs();
             renderScannerFacesSummary();
+            renderScanner3DGuideCube();
 
             const faceList = getFaceListForScanner();
             const nextUnfinished = faceList.find(f => !scannerFacesDone[f.key]);
@@ -3626,6 +4059,26 @@
             <!-- PROGRESS BADGES -->
             <div class="scanner-faces-summary" id="scanner-faces-summary">
                 <!-- Faces Done Badges -->
+            </div>
+
+            <!-- 3D CUBE ORIENTATION GUIDE AT BOTTOM -->
+            <div class="scanner-3d-guide-container">
+                <div class="scanner-3d-guide-header">
+                    <span style="font-weight: 800; color: #38bdf8; font-size: 0.9em; display: flex; align-items: center; gap: 6px;">
+                        🧭 <strong>3D Cube Orientation Guide</strong> (Front face is scanning target):
+                    </span>
+                    <span id="scanner-guide-face-tag" class="scanner-guide-face-tag">
+                        FRONT: Top (White)
+                    </span>
+                </div>
+                <div class="scanner-mini-3d-scene" id="scanner-mini-3d-scene">
+                    <div class="scanner-mini-3d-cube" id="scanner-mini-3d-cube">
+                        <!-- Populated dynamically by renderScanner3DGuideCube() -->
+                    </div>
+                </div>
+                <div class="scanner-3d-guide-hint">
+                    💡 The face directly facing you is the scanning target. Tap any face to switch!
+                </div>
             </div>
 
             <!-- ALL DONE ACTION -->

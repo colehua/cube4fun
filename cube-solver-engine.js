@@ -1863,21 +1863,15 @@
 
       // Initialize phase 2 coordinates
       init2(top = true) {
-        if (this.parent === null) {
-          return;
+        if (this.parent !== null) {
+          this.parent.init2(false);
+          this.URFtoDLF = this.move('URFtoDLF', this.parent.URFtoDLF, this.lastMove);
+          this.FRtoBR = this.move('FRtoBR', this.parent.FRtoBR, this.lastMove);
+          this.parity = this.move('parity', this.parent.parity, this.lastMove);
+          this.URtoUL = this.move('URtoUL', this.parent.URtoUL, this.lastMove);
+          this.UBtoDF = this.move('UBtoDF', this.parent.UBtoDF, this.lastMove);
         }
-        // For other states, the phase 2 state is computed based on
-        // parent's state.
-        // Already assigned for the initial state
-        this.parent.init2(false);
-        this.URFtoDLF = this.move('URFtoDLF', this.parent.URFtoDLF, this.lastMove);
-        this.FRtoBR = this.move('FRtoBR', this.parent.FRtoBR, this.lastMove);
-        this.parity = this.move('parity', this.parent.parity, this.lastMove);
-        this.URtoUL = this.move('URtoUL', this.parent.URtoUL, this.lastMove);
-        this.UBtoDF = this.move('UBtoDF', this.parent.UBtoDF, this.lastMove);
         if (top) {
-          // This is the initial phase 2 state. Get the URtoDF coordinate
-          // by merging URtoUL and UBtoDF
           return this.URtoDF = this.move('mergeURtoDF', this.URtoUL, this.UBtoDF);
         }
       }
@@ -1899,17 +1893,14 @@
     };
     solution = null;
     phase1search = function(state) {
-      var depth, m, ref, results;
-      depth = 0;
-      results = [];
-      for (depth = m = 1, ref = maxDepth; (1 <= ref ? m <= ref : m >= ref); depth = 1 <= ref ? ++m : --m) {
-        phase1(state, depth);
-        if (solution !== null) {
-          break;
-        }
-        results.push(depth++);
+      if (state.minDist1() === 0) {
+        phase1(state, 0);
+        if (solution !== null) return;
       }
-      return results;
+      for (let depth = 1; depth <= maxDepth; depth++) {
+        phase1(state, depth);
+        if (solution !== null) break;
+      }
     };
     phase1 = function(state, depth) {
       var len, m, move, next, ref, ref1, results;
@@ -1942,18 +1933,15 @@
       }
     };
     phase2search = function(state) {
-      var depth, m, ref, results;
-      // Initialize phase 2 coordinates
       state.init2();
-      results = [];
-      for (depth = m = 1, ref = maxDepth - state.depth; (1 <= ref ? m <= ref : m >= ref); depth = 1 <= ref ? ++m : --m) {
-        phase2(state, depth);
-        if (solution !== null) {
-          break;
-        }
-        results.push(depth++);
+      if (state.minDist2() === 0) {
+        solution = state.solution();
+        return;
       }
-      return results;
+      for (let depth = 1; depth <= maxDepth - state.depth; depth++) {
+        phase2(state, depth);
+        if (solution !== null) break;
+      }
     };
     phase2 = function(state, depth) {
       var len, m, move, next, ref, results;
@@ -2831,6 +2819,101 @@
 
   const UNSOLVABLE_ERROR = "ERROR this is a unsolvible case you might want to check if you filled it in correct or not";
 
+  const MOVES_3X3 = [
+    'U', "U'", 'U2',
+    'D', "D'", 'D2',
+    'F', "F'", 'F2',
+    'B', "B'", 'B2',
+    'L', "L'", 'L2',
+    'R', "R'", 'R2'
+  ];
+
+  function invertMove3x3(m) {
+    if (m.endsWith('2')) return m;
+    if (m.endsWith("'")) return m.slice(0, -1);
+    return m + "'";
+  }
+
+  function serializeFaces3x3(faces) {
+    return ['U', 'D', 'F', 'B', 'L', 'R'].map(f => faces[f].map(c => c[0]).join('')).join('');
+  }
+
+  function solveOptimalShort(faces, maxDepth = 6) {
+    if (checkFacesSolved(3, faces)) {
+      return { moves: "" };
+    }
+
+    const targetSolved = {
+      U: new Array(9).fill(faces.U[4]),
+      D: new Array(9).fill(faces.D[4]),
+      F: new Array(9).fill(faces.F[4]),
+      B: new Array(9).fill(faces.B[4]),
+      L: new Array(9).fill(faces.L[4]),
+      R: new Array(9).fill(faces.R[4])
+    };
+
+    const startKey = serializeFaces3x3(faces);
+    const targetKey = serializeFaces3x3(targetSolved);
+    if (startKey === targetKey) {
+      return { moves: "" };
+    }
+
+    const forwardMap = new Map();
+    forwardMap.set(startKey, []);
+    let forwardQueue = [{ state: faces, path: [] }];
+
+    const backwardMap = new Map();
+    backwardMap.set(targetKey, []);
+    let backwardQueue = [{ state: targetSolved, path: [] }];
+
+    const halfDepth = Math.ceil(maxDepth / 2);
+
+    for (let depth = 0; depth < halfDepth; depth++) {
+      const nextFwd = [];
+      for (const node of forwardQueue) {
+        const lastFace = node.path.length > 0 ? node.path[node.path.length - 1][0] : null;
+        for (const m of MOVES_3X3) {
+          if (m[0] === lastFace) continue;
+          const nextState = cloneFaces(node.state);
+          applyMoveToFaces(nextState, 3, m);
+          const key = serializeFaces3x3(nextState);
+          if (!forwardMap.has(key)) {
+            const newPath = [...node.path, m];
+            forwardMap.set(key, newPath);
+            if (backwardMap.has(key)) {
+              return { moves: [...newPath, ...backwardMap.get(key)].join(' ') };
+            }
+            nextFwd.push({ state: nextState, path: newPath });
+          }
+        }
+      }
+      forwardQueue = nextFwd;
+
+      const nextBwd = [];
+      for (const node of backwardQueue) {
+        const firstFace = node.path.length > 0 ? node.path[0][0] : null;
+        for (const m of MOVES_3X3) {
+          if (m[0] === firstFace) continue;
+          const inv = invertMove3x3(m);
+          const prevState = cloneFaces(node.state);
+          applyMoveToFaces(prevState, 3, inv);
+          const key = serializeFaces3x3(prevState);
+          if (!backwardMap.has(key)) {
+            const newPath = [m, ...node.path];
+            backwardMap.set(key, newPath);
+            if (forwardMap.has(key)) {
+              return { moves: [...forwardMap.get(key), ...newPath].join(' ') };
+            }
+            nextBwd.push({ state: prevState, path: newPath });
+          }
+        }
+      }
+      backwardQueue = nextBwd;
+    }
+
+    return null;
+  }
+
   function solve3x3FromFaces(faces) {
     if (CubeClass.initSolver) {
       CubeClass.initSolver();
@@ -2848,6 +2931,12 @@
     const centerSet = new Set(Object.values(centers));
     if (centerSet.size !== 6 || centerSet.has('grey')) {
       return { error: UNSOLVABLE_ERROR };
+    }
+
+    // Check optimal shortest solver (1-6 moves) first
+    const optSol = solveOptimalShort(faces, 6);
+    if (optSol && optSol.moves !== undefined) {
+      return optSol;
     }
 
     const colorToLetter = {};
