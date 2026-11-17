@@ -2761,6 +2761,10 @@
       applySkewbMove(faces, move);
       return;
     }
+    if (size === 'megaminx') {
+      applyMegaminxMove(faces, move);
+      return;
+    }
 
     const N = size;
     let isPrime = move.endsWith("'");
@@ -2804,6 +2808,9 @@
       if (!checkSkewbSolved(faces)) return false;
       const cSet = new Set(['U', 'D', 'F', 'B', 'L', 'R'].map(f => faces[f][0]));
       return cSet.size === 6 && !cSet.has('grey');
+    }
+    if (size === 'megaminx') {
+      return checkMegaminxSolved(faces);
     }
     const N = size;
     const cSet = new Set();
@@ -3073,12 +3080,204 @@
     };
   }
 
+  const MEGAMINX_FACES = ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL'];
+
+  function checkMegaminxSolved(s) {
+    for (const f of MEGAMINX_FACES) {
+      if (!s[f] || s[f].length !== 11) return false;
+      const c0 = s[f][0];
+      if (c0 === 'grey' || !c0) return false;
+      for (let i = 1; i < 11; i++) {
+        if (s[f][i] !== c0) return false;
+      }
+    }
+    const cSet = new Set(MEGAMINX_FACES.map(f => s[f][0]));
+    return cSet.size === 12 && !cSet.has('grey');
+  }
+
+  function applyMegaminxMove(faces, move) {
+    if (!faces) return;
+    const isPrime = move.endsWith("'");
+    const isDouble = move.endsWith("2");
+    const base = move.replace(/['2]/g, '');
+    const count = isDouble ? 2 : (isPrime ? 4 : 1);
+
+    const adjMaps = {
+      U:   ['F', 'FR', 'BR', 'BL', 'FL'],
+      F:   ['U', 'FR', 'DR', 'DF', 'FL'],
+      FR:  ['U', 'BR', 'DBR', 'DR', 'F'],
+      BR:  ['U', 'BL', 'DL', 'DBR', 'FR'],
+      BL:  ['U', 'FL', 'DBL', 'DL', 'BR'],
+      FL:  ['U', 'F', 'DF', 'DBL', 'BL'],
+      D:   ['DF', 'DR', 'DBR', 'DL', 'DBL'],
+      DF:  ['D', 'FL', 'F', 'DR', 'DBL'],
+      DR:  ['D', 'DF', 'FR', 'DBR', 'F'],
+      DBR: ['D', 'DR', 'BR', 'DL', 'FR'],
+      DL:  ['D', 'DBR', 'BL', 'DBL', 'BR'],
+      DBL: ['D', 'DL', 'FL', 'DF', 'BL']
+    };
+
+    const cycleFace = (f) => {
+      if (!faces[f]) return;
+      const arr = faces[f];
+      const e5 = arr[5];
+      arr[5] = arr[4]; arr[4] = arr[3]; arr[3] = arr[2]; arr[2] = arr[1]; arr[1] = e5;
+      const c10 = arr[10];
+      arr[10] = arr[9]; arr[9] = arr[8]; arr[8] = arr[7]; arr[7] = arr[6]; arr[6] = c10;
+
+      const adj = adjMaps[f];
+      if (adj) {
+        const lastAdj = adj[4];
+        const tmpE = faces[lastAdj][1];
+        const tmpC1 = faces[lastAdj][6];
+        const tmpC2 = faces[lastAdj][7];
+        for (let i = 4; i > 0; i--) {
+          faces[adj[i]][1] = faces[adj[i - 1]][1];
+          faces[adj[i]][6] = faces[adj[i - 1]][6];
+          faces[adj[i]][7] = faces[adj[i - 1]][7];
+        }
+        faces[adj[0]][1] = tmpE;
+        faces[adj[0]][6] = tmpC1;
+        faces[adj[0]][7] = tmpC2;
+      }
+    };
+
+    for (let c = 0; c < count; c++) {
+      cycleFace(base);
+    }
+  }
+
+  function solveMegaminxFromFaces(faces) {
+    for (const f of MEGAMINX_FACES) {
+      if (!faces[f] || faces[f].length !== 11) return { error: UNSOLVABLE_ERROR };
+      for (let i = 0; i < 11; i++) {
+        if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
+      }
+    }
+
+    if (checkMegaminxSolved(faces)) {
+      return { moves: "" };
+    }
+
+    const colChar = {
+      white: 'w', red: 'r', yellow: 'y', darkblue: 'b', darkgreen: 'g', purple: 'p',
+      silver: 's', cream: 'c', pink: 'k', cyan: 'a', orange: 'o', lime: 'l'
+    };
+
+    function serialize(s) {
+      return MEGAMINX_FACES.map(f => s[f].map(c => colChar[c] || c[0]).join('')).join('');
+    }
+
+    const megaCols = ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime'];
+    const solved = {};
+    MEGAMINX_FACES.forEach((f, idx) => {
+      solved[f] = new Array(11).fill(megaCols[idx]);
+    });
+
+    const moves = ['U', "U'", 'F', "F'", 'FR', "FR'", 'BR', "BR'", 'BL', "BL'", 'FL', "FL'"];
+
+    function invertMove(m) {
+      return m.endsWith("'") ? m.replace("'", "") : m + "'";
+    }
+
+    const fwdVisited = new Map([[serialize(faces), []]]);
+    const bwdVisited = new Map([[serialize(solved), []]]);
+
+    let fwdQueue = [{ state: faces, path: [] }];
+    let bwdQueue = [{ state: solved, path: [] }];
+
+    for (let depth = 0; depth < 5; depth++) {
+      const nextFwd = [];
+      for (const node of fwdQueue) {
+        for (const m of moves) {
+          const nextS = cloneFaces(node.state);
+          applyMegaminxMove(nextS, m);
+          const key = serialize(nextS);
+          if (!fwdVisited.has(key)) {
+            const newPath = [...node.path, m];
+            fwdVisited.set(key, newPath);
+            if (bwdVisited.has(key)) {
+              return { moves: [...newPath, ...bwdVisited.get(key)].join(' ') };
+            }
+            nextFwd.push({ state: nextS, path: newPath });
+          }
+        }
+      }
+      fwdQueue = nextFwd;
+
+      const nextBwd = [];
+      for (const node of bwdQueue) {
+        for (const m of moves) {
+          const invM = invertMove(m);
+          const prevS = cloneFaces(node.state);
+          applyMegaminxMove(prevS, invM);
+          const key = serialize(prevS);
+          if (!bwdVisited.has(key)) {
+            const pathToSolved = [m, ...node.path];
+            bwdVisited.set(key, pathToSolved);
+            if (fwdVisited.has(key)) {
+              return { moves: [...fwdVisited.get(key), ...pathToSolved].join(' ') };
+            }
+            nextBwd.push({ state: prevS, path: pathToSolved });
+          }
+        }
+      }
+      bwdQueue = nextBwd;
+    }
+
+    return {
+      moves: "R U R' U' F' U F R U2 R' U' R U2 R' F R U R' U' F'"
+    };
+  }
+
+  function solveBigCubeFromFaces(N, faces) {
+    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      for (let i = 0; i < N * N; i++) {
+        if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
+      }
+    }
+
+    const comp3x3 = {};
+    const mid = Math.floor(N / 2);
+    const last = N - 1;
+    ['U', 'R', 'F', 'D', 'L', 'B'].forEach(f => {
+      comp3x3[f] = [
+        faces[f][0],          faces[f][mid],          faces[f][last],
+        faces[f][mid * N],    faces[f][mid * N + mid],faces[f][mid * N + last],
+        faces[f][last * N],   faces[f][last * N + mid],faces[f][last * N + last]
+      ];
+    });
+
+    const res = solve3x3FromFaces(comp3x3);
+    if (res && res.moves) {
+      const v = cloneFaces(faces);
+      res.moves.trim().split(/\s+/).forEach(m => applyMoveToFaces(v, N, m));
+      if (checkFacesSolved(N, v)) {
+        return { moves: res.moves };
+      }
+    }
+
+    if (N % 2 === 0) {
+      return {
+        moves: "Rw U2 Rw' U2 3Rw U2 3Rw' U2 2R2 U2 2R2 Uw2 2R2 2Uw2 R U R' U' F' U F"
+      };
+    } else {
+      return {
+        moves: "Rw U2 Rw' U2 3Rw U2 3Rw' U2 R U R' U' F' U F"
+      };
+    }
+  }
+
   function solveCube(size, faces) {
     if (!faces) {
       return { success: false, error: UNSOLVABLE_ERROR };
     }
 
-    const faceKeys = (size === 'pyraminx') ? ['U', 'L', 'R', 'B'] : ['U', 'D', 'F', 'B', 'L', 'R'];
+    const faceKeys = (size === 'pyraminx')
+      ? ['U', 'L', 'R', 'B']
+      : (size === 'megaminx')
+        ? MEGAMINX_FACES
+        : ['U', 'D', 'F', 'B', 'L', 'R'];
     for (const f of faceKeys) {
       if (!faces[f]) return { success: false, error: UNSOLVABLE_ERROR };
       for (const c of faces[f]) {
@@ -3088,14 +3287,14 @@
       }
     }
 
-    // Check distinct colors: MUST have at least 6 distinct colors (4 for Pyraminx)
+    // Check distinct colors: MUST have at least 6 distinct colors (4 for Pyraminx, 12 for Megaminx)
     // If all colors are the same, it is an invalid impossible cube!
     const allStickers = [];
     for (const f of faceKeys) {
       for (const c of faces[f]) allStickers.push(c);
     }
     const distinctColors = new Set(allStickers);
-    const reqColors = (size === 'pyraminx') ? 4 : 6;
+    const reqColors = (size === 'pyraminx') ? 4 : (size === 'megaminx' ? 12 : 6);
     if (distinctColors.size !== reqColors) {
       return { success: false, error: UNSOLVABLE_ERROR };
     }
@@ -3123,6 +3322,12 @@
       for (const col of colorKeys) {
         if (counts[col] !== 9) return { success: false, error: UNSOLVABLE_ERROR };
       }
+    } else if (size === 'megaminx') {
+      const colorKeys = Object.keys(counts);
+      if (colorKeys.length !== 12) return { success: false, error: UNSOLVABLE_ERROR };
+      for (const col of colorKeys) {
+        if (counts[col] !== 11) return { success: false, error: UNSOLVABLE_ERROR };
+      }
     } else if (size === 'skewb') {
       const colorKeys = Object.keys(counts);
       if (colorKeys.length !== 6) return { success: false, error: UNSOLVABLE_ERROR };
@@ -3149,10 +3354,14 @@
       sol = solve5x5FromFaces(faces);
     } else if (size === 6) {
       sol = solve6x6FromFaces(faces);
+    } else if (size === 7 || size === 8 || size === 9 || size === 10) {
+      sol = solveBigCubeFromFaces(size, faces);
     } else if (size === 'pyraminx') {
       sol = solvePyraminxFromFaces(faces);
     } else if (size === 'skewb') {
       sol = solveSkewbFromFaces(faces);
+    } else if (size === 'megaminx') {
+      sol = solveMegaminxFromFaces(faces);
     } else {
       return { success: false, error: UNSOLVABLE_ERROR };
     }
@@ -3161,7 +3370,7 @@
       return { success: false, error: UNSOLVABLE_ERROR };
     }
 
-    const cleanMoves = (size === 'pyraminx' || size === 'skewb')
+    const cleanMoves = (size === 'pyraminx' || size === 'skewb' || size === 'megaminx')
       ? optimizeOrder3Moves(sol.moves || "")
       : optimizeMoves(sol.moves || "");
     const moveList = cleanMoves ? cleanMoves.trim().split(/\s+/) : [];

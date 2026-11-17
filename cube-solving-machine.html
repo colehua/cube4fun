@@ -507,6 +507,59 @@
             transform: scale(1.06);
         }
 
+        /* 3D MEGAMINX FACE */
+        .solver-3d-face.face-megaminx {
+            display: block !important;
+            padding: 0 !important;
+            width: 160px !important;
+            height: 160px !important;
+            left: 60px !important;
+            top: 60px !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            backface-visibility: visible !important;
+        }
+        .solver-3d-face.megaminx-U   { transform: rotateX(90deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-F   { transform: rotateY(0deg) rotateX(26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-FR  { transform: rotateY(-72deg) rotateX(26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-BR  { transform: rotateY(-144deg) rotateX(26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-BL  { transform: rotateY(-216deg) rotateX(26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-FL  { transform: rotateY(-288deg) rotateX(26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-D   { transform: rotateX(-90deg) rotateZ(180deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-DF  { transform: rotateY(180deg) rotateX(-26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-DR  { transform: rotateY(252deg) rotateX(-26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-DBR { transform: rotateY(324deg) rotateX(-26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-DBL { transform: rotateY(36deg) rotateX(-26.565deg) translateZ(82px) !important; }
+        .solver-3d-face.megaminx-DL  { transform: rotateY(108deg) rotateX(-26.565deg) translateZ(82px) !important; }
+
+        .mega-polygon {
+            cursor: pointer;
+            transition: fill 0.15s ease, filter 0.15s ease;
+        }
+        .mega-polygon:hover {
+            filter: brightness(1.3) drop-shadow(0 0 6px rgba(0, 240, 255, 0.8));
+        }
+
+        /* MEGAMINX 2D NET */
+        .net-face.face-mega-net {
+            width: 170px !important;
+            height: 195px !important;
+            position: relative;
+            padding: 6px 8px;
+            background: rgba(11, 17, 32, 0.95);
+            border-radius: 12px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .net-face.face-mega-net .face-title {
+            margin-bottom: 4px;
+            font-size: 0.82em;
+        }
+
         /* SKEWB 2D NET */
         .net-face.face-skewb-net {
             width: 130px;
@@ -1293,11 +1346,26 @@
                 <button class="solver-type-btn" id="solver-tab-6" onclick="switchSolverCube(6)">
                     6x6x6
                 </button>
+                <button class="solver-type-btn" id="solver-tab-7" onclick="switchSolverCube(7)">
+                    7x7x7
+                </button>
+                <button class="solver-type-btn" id="solver-tab-8" onclick="switchSolverCube(8)">
+                    8x8x8
+                </button>
+                <button class="solver-type-btn" id="solver-tab-9" onclick="switchSolverCube(9)">
+                    9x9x9
+                </button>
+                <button class="solver-type-btn" id="solver-tab-10" onclick="switchSolverCube(10)">
+                    10x10x10
+                </button>
                 <button class="solver-type-btn" id="solver-tab-pyraminx" onclick="switchSolverCube('pyraminx')">
                     Pyraminx
                 </button>
                 <button class="solver-type-btn" id="solver-tab-skewb" onclick="switchSolverCube('skewb')">
                     Skewb
+                </button>
+                <button class="solver-type-btn" id="solver-tab-megaminx" onclick="switchSolverCube('megaminx')">
+                    Megaminx
                 </button>
             </div>
 
@@ -1314,6 +1382,14 @@
                     <button class="swatch-btn" id="swatch-blue" data-color="blue" style="background-color: #3b82f6;" onclick="selectPaletteColor('blue')" title="Blue (Back Face)"></button>
                     <button class="swatch-btn" id="swatch-orange" data-color="orange" style="background-color: #f97316;" onclick="selectPaletteColor('orange')" title="Orange (Left Face)"></button>
                     <button class="swatch-btn" id="swatch-red" data-color="red" style="background-color: #ef4444;" onclick="selectPaletteColor('red')" title="Red (Right Face)"></button>
+                    <button class="swatch-btn" id="swatch-purple" data-color="purple" style="background-color: #a855f7; display: none;" onclick="selectPaletteColor('purple')" title="Purple (FL Face)"></button>
+                    <button class="swatch-btn" id="swatch-darkblue" data-color="darkblue" style="background-color: #1d4ed8; display: none;" onclick="selectPaletteColor('darkblue')" title="Dark Blue (BR Face)"></button>
+                    <button class="swatch-btn" id="swatch-darkgreen" data-color="darkgreen" style="background-color: #15803d; display: none;" onclick="selectPaletteColor('darkgreen')" title="Dark Green (BL Face)"></button>
+                    <button class="swatch-btn" id="swatch-pink" data-color="pink" style="background-color: #f472b6; display: none;" onclick="selectPaletteColor('pink')" title="Pink (DR Face)"></button>
+                    <button class="swatch-btn" id="swatch-cyan" data-color="cyan" style="background-color: #06b6d4; display: none;" onclick="selectPaletteColor('cyan')" title="Light Blue (DBR Face)"></button>
+                    <button class="swatch-btn" id="swatch-lime" data-color="lime" style="background-color: #84cc16; display: none;" onclick="selectPaletteColor('lime')" title="Light Green (DL Face)"></button>
+                    <button class="swatch-btn" id="swatch-cream" data-color="cream" style="background-color: #fef08a; display: none;" onclick="selectPaletteColor('cream')" title="Cream / Beige (DF Face)"></button>
+                    <button class="swatch-btn" id="swatch-silver" data-color="silver" style="background-color: #94a3b8; display: none;" onclick="selectPaletteColor('silver')" title="Silver / Grey (D Face)"></button>
                     <button class="swatch-btn" id="swatch-grey" data-color="grey" style="background-color: #64748b;" onclick="selectPaletteColor('grey')" title="Grey (Erase / Clear Spot)"></button>
                 </div>
             </div>
@@ -1558,13 +1634,21 @@
         let isPlayerAutoPlaying = false;
 
         const PALETTE_COLORS = {
-            white:  { hex: '#ffffff', name: 'White (Top / U)' },
-            yellow: { hex: '#ffd700', name: 'Yellow (Down / D)' },
-            green:  { hex: '#22c55e', name: 'Green (Front / F)' },
-            blue:   { hex: '#3b82f6', name: 'Blue (Back / B)' },
-            orange: { hex: '#f97316', name: 'Orange (Left / L)' },
-            red:    { hex: '#ef4444', name: 'Red (Right / R)' },
-            grey:   { hex: '#64748b', name: 'Grey (Erase / Clear Spot)' }
+            white:     { hex: '#ffffff', name: 'White (Top Face)' },
+            yellow:    { hex: '#ffd700', name: 'Yellow (Down Face)' },
+            green:     { hex: '#22c55e', name: 'Green (Front Face)' },
+            blue:      { hex: '#3b82f6', name: 'Blue (Back Face)' },
+            orange:    { hex: '#f97316', name: 'Orange (Left Face)' },
+            red:       { hex: '#ef4444', name: 'Red (Right Face)' },
+            purple:    { hex: '#a855f7', name: 'Purple (FL Face)' },
+            darkblue:  { hex: '#1d4ed8', name: 'Dark Blue (BR Face)' },
+            darkgreen: { hex: '#15803d', name: 'Dark Green (BL Face)' },
+            pink:      { hex: '#f472b6', name: 'Pink (DR Face)' },
+            cyan:      { hex: '#06b6d4', name: 'Light Blue / Cyan (DBR Face)' },
+            lime:      { hex: '#84cc16', name: 'Light Green / Lime (DL Face)' },
+            cream:     { hex: '#fef08a', name: 'Cream / Beige (DF Face)' },
+            silver:    { hex: '#94a3b8', name: 'Silver / Grey (D Face)' },
+            grey:      { hex: '#64748b', name: 'Grey (Erase / Clear Spot)' }
         };
 
         function initSolverFaces(size) {
@@ -1577,6 +1661,10 @@
                 ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
                     faces[f] = new Array(5).fill('grey');
                 });
+            } else if (size === 'megaminx') {
+                ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL'].forEach(f => {
+                    faces[f] = new Array(11).fill('grey');
+                });
             } else {
                 const N = size;
                 ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
@@ -1588,26 +1676,58 @@
 
         function switchSolverCube(size, skipSound = false) {
             solverSize = size;
-            const tabs = [2, 3, 4, 5, 6, 'pyraminx', 'skewb'];
+            const tabs = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'pyraminx', 'skewb', 'megaminx'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`solver-tab-${t}`);
                 if (btn) btn.classList.toggle('active', t === size);
             });
 
-            // Adjust palette swatches for Pyraminx (4 colors: Yellow, Green, Blue, Red)
+            const megaSwatches = ['purple', 'darkblue', 'darkgreen', 'pink', 'cyan', 'lime', 'cream', 'silver'];
             const swatchWhite = document.getElementById('swatch-white');
             const swatchOrange = document.getElementById('swatch-orange');
+            const swatchGreen = document.getElementById('swatch-green');
+            const swatchBlue = document.getElementById('swatch-blue');
+
             if (size === 'pyraminx') {
                 if (swatchWhite) swatchWhite.style.display = 'none';
                 if (swatchOrange) swatchOrange.style.display = 'none';
-                if (solverColor === 'white' || solverColor === 'orange') {
+                if (swatchGreen) swatchGreen.style.display = 'inline-block';
+                if (swatchBlue) swatchBlue.style.display = 'inline-block';
+                megaSwatches.forEach(id => {
+                    const el = document.getElementById(`swatch-${id}`);
+                    if (el) el.style.display = 'none';
+                });
+                if (solverColor === 'white' || solverColor === 'orange' || megaSwatches.includes(solverColor)) {
                     selectPaletteColor('yellow');
                 }
                 rotX = -18;
                 rotY = -35;
+            } else if (size === 'megaminx') {
+                if (swatchWhite) swatchWhite.style.display = 'inline-block';
+                if (swatchOrange) swatchOrange.style.display = 'inline-block';
+                if (swatchGreen) swatchGreen.style.display = 'none';
+                if (swatchBlue) swatchBlue.style.display = 'none';
+                megaSwatches.forEach(id => {
+                    const el = document.getElementById(`swatch-${id}`);
+                    if (el) el.style.display = 'inline-block';
+                });
+                if (solverColor === 'green' || solverColor === 'blue') {
+                    selectPaletteColor('white');
+                }
+                rotX = -20;
+                rotY = -30;
             } else {
                 if (swatchWhite) swatchWhite.style.display = 'inline-block';
                 if (swatchOrange) swatchOrange.style.display = 'inline-block';
+                if (swatchGreen) swatchGreen.style.display = 'inline-block';
+                if (swatchBlue) swatchBlue.style.display = 'inline-block';
+                megaSwatches.forEach(id => {
+                    const el = document.getElementById(`swatch-${id}`);
+                    if (el) el.style.display = 'none';
+                });
+                if (megaSwatches.includes(solverColor)) {
+                    selectPaletteColor('white');
+                }
                 rotX = -25;
                 rotY = -45;
             }
@@ -1673,6 +1793,21 @@
                     const m = moves[Math.floor(Math.random() * moves.length)];
                     CubeSolver.applyMoveToFaces(solverFaces, 'skewb', m);
                 }
+            } else if (solverSize === 'megaminx') {
+                const megaCols = {
+                    U: 'white', F: 'red', FR: 'yellow', BR: 'darkblue', BL: 'darkgreen', FL: 'purple',
+                    D: 'silver', DF: 'cream', DR: 'pink', DBR: 'cyan', DBL: 'orange', DL: 'lime'
+                };
+                solverFaces = {};
+                for (const f of ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL']) {
+                    solverFaces[f] = new Array(11).fill(megaCols[f]);
+                }
+                const moves = ['U', "U'", 'F', "F'", 'FR', "FR'", 'BR', "BR'", 'BL', "BL'", 'FL', "FL'"];
+                const count = 3 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < count; i++) {
+                    const m = moves[Math.floor(Math.random() * moves.length)];
+                    CubeSolver.applyMoveToFaces(solverFaces, 'megaminx', m);
+                }
             } else {
                 const N = solverSize;
                 solverFaces = {
@@ -1687,7 +1822,6 @@
                 if (N === 2) {
                     moves = ['R', "R'", 'R2', 'U', "U'", 'U2', 'F', "F'", 'F2'];
                 } else {
-                    // For 3x3 to 6x6: outer face turns allow reduction to solve 100%
                     moves = ['R', "R'", 'R2', 'U', "U'", 'U2', 'F', "F'", 'F2', 'L', "L'", 'L2', 'B', "B'", 'B2', 'D', "D'", 'D2'];
                 }
                 const count = Math.min(8, 4 + Math.floor(Math.random() * 4));
@@ -1728,6 +1862,17 @@
                     <button class="btn-angle" onclick="setCubeAngle('right')" title="View Right face (R)">Right (R)</button>
                     <button class="btn-angle" onclick="setCubeAngle('bottom')" title="View Bottom Base face (B)">Bottom Base (B)</button>
                 `;
+            } else if (solverSize === 'megaminx') {
+                container.innerHTML = `
+                    <button class="btn-angle" onclick="setCubeAngle('iso')" title="Isometric 3D perspective">🔄 3D View</button>
+                    <button class="btn-angle" onclick="setCubeAngle('U')" title="View Top White Face (U)">Top (U)</button>
+                    <button class="btn-angle" onclick="setCubeAngle('F')" title="View Front Red Face (F)">Front (F)</button>
+                    <button class="btn-angle" onclick="setCubeAngle('FR')" title="View Front-Right Yellow Face (FR)">FR (Yellow)</button>
+                    <button class="btn-angle" onclick="setCubeAngle('BR')" title="View Back-Right Blue Face (BR)">BR (Dark Blue)</button>
+                    <button class="btn-angle" onclick="setCubeAngle('BL')" title="View Back-Left Green Face (BL)">BL (Dark Green)</button>
+                    <button class="btn-angle" onclick="setCubeAngle('FL')" title="View Front-Left Purple Face (FL)">FL (Purple)</button>
+                    <button class="btn-angle" onclick="setCubeAngle('D')" title="View Bottom Silver Face (D)">Bottom (D)</button>
+                `;
             } else {
                 container.innerHTML = `
                     <button class="btn-angle" onclick="setCubeAngle('iso')" title="Isometric 3D perspective">🔄 3D View</button>
@@ -1762,6 +1907,27 @@
                         <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 8px;">🔵 Bottom Base (B): Blue</span>
                     </div>
                 `;
+            } else if (solverSize === 'megaminx') {
+                box.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                        <span style="font-size: 1.4em;">⚠️</span>
+                        <h3 style="margin: 0; color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 1.1em; letter-spacing: 0.5px;">
+                            CRITICAL ORIENTATION: HOLD WHITE ON TOP, RED IN FRONT
+                        </h3>
+                    </div>
+                    <p style="margin: 0 0 10px 0; color: #e2e8f0; font-size: 0.95em; line-height: 1.5;">
+                        To guarantee correct solutions, always hold your Megaminx with <strong>WHITE ON TOP (U)</strong> and <strong>RED IN FRONT (F)</strong> when filling in colors and executing moves!
+                    </p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.82em; font-weight: 700;">
+                        <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid #ffffff; padding: 3px 8px; border-radius: 6px;">⚪ U: White</span>
+                        <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 3px 8px; border-radius: 6px;">🔴 F: Red</span>
+                        <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 3px 8px; border-radius: 6px;">🟡 FR: Yellow</span>
+                        <span style="background: rgba(29, 78, 216, 0.15); color: #60a5fa; border: 1px solid #1d4ed8; padding: 3px 8px; border-radius: 6px;">🔷 BR: Dark Blue</span>
+                        <span style="background: rgba(21, 128, 61, 0.15); color: #4ade80; border: 1px solid #15803d; padding: 3px 8px; border-radius: 6px;">🟢 BL: Dark Green</span>
+                        <span style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #a855f7; padding: 3px 8px; border-radius: 6px;">🟣 FL: Purple</span>
+                        <span style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid #94a3b8; padding: 3px 8px; border-radius: 6px;">🔘 D: Silver</span>
+                    </div>
+                `;
             } else {
                 box.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
@@ -1792,6 +1958,15 @@
                 else if (angle === 'left' || angle === 'L') { rotX = -19.47; rotY = 120; }
                 else if (angle === 'right' || angle === 'R') { rotX = -19.47; rotY = -120; }
                 else if (angle === 'bottom' || angle === 'B') { rotX = 90; rotY = 0; }
+            } else if (solverSize === 'megaminx') {
+                if (angle === 'iso' || angle === '3d') { rotX = -20; rotY = -30; }
+                else if (angle === 'U') { rotX = -90; rotY = 0; }
+                else if (angle === 'F') { rotX = -26.5; rotY = 0; }
+                else if (angle === 'FR') { rotX = -26.5; rotY = 72; }
+                else if (angle === 'BR') { rotX = -26.5; rotY = 144; }
+                else if (angle === 'BL') { rotX = -26.5; rotY = 216; }
+                else if (angle === 'FL') { rotX = -26.5; rotY = 288; }
+                else if (angle === 'D') { rotX = 90; rotY = 0; }
             } else {
                 if (angle === 'iso' || angle === '3d') { rotX = -25; rotY = -45; }
                 else if (angle === 'front') { rotX = 0; rotY = 0; }
@@ -1803,6 +1978,45 @@
             }
             apply3DRotation();
             playSound('turn');
+        }
+
+        function createMegaminxSvgMarkup(faceKey, stickerColors) {
+            const cx = 80, cy = 80, rIn = 26, rOut = 74;
+            const vIn = [], vOut = [];
+            for (let k = 0; k < 5; k++) {
+                const ang = (-90 + k * 72) * Math.PI / 180;
+                vIn.push({ x: +(cx + rIn * Math.cos(ang)).toFixed(2), y: +(cy + rIn * Math.sin(ang)).toFixed(2) });
+                vOut.push({ x: +(cx + rOut * Math.cos(ang)).toFixed(2), y: +(cy + rOut * Math.sin(ang)).toFixed(2) });
+            }
+            function lerp(p1, p2, t) {
+                return { x: +(p1.x + (p2.x - p1.x) * t).toFixed(2), y: +(p1.y + (p2.y - p1.y) * t).toFixed(2) };
+            }
+            const polys = [];
+            polys.push(vIn.map(p => p.x + ',' + p.y).join(' '));
+            for (let k = 0; k < 5; k++) {
+                const next = (k + 1) % 5;
+                const in1 = lerp(vIn[k], vIn[next], 0.2);
+                const in2 = lerp(vIn[k], vIn[next], 0.8);
+                const out2 = lerp(vOut[k], vOut[next], 0.68);
+                const out1 = lerp(vOut[k], vOut[next], 0.32);
+                polys.push([in1, in2, out2, out1].map(p => p.x + ',' + p.y).join(' '));
+            }
+            for (let k = 0; k < 5; k++) {
+                const next = (k + 1) % 5;
+                const prev = (k + 4) % 5;
+                const out1 = lerp(vOut[k], vOut[next], 0.32);
+                const in1 = lerp(vIn[k], vIn[next], 0.2);
+                const prev_in2 = lerp(vIn[prev], vIn[k], 0.8);
+                const prev_out2 = lerp(vOut[prev], vOut[k], 0.68);
+                polys.push([vOut[k], out1, in1, vIn[k], prev_in2, prev_out2].map(p => p.x + ',' + p.y).join(' '));
+            }
+            let svg = '<svg viewBox="0 0 160 160" width="160" height="160" class="mega-pentagon-svg">';
+            polys.forEach((pts, idx) => {
+                const col = stickerColors[idx] || '#64748b';
+                svg += `<polygon class="mega-polygon" data-face="${faceKey}" data-index="${idx}" points="${pts}" fill="${col}" stroke="#0f172a" stroke-width="2.5" stroke-linejoin="round"/>`;
+            });
+            svg += '</svg>';
+            return svg;
         }
 
         function renderSolver3DCube() {
@@ -1891,6 +2105,23 @@
                     cubeEl.appendChild(faceDiv);
                 });
 
+            } else if (solverSize === 'megaminx') {
+                const megaFaces = ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL'];
+                megaFaces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `solver-3d-face face-megaminx megaminx-${f}`;
+                    const colors = (solverFaces[f] || []).map(c => PALETTE_COLORS[c] ? PALETTE_COLORS[c].hex : c);
+                    faceDiv.innerHTML = createMegaminxSvgMarkup(f, colors);
+                    faceDiv.querySelectorAll('.mega-polygon').forEach(poly => {
+                        poly.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const idx = parseInt(poly.dataset.index, 10);
+                            paintSticker(f, idx);
+                        });
+                    });
+                    cubeEl.appendChild(faceDiv);
+                });
+
             } else {
                 const N = solverSize;
                 const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
@@ -1901,6 +2132,10 @@
                 else if (N === 4) { gap = 3; radius = 4; }
                 else if (N === 5) { gap = 2; radius = 3; }
                 else if (N === 6) { gap = 2; radius = 2; }
+                else if (N === 7) { gap = 1.5; radius = 1.5; }
+                else if (N === 8) { gap = 1.2; radius = 1; }
+                else if (N === 9) { gap = 1; radius = 1; }
+                else if (N === 10) { gap = 0.8; radius = 0.5; }
 
                 faceKeys.forEach(f => {
                     const faceDiv = document.createElement('div');
@@ -2079,6 +2314,58 @@
                     container.appendChild(faceEl);
                 });
 
+            } else if (solverSize === 'megaminx') {
+                container.style.gridTemplateColumns = 'repeat(6, auto)';
+                container.style.gridTemplateRows = 'repeat(2, auto)';
+
+                const megaFaceList = [
+                    { key: 'U',   name: 'Top (U)',              border: '#ffffff' },
+                    { key: 'F',   name: 'Front (F)',            border: '#ef4444' },
+                    { key: 'FR',  name: 'Front-Right (FR)',     border: '#ffd700' },
+                    { key: 'BR',  name: 'Back-Right (BR)',      border: '#1d4ed8' },
+                    { key: 'BL',  name: 'Back-Left (BL)',       border: '#15803d' },
+                    { key: 'FL',  name: 'Front-Left (FL)',      border: '#a855f7' },
+                    { key: 'D',   name: 'Bottom (D)',           border: '#94a3b8' },
+                    { key: 'DF',  name: 'Down-Front (DF)',      border: '#fef08a' },
+                    { key: 'DR',  name: 'Down-Right (DR)',      border: '#f472b6' },
+                    { key: 'DBR', name: 'Down-Back-R (DBR)',    border: '#06b6d4' },
+                    { key: 'DBL', name: 'Down-Back-L (DBL)',    border: '#f97316' },
+                    { key: 'DL',  name: 'Down-Left (DL)',       border: '#84cc16' }
+                ];
+
+                megaFaceList.forEach(item => {
+                    const faceEl = document.createElement('div');
+                    faceEl.className = `net-face face-mega-net net-face-${item.key}`;
+                    faceEl.style.border = `2px solid ${item.border}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'face-title';
+                    title.textContent = item.name + ' 🎨';
+                    title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
+                    title.style.cursor = 'pointer';
+                    title.addEventListener('click', () => fillWholeFace(item.key));
+                    faceEl.appendChild(title);
+
+                    const colors = (solverFaces[item.key] || []).map(c => PALETTE_COLORS[c] ? PALETTE_COLORS[c].hex : c);
+                    const svgWrapper = document.createElement('div');
+                    svgWrapper.innerHTML = createMegaminxSvgMarkup(item.key, colors);
+                    svgWrapper.querySelectorAll('.mega-polygon').forEach(poly => {
+                        poly.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            const idx = parseInt(poly.dataset.index, 10);
+                            paintSticker(item.key, idx);
+                        });
+                        poly.addEventListener('mouseenter', () => {
+                            if (isStickerMouseDown) {
+                                const idx = parseInt(poly.dataset.index, 10);
+                                paintSticker(item.key, idx);
+                            }
+                        });
+                    });
+                    faceEl.appendChild(svgWrapper);
+                    container.appendChild(faceEl);
+                });
+
             } else {
                 container.style.gridTemplateColumns = 'repeat(4, auto)';
                 container.style.gridTemplateRows = 'repeat(3, auto)';
@@ -2091,6 +2378,10 @@
                 else if (N === 4) { stickerSize = 25; stickerRadius = 4; }
                 else if (N === 5) { stickerSize = 21; stickerRadius = 3; }
                 else if (N === 6) { stickerSize = 18; stickerRadius = 2; }
+                else if (N === 7) { stickerSize = 15; stickerRadius = 2; }
+                else if (N === 8) { stickerSize = 13; stickerRadius = 1.5; }
+                else if (N === 9) { stickerSize = 12; stickerRadius = 1; }
+                else if (N === 10) { stickerSize = 11; stickerRadius = 1; }
 
                 const faceOrder = [
                     { key: 'U', name: 'Top (U)' },
@@ -2161,26 +2452,30 @@
             solverFaces[faceKey][index] = solverColor;
             const hex = PALETTE_COLORS[solverColor] ? PALETTE_COLORS[solverColor].hex : solverColor;
 
-            const st3d = document.querySelector(`.solver-3d-face.face-${faceKey} .solver-3d-sticker[data-index="${index}"]`);
+            const st3d = document.querySelector(`.solver-3d-face.face-${faceKey} .solver-3d-sticker[data-index="${index}"], .solver-3d-face.megaminx-${faceKey} .mega-polygon[data-index="${index}"]`);
             if (st3d) {
-                st3d.style.backgroundColor = hex;
-                st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.2)';
-                setTimeout(() => {
-                    if (st3d) {
-                        st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg)' : '';
-                    }
-                }, 120);
+                if (st3d.tagName && st3d.tagName.toLowerCase() === 'polygon') {
+                    st3d.setAttribute('fill', hex);
+                } else {
+                    st3d.style.backgroundColor = hex;
+                    st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.2)';
+                    setTimeout(() => {
+                        if (st3d) st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg)' : '';
+                    }, 120);
+                }
             }
 
-            const st2d = document.querySelector(`.net-face-${faceKey} .net-sticker[data-index="${index}"]`);
+            const st2d = document.querySelector(`.net-face-${faceKey} .net-sticker[data-index="${index}"], .net-face-${faceKey} .mega-polygon[data-index="${index}"]`);
             if (st2d) {
-                st2d.style.backgroundColor = hex;
-                st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.18)';
-                setTimeout(() => {
-                    if (st2d) {
-                        st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg)' : '';
-                    }
-                }, 120);
+                if (st2d.tagName && st2d.tagName.toLowerCase() === 'polygon') {
+                    st2d.setAttribute('fill', hex);
+                } else {
+                    st2d.style.backgroundColor = hex;
+                    st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.18)';
+                    setTimeout(() => {
+                        if (st2d) st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg)' : '';
+                    }, 120);
+                }
             }
 
             playSound('turn');
@@ -2191,7 +2486,7 @@
         window.addEventListener('mouseup', () => { isStickerMouseDown = false; });
 
         function updateColorBadgesAndBanner() {
-            const counts = { white: 0, yellow: 0, green: 0, blue: 0, orange: 0, red: 0, grey: 0 };
+            const counts = {};
             let expected = 0;
             let activeColors = [];
             let faceKeys = [];
@@ -2204,12 +2499,19 @@
                 expected = 5;
                 activeColors = ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
                 faceKeys = ['U', 'D', 'F', 'B', 'L', 'R'];
+            } else if (solverSize === 'megaminx') {
+                expected = 11;
+                activeColors = ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime'];
+                faceKeys = ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL'];
             } else {
                 const N = solverSize;
                 expected = N * N;
                 activeColors = ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
                 faceKeys = ['U', 'D', 'F', 'B', 'L', 'R'];
             }
+
+            activeColors.forEach(c => { counts[c] = 0; });
+            counts.grey = 0;
 
             faceKeys.forEach(f => {
                 if (solverFaces && solverFaces[f]) {
@@ -2322,6 +2624,8 @@
             if (remEl) {
                 if (solverSize === 'pyraminx') {
                     remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your Pyraminx with <strong>YELLOW ON TOP</strong>, <strong>GREEN ON LEFT</strong>, and <strong>RED ON RIGHT</strong> while executing each move!`;
+                } else if (solverSize === 'megaminx') {
+                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your Megaminx with <strong>WHITE ON TOP</strong> and <strong>RED IN FRONT</strong> while executing each move!`;
                 } else {
                     remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your cube with <strong>WHITE ON TOP</strong> and <strong>GREEN IN FRONT</strong> while executing each move!`;
                 }
@@ -2528,6 +2832,21 @@
                     { key: 'R', name: 'Right (Red)', color: 'red', hint: 'Red face facing camera' },
                     { key: 'B', name: 'Bottom Base (Blue)', color: 'blue', hint: 'Blue bottom base facing camera' }
                 ];
+            } else if (solverSize === 'megaminx') {
+                return [
+                    { key: 'U',   name: 'Top (White / U)',              color: 'white',     hint: 'Hold White on Top, Red in Front' },
+                    { key: 'F',   name: 'Front (Red / F)',              color: 'red',       hint: 'Hold Red in Front, White on Top' },
+                    { key: 'FR',  name: 'Front-Right (Yellow / FR)',    color: 'yellow',    hint: 'Yellow face facing camera' },
+                    { key: 'BR',  name: 'Back-Right (Dark Blue / BR)',  color: 'darkblue',  hint: 'Dark Blue face facing camera' },
+                    { key: 'BL',  name: 'Back-Left (Dark Green / BL)',  color: 'darkgreen', hint: 'Dark Green face facing camera' },
+                    { key: 'FL',  name: 'Front-Left (Purple / FL)',     color: 'purple',    hint: 'Purple face facing camera' },
+                    { key: 'D',   name: 'Bottom (Silver / D)',          color: 'silver',    hint: 'Silver bottom face facing camera' },
+                    { key: 'DF',  name: 'Down-Front (Cream / DF)',      color: 'cream',     hint: 'Cream face facing camera' },
+                    { key: 'DR',  name: 'Down-Right (Pink / DR)',       color: 'pink',      hint: 'Pink face facing camera' },
+                    { key: 'DBR', name: 'Down-Back-R (Cyan / DBR)',     color: 'cyan',      hint: 'Cyan / Light Blue face facing camera' },
+                    { key: 'DBL', name: 'Down-Back-L (Orange / DBL)',   color: 'orange',    hint: 'Orange face facing camera' },
+                    { key: 'DL',  name: 'Down-Left (Lime / DL)',        color: 'lime',      hint: 'Lime / Light Green face facing camera' }
+                ];
             } else {
                 return [
                     { key: 'U', name: 'Top (White)', color: 'white', hint: 'Hold White on Top, Green in Front' },
@@ -2567,25 +2886,47 @@
                 }
             }
 
+            // Check for silver if allowed
+            if (allowedColors.includes('silver')) {
+                if (s < 0.20 && v >= 0.35 && v <= 0.85) {
+                    return 'silver';
+                }
+            }
+
             // Hue based classification
-            let col = 'white';
+            let col = allowedColors[0] || 'white';
             if (h >= 345 || h < 14) {
-                col = 'red';
+                if (allowedColors.includes('pink') && s < 0.65 && v > 0.65) col = 'pink';
+                else col = 'red';
             } else if (h >= 14 && h < 46) {
                 col = 'orange';
             } else if (h >= 46 && h < 74) {
-                col = 'yellow';
-            } else if (h >= 74 && h < 165) {
-                col = 'green';
-            } else if (h >= 165 && h < 265) {
-                col = 'blue';
-            } else {
-                col = 'red';
+                if (allowedColors.includes('cream') && s < 0.50 && v > 0.75) col = 'cream';
+                else col = 'yellow';
+            } else if (h >= 74 && h < 100) {
+                if (allowedColors.includes('lime')) col = 'lime';
+                else col = 'green';
+            } else if (h >= 100 && h < 165) {
+                if (allowedColors.includes('darkgreen') && v < 0.70) col = 'darkgreen';
+                else col = 'green';
+            } else if (h >= 165 && h < 205) {
+                if (allowedColors.includes('cyan')) col = 'cyan';
+                else col = 'blue';
+            } else if (h >= 205 && h < 265) {
+                if (allowedColors.includes('darkblue')) col = 'darkblue';
+                else col = 'blue';
+            } else if (h >= 265 && h < 315) {
+                col = allowedColors.includes('purple') ? 'purple' : 'blue';
+            } else if (h >= 315 && h < 345) {
+                if (allowedColors.includes('pink')) col = 'pink';
+                else if (allowedColors.includes('purple')) col = 'purple';
+                else col = 'red';
             }
 
             if (!allowedColors.includes(col)) {
                 if (col === 'orange') col = (h > 30) ? 'yellow' : 'red';
-                else if (col === 'white') col = 'yellow';
+                else if (col === 'white') col = allowedColors.includes('silver') ? 'silver' : 'yellow';
+                else col = allowedColors[0];
             }
             return col;
         }
@@ -2638,6 +2979,25 @@
                 pts.push({ x: x0 + 0.78 * side, y: y0 + 0.22 * side });
                 pts.push({ x: x0 + 0.22 * side, y: y0 + 0.78 * side });
                 pts.push({ x: x0 + 0.78 * side, y: y0 + 0.78 * side });
+            } else if (solverSize === 'megaminx') {
+                // 0: Center
+                pts.push({ x: x0 + 0.50 * side, y: y0 + 0.50 * side });
+                // 1..5: Edge centers at radius 0.28 * side
+                for (let k = 0; k < 5; k++) {
+                    const ang = (-54 + k * 72) * Math.PI / 180;
+                    pts.push({
+                        x: x0 + 0.50 * side + Math.cos(ang) * 0.28 * side,
+                        y: y0 + 0.50 * side + Math.sin(ang) * 0.28 * side
+                    });
+                }
+                // 6..10: Corner tips at radius 0.44 * side
+                for (let k = 0; k < 5; k++) {
+                    const ang = (-90 + k * 72) * Math.PI / 180;
+                    pts.push({
+                        x: x0 + 0.50 * side + Math.cos(ang) * 0.44 * side,
+                        y: y0 + 0.50 * side + Math.sin(ang) * 0.44 * side
+                    });
+                }
             } else {
                 const N = solverSize;
                 const cell = side / N;
@@ -2659,6 +3019,8 @@
             modal.style.display = 'flex';
 
             const faceList = getFaceListForScanner();
+            scannerFacesDone = {};
+            faceList.forEach(f => { scannerFacesDone[f.key] = false; });
             const firstUnfinished = faceList.find(f => !scannerFacesDone[f.key]);
             scannerCurrentFace = firstUnfinished ? firstUnfinished.key : faceList[0].key;
             scannerCorrectionColor = (solverSize === 'pyraminx') ? 'yellow' : 'white';
@@ -2753,6 +3115,8 @@
 
             const activeColors = (solverSize === 'pyraminx')
                 ? ['yellow', 'green', 'blue', 'red']
+                : (solverSize === 'megaminx')
+                ? ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime']
                 : ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
 
             const samplePoints = getSamplePoints(w, h);
@@ -2807,6 +3171,8 @@
 
             const activeColors = (solverSize === 'pyraminx')
                 ? ['yellow', 'green', 'blue', 'red']
+                : (solverSize === 'megaminx')
+                ? ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime']
                 : ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
 
             const samplePoints = getSamplePoints(srcW, srcH);
@@ -2955,6 +3321,34 @@
                     dot.style.transform = 'translate(-50%, -50%)';
                     gridEl.appendChild(dot);
                 });
+            } else if (solverSize === 'megaminx') {
+                gridEl.style.display = 'block';
+                gridEl.style.position = 'relative';
+                const dots = [{ x: '50%', y: '50%' }];
+                for (let k = 0; k < 5; k++) {
+                    const ang = (-54 + k * 72) * Math.PI / 180;
+                    dots.push({
+                        x: (50 + Math.cos(ang) * 28).toFixed(1) + '%',
+                        y: (50 + Math.sin(ang) * 28).toFixed(1) + '%'
+                    });
+                }
+                for (let k = 0; k < 5; k++) {
+                    const ang = (-90 + k * 72) * Math.PI / 180;
+                    dots.push({
+                        x: (50 + Math.cos(ang) * 44).toFixed(1) + '%',
+                        y: (50 + Math.sin(ang) * 44).toFixed(1) + '%'
+                    });
+                }
+                dots.forEach((c, idx) => {
+                    const dot = document.createElement('div');
+                    dot.className = 'scanner-cell-dot';
+                    dot.style.position = 'absolute';
+                    dot.style.left = c.x;
+                    dot.style.top = c.y;
+                    dot.style.transform = 'translate(-50%, -50%)';
+                    dot.title = `Sticker ${idx}`;
+                    gridEl.appendChild(dot);
+                });
             } else {
                 const N = solverSize;
                 gridEl.style.display = 'grid';
@@ -2977,9 +3371,14 @@
             if (!strip) return;
             strip.innerHTML = "";
 
-            const colors = (solverSize === 'pyraminx')
-                ? ['yellow', 'green', 'blue', 'red']
-                : ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
+            let colors = [];
+            if (solverSize === 'pyraminx') {
+                colors = ['yellow', 'green', 'blue', 'red'];
+            } else if (solverSize === 'megaminx') {
+                colors = ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime'];
+            } else {
+                colors = ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
+            }
 
             colors.forEach(c => {
                 const btn = document.createElement('div');
@@ -3021,6 +3420,23 @@
             } else if (solverSize === 'skewb') {
                 container.style.display = 'flex';
                 container.style.gap = '8px';
+                scannerDetectedColors.forEach((col, idx) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'scanner-review-cell';
+                    cell.style.backgroundColor = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                    cell.textContent = col[0].toUpperCase();
+                    cell.title = `Sticker ${idx}: ${col}. Tap to change to ${scannerCorrectionColor}!`;
+                    cell.onclick = () => {
+                        scannerDetectedColors[idx] = scannerCorrectionColor;
+                        renderScannerReviewGrid();
+                        playSound('turn');
+                    };
+                    container.appendChild(cell);
+                });
+            } else if (solverSize === 'megaminx') {
+                container.style.display = 'grid';
+                container.style.gridTemplateColumns = 'repeat(6, 44px)';
+                container.style.gap = '6px';
                 scannerDetectedColors.forEach((col, idx) => {
                     const cell = document.createElement('div');
                     cell.className = 'scanner-review-cell';
