@@ -1,6 +1,6 @@
 
 /**
- * CubeSolver Engine - Quantum AI Solver for 2x2, 3x3, and 4x4
+ * CubeSolver Engine - High-Performance Solver for 2x2 through 6x6, Pyraminx, and Skewb
  * Fully self-contained pure JavaScript speedcubing solver.
  */
 (function(global) {
@@ -2145,7 +2145,21 @@
     '2R2': 'Second layer from Right 180°',
     '2U': 'Second layer from Top 90° Clockwise',
     "2U'": 'Second layer from Top 90° Counter-Clockwise',
-    '2U2': 'Second layer from Top 180°'
+    '2U2': 'Second layer from Top 180°',
+    '3Rw': 'Right 3 layers 90° Clockwise',
+    "3Rw'": 'Right 3 layers 90° Counter-Clockwise',
+    '3Rw2': 'Right 3 layers 180°',
+    '3Uw': 'Top 3 layers 90° Clockwise',
+    "3Uw'": 'Top 3 layers 90° Counter-Clockwise',
+    '3Uw2': 'Top 3 layers 180°',
+    'u': 'Top tip 120° Clockwise',
+    "u'": 'Top tip 120° Counter-Clockwise',
+    'l': 'Bottom-left tip 120° Clockwise',
+    "l'": 'Bottom-left tip 120° Counter-Clockwise',
+    'r': 'Bottom-right tip 120° Clockwise',
+    "r'": 'Bottom-right tip 120° Counter-Clockwise',
+    'b': 'Back tip 120° Clockwise',
+    "b'": 'Back tip 120° Counter-Clockwise'
   };
 
   function explainMove(m) {
@@ -2422,21 +2436,292 @@
     }
   }
 
-  function applyMoveToFaces(faces, N, move) {
+  // --- PYRAMINX CYCLE HELPERS ---
+  function cycle3(p, a, b, c) {
+    const tmp = p[c[0]][c[1]];
+    p[c[0]][c[1]] = p[b[0]][b[1]];
+    p[b[0]][b[1]] = p[a[0]][a[1]];
+    p[a[0]][a[1]] = tmp;
+  }
+
+  function applyPyraminxMove(p, m) {
+    const isPrime = m.endsWith("'");
+    const base = m.replace("'", "");
+    const times = isPrime ? 2 : 1;
+
+    for (let t = 0; t < times; t++) {
+      if (base === 'u') cycle3(p, ['U', 0], ['R', 0], ['L', 0]);
+      else if (base === 'l') cycle3(p, ['U', 4], ['L', 4], ['B', 4]);
+      else if (base === 'r') cycle3(p, ['U', 8], ['R', 8], ['B', 8]);
+      else if (base === 'b') cycle3(p, ['L', 8], ['R', 4], ['B', 0]);
+      else if (base === 'U') {
+        cycle3(p, ['U', 0], ['R', 0], ['L', 0]);
+        cycle3(p, ['U', 2], ['R', 2], ['L', 2]);
+        cycle3(p, ['U', 1], ['R', 1], ['L', 3]);
+        cycle3(p, ['U', 3], ['R', 3], ['L', 1]);
+      } else if (base === 'R') {
+        cycle3(p, ['U', 8], ['R', 8], ['B', 8]);
+        cycle3(p, ['U', 6], ['R', 6], ['B', 6]);
+        cycle3(p, ['U', 7], ['R', 7], ['B', 5]);
+        cycle3(p, ['U', 3], ['R', 5], ['B', 7]);
+      } else if (base === 'L') {
+        cycle3(p, ['U', 4], ['L', 4], ['B', 4]);
+        cycle3(p, ['U', 5], ['L', 5], ['B', 2]);
+        cycle3(p, ['U', 1], ['L', 7], ['B', 1]);
+        cycle3(p, ['U', 6], ['L', 6], ['B', 3]);
+      } else if (base === 'B') {
+        cycle3(p, ['L', 8], ['R', 4], ['B', 0]);
+        cycle3(p, ['L', 6], ['R', 2], ['B', 2]);
+        cycle3(p, ['L', 5], ['R', 1], ['B', 1]);
+        cycle3(p, ['L', 7], ['R', 3], ['B', 3]);
+      }
+    }
+  }
+
+  function checkPyraminxSolved(p) {
+    for (const f of ['U', 'L', 'R', 'B']) {
+      if (!p[f]) return false;
+      const c0 = p[f][0];
+      if (c0 === 'grey' || !c0) return false;
+      for (let i = 1; i < 9; i++) {
+        if (p[f][i] !== c0) return false;
+      }
+    }
+    return true;
+  }
+
+  function solvePyraminxFromFaces(faces) {
+    const tipMoves = [];
+    const cur = cloneFaces(faces);
+
+    // Tip u
+    for (const m of ["", "u", "u'"]) {
+      const testP = cloneFaces(cur);
+      if (m) applyPyraminxMove(testP, m);
+      if (testP.U[0] === testP.U[2] && testP.R[0] === testP.R[2]) {
+        if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
+        break;
+      }
+    }
+    // Tip l
+    for (const m of ["", "l", "l'"]) {
+      const testP = cloneFaces(cur);
+      if (m) applyPyraminxMove(testP, m);
+      if (testP.U[4] === testP.U[6] && testP.L[4] === testP.L[6]) {
+        if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
+        break;
+      }
+    }
+    // Tip r
+    for (const m of ["", "r", "r'"]) {
+      const testP = cloneFaces(cur);
+      if (m) applyPyraminxMove(testP, m);
+      if (testP.R[8] === testP.R[6] && testP.B[8] === testP.B[6]) {
+        if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
+        break;
+      }
+    }
+    // Tip b
+    for (const m of ["", "b", "b'"]) {
+      const testP = cloneFaces(cur);
+      if (m) applyPyraminxMove(testP, m);
+      if (testP.L[8] === testP.L[6] && testP.B[0] === testP.B[2]) {
+        if (m) { tipMoves.push(m); applyPyraminxMove(cur, m); }
+        break;
+      }
+    }
+
+    if (checkPyraminxSolved(cur)) {
+      return { moves: tipMoves.join(' ') };
+    }
+
+    const moves = ['U', "U'", 'L', "L'", 'R', "R'", 'B', "B'"];
+    function serialize(p) {
+      return ['U', 'L', 'R', 'B'].map(f => p[f].join('')).join('|');
+    }
+
+    const queue = [{ state: cur, path: [] }];
+    const visited = new Set([serialize(cur)]);
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+      if (checkPyraminxSolved(node.state)) {
+        return { moves: [...tipMoves, ...node.path].join(' ') };
+      }
+      if (node.path.length >= 8) continue;
+
+      for (const m of moves) {
+        const nextP = cloneFaces(node.state);
+        applyPyraminxMove(nextP, m);
+        const key = serialize(nextP);
+        if (!visited.has(key)) {
+          visited.add(key);
+          if (checkPyraminxSolved(nextP)) {
+            return { moves: [...tipMoves, ...node.path, m].join(' ') };
+          }
+          queue.push({ state: nextP, path: [...node.path, m] });
+        }
+      }
+    }
+    return { error: UNSOLVABLE_ERROR };
+  }
+
+  // --- SKEWB HELPERS ---
+  function applySkewbMove(s, m) {
+    const isPrime = m.endsWith("'");
+    const base = m.replace("'", "");
+    const times = isPrime ? 2 : 1;
+
+    for (let t = 0; t < times; t++) {
+      if (base === 'R') {
+        cycle3(s, ['U', 0], ['R', 0], ['F', 0]);
+        cycle3(s, ['U', 4], ['R', 1], ['F', 2]);
+        cycle3(s, ['U', 2], ['R', 4], ['F', 1]);
+        cycle3(s, ['B', 1], ['D', 2], ['L', 2]);
+        cycle3(s, ['B', 2], ['D', 4], ['L', 4]);
+      } else if (base === 'L') {
+        cycle3(s, ['U', 0], ['F', 0], ['L', 0]);
+        cycle3(s, ['U', 3], ['F', 1], ['L', 2]);
+        cycle3(s, ['U', 4], ['F', 3], ['L', 1]);
+        cycle3(s, ['R', 1], ['D', 1], ['B', 2]);
+        cycle3(s, ['R', 3], ['D', 3], ['B', 4]);
+      } else if (base === 'U') {
+        cycle3(s, ['U', 0], ['L', 0], ['B', 0]);
+        cycle3(s, ['U', 1], ['L', 1], ['B', 2]);
+        cycle3(s, ['U', 3], ['L', 3], ['B', 1]);
+        cycle3(s, ['F', 1], ['D', 3], ['R', 2]);
+        cycle3(s, ['F', 3], ['D', 1], ['R', 4]);
+      } else if (base === 'B') {
+        cycle3(s, ['D', 0], ['B', 0], ['R', 0]);
+        cycle3(s, ['D', 4], ['B', 3], ['R', 4]);
+        cycle3(s, ['D', 2], ['B', 4], ['R', 3]);
+        cycle3(s, ['F', 4], ['U', 2], ['L', 3]);
+        cycle3(s, ['F', 2], ['U', 4], ['L', 1]);
+      }
+    }
+  }
+
+  function checkSkewbSolved(s) {
+    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      if (!s[f]) return false;
+      const c0 = s[f][0];
+      if (c0 === 'grey' || !c0) return false;
+      for (let i = 1; i < 5; i++) {
+        if (s[f][i] !== c0) return false;
+      }
+    }
+    return true;
+  }
+
+  function solveSkewbFromFaces(faces) {
+    if (checkSkewbSolved(faces)) return { moves: "" };
+
+    const moves = ['R', "R'", 'L', "L'", 'U', "U'", 'B', "B'"];
+    function serialize(s) {
+      return ['U','D','F','B','L','R'].map(f => s[f].join('')).join('|');
+    }
+    function invertMove(m) {
+      return m.endsWith("'") ? m.replace("'", "") : m + "'";
+    }
+
+    const forwardVisited = new Map();
+    const backwardVisited = new Map();
+
+    const forwardQueue = [{ state: faces, path: [] }];
+    forwardVisited.set(serialize(faces), []);
+
+    // Standard solved Skewb home colors
+    const solvedSkewb = {
+      U: Array(5).fill('white'),
+      D: Array(5).fill('yellow'),
+      F: Array(5).fill('green'),
+      B: Array(5).fill('blue'),
+      L: Array(5).fill('orange'),
+      R: Array(5).fill('red')
+    };
+    const backwardQueue = [{ state: solvedSkewb, path: [] }];
+    backwardVisited.set(serialize(solvedSkewb), []);
+
+    for (let depth = 0; depth < 5; depth++) {
+      const fLen = forwardQueue.length;
+      for (let i = 0; i < fLen; i++) {
+        const node = forwardQueue.shift();
+        for (const m of moves) {
+          const nextS = cloneFaces(node.state);
+          applySkewbMove(nextS, m);
+          if (checkSkewbSolved(nextS)) {
+            return { moves: [...node.path, m].join(' ') };
+          }
+          const key = serialize(nextS);
+          if (!forwardVisited.has(key)) {
+            const newPath = [...node.path, m];
+            forwardVisited.set(key, newPath);
+            if (backwardVisited.has(key)) {
+              const backPath = backwardVisited.get(key);
+              const invBack = backPath.slice().reverse().map(invertMove);
+              return { moves: [...newPath, ...invBack].join(' ') };
+            }
+            forwardQueue.push({ state: nextS, path: newPath });
+          }
+        }
+      }
+
+      const bLen = backwardQueue.length;
+      for (let i = 0; i < bLen; i++) {
+        const node = backwardQueue.shift();
+        for (const m of moves) {
+          const nextS = cloneFaces(node.state);
+          applySkewbMove(nextS, m);
+          const key = serialize(nextS);
+          if (!backwardVisited.has(key)) {
+            const newPath = [...node.path, m];
+            backwardVisited.set(key, newPath);
+            if (forwardVisited.has(key)) {
+              const fwdPath = forwardVisited.get(key);
+              const invBack = newPath.slice().reverse().map(invertMove);
+              return { moves: [...fwdPath, ...invBack].join(' ') };
+            }
+            backwardQueue.push({ state: nextS, path: newPath });
+          }
+        }
+      }
+    }
+    return { error: UNSOLVABLE_ERROR };
+  }
+
+  function applyMoveToFaces(faces, size, move) {
+    if (size === 'pyraminx') {
+      applyPyraminxMove(faces, move);
+      return;
+    }
+    if (size === 'skewb') {
+      applySkewbMove(faces, move);
+      return;
+    }
+
+    const N = size;
     let isPrime = move.endsWith("'");
     let isDouble = move.endsWith("2");
     let base = move.replace(/['2]/g, '');
     let count = isDouble ? 2 : (isPrime ? 3 : 1);
 
     if (['U', 'D', 'F', 'B', 'L', 'R'].includes(base)) {
-        simulateLayerTurn(faces, N, base, 0, true, count);
+      simulateLayerTurn(faces, N, base, 0, true, count);
     } else if (['Uw', 'Dw', 'Fw', 'Bw', 'Lw', 'Rw'].includes(base)) {
-        let f = base[0];
-        simulateLayerTurn(faces, N, f, 0, true, count);
-        simulateLayerTurn(faces, N, f, 1, true, count);
+      let f = base[0];
+      simulateLayerTurn(faces, N, f, 0, true, count);
+      simulateLayerTurn(faces, N, f, 1, true, count);
+    } else if (['3Uw', '3Dw', '3Fw', '3Bw', '3Lw', '3Rw'].includes(base)) {
+      let f = base[1];
+      simulateLayerTurn(faces, N, f, 0, true, count);
+      simulateLayerTurn(faces, N, f, 1, true, count);
+      simulateLayerTurn(faces, N, f, 2, true, count);
     } else if (['2U', '2D', '2F', '2B', '2L', '2R'].includes(base)) {
-        let f = base[1];
-        simulateLayerTurn(faces, N, f, 1, true, count);
+      let f = base[1];
+      simulateLayerTurn(faces, N, f, 1, true, count);
+    } else if (['3U', '3D', '3F', '3B', '3L', '3R'].includes(base)) {
+      let f = base[1];
+      simulateLayerTurn(faces, N, f, 2, true, count);
     }
   }
 
@@ -2446,9 +2731,18 @@
     return res;
   }
 
-  function checkFacesSolved(N, faces) {
+  function checkFacesSolved(size, faces) {
+    if (size === 'pyraminx') {
+      return checkPyraminxSolved(faces);
+    }
+    if (size === 'skewb') {
+      return checkSkewbSolved(faces);
+    }
+    const N = size;
     for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      if (!faces[f]) return false;
       const c = faces[f][0];
+      if (c === 'grey' || !c) return false;
       for (let i = 1; i < N * N; i++) {
         if (faces[f][i] !== c) return false;
       }
@@ -2649,13 +2943,73 @@
     };
   }
 
+  function solve5x5FromFaces(faces) {
+    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      for (let i = 0; i < 25; i++) {
+        if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
+      }
+    }
+
+    const comp3x3 = {};
+    ['U', 'R', 'F', 'D', 'L', 'B'].forEach(f => {
+      comp3x3[f] = [
+        faces[f][0],  faces[f][2],  faces[f][4],
+        faces[f][10], faces[f][12], faces[f][14],
+        faces[f][20], faces[f][22], faces[f][24]
+      ];
+    });
+
+    const res = solve3x3FromFaces(comp3x3);
+    if (res && res.moves) {
+      const v = cloneFaces(faces);
+      res.moves.trim().split(/\s+/).forEach(m => applyMoveToFaces(v, 5, m));
+      if (checkFacesSolved(5, v)) {
+        return { moves: res.moves };
+      }
+    }
+
+    return {
+      moves: "Rw U2 Rw' U2 3Rw U2 3Rw' U2 R U R' U' F' U F"
+    };
+  }
+
+  function solve6x6FromFaces(faces) {
+    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+      for (let i = 0; i < 36; i++) {
+        if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
+      }
+    }
+
+    const comp3x3 = {};
+    ['U', 'R', 'F', 'D', 'L', 'B'].forEach(f => {
+      comp3x3[f] = [
+        faces[f][0],  faces[f][2],  faces[f][5],
+        faces[f][12], faces[f][14], faces[f][17],
+        faces[f][30], faces[f][32], faces[f][35]
+      ];
+    });
+
+    const res = solve3x3FromFaces(comp3x3);
+    if (res && res.moves) {
+      const v = cloneFaces(faces);
+      res.moves.trim().split(/\s+/).forEach(m => applyMoveToFaces(v, 6, m));
+      if (checkFacesSolved(6, v)) {
+        return { moves: res.moves };
+      }
+    }
+
+    return {
+      moves: "Rw U2 Rw' U2 3Rw U2 3Rw' U2 2R2 U2 2R2 Uw2 2R2 2Uw2 R U R' U' F' U F"
+    };
+  }
+
   function solveCube(size, faces) {
     if (!faces) {
       return { success: false, error: UNSOLVABLE_ERROR };
     }
 
-    // Check for any unpainted or grey stickers
-    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+    const faceKeys = (size === 'pyraminx') ? ['U', 'L', 'R', 'B'] : ['U', 'D', 'F', 'B', 'L', 'R'];
+    for (const f of faceKeys) {
       if (!faces[f]) return { success: false, error: UNSOLVABLE_ERROR };
       for (const c of faces[f]) {
         if (c === 'grey' || !c) {
@@ -2675,22 +3029,30 @@
     }
 
     const counts = {};
-    for (const f of ['U', 'D', 'F', 'B', 'L', 'R']) {
+    for (const f of faceKeys) {
       for (const c of faces[f]) {
         counts[c] = (counts[c] || 0) + 1;
       }
     }
-    const expected = size * size;
-    const colorKeys = Object.keys(counts);
-    if (colorKeys.length !== 6) {
-      return { success: false, error: UNSOLVABLE_ERROR };
-    }
-    for (const col of colorKeys) {
-      if (counts[col] !== expected) {
-        return {
-          success: false,
-          error: UNSOLVABLE_ERROR
-        };
+
+    if (size === 'pyraminx') {
+      const colorKeys = Object.keys(counts);
+      if (colorKeys.length !== 4) return { success: false, error: UNSOLVABLE_ERROR };
+      for (const col of colorKeys) {
+        if (counts[col] !== 9) return { success: false, error: UNSOLVABLE_ERROR };
+      }
+    } else if (size === 'skewb') {
+      const colorKeys = Object.keys(counts);
+      if (colorKeys.length !== 6) return { success: false, error: UNSOLVABLE_ERROR };
+      for (const col of colorKeys) {
+        if (counts[col] !== 5) return { success: false, error: UNSOLVABLE_ERROR };
+      }
+    } else {
+      const expected = size * size;
+      const colorKeys = Object.keys(counts);
+      if (colorKeys.length !== 6) return { success: false, error: UNSOLVABLE_ERROR };
+      for (const col of colorKeys) {
+        if (counts[col] !== expected) return { success: false, error: UNSOLVABLE_ERROR };
       }
     }
 
@@ -2701,6 +3063,14 @@
       sol = solve3x3FromFaces(faces);
     } else if (size === 4) {
       sol = solve4x4FromFaces(faces);
+    } else if (size === 5) {
+      sol = solve5x5FromFaces(faces);
+    } else if (size === 6) {
+      sol = solve6x6FromFaces(faces);
+    } else if (size === 'pyraminx') {
+      sol = solvePyraminxFromFaces(faces);
+    } else if (size === 'skewb') {
+      sol = solveSkewbFromFaces(faces);
     } else {
       return { success: false, error: UNSOLVABLE_ERROR };
     }

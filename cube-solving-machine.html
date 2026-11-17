@@ -434,6 +434,114 @@
         .solver-3d-face.face-U { transform: rotateX(90deg) translateZ(100px); border-color: rgba(255, 255, 255, 0.7); }
         .solver-3d-face.face-D { transform: rotateX(-90deg) translateZ(100px); border-color: rgba(250, 237, 39, 0.7); }
 
+        /* 3D SKEWB FACE */
+        .solver-3d-face.face-skewb {
+            display: block !important;
+            padding: 0 !important;
+        }
+        .solver-3d-face.face-skewb .skewb-center {
+            position: absolute;
+            width: 86px;
+            height: 86px;
+            left: 55px;
+            top: 55px;
+            transform: rotate(45deg);
+            border-radius: 8px;
+            border: 2px solid #0f172a;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+            transition: all 0.15s ease;
+        }
+        .solver-3d-face.face-skewb .skewb-corner {
+            position: absolute;
+            width: 66px;
+            height: 66px;
+            border: 2px solid #0f172a;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+            transition: all 0.15s ease;
+        }
+        .solver-3d-face.face-skewb .skewb-corner.c-tl { top: 8px; left: 8px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+        .solver-3d-face.face-skewb .skewb-corner.c-tr { top: 8px; right: 8px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+        .solver-3d-face.face-skewb .skewb-corner.c-bl { bottom: 8px; left: 8px; clip-path: polygon(0 0, 0 100%, 100% 100%); }
+        .solver-3d-face.face-skewb .skewb-corner.c-br { bottom: 8px; right: 8px; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+        /* 3D PYRAMINX FACE */
+        .solver-3d-face.face-pyraminx {
+            display: block !important;
+            padding: 0 !important;
+            width: 190px !important;
+            height: 165px !important;
+            left: 45px !important;
+            top: 55px !important;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            border: none !important;
+            background: #0b1120 !important;
+        }
+        .solver-3d-face.pyraminx-U { transform: rotateY(0deg) translateZ(32px) rotateX(19.47deg); }
+        .solver-3d-face.pyraminx-L { transform: rotateY(-120deg) translateZ(32px) rotateX(19.47deg); }
+        .solver-3d-face.pyraminx-R { transform: rotateY(120deg) translateZ(32px) rotateX(19.47deg); }
+        .solver-3d-face.pyraminx-B { transform: rotateX(90deg) translateZ(-42px); }
+
+        .pyra-sticker {
+            position: absolute;
+            cursor: pointer;
+            border: 1px solid #0f172a;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+            transition: all 0.15s ease;
+        }
+        .pyra-sticker.tri-up { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+        .pyra-sticker.tri-down { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+        .pyra-sticker:hover {
+            filter: brightness(1.25);
+            z-index: 5;
+            transform: scale(1.08);
+        }
+
+        /* SKEWB 2D NET */
+        .net-face.face-skewb-net {
+            width: 130px;
+            height: 130px;
+            position: relative;
+            padding: 4px;
+        }
+        .net-face.face-skewb-net .skewb-center {
+            position: absolute;
+            width: 58px;
+            height: 58px;
+            left: 36px;
+            top: 36px;
+            transform: rotate(45deg);
+            border-radius: 6px;
+            border: 1.5px solid #0f172a;
+            cursor: pointer;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+            transition: all 0.15s ease;
+        }
+        .net-face.face-skewb-net .skewb-corner {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border: 1.5px solid #0f172a;
+            cursor: pointer;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+            transition: all 0.15s ease;
+        }
+        .net-face.face-skewb-net .skewb-corner.c-tl { top: 4px; left: 4px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+        .net-face.face-skewb-net .skewb-corner.c-tr { top: 4px; right: 4px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+        .net-face.face-skewb-net .skewb-corner.c-bl { bottom: 4px; left: 4px; clip-path: polygon(0 0, 0 100%, 100% 100%); }
+        .net-face.face-skewb-net .skewb-corner.c-br { bottom: 4px; right: 4px; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+        /* PYRAMINX 2D NET */
+        .net-face.face-pyra-net {
+            width: 150px;
+            height: 130px;
+            position: relative;
+            padding: 4px;
+            background: #0b1120;
+            border-radius: 12px;
+        }
+
         .solver-3d-sticker {
             background-color: #64748b; /* Fully grey default */
             border: 2px solid #0f172a;
@@ -753,7 +861,7 @@
                 </span>
             </div>
 
-            <!-- 1. CUBE TYPE SELECTOR (Clean names: 2x2x2, 3x3x3, 4x4x4) -->
+            <!-- 1. PUZZLE TYPE SELECTOR (2x2x2 to 6x6x6, Pyraminx, Skewb) -->
             <div class="solver-type-selector">
                 <button class="solver-type-btn" id="solver-tab-2" onclick="switchSolverCube(2)">
                     2x2x2
@@ -764,6 +872,18 @@
                 <button class="solver-type-btn" id="solver-tab-4" onclick="switchSolverCube(4)">
                     4x4x4
                 </button>
+                <button class="solver-type-btn" id="solver-tab-5" onclick="switchSolverCube(5)">
+                    5x5x5
+                </button>
+                <button class="solver-type-btn" id="solver-tab-6" onclick="switchSolverCube(6)">
+                    6x6x6
+                </button>
+                <button class="solver-type-btn" id="solver-tab-pyraminx" onclick="switchSolverCube('pyraminx')">
+                    Pyraminx
+                </button>
+                <button class="solver-type-btn" id="solver-tab-skewb" onclick="switchSolverCube('skewb')">
+                    Skewb
+                </button>
             </div>
 
             <!-- 2. COLOR PALETTE BAR -->
@@ -773,13 +893,13 @@
                     <span id="active-color-name" style="color: #ffffff; font-weight: bold; margin-left: 8px;">White (Top / U)</span>
                 </div>
                 <div class="palette-swatches">
-                    <button class="swatch-btn active" data-color="white" style="background-color: #ffffff;" onclick="selectPaletteColor('white')" title="White (Up Face)"></button>
-                    <button class="swatch-btn" data-color="yellow" style="background-color: #ffd700;" onclick="selectPaletteColor('yellow')" title="Yellow (Down Face)"></button>
-                    <button class="swatch-btn" data-color="green" style="background-color: #22c55e;" onclick="selectPaletteColor('green')" title="Green (Front Face)"></button>
-                    <button class="swatch-btn" data-color="blue" style="background-color: #3b82f6;" onclick="selectPaletteColor('blue')" title="Blue (Back Face)"></button>
-                    <button class="swatch-btn" data-color="orange" style="background-color: #f97316;" onclick="selectPaletteColor('orange')" title="Orange (Left Face)"></button>
-                    <button class="swatch-btn" data-color="red" style="background-color: #ef4444;" onclick="selectPaletteColor('red')" title="Red (Right Face)"></button>
-                    <button class="swatch-btn" data-color="grey" style="background-color: #64748b;" onclick="selectPaletteColor('grey')" title="Grey (Erase / Clear Spot)"></button>
+                    <button class="swatch-btn active" id="swatch-white" data-color="white" style="background-color: #ffffff;" onclick="selectPaletteColor('white')" title="White (Up Face)"></button>
+                    <button class="swatch-btn" id="swatch-yellow" data-color="yellow" style="background-color: #ffd700;" onclick="selectPaletteColor('yellow')" title="Yellow (Down Face)"></button>
+                    <button class="swatch-btn" id="swatch-green" data-color="green" style="background-color: #22c55e;" onclick="selectPaletteColor('green')" title="Green (Front Face)"></button>
+                    <button class="swatch-btn" id="swatch-blue" data-color="blue" style="background-color: #3b82f6;" onclick="selectPaletteColor('blue')" title="Blue (Back Face)"></button>
+                    <button class="swatch-btn" id="swatch-orange" data-color="orange" style="background-color: #f97316;" onclick="selectPaletteColor('orange')" title="Orange (Left Face)"></button>
+                    <button class="swatch-btn" id="swatch-red" data-color="red" style="background-color: #ef4444;" onclick="selectPaletteColor('red')" title="Red (Right Face)"></button>
+                    <button class="swatch-btn" id="swatch-grey" data-color="grey" style="background-color: #64748b;" onclick="selectPaletteColor('grey')" title="Grey (Erase / Clear Spot)"></button>
                 </div>
             </div>
 
@@ -789,6 +909,9 @@
                     <!-- Populated dynamically -->
                 </div>
                 <div class="solver-quick-btns">
+                    <button class="btn-cyber btn-purple" onclick="scrambleCurrentPuzzle()" style="padding: 7px 14px; font-size: 0.9em;" title="Scramble puzzle with legal moves">
+                        🎲 Scramble
+                    </button>
                     <button class="btn-cyber btn-pink" onclick="resetToGreyCube()" style="padding: 7px 14px; font-size: 0.9em;" title="Resets all stickers to grey">
                         🧹 Reset to Grey
                     </button>
@@ -993,20 +1116,46 @@
             grey:   { hex: '#64748b', name: 'Grey (Erase / Clear Spot)' }
         };
 
-        function initSolverFaces(N) {
+        function initSolverFaces(size) {
             const faces = {};
-            ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
-                faces[f] = new Array(N * N).fill('grey');
-            });
+            if (size === 'pyraminx') {
+                ['U', 'L', 'R', 'B'].forEach(f => {
+                    faces[f] = new Array(9).fill('grey');
+                });
+            } else if (size === 'skewb') {
+                ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
+                    faces[f] = new Array(5).fill('grey');
+                });
+            } else {
+                const N = size;
+                ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
+                    faces[f] = new Array(N * N).fill('grey');
+                });
+            }
             return faces;
         }
 
         function switchSolverCube(size, skipSound = false) {
             solverSize = size;
-            [2, 3, 4].forEach(s => {
-                const btn = document.getElementById(`solver-tab-${s}`);
-                if (btn) btn.classList.toggle('active', s === size);
+            const tabs = [2, 3, 4, 5, 6, 'pyraminx', 'skewb'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`solver-tab-${t}`);
+                if (btn) btn.classList.toggle('active', t === size);
             });
+
+            // Adjust palette swatches for Pyraminx (4 colors: Yellow, Green, Blue, Red)
+            const swatchWhite = document.getElementById('swatch-white');
+            const swatchOrange = document.getElementById('swatch-orange');
+            if (size === 'pyraminx') {
+                if (swatchWhite) swatchWhite.style.display = 'none';
+                if (swatchOrange) swatchOrange.style.display = 'none';
+                if (solverColor === 'white' || solverColor === 'orange') {
+                    selectPaletteColor('yellow');
+                }
+            } else {
+                if (swatchWhite) swatchWhite.style.display = 'inline-block';
+                if (swatchOrange) swatchOrange.style.display = 'inline-block';
+            }
 
             solverFaces = initSolverFaces(size);
             const resPanel = document.getElementById('solver-result-panel');
@@ -1032,7 +1181,71 @@
             playSound('turn');
         }
 
-        // --- 3D CUBE RENDERING & CAMERA CONTROLS ---
+        function scrambleCurrentPuzzle() {
+            stopStepAutoPlay();
+            const resPanel = document.getElementById('solver-result-panel');
+            if (resPanel) resPanel.style.display = 'none';
+            currentSolutionData = null;
+
+            if (solverSize === 'pyraminx') {
+                solverFaces = {
+                    U: new Array(9).fill('yellow'),
+                    L: new Array(9).fill('green'),
+                    R: new Array(9).fill('red'),
+                    B: new Array(9).fill('blue')
+                };
+                const moves = ['U', "U'", 'L', "L'", 'R', "R'", 'B', "B'", 'u', "u'", 'l', "l'", 'r', "r'", 'b', "b'"];
+                const count = 4 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < count; i++) {
+                    const m = moves[Math.floor(Math.random() * moves.length)];
+                    CubeSolver.applyMoveToFaces(solverFaces, 'pyraminx', m);
+                }
+            } else if (solverSize === 'skewb') {
+                solverFaces = {
+                    U: new Array(5).fill('white'),
+                    D: new Array(5).fill('yellow'),
+                    F: new Array(5).fill('green'),
+                    B: new Array(5).fill('blue'),
+                    L: new Array(5).fill('orange'),
+                    R: new Array(5).fill('red')
+                };
+                const moves = ['R', "R'", 'L', "L'", 'U', "U'", 'B', "B'"];
+                const count = 4 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < count; i++) {
+                    const m = moves[Math.floor(Math.random() * moves.length)];
+                    CubeSolver.applyMoveToFaces(solverFaces, 'skewb', m);
+                }
+            } else {
+                const N = solverSize;
+                solverFaces = {
+                    U: new Array(N * N).fill('white'),
+                    D: new Array(N * N).fill('yellow'),
+                    F: new Array(N * N).fill('green'),
+                    B: new Array(N * N).fill('blue'),
+                    L: new Array(N * N).fill('orange'),
+                    R: new Array(N * N).fill('red')
+                };
+                let moves;
+                if (N === 2) {
+                    moves = ['R', "R'", 'R2', 'U', "U'", 'U2', 'F', "F'", 'F2'];
+                } else {
+                    // For 3x3 to 6x6: outer face turns allow reduction to solve 100%
+                    moves = ['R', "R'", 'R2', 'U', "U'", 'U2', 'F', "F'", 'F2', 'L', "L'", 'L2', 'B', "B'", 'B2', 'D', "D'", 'D2'];
+                }
+                const count = Math.min(8, 4 + Math.floor(Math.random() * 4));
+                for (let i = 0; i < count; i++) {
+                    const m = moves[Math.floor(Math.random() * moves.length)];
+                    CubeSolver.applyMoveToFaces(solverFaces, N, m);
+                }
+            }
+
+            renderSolver3DCube();
+            renderSolverNet();
+            updateColorBadgesAndBanner();
+            playSound('turn');
+        }
+
+        // --- 3D PUZZLE RENDERING & CAMERA CONTROLS ---
         let rotX = -25;
         let rotY = -45;
         let isOrbitDragging = false;
@@ -1063,33 +1276,127 @@
             if (!cubeEl) return;
             cubeEl.innerHTML = "";
 
-            const N = solverSize;
-            const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
+            if (solverSize === 'pyraminx') {
+                const faceKeys = [
+                    { key: 'U', cls: 'pyraminx-U', border: '#ffd700' },
+                    { key: 'L', cls: 'pyraminx-L', border: '#22c55e' },
+                    { key: 'R', cls: 'pyraminx-R', border: '#ef4444' },
+                    { key: 'B', cls: 'pyraminx-B', border: '#3b82f6' }
+                ];
 
-            faceKeys.forEach(f => {
-                const faceDiv = document.createElement('div');
-                faceDiv.className = `solver-3d-face face-${f}`;
-                faceDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
-                faceDiv.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+                const coords = [
+                    { x: 63.3, y: 0, dir: 'up' },
+                    { x: 31.7, y: 55, dir: 'up' },
+                    { x: 63.3, y: 55, dir: 'down' },
+                    { x: 95.0, y: 55, dir: 'up' },
+                    { x: 0,    y: 110, dir: 'up' },
+                    { x: 31.7, y: 110, dir: 'down' },
+                    { x: 63.3, y: 110, dir: 'up' },
+                    { x: 95.0, y: 110, dir: 'down' },
+                    { x: 126.7, y: 110, dir: 'up' }
+                ];
 
-                for (let i = 0; i < N * N; i++) {
-                    const st = document.createElement('div');
-                    st.className = 'solver-3d-sticker';
-                    const curColor = solverFaces[f][i] || 'grey';
-                    st.style.backgroundColor = PALETTE_COLORS[curColor] ? PALETTE_COLORS[curColor].hex : curColor;
-                    st.dataset.face = f;
-                    st.dataset.index = i;
+                faceKeys.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `solver-3d-face face-pyraminx ${f.cls} face-${f.key}`;
+                    faceDiv.style.borderColor = f.border;
 
-                    st.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        paintSticker(f, i);
-                    });
+                    for (let i = 0; i < 9; i++) {
+                        const st = document.createElement('div');
+                        st.className = `solver-3d-sticker pyra-sticker tri-${coords[i].dir}`;
+                        st.style.left = coords[i].x + 'px';
+                        st.style.top = coords[i].y + 'px';
+                        st.style.width = '63.3px';
+                        st.style.height = '55px';
+                        const curColor = (solverFaces[f.key] && solverFaces[f.key][i]) || 'grey';
+                        st.style.backgroundColor = PALETTE_COLORS[curColor] ? PALETTE_COLORS[curColor].hex : curColor;
+                        st.dataset.face = f.key;
+                        st.dataset.index = i;
 
-                    faceDiv.appendChild(st);
-                }
+                        st.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            paintSticker(f.key, i);
+                        });
 
-                cubeEl.appendChild(faceDiv);
-            });
+                        faceDiv.appendChild(st);
+                    }
+
+                    cubeEl.appendChild(faceDiv);
+                });
+
+            } else if (solverSize === 'skewb') {
+                const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
+
+                faceKeys.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `solver-3d-face face-skewb face-${f}`;
+
+                    // Center (0)
+                    const cSt = document.createElement('div');
+                    cSt.className = 'solver-3d-sticker skewb-center';
+                    const curC = (solverFaces[f] && solverFaces[f][0]) || 'grey';
+                    cSt.style.backgroundColor = PALETTE_COLORS[curC] ? PALETTE_COLORS[curC].hex : curC;
+                    cSt.dataset.face = f;
+                    cSt.dataset.index = 0;
+                    cSt.addEventListener('click', (e) => { e.stopPropagation(); paintSticker(f, 0); });
+                    faceDiv.appendChild(cSt);
+
+                    // 4 Corners (1: TL, 2: TR, 3: BL, 4: BR)
+                    const cornerCls = ['c-tl', 'c-tr', 'c-bl', 'c-br'];
+                    for (let i = 1; i <= 4; i++) {
+                        const corn = document.createElement('div');
+                        corn.className = `solver-3d-sticker skewb-corner ${cornerCls[i - 1]}`;
+                        const curCorn = (solverFaces[f] && solverFaces[f][i]) || 'grey';
+                        corn.style.backgroundColor = PALETTE_COLORS[curCorn] ? PALETTE_COLORS[curCorn].hex : curCorn;
+                        corn.dataset.face = f;
+                        corn.dataset.index = i;
+                        corn.addEventListener('click', (e) => { e.stopPropagation(); paintSticker(f, i); });
+                        faceDiv.appendChild(corn);
+                    }
+
+                    cubeEl.appendChild(faceDiv);
+                });
+
+            } else {
+                const N = solverSize;
+                const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
+                let gap = 4;
+                let radius = 6;
+                if (N === 2) { gap = 6; radius = 8; }
+                else if (N === 3) { gap = 4; radius = 6; }
+                else if (N === 4) { gap = 3; radius = 4; }
+                else if (N === 5) { gap = 2; radius = 3; }
+                else if (N === 6) { gap = 2; radius = 2; }
+
+                faceKeys.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = `solver-3d-face face-${f}`;
+                    faceDiv.style.display = 'grid';
+                    faceDiv.style.gap = `${gap}px`;
+                    faceDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+                    faceDiv.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+
+                    for (let i = 0; i < N * N; i++) {
+                        const st = document.createElement('div');
+                        st.className = 'solver-3d-sticker';
+                        st.style.borderRadius = `${radius}px`;
+                        const curColor = (solverFaces[f] && solverFaces[f][i]) || 'grey';
+                        st.style.backgroundColor = PALETTE_COLORS[curColor] ? PALETTE_COLORS[curColor].hex : curColor;
+                        st.dataset.face = f;
+                        st.dataset.index = i;
+
+                        st.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            paintSticker(f, i);
+                        });
+
+                        faceDiv.appendChild(st);
+                    }
+
+                    cubeEl.appendChild(faceDiv);
+                });
+            }
+
             apply3DRotation();
         }
 
@@ -1110,91 +1417,234 @@
             if (!container) return;
             container.innerHTML = "";
 
-            const N = solverSize;
-            let stickerSize = 34;
-            let stickerRadius = 5;
-            if (N === 4) { stickerSize = 25; stickerRadius = 4; }
-            else if (N === 2) { stickerSize = 48; stickerRadius = 7; }
+            if (solverSize === 'pyraminx') {
+                container.style.gridTemplateColumns = 'repeat(4, auto)';
+                container.style.gridTemplateRows = 'auto';
 
-            const faceOrder = [
-                { key: 'U', name: 'Top (U)' },
-                { key: 'L', name: 'Left (L)' },
-                { key: 'F', name: 'Front (F)' },
-                { key: 'R', name: 'Right (R)' },
-                { key: 'B', name: 'Back (B)' },
-                { key: 'D', name: 'Bottom (D)' }
-            ];
+                const faceList = [
+                    { key: 'U', name: 'Top (U)' },
+                    { key: 'L', name: 'Left (L)' },
+                    { key: 'R', name: 'Right (R)' },
+                    { key: 'B', name: 'Bottom (B)' }
+                ];
 
-            faceOrder.forEach(item => {
-                const faceEl = document.createElement('div');
-                faceEl.className = `net-face net-face-${item.key}`;
-                
-                const title = document.createElement('div');
-                title.className = 'face-title';
-                title.textContent = item.name + ' 🎨';
-                title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
-                title.style.cursor = 'pointer';
-                title.addEventListener('click', () => fillWholeFace(item.key));
-                faceEl.appendChild(title);
+                const pyraCoords = [
+                    { x: 50,  y: 0,   dir: 'up' },
+                    { x: 25,  y: 43.3, dir: 'up' },
+                    { x: 50,  y: 43.3, dir: 'down' },
+                    { x: 75,  y: 43.3, dir: 'up' },
+                    { x: 0,   y: 86.6, dir: 'up' },
+                    { x: 25,  y: 86.6, dir: 'down' },
+                    { x: 50,  y: 86.6, dir: 'up' },
+                    { x: 75,  y: 86.6, dir: 'down' },
+                    { x: 100, y: 86.6, dir: 'up' }
+                ];
 
-                const grid = document.createElement('div');
-                grid.className = 'face-grid';
-                grid.style.gridTemplateColumns = `repeat(${N}, ${stickerSize}px)`;
-                grid.style.gridTemplateRows = `repeat(${N}, ${stickerSize}px)`;
+                faceList.forEach(item => {
+                    const faceEl = document.createElement('div');
+                    faceEl.className = `net-face face-pyra-net net-face-${item.key}`;
 
-                const midIdx = Math.floor((N * N) / 2);
+                    const title = document.createElement('div');
+                    title.className = 'face-title';
+                    title.textContent = item.name + ' 🎨';
+                    title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
+                    title.style.cursor = 'pointer';
+                    title.addEventListener('click', () => fillWholeFace(item.key));
+                    faceEl.appendChild(title);
 
-                for (let i = 0; i < N * N; i++) {
-                    const st = document.createElement('div');
-                    st.className = 'net-sticker';
-                    if (N % 2 === 1 && i === midIdx) {
-                        st.classList.add('center-sticker');
-                    }
-                    st.style.width = stickerSize + 'px';
-                    st.style.height = stickerSize + 'px';
-                    st.style.borderRadius = stickerRadius + 'px';
-                    
-                    const curCol = solverFaces[item.key][i] || 'grey';
-                    st.style.backgroundColor = PALETTE_COLORS[curCol] ? PALETTE_COLORS[curCol].hex : curCol;
-                    st.dataset.face = item.key;
-                    st.dataset.index = i;
+                    const gridBox = document.createElement('div');
+                    gridBox.style.width = '150px';
+                    gridBox.style.height = '130px';
+                    gridBox.style.position = 'relative';
 
-                    st.addEventListener('mousedown', (e) => {
-                        e.preventDefault();
-                        paintSticker(item.key, i);
-                    });
+                    for (let i = 0; i < 9; i++) {
+                        const st = document.createElement('div');
+                        st.className = `net-sticker pyra-sticker tri-${pyraCoords[i].dir}`;
+                        st.style.left = pyraCoords[i].x + 'px';
+                        st.style.top = pyraCoords[i].y + 'px';
+                        st.style.width = '50px';
+                        st.style.height = '43.3px';
+                        const curCol = (solverFaces[item.key] && solverFaces[item.key][i]) || 'grey';
+                        st.style.backgroundColor = PALETTE_COLORS[curCol] ? PALETTE_COLORS[curCol].hex : curCol;
+                        st.dataset.face = item.key;
+                        st.dataset.index = i;
 
-                    st.addEventListener('mouseenter', () => {
-                        if (isStickerMouseDown) {
+                        st.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
                             paintSticker(item.key, i);
+                        });
+                        st.addEventListener('mouseenter', () => {
+                            if (isStickerMouseDown) paintSticker(item.key, i);
+                        });
+
+                        gridBox.appendChild(st);
+                    }
+
+                    faceEl.appendChild(gridBox);
+                    container.appendChild(faceEl);
+                });
+
+            } else if (solverSize === 'skewb') {
+                container.style.gridTemplateColumns = 'repeat(4, auto)';
+                container.style.gridTemplateRows = 'repeat(3, auto)';
+
+                const faceOrder = [
+                    { key: 'U', name: 'Top (U)' },
+                    { key: 'L', name: 'Left (L)' },
+                    { key: 'F', name: 'Front (F)' },
+                    { key: 'R', name: 'Right (R)' },
+                    { key: 'B', name: 'Back (B)' },
+                    { key: 'D', name: 'Bottom (D)' }
+                ];
+
+                faceOrder.forEach(item => {
+                    const faceEl = document.createElement('div');
+                    faceEl.className = `net-face face-skewb-net net-face-${item.key}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'face-title';
+                    title.textContent = item.name + ' 🎨';
+                    title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
+                    title.style.cursor = 'pointer';
+                    title.addEventListener('click', () => fillWholeFace(item.key));
+                    faceEl.appendChild(title);
+
+                    const gridBox = document.createElement('div');
+                    gridBox.style.width = '130px';
+                    gridBox.style.height = '130px';
+                    gridBox.style.position = 'relative';
+
+                    // Center (0)
+                    const cSt = document.createElement('div');
+                    cSt.className = 'net-sticker skewb-center';
+                    const curC = (solverFaces[item.key] && solverFaces[item.key][0]) || 'grey';
+                    cSt.style.backgroundColor = PALETTE_COLORS[curC] ? PALETTE_COLORS[curC].hex : curC;
+                    cSt.dataset.face = item.key;
+                    cSt.dataset.index = 0;
+                    cSt.addEventListener('mousedown', (e) => { e.preventDefault(); paintSticker(item.key, 0); });
+                    cSt.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(item.key, 0); });
+                    gridBox.appendChild(cSt);
+
+                    // Corners (1: TL, 2: TR, 3: BL, 4: BR)
+                    const cornerCls = ['c-tl', 'c-tr', 'c-bl', 'c-br'];
+                    for (let i = 1; i <= 4; i++) {
+                        const corn = document.createElement('div');
+                        corn.className = `net-sticker skewb-corner ${cornerCls[i - 1]}`;
+                        const curCorn = (solverFaces[item.key] && solverFaces[item.key][i]) || 'grey';
+                        corn.style.backgroundColor = PALETTE_COLORS[curCorn] ? PALETTE_COLORS[curCorn].hex : curCorn;
+                        corn.dataset.face = item.key;
+                        corn.dataset.index = i;
+                        corn.addEventListener('mousedown', (e) => { e.preventDefault(); paintSticker(item.key, i); });
+                        corn.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(item.key, i); });
+                        gridBox.appendChild(corn);
+                    }
+
+                    faceEl.appendChild(gridBox);
+                    container.appendChild(faceEl);
+                });
+
+            } else {
+                container.style.gridTemplateColumns = 'repeat(4, auto)';
+                container.style.gridTemplateRows = 'repeat(3, auto)';
+
+                const N = solverSize;
+                let stickerSize = 34;
+                let stickerRadius = 5;
+                if (N === 2) { stickerSize = 48; stickerRadius = 7; }
+                else if (N === 3) { stickerSize = 34; stickerRadius = 5; }
+                else if (N === 4) { stickerSize = 25; stickerRadius = 4; }
+                else if (N === 5) { stickerSize = 21; stickerRadius = 3; }
+                else if (N === 6) { stickerSize = 18; stickerRadius = 2; }
+
+                const faceOrder = [
+                    { key: 'U', name: 'Top (U)' },
+                    { key: 'L', name: 'Left (L)' },
+                    { key: 'F', name: 'Front (F)' },
+                    { key: 'R', name: 'Right (R)' },
+                    { key: 'B', name: 'Back (B)' },
+                    { key: 'D', name: 'Bottom (D)' }
+                ];
+
+                faceOrder.forEach(item => {
+                    const faceEl = document.createElement('div');
+                    faceEl.className = `net-face net-face-${item.key}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'face-title';
+                    title.textContent = item.name + ' 🎨';
+                    title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
+                    title.style.cursor = 'pointer';
+                    title.addEventListener('click', () => fillWholeFace(item.key));
+                    faceEl.appendChild(title);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'face-grid';
+                    grid.style.gridTemplateColumns = `repeat(${N}, ${stickerSize}px)`;
+                    grid.style.gridTemplateRows = `repeat(${N}, ${stickerSize}px)`;
+
+                    const midIdx = Math.floor((N * N) / 2);
+
+                    for (let i = 0; i < N * N; i++) {
+                        const st = document.createElement('div');
+                        st.className = 'net-sticker';
+                        if (N % 2 === 1 && i === midIdx) {
+                            st.classList.add('center-sticker');
                         }
-                    });
+                        st.style.width = stickerSize + 'px';
+                        st.style.height = stickerSize + 'px';
+                        st.style.borderRadius = stickerRadius + 'px';
 
-                    grid.appendChild(st);
-                }
+                        const curCol = (solverFaces[item.key] && solverFaces[item.key][i]) || 'grey';
+                        st.style.backgroundColor = PALETTE_COLORS[curCol] ? PALETTE_COLORS[curCol].hex : curCol;
+                        st.dataset.face = item.key;
+                        st.dataset.index = i;
 
-                faceEl.appendChild(grid);
-                container.appendChild(faceEl);
-            });
+                        st.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            paintSticker(item.key, i);
+                        });
+
+                        st.addEventListener('mouseenter', () => {
+                            if (isStickerMouseDown) {
+                                paintSticker(item.key, i);
+                            }
+                        });
+
+                        grid.appendChild(st);
+                    }
+
+                    faceEl.appendChild(grid);
+                    container.appendChild(faceEl);
+                });
+            }
         }
 
         // --- PAINT STICKER ON 3D & 2D ---
         function paintSticker(faceKey, index) {
+            if (!solverFaces || !solverFaces[faceKey]) return;
             solverFaces[faceKey][index] = solverColor;
             const hex = PALETTE_COLORS[solverColor] ? PALETTE_COLORS[solverColor].hex : solverColor;
 
             const st3d = document.querySelector(`.solver-3d-face.face-${faceKey} .solver-3d-sticker[data-index="${index}"]`);
             if (st3d) {
                 st3d.style.backgroundColor = hex;
-                st3d.style.transform = 'scale(1.2)';
-                setTimeout(() => { if (st3d) st3d.style.transform = ''; }, 120);
+                st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.2)';
+                setTimeout(() => {
+                    if (st3d) {
+                        st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg)' : '';
+                    }
+                }, 120);
             }
 
             const st2d = document.querySelector(`.net-face-${faceKey} .net-sticker[data-index="${index}"]`);
             if (st2d) {
                 st2d.style.backgroundColor = hex;
-                st2d.style.transform = 'scale(1.18)';
-                setTimeout(() => { if (st2d) st2d.style.transform = ''; }, 120);
+                st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.18)';
+                setTimeout(() => {
+                    if (st2d) {
+                        st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg)' : '';
+                    }
+                }, 120);
             }
 
             playSound('turn');
@@ -1206,11 +1656,27 @@
 
         function updateColorBadgesAndBanner() {
             const counts = { white: 0, yellow: 0, green: 0, blue: 0, orange: 0, red: 0, grey: 0 };
-            const N = solverSize;
-            const expected = N * N;
+            let expected = 0;
+            let activeColors = [];
+            let faceKeys = [];
 
-            ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
-                if (solverFaces[f]) {
+            if (solverSize === 'pyraminx') {
+                expected = 9;
+                activeColors = ['yellow', 'green', 'blue', 'red'];
+                faceKeys = ['U', 'L', 'R', 'B'];
+            } else if (solverSize === 'skewb') {
+                expected = 5;
+                activeColors = ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
+                faceKeys = ['U', 'D', 'F', 'B', 'L', 'R'];
+            } else {
+                const N = solverSize;
+                expected = N * N;
+                activeColors = ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
+                faceKeys = ['U', 'D', 'F', 'B', 'L', 'R'];
+            }
+
+            faceKeys.forEach(f => {
+                if (solverFaces && solverFaces[f]) {
                     solverFaces[f].forEach(c => {
                         if (counts[c] !== undefined) counts[c]++;
                         else counts.grey++;
@@ -1221,7 +1687,7 @@
             const badgeContainer = document.getElementById('color-count-badges');
             if (badgeContainer) {
                 badgeContainer.innerHTML = "";
-                ['white', 'yellow', 'green', 'blue', 'orange', 'red'].forEach(c => {
+                activeColors.forEach(c => {
                     const badge = document.createElement('div');
                     const isOk = counts[c] === expected;
                     badge.className = `cnt-badge ${isOk ? 'valid' : 'invalid'}`;
@@ -1232,14 +1698,14 @@
 
             const banner = document.getElementById('solver-status-banner');
             if (banner) {
-                const totalStickers = 6 * expected;
+                const totalStickers = activeColors.length * expected;
                 const filledCount = totalStickers - counts.grey;
 
                 if (counts.grey > 0) {
                     banner.className = 'solver-banner warning';
-                    banner.innerHTML = `🎯 <strong>Spots filled: ${filledCount}/${totalStickers}.</strong> Click grey spots on the 3D cube to fill in all colors!`;
+                    banner.innerHTML = `🎯 <strong>Spots filled: ${filledCount}/${totalStickers}.</strong> Click grey spots on the 3D puzzle to fill in all colors!`;
                 } else {
-                    const allOk = ['white', 'yellow', 'green', 'blue', 'orange', 'red'].every(c => counts[c] === expected);
+                    const allOk = activeColors.every(c => counts[c] === expected);
                     if (allOk) {
                         banner.className = 'solver-banner ready';
                         banner.innerHTML = `✅ <strong>All spots filled evenly (${expected} of each color)!</strong> Click <em>Calculate Fastest Solution</em> to solve.`;
@@ -1252,7 +1718,7 @@
         }
 
         function fillWholeFace(faceKey) {
-            if (!solverFaces[faceKey]) return;
+            if (!solverFaces || !solverFaces[faceKey]) return;
             solverFaces[faceKey].fill(solverColor);
             renderSolver3DCube();
             renderSolverNet();
@@ -1264,6 +1730,8 @@
             solverFaces = initSolverFaces(solverSize);
             const resPanel = document.getElementById('solver-result-panel');
             if (resPanel) resPanel.style.display = 'none';
+            currentSolutionData = null;
+            stopStepAutoPlay();
             renderSolver3DCube();
             renderSolverNet();
             updateColorBadgesAndBanner();
@@ -1291,7 +1759,7 @@
 
             if (res.alreadySolved) {
                 banner.className = 'solver-banner ready';
-                banner.innerHTML = `🎉 <strong>Cube is already 100% Solved!</strong> No moves required.`;
+                banner.innerHTML = `🎉 <strong>Puzzle is already 100% Solved!</strong> No moves required.`;
                 playSound('victory');
                 return;
             }

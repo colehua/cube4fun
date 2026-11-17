@@ -119,7 +119,9 @@
         try {
             const path = window.location.pathname.toLowerCase();
             const isMainHome = path.endsWith('/index.html') || path.endsWith('/cube4fun/') || path === '/' || path.endsWith('\\index.html');
-            if (isMainHome) return;
+            const isSecretHome = path.endsWith('/secret.html') || path.endsWith('\\secret.html') || path.includes('secret.html');
+            // When on main home or secret home page, no home button should exist
+            if (isMainHome || isSecretHome) return;
 
             // Check if page already has a link to index.html
             const existingHome = document.querySelector('a[href*="index.html"], a[href="./"], a[href="/"], .btn-return-home, .floating-home-pill');
