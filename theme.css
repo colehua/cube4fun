@@ -212,7 +212,7 @@ body.dark-mode .tab-btn,
 body.dark-mode .filter-btn,
 body.dark-mode .reset-btn,
 body.dark-mode .alg-btn-copy,
-body.dark-mode button:not(#theme-toggle):not(.floating-theme-toggle):not(.admin-login-link):not(.secret-red-dot):not(#secret-portal-button):not(#secret-red-dot-btn) {
+body.dark-mode button:not(#theme-toggle):not(.floating-theme-toggle):not(.admin-login-link):not(.secret-red-dot):not(#secret-portal-button):not(#secret-red-dot-btn):not(.swatch-btn) {
     background: #111827 !important;
     background-color: #111827 !important;
     color: #f8fafc !important;
