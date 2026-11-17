@@ -479,11 +479,12 @@
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%) !important;
             border: none !important;
             background: #0b1120 !important;
+            backface-visibility: visible !important;
         }
         .solver-3d-face.pyraminx-U { transform: rotateY(0deg) rotateX(19.4712deg) translateZ(38.78px) !important; }
         .solver-3d-face.pyraminx-L { transform: rotateY(-120deg) rotateX(19.4712deg) translateZ(38.78px) !important; }
         .solver-3d-face.pyraminx-R { transform: rotateY(120deg) rotateX(19.4712deg) translateZ(38.78px) !important; }
-        .solver-3d-face.pyraminx-B { transform: rotateX(90deg) translateZ(-38.78px) !important; }
+        .solver-3d-face.pyraminx-B { transform: rotateX(-90deg) rotateZ(180deg) translateZ(38.78px) !important; }
 
         .pyra-sticker {
             position: absolute;
