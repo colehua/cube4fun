@@ -690,10 +690,13 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 10006;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 20px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 30px 20px;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
         }
 
         .cs-modal.open {
@@ -704,6 +707,7 @@
             position: relative;
             max-width: 480px;
             width: 100%;
+            margin: auto;
         }
 
         .cs-modal-close {
@@ -1719,8 +1723,8 @@
         </div>
 
     <!-- Admin Login Modal -->
-    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: center; justify-content: center; box-sizing: border-box; user-select: none; touch-action: none;">
-        <div style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
+    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
+        <div style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
             <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
             <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; color: #FF6B6B;">🔑 Admin Login</h3>
             <p style="font-size: 1.1em; color: #666; margin: 0; text-align: center; font-weight: normal; font-family: 'Comic Neue', sans-serif;">Log in to edit Cole's records.</p>

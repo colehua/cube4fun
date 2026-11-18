@@ -531,13 +531,19 @@
             backdrop-filter: blur(8px);
             z-index: 2000;
             display: none;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 24px 16px;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal-overlay.show {
+            display: flex;
             opacity: 1;
         }
 
@@ -549,6 +555,7 @@
             max-width: 600px;
             box-shadow: 0 16px 0 #1e272e;
             padding: 24px;
+            margin: auto;
             transform: translateY(30px);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
@@ -5656,6 +5663,8 @@
             const overlay = document.getElementById('animator-modal');
             if (overlay) {
                 overlay.style.display = 'flex';
+                overlay.scrollTop = 0;
+                document.body.style.overflow = 'hidden';
                 setTimeout(() => {
                     overlay.classList.add('show');
                 }, 10);
@@ -5673,8 +5682,10 @@
             const overlay = document.getElementById('animator-modal');
             if (overlay) {
                 overlay.classList.remove('show');
+                overlay.scrollTop = 0;
                 setTimeout(() => {
                     overlay.style.display = 'none';
+                    document.body.style.overflow = '';
                 }, 300);
             }
         }

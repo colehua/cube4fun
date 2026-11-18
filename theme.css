@@ -804,3 +804,28 @@ a.btn-return-secret-home:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 5px 0 #1e272e !important;
 }
 
+/* ==========================================================================
+   UNIVERSAL MODAL SCROLL SAFETY: PREVENTS TOP CUTOFF ON SHORT/MOBILE SCREENS
+   ========================================================================== */
+.modal-overlay,
+.ps-modal-overlay,
+.pattern-modal-overlay,
+.cs-modal,
+.camera-scanner-modal,
+#admin-modal {
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.modal-container,
+.ps-modal-box,
+.pattern-modal-container,
+.cs-modal-card,
+.composer-card,
+.camera-scanner-dialog,
+#admin-modal > div {
+    margin: auto !important;
+}
+

@@ -901,12 +901,15 @@
             -webkit-backdrop-filter: blur(8px);
             z-index: 9999;
             display: none;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease;
-            padding: 16px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 24px 16px;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
         }
 
         .pattern-modal-overlay.show {
@@ -922,12 +925,11 @@
             max-width: 720px;
             box-shadow: 0 20px 0 #1e272e;
             padding: 26px 28px;
+            margin: auto;
             transform: translateY(30px) scale(0.96);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             box-sizing: border-box;
-            max-height: 92vh;
-            overflow-y: auto;
         }
 
         .pattern-modal-overlay.show .pattern-modal-container {
@@ -3422,6 +3424,8 @@
             const overlay = document.getElementById('pattern-video-modal');
             if (overlay) {
                 overlay.style.display = 'flex';
+                overlay.scrollTop = 0;
+                document.body.style.overflow = 'hidden';
                 setTimeout(() => {
                     overlay.classList.add('show');
                 }, 10);
@@ -3440,8 +3444,10 @@
             const overlay = document.getElementById('pattern-video-modal');
             if (overlay) {
                 overlay.classList.remove('show');
+                overlay.scrollTop = 0;
                 setTimeout(() => {
                     overlay.style.display = 'none';
+                    document.body.style.overflow = '';
                 }, 250);
             }
         }

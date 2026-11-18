@@ -985,10 +985,12 @@
             backdrop-filter: blur(10px);
             z-index: 10000;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 16px;
+            padding: 24px 16px;
             overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
         }
 
         .camera-scanner-dialog {
@@ -1002,6 +1004,7 @@
             position: relative;
             box-sizing: border-box;
             color: #f8fafc;
+            margin: auto;
             animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -3299,6 +3302,8 @@
             const modal = document.getElementById('camera-scanner-modal');
             if (!modal) return;
             modal.style.display = 'flex';
+            modal.scrollTop = 0;
+            document.body.style.overflow = 'hidden';
 
             const faceList = getFaceListForScanner();
             scannerFacesDone = {};
@@ -3325,7 +3330,11 @@
 
         function closeCameraScannerModal() {
             const modal = document.getElementById('camera-scanner-modal');
-            if (modal) modal.style.display = 'none';
+            if (modal) {
+                modal.style.display = 'none';
+                modal.scrollTop = 0;
+            }
+            document.body.style.overflow = '';
             stopScannerCamera();
         }
 
@@ -4113,7 +4122,7 @@
     </script>
 
     <!-- CAMERA SCANNER MODAL OVERLAY -->
-    <div id="camera-scanner-modal" class="camera-scanner-modal" style="display: none;">
+    <div id="camera-scanner-modal" class="camera-scanner-modal" style="display: none;" onclick="if(event.target===this) closeCameraScannerModal()">
         <div class="camera-scanner-dialog">
             <!-- MODAL HEADER -->
             <div class="scanner-header">
