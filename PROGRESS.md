@@ -1,69 +1,55 @@
 # Summary
 - **What changed**:
-  1. **Fixed Fastest 3x3 Solver Solutions**:
-     - Patched Two-Phase Kociemba bugs in [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js): fixed `init2` root state coordinate merging for initial phase 2, fixed `phase1search` loop to avoid double-incrementing depth and handle depth 0, and fixed `phase2search` loop to avoid double-incrementing depth and check depth 0 directly.
-     - Added `solveOptimalShort(faces, 6)` using bidirectional BFS in [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js). Any scramble of 1-6 moves (e.g. `U` -> `U'`, `R` -> `R'`, `R U` -> `U' R'`, `R U R' U'` -> `U R U' R'`, `F R U R' U' F'` -> `F U R U' R' F'`) is solved in 0-25ms with 100% mathematically optimal shortest moves. Scrambles > 6 moves fall through to the patched Two-Phase Kociemba solver and solve in 20-40ms.
-     - Integrated rigorous simulation verification in `solveCube`: every solution is applied move-by-move to an independent clone to guarantee it reaches a solved state before returning.
-  2. **Moved Color Palette Next to 3D Cube**:
-     - Placed `.color-palette-container` directly beside `.solver-3d-scene` inside `.solver-3d-stage` in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-     - Added glowing palette card styling with active color dot and label, compact 3-column swatch grid, and responsive flex alignment so users can pick colors and paint stickers side-by-side without scrolling.
-  3. **Added 3D Cube Orientation Guide to Bottom of Camera Scanner**:
-     - Added `.scanner-3d-guide-container` with an interactive mini 3D cube at the bottom of the camera scanner modal in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-     - The mini 3D cube automatically turns so the face currently being scanned faces FRONT directly toward the user, with a pulsing cyan target glow.
-     - When saving a face with "Save Face & Scan Next", the scanner advances to the next face and the mini 3D cube rotates with a smooth 3D CSS animation while reflecting the memorized colors.
-     - Tapping any face on the mini 3D cube switches the active scanning face.
+  1. **Redesigned 3D Cube in Camera Scanner to Match Earlier 3D Cube**:
+     - Upgraded the camera scanner 3D cube in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) to full 3D geometry (260x250px scene, 180px faces, 90px translateZ, 800px perspective).
+     - Applied matching face border styling, specular sticker bevel highlights (`inset 0 1px 3px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.5)`), and dynamic sticker gaps/radii for all cube sizes ($N=2..10$), Pyraminx, Skewb, and Megaminx.
+     - Kept true 3D isometric perspectives (`rotateX(-20deg) rotateY(-25deg)` for Front, etc.) so the active scanning face faces front while maintaining full 3D depth and visibility of adjacent faces.
+     - Added full interactive pointer orbit rotation (`setupScanner3DOrbitListeners`) so users can freely spin and inspect the cube in 3D.
+     - Added quick face angle buttons (`#scanner-angle-btns`) directly under the 3D cube matching the main solver's angle controls.
+  2. **Added Prominent "Back to Cube Solving Machine" Buttons**:
+     - Added cyber-styled `⬅️ Back to Cube Solving Machine` button in the camera scanner modal header next to the close button.
+     - Added `⬅️ Back to Solver` button in the camera controls bar.
+     - Added `⬅️ Back to Solver` button in the review and color verification actions.
+     - Added `⬅️ Back to Cube Solving Machine` return button at the bottom of the 3D guide container.
 - **How verified**:
-  - Node test suite verified:
-    - Scramble `U` -> Solved in 1 move (`U'`) in 1ms.
-    - Scramble `R` -> Solved in 1 move (`R'`) in 0ms.
-    - Scramble `R U` -> Solved in 2 moves (`U' R'`) in 0ms.
-    - Scramble `R U R' U'` -> Solved in 4 moves (`U R U' R'`) in 3ms.
-    - Scramble `F R U R' U' F'` -> Solved in 6 moves (`F U R U' R' F'`) in 25ms.
-    - Deep scrambles solved in 28-38ms.
-    - All puzzle types (2x2..10x10, Pyraminx, Skewb, Megaminx) pass `alreadySolved`, scramble solving, and single-color error rejection.
-  - Live Chrome DevTools MCP evaluated:
-    - `.solver-3d-scene` and `.color-palette-container` confirmed side-by-side (`isSideBySide: true`, same top coordinate `~1061px`).
-    - Live solutions tested in browser: `U` -> `U'`, `R` -> `R'`, `R U R' U'` -> `U R U' R'`, `F R U R' U' F'` -> `F U R U' R' F'`.
-    - Mini 3D cube in scanner tested: opens with Top face front, rotates when switching faces (`F`, `R`, `B`, `L`, `D`), advances and updates colors when saving faces, and rotates when clicking faces.
+  - Live Chrome DevTools MCP evaluated on page 4:
+    - Opened modal via `openCameraScannerModal()`: confirmed `modalDisplay: "flex"`, 4 back buttons present across header, controls, review panel, and bottom.
+    - Verified 3D cube rendered 6 faces with isometric transform `rotateX(-65deg) rotateY(-25deg)`.
+    - Tested switching faces (`setScannerFace('F')`): confirmed Front face rotates to front (`rotateX(-20deg) rotateY(-25deg)`) and glows with `.active-target`.
+    - Tested clicking `⬅️ Back to Cube Solving Machine`: confirmed modal closes cleanly (`modalDisplayAfterClick: "none"`) and camera stream stops.
+    - Verified Pyraminx, Skewb, Megaminx, and NxN support in scanner 3D guide with zero console errors.
 - **What to review**:
   - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-  - Verify Color Palette is right next to the 3D cube.
-  - Click `Scramble`, then `⚡ CALCULATE FASTEST SOLUTION ⚡`, or paint a 1-move scramble (e.g. `R`) and verify it solves in 1 move (`R'`).
-  - Click `📸 Take Picture to Fill Colors`, observe the 3D cube at the bottom rotating as you select or save faces.
+  - Click `📸 Take Picture to Fill Colors` to open the scanner.
+  - Notice the `⬅️ Back to Cube Solving Machine` button in the top right header, in the camera controls bar, and at the bottom.
+  - Check the 3D cube at the bottom: it matches the look, depth, beveled stickers, and face borders of the main solver 3D cube.
+  - Drag the 3D cube with mouse or touch, click angle buttons, or tap faces to see it smoothly rotate.
+  - Click `⬅️ Back to Cube Solving Machine` to return to the solver page.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Make color palette next to the 3D cube.
-2. Fix fastest steps to solve the cube in cube solving machine so short and deep solutions are 100% correct and mathematically optimal.
-3. Put a 3D cube on the bottom of the camera scanner with the face in the front being the one the scanner is scanning, advancing side-by-side.
-4. Verify all functionality and push changes to origin main.
+1. Make camera scanner 3D cube match the look, depth, and interactivity of the earlier 3D cube.
+2. Add a button to go back to the cube solving machine page when opening the camera scanner.
+3. Commit and push changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Fix Two-Phase Kociemba depth-skipping and init2 bugs in cube-solver-engine.js
-- [x] Add solveOptimalShort bidirectional BFS (1-6 moves) to cube-solver-engine.js
-- [x] Move color palette next to 3D cube in cube-solving-machine.html with flex layout
-- [x] Add interactive mini 3D cube at the bottom of the camera scanner modal
-- [x] Make mini 3D cube rotate so the current scanning face faces front
-- [x] Update mini 3D cube colors and face advancement on confirm/save
-- [x] Verify live in Chrome DevTools MCP and test suite in Node
-- [x] Push all changes to origin main
+- [x] Redesign scanner 3D cube geometry, border colors, and beveled stickers to match main 3D cube
+- [x] Implement interactive 3D orbit rotation listeners for scanner 3D cube
+- [x] Add angle preset buttons under scanner 3D cube
+- [x] Add multiple prominent "Back to Cube Solving Machine" buttons in header, controls, review panel, and bottom
+- [x] Verify live in Chrome DevTools MCP with zero console errors
+- [x] Commit and push changes to origin main
 
 Assumptions:
-- Short scrambles (1-6 moves) use bidirectional BFS for exact optimal solutions.
-- Deeper scrambles use the patched Two-Phase Kociemba solver.
+- The return buttons should close the camera modal, turn off any live webcam stream, and bring the user back to the cube solving machine workspace immediately.
+- The 3D cube in the scanner should align the target face facing front while maintaining 3D isometric tilt to show depth.
 
-Blockers (what I need to do):
-- None.
-
-Found, not done:
-- None.
-
+Blockers (what I need to do): None.
+Found, not done: None.
 Log (newest first, one line each):
-- Fixed fastest 3x3 solver moves (optimal BFS + patched Kociemba), moved color palette next to 3D cube, and added rotating 3D cube guide to bottom of camera scanner; verified in Node and Chrome DevTools MCP and pushed to origin main.
-- Added 7x7x7, 8x8x8, 9x9x9, 10x10x10, and Megaminx to the cube solving machine; verified in Node and Chrome DevTools MCP and pushed to origin main.
-- Fixed Pyraminx 3D bottom face normal transform and backface visibility; verified in Chrome DevTools MCP and pushed to origin main.
-- Moved secret portal dot to top left corner; verified in Chrome DevTools MCP and pushed to origin main.
-- Built camera photo color scanner with sweeping laser effect and light blue top-right button; verified in Chrome DevTools MCP.
+- 2026-11-17: Verified modal return buttons and interactive 3D scanner cube live in Chrome DevTools MCP with 0 console errors.
+- 2026-11-17: Added Back to Cube Solving Machine buttons in header, controls, review panel, and bottom.
+- 2026-11-17: Upgraded scanner 3D cube with 180px faces, beveled stickers, orbit drag listeners, and angle buttons.

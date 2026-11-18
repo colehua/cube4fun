@@ -1347,12 +1347,12 @@
         /* CAMERA SCANNER 3D CUBE GUIDE AT BOTTOM */
         .scanner-3d-guide-container {
             margin-top: 18px;
-            background: rgba(3, 7, 18, 0.85);
-            border: 1.5px solid rgba(56, 189, 248, 0.45);
-            border-radius: 16px;
-            padding: 14px 16px;
+            background: rgba(3, 7, 18, 0.9);
+            border: 2px solid rgba(56, 189, 248, 0.45);
+            border-radius: 18px;
+            padding: 16px 18px;
             text-align: center;
-            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.15);
+            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(56, 189, 248, 0.2);
         }
 
         .scanner-3d-guide-header {
@@ -1360,8 +1360,8 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .scanner-guide-face-tag {
@@ -1369,26 +1369,34 @@
             border: 1.5px solid #38bdf8;
             color: #38bdf8;
             font-weight: 800;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.88em;
+            padding: 4px 14px;
+            border-radius: 10px;
+            font-size: 0.9em;
             letter-spacing: 0.5px;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
         }
 
         .scanner-mini-3d-scene {
-            width: 140px;
-            height: 140px;
-            margin: 10px auto;
-            perspective: 500px;
+            width: 260px;
+            height: 250px;
+            margin: 12px auto;
+            perspective: 800px;
             display: flex;
             align-items: center;
             justify-content: center;
+            user-select: none;
+            cursor: grab;
+            position: relative;
+            touch-action: none;
+        }
+
+        .scanner-mini-3d-scene:active {
+            cursor: grabbing;
         }
 
         .scanner-mini-3d-cube {
-            width: 90px;
-            height: 90px;
+            width: 100%;
+            height: 100%;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1396,103 +1404,151 @@
 
         .scanner-mini-face {
             position: absolute;
-            width: 90px;
-            height: 90px;
+            width: 180px;
+            height: 180px;
+            left: 40px;
+            top: 35px;
             background: #0b1120;
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            border-radius: 8px;
-            box-sizing: border-box;
             display: grid;
-            gap: 2px;
-            padding: 3px;
+            gap: 4px;
+            padding: 5px;
+            box-sizing: border-box;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            backface-visibility: hidden;
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.85);
             cursor: pointer;
-            backface-visibility: visible;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .scanner-mini-face.active-target {
-            border: 2.5px solid #00f0ff !important;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.95), inset 0 0 12px rgba(0, 240, 255, 0.4) !important;
+            border: 3px solid #00f0ff !important;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 1), inset 0 0 15px rgba(0, 240, 255, 0.5) !important;
             animation: targetPulse 1.2s infinite alternate ease-in-out;
+            z-index: 10;
         }
 
         @keyframes targetPulse {
-            0% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.6), inset 0 0 6px rgba(0, 240, 255, 0.2); }
-            100% { box-shadow: 0 0 22px rgba(0, 240, 255, 1), inset 0 0 14px rgba(0, 240, 255, 0.6); }
+            0% { box-shadow: 0 0 12px rgba(0, 240, 255, 0.7), inset 0 0 8px rgba(0, 240, 255, 0.3); }
+            100% { box-shadow: 0 0 28px rgba(0, 240, 255, 1), inset 0 0 16px rgba(0, 240, 255, 0.6); }
         }
 
-        .scanner-mini-face.face-F { transform: rotateY(0deg) translateZ(45px); }
-        .scanner-mini-face.face-B { transform: rotateY(180deg) translateZ(45px); }
-        .scanner-mini-face.face-R { transform: rotateY(90deg) translateZ(45px); }
-        .scanner-mini-face.face-L { transform: rotateY(-90deg) translateZ(45px); }
-        .scanner-mini-face.face-U { transform: rotateX(90deg) translateZ(45px); }
-        .scanner-mini-face.face-D { transform: rotateX(-90deg) translateZ(45px); }
+        .scanner-mini-face.face-F { transform: rotateY(0deg) translateZ(90px); border-color: rgba(34, 197, 94, 0.7); }
+        .scanner-mini-face.face-B { transform: rotateY(180deg) translateZ(90px); border-color: rgba(59, 130, 246, 0.7); }
+        .scanner-mini-face.face-R { transform: rotateY(90deg) translateZ(90px); border-color: rgba(239, 68, 68, 0.7); }
+        .scanner-mini-face.face-L { transform: rotateY(-90deg) translateZ(90px); border-color: rgba(249, 115, 22, 0.7); }
+        .scanner-mini-face.face-U { transform: rotateX(90deg) translateZ(90px); border-color: rgba(255, 255, 255, 0.8); }
+        .scanner-mini-face.face-D { transform: rotateX(-90deg) translateZ(90px); border-color: rgba(250, 237, 39, 0.8); }
+
+        .scanner-mini-face.face-skewb {
+            display: block !important;
+            padding: 0 !important;
+        }
 
         .scanner-mini-sticker {
-            border-radius: 2px;
-            border: 1px solid rgba(0, 0, 0, 0.6);
-            background: #475569;
-            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
-            transition: background-color 0.2s ease;
+            background-color: #64748b;
+            border: 2px solid #0f172a;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.25), inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.15s ease, transform 0.15s ease;
+        }
+        .scanner-mini-sticker:hover {
+            transform: scale(1.08);
+            filter: brightness(1.2);
+            z-index: 5;
         }
 
         /* 3D PYRAMINX MINI FACE */
         .scanner-mini-face.face-pyraminx {
             display: block !important;
             padding: 0 !important;
-            width: 90px !important;
-            height: 77.94px !important;
+            width: 176px !important;
+            height: 152.4px !important;
+            left: 42px !important;
+            top: 48px !important;
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%) !important;
             border: none !important;
             background: #0b1120 !important;
             backface-visibility: visible !important;
         }
         .scanner-mini-face.face-pyraminx.active-target {
-            filter: drop-shadow(0 0 14px #00f0ff);
+            filter: drop-shadow(0 0 16px #00f0ff);
         }
-        .scanner-mini-face.face-pyraminx.face-U { transform: rotateY(0deg) rotateX(19.4712deg) translateZ(18.37px) !important; }
-        .scanner-mini-face.face-pyraminx.face-L { transform: rotateY(-120deg) rotateX(19.4712deg) translateZ(18.37px) !important; }
-        .scanner-mini-face.face-pyraminx.face-R { transform: rotateY(120deg) rotateX(19.4712deg) translateZ(18.37px) !important; }
-        .scanner-mini-face.face-pyraminx.face-B { transform: rotateX(-90deg) rotateZ(180deg) translateZ(18.37px) !important; }
-
-        .scanner-mini-pyra-sticker {
-            position: absolute;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
-        }
+        .scanner-mini-face.face-pyraminx.face-U { transform: rotateY(0deg) rotateX(19.4712deg) translateZ(34.8px) !important; }
+        .scanner-mini-face.face-pyraminx.face-L { transform: rotateY(-120deg) rotateX(19.4712deg) translateZ(34.8px) !important; }
+        .scanner-mini-face.face-pyraminx.face-R { transform: rotateY(120deg) rotateX(19.4712deg) translateZ(34.8px) !important; }
+        .scanner-mini-face.face-pyraminx.face-B { transform: rotateX(-90deg) rotateZ(180deg) translateZ(34.8px) !important; }
 
         /* 3D MEGAMINX MINI FACE */
         .scanner-mini-face.face-megaminx {
             display: block !important;
             padding: 0 !important;
-            width: 80px !important;
-            height: 80px !important;
-            left: 5px !important;
-            top: 5px !important;
+            width: 140px !important;
+            height: 140px !important;
+            left: 60px !important;
+            top: 55px !important;
             border: none !important;
             background: transparent !important;
             box-shadow: none !important;
             backface-visibility: visible !important;
         }
         .scanner-mini-face.face-megaminx.active-target {
-            filter: drop-shadow(0 0 14px #00f0ff);
+            filter: drop-shadow(0 0 18px #00f0ff);
         }
-        .scanner-mini-face.face-megaminx.megaminx-U   { transform: rotateX(90deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-F   { transform: rotateY(0deg) rotateX(26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-FR  { transform: rotateY(-72deg) rotateX(26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-BR  { transform: rotateY(-144deg) rotateX(26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-BL  { transform: rotateY(-216deg) rotateX(26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-FL  { transform: rotateY(-288deg) rotateX(26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-D   { transform: rotateX(-90deg) rotateZ(180deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-DF  { transform: rotateY(180deg) rotateX(-26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-DR  { transform: rotateY(252deg) rotateX(-26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-DBR { transform: rotateY(324deg) rotateX(-26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-DBL { transform: rotateY(36deg) rotateX(-26.565deg) translateZ(41px) !important; }
-        .scanner-mini-face.face-megaminx.megaminx-DL  { transform: rotateY(108deg) rotateX(-26.565deg) translateZ(41px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-U   { transform: rotateX(90deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-F   { transform: rotateY(0deg) rotateX(26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-FR  { transform: rotateY(-72deg) rotateX(26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-BR  { transform: rotateY(-144deg) rotateX(26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-BL  { transform: rotateY(-216deg) rotateX(26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-FL  { transform: rotateY(-288deg) rotateX(26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-D   { transform: rotateX(-90deg) rotateZ(180deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DF  { transform: rotateY(180deg) rotateX(-26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DR  { transform: rotateY(252deg) rotateX(-26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DBR { transform: rotateY(324deg) rotateX(-26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DBL { transform: rotateY(36deg) rotateX(-26.565deg) translateZ(72px) !important; }
+        .scanner-mini-face.face-megaminx.megaminx-DL  { transform: rotateY(108deg) rotateX(-26.565deg) translateZ(72px) !important; }
 
         .scanner-3d-guide-hint {
-            font-size: 0.82em;
+            font-size: 0.88em;
             color: #94a3b8;
-            margin-top: 6px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .btn-scanner-back {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1.5px solid #38bdf8;
+            color: #e0f2fe;
+            font-family: 'DynaPuff', cursive;
+            font-weight: 700;
+            font-size: 0.88em;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        }
+        .btn-scanner-back:hover {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #030712;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+            border-color: #ffffff;
+        }
+
+        .btn-scanner-return {
+            background: rgba(30, 41, 59, 0.85) !important;
+            border: 1.5px solid #38bdf8 !important;
+            color: #e0f2fe !important;
+        }
+        .btn-scanner-return:hover {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%) !important;
+            color: #030712 !important;
+            border-color: #ffffff !important;
         }
     </style>
 </head>
@@ -3256,6 +3312,8 @@
             renderScannerPaletteStrip();
             renderScannerFacesSummary();
             renderScanner3DGuideCube();
+            renderScannerAngleButtons();
+            setupScanner3DOrbitListeners();
             updateScanner3DGuideRotation(scannerCurrentFace);
 
             document.getElementById('scanner-review-panel').style.display = 'none';
@@ -3701,6 +3759,80 @@
             }
         }
 
+        let isScannerOrbitDragging = false;
+        let scannerOrbitStartX = 0;
+        let scannerOrbitStartY = 0;
+        let scannerRotX = -20;
+        let scannerRotY = -25;
+
+        function setupScanner3DOrbitListeners() {
+            const sceneEl = document.getElementById('scanner-mini-3d-scene');
+            const cubeEl = document.getElementById('scanner-mini-3d-cube');
+            if (!sceneEl || !cubeEl || sceneEl.dataset.orbitInitialized) return;
+            sceneEl.dataset.orbitInitialized = 'true';
+
+            sceneEl.addEventListener('pointerdown', (e) => {
+                isScannerOrbitDragging = true;
+                scannerOrbitStartX = e.clientX;
+                scannerOrbitStartY = e.clientY;
+                cubeEl.style.transition = 'none';
+                sceneEl.setPointerCapture(e.pointerId);
+            });
+
+            sceneEl.addEventListener('pointermove', (e) => {
+                if (!isScannerOrbitDragging) return;
+                const dx = e.clientX - scannerOrbitStartX;
+                const dy = e.clientY - scannerOrbitStartY;
+                scannerRotY += dx * 0.7;
+                scannerRotX -= dy * 0.7;
+                scannerRotX = Math.max(-85, Math.min(85, scannerRotX));
+                cubeEl.style.transform = `rotateX(${scannerRotX}deg) rotateY(${scannerRotY}deg)`;
+                scannerOrbitStartX = e.clientX;
+                scannerOrbitStartY = e.clientY;
+            });
+
+            const stopDrag = () => {
+                if (!isScannerOrbitDragging) return;
+                isScannerOrbitDragging = false;
+                cubeEl.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            };
+
+            sceneEl.addEventListener('pointerup', stopDrag);
+            sceneEl.addEventListener('pointercancel', stopDrag);
+        }
+
+        function renderScannerAngleButtons() {
+            const container = document.getElementById('scanner-angle-btns');
+            if (!container) return;
+            if (solverSize === 'pyraminx') {
+                container.innerHTML = `
+                    <button class="btn-angle" onclick="setScannerFace('U')" title="Target Top Face (Yellow)">Top (U)</button>
+                    <button class="btn-angle" onclick="setScannerFace('L')" title="Target Left Face (Green)">Left (L)</button>
+                    <button class="btn-angle" onclick="setScannerFace('R')" title="Target Right Face (Red)">Right (R)</button>
+                    <button class="btn-angle" onclick="setScannerFace('B')" title="Target Bottom Base Face (Blue)">Bottom Base (B)</button>
+                `;
+            } else if (solverSize === 'megaminx') {
+                container.innerHTML = `
+                    <button class="btn-angle" onclick="setScannerFace('U')" title="Top White Face">Top (U)</button>
+                    <button class="btn-angle" onclick="setScannerFace('F')" title="Front Red Face">Front (F)</button>
+                    <button class="btn-angle" onclick="setScannerFace('FR')" title="Front-Right Yellow Face">FR (Yellow)</button>
+                    <button class="btn-angle" onclick="setScannerFace('BR')" title="Back-Right Blue Face">BR (Blue)</button>
+                    <button class="btn-angle" onclick="setScannerFace('BL')" title="Back-Left Green Face">BL (Green)</button>
+                    <button class="btn-angle" onclick="setScannerFace('FL')" title="Front-Left Purple Face">FL (Purple)</button>
+                    <button class="btn-angle" onclick="setScannerFace('D')" title="Bottom Silver Face">Bottom (D)</button>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button class="btn-angle" onclick="setScannerFace('U')" title="Target Top Face (White)">Top (U)</button>
+                    <button class="btn-angle" onclick="setScannerFace('F')" title="Target Front Face (Green)">Front (F)</button>
+                    <button class="btn-angle" onclick="setScannerFace('R')" title="Target Right Face (Red)">Right (R)</button>
+                    <button class="btn-angle" onclick="setScannerFace('B')" title="Target Back Face (Blue)">Back (B)</button>
+                    <button class="btn-angle" onclick="setScannerFace('L')" title="Target Left Face (Orange)">Left (L)</button>
+                    <button class="btn-angle" onclick="setScannerFace('D')" title="Target Bottom Face (Yellow)">Bottom (D)</button>
+                `;
+            }
+        }
+
         function renderScanner3DGuideCube() {
             const cubeEl = document.getElementById('scanner-mini-3d-cube');
             if (!cubeEl) return;
@@ -3715,15 +3847,15 @@
                     { key: 'B', cls: 'pyraminx-B', name: 'Bottom (Blue)' }
                 ];
                 const miniCoords = [
-                    { x: 30, y: 0,      dir: 'up' },
-                    { x: 15, y: 25.98,  dir: 'up' },
-                    { x: 30, y: 25.98,  dir: 'down' },
-                    { x: 45, y: 25.98,  dir: 'up' },
-                    { x: 0,  y: 51.96,  dir: 'up' },
-                    { x: 15, y: 51.96,  dir: 'down' },
-                    { x: 30, y: 51.96,  dir: 'up' },
-                    { x: 45, y: 51.96,  dir: 'down' },
-                    { x: 60, y: 51.96,  dir: 'up' }
+                    { x: 58.7, y: 0,      dir: 'up' },
+                    { x: 29.3, y: 50.8,   dir: 'up' },
+                    { x: 58.7, y: 50.8,   dir: 'down' },
+                    { x: 88.0, y: 50.8,   dir: 'up' },
+                    { x: 0,    y: 101.6,  dir: 'up' },
+                    { x: 29.3, y: 101.6,  dir: 'down' },
+                    { x: 58.7, y: 101.6,  dir: 'up' },
+                    { x: 88.0, y: 101.6,  dir: 'down' },
+                    { x: 117.3,y: 101.6,  dir: 'up' }
                 ];
 
                 pyraFaces.forEach(f => {
@@ -3736,13 +3868,14 @@
                     const colors = solverFaces[f.key] || new Array(9).fill('grey');
                     for (let i = 0; i < 9; i++) {
                         const col = colors[i] || 'grey';
-                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#475569';
+                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#64748b';
                         const st = document.createElement('div');
-                        st.className = `scanner-mini-pyra-sticker pyra-sticker tri-${miniCoords[i].dir}`;
+                        st.className = `solver-3d-sticker pyra-sticker tri-${miniCoords[i].dir}`;
+                        st.style.position = 'absolute';
                         st.style.left = miniCoords[i].x + 'px';
                         st.style.top = miniCoords[i].y + 'px';
-                        st.style.width = '30px';
-                        st.style.height = '25.98px';
+                        st.style.width = '58.7px';
+                        st.style.height = '50.8px';
                         st.style.backgroundColor = hex;
                         faceDiv.appendChild(st);
                     }
@@ -3757,8 +3890,8 @@
                     faceDiv.dataset.face = f;
                     faceDiv.title = `Face ${f} - Tap to select for scanning`;
                     faceDiv.onclick = () => setScannerFace(f);
-                    const colors = (solverFaces[f] || new Array(11).fill('grey')).map(c => PALETTE_COLORS[c] ? PALETTE_COLORS[c].hex : '#475569');
-                    faceDiv.innerHTML = createMegaminxSvgMarkup(f, colors).replace('width="160" height="160"', 'width="80" height="80"');
+                    const colors = (solverFaces[f] || new Array(11).fill('grey')).map(c => PALETTE_COLORS[c] ? PALETTE_COLORS[c].hex : '#64748b');
+                    faceDiv.innerHTML = createMegaminxSvgMarkup(f, colors).replace('width="160" height="160"', 'width="140" height="140"');
                     cubeEl.appendChild(faceDiv);
                 });
             } else if (solverSize === 'skewb') {
@@ -3773,7 +3906,7 @@
                 ];
                 skewbFaces.forEach(f => {
                     const faceDiv = document.createElement('div');
-                    faceDiv.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
+                    faceDiv.className = `scanner-mini-face face-${f.key} face-skewb` + (f.key === scannerCurrentFace ? ' active-target' : '');
                     faceDiv.dataset.face = f.key;
                     faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
                     faceDiv.onclick = () => setScannerFace(f.key);
@@ -3782,34 +3915,36 @@
 
                     const colors = solverFaces[f.key] || new Array(5).fill('grey');
                     const centerSt = document.createElement('div');
+                    centerSt.className = 'solver-3d-sticker skewb-center';
                     centerSt.style.position = 'absolute';
-                    centerSt.style.width = '46px';
-                    centerSt.style.height = '46px';
-                    centerSt.style.left = '22px';
-                    centerSt.style.top = '22px';
+                    centerSt.style.width = '76px';
+                    centerSt.style.height = '76px';
+                    centerSt.style.left = '52px';
+                    centerSt.style.top = '52px';
                     centerSt.style.transform = 'rotate(45deg)';
-                    centerSt.style.borderRadius = '4px';
-                    centerSt.style.border = '1.5px solid #0f172a';
+                    centerSt.style.borderRadius = '8px';
+                    centerSt.style.border = '2px solid #0f172a';
                     const cCol = colors[0] || 'grey';
-                    centerSt.style.backgroundColor = PALETTE_COLORS[cCol] ? PALETTE_COLORS[cCol].hex : '#475569';
+                    centerSt.style.backgroundColor = PALETTE_COLORS[cCol] ? PALETTE_COLORS[cCol].hex : '#64748b';
                     faceDiv.appendChild(centerSt);
 
                     const cornerStyles = [
-                        { top: '3px', left: '3px', clip: 'polygon(0 0, 100% 0, 0 100%)' },
-                        { top: '3px', right: '3px', clip: 'polygon(0 0, 100% 0, 100% 100%)' },
-                        { bottom: '3px', left: '3px', clip: 'polygon(0 0, 0 100%, 100% 100%)' },
-                        { bottom: '3px', right: '3px', clip: 'polygon(100% 0, 100% 100%, 0 100%)' }
+                        { top: '6px', left: '6px', clip: 'polygon(0 0, 100% 0, 0 100%)' },
+                        { top: '6px', right: '6px', clip: 'polygon(0 0, 100% 0, 100% 100%)' },
+                        { bottom: '6px', left: '6px', clip: 'polygon(0 0, 0 100%, 100% 100%)' },
+                        { bottom: '6px', right: '6px', clip: 'polygon(100% 0, 100% 100%, 0 100%)' }
                     ];
                     for (let i = 1; i <= 4; i++) {
                         const st = document.createElement('div');
+                        st.className = 'solver-3d-sticker skewb-corner';
                         st.style.position = 'absolute';
-                        st.style.width = '30px';
-                        st.style.height = '30px';
-                        st.style.border = '1.5px solid #0f172a';
+                        st.style.width = '60px';
+                        st.style.height = '60px';
+                        st.style.border = '2px solid #0f172a';
                         Object.assign(st.style, cornerStyles[i - 1]);
                         st.style.clipPath = cornerStyles[i - 1].clip;
                         const col = colors[i] || 'grey';
-                        st.style.backgroundColor = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#475569';
+                        st.style.backgroundColor = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#64748b';
                         faceDiv.appendChild(st);
                     }
                     cubeEl.appendChild(faceDiv);
@@ -3826,6 +3961,18 @@
                 ];
 
                 const N = typeof solverSize === 'number' ? solverSize : 3;
+                let gap = 4;
+                let radius = 6;
+                if (N === 2) { gap = 6; radius = 8; }
+                else if (N === 3) { gap = 4; radius = 6; }
+                else if (N === 4) { gap = 3; radius = 4; }
+                else if (N === 5) { gap = 2; radius = 3; }
+                else if (N === 6) { gap = 2; radius = 2; }
+                else if (N === 7) { gap = 1.5; radius = 1.5; }
+                else if (N === 8) { gap = 1.2; radius = 1; }
+                else if (N === 9) { gap = 1; radius = 1; }
+                else if (N === 10) { gap = 0.8; radius = 0.5; }
+
                 standardFaces.forEach(f => {
                     const faceDiv = document.createElement('div');
                     faceDiv.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
@@ -3833,6 +3980,7 @@
                     faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
                     faceDiv.onclick = () => setScannerFace(f.key);
 
+                    faceDiv.style.gap = `${gap}px`;
                     faceDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
                     faceDiv.style.gridTemplateRows = `repeat(${N}, 1fr)`;
 
@@ -3840,9 +3988,10 @@
                     const colors = solverFaces[f.key] || new Array(totalStickers).fill('grey');
                     for (let i = 0; i < totalStickers; i++) {
                         const col = colors[i] || 'grey';
-                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#475569';
+                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#64748b';
                         const st = document.createElement('div');
                         st.className = 'scanner-mini-sticker';
+                        st.style.borderRadius = `${radius}px`;
                         st.style.backgroundColor = hex;
                         faceDiv.appendChild(st);
                     }
@@ -3864,43 +4013,53 @@
             const faceList = getFaceListForScanner();
             const curInfo = faceList.find(f => f.key === faceKey);
             if (tagEl) {
-                tagEl.textContent = `FRONT: ${curInfo ? curInfo.name : faceKey}`;
+                tagEl.textContent = `TARGET IN FRONT: ${curInfo ? curInfo.name : faceKey}`;
             }
 
             if (solverSize === 'pyraminx') {
                 const pyraRotations = {
-                    U: 'rotateX(-19.5deg) rotateY(0deg)',
-                    L: 'rotateX(-19.5deg) rotateY(120deg)',
-                    R: 'rotateX(-19.5deg) rotateY(-120deg)',
-                    B: 'rotateX(90deg) rotateZ(180deg)'
+                    U: { x: -12, y: 0 },
+                    L: { x: -12, y: 120 },
+                    R: { x: -12, y: -120 },
+                    B: { x: 80, y: 180 }
                 };
-                cubeEl.style.transform = pyraRotations[faceKey] || 'rotateX(-19.5deg) rotateY(0deg)';
+                const rot = pyraRotations[faceKey] || { x: -12, y: 0 };
+                scannerRotX = rot.x;
+                scannerRotY = rot.y;
+                cubeEl.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
             } else if (solverSize === 'megaminx') {
                 const megaRotations = {
-                    U:   'rotateX(-90deg) rotateY(0deg)',
-                    F:   'rotateX(-26.5deg) rotateY(0deg)',
-                    FR:  'rotateX(-26.5deg) rotateY(72deg)',
-                    BR:  'rotateX(-26.5deg) rotateY(144deg)',
-                    BL:  'rotateX(-26.5deg) rotateY(216deg)',
-                    FL:  'rotateX(-26.5deg) rotateY(288deg)',
-                    D:   'rotateX(90deg) rotateZ(180deg)',
-                    DF:  'rotateX(26.5deg) rotateY(180deg)',
-                    DR:  'rotateX(26.5deg) rotateY(252deg)',
-                    DBR: 'rotateX(26.5deg) rotateY(324deg)',
-                    DBL: 'rotateX(26.5deg) rotateY(36deg)',
-                    DL:  'rotateX(26.5deg) rotateY(108deg)'
+                    U:   { x: -75, y: -25 },
+                    F:   { x: -20, y: -25 },
+                    FR:  { x: -20, y: 47 },
+                    BR:  { x: -20, y: 119 },
+                    BL:  { x: -20, y: 191 },
+                    FL:  { x: -20, y: 263 },
+                    D:   { x: 75,  y: -25 },
+                    DF:  { x: 20,  y: 155 },
+                    DR:  { x: 20,  y: 227 },
+                    DBR: { x: 20,  y: 299 },
+                    DBL: { x: 20,  y: 11 },
+                    DL:  { x: 20,  y: 83 }
                 };
-                cubeEl.style.transform = megaRotations[faceKey] || 'rotateX(0deg) rotateY(0deg)';
+                const rot = megaRotations[faceKey] || { x: -20, y: -25 };
+                scannerRotX = rot.x;
+                scannerRotY = rot.y;
+                cubeEl.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
             } else {
+                // 3D Isometric View with active face prominently in front, matching the 3D cube earlier:
                 const cubeRotations = {
-                    F: 'rotateX(0deg) rotateY(0deg)',
-                    R: 'rotateX(0deg) rotateY(-90deg)',
-                    B: 'rotateX(0deg) rotateY(-180deg)',
-                    L: 'rotateX(0deg) rotateY(90deg)',
-                    U: 'rotateX(-90deg) rotateY(0deg)',
-                    D: 'rotateX(90deg) rotateY(0deg)'
+                    F: { x: -20, y: -25 },
+                    R: { x: -20, y: -115 },
+                    B: { x: -20, y: -205 },
+                    L: { x: -20, y: -295 },
+                    U: { x: -65, y: -25 },
+                    D: { x: 65,  y: -25 }
                 };
-                cubeEl.style.transform = cubeRotations[faceKey] || 'rotateX(0deg) rotateY(0deg)';
+                const rot = cubeRotations[faceKey] || { x: -20, y: -25 };
+                scannerRotX = rot.x;
+                scannerRotY = rot.y;
+                cubeEl.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
             }
         }
 
@@ -3965,7 +4124,12 @@
                         <div class="scanner-subtitle">Align face in target reticle, snap or upload photo to memorize colors!</div>
                     </div>
                 </div>
-                <button class="scanner-btn-close" onclick="closeCameraScannerModal()" title="Close Scanner">✖</button>
+                <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+                    <button class="btn-scanner-back" onclick="closeCameraScannerModal()" title="Back to Cube Solving Machine">
+                        ⬅️ Back to Cube Solving Machine
+                    </button>
+                    <button class="scanner-btn-close" onclick="closeCameraScannerModal()" title="Close Scanner">✖</button>
+                </div>
             </div>
 
             <!-- STEP / FACE TABS -->
@@ -4028,6 +4192,9 @@
                     <button class="btn-scanner-action btn-flip" id="btn-flip-camera" onclick="flipCameraFacing()" title="Switch Front/Back Camera">
                         🔄 Flip Camera
                     </button>
+                    <button class="btn-scanner-action btn-scanner-return" onclick="closeCameraScannerModal()" title="Back to Cube Solving Machine">
+                        ⬅️ Back to Solver
+                    </button>
                 </div>
             </div>
 
@@ -4053,6 +4220,9 @@
                     <button class="btn-cyber btn-pink" onclick="retakeCurrentFaceScan()" style="padding: 9px 16px; font-size: 0.88em;">
                         🔄 Retake Photo
                     </button>
+                    <button class="btn-scanner-back" onclick="closeCameraScannerModal()" style="padding: 9px 16px; font-size: 0.88em;" title="Back to Cube Solving Machine">
+                        ⬅️ Back to Solver
+                    </button>
                 </div>
             </div>
 
@@ -4076,8 +4246,16 @@
                         <!-- Populated dynamically by renderScanner3DGuideCube() -->
                     </div>
                 </div>
+                <div class="solver-angle-btns" id="scanner-angle-btns" style="margin: 8px 0 10px 0;">
+                    <!-- Angle quick buttons populated by renderScannerAngleButtons() -->
+                </div>
                 <div class="scanner-3d-guide-hint">
-                    💡 The face directly facing you is the scanning target. Tap any face to switch!
+                    💡 Drag to rotate in 3D, or click any face / button to align that side in front for scanning!
+                </div>
+                <div style="margin-top: 14px; text-align: center;">
+                    <button class="btn-scanner-back" onclick="closeCameraScannerModal()" title="Back to Cube Solving Machine">
+                        ⬅️ Back to Cube Solving Machine
+                    </button>
                 </div>
             </div>
 
