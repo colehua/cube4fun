@@ -3443,7 +3443,7 @@
       sol = solve5x5FromFaces(faces);
     } else if (size === 6) {
       sol = solve6x6FromFaces(faces);
-    } else if (size === 7 || size === 8 || size === 9 || size === 10) {
+    } else if (typeof size === 'number' && size >= 7) {
       sol = solveBigCubeFromFaces(size, faces);
     } else if (size === 'pyraminx') {
       sol = solvePyraminxFromFaces(faces);

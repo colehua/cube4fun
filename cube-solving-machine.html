@@ -1425,22 +1425,22 @@
         }
 
         .scanner-mini-face.active-target {
-            border: 3px solid #00f0ff !important;
-            box-shadow: 0 0 25px rgba(0, 240, 255, 1), inset 0 0 15px rgba(0, 240, 255, 0.5) !important;
+            border: 3px solid #ffffff !important;
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.95), 0 0 38px rgba(255, 255, 255, 0.6) !important;
             animation: targetPulse 1.2s infinite alternate ease-in-out;
             z-index: 10;
         }
 
         @keyframes targetPulse {
-            0% { box-shadow: 0 0 12px rgba(0, 240, 255, 0.7), inset 0 0 8px rgba(0, 240, 255, 0.3); }
-            100% { box-shadow: 0 0 28px rgba(0, 240, 255, 1), inset 0 0 16px rgba(0, 240, 255, 0.6); }
+            0% { box-shadow: 0 0 14px rgba(255, 255, 255, 0.8), 0 0 24px rgba(255, 255, 255, 0.4); }
+            100% { box-shadow: 0 0 28px rgba(255, 255, 255, 1), 0 0 48px rgba(255, 255, 255, 0.7); }
         }
 
         .scanner-mini-face.face-F { transform: rotateY(0deg) translateZ(90px); border-color: rgba(34, 197, 94, 0.7); }
         .scanner-mini-face.face-B { transform: rotateY(180deg) translateZ(90px); border-color: rgba(59, 130, 246, 0.7); }
         .scanner-mini-face.face-R { transform: rotateY(90deg) translateZ(90px); border-color: rgba(239, 68, 68, 0.7); }
         .scanner-mini-face.face-L { transform: rotateY(-90deg) translateZ(90px); border-color: rgba(249, 115, 22, 0.7); }
-        .scanner-mini-face.face-U { transform: rotateX(90deg) translateZ(90px); border-color: rgba(255, 255, 255, 0.8); }
+        .scanner-mini-face.face-U { transform: rotateX(90deg) translateZ(90px); border-color: #ffffff; }
         .scanner-mini-face.face-D { transform: rotateX(-90deg) translateZ(90px); border-color: rgba(250, 237, 39, 0.8); }
 
         .scanner-mini-face.face-skewb {
@@ -1629,6 +1629,9 @@
                 </button>
                 <button class="solver-type-btn" id="solver-tab-10" onclick="switchSolverCube(10)">
                     10x10x10
+                </button>
+                <button class="solver-type-btn" id="solver-tab-100" onclick="switchSolverCube(100)">
+                    100x100x100
                 </button>
                 <button class="solver-type-btn" id="solver-tab-pyraminx" onclick="switchSolverCube('pyraminx')">
                     Pyraminx
@@ -1957,7 +1960,7 @@
 
         function switchSolverCube(size, skipSound = false) {
             solverSize = size;
-            const tabs = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'pyraminx', 'skewb', 'megaminx'];
+            const tabs = [2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 'pyraminx', 'skewb', 'megaminx'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`solver-tab-${t}`);
                 if (btn) btn.classList.toggle('active', t === size);
@@ -2407,6 +2410,61 @@
                     cubeEl.appendChild(faceDiv);
                 });
 
+            } else if (solverSize === 100) {
+                const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
+                faceKeys.forEach(f => {
+                    const canvas = document.createElement('canvas');
+                    canvas.className = `solver-3d-face face-${f}`;
+                    canvas.width = 200;
+                    canvas.height = 200;
+                    canvas.style.padding = '0';
+                    canvas.style.display = 'block';
+                    canvas.style.cursor = 'crosshair';
+                    canvas.title = `Face ${f} (100x100) - Click or drag to paint with ${solverColor}!`;
+
+                    const ctx = canvas.getContext('2d');
+                    const colors = solverFaces[f] || [];
+                    for (let r = 0; r < 100; r++) {
+                        for (let c = 0; c < 100; c++) {
+                            const idx = r * 100 + c;
+                            const col = colors[idx] || 'grey';
+                            ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                            ctx.fillRect(c * 2, r * 2, 2, 2);
+                        }
+                    }
+
+                    const handlePaintAt = (e) => {
+                        const rect = canvas.getBoundingClientRect();
+                        const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+                        const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
+                        if (clientX === undefined) return;
+                        const x = Math.max(0, Math.min(199, Math.floor((clientX - rect.left) * (200 / rect.width))));
+                        const y = Math.max(0, Math.min(199, Math.floor((clientY - rect.top) * (200 / rect.height))));
+                        const col = Math.min(99, Math.floor(x / 2));
+                        const row = Math.min(99, Math.floor(y / 2));
+                        paintSticker(f, row * 100 + col);
+                    };
+
+                    canvas.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        handlePaintAt(e);
+                    });
+
+                    canvas.addEventListener('pointerdown', (e) => {
+                        e.stopPropagation();
+                        isStickerMouseDown = true;
+                        handlePaintAt(e);
+                    });
+
+                    canvas.addEventListener('pointermove', (e) => {
+                        if (isStickerMouseDown) {
+                            e.stopPropagation();
+                            handlePaintAt(e);
+                        }
+                    });
+
+                    cubeEl.appendChild(canvas);
+                });
             } else {
                 const N = solverSize;
                 const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
@@ -2651,6 +2709,84 @@
                     container.appendChild(faceEl);
                 });
 
+            } else if (solverSize === 100) {
+                container.style.gridTemplateColumns = 'repeat(4, auto)';
+                container.style.gridTemplateRows = 'repeat(3, auto)';
+
+                const faceOrder = [
+                    { key: 'U', name: 'Top (U)' },
+                    { key: 'L', name: 'Left (L)' },
+                    { key: 'F', name: 'Front (F)' },
+                    { key: 'R', name: 'Right (R)' },
+                    { key: 'B', name: 'Back (B)' },
+                    { key: 'D', name: 'Bottom (D)' }
+                ];
+
+                faceOrder.forEach(item => {
+                    const faceEl = document.createElement('div');
+                    faceEl.className = `net-face net-face-${item.key}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'face-title';
+                    title.textContent = item.name + ' 🎨 (100x100)';
+                    title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
+                    title.style.cursor = 'pointer';
+                    title.addEventListener('click', () => fillWholeFace(item.key));
+                    faceEl.appendChild(title);
+
+                    const canvas = document.createElement('canvas');
+                    canvas.className = `net-canvas net-canvas-${item.key}`;
+                    canvas.width = 160;
+                    canvas.height = 160;
+                    canvas.style.cursor = 'crosshair';
+                    canvas.style.display = 'block';
+                    canvas.style.margin = '4px auto';
+                    canvas.style.borderRadius = '4px';
+                    canvas.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+
+                    const ctx = canvas.getContext('2d');
+                    const colors = solverFaces[item.key] || [];
+                    const step = 160 / 100;
+                    for (let r = 0; r < 100; r++) {
+                        for (let c = 0; c < 100; c++) {
+                            const idx = r * 100 + c;
+                            const col = colors[idx] || 'grey';
+                            ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                            ctx.fillRect(c * step, r * step, step + 0.1, step + 0.1);
+                        }
+                    }
+
+                    const handleNetPaint = (e) => {
+                        const rect = canvas.getBoundingClientRect();
+                        const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+                        const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
+                        if (clientX === undefined) return;
+                        const x = Math.max(0, Math.min(159, Math.floor((clientX - rect.left) * (160 / rect.width))));
+                        const y = Math.max(0, Math.min(159, Math.floor((clientY - rect.top) * (160 / rect.height))));
+                        const col = Math.min(99, Math.floor(x / 1.6));
+                        const row = Math.min(99, Math.floor(y / 1.6));
+                        paintSticker(item.key, row * 100 + col);
+                    };
+
+                    canvas.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        handleNetPaint(e);
+                    });
+                    canvas.addEventListener('pointerdown', (e) => {
+                        e.stopPropagation();
+                        isStickerMouseDown = true;
+                        handleNetPaint(e);
+                    });
+                    canvas.addEventListener('pointermove', (e) => {
+                        if (isStickerMouseDown) {
+                            e.stopPropagation();
+                            handleNetPaint(e);
+                        }
+                    });
+
+                    faceEl.appendChild(canvas);
+                    container.appendChild(faceEl);
+                });
             } else {
                 container.style.gridTemplateColumns = 'repeat(4, auto)';
                 container.style.gridTemplateRows = 'repeat(3, auto)';
@@ -2736,6 +2872,29 @@
             if (!solverFaces || !solverFaces[faceKey]) return;
             solverFaces[faceKey][index] = solverColor;
             const hex = PALETTE_COLORS[solverColor] ? PALETTE_COLORS[solverColor].hex : solverColor;
+
+            if (solverSize === 100) {
+                const c3d = document.querySelector(`canvas.solver-3d-face.face-${faceKey}`);
+                if (c3d) {
+                    const ctx = c3d.getContext('2d');
+                    const col = index % 100;
+                    const row = Math.floor(index / 100);
+                    ctx.fillStyle = hex;
+                    ctx.fillRect(col * 2, row * 2, 2, 2);
+                }
+                const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
+                if (c2d) {
+                    const ctx = c2d.getContext('2d');
+                    const col = index % 100;
+                    const row = Math.floor(index / 100);
+                    const step = 160 / 100;
+                    ctx.fillStyle = hex;
+                    ctx.fillRect(col * step, row * step, step + 0.1, step + 0.1);
+                }
+                playSound('turn');
+                updateColorBadgesAndBanner();
+                return;
+            }
 
             const st3d = document.querySelector(`.solver-3d-face.face-${faceKey} .solver-3d-sticker[data-index="${index}"], .solver-3d-face.megaminx-${faceKey} .mega-polygon[data-index="${index}"]`);
             if (st3d) {
@@ -3285,7 +3444,7 @@
                     });
                 }
             } else {
-                const N = solverSize;
+                const N = (solverSize === 100) ? 10 : solverSize;
                 const cell = side / N;
                 for (let r = 0; r < N; r++) {
                     for (let c = 0; c < N; c++) {
@@ -3470,12 +3629,34 @@
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.drawImage(sourceEl, 0, 0, srcW, srcH);
 
-                const samplePoints = getSamplePoints(srcW, srcH);
-                samplePoints.forEach(pt => {
-                    const rgb = getAverageRGB(ctx, pt.x, pt.y, 8);
-                    const col = classifyColor(rgb.r, rgb.g, rgb.b, activeColors);
-                    scannerDetectedColors.push(col);
-                });
+                if (solverSize === 100) {
+                    const side = Math.min(srcW, srcH) * 0.62;
+                    const x0 = (srcW - side) / 2;
+                    const y0 = (srcH - side) / 2;
+                    const cell = side / 100;
+                    const imgData = ctx.getImageData(0, 0, srcW, srcH).data;
+
+                    for (let r = 0; r < 100; r++) {
+                        const py = Math.min(srcH - 1, Math.max(0, Math.round(y0 + (r + 0.5) * cell)));
+                        const rowOffset = py * srcW * 4;
+                        for (let c = 0; c < 100; c++) {
+                            const px = Math.min(srcW - 1, Math.max(0, Math.round(x0 + (c + 0.5) * cell)));
+                            const offset = rowOffset + px * 4;
+                            const red = imgData[offset];
+                            const green = imgData[offset + 1];
+                            const blue = imgData[offset + 2];
+                            const col = classifyColor(red, green, blue, activeColors);
+                            scannerDetectedColors.push(col);
+                        }
+                    }
+                } else {
+                    const samplePoints = getSamplePoints(srcW, srcH);
+                    samplePoints.forEach(pt => {
+                        const rgb = getAverageRGB(ctx, pt.x, pt.y, 8);
+                        const col = classifyColor(rgb.r, rgb.g, rgb.b, activeColors);
+                        scannerDetectedColors.push(col);
+                    });
+                }
             } else {
                 // Graceful fallback if camera is blocked/inactive and no photo uploaded
                 const faceList = getFaceListForScanner();
@@ -3734,6 +3915,20 @@
                     dot.title = `Sticker ${idx}`;
                     gridEl.appendChild(dot);
                 });
+            } else if (solverSize === 100) {
+                const N = 10;
+                gridEl.style.display = 'grid';
+                gridEl.style.position = 'static';
+                gridEl.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+                gridEl.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+                for (let i = 0; i < N * N; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'scanner-grid-cell';
+                    const dot = document.createElement('div');
+                    dot.className = 'scanner-cell-dot';
+                    cell.appendChild(dot);
+                    gridEl.appendChild(cell);
+                }
             } else {
                 const N = solverSize;
                 gridEl.style.display = 'grid';
@@ -3835,6 +4030,24 @@
                     };
                     container.appendChild(cell);
                 });
+            } else if (solverSize === 100) {
+                container.style.display = 'flex';
+                container.style.justifyContent = 'center';
+                const canvas = document.createElement('canvas');
+                canvas.width = 180;
+                canvas.height = 180;
+                canvas.style.borderRadius = '8px';
+                canvas.style.border = '2px solid #38bdf8';
+                const ctx = canvas.getContext('2d');
+                for (let r = 0; r < 100; r++) {
+                    for (let c = 0; c < 100; c++) {
+                        const idx = r * 100 + c;
+                        const col = scannerDetectedColors[idx] || 'white';
+                        ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                        ctx.fillRect(c * 1.8, r * 1.8, 1.8, 1.8);
+                    }
+                }
+                container.appendChild(canvas);
             } else {
                 const N = solverSize;
                 container.style.display = 'grid';
@@ -4050,51 +4263,81 @@
             } else {
                 cubeEl.className = 'scanner-mini-3d-cube mini-cube';
                 const standardFaces = [
-                    { key: 'F', name: 'Front (Green / F)' },
-                    { key: 'R', name: 'Right (Red / R)' },
-                    { key: 'B', name: 'Back (Blue / B)' },
-                    { key: 'L', name: 'Left (Orange / L)' },
-                    { key: 'U', name: 'Top (White / U)' },
-                    { key: 'D', name: 'Bottom (Yellow / D)' }
+                    { key: 'F', name: 'Front (Green / F)', guideCol: 'green' },
+                    { key: 'R', name: 'Right (Red / R)', guideCol: 'red' },
+                    { key: 'B', name: 'Back (Blue / B)', guideCol: 'blue' },
+                    { key: 'L', name: 'Left (Orange / L)', guideCol: 'orange' },
+                    { key: 'U', name: 'Top (White / U)', guideCol: 'white' },
+                    { key: 'D', name: 'Bottom (Yellow / D)', guideCol: 'yellow' }
                 ];
 
                 const N = typeof solverSize === 'number' ? solverSize : 3;
-                let gap = 4;
-                let radius = 6;
-                if (N === 2) { gap = 6; radius = 8; }
-                else if (N === 3) { gap = 4; radius = 6; }
-                else if (N === 4) { gap = 3; radius = 4; }
-                else if (N === 5) { gap = 2; radius = 3; }
-                else if (N === 6) { gap = 2; radius = 2; }
-                else if (N === 7) { gap = 1.5; radius = 1.5; }
-                else if (N === 8) { gap = 1.2; radius = 1; }
-                else if (N === 9) { gap = 1; radius = 1; }
-                else if (N === 10) { gap = 0.8; radius = 0.5; }
 
-                standardFaces.forEach(f => {
-                    const faceDiv = document.createElement('div');
-                    faceDiv.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
-                    faceDiv.dataset.face = f.key;
-                    faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
-                    faceDiv.onclick = () => setScannerFace(f.key);
+                if (N === 100) {
+                    standardFaces.forEach(f => {
+                        const canvas = document.createElement('canvas');
+                        canvas.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
+                        canvas.dataset.face = f.key;
+                        canvas.width = 180;
+                        canvas.height = 180;
+                        canvas.style.padding = '0';
+                        canvas.style.display = 'block';
+                        canvas.title = `Face ${f.name} - Tap to select for scanning`;
+                        canvas.onclick = () => setScannerFace(f.key);
 
-                    faceDiv.style.gap = `${gap}px`;
-                    faceDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
-                    faceDiv.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+                        const ctx = canvas.getContext('2d');
+                        const isMemorized = !!scannerFacesDone[f.key];
+                        const colors = solverFaces[f.key] || [];
 
-                    const totalStickers = N * N;
-                    const colors = solverFaces[f.key] || new Array(totalStickers).fill('grey');
-                    for (let i = 0; i < totalStickers; i++) {
-                        const col = colors[i] || 'grey';
-                        const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#64748b';
-                        const st = document.createElement('div');
-                        st.className = 'scanner-mini-sticker';
-                        st.style.borderRadius = `${radius}px`;
-                        st.style.backgroundColor = hex;
-                        faceDiv.appendChild(st);
-                    }
-                    cubeEl.appendChild(faceDiv);
-                });
+                        for (let r = 0; r < 100; r++) {
+                            for (let c = 0; c < 100; c++) {
+                                const idx = r * 100 + c;
+                                const col = (isMemorized && colors[idx] && colors[idx] !== 'grey') ? colors[idx] : f.guideCol;
+                                ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#ffffff';
+                                ctx.fillRect(c * 1.8, r * 1.8, 1.8, 1.8);
+                            }
+                        }
+                        cubeEl.appendChild(canvas);
+                    });
+                } else {
+                    let gap = 4;
+                    let radius = 6;
+                    if (N === 2) { gap = 6; radius = 8; }
+                    else if (N === 3) { gap = 4; radius = 6; }
+                    else if (N === 4) { gap = 3; radius = 4; }
+                    else if (N === 5) { gap = 2; radius = 3; }
+                    else if (N === 6) { gap = 2; radius = 2; }
+                    else if (N === 7) { gap = 1.5; radius = 1.5; }
+                    else if (N === 8) { gap = 1.2; radius = 1; }
+                    else if (N === 9) { gap = 1; radius = 1; }
+                    else if (N === 10) { gap = 0.8; radius = 0.5; }
+
+                    standardFaces.forEach(f => {
+                        const faceDiv = document.createElement('div');
+                        faceDiv.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
+                        faceDiv.dataset.face = f.key;
+                        faceDiv.title = `Face ${f.name} - Tap to select for scanning`;
+                        faceDiv.onclick = () => setScannerFace(f.key);
+
+                        faceDiv.style.gap = `${gap}px`;
+                        faceDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+                        faceDiv.style.gridTemplateRows = `repeat(${N}, 1fr)`;
+
+                        const totalStickers = N * N;
+                        const isMemorized = !!scannerFacesDone[f.key];
+                        const colors = solverFaces[f.key] || [];
+                        for (let i = 0; i < totalStickers; i++) {
+                            const col = (isMemorized && colors[i] && colors[i] !== 'grey') ? colors[i] : f.guideCol;
+                            const hex = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#ffffff';
+                            const st = document.createElement('div');
+                            st.className = 'scanner-mini-sticker';
+                            st.style.borderRadius = `${radius}px`;
+                            st.style.backgroundColor = hex;
+                            faceDiv.appendChild(st);
+                        }
+                        cubeEl.appendChild(faceDiv);
+                    });
+                }
             }
         }
 
