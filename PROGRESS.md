@@ -1,62 +1,58 @@
 # Summary
 - **What changed**:
-  1. **Fixed Modal Scroll & Top Cutoff Bug in Cube Solving Machine**:
-     - Identified root cause of the unscrollable top in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html): flex centering (`align-items: center`) pushed `.camera-scanner-dialog` to a negative top coordinate (`-320.5px`) on viewport heights smaller than the modal, rendering the header, close button, and return button offscreen and unscrollable.
-     - Changed `.camera-scanner-modal` to `align-items: flex-start; justify-content: center; overflow-y: auto; overscroll-behavior: contain; padding: 24px 16px;`.
-     - Added `margin: auto;` to `.camera-scanner-dialog` (centers when space permits, remains accessible from `top: 24px` when overflowing).
-     - Added `modal.scrollTop = 0; document.body.style.overflow = 'hidden';` on open and restored on close. Added backdrop click-to-close.
-  2. **Audited and Fixed All Modals Across All Website Pages**:
-     - Fixed 3D Animator modal in [algorithms.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/algorithms.html).
-     - Fixed 3D Pattern Video modal in [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html).
-     - Fixed 3D Scramble modal and Admin login modal in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html).
-     - Fixed Set Goal modal and Celebration modal in [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html).
-     - Fixed Composer modal and Admin modal in [news.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/news.html).
-     - Fixed Admin modal in [blog.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/blog.html) and [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html).
-     - Added universal modal scroll safety rules to [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) as a site-wide safeguard.
+  1. **Immediate Face Memorization on Picture Snap & Upload**:
+     - Updated `captureAndAnalyzeFrame()` in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) to immediately store scanned colors into `solverFaces[scannerCurrentFace]` and mark `scannerFacesDone[scannerCurrentFace] = true`.
+     - Scanned face stickers now reflect immediately on the 3D Guide Cube, solver 3D cube, and 2D net without requiring extra confirmation clicks.
+     - Provided a graceful fallback for environments where camera permissions are blocked or inactive, capturing face presets without blocking alert popups.
+  2. **Smooth, Slow 3D Cube Rotation to the Next Face**:
+     - Configured `.scanner-mini-3d-cube` with `1.6s` transition timing using `cubic-bezier(0.25, 1, 0.5, 1)` for deliberate and satisfying cube turning.
+     - Implemented shortest-turn angle calculation for Y (`while (targetY - scannerRotY > 180) targetY -= 360; while (targetY - scannerRotY < -180) targetY += 360;`) to eliminate unwanted 270° or 360° backwards spins.
+     - Added a rotation lock (`isScannerRotating`) to prevent rapid click conflicts while the cube is turning.
+  3. **Interactive Step-by-Step HUD Feedback**:
+     - Status ticker updates dynamically across three phases:
+       - Phase 1 (Capture): `✅ [FACE] MEMORIZED! ROTATING CUBE TO [NEXT FACE]...`
+       - Phase 2 (Turn): `🔄 TURNING CUBE TO [NEXT FACE]...`
+       - Phase 3 (Ready): `READY • NOW SCAN [NEXT FACE] (ALIGN IN TARGET)`
+     - Once all 6 faces are memorized, the cube turns to an isometric showcase angle, unlocks the `#scanner-all-done-banner`, and triggers victory sound.
 - **How verified**:
-  - Live Chrome DevTools MCP evaluated across all 7 pages with modals:
-    - [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html): Verified `dialogTop` went from `-320.5px` to `+75px`, `headerTop: 97px`, scrolled down 300px and back up to 0px cleanly, and return button closed modal.
-    - [algorithms.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/algorithms.html): Verified `openAnimatorModal` positioned `containerTop: 125.5px`, title and close button fully visible.
-    - [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html): Verified `openPattern3dModal` positioned `containerTop: 66.57px`, title and close button fully visible.
-    - [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html): Verified `.cs-modal` (`cardTop: 30px`) and `#admin-modal` (`adminBoxTop: 79px`) both visible.
-    - [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html): Verified `openSetGoalModal` positioned `boxTop: 79px`, close button visible.
-    - [news.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/news.html): Verified `composer-card` positioned `cardTop: 24px`, close button visible.
-    - [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html): Verified `#admin-modal` positioned `boxTop: 57.36px`, close button visible.
-    - Checked console messages: 0 errors across all tests.
+  - Live Chrome DevTools MCP evaluated on Page 4 with multi-step asynchronous tests:
+    - Initial modal open verified at face `U` (`rotateX(-65deg) rotateY(-25deg)`).
+    - Simulated snap for face `U`: verified `scannerFacesDone.U = true`, 400ms transition trigger, 1.6s rotation to face `F` (`rotateX(-20deg) rotateY(-25deg)`).
+    - Simulated snap for face `F`: verified transition to face `R` (`rotateX(-20deg) rotateY(-115deg)`).
+    - Full sequence test: verified sequential transitions through R, B, L, and D, verified shortest turn angle normalization on D (`-385deg`), and verified all 6 faces marked done with showcase rotation (`rotateX(-25deg) rotateY(-45deg)`).
+    - Executed `finishScannerAndSolve()`: verified solver closed modal and displayed solved banner.
+    - Checked console messages: 0 errors throughout all tests.
 - **What to review**:
-  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html), click `📸 Take Picture to Fill Colors`, and verify the header and title are completely visible from the top and the modal scrolls smoothly.
-  - Review HTML report at `C:\Users\S\ClaudeReports\how-to-solve-rubiks-cube\2026-11-17_2022_modal_scroll_fix.html`.
+  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html), click `📸 Take Picture to Fill Colors`, and click `📸 Take Picture & Memorize Face`.
+  - Notice the face colors are memorized immediately and the 3D Guide Cube slowly and smoothly turns to the next face over 1.6 seconds.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Fix top cutoff and unscrollable header bug on camera scanner modal in cube-solving-machine.html.
-2. Audit all other website pages for similar modal centering/scroll bugs and fix them.
+1. When taking a picture or uploading a photo in camera scanner, memorize colors immediately.
+2. Slowly rotate 3D cube to next unfinished face with smooth easing.
 3. Verify live in browser with zero errors.
 4. Commit and push all changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Identify root cause in cube-solving-machine.html (flex align-items: center negative offset)
-- [x] Fix camera scanner modal CSS and open/close scroll behavior
-- [x] Audit all project files for modals and overlays with similar patterns
-- [x] Fix algorithms.html 3D animator modal
-- [x] Fix challenges.html 3D pattern video modal
-- [x] Fix timer.html scramble video modal and admin modal
-- [x] Fix practice-speed.html set-goal modal and celebration modal
-- [x] Fix news.html composer modal and admin modal
-- [x] Fix blog.html admin modal and index.html admin modal
-- [x] Add site-wide universal modal scroll safety rules in theme.css
-- [x] Verify live across all pages using Chrome DevTools MCP
-- [x] Generate discardable HTML review report for >5 changed files
+- [x] Update CSS transition duration on .scanner-mini-3d-cube to 1.6s
+- [x] Update updateScanner3DGuideRotation with shortest-path angle normalization
+- [x] Update captureAndAnalyzeFrame to memorize face immediately and trigger slow rotation
+- [x] Update setScannerFace to pass 1.6s duration
+- [x] Provide graceful fallback for blocked camera feeds
+- [x] Add dynamic HUD status feedback during and after rotation
+- [x] Add showcase rotation and banner upon completing all faces
+- [x] Verify in Chrome DevTools MCP with live test script
 - [x] Commit and push changes to origin main
 
 Assumptions:
-- All modals should start scrolled to the top when opened, with headers and close buttons immediately visible.
-- Modals taller than viewport must allow standard top-to-bottom scrolling without negative offsets.
+- Transition duration of 1.6s provides a slow, clearly observable rotation without feeling sluggish.
+- Normalizing target angle to within ±180° of current rotation guarantees the cube always turns via the shortest route.
 
 Blockers (what I need to do): None.
 Found, not done: None.
 Log (newest first, one line each):
+- 2026-11-17: Implemented auto face memorization and slow 1.6s 3D cube rotation after snapping picture in scanner.
 - 2026-11-17: Fixed modal scroll and top cutoff across 8 pages and theme.css, verified in Chrome DevTools MCP.

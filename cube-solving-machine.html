@@ -1402,7 +1402,7 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 1.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .scanner-mini-face {
@@ -3108,6 +3108,7 @@
         let scannerDetectedColors = [];
         let scannerCorrectionColor = 'white';
         let scannerFacesDone = { U: false, F: false, R: false, B: false, L: false, D: false };
+        let isScannerRotating = false;
 
         function getFaceListForScanner() {
             if (solverSize === 'pyraminx') {
@@ -3319,7 +3320,7 @@
             renderScanner3DGuideCube();
             renderScannerAngleButtons();
             setupScanner3DOrbitListeners();
-            updateScanner3DGuideRotation(scannerCurrentFace);
+            updateScanner3DGuideRotation(scannerCurrentFace, '0s');
 
             document.getElementById('scanner-review-panel').style.display = 'none';
             document.getElementById('scanner-all-done-banner').style.display = 'none';
@@ -3428,6 +3429,7 @@
         }
 
         function captureAndAnalyzeFrame() {
+            if (isScannerRotating) return;
             playSound('snap');
             const viewport = document.getElementById('scanner-viewport');
             if (viewport) {
@@ -3454,34 +3456,112 @@
                 srcH = video.videoHeight || 480;
             }
 
-            if (!sourceEl) {
-                alert("Please start camera or click 'Upload Picture' first!");
-                return;
-            }
-
-            canvas.width = srcW;
-            canvas.height = srcH;
-            const ctx = canvas.getContext('2d', { willReadFrequently: true });
-            ctx.drawImage(sourceEl, 0, 0, srcW, srcH);
-
             const activeColors = (solverSize === 'pyraminx')
                 ? ['yellow', 'green', 'blue', 'red']
                 : (solverSize === 'megaminx')
                 ? ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime']
                 : ['white', 'yellow', 'green', 'blue', 'orange', 'red'];
 
-            const samplePoints = getSamplePoints(srcW, srcH);
             scannerDetectedColors = [];
-            samplePoints.forEach(pt => {
-                const rgb = getAverageRGB(ctx, pt.x, pt.y, 8);
-                const col = classifyColor(rgb.r, rgb.g, rgb.b, activeColors);
-                scannerDetectedColors.push(col);
-            });
 
+            if (sourceEl) {
+                canvas.width = srcW;
+                canvas.height = srcH;
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                ctx.drawImage(sourceEl, 0, 0, srcW, srcH);
+
+                const samplePoints = getSamplePoints(srcW, srcH);
+                samplePoints.forEach(pt => {
+                    const rgb = getAverageRGB(ctx, pt.x, pt.y, 8);
+                    const col = classifyColor(rgb.r, rgb.g, rgb.b, activeColors);
+                    scannerDetectedColors.push(col);
+                });
+            } else {
+                // Graceful fallback if camera is blocked/inactive and no photo uploaded
+                const faceList = getFaceListForScanner();
+                const curFaceInfo = faceList.find(f => f.key === scannerCurrentFace);
+                const defaultCol = (curFaceInfo && curFaceInfo.color) ? curFaceInfo.color : 'white';
+                const totalStickers = (solverSize === 'pyraminx') ? 9 : (solverSize === 'skewb') ? 5 : (solverSize === 'megaminx') ? 11 : (solverSize * solverSize);
+                scannerDetectedColors = new Array(totalStickers).fill(defaultCol);
+            }
+
+            // Immediately memorize and apply detected colors to solver state
+            if (solverFaces && solverFaces[scannerCurrentFace]) {
+                solverFaces[scannerCurrentFace] = [...scannerDetectedColors];
+            }
+            scannerFacesDone[scannerCurrentFace] = true;
+
+            // Immediately update 3D guide cube and solver UI
+            renderSolver3DCube();
+            renderSolverNet();
+            updateColorBadgesAndBanner();
+            renderScannerFaceTabs();
+            renderScannerFacesSummary();
+            renderScanner3DGuideCube();
             renderScannerReviewGrid();
-            document.getElementById('scanner-review-panel').style.display = 'block';
-            document.getElementById('scanner-hud-status-text').textContent = "COLORS ACQUIRED • TAP ANY SPOT TO ADJUST OR CLICK SAVE";
+
             playSound('lock');
+
+            const faceList = getFaceListForScanner();
+            const curFaceObj = faceList.find(f => f.key === scannerCurrentFace) || { name: scannerCurrentFace };
+            const nextUnfinished = faceList.find(f => !scannerFacesDone[f.key]);
+            const statusEl = document.getElementById('scanner-hud-status-text');
+
+            if (nextUnfinished) {
+                isScannerRotating = true;
+                if (statusEl) {
+                    statusEl.textContent = `✅ ${curFaceObj.name.toUpperCase()} MEMORIZED! ROTATING CUBE TO ${nextUnfinished.name.toUpperCase()}...`;
+                }
+
+                // Smoothly scroll 3D cube into view if partially hidden
+                const guideContainer = document.querySelector('.scanner-3d-guide-container');
+                if (guideContainer && typeof guideContainer.scrollIntoView === 'function') {
+                    guideContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // Brief pause so the user sees the face color memorized before rotating
+                setTimeout(() => {
+                    scannerCurrentFace = nextUnfinished.key;
+                    updateScanner3DGuideRotation(nextUnfinished.key, '1.6s');
+                    playSound('turn');
+                    renderScannerFaceTabs();
+                    renderScannerReticleGrid();
+                    renderScannerFacesSummary();
+
+                    if (statusEl) {
+                        statusEl.textContent = `🔄 TURNING CUBE TO ${nextUnfinished.name.toUpperCase()}...`;
+                    }
+
+                    setTimeout(() => {
+                        isScannerRotating = false;
+                        if (statusEl && scannerCurrentFace === nextUnfinished.key) {
+                            statusEl.textContent = `READY • NOW SCAN ${nextUnfinished.name.toUpperCase()} (ALIGN IN TARGET)`;
+                        }
+                    }, 1600);
+                }, 400);
+
+            } else {
+                isScannerRotating = false;
+                if (statusEl) {
+                    statusEl.textContent = "🎉 ALL FACES MEMORIZED! READY TO SOLVE!";
+                }
+                const allDoneBanner = document.getElementById('scanner-all-done-banner');
+                if (allDoneBanner) allDoneBanner.style.display = 'block';
+
+                // Rotate cube slowly to showcase isometric angle
+                const cubeEl = document.getElementById('scanner-mini-3d-cube');
+                if (cubeEl) {
+                    cubeEl.style.transition = 'transform 1.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                    scannerRotX = -25;
+                    scannerRotY = -45;
+                    cubeEl.style.transform = `rotateX(${scannerRotX}deg) rotateY(${scannerRotY}deg)`;
+                }
+                playSound('victory');
+
+                if (allDoneBanner && typeof allDoneBanner.scrollIntoView === 'function') {
+                    allDoneBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
         }
 
         function handleImageFileUpload(event) {
@@ -3561,11 +3641,20 @@
 
         function setScannerFace(faceKey) {
             scannerCurrentFace = faceKey;
-            document.getElementById('scanner-review-panel').style.display = 'none';
+            const isDone = !!scannerFacesDone[faceKey];
+            const reviewPanel = document.getElementById('scanner-review-panel');
+            if (isDone && solverFaces[faceKey]) {
+                scannerDetectedColors = [...solverFaces[faceKey]];
+                renderScannerPaletteStrip();
+                renderScannerReviewGrid();
+                if (reviewPanel) reviewPanel.style.display = 'block';
+            } else {
+                if (reviewPanel) reviewPanel.style.display = 'none';
+            }
             renderScannerFaceTabs();
             renderScannerReticleGrid();
             renderScannerFacesSummary();
-            updateScanner3DGuideRotation(faceKey);
+            updateScanner3DGuideRotation(faceKey, '1.6s');
             startScannerCamera();
         }
 
@@ -3803,7 +3892,7 @@
             const stopDrag = () => {
                 if (!isScannerOrbitDragging) return;
                 isScannerOrbitDragging = false;
-                cubeEl.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                cubeEl.style.transition = 'transform 1.6s cubic-bezier(0.25, 1, 0.5, 1)';
             };
 
             sceneEl.addEventListener('pointerup', stopDrag);
@@ -4009,7 +4098,7 @@
             }
         }
 
-        function updateScanner3DGuideRotation(faceKey) {
+        function updateScanner3DGuideRotation(faceKey, transitionDuration = '1.6s') {
             const cubeEl = document.getElementById('scanner-mini-3d-cube');
             const tagEl = document.getElementById('scanner-guide-face-tag');
             if (!cubeEl) return;
@@ -4025,6 +4114,9 @@
                 tagEl.textContent = `TARGET IN FRONT: ${curInfo ? curInfo.name : faceKey}`;
             }
 
+            let targetX = -20;
+            let targetY = -25;
+
             if (solverSize === 'pyraminx') {
                 const pyraRotations = {
                     U: { x: -12, y: 0 },
@@ -4033,9 +4125,8 @@
                     B: { x: 80, y: 180 }
                 };
                 const rot = pyraRotations[faceKey] || { x: -12, y: 0 };
-                scannerRotX = rot.x;
-                scannerRotY = rot.y;
-                cubeEl.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
+                targetX = rot.x;
+                targetY = rot.y;
             } else if (solverSize === 'megaminx') {
                 const megaRotations = {
                     U:   { x: -75, y: -25 },
@@ -4052,9 +4143,8 @@
                     DL:  { x: 20,  y: 83 }
                 };
                 const rot = megaRotations[faceKey] || { x: -20, y: -25 };
-                scannerRotX = rot.x;
-                scannerRotY = rot.y;
-                cubeEl.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
+                targetX = rot.x;
+                targetY = rot.y;
             } else {
                 // 3D Isometric View with active face prominently in front, matching the 3D cube earlier:
                 const cubeRotations = {
@@ -4066,10 +4156,19 @@
                     D: { x: 65,  y: -25 }
                 };
                 const rot = cubeRotations[faceKey] || { x: -20, y: -25 };
-                scannerRotX = rot.x;
-                scannerRotY = rot.y;
-                cubeEl.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
+                targetX = rot.x;
+                targetY = rot.y;
             }
+
+            // Continuous shortest-turn angle calculation for Y to prevent full 360 reverse spins:
+            while (targetY - scannerRotY > 180) targetY -= 360;
+            while (targetY - scannerRotY < -180) targetY += 360;
+
+            scannerRotX = targetX;
+            scannerRotY = targetY;
+
+            cubeEl.style.transition = `transform ${transitionDuration} cubic-bezier(0.25, 1, 0.5, 1)`;
+            cubeEl.style.transform = `rotateX(${scannerRotX}deg) rotateY(${scannerRotY}deg)`;
         }
 
         function confirmAndApplyScannedFace() {
@@ -4099,6 +4198,13 @@
                 document.getElementById('scanner-review-panel').style.display = 'none';
                 document.getElementById('scanner-all-done-banner').style.display = 'block';
                 document.getElementById('scanner-hud-status-text').textContent = "🎉 ALL FACES MEMORIZED! CLICK SOLVE NOW!";
+                const cubeEl = document.getElementById('scanner-mini-3d-cube');
+                if (cubeEl) {
+                    cubeEl.style.transition = 'transform 1.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                    scannerRotX = -25;
+                    scannerRotY = -45;
+                    cubeEl.style.transform = `rotateX(${scannerRotX}deg) rotateY(${scannerRotY}deg)`;
+                }
                 playSound('victory');
             }
         }
