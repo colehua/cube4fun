@@ -325,6 +325,47 @@
             }
         }
 
+        /* Comments Network Status Indicator */
+        .comment-network-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'DynaPuff', cursive, sans-serif;
+            font-size: 0.85em;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 2px solid #0284c7;
+            background: #e0f2fe;
+            color: #0369a1;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+        .comment-network-badge.offline {
+            border-color: #dc2626 !important;
+            background: #fee2e2 !important;
+            color: #b91c1c !important;
+            animation: pulseNetWarning 1.5s infinite;
+        }
+        .comment-network-note {
+            font-family: 'Comic Neue', cursive, sans-serif;
+            font-weight: bold;
+            font-size: 0.95em;
+            transition: color 0.2s ease;
+        }
+        .comment-network-note.online {
+            color: #0284c7;
+        }
+        .comment-network-note.offline {
+            color: #dc2626 !important;
+            font-weight: 800;
+        }
+        @keyframes pulseNetWarning {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* GLOBAL SITE FOOTER */
         .site-footer {
             background: #1e272e;
@@ -2956,8 +2997,11 @@
 
         <!-- COMMENTS SECTION -->
         <div class="text-section" style="margin-top: 40px; box-sizing: border-box;">
-            <h2 class="black-bubbly" style="font-size: 2.2em; text-align: center; margin-bottom: 5px;">💬 Community Comments</h2>
-            <p style="font-size: 1.15em; color: #666; text-align: center; margin-top: 0; margin-bottom: 25px;">Ask a question, share your record, or leave a message for Cole! 👇</p>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 5px;">
+                <h2 class="black-bubbly" style="font-size: 2.2em; text-align: center; margin: 0;">💬 Community Comments</h2>
+                <span id="comment-network-badge" class="comment-network-badge online" title="Network status: ready to send/receive comments">need network</span>
+            </div>
+            <p style="font-size: 1.15em; color: #666; text-align: center; margin-top: 5px; margin-bottom: 25px;">Ask a question, share your record, or leave a message for Cole! 👇</p>
             
             <!-- Comment Form -->
             <form id="comment-form" style="display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 0 auto 30px auto; box-sizing: border-box;">
@@ -2973,6 +3017,9 @@
                     <button type="submit" class="cube-button" style="background-color: #00E5FF; color: #1a1a1a; cursor: pointer; border-radius: 15px; padding: 12px 30px; font-size: 1.3em; outline: none;">
                         📣 Post Comment!
                     </button>
+                    <div id="comment-network-note" class="comment-network-note online" style="margin-top: 8px;">
+                        need network
+                    </div>
                 </div>
             </form>
 
@@ -3713,6 +3760,10 @@
                 document.querySelectorAll('.reply-form').forEach(form => {
                     form.addEventListener('submit', async function(e) {
                         e.preventDefault();
+                        if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
+                            alert("WIFI needed");
+                            return;
+                        }
                         const parentId = this.getAttribute('data-parent-id');
                         const nameInput = this.querySelector('.reply-name-input');
                         const textInput = this.querySelector('.reply-text-input');
@@ -3747,9 +3798,35 @@
                 );
             }
 
+            // Network Status Checker for Comments ("need network" / "WIFI needed")
+            function updateCommentNetworkStatus() {
+                const isOnline = (typeof navigator.onLine === 'boolean') ? navigator.onLine : true;
+                const badge = document.getElementById('comment-network-badge');
+                const note = document.getElementById('comment-network-note');
+                const text = isOnline ? "need network" : "WIFI needed";
+
+                if (badge) {
+                    badge.textContent = text;
+                    badge.className = 'comment-network-badge ' + (isOnline ? 'online' : 'offline');
+                    badge.title = isOnline ? 'Network connected' : 'No network connection - WIFI needed';
+                }
+                if (note) {
+                    note.textContent = text;
+                    note.className = 'comment-network-note ' + (isOnline ? 'online' : 'offline');
+                }
+            }
+
+            window.addEventListener('online', updateCommentNetworkStatus);
+            window.addEventListener('offline', updateCommentNetworkStatus);
+            updateCommentNetworkStatus();
+
             if (commentForm) {
                 commentForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
+                    if (typeof navigator.onLine === 'boolean' && !navigator.onLine) {
+                        alert("WIFI needed");
+                        return;
+                    }
                     const name = commentNameInput.value.trim();
                     const text = commentTextInput.value.trim();
 

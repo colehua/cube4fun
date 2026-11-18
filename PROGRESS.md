@@ -1,64 +1,57 @@
 # Summary
 - **What changed**:
-  1. **Fixed Megaminx 3D Dodecahedron Geometry & Visuals**:
-     - Corrected CSS 3D transforms for all 12 faces in both main 3D scene (`.solver-3d-face.face-megaminx`) and camera scanner guide cube (`.scanner-mini-face.face-megaminx`) in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-     - Applied exact mathematical regular dodecahedron inradius: `translateZ(96.87px)` for 160px pentagons (`84.76px` for 140px scanner mini faces) instead of the previous incorrect `82px` and `72px`.
-     - Inverted top-ring faces with `rotateZ(180deg)` so flat pentagon edges mesh with adjacent faces instead of stabbing through each other with apex points.
-     - Fixed bottom-ring face azimuths (`DR: -36°`, `DBR: -108°`, `DL: -180°`, `DBL: -252°`, `DF: -324°`) which were previously backwards by 180°.
-     - Enabled `backface-visibility: hidden !important;` on all 12 Megaminx faces to eliminate transparent ghosting and back-face visual artifacts.
-  2. **Fixed Megaminx Turn Permutations & Engine**:
-     - Corrected `applyMegaminxMove()` in [cube-solver-engine.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solver-engine.js) with mathematically verified 25-sticker permutations (`MEGAMINX_PERMS`) across all 12 faces.
-     - Replaced broken hardcoded 3-sticker cycle with full 3D spatial permutation cycles satisfying $(move)^5 \equiv \text{Identity}$.
-     - Implemented `optimizeMegaminxMoves()` using modulo 5 face reduction instead of modulo 3 (which previously corrupted Megaminx turns).
-     - Upgraded `solveMegaminxFromFaces()` bidirectional BFS with parent move pruning, eliminating spurious unsolvable errors and solving scrambles in under 10ms.
-     - Added step explanations for all 12 Megaminx face moves (72° Clockwise / Counter-Clockwise).
-  3. **Enhanced Orientation Guide & Camera Controls**:
-     - Added quick camera view buttons for all 12 Megaminx faces (Top Ring: U, F, FR, BR, BL, FL; Bottom Ring: DR, DBR, DL, DBL, DF, D) in `#solver-angle-btns` and `#scanner-angle-btns`.
-     - Updated `updateOrientationGuide()` to display color badges for all 12 Megaminx faces.
-     - Updated scanner guide cube rotation map (`megaRotations`) so each target face aligns directly in front when scanning.
+  1. **Added Comments Section Network Status Indicator ("need network" / "WIFI needed")**:
+     - Added a network status badge `#comment-network-badge` in the comments header and `#comment-network-note` below the post button in [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html).
+     - When connected to the network, displays `"need network"` with cyan indicator styling.
+     - When offline or when the network disconnects (`navigator.onLine === false` or `offline` event), dynamically switches to `"WIFI needed"` with an alert badge and pulse animation.
+     - Guarded comment and reply form submission to alert `"WIFI needed"` if the user attempts to post without an active network connection.
+  2. **Implemented Freeze / Unfreeze Button on Cube Solving Robot**:
+     - Added `#btn-freeze-cube` (`❄️ Freeze Cube` / `🧊 Unfreeze Cube`) in [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) with pulsing cyan/ice glowing styles and audio effects.
+     - When pressed: freezes the 3D cube, displays a floating `#cube-frozen-badge`, applies `.cube-frozen-scene` glow, and disables pointer orbit dragging and angle view buttons.
+     - Added `showFrozenNotice()` toast when the user attempts to move the cube while frozen.
+     - When pressed again: unfreezes the cube, restores free 3D rotation, and re-enables all angle buttons.
+  3. **Upgraded Camera Scanner Layout to Two-Column Side-by-Side View**:
+     - Redesigned `#camera-scanner-modal` using a responsive 2-column grid (`.scanner-content-grid`).
+     - Placed the Camera Viewfinder and capture controls in the left column (`.scanner-col-camera`) and the 3D Cube Orientation Guide in the right column (`.scanner-col-guide`).
+     - Eliminates vertical overflow and allows users to see both the live camera feed and the rotating 3D guide cube simultaneously on screen without scrolling.
+     - Smoothly collapses into a single column on mobile screens (<860px).
 - **How verified**:
   - Live Chrome DevTools MCP evaluated on Page 4:
-    - Verified `switchSolverCube('megaminx')`: 12 3D faces, 12 2D net faces, 13 angle buttons.
-    - Verified `scrambleCurrentPuzzle()` and `CubeSolver.solveCube('megaminx')`: solved in 3ms with verified step list (`BR BL F FR'`).
-    - Verified `stepPlayerNext()`, `stepPlayerLast()` to 100% solved with correct 72° step explanations.
-    - Verified camera scanner modal: 12 mini faces, correct target highlighting, smooth rotation across all faces (`U`, `F`, `DR`, `D`).
-    - Ran regression suite across all 7 puzzle types (2x2, 3x3, 4x4, 100x100, Pyraminx, Skewb, Megaminx): 100% passed.
-    - Checked console messages: 0 errors throughout.
+    - Verified `index.html` network status: starts at `"need network"`, switches to `"WIFI needed"` on simulated offline event, and restores to `"need network"` on online event.
+    - Verified `cube-solving-machine.html` freeze button: toggles `isCubeFrozen`, changes button text to `"🧊 Unfreeze Cube"`, prevents 3D orbit dragging and angle button turns, then cleanly restores free movement on unfreeze.
+    - Verified camera scanner modal layout: `.scanner-content-grid` rendered side-by-side (`isSideBySide: true`, camera width 431px, guide width 345px, guide top 140px).
+    - Verified zero console errors.
 - **What to review**:
-  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html).
-  - Click `Megaminx` button in puzzle selector.
-  - Inspect the 3D dodecahedron: all 12 pentagons fit flush with zero gaps and no clipping.
-  - Click `🎲 Scramble` and `⚡ Calculate Fastest Solution`: solver returns the shortest solution and allows step-by-step playback.
-  - Click any face button (e.g. `🌸 DR (Pink)`, `⚪ Top (U)`) to view that face directly.
-  - Click `📸 Scan with Camera`: verify 3D guide cube rotates smoothly to each face.
+  - Open [index.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/index.html), scroll to Comments: observe the `"need network"` badge.
+  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html):
+    - Click `❄️ Freeze Cube`: observe the frozen ice glow and notice the cube cannot be dragged or rotated. Click `🧊 Unfreeze Cube` to move it again.
+    - Click `📸 Scan with Camera`: observe the camera viewfinder on the left and the 3D guide cube on the right together without scrolling.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Diagnose and fix weirdness with Megaminx 3D geometry, visual orientation, and solver.
-2. Verify live in browser with zero errors.
-3. Commit and push all changes to origin main.
+1. Add "need network" and "WIFI needed" indicators to the comments section on the main page.
+2. Add a freeze/unfreeze button for the cube solving robot.
+3. Optimize camera scanner modal layout so the 3D guide cube is visible next to the camera without scrolling.
+4. Verify live in browser with zero errors.
+5. Commit and push all changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Diagnose Megaminx 3D face overlap, azimuth inversion, and backface culling issues
-- [x] Calculate exact dodecahedron inradius (96.87px) and 3D transforms
-- [x] Fix CSS 3D transforms for main cube and scanner mini cube
-- [x] Fix Megaminx sticker permutation cycles in cube-solver-engine.js
-- [x] Implement optimizeMegaminxMoves (modulo 5 face reduction)
-- [x] Add move explanations for all 12 Megaminx face turns
-- [x] Add angle buttons and orientation badges for all 12 faces
+- [x] Add comments network status badge and submission checks in index.html
+- [x] Add freeze / unfreeze toggle button and orbit drag guards in cube-solving-machine.html
+- [x] Redesign camera scanner modal into responsive 2-column layout (camera left, 3D cube right)
 - [x] Verify live in Chrome DevTools MCP
 - [x] Commit and push changes to origin main
 
 Assumptions:
-- Megaminx uses standard 12-color scheme with White on Top and Red in Front.
+- Navigator online status check accurately reflects browser connectivity.
 
 Blockers (what I need to do): None.
 Found, not done: None.
 Log (newest first, one line each):
+- 2026-11-18: Added comments network status badge ("need network" / "WIFI needed"), freeze/unfreeze button on cube solving robot, and side-by-side camera scanner layout.
 - 2026-11-18: Fixed Megaminx 3D dodecahedron geometry, face transforms, turn permutations, and solver.
 - 2026-11-17: Added 100x100x100 cube solver and fixed white color on 3D guide cube in scanner.
 - 2026-11-17: Implemented auto face memorization and slow 1.6s 3D cube rotation after snapping picture in scanner.
-- 2026-11-17: Fixed modal scroll and top cutoff across 8 pages and theme.css, verified in Chrome DevTools MCP.
