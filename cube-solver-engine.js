@@ -2129,8 +2129,68 @@
     return moves.join(' ');
   }
 
+  function optimizeMegaminxMoves(movesStr) {
+    if (!movesStr) return "";
+    let moves = movesStr.trim().split(/\s+/).filter(Boolean);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      const newMoves = [];
+      let i = 0;
+      while (i < moves.length) {
+        if (i + 1 < moves.length) {
+          const m1 = moves[i];
+          const m2 = moves[i + 1];
+          const b1 = m1.replace(/['2]/g, "");
+          const b2 = m2.replace(/['2]/g, "");
+          if (b1 === b2) {
+            const p1 = m1.endsWith("2") ? 2 : (m1.endsWith("'") ? 4 : 1);
+            const p2 = m2.endsWith("2") ? 2 : (m2.endsWith("'") ? 4 : 1);
+            const total = (p1 + p2) % 5;
+            if (total === 1) newMoves.push(b1);
+            else if (total === 2) newMoves.push(b1 + "2");
+            else if (total === 3) newMoves.push(b1 + "'2");
+            else if (total === 4) newMoves.push(b1 + "'");
+            i += 2;
+            changed = true;
+            continue;
+          }
+        }
+        newMoves.push(moves[i]);
+        i++;
+      }
+      moves = newMoves;
+    }
+    return moves.join(' ');
+  }
+
   // --- MOVE EXPLANATIONS ---
   const MOVE_EXPLANATIONS = {
+    // Megaminx Moves (72° Face Rotations)
+    'U': 'Top (White) 72° Clockwise',
+    "U'": 'Top (White) 72° Counter-Clockwise',
+    'F': 'Front (Red) 72° Clockwise',
+    "F'": 'Front (Red) 72° Counter-Clockwise',
+    'FR': 'Front-Right (Yellow) 72° Clockwise',
+    "FR'": 'Front-Right (Yellow) 72° Counter-Clockwise',
+    'BR': 'Back-Right (Dark Blue) 72° Clockwise',
+    "BR'": 'Back-Right (Dark Blue) 72° Counter-Clockwise',
+    'BL': 'Back-Left (Dark Green) 72° Clockwise',
+    "BL'": 'Back-Left (Dark Green) 72° Counter-Clockwise',
+    'FL': 'Front-Left (Purple) 72° Clockwise',
+    "FL'": 'Front-Left (Purple) 72° Counter-Clockwise',
+    'DR': 'Down-Right (Pink) 72° Clockwise',
+    "DR'": 'Down-Right (Pink) 72° Counter-Clockwise',
+    'DBR': 'Down-Back-Right (Cyan) 72° Clockwise',
+    "DBR'": 'Down-Back-Right (Cyan) 72° Counter-Clockwise',
+    'DL': 'Down-Back (Lime) 72° Clockwise',
+    "DL'": 'Down-Back (Lime) 72° Counter-Clockwise',
+    'DBL': 'Down-Back-Left (Orange) 72° Clockwise',
+    "DBL'": 'Down-Back-Left (Orange) 72° Counter-Clockwise',
+    'DF': 'Down-Front (Cream) 72° Clockwise',
+    "DF'": 'Down-Front (Cream) 72° Counter-Clockwise',
+    'D': 'Bottom (Silver) 72° Clockwise',
+    "D'": 'Bottom (Silver) 72° Counter-Clockwise',
     'U': 'Top layer 90° Clockwise',
     "U'": 'Top layer 90° Counter-Clockwise',
     'U2': 'Top layer 180° Half-Turn',
@@ -3184,55 +3244,40 @@
     return cSet.size === 12 && !cSet.has('grey');
   }
 
+  const MEGAMINX_PERMS = {
+    U: [["U",1,"U",2],["U",2,"U",3],["U",3,"U",4],["U",4,"U",5],["U",5,"U",1],["U",6,"U",7],["U",7,"U",8],["U",8,"U",9],["U",9,"U",10],["U",10,"U",6],["F",3,"FR",3],["F",8,"FR",8],["F",9,"FR",9],["FR",3,"BR",3],["FR",8,"BR",8],["FR",9,"BR",9],["BR",3,"BL",3],["BR",8,"BL",8],["BR",9,"BL",9],["BL",3,"FL",3],["BL",8,"FL",8],["BL",9,"FL",9],["FL",3,"F",3],["FL",8,"F",8],["FL",9,"F",9]],
+    F: [["U",3,"FL",2],["U",8,"FL",7],["U",9,"FL",8],["F",1,"F",2],["F",2,"F",3],["F",3,"F",4],["F",4,"F",5],["F",5,"F",1],["F",6,"F",7],["F",7,"F",8],["F",8,"F",9],["F",9,"F",10],["F",10,"F",6],["FR",4,"U",3],["FR",9,"U",8],["FR",10,"U",9],["FL",2,"DF",5],["FL",7,"DF",10],["FL",8,"DF",6],["DR",1,"FR",4],["DR",6,"FR",9],["DR",7,"FR",10],["DF",5,"DR",1],["DF",6,"DR",7],["DF",10,"DR",6]],
+    FR: [["U",4,"F",2],["U",9,"F",7],["U",10,"F",8],["F",2,"DR",5],["F",7,"DR",10],["F",8,"DR",6],["FR",1,"FR",2],["FR",2,"FR",3],["FR",3,"FR",4],["FR",4,"FR",5],["FR",5,"FR",1],["FR",6,"FR",7],["FR",7,"FR",8],["FR",8,"FR",9],["FR",9,"FR",10],["FR",10,"FR",6],["BR",4,"U",4],["BR",9,"U",9],["BR",10,"U",10],["DR",5,"DBR",1],["DR",6,"DBR",7],["DR",10,"DBR",6],["DBR",1,"BR",4],["DBR",6,"BR",9],["DBR",7,"BR",10]],
+    BR: [["U",5,"FR",2],["U",6,"FR",8],["U",10,"FR",7],["FR",2,"DBR",5],["FR",7,"DBR",10],["FR",8,"DBR",6],["BR",1,"BR",2],["BR",2,"BR",3],["BR",3,"BR",4],["BR",4,"BR",5],["BR",5,"BR",1],["BR",6,"BR",7],["BR",7,"BR",8],["BR",8,"BR",9],["BR",9,"BR",10],["BR",10,"BR",6],["BL",4,"U",5],["BL",9,"U",10],["BL",10,"U",6],["DBR",5,"DL",1],["DBR",6,"DL",7],["DBR",10,"DL",6],["DL",1,"BL",4],["DL",6,"BL",9],["DL",7,"BL",10]],
+    BL: [["U",1,"BR",2],["U",6,"BR",7],["U",7,"BR",8],["BR",2,"DL",5],["BR",7,"DL",10],["BR",8,"DL",6],["BL",1,"BL",2],["BL",2,"BL",3],["BL",3,"BL",4],["BL",4,"BL",5],["BL",5,"BL",1],["BL",6,"BL",7],["BL",7,"BL",8],["BL",8,"BL",9],["BL",9,"BL",10],["BL",10,"BL",6],["FL",4,"U",1],["FL",9,"U",6],["FL",10,"U",7],["DL",5,"DBL",1],["DL",6,"DBL",7],["DL",10,"DBL",6],["DBL",1,"FL",4],["DBL",6,"FL",9],["DBL",7,"FL",10]],
+    FL: [["U",2,"BL",2],["U",7,"BL",7],["U",8,"BL",8],["F",4,"U",2],["F",9,"U",7],["F",10,"U",8],["BL",2,"DBL",5],["BL",7,"DBL",10],["BL",8,"DBL",6],["FL",1,"FL",2],["FL",2,"FL",3],["FL",3,"FL",4],["FL",4,"FL",5],["FL",5,"FL",1],["FL",6,"FL",7],["FL",7,"FL",8],["FL",8,"FL",9],["FL",9,"FL",10],["FL",10,"FL",6],["DBL",5,"DF",1],["DBL",6,"DF",7],["DBL",10,"DF",6],["DF",1,"F",4],["DF",6,"F",9],["DF",7,"F",10]],
+    DR: [["F",1,"DF",4],["F",6,"DF",9],["F",7,"DF",10],["FR",5,"F",1],["FR",6,"F",7],["FR",10,"F",6],["DR",1,"DR",2],["DR",2,"DR",3],["DR",3,"DR",4],["DR",4,"DR",5],["DR",5,"DR",1],["DR",6,"DR",7],["DR",7,"DR",8],["DR",8,"DR",9],["DR",9,"DR",10],["DR",10,"DR",6],["DBR",2,"FR",5],["DBR",7,"FR",10],["DBR",8,"FR",6],["DF",4,"D",5],["DF",9,"D",10],["DF",10,"D",6],["D",5,"DBR",2],["D",6,"DBR",8],["D",10,"DBR",7]],
+    DBR: [["FR",1,"DR",4],["FR",6,"DR",9],["FR",7,"DR",10],["BR",5,"FR",1],["BR",6,"FR",7],["BR",10,"FR",6],["DR",4,"D",4],["DR",9,"D",9],["DR",10,"D",10],["DBR",1,"DBR",2],["DBR",2,"DBR",3],["DBR",3,"DBR",4],["DBR",4,"DBR",5],["DBR",5,"DBR",1],["DBR",6,"DBR",7],["DBR",7,"DBR",8],["DBR",8,"DBR",9],["DBR",9,"DBR",10],["DBR",10,"DBR",6],["DL",2,"BR",5],["DL",7,"BR",10],["DL",8,"BR",6],["D",4,"DL",2],["D",9,"DL",7],["D",10,"DL",8]],
+    DL: [["BR",1,"DBR",4],["BR",6,"DBR",9],["BR",7,"DBR",10],["BL",5,"BR",1],["BL",6,"BR",7],["BL",10,"BR",6],["DBR",4,"D",3],["DBR",9,"D",8],["DBR",10,"D",9],["DL",1,"DL",2],["DL",2,"DL",3],["DL",3,"DL",4],["DL",4,"DL",5],["DL",5,"DL",1],["DL",6,"DL",7],["DL",7,"DL",8],["DL",8,"DL",9],["DL",9,"DL",10],["DL",10,"DL",6],["DBL",2,"BL",5],["DBL",7,"BL",10],["DBL",8,"BL",6],["D",3,"DBL",2],["D",8,"DBL",7],["D",9,"DBL",8]],
+    DBL: [["BL",1,"DL",4],["BL",6,"DL",9],["BL",7,"DL",10],["FL",5,"BL",1],["FL",6,"BL",7],["FL",10,"BL",6],["DL",4,"D",2],["DL",9,"D",7],["DL",10,"D",8],["DBL",1,"DBL",2],["DBL",2,"DBL",3],["DBL",3,"DBL",4],["DBL",4,"DBL",5],["DBL",5,"DBL",1],["DBL",6,"DBL",7],["DBL",7,"DBL",8],["DBL",8,"DBL",9],["DBL",9,"DBL",10],["DBL",10,"DBL",6],["DF",2,"FL",5],["DF",7,"FL",10],["DF",8,"FL",6],["D",2,"DF",2],["D",7,"DF",7],["D",8,"DF",8]],
+    DF: [["F",5,"FL",1],["F",6,"FL",7],["F",10,"FL",6],["FL",1,"DBL",4],["FL",6,"DBL",9],["FL",7,"DBL",10],["DR",2,"F",5],["DR",7,"F",10],["DR",8,"F",6],["DBL",4,"D",1],["DBL",9,"D",6],["DBL",10,"D",7],["DF",1,"DF",2],["DF",2,"DF",3],["DF",3,"DF",4],["DF",4,"DF",5],["DF",5,"DF",1],["DF",6,"DF",7],["DF",7,"DF",8],["DF",8,"DF",9],["DF",9,"DF",10],["DF",10,"DF",6],["D",1,"DR",2],["D",6,"DR",7],["D",7,"DR",8]],
+    D: [["DR",3,"DF",3],["DR",8,"DF",8],["DR",9,"DF",9],["DBR",3,"DR",3],["DBR",8,"DR",8],["DBR",9,"DR",9],["DL",3,"DBR",3],["DL",8,"DBR",8],["DL",9,"DBR",9],["DBL",3,"DL",3],["DBL",8,"DL",8],["DBL",9,"DL",9],["DF",3,"DBL",3],["DF",8,"DBL",8],["DF",9,"DBL",9],["D",1,"D",2],["D",2,"D",3],["D",3,"D",4],["D",4,"D",5],["D",5,"D",1],["D",6,"D",7],["D",7,"D",8],["D",8,"D",9],["D",9,"D",10],["D",10,"D",6]],
+  };
+
   function applyMegaminxMove(faces, move) {
-    if (!faces) return;
+    if (!faces || !move) return;
     const isPrime = move.endsWith("'");
     const isDouble = move.endsWith("2");
     const base = move.replace(/['2]/g, '');
+    const perm = MEGAMINX_PERMS[base];
+    if (!perm) return;
     const count = isDouble ? 2 : (isPrime ? 4 : 1);
-
-    const adjMaps = {
-      U:   ['F', 'FR', 'BR', 'BL', 'FL'],
-      F:   ['U', 'FR', 'DR', 'DF', 'FL'],
-      FR:  ['U', 'BR', 'DBR', 'DR', 'F'],
-      BR:  ['U', 'BL', 'DL', 'DBR', 'FR'],
-      BL:  ['U', 'FL', 'DBL', 'DL', 'BR'],
-      FL:  ['U', 'F', 'DF', 'DBL', 'BL'],
-      D:   ['DF', 'DR', 'DBR', 'DL', 'DBL'],
-      DF:  ['D', 'FL', 'F', 'DR', 'DBL'],
-      DR:  ['D', 'DF', 'FR', 'DBR', 'F'],
-      DBR: ['D', 'DR', 'BR', 'DL', 'FR'],
-      DL:  ['D', 'DBR', 'BL', 'DBL', 'BR'],
-      DBL: ['D', 'DL', 'FL', 'DF', 'BL']
-    };
-
-    const cycleFace = (f) => {
-      if (!faces[f]) return;
-      const arr = faces[f];
-      const e5 = arr[5];
-      arr[5] = arr[4]; arr[4] = arr[3]; arr[3] = arr[2]; arr[2] = arr[1]; arr[1] = e5;
-      const c10 = arr[10];
-      arr[10] = arr[9]; arr[9] = arr[8]; arr[8] = arr[7]; arr[7] = arr[6]; arr[6] = c10;
-
-      const adj = adjMaps[f];
-      if (adj) {
-        const lastAdj = adj[4];
-        const tmpE = faces[lastAdj][1];
-        const tmpC1 = faces[lastAdj][6];
-        const tmpC2 = faces[lastAdj][7];
-        for (let i = 4; i > 0; i--) {
-          faces[adj[i]][1] = faces[adj[i - 1]][1];
-          faces[adj[i]][6] = faces[adj[i - 1]][6];
-          faces[adj[i]][7] = faces[adj[i - 1]][7];
-        }
-        faces[adj[0]][1] = tmpE;
-        faces[adj[0]][6] = tmpC1;
-        faces[adj[0]][7] = tmpC2;
-      }
-    };
-
     for (let c = 0; c < count; c++) {
-      cycleFace(base);
+      const backup = {};
+      for (let i = 0; i < perm.length; i++) {
+        const p = perm[i];
+        if (!backup[p[0]]) backup[p[0]] = {};
+        backup[p[0]][p[1]] = faces[p[0]][p[1]];
+      }
+      for (let i = 0; i < perm.length; i++) {
+        const p = perm[i];
+        faces[p[2]][p[3]] = backup[p[0]][p[1]];
+      }
     }
   }
 
@@ -3257,11 +3302,14 @@
       return MEGAMINX_FACES.map(f => s[f].map(c => colChar[c] || c[0]).join('')).join('');
     }
 
-    const megaCols = ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime'];
+    const megaCols = {
+      U: 'white', F: 'red', FR: 'yellow', BR: 'darkblue', BL: 'darkgreen', FL: 'purple',
+      D: 'silver', DF: 'cream', DR: 'pink', DBR: 'cyan', DBL: 'orange', DL: 'lime'
+    };
     const solved = {};
-    MEGAMINX_FACES.forEach((f, idx) => {
-      solved[f] = new Array(11).fill(megaCols[idx]);
-    });
+    for (const f of MEGAMINX_FACES) {
+      solved[f] = new Array(11).fill(megaCols[f]);
+    }
 
     const moves = ['U', "U'", 'F', "F'", 'FR', "FR'", 'BR', "BR'", 'BL', "BL'", 'FL', "FL'"];
 
@@ -3269,16 +3317,25 @@
       return m.endsWith("'") ? m.replace("'", "") : m + "'";
     }
 
-    const fwdVisited = new Map([[serialize(faces), []]]);
-    const bwdVisited = new Map([[serialize(solved), []]]);
+    const startKey = serialize(faces);
+    const goalKey = serialize(solved);
+
+    const fwdVisited = new Map([[startKey, []]]);
+    const bwdVisited = new Map([[goalKey, []]]);
 
     let fwdQueue = [{ state: faces, path: [] }];
     let bwdQueue = [{ state: solved, path: [] }];
 
+    const startTime = Date.now();
+
     for (let depth = 0; depth < 5; depth++) {
       const nextFwd = [];
       for (const node of fwdQueue) {
+        if (Date.now() - startTime > 2500) break;
+        const lastMove = node.path[node.path.length - 1];
+        const lastBase = lastMove ? lastMove.replace("'", "") : null;
         for (const m of moves) {
+          if (lastBase && m.startsWith(lastBase)) continue;
           const nextS = cloneFaces(node.state);
           applyMegaminxMove(nextS, m);
           const key = serialize(nextS);
@@ -3296,7 +3353,11 @@
 
       const nextBwd = [];
       for (const node of bwdQueue) {
+        if (Date.now() - startTime > 2500) break;
+        const lastMove = node.path[0];
+        const lastBase = lastMove ? lastMove.replace("'", "") : null;
         for (const m of moves) {
+          if (lastBase && m.startsWith(lastBase)) continue;
           const invM = invertMove(m);
           const prevS = cloneFaces(node.state);
           applyMegaminxMove(prevS, invM);
@@ -3314,9 +3375,7 @@
       bwdQueue = nextBwd;
     }
 
-    return {
-      moves: "R U R' U' F' U F R U2 R' U' R U2 R' F R U R' U' F'"
-    };
+    return { error: UNSOLVABLE_ERROR };
   }
 
   function solveBigCubeFromFaces(N, faces) {
@@ -3459,9 +3518,11 @@
       return { success: false, error: UNSOLVABLE_ERROR };
     }
 
-    const cleanMoves = (size === 'pyraminx' || size === 'skewb' || size === 'megaminx')
+    const cleanMoves = (size === 'pyraminx' || size === 'skewb')
       ? optimizeOrder3Moves(sol.moves || "")
-      : optimizeMoves(sol.moves || "");
+      : (size === 'megaminx')
+        ? optimizeMegaminxMoves(sol.moves || "")
+        : optimizeMoves(sol.moves || "");
     const moveList = cleanMoves ? cleanMoves.trim().split(/\s+/) : [];
 
     // Rigorous simulation check before returning:
