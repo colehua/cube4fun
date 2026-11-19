@@ -1892,6 +1892,9 @@
                 <button class="solver-type-btn" id="solver-tab-100" onclick="switchSolverCube(100)">
                     100x100x100
                 </button>
+                <button class="solver-type-btn" id="solver-tab-1000" onclick="switchSolverCube(1000)">
+                    1000x1000x1000
+                </button>
                 <button class="solver-type-btn" id="solver-tab-pyraminx" onclick="switchSolverCube('pyraminx')">
                     Pyraminx
                 </button>
@@ -2226,7 +2229,7 @@
 
         function switchSolverCube(size, skipSound = false) {
             solverSize = size;
-            const tabs = [2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 'pyraminx', 'skewb', 'megaminx'];
+            const tabs = [2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 1000, 'pyraminx', 'skewb', 'megaminx'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`solver-tab-${t}`);
                 if (btn) btn.classList.toggle('active', t === size);
@@ -2710,7 +2713,8 @@
                     cubeEl.appendChild(faceDiv);
                 });
 
-            } else if (solverSize === 100) {
+            } else if (solverSize === 100 || solverSize === 1000) {
+                const N = solverSize;
                 const faceKeys = ['F', 'B', 'R', 'L', 'U', 'D'];
                 faceKeys.forEach(f => {
                     const canvas = document.createElement('canvas');
@@ -2720,17 +2724,42 @@
                     canvas.style.padding = '0';
                     canvas.style.display = 'block';
                     canvas.style.cursor = 'crosshair';
-                    canvas.title = `Face ${f} (100x100) - Click or drag to paint with ${solverColor}!`;
+                    canvas.title = `Face ${f} (${N}x${N}) - Click or drag to paint with ${solverColor}!`;
 
                     const ctx = canvas.getContext('2d');
                     const colors = solverFaces[f] || [];
-                    for (let r = 0; r < 100; r++) {
-                        for (let c = 0; c < 100; c++) {
-                            const idx = r * 100 + c;
-                            const col = colors[idx] || 'grey';
-                            ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
-                            ctx.fillRect(c * 2, r * 2, 2, 2);
+                    if (N === 100) {
+                        for (let r = 0; r < 100; r++) {
+                            for (let c = 0; c < 100; c++) {
+                                const idx = r * 100 + c;
+                                const col = colors[idx] || 'grey';
+                                ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                                ctx.fillRect(c * 2, r * 2, 2, 2);
+                            }
                         }
+                    } else {
+                        // Fast canvas rendering for 1000x1000 using 200x200 pixel buffer
+                        const imgData = ctx.createImageData(200, 200);
+                        const data = imgData.data;
+                        const COLOR_RGB = {
+                            white: [255, 255, 255], yellow: [255, 215, 0], green: [34, 197, 94],
+                            blue: [59, 130, 246], orange: [249, 115, 22], red: [239, 68, 68], grey: [100, 116, 139]
+                        };
+                        for (let y = 0; y < 200; y++) {
+                            const r = y * 5;
+                            for (let x = 0; x < 200; x++) {
+                                const c = x * 5;
+                                const idx = r * 1000 + c;
+                                const col = colors[idx] || 'grey';
+                                const rgb = COLOR_RGB[col] || [100, 116, 139];
+                                const pIdx = (y * 200 + x) * 4;
+                                data[pIdx] = rgb[0];
+                                data[pIdx + 1] = rgb[1];
+                                data[pIdx + 2] = rgb[2];
+                                data[pIdx + 3] = 255;
+                            }
+                        }
+                        ctx.putImageData(imgData, 0, 0);
                     }
 
                     const handlePaintAt = (e) => {
@@ -2740,9 +2769,9 @@
                         if (clientX === undefined) return;
                         const x = Math.max(0, Math.min(199, Math.floor((clientX - rect.left) * (200 / rect.width))));
                         const y = Math.max(0, Math.min(199, Math.floor((clientY - rect.top) * (200 / rect.height))));
-                        const col = Math.min(99, Math.floor(x / 2));
-                        const row = Math.min(99, Math.floor(y / 2));
-                        paintSticker(f, row * 100 + col);
+                        const col = Math.min(N - 1, Math.floor(x * (N / 200)));
+                        const row = Math.min(N - 1, Math.floor(y * (N / 200)));
+                        paintSticker(f, row * N + col);
                     };
 
                     canvas.addEventListener('click', (e) => {
@@ -3009,7 +3038,8 @@
                     container.appendChild(faceEl);
                 });
 
-            } else if (solverSize === 100) {
+            } else if (solverSize === 100 || solverSize === 1000) {
+                const N = solverSize;
                 container.style.gridTemplateColumns = 'repeat(4, auto)';
                 container.style.gridTemplateRows = 'repeat(3, auto)';
 
@@ -3028,7 +3058,7 @@
 
                     const title = document.createElement('div');
                     title.className = 'face-title';
-                    title.textContent = item.name + ' 🎨 (100x100)';
+                    title.textContent = item.name + ` 🎨 (${N}x${N})`;
                     title.title = `Click to fill entire ${item.name} with ${solverColor}!`;
                     title.style.cursor = 'pointer';
                     title.addEventListener('click', () => fillWholeFace(item.key));
@@ -3046,14 +3076,40 @@
 
                     const ctx = canvas.getContext('2d');
                     const colors = solverFaces[item.key] || [];
-                    const step = 160 / 100;
-                    for (let r = 0; r < 100; r++) {
-                        for (let c = 0; c < 100; c++) {
-                            const idx = r * 100 + c;
-                            const col = colors[idx] || 'grey';
-                            ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
-                            ctx.fillRect(c * step, r * step, step + 0.1, step + 0.1);
+
+                    if (N === 100) {
+                        const step = 160 / 100;
+                        for (let r = 0; r < 100; r++) {
+                            for (let c = 0; c < 100; c++) {
+                                const idx = r * 100 + c;
+                                const col = colors[idx] || 'grey';
+                                ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                                ctx.fillRect(c * step, r * step, step + 0.1, step + 0.1);
+                            }
                         }
+                    } else {
+                        // Fast canvas net for 1000x1000
+                        const imgData = ctx.createImageData(160, 160);
+                        const data = imgData.data;
+                        const COLOR_RGB = {
+                            white: [255, 255, 255], yellow: [255, 215, 0], green: [34, 197, 94],
+                            blue: [59, 130, 246], orange: [249, 115, 22], red: [239, 68, 68], grey: [100, 116, 139]
+                        };
+                        for (let y = 0; y < 160; y++) {
+                            const r = Math.floor(y * (1000 / 160));
+                            for (let x = 0; x < 160; x++) {
+                                const c = Math.floor(x * (1000 / 160));
+                                const idx = r * 1000 + c;
+                                const col = colors[idx] || 'grey';
+                                const rgb = COLOR_RGB[col] || [100, 116, 139];
+                                const pIdx = (y * 160 + x) * 4;
+                                data[pIdx] = rgb[0];
+                                data[pIdx + 1] = rgb[1];
+                                data[pIdx + 2] = rgb[2];
+                                data[pIdx + 3] = 255;
+                            }
+                        }
+                        ctx.putImageData(imgData, 0, 0);
                     }
 
                     const handleNetPaint = (e) => {
@@ -3063,9 +3119,9 @@
                         if (clientX === undefined) return;
                         const x = Math.max(0, Math.min(159, Math.floor((clientX - rect.left) * (160 / rect.width))));
                         const y = Math.max(0, Math.min(159, Math.floor((clientY - rect.top) * (160 / rect.height))));
-                        const col = Math.min(99, Math.floor(x / 1.6));
-                        const row = Math.min(99, Math.floor(y / 1.6));
-                        paintSticker(item.key, row * 100 + col);
+                        const col = Math.min(N - 1, Math.floor(x * (N / 160)));
+                        const row = Math.min(N - 1, Math.floor(y * (N / 160)));
+                        paintSticker(item.key, row * N + col);
                     };
 
                     canvas.addEventListener('click', (e) => {
@@ -3173,23 +3229,25 @@
             solverFaces[faceKey][index] = solverColor;
             const hex = PALETTE_COLORS[solverColor] ? PALETTE_COLORS[solverColor].hex : solverColor;
 
-            if (solverSize === 100) {
+            if (solverSize === 100 || solverSize === 1000) {
+                const N = solverSize;
                 const c3d = document.querySelector(`canvas.solver-3d-face.face-${faceKey}`);
                 if (c3d) {
                     const ctx = c3d.getContext('2d');
-                    const col = index % 100;
-                    const row = Math.floor(index / 100);
+                    const col = index % N;
+                    const row = Math.floor(index / N);
+                    const scale = 200 / N;
                     ctx.fillStyle = hex;
-                    ctx.fillRect(col * 2, row * 2, 2, 2);
+                    ctx.fillRect(col * scale, row * scale, Math.max(1, scale), Math.max(1, scale));
                 }
                 const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
                 if (c2d) {
                     const ctx = c2d.getContext('2d');
-                    const col = index % 100;
-                    const row = Math.floor(index / 100);
-                    const step = 160 / 100;
+                    const col = index % N;
+                    const row = Math.floor(index / N);
+                    const scale = 160 / N;
                     ctx.fillStyle = hex;
-                    ctx.fillRect(col * step, row * step, step + 0.1, step + 0.1);
+                    ctx.fillRect(col * scale, row * scale, Math.max(1, scale), Math.max(1, scale));
                 }
                 playSound('turn');
                 updateColorBadgesAndBanner();
@@ -3259,10 +3317,13 @@
 
             faceKeys.forEach(f => {
                 if (solverFaces && solverFaces[f]) {
-                    solverFaces[f].forEach(c => {
+                    const arr = solverFaces[f];
+                    const len = arr.length;
+                    for (let i = 0; i < len; i++) {
+                        const c = arr[i];
                         if (counts[c] !== undefined) counts[c]++;
                         else counts.grey++;
-                    });
+                    }
                 }
             });
 
@@ -3817,7 +3878,7 @@
                     });
                 }
             } else {
-                const N = (solverSize === 100) ? 10 : solverSize;
+                const N = (solverSize === 100 || solverSize === 1000) ? 10 : solverSize;
                 const cell = side / N;
                 for (let r = 0; r < N; r++) {
                     for (let c = 0; c < N; c++) {
@@ -4002,17 +4063,18 @@
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.drawImage(sourceEl, 0, 0, srcW, srcH);
 
-                if (solverSize === 100) {
+                if (solverSize === 100 || solverSize === 1000) {
+                    const N = solverSize;
                     const side = Math.min(srcW, srcH) * 0.62;
                     const x0 = (srcW - side) / 2;
                     const y0 = (srcH - side) / 2;
-                    const cell = side / 100;
+                    const cell = side / N;
                     const imgData = ctx.getImageData(0, 0, srcW, srcH).data;
 
-                    for (let r = 0; r < 100; r++) {
+                    for (let r = 0; r < N; r++) {
                         const py = Math.min(srcH - 1, Math.max(0, Math.round(y0 + (r + 0.5) * cell)));
                         const rowOffset = py * srcW * 4;
-                        for (let c = 0; c < 100; c++) {
+                        for (let c = 0; c < N; c++) {
                             const px = Math.min(srcW - 1, Math.max(0, Math.round(x0 + (c + 0.5) * cell)));
                             const offset = rowOffset + px * 4;
                             const red = imgData[offset];
@@ -4288,7 +4350,7 @@
                     dot.title = `Sticker ${idx}`;
                     gridEl.appendChild(dot);
                 });
-            } else if (solverSize === 100) {
+            } else if (solverSize === 100 || solverSize === 1000) {
                 const N = 10;
                 gridEl.style.display = 'grid';
                 gridEl.style.position = 'static';
@@ -4403,7 +4465,8 @@
                     };
                     container.appendChild(cell);
                 });
-            } else if (solverSize === 100) {
+            } else if (solverSize === 100 || solverSize === 1000) {
+                const N = solverSize;
                 container.style.display = 'flex';
                 container.style.justifyContent = 'center';
                 const canvas = document.createElement('canvas');
@@ -4412,12 +4475,24 @@
                 canvas.style.borderRadius = '8px';
                 canvas.style.border = '2px solid #38bdf8';
                 const ctx = canvas.getContext('2d');
-                for (let r = 0; r < 100; r++) {
-                    for (let c = 0; c < 100; c++) {
-                        const idx = r * 100 + c;
-                        const col = scannerDetectedColors[idx] || 'white';
-                        ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
-                        ctx.fillRect(c * 1.8, r * 1.8, 1.8, 1.8);
+                if (N === 100) {
+                    for (let r = 0; r < 100; r++) {
+                        for (let c = 0; c < 100; c++) {
+                            const idx = r * 100 + c;
+                            const col = scannerDetectedColors[idx] || 'white';
+                            ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                            ctx.fillRect(c * 1.8, r * 1.8, 1.8, 1.8);
+                        }
+                    }
+                } else {
+                    const step = 180 / 1000;
+                    for (let r = 0; r < 1000; r += 5) {
+                        for (let c = 0; c < 1000; c += 5) {
+                            const idx = r * 1000 + c;
+                            const col = scannerDetectedColors[idx] || 'white';
+                            ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : col;
+                            ctx.fillRect(c * step, r * step, step * 5 + 0.1, step * 5 + 0.1);
+                        }
                     }
                 }
                 container.appendChild(canvas);
@@ -4651,7 +4726,7 @@
 
                 const N = typeof solverSize === 'number' ? solverSize : 3;
 
-                if (N === 100) {
+                if (N === 100 || N === 1000) {
                     standardFaces.forEach(f => {
                         const canvas = document.createElement('canvas');
                         canvas.className = `scanner-mini-face face-${f.key}` + (f.key === scannerCurrentFace ? ' active-target' : '');
@@ -4667,12 +4742,24 @@
                         const isMemorized = !!scannerFacesDone[f.key];
                         const colors = solverFaces[f.key] || [];
 
-                        for (let r = 0; r < 100; r++) {
-                            for (let c = 0; c < 100; c++) {
-                                const idx = r * 100 + c;
-                                const col = (isMemorized && colors[idx] && colors[idx] !== 'grey') ? colors[idx] : f.guideCol;
-                                ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#ffffff';
-                                ctx.fillRect(c * 1.8, r * 1.8, 1.8, 1.8);
+                        if (N === 100) {
+                            for (let r = 0; r < 100; r++) {
+                                for (let c = 0; c < 100; c++) {
+                                    const idx = r * 100 + c;
+                                    const col = (isMemorized && colors[idx] && colors[idx] !== 'grey') ? colors[idx] : f.guideCol;
+                                    ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#ffffff';
+                                    ctx.fillRect(c * 1.8, r * 1.8, 1.8, 1.8);
+                                }
+                            }
+                        } else {
+                            const step = 180 / 1000;
+                            for (let r = 0; r < 1000; r += 5) {
+                                for (let c = 0; c < 1000; c += 5) {
+                                    const idx = r * 1000 + c;
+                                    const col = (isMemorized && colors[idx] && colors[idx] !== 'grey') ? colors[idx] : f.guideCol;
+                                    ctx.fillStyle = PALETTE_COLORS[col] ? PALETTE_COLORS[col].hex : '#ffffff';
+                                    ctx.fillRect(c * step, r * step, step * 5 + 0.1, step * 5 + 0.1);
+                                }
                             }
                         }
                         cubeEl.appendChild(canvas);

@@ -1019,6 +1019,8 @@
                     <select id="scramble-puzzle-select" class="ps-select" onchange="onPuzzleChanged()">
                         <option value="3x3" selected>3x3x3 Rubik's Cube</option>
                         <option value="2x2">2x2x2 Rubik's Cube</option>
+                        <option value="1000x1000">1000x1000x1000 Cube 🌌</option>
+                        <option value="100x100">100x100x100 Cube 🌟</option>
                     </select>
 
                     <select id="scramble-difficulty-select" class="ps-select" onchange="onDifficultyChanged()">
@@ -1472,7 +1474,79 @@
             if (!container) return;
             container.innerHTML = "";
 
-            if (currentPuzzle === '3x3') {
+            if (currentPuzzle === '1000x1000' || currentPuzzle === '100x100') {
+                const N = currentPuzzle === '1000x1000' ? 1000 : 100;
+                const net = document.createElement('div');
+                net.className = 'cube-net-3x3';
+                net.style.maxWidth = '360px';
+                net.style.margin = '0 auto';
+
+                const faceColors = { U: '#ffffff', L: '#ff5722', F: '#22c55e', R: '#ef4444', B: '#3b82f6', D: '#ffd700' };
+                const faceLayouts = [
+                    { name: 'U', row: 1, col: 2 },
+                    { name: 'L', row: 2, col: 1 },
+                    { name: 'F', row: 2, col: 2 },
+                    { name: 'R', row: 2, col: 3 },
+                    { name: 'B', row: 2, col: 4 },
+                    { name: 'D', row: 3, col: 2 }
+                ];
+                const moves = (currentScramble || '').trim().split(/\s+/).filter(Boolean);
+
+                faceLayouts.forEach(layout => {
+                    const cell = document.createElement('div');
+                    cell.style.gridRow = layout.row;
+                    cell.style.gridColumn = layout.col;
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 64;
+                    canvas.height = 64;
+                    canvas.style.width = '100%';
+                    canvas.style.height = 'auto';
+                    canvas.style.aspectRatio = '1';
+                    canvas.style.display = 'block';
+                    canvas.style.borderRadius = '4px';
+                    canvas.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+                    canvas.style.boxShadow = '0 0 8px rgba(0, 240, 255, 0.25)';
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = faceColors[layout.name];
+                    ctx.fillRect(0, 0, 64, 64);
+
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                    for (let i = 4; i < 64; i += 4) {
+                        ctx.fillRect(i, 0, 1, 64);
+                        ctx.fillRect(0, i, 64, 1);
+                    }
+
+                    moves.forEach(m => {
+                        if (m.includes(layout.name)) {
+                            ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+                            const slicePos = (Math.abs(m.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)) * 7) % 56 + 4;
+                            ctx.fillRect(0, slicePos, 64, 2);
+                            ctx.fillRect(slicePos, 0, 2, 64);
+                        }
+                    });
+
+                    ctx.fillStyle = (layout.name === 'U' || layout.name === 'D') ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)';
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(layout.name, 32, 32);
+
+                    cell.appendChild(canvas);
+                    net.appendChild(cell);
+                });
+
+                container.appendChild(net);
+                const badge = document.createElement('div');
+                badge.style.textAlign = 'center';
+                badge.style.marginTop = '6px';
+                badge.style.fontSize = '0.85em';
+                badge.style.color = '#38bdf8';
+                badge.style.fontWeight = 'bold';
+                badge.textContent = `🌌 ${N}x${N}x${N} Hyper-Cube Preview`;
+                container.appendChild(badge);
+            } else if (currentPuzzle === '3x3') {
                 applyScramble3x3(currentScramble);
                 const net = document.createElement('div');
                 net.className = 'cube-net-3x3';
@@ -1543,7 +1617,37 @@
             if (!cubeObj) return;
             cubeObj.innerHTML = "";
 
-            if (currentPuzzle === '3x3') {
+            if (currentPuzzle === '1000x1000' || currentPuzzle === '100x100') {
+                const N = currentPuzzle === '1000x1000' ? 1000 : 100;
+                const faceColors = { U: '#ffffff', D: '#ffd700', F: '#22c55e', B: '#3b82f6', L: '#f97316', R: '#ef4444' };
+                const faces = [
+                    { name: 'U', transform: 'rotateX(90deg) translateZ(40px)' },
+                    { name: 'D', transform: 'rotateX(-90deg) translateZ(40px)' },
+                    { name: 'F', transform: 'translateZ(40px)' },
+                    { name: 'B', transform: 'rotateY(180deg) translateZ(40px)' },
+                    { name: 'L', transform: 'rotateY(-90deg) translateZ(40px)' },
+                    { name: 'R', transform: 'rotateY(90deg) translateZ(40px)' }
+                ];
+                faces.forEach(f => {
+                    const faceDiv = document.createElement('div');
+                    faceDiv.className = 'face-3d-mini';
+                    faceDiv.style.transform = f.transform;
+                    faceDiv.style.backgroundColor = faceColors[f.name];
+                    faceDiv.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.15) 1px, transparent 1px)';
+                    faceDiv.style.backgroundSize = '4px 4px';
+                    faceDiv.style.border = '1px solid rgba(255,255,255,0.7)';
+                    faceDiv.style.display = 'flex';
+                    faceDiv.style.alignItems = 'center';
+                    faceDiv.style.justifyContent = 'center';
+                    const lbl = document.createElement('span');
+                    lbl.textContent = f.name;
+                    lbl.style.fontSize = '10px';
+                    lbl.style.fontWeight = 'bold';
+                    lbl.style.color = (f.name === 'U' || f.name === 'D') ? '#000' : '#fff';
+                    faceDiv.appendChild(lbl);
+                    cubeObj.appendChild(faceDiv);
+                });
+            } else if (currentPuzzle === '3x3') {
                 const faces = [
                     { name: 'U', state: cube3.U, transform: 'rotateX(90deg) translateZ(40px)' },
                     { name: 'D', state: cube3.D, transform: 'rotateX(-90deg) translateZ(40px)' },
@@ -1647,6 +1751,33 @@
             if (diff === 'random') {
                 const choices = ['easy', 'medium', 'hard'];
                 diff = choices[Math.floor(Math.random() * choices.length)];
+            }
+
+            if (puzzle === '1000x1000' || puzzle === '100x100') {
+                const N = puzzle === '1000x1000' ? 1000 : 100;
+                let len = 25;
+                if (diff === 'easy') len = 12;
+                else if (diff === 'medium') len = 20;
+                else len = 30;
+
+                const baseFaces = ['U', 'D', 'F', 'B', 'L', 'R'];
+                const modifiers = ['', "'", '2'];
+                const sliceDepths = N === 1000
+                    ? ['', 'w', '3w', '5w', '10w', '25w', '50w', '100w', '250w', '333w', '500w', '750w']
+                    : ['', 'w', '3w', '5w', '10w', '20w', '25w', '50w'];
+                const moves = [];
+                let prevFace = '';
+
+                while (moves.length < len) {
+                    const f = baseFaces[Math.floor(Math.random() * baseFaces.length)];
+                    if (f === prevFace) continue;
+                    const slice = sliceDepths[Math.floor(Math.random() * sliceDepths.length)];
+                    let notation = (slice === '') ? f : ((slice === 'w') ? (f + 'w') : (slice.replace('w', '') + f + 'w'));
+                    const mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                    moves.push(notation + mod);
+                    prevFace = f;
+                }
+                return moves.join(' ');
             }
 
             let len = 15;

@@ -1412,6 +1412,8 @@
                 <select id="scramble-type-select" class="select-style">
                     <option value="3x3">3x3x3 Rubik's Cube</option>
                     <option value="2x2">2x2x2 Rubik's Cube</option>
+                    <option value="1000x1000">1000x1000x1000 Cube 🌌</option>
+                    <option value="100x100">100x100x100 Cube 🌟</option>
                     <option value="3x3-cross">3x3x3 Cross Practice</option>
                     <option value="3x3-f2l">3x3x3 F2L Practice</option>
                     <option value="3x3-oh">3x3x3 One-Handed</option>
@@ -2048,7 +2050,102 @@
             const container = document.getElementById('cube-net-container');
             container.innerHTML = "";
 
-            if (type.startsWith('3x3')) {
+            if (type === '1000x1000' || type === '100x100') {
+                const N = type === '1000x1000' ? 1000 : 100;
+                const net = document.createElement('div');
+                net.className = 'cube-net-3x3';
+                net.style.maxWidth = '360px';
+                net.style.margin = '0 auto';
+
+                const faceColors = {
+                    U: '#ffffff',
+                    L: '#ff5722',
+                    F: '#22c55e',
+                    R: '#ef4444',
+                    B: '#3b82f6',
+                    D: '#ffd700'
+                };
+
+                const faceLayouts = [
+                    { name: 'empty1', row: 1, col: 1 },
+                    { name: 'U', row: 1, col: 2 },
+                    { name: 'empty2', row: 1, col: 3 },
+                    { name: 'empty3', row: 1, col: 4 },
+                    
+                    { name: 'L', row: 2, col: 1 },
+                    { name: 'F', row: 2, col: 2 },
+                    { name: 'R', row: 2, col: 3 },
+                    { name: 'B', row: 2, col: 4 },
+                    
+                    { name: 'empty4', row: 3, col: 1 },
+                    { name: 'D', row: 3, col: 2 },
+                    { name: 'empty5', row: 3, col: 3 },
+                    { name: 'empty6', row: 3, col: 4 }
+                ];
+
+                const moves = (currentScramble || '').trim().split(/\s+/).filter(Boolean);
+
+                faceLayouts.forEach(layout => {
+                    const cell = document.createElement('div');
+                    cell.style.gridRow = layout.row;
+                    cell.style.gridColumn = layout.col;
+
+                    if (layout.name && !layout.name.startsWith('empty')) {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 64;
+                        canvas.height = 64;
+                        canvas.style.width = '100%';
+                        canvas.style.height = 'auto';
+                        canvas.style.aspectRatio = '1';
+                        canvas.style.display = 'block';
+                        canvas.style.borderRadius = '4px';
+                        canvas.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+                        canvas.style.boxShadow = '0 0 8px rgba(0, 240, 255, 0.25)';
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = faceColors[layout.name];
+                        ctx.fillRect(0, 0, 64, 64);
+
+                        // Dense micro-grid pattern for hyper-cube layers
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                        for (let i = 4; i < 64; i += 4) {
+                            ctx.fillRect(i, 0, 1, 64);
+                            ctx.fillRect(0, i, 64, 1);
+                        }
+
+                        // Render slice cuts from scramble moves
+                        moves.forEach(m => {
+                            if (m.includes(layout.name)) {
+                                ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+                                const slicePos = (Math.abs(m.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)) * 7) % 56 + 4;
+                                ctx.fillRect(0, slicePos, 64, 2);
+                                ctx.fillRect(slicePos, 0, 2, 64);
+                            }
+                        });
+
+                        // Centered face tag
+                        ctx.fillStyle = (layout.name === 'U' || layout.name === 'D') ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)';
+                        ctx.font = 'bold 11px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(layout.name, 32, 32);
+
+                        cell.appendChild(canvas);
+                    }
+                    net.appendChild(cell);
+                });
+
+                container.appendChild(net);
+
+                const badge = document.createElement('div');
+                badge.style.textAlign = 'center';
+                badge.style.marginTop = '6px';
+                badge.style.fontSize = '0.85em';
+                badge.style.color = '#38bdf8';
+                badge.style.fontWeight = 'bold';
+                badge.textContent = `🌌 ${N}x${N}x${N} Hyper-Cube Preview`;
+                container.appendChild(badge);
+            } else if (type.startsWith('3x3')) {
                 applyMoves3x3(currentScramble);
                 
                 const net = document.createElement('div');
@@ -2212,6 +2309,49 @@
             if (!cubeEl) return;
             cubeEl.innerHTML = "";
 
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            if (type === '1000x1000' || type === '100x100') {
+                const N = type === '1000x1000' ? 1000 : 100;
+                const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
+                const faceColors = {
+                    U: '#ffffff',
+                    D: '#ffd700',
+                    F: '#22c55e',
+                    B: '#3b82f6',
+                    L: '#f97316',
+                    R: '#ef4444'
+                };
+
+                faces.forEach(fName => {
+                    const faceEl = document.createElement('div');
+                    faceEl.className = `face-3d face-${fName}`;
+                    faceEl.style.display = 'flex';
+                    faceEl.style.flexDirection = 'column';
+                    faceEl.style.alignItems = 'center';
+                    faceEl.style.justifyContent = 'center';
+                    faceEl.style.backgroundColor = faceColors[fName];
+                    faceEl.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.15) 1px, transparent 1px)';
+                    faceEl.style.backgroundSize = '6px 6px';
+                    faceEl.style.border = '2px solid rgba(255,255,255,0.7)';
+                    faceEl.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.4), 0 0 15px rgba(0, 240, 255, 0.4)';
+
+                    const label = document.createElement('span');
+                    label.textContent = `${fName} (${N}x${N})`;
+                    label.style.fontSize = '1.05em';
+                    label.style.fontWeight = '900';
+                    label.style.color = (fName === 'U' || fName === 'D') ? '#0f172a' : '#ffffff';
+                    label.style.background = 'rgba(0, 0, 0, 0.25)';
+                    label.style.padding = '4px 8px';
+                    label.style.borderRadius = '6px';
+                    faceEl.appendChild(label);
+
+                    cubeEl.appendChild(faceEl);
+                });
+
+                cubeEl.style.transform = `rotateX(${animatorRotation.x}deg) rotateY(${animatorRotation.y}deg)`;
+                return;
+            }
+
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
             const numStickers = animatorIs2x2 ? 4 : 9;
             const gridClass = animatorIs2x2 ? 'grid-2x2' : 'grid-3x3';
@@ -2233,10 +2373,13 @@
         }
 
         function updateAnimator3dCubeVisuals() {
+            const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
+            if (type === '1000x1000' || type === '100x100') return;
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
             const numStickers = animatorIs2x2 ? 4 : 9;
             faces.forEach(fName => {
                 const state = animatorCubeState[fName];
+                if (!state) return;
                 for (let i = 0; i < numStickers; i++) {
                     const color = state[i];
                     const stickerEl = document.querySelector(`.animator-sticker-${fName}-${i}`);
@@ -2671,6 +2814,8 @@
             'easy': {
                 '3x3': 7,
                 '2x2': 5,
+                '1000x1000': 10,
+                '100x100': 8,
                 '3x3-cross': 3,
                 '3x3-f2l': 6,
                 '3x3-oh': 7,
@@ -2679,6 +2824,8 @@
             'medium': {
                 '3x3': 13,
                 '2x2': 8,
+                '1000x1000': 20,
+                '100x100': 15,
                 '3x3-cross': 5,
                 '3x3-f2l': 9,
                 '3x3-oh': 13,
@@ -2687,6 +2834,8 @@
             'hard': {
                 '3x3': 20,
                 '2x2': 11,
+                '1000x1000': 30,
+                '100x100': 25,
                 '3x3-cross': 7,
                 '3x3-f2l': 12,
                 '3x3-oh': 20,
@@ -2695,6 +2844,8 @@
             'advanced': {
                 '3x3': 25,
                 '2x2': 15,
+                '1000x1000': 45,
+                '100x100': 35,
                 '3x3-cross': 8,
                 '3x3-f2l': 20,
                 '3x3-oh': 25,
@@ -2746,7 +2897,7 @@
             localStorage.setItem('cube_timer_scramble_difficulty', diff);
 
             if (diff !== 'random') {
-                const length = DIFFICULTY_LENGTHS[diff][type];
+                const length = (DIFFICULTY_LENGTHS[diff] && DIFFICULTY_LENGTHS[diff][type]) || 20;
                 saveScrambleLength(type, length);
                 
                 const lenInput = document.getElementById('scramble-length-input');
@@ -2766,7 +2917,7 @@
         function getScrambleLength(type) {
             const diff = localStorage.getItem('cube_timer_scramble_difficulty');
             if (diff === 'random') {
-                return DIFFICULTY_LENGTHS['hard'][type];
+                return (DIFFICULTY_LENGTHS['hard'] && DIFFICULTY_LENGTHS['hard'][type]) || 20;
             }
             if (diff && DIFFICULTY_LENGTHS[diff] && DIFFICULTY_LENGTHS[diff][type] !== undefined) {
                 return DIFFICULTY_LENGTHS[diff][type];
@@ -2777,6 +2928,8 @@
             
             // Defaults (csTimer / WCA standards)
             if (type === '2x2') return 11;
+            if (type === '1000x1000') return 30;
+            if (type === '100x100') return 25;
             if (type === '3x3-cross') return 8;
             if (type === '3x3-f2l') return 12;
             if (type === '3x3-fmc') return 30;
@@ -2790,6 +2943,41 @@
             if (diff === 'random') {
                 const choices = ['easy', 'medium', 'hard', 'advanced'];
                 diff = choices[Math.floor(Math.random() * choices.length)];
+            }
+
+            // Big Hyper-Cube Scrambles (1000x1000 and 100x100)
+            if (type === '1000x1000' || type === '100x100') {
+                const N = type === '1000x1000' ? 1000 : 100;
+                let scrambleLength;
+                if (diff && DIFFICULTY_LENGTHS[diff] && DIFFICULTY_LENGTHS[diff][type] !== undefined) {
+                    scrambleLength = DIFFICULTY_LENGTHS[diff][type];
+                } else {
+                    scrambleLength = getScrambleLength(type);
+                }
+                const lenInput = document.getElementById('scramble-length-input');
+                if (lenInput) lenInput.value = scrambleLength;
+
+                const baseFaces = ['U', 'D', 'F', 'B', 'L', 'R'];
+                const modifiers = ['', "'", '2'];
+                const sliceDepths = N === 1000 
+                    ? ['', 'w', '3w', '5w', '10w', '25w', '50w', '100w', '250w', '333w', '500w', '750w']
+                    : ['', 'w', '3w', '5w', '10w', '20w', '25w', '50w'];
+                const moves = [];
+                let prevFace = '';
+
+                while (moves.length < scrambleLength) {
+                    const f = baseFaces[Math.floor(Math.random() * baseFaces.length)];
+                    if (f === prevFace) continue;
+                    const slice = sliceDepths[Math.floor(Math.random() * sliceDepths.length)];
+                    let notation;
+                    if (slice === '') notation = f;
+                    else if (slice === 'w') notation = f + 'w';
+                    else notation = slice.replace('w', '') + f + 'w';
+                    const mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                    moves.push(notation + mod);
+                    prevFace = f;
+                }
+                return moves.join(' ');
             }
             
             let faces;
@@ -2845,9 +3033,26 @@
 
         function translateScrambleToEnglish(scrambleStr) {
             if (!scrambleStr) return "";
-            const moves = scrambleStr.split(' ');
+            const moves = scrambleStr.trim().split(/\s+/);
             const translations = moves.map(m => {
                 if (!m) return "";
+                const match = m.match(/^(\d+)?([UDFBLR])(w)?(['2])?$/);
+                if (match) {
+                    const depth = match[1];
+                    const faceChar = match[2];
+                    const isWide = !!match[3];
+                    const mod = match[4] || '';
+                    const fName = moveNames[faceChar] || faceChar;
+                    let desc = fName;
+                    if (depth) {
+                        desc = `${depth}-Layer Wide ${fName}`;
+                    } else if (isWide) {
+                        desc = `Wide ${fName} (2 Layers)`;
+                    }
+                    if (mod === '2') return `${desc} (180°)`;
+                    if (mod === "'") return `${desc} (Counter-Clockwise)`;
+                    return `${desc} (Clockwise)`;
+                }
                 let base = m[0];
                 let modifier = m.slice(1);
                 let name = moveNames[base] || base;
@@ -2880,14 +3085,12 @@
             for (let i = moves.length - 1; i >= 0; i--) {
                 let m = moves[i];
                 if (!m) continue;
-                let base = m[0];
-                let modifier = m.slice(1);
-                if (modifier === "") {
-                    inverted.push(base + "'");
-                } else if (modifier === "'") {
-                    inverted.push(base);
+                if (m.endsWith("'")) {
+                    inverted.push(m.slice(0, -1));
+                } else if (m.endsWith("2")) {
+                    inverted.push(m);
                 } else {
-                    inverted.push(base + "2");
+                    inverted.push(m + "'");
                 }
             }
             return inverted.join(' ');
@@ -2989,7 +3192,7 @@
 
         // --- LOCAL STORAGE & SOLVES HISTORY ---
         function updateTotalSolvesCount() {
-            const types = ['3x3', '2x2', '3x3-cross', '3x3-f2l', '3x3-oh', '3x3-fmc'];
+            const types = ['3x3', '2x2', '1000x1000', '100x100', '3x3-cross', '3x3-f2l', '3x3-oh', '3x3-fmc'];
             let total = 0;
             types.forEach(type => {
                 const stored = localStorage.getItem('cube_timer_solves_' + type);
