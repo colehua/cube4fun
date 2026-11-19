@@ -1156,10 +1156,11 @@
             transition: all 0.15s ease;
         }
         .scanner-face-tab.active {
-            border-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.25);
+            border-color: #00f0ff;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.35), rgba(2, 132, 199, 0.35));
             color: #ffffff;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.65), inset 0 0 8px rgba(0, 240, 255, 0.35);
+            transform: scale(1.05);
         }
         .scanner-face-tab.memorized {
             border-color: #22c55e;
@@ -1233,10 +1234,10 @@
 
         .reticle-corner {
             position: absolute;
-            width: 22px;
-            height: 22px;
-            border-color: #38bdf8;
-            filter: drop-shadow(0 0 6px #38bdf8);
+            width: 24px;
+            height: 24px;
+            border-color: #00f0ff;
+            filter: drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 18px rgba(0, 240, 255, 0.6));
         }
         .corner-tl { top: -2px; left: -2px; border-top: 3px solid #38bdf8; border-left: 3px solid #38bdf8; }
         .corner-tr { top: -2px; right: -2px; border-top: 3px solid #38bdf8; border-right: 3px solid #38bdf8; }
@@ -1454,15 +1455,22 @@
         }
 
         .scanner-guide-face-tag {
-            background: rgba(56, 189, 248, 0.22);
-            border: 1.5px solid #38bdf8;
-            color: #38bdf8;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.35), rgba(56, 189, 248, 0.35));
+            border: 2px solid #00f0ff;
+            color: #e0f2fe;
             font-weight: 800;
-            padding: 4px 14px;
+            padding: 5px 16px;
             border-radius: 10px;
-            font-size: 0.9em;
+            font-size: 0.92em;
             letter-spacing: 0.5px;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.6), inset 0 0 8px rgba(0, 240, 255, 0.3);
+            text-shadow: 0 0 8px #00f0ff;
+            animation: tagGlowPulse 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes tagGlowPulse {
+            0% { box-shadow: 0 0 12px rgba(0, 240, 255, 0.5); }
+            100% { box-shadow: 0 0 24px rgba(0, 240, 255, 0.85), 0 0 40px rgba(56, 189, 248, 0.4); }
         }
 
         .scanner-mini-3d-scene {
@@ -1477,6 +1485,9 @@
             cursor: grab;
             position: relative;
             touch-action: none;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.16) 0%, rgba(14, 165, 233, 0.08) 40%, rgba(3, 7, 18, 0.4) 75%);
+            border-radius: 16px;
+            box-shadow: inset 0 0 25px rgba(0, 240, 255, 0.1);
         }
 
         .scanner-mini-3d-scene:active {
@@ -1510,16 +1521,82 @@
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
+        /* ULTRA GLOWING ACTIVE SCANNING FACE */
         .scanner-mini-face.active-target {
-            border: 3px solid #ffffff !important;
-            box-shadow: 0 0 22px rgba(255, 255, 255, 0.95), 0 0 38px rgba(255, 255, 255, 0.6) !important;
-            animation: targetPulse 1.2s infinite alternate ease-in-out;
-            z-index: 10;
+            border: 3.5px solid #00f0ff !important;
+            outline: 2px solid rgba(255, 255, 255, 0.95) !important;
+            outline-offset: 1px;
+            box-shadow:
+                0 0 15px rgba(255, 255, 255, 1),
+                0 0 32px #00f0ff,
+                0 0 65px rgba(0, 240, 255, 0.95),
+                0 0 100px rgba(6, 182, 212, 0.8),
+                0 0 150px rgba(56, 189, 248, 0.55),
+                inset 0 0 22px rgba(0, 240, 255, 0.85),
+                inset 0 0 45px rgba(255, 255, 255, 0.5) !important;
+            animation: targetMegaGlow 1.25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20 !important;
+            filter: brightness(1.22) contrast(1.1);
         }
 
-        @keyframes targetPulse {
-            0% { box-shadow: 0 0 14px rgba(255, 255, 255, 0.8), 0 0 24px rgba(255, 255, 255, 0.4); }
-            100% { box-shadow: 0 0 28px rgba(255, 255, 255, 1), 0 0 48px rgba(255, 255, 255, 0.7); }
+        /* High-tech pulsing indicator on active standard cube face */
+        .scanner-mini-face.active-target::after {
+            content: '🎯 SCANNING';
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.95), rgba(14, 165, 233, 0.95));
+            color: #030712;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.62em;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            padding: 2px 7px;
+            border-radius: 6px;
+            box-shadow: 0 0 12px #00f0ff, 0 0 20px rgba(255, 255, 255, 0.8);
+            border: 1px solid #ffffff;
+            pointer-events: none;
+            animation: scanTagPulse 1.25s infinite alternate ease-in-out;
+            z-index: 25;
+        }
+
+        .scanner-mini-face.face-pyraminx.active-target::after,
+        .scanner-mini-face.face-megaminx.active-target::after {
+            display: none !important;
+        }
+
+        @keyframes scanTagPulse {
+            0% { transform: scale(0.96); box-shadow: 0 0 8px #00f0ff; opacity: 0.9; }
+            100% { transform: scale(1.05); box-shadow: 0 0 18px #00f0ff, 0 0 28px rgba(255, 255, 255, 1); opacity: 1; }
+        }
+
+        @keyframes targetMegaGlow {
+            0% {
+                border-color: #00f0ff;
+                outline-color: rgba(255, 255, 255, 0.85);
+                box-shadow:
+                    0 0 14px rgba(255, 255, 255, 0.95),
+                    0 0 26px #00f0ff,
+                    0 0 50px rgba(0, 240, 255, 0.8),
+                    0 0 85px rgba(6, 182, 212, 0.65),
+                    0 0 120px rgba(56, 189, 248, 0.4),
+                    inset 0 0 18px rgba(0, 240, 255, 0.75),
+                    inset 0 0 35px rgba(255, 255, 255, 0.35);
+                filter: brightness(1.15) contrast(1.08);
+            }
+            100% {
+                border-color: #ffffff;
+                outline-color: #00f0ff;
+                box-shadow:
+                    0 0 22px rgba(255, 255, 255, 1),
+                    0 0 45px #00f0ff,
+                    0 0 85px rgba(0, 240, 255, 1),
+                    0 0 130px rgba(6, 182, 212, 0.9),
+                    0 0 175px rgba(56, 189, 248, 0.7),
+                    inset 0 0 30px rgba(0, 240, 255, 1),
+                    inset 0 0 60px rgba(255, 255, 255, 0.65);
+                filter: brightness(1.3) contrast(1.15);
+            }
         }
 
         .scanner-mini-face.face-F { transform: rotateY(0deg) translateZ(90px); border-color: rgba(34, 197, 94, 0.7); }
@@ -1548,7 +1625,41 @@
             z-index: 5;
         }
 
-        /* 3D PYRAMINX MINI FACE */
+        /* Stickers inside the active target face glow vividly */
+        .scanner-mini-face.active-target .scanner-mini-sticker {
+            border-color: rgba(0, 240, 255, 0.95) !important;
+            box-shadow:
+                0 0 8px rgba(0, 240, 255, 0.85),
+                inset 0 0 6px rgba(255, 255, 255, 0.75),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.4) !important;
+            animation: stickerInnerGlow 1.25s infinite alternate ease-in-out;
+        }
+
+        .scanner-mini-face.face-skewb.active-target .solver-3d-sticker {
+            border-color: rgba(0, 240, 255, 0.95) !important;
+            box-shadow:
+                0 0 10px rgba(0, 240, 255, 0.85),
+                inset 0 0 8px rgba(255, 255, 255, 0.75) !important;
+            animation: stickerInnerGlow 1.25s infinite alternate ease-in-out;
+        }
+
+        @keyframes stickerInnerGlow {
+            0% {
+                box-shadow:
+                    0 0 6px rgba(0, 240, 255, 0.7),
+                    inset 0 0 4px rgba(255, 255, 255, 0.6),
+                    inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+            }
+            100% {
+                box-shadow:
+                    0 0 12px rgba(0, 240, 255, 1),
+                    inset 0 0 8px rgba(255, 255, 255, 0.9),
+                    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+                border-color: #ffffff !important;
+            }
+        }
+
+        /* 3D PYRAMINX MINI FACE WITH MULTI-STAGE GLOW */
         .scanner-mini-face.face-pyraminx {
             display: block !important;
             padding: 0 !important;
@@ -1562,14 +1673,48 @@
             backface-visibility: visible !important;
         }
         .scanner-mini-face.face-pyraminx.active-target {
-            filter: drop-shadow(0 0 16px #00f0ff);
+            filter:
+                drop-shadow(0 0 8px #ffffff)
+                drop-shadow(0 0 22px #00f0ff)
+                drop-shadow(0 0 48px rgba(0, 240, 255, 0.95))
+                drop-shadow(0 0 80px rgba(6, 182, 212, 0.8))
+                drop-shadow(0 0 120px rgba(56, 189, 248, 0.6))
+                brightness(1.28) !important;
+            animation: pyraTargetMegaGlow 1.25s infinite alternate ease-in-out !important;
+            z-index: 20 !important;
         }
+
+        @keyframes pyraTargetMegaGlow {
+            0% {
+                filter:
+                    drop-shadow(0 0 6px #ffffff)
+                    drop-shadow(0 0 18px #00f0ff)
+                    drop-shadow(0 0 38px rgba(0, 240, 255, 0.85))
+                    drop-shadow(0 0 65px rgba(6, 182, 212, 0.7))
+                    brightness(1.18);
+            }
+            100% {
+                filter:
+                    drop-shadow(0 0 14px #ffffff)
+                    drop-shadow(0 0 32px #00f0ff)
+                    drop-shadow(0 0 65px rgba(0, 240, 255, 1))
+                    drop-shadow(0 0 100px rgba(6, 182, 212, 0.9))
+                    drop-shadow(0 0 145px rgba(56, 189, 248, 0.75))
+                    brightness(1.35);
+            }
+        }
+
+        .scanner-mini-face.face-pyraminx.active-target .pyra-sticker {
+            filter: brightness(1.22);
+            box-shadow: 0 0 8px #00f0ff, inset 0 0 6px #ffffff !important;
+        }
+
         .scanner-mini-face.face-pyraminx.face-U { transform: rotateY(0deg) rotateX(19.4712deg) translateZ(34.8px) !important; }
         .scanner-mini-face.face-pyraminx.face-L { transform: rotateY(-120deg) rotateX(19.4712deg) translateZ(34.8px) !important; }
         .scanner-mini-face.face-pyraminx.face-R { transform: rotateY(120deg) rotateX(19.4712deg) translateZ(34.8px) !important; }
         .scanner-mini-face.face-pyraminx.face-B { transform: rotateX(-90deg) rotateZ(180deg) translateZ(34.8px) !important; }
 
-        /* 3D MEGAMINX MINI FACE */
+        /* 3D MEGAMINX MINI FACE WITH MULTI-STAGE GLOW */
         .scanner-mini-face.face-megaminx {
             display: block !important;
             padding: 0 !important;
@@ -1583,7 +1728,35 @@
             backface-visibility: hidden !important;
         }
         .scanner-mini-face.face-megaminx.active-target {
-            filter: drop-shadow(0 0 18px #ffffff);
+            filter:
+                drop-shadow(0 0 8px #ffffff)
+                drop-shadow(0 0 22px #00f0ff)
+                drop-shadow(0 0 50px rgba(0, 240, 255, 0.95))
+                drop-shadow(0 0 85px rgba(6, 182, 212, 0.8))
+                drop-shadow(0 0 125px rgba(56, 189, 248, 0.6))
+                brightness(1.28) !important;
+            animation: megaTargetMegaGlow 1.25s infinite alternate ease-in-out !important;
+            z-index: 20 !important;
+        }
+
+        @keyframes megaTargetMegaGlow {
+            0% {
+                filter:
+                    drop-shadow(0 0 6px #ffffff)
+                    drop-shadow(0 0 18px #00f0ff)
+                    drop-shadow(0 0 40px rgba(0, 240, 255, 0.85))
+                    drop-shadow(0 0 70px rgba(6, 182, 212, 0.7))
+                    brightness(1.2);
+            }
+            100% {
+                filter:
+                    drop-shadow(0 0 14px #ffffff)
+                    drop-shadow(0 0 32px #00f0ff)
+                    drop-shadow(0 0 65px rgba(0, 240, 255, 1))
+                    drop-shadow(0 0 105px rgba(6, 182, 212, 0.9))
+                    drop-shadow(0 0 150px rgba(56, 189, 248, 0.75))
+                    brightness(1.38);
+            }
         }
         .scanner-mini-face.face-megaminx.megaminx-U   { transform: rotateX(90deg) translateZ(84.76px) !important; }
         .scanner-mini-face.face-megaminx.megaminx-F   { transform: rotateY(0deg) rotateX(26.565deg) translateZ(84.76px) rotateZ(180deg) !important; }
@@ -4672,6 +4845,12 @@
         window.addEventListener('DOMContentLoaded', () => {
             setup3DOrbitListeners();
             switchSolverCube(3, true);
+            // Pre-warm solver tables in background so all solutions solve instantaneously
+            setTimeout(() => {
+                if (window.CubeSolver && CubeSolver.init) {
+                    CubeSolver.init();
+                }
+            }, 300);
         });
     </script>
 

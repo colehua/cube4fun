@@ -3000,10 +3000,6 @@
   }
 
   function solve3x3FromFaces(faces) {
-    if (CubeClass.initSolver) {
-      CubeClass.initSolver();
-    }
-
     const centers = {
       U: faces.U[4],
       R: faces.R[4],
@@ -3022,6 +3018,10 @@
     const optSol = solveOptimalShort(faces, 6);
     if (optSol && optSol.moves !== undefined) {
       return optSol;
+    }
+
+    if (CubeClass.initSolver) {
+      CubeClass.initSolver();
     }
 
     const colorToLetter = {};
