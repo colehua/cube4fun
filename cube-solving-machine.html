@@ -769,32 +769,6 @@
             box-shadow: 0 0 35px rgba(6, 182, 212, 0.65), inset 0 0 35px rgba(6, 182, 212, 0.35) !important;
         }
 
-        .cube-frozen-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(8, 47, 73, 0.92);
-            border: 2px solid #38bdf8;
-            color: #e0f2fe;
-            font-family: 'DynaPuff', cursive, sans-serif;
-            font-size: 0.85em;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 999px;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-            z-index: 20;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .cube-frozen-badge:hover {
-            background: #0284c7;
-            color: #ffffff;
-            transform: scale(1.05);
-        }
-
         /* 2D NET VIEW */
         .cube-net-wrapper {
             background: rgba(3, 7, 18, 0.7);
@@ -1793,9 +1767,6 @@
                 <div class="solver-3d-stage">
                     <!-- 3D Cube Scene -->
                     <div class="solver-3d-scene" id="solver-3d-scene">
-                        <div id="cube-frozen-badge" class="cube-frozen-badge" style="display: none;" onclick="toggleCubeFreeze()" title="Cube is frozen - click to unfreeze">
-                            ❄️ FROZEN • Click to Unfreeze
-                        </div>
                         <div class="solver-3d-cube" id="solver-3d-cube">
                             <!-- 3D faces and stickers generated dynamically -->
                         </div>
@@ -2144,14 +2115,12 @@
             if (isCubeFrozen) {
                 isCubeFrozen = false;
                 const freezeBtn = document.getElementById('btn-freeze-cube');
-                const badge = document.getElementById('cube-frozen-badge');
                 const sceneEl = document.getElementById('solver-3d-scene');
                 if (freezeBtn) {
                     freezeBtn.classList.remove('frozen');
                     freezeBtn.innerHTML = '❄️ Freeze Cube';
                     freezeBtn.title = 'Freeze cube so you cannot move it';
                 }
-                if (badge) badge.style.display = 'none';
                 if (sceneEl) sceneEl.classList.remove('cube-frozen-scene');
             }
 
@@ -3398,16 +3367,12 @@
         function toggleCubeFreeze() {
             isCubeFrozen = !isCubeFrozen;
             const freezeBtn = document.getElementById('btn-freeze-cube');
-            const badge = document.getElementById('cube-frozen-badge');
             const sceneEl = document.getElementById('solver-3d-scene');
 
             if (freezeBtn) {
                 freezeBtn.classList.toggle('frozen', isCubeFrozen);
                 freezeBtn.innerHTML = isCubeFrozen ? '🧊 Unfreeze Cube' : '❄️ Freeze Cube';
                 freezeBtn.title = isCubeFrozen ? 'Cube is FROZEN! Click to unfreeze and allow moving' : 'Freeze cube so you cannot move it';
-            }
-            if (badge) {
-                badge.style.display = isCubeFrozen ? 'flex' : 'none';
             }
             if (sceneEl) {
                 sceneEl.classList.toggle('cube-frozen-scene', isCubeFrozen);
