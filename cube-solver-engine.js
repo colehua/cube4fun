@@ -2628,7 +2628,28 @@
       return m.endsWith("'") ? m.replace("'", "") : m + "'";
     }
 
-    const solved = {
+    function majorityColor(arr) {
+      const counts = {};
+      for (const c of arr) counts[c] = (counts[c] || 0) + 1;
+      let maxCol = arr[0], maxCount = 0;
+      for (const c in counts) {
+        if (counts[c] > maxCount) { maxCount = counts[c]; maxCol = c; }
+      }
+      return maxCol;
+    }
+
+    const targetU = majorityColor([cur.U[2], cur.U[5], cur.U[7]]);
+    const targetL = majorityColor([cur.L[2], cur.L[5], cur.L[7]]);
+    const targetR = majorityColor([cur.R[2], cur.R[5], cur.R[7]]);
+    const targetB = majorityColor([cur.B[2], cur.B[5], cur.B[7]]);
+    const targetSet = new Set([targetU, targetL, targetR, targetB]);
+
+    const solved = (targetSet.size === 4 && !targetSet.has('grey')) ? {
+      U: new Array(9).fill(targetU),
+      L: new Array(9).fill(targetL),
+      R: new Array(9).fill(targetR),
+      B: new Array(9).fill(targetB)
+    } : {
       U: new Array(9).fill('yellow'),
       L: new Array(9).fill('green'),
       R: new Array(9).fill('red'),
@@ -2927,8 +2948,12 @@
     let backwardQueue = [{ state: targetSolved, path: [] }];
 
     const halfDepth = Math.ceil(maxDepth / 2);
+    const startTime = Date.now();
 
     for (let depth = 0; depth < halfDepth; depth++) {
+      if (depth >= 2 && Date.now() - startTime > 35) {
+        break; // Fast fallback to Kociemba on deeper scrambles to prevent browser freeze
+      }
       const nextFwd = [];
       for (const node of forwardQueue) {
         const lastFace = node.path.length > 0 ? node.path[node.path.length - 1][0] : null;
@@ -3079,11 +3104,38 @@
     return true;
   }
 
+  const ROT_SEQUENCES_2X2 = [
+    [],
+    ['y'], ['y', 'y'], ['y', 'y', 'y'],
+    ['x'], ['x', 'y'], ['x', 'y', 'y'], ['x', 'y', 'y', 'y'],
+    ['x', 'x'], ['x', 'x', 'y'], ['x', 'x', 'y', 'y'], ['x', 'x', 'y', 'y', 'y'],
+    ['x', 'x', 'x'], ['x', 'x', 'x', 'y'], ['x', 'x', 'x', 'y', 'y'], ['x', 'x', 'x', 'y', 'y', 'y'],
+    ['z'], ['z', 'y'], ['z', 'y', 'y'], ['z', 'y', 'y', 'y'],
+    ['z', 'z', 'z'], ['z', 'z', 'z', 'y'], ['z', 'z', 'z', 'y', 'y'], ['z', 'z', 'z', 'y', 'y', 'y']
+  ];
+
+  function rot2x2X(f) {
+    applyMoveToFaces(f, 2, 'R');
+    applyMoveToFaces(f, 2, "L'");
+  }
+  function rot2x2Y(f) {
+    applyMoveToFaces(f, 2, 'U');
+    applyMoveToFaces(f, 2, "D'");
+  }
+  function rot2x2Z(f) {
+    applyMoveToFaces(f, 2, 'F');
+    applyMoveToFaces(f, 2, "B'");
+  }
+
   function solve2x2FromFaces(faces) {
     for (const f of ['U', 'R', 'F', 'D', 'L', 'B']) {
       for (let i = 0; i < 4; i++) {
         if (faces[f][i] === 'grey') return { error: UNSOLVABLE_ERROR };
       }
+    }
+
+    if (checkFacesSolved(2, faces)) {
+      return { moves: "" };
     }
 
     if (!validate2x2Faces(faces)) {
@@ -3094,23 +3146,66 @@
       'white': 0, 'red': 1, 'green': 2, 'yellow': 3, 'orange': 4, 'blue': 5
     };
 
-    let arr = [];
-    for (const f of ['U', 'R', 'F', 'D', 'L', 'B']) {
-      for (let i = 0; i < 4; i++) {
-        const col = faces[f][i];
-        let val = defaultMap[col];
-        if (val === undefined) {
-          return { error: UNSOLVABLE_ERROR };
+    // Try all 24 3D cube orientations to find one where the reference DBL corner aligns
+    for (const seq of ROT_SEQUENCES_2X2) {
+      const cand = cloneFaces(faces);
+      const labelFaces = {
+        U: Array(4).fill('U'),
+        D: Array(4).fill('D'),
+        F: Array(4).fill('F'),
+        B: Array(4).fill('B'),
+        L: Array(4).fill('L'),
+        R: Array(4).fill('R')
+      };
+      for (const step of seq) {
+        if (step === 'x') { rot2x2X(cand); rot2x2X(labelFaces); }
+        else if (step === 'y') { rot2x2Y(cand); rot2x2Y(labelFaces); }
+        else if (step === 'z') { rot2x2Z(cand); rot2x2Z(labelFaces); }
+      }
+
+      if (cand.D[2] === 'yellow' && cand.B[3] === 'blue' && cand.L[2] === 'orange') {
+        const faceMap = {
+          'U': labelFaces.U[0],
+          'R': labelFaces.R[0],
+          'F': labelFaces.F[0]
+        };
+
+        let arr = [];
+        let valid = true;
+        for (const f of ['U', 'R', 'F', 'D', 'L', 'B']) {
+          for (let i = 0; i < 4; i++) {
+            const val = defaultMap[cand[f][i]];
+            if (val === undefined) { valid = false; break; }
+            arr.push(val);
+          }
+          if (!valid) break;
         }
-        arr.push(val);
+        if (!valid) continue;
+
+        const rawSol = solve2x2Raw(arr);
+        if (rawSol !== null) {
+          if (!rawSol) return { moves: "" };
+          const mappedMoves = rawSol.split(' ').map(m => {
+            const base = m.replace(/['2]/g, '');
+            const suffix = m.slice(base.length);
+            const origFace = faceMap[base] || base;
+            return origFace + suffix;
+          }).join(' ');
+
+          const opt = optimizeMoves(mappedMoves);
+          // Simulation verification on original faces:
+          const v = cloneFaces(faces);
+          if (opt) {
+            opt.split(' ').forEach(m => applyMoveToFaces(v, 2, m));
+          }
+          if (checkFacesSolved(2, v)) {
+            return { moves: opt };
+          }
+        }
       }
     }
 
-    const rawSol = solve2x2Raw(arr);
-    if (rawSol === null) {
-      return { error: UNSOLVABLE_ERROR };
-    }
-    return { moves: rawSol };
+    return { error: UNSOLVABLE_ERROR };
   }
 
   function solve4x4FromFaces(faces) {

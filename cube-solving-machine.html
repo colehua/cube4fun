@@ -3194,11 +3194,20 @@
             const remEl = document.getElementById('solution-orientation-reminder');
             if (remEl) {
                 if (solverSize === 'pyraminx') {
-                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your Pyraminx with <strong>YELLOW ON TOP</strong>, <strong>GREEN ON LEFT</strong>, and <strong>RED ON RIGHT</strong> while executing each move!`;
+                    const topCol = (solverFaces.U && (solverFaces.U[2] || solverFaces.U[0]) ? (solverFaces.U[2] || solverFaces.U[0]) : 'Yellow').toUpperCase();
+                    const leftCol = (solverFaces.L && (solverFaces.L[5] || solverFaces.L[0]) ? (solverFaces.L[5] || solverFaces.L[0]) : 'Green').toUpperCase();
+                    const rightCol = (solverFaces.R && (solverFaces.R[5] || solverFaces.R[0]) ? (solverFaces.R[5] || solverFaces.R[0]) : 'Red').toUpperCase();
+                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your Pyraminx with <strong>${topCol} ON TOP</strong>, <strong>${leftCol} ON LEFT</strong>, and <strong>${rightCol} ON RIGHT</strong> while executing each move!`;
                 } else if (solverSize === 'megaminx') {
-                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your Megaminx with <strong>WHITE ON TOP</strong> and <strong>RED IN FRONT</strong> while executing each move!`;
+                    const topCol = (solverFaces.U && solverFaces.U[0] ? solverFaces.U[0] : 'White').toUpperCase();
+                    const frontCol = (solverFaces.F && solverFaces.F[0] ? solverFaces.F[0] : 'Red').toUpperCase();
+                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your Megaminx with <strong>${topCol} ON TOP</strong> and <strong>${frontCol} IN FRONT</strong> while executing each move!`;
                 } else {
-                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your cube with <strong>WHITE ON TOP</strong> and <strong>GREEN IN FRONT</strong> while executing each move!`;
+                    const N = typeof solverSize === 'number' ? solverSize : 3;
+                    const mid = Math.floor((N * N) / 2);
+                    const topCol = (solverFaces.U && (solverFaces.U[mid] || solverFaces.U[0]) ? (solverFaces.U[mid] || solverFaces.U[0]) : 'White').toUpperCase();
+                    const frontCol = (solverFaces.F && (solverFaces.F[mid] || solverFaces.F[0]) ? (solverFaces.F[mid] || solverFaces.F[0]) : 'Green').toUpperCase();
+                    remEl.innerHTML = `⚠️ <strong>Orientation Reminder:</strong> Always keep holding your cube with <strong>${topCol} ON TOP</strong> and <strong>${frontCol} IN FRONT</strong> while executing each move!`;
                 }
             }
 
