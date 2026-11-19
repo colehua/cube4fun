@@ -40,6 +40,56 @@ case "$ACTION" in
     git log -n 3 --oneline
     ;;
 
+  sync)
+    MSG="${2:-Auto-sync project changes}"
+    echo "🔄 Pulling latest changes from origin main..."
+    git pull origin main
+    echo "📦 Staging changes..."
+    git add .
+    if git diff --staged --quiet; then
+      echo "ℹ️ No changes to commit."
+    else
+      echo "💾 Committing: $MSG"
+      git commit -m "$MSG"
+      echo "🚀 Pushing to origin main..."
+      git push origin main
+      echo "✅ Successfully synced to GitHub!"
+    fi
+    ;;
+
+  check)
+    echo "🔍 Checking environment readiness..."
+    NAME=$(git config user.name || true)
+    EMAIL=$(git config user.email || true)
+    if [ -n "$NAME" ] && [ -n "$EMAIL" ]; then
+      echo "✅ Git Author: $NAME <$EMAIL>"
+    else
+      echo "⚠️ Git Author: Not configured"
+    fi
+
+    if command -v gh >/dev/null 2>&1; then
+      echo "✅ GitHub CLI: $(gh --version | head -n 1)"
+    else
+      echo "⚠️ GitHub CLI: Not installed"
+    fi
+
+    if command -v python3 >/dev/null 2>&1; then
+      echo "✅ Python 3: $(python3 --version)"
+    else
+      echo "❌ Python 3: Not installed"
+    fi
+
+    if command -v node >/dev/null 2>&1; then
+      echo "✅ Node.js: $(node --version)"
+    else
+      echo "❌ Node.js: Not installed"
+    fi
+
+    if command -v cloudshell >/dev/null 2>&1; then
+      echo "✅ Cloud Shell CLI: Available"
+    fi
+    ;;
+
   serve)
     PORT="${2:-8080}"
     echo "🌐 Starting web server on http://localhost:$PORT..."
@@ -53,7 +103,7 @@ case "$ACTION" in
     ;;
 
   *)
-    echo "Usage: ./sync.sh [pull | push \"commit message\" | status | serve [port] | open]"
+    echo "Usage: ./sync.sh [pull | push \"commit message\" | sync \"commit message\" | status | check | serve [port] | open]"
     exit 1
     ;;
 esac

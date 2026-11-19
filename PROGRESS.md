@@ -1,50 +1,48 @@
 # Summary
 - **What changed**:
-  1. **Configured Cloud Shell Git Author**:
-     - Configured `user.name` (`simonhua`) and `user.email` (`simon.hua@ubc.ca`) to enable headless commits in Cloud Shell.
-  2. **Verified Cloud Console Environment & Toolchains**:
-     - Verified Git remote read/write capability against `origin/main` via GitHub CLI credential helper (`Simonhua9`).
-     - Verified runtimes: Python 3, Node.js (v26.13.1), npm, and Google Cloud Shell CLI utilities.
-     - Verified Cloud Shell Web Preview integration (`cloudshell get-web-preview-url --port 8080`) and verified active local HTTP server serving project files (HTTP 200).
-     - Verified JavaScript syntax across core files (`cube-solver-engine.js`, `theme.js`, `db-config.js`) using Node syntax checker.
-     - Verified `./sync.sh status` execution.
-  3. **Standardized AGENT.md Path**:
-     - Updated link from absolute Windows OneDrive path to repository-relative link `[CLAUDE.md](CLAUDE.md)`.
+  1. **Zero-Touch User Workflow**:
+     - Updated [CLAUDE.md](file:///home/huazicheng/repos/cube4fun/CLAUDE.md), [AGENT.md](file:///home/huazicheng/repos/cube4fun/AGENT.md), and added [GEMINI.md](file:///home/huazicheng/repos/cube4fun/GEMINI.md) with the Zero-Touch User Interaction rule.
+     - Mandates that any AI assistant autonomously runs the 4-step auto-sync loop (pull -> execute -> verify -> update PROGRESS.md -> commit/push) on every user prompt without asking or requiring boilerplate.
+  2. **Simplified User Prompting in [SYNC.md](file:///home/huazicheng/repos/cube4fun/SYNC.md)**:
+     - Promoted direct task prompting (`<YOUR TASK HERE>`) as the default workflow across all environments.
+     - Preserved explicit fallback prompt for basic models.
+  3. **Enhanced Cross-Device Sync Scripts**:
+     - Added `check` command to [sync.sh](file:///home/huazicheng/repos/cube4fun/sync.sh) and [sync.ps1](file:///home/huazicheng/repos/cube4fun/sync.ps1) for automated environment diagnosis.
+     - Added single-command `sync` (`./sync.sh sync "msg"`) for instant pull, stage, commit, and push.
 - **How verified**:
-  - Tested git identity retrieval: `git config user.name && git config user.email`.
-  - Tested remote repository reachability: `git ls-remote origin`.
-  - Tested JS syntax: `node -c cube-solver-engine.js && node -c theme.js && node -c db-config.js`.
-  - Tested HTTP server response: `curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8080/repos/cube4fun/index.html` returned HTTP 200.
-  - Tested sync script: `./sync.sh status`.
+  - Ran `./sync.sh check` to confirm automated diagnostic checks.
+  - Ran `./sync.sh status` to inspect modified files.
+  - Validated all markdown links and documentation structure.
 - **What to review**:
-  - Review [PROGRESS.md](file:///home/huazicheng/repos/cube4fun/PROGRESS.md) and [AGENT.md](file:///home/huazicheng/repos/cube4fun/AGENT.md).
+  - Review [CLAUDE.md](file:///home/huazicheng/repos/cube4fun/CLAUDE.md), [AGENT.md](file:///home/huazicheng/repos/cube4fun/AGENT.md), [GEMINI.md](file:///home/huazicheng/repos/cube4fun/GEMINI.md), and [SYNC.md](file:///home/huazicheng/repos/cube4fun/SYNC.md).
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Check if Google Cloud Console is ready for development work.
-2. Verify all tooling, git authentication, web server, and project scripts.
-3. Update PROGRESS.md and push to origin main.
+1. Allow user to provide only their task description in future sessions while the agent autonomously handles the complete sync and progress workflow.
+2. Embed zero-touch guidelines across CLAUDE.md, AGENT.md, and GEMINI.md.
+3. Enhance sync helper scripts with check and sync commands.
+4. Verify, update PROGRESS.md, and push to origin main.
 
-Next step: Ready for development tasks in Cloud Console.
+Next step: User can now prompt with only their task description on any computer or Cloud Console.
 
 Tasks:
-- [x] Run git pull origin main
-- [x] Inspect and configure git identity (user.name and user.email)
-- [x] Verify GitHub CLI auth and git remote access
-- [x] Verify Cloud Shell web preview and python HTTP server
-- [x] Verify Node.js runtime and validate JS syntax across project
-- [x] Verify sync.sh helper execution
-- [x] Update AGENT.md relative links
+- [x] Update CLAUDE.md with Zero-Friction User Interaction (The Golden Rule)
+- [x] Update AGENT.md with identical standalone autonomous guidelines
+- [x] Create GEMINI.md for Google/Gemini agents
+- [x] Update SYNC.md with direct task prompting instructions
+- [x] Add check and sync commands to sync.sh and sync.ps1
+- [x] Verify script commands and test readiness
 - [x] Update PROGRESS.md
-- [x] Commit and push changes to origin main
+- [x] Stage, commit, and push changes to origin main
 
 Assumptions:
-- User will conduct development work in Cloud Console later; environment is prepped and verified.
+- Storing identical instructions in CLAUDE.md, AGENT.md, and GEMINI.md guarantees any AI agent across different IDEs/CLIs will automatically execute the 4-step sync loop.
 
 Blockers (what I need to do): None.
 Found, not done: None.
 Log (newest first, one line each):
+- 2026-11-19: Implemented Zero-Touch User Workflow across CLAUDE.md, AGENT.md, GEMINI.md, SYNC.md, and added sync/check commands to sync scripts.
 - 2026-11-19: Verified Cloud Console readiness, configured git author credentials, tested runtimes and web preview, and updated AGENT.md.
 - 2026-11-18: Embedded Level 4 autonomy guidelines in CLAUDE.md/AGENT.md and simplified cross-device prompt in SYNC.md.
 - 2026-11-18: Added cross-device sync scripts (sync.sh, sync.ps1) and SYNC.md.
