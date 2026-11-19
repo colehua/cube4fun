@@ -1,6 +1,6 @@
 # Cross-Device Workflow and Auto-Sync Protocol
 
-This document defines how to work seamlessly on **Cube4Fun** across different environments (Google Cloud Console, Windows PC, or any secondary computer) without losing progress or causing Git conflicts.
+This document defines how to work on **Cube4Fun** across different environments (Google Cloud Console, Windows PC, or any secondary computer) without losing progress or causing Git conflicts.
 
 ---
 
@@ -9,74 +9,36 @@ This document defines how to work seamlessly on **Cube4Fun** across different en
 | Environment | Repository Path | How to Open Editor |
 | :--- | :--- | :--- |
 | **Google Cloud Shell** | `/home/huazicheng/repos/cube4fun` | `cloudshell workspace ~/repos/cube4fun` |
-| **Windows PC** | `C:\Users\S\OneDrive\repos\how-to-solve-rubiks-cube\cube4fun` | Open folder in VS Code or IDE |
-
-> [!IMPORTANT]
-> In Cloud Shell, the repository is located inside `~/repos/cube4fun`, **not** `~/cube4fun`.
-> If you are inside the `cube4fun` directory, run `cloudshell workspace .` to open it in the editor.
+| **Windows PC** | `C:\Users\S\OneDrive\repos\how-to-solve-rubiks-cube\cube4fun` | Open folder in IDE |
 
 ---
 
-## 2. Fast Commands with Helper Scripts
+## 2. Universal Short Prompt (Use This Every Day)
 
-### On Google Cloud Shell (Linux)
-Run `./sync.sh` from the `~/repos/cube4fun` folder:
-- `./sync.sh pull` — Pulls latest changes from `origin main`.
-- `./sync.sh push "commit message"` — Stages, commits, and pushes to `origin main`.
-- `./sync.sh serve` — Starts Python web server on port 8080 (preview via Web Preview).
-- `./sync.sh open` — Opens Cloud Shell Editor on this folder.
-- `./sync.sh status` — Checks git status and recent commits.
-
-### On Windows PC (PowerShell)
-Run `.\sync.ps1` from the `cube4fun` folder:
-- `.\sync.ps1 pull` — Pulls latest changes from `origin main`.
-- `.\sync.ps1 push "commit message"` — Stages, commits, and pushes to `origin main`.
-- `.\sync.ps1 serve` — Starts Python web server on port 8080.
-- `.\sync.ps1 status` — Checks git status and recent commits.
-
----
-
-## 3. The Universal Agent Prompt
-
-Whenever you start an AI session (in Google Cloud Console Gemini, Claude Code, or Antigravity) on **any machine**, paste this prompt at the beginning of your instruction. The AI will automatically sync Git first, read current status, complete your request, verify it, update `PROGRESS.md`, and push back to GitHub:
+Paste this single prompt into your AI assistant in Cloud Shell or any computer:
 
 ```text
-You are an autonomous senior engineer working on the "Cube4Fun" project in this repository.
-
-Always follow this exact workflow before and after any task:
-
-[STEP 1 - PRE-SYNC]
-1. Check environment and run: git pull origin main
-2. Read PROGRESS.md to inspect current status, recent changes, and project context.
-
-[STEP 2 - EXECUTION]
-3. Implement the requested task accurately according to the instructions.
-4. Keep all changes clean, minimal, and reversible.
-
-[STEP 3 - VERIFICATION]
-5. Verify the changes (e.g. static inspection, browser test or dry-run).
-
-[STEP 4 - POST-SYNC]
-6. Update PROGRESS.md with:
-   - What changed
-   - How verified
-   - Status, Tasks, and new log entry
-7. Stage all modified and new files: git add .
-8. Commit with a concise descriptive message: git commit -m "..."
-9. Push to GitHub: git push origin main
-
-My task for you today is:
-<TYPE YOUR TASK HERE>
+Run `git pull origin main`, read CLAUDE.md and PROGRESS.md, then autonomously complete this task:
+<YOUR TASK HERE>
+When done, verify the work, update PROGRESS.md, and run `git add . && git commit -m "..." && git push origin main`.
 ```
+
+Why this works everywhere:
+- **No hardcoded updates:** The assistant reads `PROGRESS.md` dynamically to see recent work.
+- **Rules travel with Git:** `CLAUDE.md` contains Level 4 autonomy, auto-sync rules, and verification standards directly inside the repository.
+- **Cross-device ready:** Automatically pulls before working and pushes after working.
 
 ---
 
-## 4. Single Source of Truth: `PROGRESS.md`
+## 3. Fast Commands
 
-`PROGRESS.md` records:
-- The current status (`IN PROGRESS` | `COMPLETE` | `BLOCKED`)
-- Recent completed tasks and verification details
-- Pending tasks
-- Assumptions and change log
+### Google Cloud Shell (Linux)
+- `./sync.sh pull` — Pulls latest code.
+- `./sync.sh push "commit message"` — Stages, commits, and pushes.
+- `./sync.sh serve` — Starts web server on port 8080.
+- `./sync.sh open` — Opens Cloud Shell Editor on this folder.
 
-Every AI session must read `PROGRESS.md` at step 1 and update it before pushing at step 4.
+### Windows PC (PowerShell)
+- `.\sync.ps1 pull` — Pulls latest code.
+- `.\sync.ps1 push "commit message"` — Stages, commits, and pushes.
+- `.\sync.ps1 serve` — Starts web server on port 8080.
