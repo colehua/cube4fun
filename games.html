@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>🚀 Secret Game Mode • Agent Cole's Cube Arcade 🕹️</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
     <link rel="stylesheet" href="theme.css">
@@ -22,6 +22,38 @@
         * {
             box-sizing: border-box;
             user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        canvas,
+        .arcade-canvas,
+        .runner-canvas-super,
+        .runner-canvas-container {
+            touch-action: none !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -webkit-touch-callout: none !important;
+        }
+
+        button,
+        .hud-btn,
+        .hud-ctrl-btn,
+        .deck-btn,
+        .deck-btn-slim,
+        .arcade-control-deck {
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         body {
@@ -4240,6 +4272,20 @@
         }
 
         if (runnerCanvas) {
+            // Prevent double-click from turning things bigger / zooming
+            runnerCanvas.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                if (runnerActive && !runnerPaused) {
+                    const rect = runnerCanvas.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    if (clickX < rect.width * 0.42) {
+                        moveRunnerLane(-1);
+                    } else if (clickX > rect.width * 0.58) {
+                        moveRunnerLane(1);
+                    }
+                }
+            });
+
             runnerCanvas.addEventListener('click', (e) => {
                 if (!runnerActive) {
                     if (runnerSurviveBtnRect) {
@@ -6955,6 +7001,44 @@
         drawStacker();
         renderPairsBoard();
         renderFlappyIdle();
+
+        // ==========================================
+        // 16. PREVENT DOUBLE-CLICK & DOUBLE-TAP ZOOM
+        // ==========================================
+        // Stops elements from turning bigger when double-clicking or double-tapping
+        window.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        // Prevent double-tap zoom on touchscreens and trackpads
+        let lastTouchEndTime = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEndTime <= 300) {
+                e.preventDefault();
+                // Ensure button clicks still fire without zooming the viewport
+                const target = e.target;
+                if (target) {
+                    const btn = target.closest('button');
+                    if (btn) btn.click();
+                }
+            }
+            lastTouchEndTime = now;
+        }, { passive: false });
+
+        // Prevent Ctrl + wheel zoom & trackpad pinch gestures
+        document.addEventListener('wheel', (e) => {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
+
+        // Prevent iOS/WebKit gesture zoom
+        document.addEventListener('gesturestart', (e) => e.preventDefault());
+        document.addEventListener('gesturechange', (e) => e.preventDefault());
+        document.addEventListener('gestureend', (e) => e.preventDefault());
     </script>
 </body>
 </html>
