@@ -23,6 +23,17 @@
             0% { transform: scale(1); filter: brightness(1); }
             100% { transform: scale(1.04); filter: brightness(1.25); }
         }
+        /* Cool Music Pulsing state */
+        .btn-cool-music-active {
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%) !important;
+            color: #ffffff !important;
+            animation: coolPulse 1.2s infinite alternate ease-in-out !important;
+            box-shadow: 0 0 16px rgba(0, 198, 255, 0.8), 0 4px 0 #1e272e !important;
+        }
+        @keyframes coolPulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.04); filter: brightness(1.25); }
+        }
         :root {
             --cyan-blob: #00E5FF;
             --yellow-blob: #FAED27;
@@ -1046,9 +1057,8 @@
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <button class="btn-action btn-new-scramble" onclick="generateNewScramble()">New Scramble 🔄</button>
                     <button class="btn-action" onclick="copyScramble()">Copy 📋</button>
+                    <button id="btn-cool-music" class="btn-action btn-cool-music" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); color: #ffffff; font-weight: 800; border-color: #1e272e;" title="Play Cool Speedcubing Lo-Fi Chill Music">😎 Cool Music 🎵</button>
                     <button id="btn-intense-music" class="btn-action btn-intense-music" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: #ffffff; font-weight: 800; border-color: #1e272e;" title="Play Gangnam Style Intense Speedcubing Music">🔥 Intense Music 🎵</button>
-                    <button id="btn-audio-device" class="btn-action btn-audio-device" style="background-color: #6c5ce7; color: #ffffff; font-size: 0.95em; border-color: #1e272e;" title="Connect or switch audio to Headphones / Earphones">🎧 Headphones: Auto</button>
-                    <button id="btn-music-volume" class="btn-action btn-music-volume" style="background-color: #ff9f43; color: #ffffff; font-size: 0.95em; border-color: #1e272e;" title="Music Volume: Click to cycle Low / Medium / High">🔊 Vol: 65%</button>
                     <button id="btn-sound-toggle" class="btn-action btn-sound-toggle" onclick="toggleSound()">🔊 Sound: ON</button>
                 </div>
             </div>

@@ -1,65 +1,66 @@
 # Summary
 - **What changed**:
-  1. **Added Volume Control & Presets to Intense Gangnam Style Music Engine**:
-     - Upgraded [gangnam-music.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/gangnam-music.js) with dynamic master volume control (`setVolume`, `cycleVolume`, `updateVolumeUI`).
-     - Added volume presets: High 🔊 (100%), Medium 🔉 (65%), Low 🔈 (35%) with local storage memory and non-intrusive volume toast notifications.
-     - Added volume preset buttons to [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html), [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html), and [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html).
-  2. **Integrated Intense Music & Headphone Controls into Challenges of Cubing**:
-     - Added `🔥 Intense Music 🎵`, `🎧 Headphones: Auto`, and `🔊 Vol: 65%` buttons into the active challenge control group and integrated stopwatch arena in [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html).
-     - Added glowing pulse animation for active music playback during speedcubing challenges.
-  3. **Fixed 1000x1000x1000 Color Visibility & Persistence**:
-     - In [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html), added persistent sparse override tracking (`_overrides`) for hyper-cube faces.
-     - Rendered user-painted squares as clearly visible 3x3 pixel blocks on both 3D face and 2D net canvases, guaranteeing that painted squares are never lost or overwritten during downsampled canvas re-renders.
-  4. **Enforced Precise Single-Square Painting**:
-     - Eliminated accidental multi-square filling caused by pointerenter/mouseenter/pointermove drag triggers across 3D faces and 2D nets for all cubes (2x2 through 1000x1000, Skewb, Pyraminx, Megaminx).
-     - Each click now paints strictly and only the clicked sticker or canvas cell without affecting adjacent squares.
-  5. **Fixed 1000x1000 Scramble Generation & Navigation in Speedcubing Timer**:
-     - Initialized `1000x1000` and `100x100` history buffers in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html), preventing null-reference errors on scramble change.
-     - Generates authentic multi-layer WCA scrambles (e.g., `100Bw'`, `500Rw'`, `750Fw2`) without freezing or lagging the browser.
+  1. **Added Cool Music in Speedcubing Timer**:
+     - Built a 104 BPM Lo-Fi chill speedcubing synthesizer in [gangnam-music.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/gangnam-music.js), featuring warm analog kicks, snappy rimshots, swung hi-hats, a funky walking bassline (D2-F2-G2-A2), rich 9th chord pads (Dm9, Bbmaj9, Gm9, C9, A7alt), and soulful pentatonic lead riffs.
+     - Fully distinct from the 132 BPM Gangnam Style EDM intense music track.
+  2. **Auto-Play on Timer Open**:
+     - Automatically starts Cool Music when opening [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html).
+     - Includes one-time gesture unlock so that the very first touch, click, or spacebar hold unlocks Web Audio under browser autoplay policies.
+  3. **Infinite Music Looping**:
+     - Configured both Cool Music and Intense Music to loop continuously without stopping until the user clicks the button to pause.
+  4. **Deleted Headphone Button**:
+     - Deleted the `btn-audio-device` ("🎧 Headphones") button from [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html), [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html), and [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html).
+     - Web Audio automatically routes directly through the user's connected earphones or headphones.
+  5. **Removed Duplicate Buttons (One Button for One Thing)**:
+     - Deleted duplicate `btn-reset-average` from the Session Stats header in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html), leaving `btn-clear-session` ("Clear 🗑️") in the Solve History table as the single button to reset session solves.
+     - Removed redundant volume button from toolbars to maintain a clean layout with one button per action.
 - **How verified**:
-  - Live Chrome DevTools MCP testing:
-    - 1000x1000 painting verified on face F: painted square persisted through full 3D re-render (`pixelAfterReRender: [255, 215, 0, 255]`, `persisted: true`, `overridesCount: 1`).
-    - Single-square painting verified on 3x3: only sticker 0 painted (`isOnlySt0Painted: true`).
-    - Volume cycling verified in timer and challenges: cycled from 65% to 100% to 35% (`vol1: 0.95`, `vol2: 0.35`).
-    - Intense Music playback toggle verified in challenges (`isPlaying1: true`, `isPlaying2: false`).
-    - 1000x1000 scramble generation verified in timer: generates multi-slice scrambles instantly (`hasHyperMoves: true`).
-  - Full codebase syntax audit:
-    - All 4 standalone JS files passed `node --check` with 0 errors.
-    - All inline script blocks across all 17 HTML files passed `node --check` with 0 errors.
+  - Live Chrome DevTools MCP testing on [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html):
+    - Headphone button confirmed deleted: `headphoneButtonDeleted: true`.
+    - Duplicate reset button confirmed deleted: `duplicateResetButtonDeleted: true`.
+    - Cool Music confirmed playing automatically on open: `isPlayingOnLoad: true`, `activeTrackOnLoad: "cool"`.
+    - Button state confirmed: `coolBtnText: "😎 Cool Music: PLAYING 🎶 (Click to Stop)"`.
+    - Track switching verified: switching to Intense Music updates `activeTrack: "intense"`, switching back updates `activeTrack: "cool"`, clicking again cleanly stops `isPlaying: false`.
+    - Infinite looping verified: step counter advanced continuously without stoppage (`stepAdvanced: true`, `isPlaying: true`, `timerIdActive: true`).
+    - Verified clean rendering and buttons in [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html) and [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html).
+  - Code syntax check:
+    - Node syntax validation (`node --check`) passed with 0 errors across all files.
 - **What to review**:
-  - Open [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html): test `🔥 Intense Music 🎵`, `🎧 Headphones`, and `🔊 Vol: 65%`.
-  - Open [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html): select `1000x1000x1000 (very laggy)` and click `New Scramble 🔄`.
-  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html): select `1000x1000x1000 (very laggy)` or `3x3`, click to paint squares, and verify clean single-square coloring and persistence.
+  - Open [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html):
+    - Cool Music plays automatically in the background.
+    - Notice the clean toolbar: `😎 Cool Music 🎵` and `🔥 Intense Music 🎵` with no duplicate headphone button.
+    - Audio plays directly through connected headphones/earphones.
+    - Click `🔥 Intense Music 🎵` to switch to Gangnam Style EDM, or click the active button to stop.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Upgrade site features and ensure everything is correct across all files.
-2. Add audio volume controls and integrate intense music into challenges.
-3. Fix 1000x1000 color filling, single-square painting, and scramble generation.
-4. Verify with Chrome DevTools MCP and Node syntax checks.
-5. Commit and push changes to origin main.
+1. Add Cool Music to speedcubing timer that autoplays on open and is different from Intense Music.
+2. Delete duplicate buttons (make one button for one thing).
+3. Make music loop infinitely until stopped.
+4. Delete headphone button and ensure earphones/headphones work automatically.
+5. Verify live and push changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Add volume controls (High/Med/Low presets) to gangnam-music.js
-- [x] Add Intense Music and volume buttons to challenges.html
-- [x] Add volume buttons to timer.html and practice-speed.html
-- [x] Fix 1000x1000 color filling visibility and re-render persistence in cube-solving-machine.html
-- [x] Fix single-square painting on computer and mobile (remove accidental drag painting)
-- [x] Fix 1000x1000 scramble history and generation in timer.html
+- [x] Compose Cool Music synthesizer track (104 BPM Lo-Fi speedcubing groove with kick, rimshot, hat, bass, chords, and lead)
+- [x] Support seamless infinite looping in gangnam-music.js
+- [x] Auto-play Cool Music when opening timer.html with gesture unlock
+- [x] Delete headphone button from timer.html, practice-speed.html, and challenges.html
+- [x] Delete duplicate reset button from timer.html
 - [x] Verify live in Chrome DevTools MCP
-- [x] Verify 100% clean syntax on all JS files and 17 HTML files
+- [x] Verify syntax across all files
 - [x] Update PROGRESS.md
-- [x] Commit and push verified changes to origin main
+- [x] Commit and push changes to origin main
 
 Assumptions:
-- Volume presets (100%, 65%, 35%) give comfortable headphone/earphone listening levels without requiring full-page mixer overlays.
+- Cool Music uses 104 BPM lo-fi chord progressions and chill melodies to provide a relaxed, focused solving environment distinct from 132 BPM Gangnam Style EDM.
 
 Blockers (what I need to do): None.
 Found, not done: None.
 Log (newest first, one line each):
+- 2026-11-19: Added Cool Lo-Fi Music that autoplays on timer open, enabled infinite looping, deleted headphone button, and removed duplicate buttons.
 - 2026-11-19: Upgraded site features: added audio volume presets, integrated intense music into challenges, fixed 1000x1000 color persistence, and ensured single-square painting.
 - 2026-11-19: Fixed Megaminx sticker geometry with authentic pentagon/trapezoid/kite tiling; added Intense Gangnam Style music and headphone connector to speedcubing timer.
 - 2026-11-19: Ensured color filling only fills one square at a time; removed whole-face flood fills from canvas click, dblclick, and faceDiv click; replaced brush with single-square pencil painting.
