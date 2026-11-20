@@ -615,11 +615,20 @@
             grid-template-columns: repeat(4, 108px);
             gap: 16px;
             margin: 20px 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
         @media (max-width: 500px) {
             .reflex-grid {
                 grid-template-columns: repeat(4, 74px);
                 gap: 10px;
+            }
+        }
+        @media (max-width: 360px) {
+            .reflex-grid {
+                grid-template-columns: repeat(4, 66px);
+                gap: 8px;
             }
         }
 
@@ -636,34 +645,69 @@
             font-size: 1.9em;
             color: #64748b;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: transform 0.1s ease, background 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
         @media (max-width: 500px) {
             .reflex-cell {
                 width: 74px;
                 height: 74px;
                 font-size: 1.4em;
+                border-radius: 14px;
             }
         }
+        @media (max-width: 360px) {
             .reflex-cell {
-                width: 70px;
-                height: 70px;
-                font-size: 1.4em;
+                width: 66px;
+                height: 66px;
+                font-size: 1.25em;
+                border-radius: 12px;
             }
+        }
+
+        .reflex-cell:hover {
+            border-color: #64748b;
+            background: #1e293b;
         }
 
         .reflex-cell.active-target {
-            background: #ff007f;
-            border-color: #ff007f;
-            color: #ffffff;
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.8);
-            transform: scale(1.08);
-            animation: pulse-target 0.4s infinite alternate;
+            background: linear-gradient(135deg, #ff007f 0%, #f43f5e 100%) !important;
+            border: 3px solid #ffffff !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 35px rgba(255, 0, 127, 0.95), inset 0 0 15px rgba(255, 255, 255, 0.6) !important;
+            transform: scale(1.12);
+            animation: pulse-target 0.35s infinite alternate;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .reflex-cell.hit-success {
+            animation: reflexHitSuccess 0.22s ease-out;
+        }
+
+        .reflex-cell.hit-miss {
+            animation: reflexHitMiss 0.22s ease-out;
         }
 
         @keyframes pulse-target {
-            0% { transform: scale(1.05); }
-            100% { transform: scale(1.12); }
+            0% { transform: scale(1.06); box-shadow: 0 0 20px rgba(255, 0, 127, 0.8); }
+            100% { transform: scale(1.14); box-shadow: 0 0 40px rgba(255, 0, 127, 1), inset 0 0 20px rgba(255, 255, 255, 0.7); }
+        }
+
+        @keyframes reflexHitSuccess {
+            0% { transform: scale(1.18); filter: brightness(1.8); }
+            50% { transform: scale(0.92); filter: brightness(1.3); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+
+        @keyframes reflexHitMiss {
+            0% { transform: translateX(-6px); background: #ef4444; border-color: #ef4444; }
+            25% { transform: translateX(6px); }
+            50% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+            100% { transform: translateX(0); }
         }
 
         /* NOTATION BLITZ */
@@ -1430,16 +1474,17 @@
             <!-- GAME 7: SPEEDCUBER TPS REFLEX TARGETS -->
             <!-- ============================================== -->
             <div id="panel-reflex" class="game-panel">
-                <div class="game-header-bar">
+                <div class="game-header-bar header-stacked">
                     <h2 class="game-title-text">🎯 Speedcuber TPS Reflex</h2>
                     <div class="game-score-display">
                         <span>HITS: <span id="reflex-hits">0</span></span>
                         <span>TIME: <span id="reflex-time">30.0s</span></span>
                         <span>TPS: <span id="reflex-tps">0.00</span></span>
+                        <span class="record-pill">🏆 BEST: <span id="reflex-best">0.00</span> TPS</span>
                     </div>
                 </div>
                 <div id="reflex-status" style="font-family: 'DynaPuff', cursive; font-size: 1.15em; color: #ff007f; min-height: 28px; margin-top: 6px; text-align: center;">
-                    Tap targets as fast as possible in 30 seconds!
+                    Tap glowing magenta targets as fast as possible in 30 seconds!
                 </div>
                 <div class="reflex-grid" id="reflex-grid-box">
                     <!-- 16 Cells generated dynamically -->
@@ -1451,6 +1496,9 @@
                     <button id="btn-reflex-pause" class="btn-game-pause" onclick="togglePauseReflex()">
                         ⏸️ Pause
                     </button>
+                </div>
+                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 620px; line-height: 1.5;">
+                    ⚡ <strong>Controls</strong>: Tap or click glowing magenta targets as fast as you can! • Keyboard: <strong>U, R, F, L, D, B, M</strong> • <strong>Spacebar</strong> to Start/Restart.
                 </div>
             </div>
 
@@ -4689,22 +4737,45 @@
         // ==========================================
         const reflexBox = document.getElementById('reflex-grid-box');
         let reflexHits = 0;
-        let reflexTimeLeft = 30;
+        let reflexTimeLeft = 30.0;
         let reflexActive = false;
         let reflexPaused = false;
         let reflexTimer = null;
         let reflexElapsedBeforePause = 0;
         let reflexSegmentStartTime = 0;
         let activeReflexTarget = -1;
+        let lastReflexInputTime = 0;
+        let reflexBest = parseFloat(localStorage.getItem('cube_reflex_best') || '0.00');
+        const reflexBestEl = document.getElementById('reflex-best');
+        if (reflexBestEl) reflexBestEl.textContent = reflexBest.toFixed(2);
 
-        // Initialize 16 cells
-        for (let i = 0; i < 16; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'reflex-cell';
-            const notations = ['U', 'R', 'F', 'L', 'D', 'B', 'M', 'R2', 'U\'', 'F\'', 'L\'', 'D\'', 'B\'', 'r', 'u', 'f'];
-            cell.textContent = notations[i];
-            cell.onclick = () => handleReflexClick(i);
-            reflexBox.appendChild(cell);
+        // Initialize 16 cells with responsive touch and click handling
+        const reflexNotations = ['U', 'R', 'F', 'L', 'D', 'B', 'M', 'R2', 'U\'', 'F\'', 'L\'', 'D\'', 'B\'', 'r', 'u', 'f'];
+        if (reflexBox) {
+            reflexBox.innerHTML = '';
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'reflex-cell';
+                cell.id = 'reflex-cell-' + i;
+                cell.textContent = reflexNotations[i];
+                cell.setAttribute('role', 'button');
+                cell.setAttribute('tabindex', '0');
+
+                // Pointer and click event handling with debounce
+                const triggerCell = (e) => {
+                    if (e && e.cancelable && e.type === 'pointerdown') e.preventDefault();
+                    handleReflexClick(i);
+                };
+                cell.addEventListener('pointerdown', triggerCell);
+                cell.addEventListener('click', (e) => {
+                    // Suppress duplicate click if pointerdown handled it
+                    if (performance.now() - lastReflexInputTime > 40) {
+                        handleReflexClick(i);
+                    }
+                });
+
+                reflexBox.appendChild(cell);
+            }
         }
 
         function startReflexGame() {
@@ -4788,18 +4859,55 @@
             let next = Math.floor(Math.random() * 16);
             if (next === activeReflexTarget) next = (next + 1) % 16;
             activeReflexTarget = next;
-            cells[activeReflexTarget].classList.add('active-target');
+            if (cells[activeReflexTarget]) {
+                cells[activeReflexTarget].classList.add('active-target');
+            }
         }
 
         function handleReflexClick(index) {
-            if (!reflexActive || reflexPaused) return;
+            const now = performance.now();
+            if (now - lastReflexInputTime < 35) return; // Debounce rapid multi-events
+            lastReflexInputTime = now;
+
+            // If game is not active yet, tapping starts the game immediately
+            if (!reflexActive) {
+                startReflexGame();
+                if (index === activeReflexTarget) {
+                    // Count hit for starting target
+                    reflexHits = 1;
+                    playSfx('score');
+                    document.getElementById('reflex-hits').textContent = '1';
+                    const cell = document.getElementById('reflex-cell-' + index);
+                    if (cell) {
+                        cell.classList.remove('hit-success');
+                        void cell.offsetWidth;
+                        cell.classList.add('hit-success');
+                    }
+                    pickNextReflexTarget();
+                }
+                return;
+            }
+
+            if (reflexPaused) return;
+
+            const cell = document.getElementById('reflex-cell-' + index);
             if (index === activeReflexTarget) {
                 reflexHits++;
                 playSfx('score');
                 document.getElementById('reflex-hits').textContent = reflexHits;
+                if (cell) {
+                    cell.classList.remove('hit-success');
+                    void cell.offsetWidth;
+                    cell.classList.add('hit-success');
+                }
                 pickNextReflexTarget();
             } else {
                 playSfx('crash');
+                if (cell) {
+                    cell.classList.remove('hit-miss');
+                    void cell.offsetWidth;
+                    cell.classList.add('hit-miss');
+                }
             }
         }
 
@@ -4808,10 +4916,27 @@
             reflexPaused = false;
             clearInterval(reflexTimer);
             document.querySelectorAll('.reflex-cell').forEach(c => c.classList.remove('active-target'));
-            playSfx('crash');
-            const finalTps = (reflexHits / 30.0).toFixed(2);
-            document.getElementById('reflex-status').innerHTML = `🏁 TIME UP! Final: <strong>${reflexHits} Hits</strong> | <strong>${finalTps} TPS</strong> ⚡`;
-            document.getElementById('btn-reflex-start').textContent = '▶ Play Again';
+            
+            const finalTps = parseFloat((reflexHits / 30.0).toFixed(2));
+            let isNewBest = false;
+            if (finalTps > reflexBest) {
+                reflexBest = finalTps;
+                localStorage.setItem('cube_reflex_best', reflexBest.toFixed(2));
+                const bestEl = document.getElementById('reflex-best');
+                if (bestEl) bestEl.textContent = reflexBest.toFixed(2);
+                isNewBest = true;
+                playSfx('fanfare');
+            } else {
+                playSfx('crash');
+            }
+
+            if (isNewBest) {
+                document.getElementById('reflex-status').innerHTML = `🏆 <strong>NEW RECORD!</strong> Final: <strong>${reflexHits} Hits</strong> | <strong>${finalTps.toFixed(2)} TPS</strong> ⚡`;
+            } else {
+                document.getElementById('reflex-status').innerHTML = `🏁 TIME UP! Final: <strong>${reflexHits} Hits</strong> | <strong>${finalTps.toFixed(2)} TPS</strong> (Best: ${reflexBest.toFixed(2)}) ⚡`;
+            }
+
+            document.getElementById('btn-reflex-start').textContent = '▶ Play Again (Space)';
             const pauseBtn = document.getElementById('btn-reflex-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
@@ -6214,14 +6339,31 @@
                 }
             }
 
-            // Spacebar Action for Stacker and Flappy
+            // Spacebar Action for Reflex, Stacker, and Flappy
             if (e.code === 'Space') {
-                if (activePanel.id === 'panel-stacker') {
+                if (activePanel.id === 'panel-reflex') {
+                    e.preventDefault();
+                    startReflexGame();
+                    return;
+                } else if (activePanel.id === 'panel-stacker') {
                     e.preventDefault();
                     stackLayer();
+                    return;
                 } else if (activePanel.id === 'panel-flappy') {
                     e.preventDefault();
                     flapCubie();
+                    return;
+                }
+            }
+
+            // Keyboard Notation Input for Speedcuber Reflex
+            if (activePanel.id === 'panel-reflex' && reflexActive && !reflexPaused && activeReflexTarget >= 0) {
+                const targetNotation = reflexNotations[activeReflexTarget];
+                const cleanNotation = targetNotation.replace(/['2]/g, '').toLowerCase();
+                if (e.key.toLowerCase() === cleanNotation) {
+                    e.preventDefault();
+                    handleReflexClick(activeReflexTarget);
+                    return;
                 }
             }
 
