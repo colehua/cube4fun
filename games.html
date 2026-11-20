@@ -604,6 +604,55 @@
             animation: shootPulse 1.8s infinite ease-in-out;
         }
 
+        /* SUDDEN SPEED DASH BUTTON STYLING */
+        .side-dock-btn.btn-side-dash,
+        .deck-btn.btn-action-dash {
+            background: linear-gradient(135deg, #f59e0b 0%, #e11d48 45%, #00f0ff 100%) !important;
+            border: 2px solid #ffd700 !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.7) !important;
+            animation: dashBtnPulse 1.4s infinite alternate ease-in-out !important;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .side-dock-btn.btn-side-dash:hover,
+        .deck-btn.btn-action-dash:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 32px rgba(245, 158, 11, 0.95), 0 0 16px rgba(0, 240, 255, 0.8) !important;
+            border-color: #ffffff !important;
+        }
+
+        .side-dock-btn.btn-side-dash.dashing,
+        .deck-btn.btn-action-dash.dashing {
+            background: linear-gradient(135deg, #00f0ff 0%, #3b82f6 50%, #ffffff 100%) !important;
+            border-color: #00f0ff !important;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.95), 0 0 20px rgba(255, 255, 255, 0.9) !important;
+            animation: hyperWarp 0.25s infinite alternate !important;
+        }
+
+        .side-dock-btn.btn-side-dash.cooling-down,
+        .deck-btn.btn-action-dash.cooling-down {
+            background: #1e293b !important;
+            border-color: #475569 !important;
+            color: #94a3b8 !important;
+            box-shadow: none !important;
+            animation: none !important;
+            opacity: 0.75;
+            cursor: not-allowed;
+        }
+
+        @keyframes dashBtnPulse {
+            0% { transform: scale(1); box-shadow: 0 0 14px rgba(245, 158, 11, 0.5); }
+            100% { transform: scale(1.04); box-shadow: 0 0 26px rgba(245, 158, 11, 0.9), 0 0 16px rgba(0, 240, 255, 0.75); }
+        }
+
+        @keyframes hyperWarp {
+            0% { transform: scale(1.02); filter: brightness(1.2); }
+            100% { transform: scale(1.08); filter: brightness(1.7); }
+        }
+
         @keyframes dashDockPulse {
             0%, 100% {
                 box-shadow: 0 0 20px rgba(0, 240, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -1562,6 +1611,7 @@
 
                         <!-- QUICK ACTIONS DOCKED RIGHT NEXT TO SCREEN -->
                         <div class="side-dock-actions">
+                            <button id="btn-side-dash" class="side-dock-btn btn-side-dash" onclick="runnerDashAction()" title="⚡ Sudden Speed Dash! [Shift / E]">⚡ DASH! (Go Fast!)</button>
                             <div class="side-dock-steer-row">
                                 <button class="side-dock-btn" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
                                 <button class="side-dock-btn" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
@@ -1579,6 +1629,7 @@
                         <button class="deck-btn btn-steer" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
                     </div>
                     <div class="control-group">
+                        <button id="btn-deck-dash" class="deck-btn btn-action-dash" onclick="runnerDashAction()" title="Sudden Speed Dash (Shift / E)">⚡ DASH!</button>
                         <button class="deck-btn btn-action-jump" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">⬆️ Jump</button>
                         <button class="deck-btn btn-action-slide" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
                         <button class="deck-btn btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
@@ -1590,8 +1641,8 @@
                         </label>
                     </div>
                 </div>
-                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 880px; line-height: 1.5;">
-                    🦘 <strong>Jump Rules</strong>: You can <strong>jump over anything 1 block tall</strong> (hurdles, 1-block cubes, and 25 HP imps)! • 🔫 <strong>You can ONLY jump on shooting monsters</strong> (crush them for <strong>+50 💰</strong>; jump in the air to dodge bullets)! • 👾 <strong>Normal monsters cannot be jumped on</strong> — blast them with 🔥 <strong>SHOOT</strong> (100 HP needs 4 shots, 50 HP needs 2, 25 HP needs 1)! • <strong>A / D</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive (100 💰)
+                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 900px; line-height: 1.5;">
+                    🦘 <strong>Jump Rules</strong>: You can <strong>jump over anything 1 block tall</strong> (hurdles, 1-block cubes, and 25 HP imps)! • 🔫 <strong>You can ONLY jump on shooting monsters</strong> (crush them for <strong>+50 💰</strong>; jump in the air to dodge bullets)! • 👾 <strong>Normal monsters cannot be jumped on</strong> — blast them with 🔥 <strong>SHOOT</strong>! • ⚡ <strong>Shift / E</strong> Dash (Go Fast!) • <strong>A / D</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive (100 💰)
                 </div>
             </div>
 
@@ -2212,6 +2263,19 @@
                         o.start(now + i * 0.07);
                         o.stop(now + i * 0.07 + 0.38);
                     });
+                } else if (type === 'turbo' || type === 'dash') {
+                    // Sonic Jet Warp Dash Sound
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(260, now);
+                    osc.frequency.exponentialRampToValueAtTime(1300, now + 0.22);
+                    gain.gain.setValueAtTime(0.32, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.36);
                 } else if (type === 'explosion') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -2369,6 +2433,8 @@
         let runnerSurviveBtnRect = null;
         let runnerIsDiveStomping = false;
         let runnerMonsterBullets = [];
+        let runnerDashTimer = 0;
+        let runnerDashCooldown = 0;
 
         // Background stars (scaled for 1200x675 super big screen)
         const runnerStars = Array.from({ length: 95 }, () => ({
@@ -2403,6 +2469,9 @@
             runnerFrame = 0;
             runnerSurviveBtnRect = null;
             runnerIsDiveStomping = false;
+            runnerDashTimer = 0;
+            runnerDashCooldown = 0;
+            updateDashButtons();
 
             document.getElementById('runner-score').textContent = '0';
             document.getElementById('runner-coins').textContent = runnerCoins;
@@ -2507,6 +2576,51 @@
             });
         }
 
+        function runnerDashAction() {
+            if (!runnerActive || runnerPaused) {
+                if (!runnerActive) startRunnerGame();
+                return;
+            }
+            if (runnerDashCooldown > 0 || runnerDashTimer > 0) return;
+
+            // Activate Sudden Speed Dash!
+            runnerDashTimer = 95; // ~1.6s of hyper speed
+            runnerDashCooldown = 200; // ~3.3s cooldown
+            runnerInvulnerable = Math.max(runnerInvulnerable, 105); // Shielded during dash
+            playSfx('turbo');
+
+            runnerFloatingTexts.push({
+                text: '⚡ SUPER DASH! 🚀💨',
+                x: runnerCanvas.width / 2,
+                y: runnerCanvas.height * 0.42,
+                color: '#fde047',
+                life: 45
+            });
+
+            updateDashButtons();
+        }
+
+        function updateDashButtons() {
+            const sideBtn = document.getElementById('btn-side-dash');
+            const deckBtn = document.getElementById('btn-deck-dash');
+            [sideBtn, deckBtn].forEach(btn => {
+                if (!btn) return;
+                if (runnerDashTimer > 0) {
+                    btn.classList.add('dashing');
+                    btn.classList.remove('cooling-down');
+                    btn.innerHTML = '⚡ DASHING! 🚀';
+                } else if (runnerDashCooldown > 0) {
+                    btn.classList.remove('dashing');
+                    btn.classList.add('cooling-down');
+                    const sec = (runnerDashCooldown / 60).toFixed(1);
+                    btn.innerHTML = `⚡ Dash: ${sec}s`;
+                } else {
+                    btn.classList.remove('dashing', 'cooling-down');
+                    btn.innerHTML = '⚡ DASH! (Go Fast!)';
+                }
+            });
+        }
+
         function spawnMonsterExplosion(x, y, count = 18) {
             const colors = ['#ff007f', '#f97316', '#fde047', '#ffffff', '#a855f7', '#00f0ff'];
             const particles = [];
@@ -2530,16 +2644,29 @@
             if (!runnerActive || runnerPaused || !rCtx) return;
             runnerFrame++;
 
+            // Sudden Speed Dash calculations
+            if (runnerDashTimer > 0) {
+                runnerDashTimer--;
+                if (runnerDashTimer === 0) updateDashButtons();
+            }
+            if (runnerDashCooldown > 0) {
+                runnerDashCooldown--;
+                if (runnerDashCooldown % 15 === 0 || runnerDashCooldown === 0) updateDashButtons();
+            }
+
+            const currentBoost = runnerDashTimer > 0 ? 3.2 : 0;
+            const effectiveSpeed = runnerSpeed + currentBoost;
+
             // Distance & Continuous Speed Progression
             // Starts very slow (0.5x), steadily accelerates faster and faster until you die!
             runnerSpeed += 0.001;
-            runnerDistance += Math.max(1, Math.floor(runnerSpeed * 1.6));
-            runnerRoadZ += runnerSpeed * 13;
+            runnerDistance += Math.max(1, Math.floor(effectiveSpeed * 2.2));
+            runnerRoadZ += effectiveSpeed * 14;
             if (runnerShootCooldown > 0) runnerShootCooldown--;
             if (runnerInvulnerable > 0) runnerInvulnerable--;
 
             document.getElementById('runner-score').textContent = runnerDistance;
-            document.getElementById('runner-speed').textContent = runnerSpeed.toFixed(1);
+            document.getElementById('runner-speed').textContent = effectiveSpeed.toFixed(1) + (runnerDashTimer > 0 ? ' ⚡' : '');
 
             // Interpolate lane position
             runnerCurrentLaneX += (runnerTargetLane - runnerCurrentLaneX) * 0.22;
@@ -2809,10 +2936,10 @@
             // Update Monster Gun Bullets (Shooting forward down the highway)
             for (let bi = runnerMonsterBullets.length - 1; bi >= 0; bi--) {
                 const b = runnerMonsterBullets[bi];
-                b.z -= (18 + runnerSpeed * 12);
+                b.z -= (18 + effectiveSpeed * 12);
 
-                // Collision check against player (z between 50 and 130)
-                if (b.z < 130 && b.z > 50) {
+                // Collision check against player (z between 20 and 140)
+                if (b.z < 140 && b.z > 20) {
                     const laneDiff = Math.abs(runnerCurrentLaneX - b.lane);
                     if (laneDiff < 0.52) {
                         // IMMUNITY RULE: "and the bullets can not shoot you anymore if you are jumping in the air"
@@ -2835,7 +2962,8 @@
                             });
                             runnerMonsterBullets.splice(bi, 1);
                             continue;
-                        } else if (runnerInvulnerable > 0) {
+                        } else if (runnerDashTimer > 0 || runnerInvulnerable > 0) {
+                            // Dash / Shield absorbs bullets
                             playSfx('explosion');
                             runnerMonsterBullets.splice(bi, 1);
                             continue;
@@ -2869,7 +2997,7 @@
             // Update obstacles
             for (let i = runnerObstacles.length - 1; i >= 0; i--) {
                 const ob = runnerObstacles[i];
-                ob.z -= runnerSpeed * 14;
+                ob.z -= effectiveSpeed * 14;
                 if (ob.hitFlash > 0) ob.hitFlash--;
 
                 // Gun monster shoots forward down track towards player
@@ -2891,8 +3019,8 @@
                     }
                 }
 
-                // Collision check (when reaching player at z between 50 and 130)
-                if (ob.z < 130 && ob.z > 50) {
+                // Collision check (when reaching player at z between 20 and 140)
+                if (ob.z < 140 && ob.z > 20) {
                     const laneDiff = Math.abs(runnerCurrentLaneX - ob.lane);
                     if (laneDiff < 0.55) {
                         if (ob.type === 'coin_bag') {
@@ -2920,6 +3048,35 @@
                                 life: 60
                             });
 
+                            runnerObstacles.splice(i, 1);
+                            continue;
+                        } else if (runnerDashTimer > 0) {
+                            // SUDDEN HYPER DASH RAMS AND OBLITERATES OBSTACLES!
+                            playSfx('explosion');
+                            if (ob.type === 'monster' || ob.type === 'gun_monster') {
+                                const bounty = ob.type === 'gun_monster' ? 50 : (ob.maxHp === 100 ? 30 : (ob.maxHp === 50 ? 20 : 10));
+                                runnerCoins += bounty;
+                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                runnerDistance += 120;
+                                document.getElementById('runner-score').textContent = runnerDistance;
+                            }
+                            const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                            const horizonY = Math.round(runnerCanvas.height * 0.25);
+                            const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                            const horizonW = Math.round(runnerCanvas.width * 0.25);
+                            const bottomW = Math.round(runnerCanvas.width * 0.86);
+                            const roadW = horizonW + t * (bottomW - horizonW);
+                            const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                            spawnMonsterExplosion(expX, expY - 20, 20);
+
+                            runnerFloatingTexts.push({
+                                text: '⚡ DASH RAM! 💥',
+                                x: expX,
+                                y: expY - 30,
+                                color: '#00f0ff',
+                                life: 50
+                            });
                             runnerObstacles.splice(i, 1);
                             continue;
                         } else if (ob.type === 'gun_monster') {
@@ -3241,6 +3398,25 @@
             rCtx.lineTo(centerX + bottomW / 2, bottomY);
             rCtx.stroke();
             rCtx.shadowBlur = 0;
+
+            // Hyper Dash Supersonic Warp Speed Lines
+            if (runnerDashTimer > 0) {
+                rCtx.save();
+                rCtx.strokeStyle = 'rgba(0, 240, 255, 0.75)';
+                rCtx.lineWidth = 3;
+                rCtx.shadowColor = '#00f0ff';
+                rCtx.shadowBlur = 14;
+                for (let wl = 0; wl < 18; wl++) {
+                    const wx = (centerX - bottomW * 0.45) + ((runnerFrame * 29 + wl * 67) % (bottomW * 0.9));
+                    const wy = horizonY + 20 + ((runnerFrame * 37 + wl * 47) % (bottomY - horizonY - 40));
+                    const len = 45 + ((wl * 17) % 55);
+                    rCtx.beginPath();
+                    rCtx.moveTo(wx, wy);
+                    rCtx.lineTo(wx + (wx > centerX ? 12 : -12), wy + len);
+                    rCtx.stroke();
+                }
+                rCtx.restore();
+            }
 
             // Lane dividers (between lanes 0-1 and 1-2)
             const divOffset1 = -1/6;
@@ -3813,6 +3989,20 @@
                 rCtx.shadowBlur = 18;
                 for (let tp = 0; tp < 4; tp++) {
                     rCtx.fillRect(-12 + Math.random() * 24, -48 - 12 - Math.random() * 22, 4, 12);
+                }
+                rCtx.restore();
+            }
+
+            // Sudden Hyper Dash Thruster Jet Flames
+            if (runnerDashTimer > 0) {
+                rCtx.save();
+                const cubeSize = Math.round(52 * (w / 880));
+                rCtx.fillStyle = '#00f0ff';
+                rCtx.shadowColor = '#00f0ff';
+                rCtx.shadowBlur = 24;
+                for (let tp = 0; tp < 6; tp++) {
+                    const tw = (cubeSize * 0.7) * (1 - tp / 6);
+                    rCtx.fillRect(-tw / 2, tp * 12 + 6, tw, 8);
                 }
                 rCtx.restore();
             }
@@ -6627,6 +6817,9 @@
                 } else if (e.code === 'Space' || e.key === 'f' || e.key === 'F' || e.key === 'Enter') {
                     e.preventDefault();
                     runnerShootAction();
+                } else if (e.key === 'Shift' || e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.key === 'e' || e.key === 'E' || e.key === 'q' || e.key === 'Q') {
+                    e.preventDefault();
+                    runnerDashAction();
                 }
             }
 
