@@ -935,19 +935,49 @@
         }
 
         /* GAME 11: FLAPPY CUBIE */
+        .flappy-top-bar {
+            margin: 4px 0 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .flappy-canvas-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+        #canvas-flappy {
+            background: #020617;
+            border: 2px solid #f59e0b;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+            touch-action: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            max-height: min(420px, 48vh);
+            aspect-ratio: 640 / 420;
+            object-fit: contain;
+            display: block;
+        }
         .flappy-controls-row {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         .btn-flap-action {
             background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
             color: #ffffff;
             font-family: 'DynaPuff', cursive;
-            font-size: 1.2em;
+            font-size: 1.15em;
             font-weight: 800;
-            padding: 12px 34px;
+            padding: 10px 28px;
             border-radius: 16px;
             border: 2px solid #fbbf24;
             cursor: pointer;
@@ -957,6 +987,15 @@
         }
         .btn-flap-action:active {
             transform: scale(0.95);
+        }
+        @media (max-height: 750px) {
+            #canvas-flappy {
+                max-height: 42vh;
+            }
+            .btn-flap-action {
+                padding: 8px 22px;
+                font-size: 1.0em;
+            }
         }
 
         /* GAME 12: SCRAMBLE MATCH PAIRS */
@@ -1512,7 +1551,7 @@
             <!-- GAME 11: FLAPPY CUBIE (SKY SCRAMBLE) -->
             <!-- ============================================== -->
             <div id="panel-flappy" class="game-panel">
-                <div class="game-header-bar header-stacked">
+                <div class="game-header-bar header-stacked" style="margin-bottom: 8px;">
                     <h2 class="game-title-text">🪂 Flappy Cubie</h2>
                     <div class="game-score-display">
                         <span>SCORE: <span id="flappy-score">0</span></span>
@@ -1520,19 +1559,10 @@
                         <span class="record-pill">🏆 RECORD: <span id="flappy-best">0</span></span>
                     </div>
                 </div>
-                <div id="flappy-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #f59e0b; min-height: 28px; margin-top: 4px; text-align: center;">
-                    Flap through Scramble Pillar Towers! Tap or Space!
-                </div>
-                <div style="position: relative; display: inline-block; margin: 10px 0;">
-                    <canvas id="canvas-flappy" width="640" height="420" style="background: #020617; border: 2px solid #f59e0b; border-radius: 16px; box-shadow: 0 0 25px rgba(245, 158, 11, 0.25); touch-action: none; cursor: pointer;"></canvas>
-                </div>
-                <div class="flappy-controls-row">
-                    <button class="btn-flap-action" onclick="flapCubie()">
-                        🪂 FLAP WINGS! (Space)
-                    </button>
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-flappy-start" class="btn-game-primary" onclick="startFlappyGame()">
+
+                <!-- TOP CONTROL BAR: RIGHT ON TOP OF THE GAME -->
+                <div class="game-controls-row flappy-top-bar">
+                    <button id="btn-flappy-start" class="btn-game-primary" onclick="startFlappyGame()" title="Start or Play Again (Spacebar)">
                         ▶ Start Flappy Cubie
                     </button>
                     <button id="btn-flappy-survive" class="btn-game-survive" onclick="surviveFlappyWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
@@ -1540,6 +1570,21 @@
                     </button>
                     <button id="btn-flappy-pause" class="btn-game-pause" onclick="togglePauseFlappy()">
                         ⏸️ Pause
+                    </button>
+                </div>
+
+                <div id="flappy-status" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #f59e0b; min-height: 24px; margin: 2px 0 8px 0; text-align: center;">
+                    Flap through Scramble Pillar Towers! Tap screen or press Space!
+                </div>
+
+                <!-- RESPONSIVE FLAPPY CANVAS CONTAINER -->
+                <div class="flappy-canvas-wrap">
+                    <canvas id="canvas-flappy" class="arcade-canvas" width="640" height="420" title="Click or tap to flap wings!"></canvas>
+                </div>
+
+                <div class="flappy-controls-row">
+                    <button class="btn-flap-action" onclick="flapCubie()" title="Flap Wings (Spacebar or Click)">
+                        🪂 FLAP WINGS! <span style="font-size:0.85em; opacity:0.9;">(Space / Tap)</span>
                     </button>
                 </div>
             </div>
@@ -1892,7 +1937,12 @@
             if (targetBtn) targetBtn.classList.add('active');
 
             const targetPanel = document.getElementById('panel-' + gameId);
-            if (targetPanel) targetPanel.classList.add('active');
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+                if (gameId === 'flappy' && !flappyActive && typeof renderFlappyIdle === 'function') {
+                    renderFlappyIdle();
+                }
+            }
 
             // Pause other running games when switching tabs to avoid background collisions
             if (gameId !== 'runner' && runnerActive && !runnerPaused) togglePauseRunner();
@@ -5053,11 +5103,13 @@
         let flappyObstacles = [];
         let flappyAnimId = null;
         let flappyFrame = 0;
+        let flappySurviveBtnRect = null;
 
         function startFlappyGame() {
             getAudioContext();
             flappyActive = true;
             flappyPaused = false;
+            flappySurviveBtnRect = null;
             flappyScore = 0;
             flappyPipes = 0;
             flappyY = 180;
@@ -5284,11 +5336,93 @@
             fCtx.restore();
         }
 
+        function renderFlappyIdle() {
+            if (!fCtx) return;
+            const w = flappyCanvas.width;
+            const h = flappyCanvas.height;
+
+            // Sky gradient
+            const skyGrad = fCtx.createLinearGradient(0, 0, 0, h - 15);
+            skyGrad.addColorStop(0, '#020617');
+            skyGrad.addColorStop(0.6, '#0f172a');
+            skyGrad.addColorStop(1, '#1e1b4b');
+            fCtx.fillStyle = skyGrad;
+            fCtx.fillRect(0, 0, w, h);
+
+            // Ground strip
+            fCtx.fillStyle = '#1e293b';
+            fCtx.fillRect(0, h - 15, w, 15);
+            fCtx.fillStyle = '#22c55e';
+            fCtx.fillRect(0, h - 15, w, 3);
+
+            // Floating preview cubie in center
+            const cubieX = w / 2 - 20;
+            const cubieY = h / 2 - 35;
+            const cubieSize = 38;
+
+            fCtx.save();
+            fCtx.translate(cubieX + cubieSize / 2, cubieY + cubieSize / 2);
+
+            // Wings
+            fCtx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            fCtx.beginPath();
+            fCtx.ellipse(-18, 0, 16, 8, -0.3, 0, Math.PI * 2);
+            fCtx.fill();
+
+            // Cube body
+            fCtx.fillStyle = '#00f0ff';
+            fCtx.shadowColor = '#00f0ff';
+            fCtx.shadowBlur = 16;
+            fCtx.fillRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
+            fCtx.strokeStyle = '#ffffff';
+            fCtx.lineWidth = 2.5;
+            fCtx.strokeRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
+            fCtx.shadowBlur = 0;
+
+            // 3x3 Rubik face stickers
+            const sub = cubieSize / 3;
+            const miniColors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#ffffff', '#3b82f6'];
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    fCtx.fillStyle = miniColors[(r * 3 + c) % miniColors.length];
+                    fCtx.fillRect(-cubieSize / 2 + c * sub + 1.5, -cubieSize / 2 + r * sub + 1.5, sub - 3, sub - 3);
+                }
+            }
+
+            // Cartoon eye
+            fCtx.fillStyle = '#ffffff';
+            fCtx.beginPath();
+            fCtx.arc(8, -4, 7, 0, Math.PI * 2);
+            fCtx.fill();
+            fCtx.fillStyle = '#000000';
+            fCtx.beginPath();
+            fCtx.arc(10, -4, 3.5, 0, Math.PI * 2);
+            fCtx.fill();
+
+            fCtx.restore();
+
+            // Overlay text
+            fCtx.font = '26px "DynaPuff", cursive';
+            fCtx.fillStyle = '#f59e0b';
+            fCtx.textAlign = 'center';
+            fCtx.fillText('🪂 READY TO FLAP!', w / 2, h / 2 + 48);
+
+            fCtx.font = 'bold 15px "Outfit", sans-serif';
+            fCtx.fillStyle = '#38bdf8';
+            fCtx.fillText('Tap screen, click "▶ Start", or press Spacebar to flap!', w / 2, h / 2 + 78);
+        }
+
         function gameOverFlappy() {
             flappyActive = false;
             flappyPaused = false;
             playSfx('crash');
             
+            if (flappyScore > flappyBest) {
+                flappyBest = flappyScore;
+                localStorage.setItem('cube_flappy_best', flappyBest);
+                document.getElementById('flappy-best').textContent = flappyBest;
+            }
+
             const coins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
             const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
             if (surviveBtn) {
@@ -5312,6 +5446,92 @@
                 pauseBtn.classList.remove('paused');
                 pauseBtn.innerHTML = '⏸️ Pause';
             }
+
+            // Draw interactive Game Over screen directly on canvas
+            if (fCtx) {
+                fCtx.fillStyle = 'rgba(2, 6, 23, 0.88)';
+                fCtx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+
+                fCtx.font = '28px "DynaPuff", cursive';
+                fCtx.fillStyle = '#ff007f';
+                fCtx.textAlign = 'center';
+                fCtx.fillText('💥 CRASHED INTO PILLARS!', flappyCanvas.width / 2, flappyCanvas.height / 2 - 75);
+
+                fCtx.font = '16px "Outfit", sans-serif';
+                fCtx.fillStyle = '#cbd5e1';
+                fCtx.fillText(`Score: ${flappyScore}  |  Pillars Passed: ${flappyPipes}  |  Record: ${flappyBest}`, flappyCanvas.width / 2, flappyCanvas.height / 2 - 42);
+
+                // Draw on-canvas Survive button
+                const sBtnW = Math.min(420, flappyCanvas.width - 40);
+                const sBtnH = 54;
+                const sBtnX = (flappyCanvas.width - sBtnW) / 2;
+                const sBtnY = flappyCanvas.height / 2 - 12;
+                flappySurviveBtnRect = { x: sBtnX, y: sBtnY, w: sBtnW, h: sBtnH };
+
+                fCtx.save();
+                if (coins >= 100) {
+                    const grad = fCtx.createLinearGradient(sBtnX, sBtnY, sBtnX + sBtnW, sBtnY + sBtnH);
+                    grad.addColorStop(0, '#f59e0b');
+                    grad.addColorStop(0.5, '#e11d48');
+                    grad.addColorStop(1, '#ff007f');
+                    fCtx.fillStyle = grad;
+                    fCtx.strokeStyle = '#ffd700';
+                    fCtx.lineWidth = 3;
+                    fCtx.shadowColor = 'rgba(245, 158, 11, 0.8)';
+                    fCtx.shadowBlur = 18;
+                    if (fCtx.roundRect) {
+                        fCtx.beginPath();
+                        fCtx.roundRect(sBtnX, sBtnY, sBtnW, sBtnH, 14);
+                        fCtx.fill();
+                        fCtx.stroke();
+                    } else {
+                        fCtx.fillRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                        fCtx.strokeRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                    }
+
+                    fCtx.shadowBlur = 0;
+                    fCtx.font = 'bold 18px "DynaPuff", cursive';
+                    fCtx.fillStyle = '#ffffff';
+                    fCtx.textAlign = 'center';
+                    fCtx.textBaseline = 'middle';
+                    fCtx.fillText('🛡️ CLICK HERE TO SURVIVE! (100 💰)', flappyCanvas.width / 2, sBtnY + sBtnH / 2);
+
+                    fCtx.textBaseline = 'alphabetic';
+                    fCtx.font = '13px "Outfit", sans-serif';
+                    fCtx.fillStyle = '#38bdf8';
+                    fCtx.fillText('Or press [S] on your keyboard to instantly survive!', flappyCanvas.width / 2, sBtnY + sBtnH + 24);
+                } else {
+                    fCtx.fillStyle = '#1e293b';
+                    fCtx.strokeStyle = '#475569';
+                    fCtx.lineWidth = 2;
+                    if (fCtx.roundRect) {
+                        fCtx.beginPath();
+                        fCtx.roundRect(sBtnX, sBtnY, sBtnW, sBtnH, 14);
+                        fCtx.fill();
+                        fCtx.stroke();
+                    } else {
+                        fCtx.fillRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                        fCtx.strokeRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                    }
+
+                    fCtx.font = 'bold 15px "DynaPuff", cursive';
+                    fCtx.fillStyle = '#94a3b8';
+                    fCtx.textAlign = 'center';
+                    fCtx.textBaseline = 'middle';
+                    fCtx.fillText(`🛡️ Need 100 💰 to Survive (${coins}/100 💰)`, flappyCanvas.width / 2, sBtnY + sBtnH / 2);
+
+                    fCtx.textBaseline = 'alphabetic';
+                    fCtx.font = '13px "Outfit", sans-serif';
+                    fCtx.fillStyle = '#fb7185';
+                    fCtx.fillText(`Earn coins in Cube Runner by blasting monsters with lasers!`, flappyCanvas.width / 2, sBtnY + sBtnH + 24);
+                }
+                fCtx.restore();
+
+                fCtx.font = 'bold 15px "DynaPuff", cursive';
+                fCtx.fillStyle = '#00f0ff';
+                fCtx.textAlign = 'center';
+                fCtx.fillText('👆 Tap screen or click "▶ Play Again" on top to restart!', flappyCanvas.width / 2, flappyCanvas.height / 2 + 105);
+            }
         }
 
         function surviveFlappyWithCoins() {
@@ -5330,6 +5550,7 @@
 
             flappyActive = true;
             flappyPaused = false;
+            flappySurviveBtnRect = null;
             flappyY = flappyCanvas.height / 2;
             flappyVy = -4.5;
             // Clear obstacles within immediate proximity
@@ -5348,7 +5569,23 @@
         const reviveFlappyWithCoins = surviveFlappyWithCoins;
 
         if (flappyCanvas) {
-            flappyCanvas.addEventListener('click', () => {
+            flappyCanvas.addEventListener('click', (e) => {
+                if (!flappyActive) {
+                    if (flappySurviveBtnRect) {
+                        const rect = flappyCanvas.getBoundingClientRect();
+                        const scaleX = flappyCanvas.width / rect.width;
+                        const scaleY = flappyCanvas.height / rect.height;
+                        const clickX = (e.clientX - rect.left) * scaleX;
+                        const clickY = (e.clientY - rect.top) * scaleY;
+                        if (clickX >= flappySurviveBtnRect.x && clickX <= flappySurviveBtnRect.x + flappySurviveBtnRect.w &&
+                            clickY >= flappySurviveBtnRect.y && clickY <= flappySurviveBtnRect.y + flappySurviveBtnRect.h) {
+                            surviveFlappyWithCoins();
+                            return;
+                        }
+                    }
+                    startFlappyGame();
+                    return;
+                }
                 flapCubie();
             });
         }
@@ -5635,6 +5872,7 @@
         initStackerGrid();
         drawStacker();
         renderPairsBoard();
+        renderFlappyIdle();
     </script>
 </body>
 </html>
