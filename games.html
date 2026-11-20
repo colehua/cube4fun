@@ -775,9 +775,10 @@
             100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(245, 158, 11, 0.9); }
         }
 
-        /* REVIVE BUTTON STYLING (100 COINS REVIVAL) */
+        /* SURVIVE BUTTON STYLING (100 COINS SURVIVAL) */
+        .btn-game-survive,
         .btn-game-revive {
-            background: linear-gradient(135deg, #ff007f 0%, #e11d48 45%, #f59e0b 100%);
+            background: linear-gradient(135deg, #f59e0b 0%, #e11d48 45%, #ff007f 100%);
             color: #ffffff;
             border: 2.5px solid #ffd700;
             padding: 14px 28px;
@@ -786,23 +787,26 @@
             font-size: 1.12em;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.6), 0 0 12px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.7), 0 0 14px rgba(255, 215, 0, 0.6);
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            animation: reviveHeartbeat 1.4s infinite ease-in-out;
+            animation: surviveHeartbeat 1.4s infinite ease-in-out;
             user-select: none;
             touch-action: manipulation;
         }
+        .btn-game-survive:hover,
         .btn-game-revive:hover {
             transform: scale(1.06);
-            box-shadow: 0 0 35px rgba(255, 0, 127, 0.9), 0 0 20px rgba(255, 215, 0, 0.85);
+            box-shadow: 0 0 35px rgba(245, 158, 11, 0.95), 0 0 22px rgba(255, 215, 0, 0.9);
             border-color: #ffffff;
         }
+        .btn-game-survive:active,
         .btn-game-revive:active {
             transform: scale(0.96);
         }
+        .btn-game-survive.disabled,
         .btn-game-revive.disabled {
             background: #1e293b;
             border-color: #475569;
@@ -811,9 +815,9 @@
             animation: none;
             filter: grayscale(0.5);
         }
-        @keyframes reviveHeartbeat {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 18px rgba(255, 0, 127, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 32px rgba(255, 0, 127, 0.85), 0 0 16px rgba(255, 215, 0, 0.7); }
+        @keyframes surviveHeartbeat {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 18px rgba(245, 158, 11, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 32px rgba(245, 158, 11, 0.85), 0 0 18px rgba(255, 215, 0, 0.75); }
         }
 
         /* KEYBOARD HINT CHIP */
@@ -1147,8 +1151,8 @@
                     <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()" title="Start or Dash Again (Spacebar)">
                         ▶ Start 3D Cube Runner
                     </button>
-                    <button id="btn-runner-revive" class="btn-game-revive" onclick="reviveRunnerWithCoins()" style="display: none;" title="Revive with 100 Coins (Press R)">
-                        ❤️ Revive with 100 Coins (100 💰)
+                    <button id="btn-runner-survive" class="btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
+                        🛡️ SURVIVE WITH 100 COINS (100 💰)
                     </button>
                     <button id="btn-runner-pause" class="btn-game-pause" onclick="togglePauseRunner()">
                         ⏸️ Pause
@@ -1168,9 +1172,15 @@
                         <button class="deck-btn btn-action-slide" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
                         <button class="deck-btn btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
                     </div>
+                    <div class="control-group" style="margin-left: 6px;">
+                        <label style="display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-size: 0.9em; font-weight: 700; color: #ffd700; background: rgba(0, 0, 0, 0.55); padding: 8px 14px; border-radius: 12px; border: 1.5px solid #eab308; user-select: none;" title="Auto-Survive: When you hit an obstacle or monster, automatically spend 100 coins to survive with an invulnerable shield!">
+                            <input type="checkbox" id="chk-auto-survive" style="width: 17px; height: 17px; accent-color: #f59e0b; cursor: pointer;">
+                            🛡️ Auto-Survive (100 💰)
+                        </label>
+                    </div>
                 </div>
                 <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 880px;">
-                    👾 Blast Scramble Monsters with lasers to get a <strong>Bag of Coins (+10 💰)</strong>! <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide • <strong>Space / F</strong> Shoot • <strong>R</strong> Revive (100 💰)
+                    👾 Blast Scramble Monsters with lasers to get a <strong>Bag of Coins (+10 💰)</strong>! <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive for 100 Coins (100 💰)
                 </div>
             </div>
 
@@ -1525,8 +1535,8 @@
                     <button id="btn-flappy-start" class="btn-game-primary" onclick="startFlappyGame()">
                         ▶ Start Flappy Cubie
                     </button>
-                    <button id="btn-flappy-revive" class="btn-game-revive" onclick="reviveFlappyWithCoins()" style="display: none;" title="Revive with 100 Coins (Press R)">
-                        ❤️ Revive with 100 Coins (100 💰)
+                    <button id="btn-flappy-survive" class="btn-game-survive" onclick="surviveFlappyWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
+                        🛡️ SURVIVE WITH 100 COINS (100 💰)
                     </button>
                     <button id="btn-flappy-pause" class="btn-game-pause" onclick="togglePauseFlappy()">
                         ⏸️ Pause
@@ -1930,6 +1940,7 @@
         let runnerAnimId = null;
         let runnerRoadZ = 0;
         let runnerFrame = 0;
+        let runnerSurviveBtnRect = null;
 
         // Background stars
         const runnerStars = Array.from({ length: 65 }, () => ({
@@ -1961,6 +1972,7 @@
             runnerFloatingTexts = [];
             runnerRoadZ = 0;
             runnerFrame = 0;
+            runnerSurviveBtnRect = null;
 
             document.getElementById('runner-score').textContent = '0';
             document.getElementById('runner-coins').textContent = runnerCoins;
@@ -1970,8 +1982,8 @@
                 startBtn.textContent = '🔄 Restart Highway Dash';
                 startBtn.classList.remove('dash-again-highlight');
             }
-            const reviveBtn = document.getElementById('btn-runner-revive');
-            if (reviveBtn) reviveBtn.style.display = 'none';
+            const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
+            if (surviveBtn) surviveBtn.style.display = 'none';
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
@@ -2247,6 +2259,33 @@
                                 const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
                                 spawnMonsterExplosion(expX, expY - 20);
                             }
+                            runnerObstacles.splice(i, 1);
+                            continue;
+                        } else if (document.getElementById('chk-auto-survive') && document.getElementById('chk-auto-survive').checked && runnerCoins >= 100) {
+                            // AUTO-SURVIVE: Automatically spends 100 coins to absorb fatal hit!
+                            runnerCoins -= 100;
+                            localStorage.setItem('cube_arcade_coins', runnerCoins);
+                            document.getElementById('runner-coins').textContent = runnerCoins;
+                            runnerInvulnerable = 150; // ~2.5s shield
+                            playSfx('revive');
+                            if (ob.type === 'monster') {
+                                playSfx('explosion');
+                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                                const horizonY = Math.round(runnerCanvas.height * 0.25);
+                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                                const horizonW = Math.round(runnerCanvas.width * 0.25);
+                                const bottomW = Math.round(runnerCanvas.width * 0.86);
+                                const roadW = horizonW + t * (bottomW - horizonW);
+                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                                spawnMonsterExplosion(expX, expY - 20);
+                            }
+                            runnerFloatingTexts.push({
+                                text: '🛡️ AUTO-SURVIVE! -100 💰',
+                                x: runnerCanvas.width / 2,
+                                y: runnerCanvas.height / 2 - 30,
+                                color: '#ffd700',
+                                life: 75
+                            });
                             runnerObstacles.splice(i, 1);
                             continue;
                         } else if (ob.type === 'monster') {
@@ -2712,57 +2751,109 @@
                 document.getElementById('runner-best').textContent = runnerBest;
             }
 
-            // Revive button control
-            const reviveBtn = document.getElementById('btn-runner-revive');
-            if (reviveBtn) {
-                reviveBtn.style.display = 'inline-flex';
+            // Survive button control on top bar
+            const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
+            if (surviveBtn) {
+                surviveBtn.style.display = 'inline-flex';
                 if (runnerCoins >= 100) {
-                    reviveBtn.classList.remove('disabled');
-                    reviveBtn.innerHTML = `❤️ Revive with 100 Coins (100 💰) <span style="font-size:0.85em; opacity:0.9;">[Press R]</span>`;
-                    reviveBtn.title = `Revive immediately for 100 coins! You have ${runnerCoins} 💰`;
+                    surviveBtn.classList.remove('disabled');
+                    surviveBtn.innerHTML = `🛡️ SURVIVE WITH 100 COINS (100 💰) <span style="font-size:0.85em; opacity:0.9;">[Press S]</span>`;
+                    surviveBtn.title = `Survive immediately for 100 coins! You have ${runnerCoins} 💰`;
                 } else {
-                    reviveBtn.classList.add('disabled');
-                    reviveBtn.innerHTML = `❤️ Need 100 💰 to Revive (${runnerCoins}/100)`;
-                    reviveBtn.title = `Need ${100 - runnerCoins} more coins to revive`;
+                    surviveBtn.classList.add('disabled');
+                    surviveBtn.innerHTML = `🛡️ Need 100 💰 to Survive (${runnerCoins}/100)`;
+                    surviveBtn.title = `Need ${100 - runnerCoins} more coins to survive`;
                 }
             }
 
             if (rCtx) {
-                rCtx.fillStyle = 'rgba(2, 6, 23, 0.9)';
+                rCtx.fillStyle = 'rgba(2, 6, 23, 0.92)';
                 rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
 
                 rCtx.font = '28px "DynaPuff", cursive';
                 rCtx.fillStyle = '#ff007f';
                 rCtx.textAlign = 'center';
-                rCtx.fillText('💥 HIGHWAY DASH OVER!', runnerCanvas.width / 2, runnerCanvas.height / 2 - 42);
+                rCtx.fillText('💥 HIGHWAY DASH OVER!', runnerCanvas.width / 2, runnerCanvas.height / 2 - 80);
 
                 rCtx.font = '16px "Outfit", sans-serif';
                 rCtx.fillStyle = '#fde047';
-                rCtx.fillText(reason || 'Defeated on the cubing highway!', runnerCanvas.width / 2, runnerCanvas.height / 2 - 12);
+                rCtx.fillText(reason || 'Defeated on the cubing highway!', runnerCanvas.width / 2, runnerCanvas.height / 2 - 50);
 
                 rCtx.font = '15px "Outfit", sans-serif';
                 rCtx.fillStyle = '#cbd5e1';
-                rCtx.fillText(`Distance: ${runnerDistance}m  |  Coins: ${runnerCoins} 💰  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 18);
+                rCtx.fillText(`Distance: ${runnerDistance}m  |  Coins: ${runnerCoins} 💰  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 - 20);
 
+                // DRAW INTERACTIVE SURVIVE BUTTON ON CANVAS
+                const sBtnW = Math.min(440, runnerCanvas.width - 40);
+                const sBtnH = 56;
+                const sBtnX = (runnerCanvas.width - sBtnW) / 2;
+                const sBtnY = runnerCanvas.height / 2 + 10;
+                runnerSurviveBtnRect = { x: sBtnX, y: sBtnY, w: sBtnW, h: sBtnH };
+
+                rCtx.save();
                 if (runnerCoins >= 100) {
-                    rCtx.font = 'bold 17px "DynaPuff", cursive';
-                    rCtx.fillStyle = '#38bdf8';
-                    rCtx.fillText('❤️ REVIVE AVAILABLE! Press [R] or click Revive (Costs 100 💰)', runnerCanvas.width / 2, runnerCanvas.height / 2 + 52);
-                    rCtx.font = '13px "Outfit", sans-serif';
-                    rCtx.fillStyle = '#94a3b8';
-                    rCtx.fillText('Or click "Dash Again" above to start fresh', runnerCanvas.width / 2, runnerCanvas.height / 2 + 76);
-                } else {
-                    rCtx.font = '15px "Outfit", sans-serif';
-                    rCtx.fillStyle = '#fb7185';
-                    rCtx.fillText(`💰 Need ${100 - runnerCoins} more coins to revive (Have ${runnerCoins}/100 💰). Blast more monsters!`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 52);
-                    rCtx.font = '13px "Outfit", sans-serif';
-                    rCtx.fillStyle = '#94a3b8';
-                    rCtx.fillText('Click "▶ Dash Again" above, tap screen, or press Spacebar!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 76);
-                }
+                    // Golden glowing survival button
+                    const grad = rCtx.createLinearGradient(sBtnX, sBtnY, sBtnX + sBtnW, sBtnY + sBtnH);
+                    grad.addColorStop(0, '#f59e0b');
+                    grad.addColorStop(0.5, '#e11d48');
+                    grad.addColorStop(1, '#ff007f');
+                    rCtx.fillStyle = grad;
+                    rCtx.strokeStyle = '#ffd700';
+                    rCtx.lineWidth = 3;
+                    rCtx.shadowColor = 'rgba(245, 158, 11, 0.8)';
+                    rCtx.shadowBlur = 18;
+                    if (rCtx.roundRect) {
+                        rCtx.beginPath();
+                        rCtx.roundRect(sBtnX, sBtnY, sBtnW, sBtnH, 14);
+                        rCtx.fill();
+                        rCtx.stroke();
+                    } else {
+                        rCtx.fillRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                        rCtx.strokeRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                    }
 
-                rCtx.font = 'bold 16px "DynaPuff", cursive';
+                    rCtx.shadowBlur = 0;
+                    rCtx.font = 'bold 20px "DynaPuff", cursive';
+                    rCtx.fillStyle = '#ffffff';
+                    rCtx.textAlign = 'center';
+                    rCtx.textBaseline = 'middle';
+                    rCtx.fillText('🛡️ CLICK HERE TO SURVIVE! (100 💰)', runnerCanvas.width / 2, sBtnY + sBtnH / 2);
+
+                    rCtx.textBaseline = 'alphabetic';
+                    rCtx.font = '13px "Outfit", sans-serif';
+                    rCtx.fillStyle = '#38bdf8';
+                    rCtx.fillText('Or press [S] on your keyboard to instantly survive!', runnerCanvas.width / 2, sBtnY + sBtnH + 24);
+                } else {
+                    // Disabled style button
+                    rCtx.fillStyle = '#1e293b';
+                    rCtx.strokeStyle = '#475569';
+                    rCtx.lineWidth = 2;
+                    if (rCtx.roundRect) {
+                        rCtx.beginPath();
+                        rCtx.roundRect(sBtnX, sBtnY, sBtnW, sBtnH, 14);
+                        rCtx.fill();
+                        rCtx.stroke();
+                    } else {
+                        rCtx.fillRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                        rCtx.strokeRect(sBtnX, sBtnY, sBtnW, sBtnH);
+                    }
+                    rCtx.font = 'bold 16px "DynaPuff", cursive';
+                    rCtx.fillStyle = '#94a3b8';
+                    rCtx.textAlign = 'center';
+                    rCtx.textBaseline = 'middle';
+                    rCtx.fillText(`🛡️ Need 100 💰 to Survive (${runnerCoins}/100 💰)`, runnerCanvas.width / 2, sBtnY + sBtnH / 2);
+
+                    rCtx.textBaseline = 'alphabetic';
+                    rCtx.font = '13px "Outfit", sans-serif';
+                    rCtx.fillStyle = '#fb7185';
+                    rCtx.fillText(`Blast more Scramble Monsters (+10 💰 each) to earn ${100 - runnerCoins} more coins!`, runnerCanvas.width / 2, sBtnY + sBtnH + 24);
+                }
+                rCtx.restore();
+
+                rCtx.font = 'bold 15px "DynaPuff", cursive';
                 rCtx.fillStyle = '#00f0ff';
-                rCtx.fillText('👆 Click "▶ Dash Again" on top of the screen to dash again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 104);
+                rCtx.textAlign = 'center';
+                rCtx.fillText('👆 Click "▶ Dash Again" on top of the screen to start over!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 120);
             }
 
             const startBtn = document.getElementById('btn-runner-start');
@@ -2778,19 +2869,31 @@
         }
 
         if (runnerCanvas) {
-            runnerCanvas.addEventListener('click', () => {
+            runnerCanvas.addEventListener('click', (e) => {
                 if (!runnerActive) {
+                    if (runnerSurviveBtnRect) {
+                        const rect = runnerCanvas.getBoundingClientRect();
+                        const scaleX = runnerCanvas.width / rect.width;
+                        const scaleY = runnerCanvas.height / rect.height;
+                        const clickX = (e.clientX - rect.left) * scaleX;
+                        const clickY = (e.clientY - rect.top) * scaleY;
+                        if (clickX >= runnerSurviveBtnRect.x && clickX <= runnerSurviveBtnRect.x + runnerSurviveBtnRect.w &&
+                            clickY >= runnerSurviveBtnRect.y && clickY <= runnerSurviveBtnRect.y + runnerSurviveBtnRect.h) {
+                            surviveRunnerWithCoins();
+                            return;
+                        }
+                    }
                     startRunnerGame();
                 }
             });
         }
 
-        function reviveRunnerWithCoins() {
+        function surviveRunnerWithCoins() {
             if (runnerActive) return;
             if (runnerCoins < 100) {
                 playSfx('bonk');
                 const needed = 100 - runnerCoins;
-                alert(`⚠️ You need 100 coins to revive!\nYou currently have ${runnerCoins} 💰.\nDestroy ${Math.ceil(needed / 10)} more Scramble Monsters with lasers (+10 💰 each) to earn enough coins!`);
+                alert(`⚠️ You need 100 coins to survive!\nYou currently have ${runnerCoins} 💰.\nDestroy ${Math.ceil(needed / 10)} more Scramble Monsters with lasers (+10 💰 each) to earn enough coins!`);
                 return;
             }
 
@@ -2802,7 +2905,8 @@
             // Reset death state and activate temporary invulnerability shield
             runnerActive = true;
             runnerPaused = false;
-            runnerSpeed = 0.6; // Gentle manageable recovery pace upon revival
+            runnerSurviveBtnRect = null;
+            runnerSpeed = 0.6; // Gentle manageable recovery pace upon survival
             document.getElementById('runner-speed').textContent = '0.6';
             runnerInvulnerable = 150; // ~2.5s shield
             runnerJumpY = 0;
@@ -2814,9 +2918,9 @@
             // Clear hazards within z < 320 to give immediate breathing room
             runnerObstacles = runnerObstacles.filter(ob => ob.z > 320);
 
-            // Hide revive button
-            const reviveBtn = document.getElementById('btn-runner-revive');
-            if (reviveBtn) reviveBtn.style.display = 'none';
+            // Hide survive button
+            const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
+            if (surviveBtn) surviveBtn.style.display = 'none';
 
             const startBtn = document.getElementById('btn-runner-start');
             if (startBtn) {
@@ -2829,29 +2933,30 @@
                 pauseBtn.innerHTML = '⏸️ Pause';
             }
 
-            // Play revival audio fanfare
+            // Play survival audio fanfare
             playSfx('revive');
 
             // Floating celebration notifications
             runnerFloatingTexts.push({
-                text: '❤️ REVIVED! -100 💰',
+                text: '🛡️ SURVIVED! -100 💰',
                 x: runnerCanvas.width / 2,
                 y: runnerCanvas.height / 2 - 30,
-                color: '#f43f5e',
-                life: 75
+                color: '#ffd700',
+                life: 80
             });
             runnerFloatingTexts.push({
-                text: '🛡️ INVULNERABLE SHIELD!',
+                text: '✨ FORCEFIELD SHIELD ACTIVE!',
                 x: runnerCanvas.width / 2,
                 y: runnerCanvas.height / 2 + 10,
                 color: '#00f0ff',
-                life: 75
+                life: 80
             });
 
             // Resume game loop
             if (runnerAnimId) cancelAnimationFrame(runnerAnimId);
             runnerLoop();
         }
+        const reviveRunnerWithCoins = surviveRunnerWithCoins;
 
         // ==========================================
         // 4. GAME 2: CUBE SNAKE
@@ -4612,8 +4717,8 @@
             document.getElementById('flappy-status').textContent = '🪂 Flap through the Scramble Pillars!';
             document.getElementById('btn-flappy-start').textContent = '🔄 Restart Flappy Cubie';
 
-            const reviveBtn = document.getElementById('btn-flappy-revive');
-            if (reviveBtn) reviveBtn.style.display = 'none';
+            const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
+            if (surviveBtn) surviveBtn.style.display = 'none';
 
             const pauseBtn = document.getElementById('btn-flappy-pause');
             if (pauseBtn) {
@@ -4833,22 +4938,22 @@
             playSfx('crash');
             
             const coins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
-            const reviveBtn = document.getElementById('btn-flappy-revive');
-            if (reviveBtn) {
-                reviveBtn.style.display = 'inline-flex';
+            const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
+            if (surviveBtn) {
+                surviveBtn.style.display = 'inline-flex';
                 if (coins >= 100) {
-                    reviveBtn.classList.remove('disabled');
-                    reviveBtn.innerHTML = `❤️ Revive with 100 Coins (100 💰) <span style="font-size:0.85em; opacity:0.9;">[Press R]</span>`;
-                    reviveBtn.title = `Revive with 100 coins! Current wallet: ${coins} 💰`;
+                    surviveBtn.classList.remove('disabled');
+                    surviveBtn.innerHTML = `🛡️ SURVIVE WITH 100 COINS (100 💰) <span style="font-size:0.85em; opacity:0.9;">[Press S]</span>`;
+                    surviveBtn.title = `Survive with 100 coins! Current wallet: ${coins} 💰`;
                 } else {
-                    reviveBtn.classList.add('disabled');
-                    reviveBtn.innerHTML = `❤️ Need 100 💰 to Revive (${coins}/100)`;
-                    reviveBtn.title = `Need ${100 - coins} more coins to revive`;
+                    surviveBtn.classList.add('disabled');
+                    surviveBtn.innerHTML = `🛡️ Need 100 💰 to Survive (${coins}/100)`;
+                    surviveBtn.title = `Need ${100 - coins} more coins to survive`;
                 }
             }
 
             document.getElementById('flappy-status').innerHTML = `💥 <strong>CRASH!</strong> Score: <strong>${flappyScore}</strong> (${flappyPipes} pillars passed)` +
-                (coins >= 100 ? ` • <span style="color:#38bdf8;">Press <strong>[R]</strong> or click Revive (100 💰)!</span>` : ` • <span style="color:#fb7185;">Need ${100 - coins} more 💰 to revive</span>`);
+                (coins >= 100 ? ` • <span style="color:#38bdf8;">Press <strong>[S]</strong> or click Survive (100 💰)!</span>` : ` • <span style="color:#fb7185;">Need ${100 - coins} more 💰 to survive</span>`);
             document.getElementById('btn-flappy-start').textContent = '▶ Play Again';
             const pauseBtn = document.getElementById('btn-flappy-pause');
             if (pauseBtn) {
@@ -4857,12 +4962,12 @@
             }
         }
 
-        function reviveFlappyWithCoins() {
+        function surviveFlappyWithCoins() {
             if (flappyActive) return;
             let coins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
             if (coins < 100) {
                 playSfx('bonk');
-                alert(`⚠️ You need 100 coins to revive!\nYou currently have ${coins} 💰.\nEarn coins in Cube Runner by blasting monsters with lasers (+10 💰 each)!`);
+                alert(`⚠️ You need 100 coins to survive!\nYou currently have ${coins} 💰.\nEarn coins in Cube Runner by blasting monsters with lasers (+10 💰 each)!`);
                 return;
             }
             coins -= 100;
@@ -4878,16 +4983,17 @@
             // Clear obstacles within immediate proximity
             flappyObstacles = flappyObstacles.filter(p => p.x > 90 + 170 || p.x + p.width < 90 - 40);
 
-            const reviveBtn = document.getElementById('btn-flappy-revive');
-            if (reviveBtn) reviveBtn.style.display = 'none';
+            const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
+            if (surviveBtn) surviveBtn.style.display = 'none';
 
-            document.getElementById('flappy-status').innerHTML = `❤️ <strong>REVIVED!</strong> 100 💰 used. Keep flapping!`;
+            document.getElementById('flappy-status').innerHTML = `🛡️ <strong>SURVIVED!</strong> 100 💰 used. Keep flapping!`;
             document.getElementById('btn-flappy-start').textContent = '🔄 Restart Flappy Cubie';
 
             playSfx('revive');
             if (flappyAnimId) cancelAnimationFrame(flappyAnimId);
             flappyLoop();
         }
+        const reviveFlappyWithCoins = surviveFlappyWithCoins;
 
         if (flappyCanvas) {
             flappyCanvas.addEventListener('click', () => {
@@ -5117,15 +5223,15 @@
                 return;
             }
 
-            // Revive with 100 Coins Shortcut ('R')
-            if (e.key === 'r' || e.key === 'R') {
+            // Survive with 100 Coins Shortcut ('S' or 'R')
+            if (e.key === 's' || e.key === 'S' || e.key === 'r' || e.key === 'R') {
                 if (activePanel.id === 'panel-runner' && !runnerActive) {
                     e.preventDefault();
-                    reviveRunnerWithCoins();
+                    surviveRunnerWithCoins();
                     return;
                 } else if (activePanel.id === 'panel-flappy' && !flappyActive) {
                     e.preventDefault();
-                    reviveFlappyWithCoins();
+                    surviveFlappyWithCoins();
                     return;
                 }
             }
