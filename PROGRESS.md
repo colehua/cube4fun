@@ -1,44 +1,38 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Write "best!" right next to Cube Runner:
-   - On the tab switcher button: `🎮 Cube Runner <span class="badge-best">best!</span>`
-   - In the game panel header: `🎮 Cube Runner 3D <span class="badge-best">best!</span> • Highway Dash`
-   - On the primary action button: `▶ Start 3D Cube Runner <span class="badge-best">best!</span>` (and `🔄 Restart Highway Dash <span class="badge-best">best!</span>`, `▶ Dash Again <span class="badge-best">best!</span>`)
-   - Added animated vibrant CSS styling for `.badge-best` with pulse glow animation.
-2. Differentiate monster health in Cube Runner:
-   - Implemented varied health pools: 100 HP (Boss/Goliath), 50 HP (Brute/Fiend), 25 HP (Imp/Scout).
-   - Each laser shot deals exactly 25 damage:
-     - 100 HP monster requires exactly 4 shots to defeat (100 -> 75 -> 50 -> 25 -> 0).
-     - 50 HP monster requires exactly 2 shots to defeat (50 -> 25 -> 0).
-     - 25 HP monster requires exactly 1 shot to defeat (25 -> 0).
-   - Rendered dynamic 3D health bars above monsters with remaining HP and hits counter (`100 HP (4 Shots)`, `50 HP (2 Shots)`, `25 HP (1 Shot)`).
-   - Scaled and colored monsters based on health (100 HP Crimson Titan 1.35x, 50 HP Purple Brute 1.05x, 25 HP Emerald Imp 0.82x).
-   - Added hit flash visual feedback and floating damage numbers (`-25 HP! 💥 [X shots left]`).
-   - Rewarded bags of coins based on difficulty (25 HP: +10 💰, 50 HP: +20 💰, 100 HP: +50 💰).
-   - Supported both laser shooting (4 shots) and jump-stomping on Gun Monsters (+50 💰).
-3. Verified live in Chrome DevTools MCP with 0 errors across viewports.
-4. Git commit and push changes to GitHub remote `origin/main`.
+1. Restrict jumping ON monsters to shooting monsters only:
+   - Shooting monsters (`gun_monster`): Can be jumped on (aerial jump / dive stomp) to crush for +50 💰.
+   - Normal monsters (`monster`): CANNOT be jumped on! Attempting to land on or dive-stomp normal monsters does NOT crush them; normal monsters must be shot down with lasers (🔥 SHOOT).
+2. Allow jumping OVER anything that is 1 block tall:
+   - Hurdles (`hurdle`): 1 block tall, jump over safely when `runnerIsJumping && runnerJumpY >= 12`.
+   - 1-block Rubik Cubes (`barrier` with `blocksTall: 1`): 1 block tall, jump over safely when `runnerIsJumping && runnerJumpY >= 14`.
+   - 1-block Mini Monsters (25 HP Imp): 1 block tall, player can leap OVER it safely when `runnerIsJumping && runnerJumpY >= 20` without crushing it.
+   - 2-block walls and 2-block/3-block monsters (50 HP, 100 HP): Too tall to jump over; must avoid or shoot down.
+3. Updated 3D canvas visuals to indicate 1-block vs multi-block heights and jump-stomp targets.
+4. Verified live in Chrome DevTools MCP with 0 errors.
+5. Git commit and push changes to GitHub remote `origin/main`.
 
 Next step: Done.
 
 Tasks:
 - [x] Update PROGRESS.md to IN PROGRESS
-- [x] Add `.badge-best` CSS and update HTML tab, title, and start button
-- [x] Implement monster health system (100, 50, 25 HP) with 25 damage per shot
-- [x] Implement 3D health bar and hits counter above monsters
-- [x] Implement distinct colors, sizes, and hit flash feedback for 100, 50, 25 HP
-- [x] Verify in Chrome DevTools MCP
+- [x] Remove jump-stomp crush from normal monsters (only gun monsters can be jumped on)
+- [x] Implement jump-over clearance for all 1-block tall obstacles (hurdles, 1-block cubes, 25 HP 1-block imps)
+- [x] Update obstacle rendering with 1-block vs 2-block height indicators
+- [x] Update instructions and status text
+- [x] Verify live in Chrome DevTools MCP
 - [x] Commit and push to origin main
 
 Assumptions:
-- "cube runner thingy" refers to the game tab, header, and start button.
-- 100 HP takes 4 shots, 50 HP takes 2 shots, 25 HP takes 1 shot (25 damage per laser shot).
+- "jump on" means crushing from above (stomp attack).
+- "jump over" means clearing the obstacle through the air without touching it.
+- 1 block tall includes hurdles, 1-block cube barriers, and 1-block (25 HP) imps.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Verified monster health depletion (100 HP 4 shots, 50 HP 2 shots, 25 HP 1 shot) and badge in Chrome DevTools MCP.
-- Implemented monster HP tiers (100, 50, 25), 3D health bars, and "best!" badge.
-- Initialized Cube Runner "best!" badge and monster HP (100, 50, 25) implementation.
+- Verified all 6 collision scenarios in Chrome DevTools MCP (gun monster stomp, normal monster fatal, jump over hurdle/cube/imp, 2-block wall fatal).
+- Implemented jump-on shooting monsters only and jump-over 1-block obstacles.
+- Initialized jump-on shooting monsters only and jump-over 1-block obstacles task.
