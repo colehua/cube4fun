@@ -336,10 +336,11 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            active {
-                background: #00f0ff;
-                color: #000;
-            }
+            user-select: none;
+        }
+        .dpad-btn:active {
+            background: #00f0ff;
+            color: #000;
         }
 
         /* SIMON GRID */
@@ -504,12 +505,22 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
         }
 
-        /* PRIMARY START BUTTON */
+        /* PRIMARY ACTION BUTTONS */
+        .game-controls-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-top: 18px;
+        }
+
         .btn-game-primary {
             background: linear-gradient(135deg, #00f0ff 0%, #0072ff 100%);
             color: #ffffff;
             border: none;
-            padding: 14px 32px;
+            padding: 14px 30px;
             border-radius: 18px;
             font-family: 'DynaPuff', cursive;
             font-size: 1.15em;
@@ -517,11 +528,69 @@
             cursor: pointer;
             box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
             transition: all 0.2s ease;
-            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-game-primary:hover {
             transform: scale(1.05);
             box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
+        }
+
+        /* PAUSE BUTTON STYLING */
+        .btn-game-pause {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 2.5px solid #64748b;
+            padding: 14px 28px;
+            border-radius: 18px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.12em;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-game-pause:hover {
+            border-color: #FAED27;
+            color: #FAED27;
+            transform: scale(1.04);
+            box-shadow: 0 0 15px rgba(250, 237, 39, 0.4);
+        }
+        .btn-game-pause.paused {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-color: #fde047;
+            color: #ffffff;
+            box-shadow: 0 0 22px rgba(245, 158, 11, 0.8);
+            animation: pause-pulse 1.2s infinite alternate ease-in-out;
+        }
+
+        @keyframes pause-pulse {
+            0% { transform: scale(1.02); box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
+            100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(245, 158, 11, 0.9); }
+        }
+
+        /* KEYBOARD HINT CHIP */
+        .pause-key-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        .key-badge {
+            background: #020617;
+            border: 1px solid #475569;
+            color: #fde047;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-weight: 700;
         }
 
         /* FOOTER */
@@ -558,6 +627,9 @@
         <header class="arcade-header">
             <h1 class="arcade-title">🎮 Secret Game Mode 🚀</h1>
             <p class="arcade-subtitle">You found the secret rocket portal! Choose an arcade game below and test your speedcubing skills!</p>
+            <div class="pause-key-hint">
+                💡 Tip: Press <span class="key-badge">P</span> or <span class="key-badge">Esc</span> anytime to quickly Pause or Resume any game!
+            </div>
         </header>
 
         <!-- AUDIO & MUSIC CONTROL STRIP -->
@@ -610,9 +682,14 @@
                 <div style="margin-top: 14px; text-align: center; color: #94a3b8; font-size: 0.95em;">
                     Press <strong>SPACEBAR</strong>, <strong>CLICK</strong>, or <strong>TAP</strong> anywhere on the screen to jump & flap!
                 </div>
-                <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()">
-                    ▶ Start Cube Runner
-                </button>
+                <div class="game-controls-row">
+                    <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()">
+                        ▶ Start Cube Runner
+                    </button>
+                    <button id="btn-runner-pause" class="btn-game-pause" onclick="togglePauseRunner()">
+                        ⏸️ Pause
+                    </button>
+                </div>
             </div>
 
             <!-- ============================================== -->
@@ -638,9 +715,14 @@
                 <div style="margin-top: 14px; text-align: center; color: #94a3b8; font-size: 0.95em;">
                     Use <strong>Arrow Keys</strong> or <strong>WASD</strong> to navigate. Eat scrambled cubies to grow your cube snake!
                 </div>
-                <button id="btn-snake-start" class="btn-game-primary" onclick="startSnakeGame()">
-                    ▶ Start Cube Snake
-                </button>
+                <div class="game-controls-row">
+                    <button id="btn-snake-start" class="btn-game-primary" onclick="startSnakeGame()">
+                        ▶ Start Cube Snake
+                    </button>
+                    <button id="btn-snake-pause" class="btn-game-pause" onclick="togglePauseSnake()">
+                        ⏸️ Pause
+                    </button>
+                </div>
             </div>
 
             <!-- ============================================== -->
@@ -654,7 +736,7 @@
                         <span>BEST: <span id="simon-best">0</span></span>
                     </div>
                 </div>
-                <div id="simon-status" style="font-family: 'DynaPuff', cursive; font-size: 1.2em; color: #38bdf8; min-height: 32px; margin-top: 8px;">
+                <div id="simon-status" style="font-family: 'DynaPuff', cursive; font-size: 1.2em; color: #38bdf8; min-height: 32px; margin-top: 8px; text-align: center;">
                     Press Start to memorize the pattern!
                 </div>
                 <div class="simon-grid">
@@ -665,9 +747,14 @@
                     <button class="simon-cube-btn" style="background: #ef4444; color: #fff;" onclick="handleSimonInput(4)" id="simon-btn-4">RED<br>R</button>
                     <button class="simon-cube-btn" style="background: #f97316; color: #000;" onclick="handleSimonInput(5)" id="simon-btn-5">ORANGE<br>L</button>
                 </div>
-                <button id="btn-simon-start" class="btn-game-primary" onclick="startSimonGame()">
-                    ▶ Start Memory Challenge
-                </button>
+                <div class="game-controls-row">
+                    <button id="btn-simon-start" class="btn-game-primary" onclick="startSimonGame()">
+                        ▶ Start Memory Challenge
+                    </button>
+                    <button id="btn-simon-pause" class="btn-game-pause" onclick="togglePauseSimon()">
+                        ⏸️ Pause
+                    </button>
+                </div>
             </div>
 
             <!-- ============================================== -->
@@ -682,15 +769,20 @@
                         <span>TPS: <span id="reflex-tps">0.00</span></span>
                     </div>
                 </div>
-                <div id="reflex-status" style="font-family: 'DynaPuff', cursive; font-size: 1.15em; color: #ff007f; min-height: 28px; margin-top: 6px;">
+                <div id="reflex-status" style="font-family: 'DynaPuff', cursive; font-size: 1.15em; color: #ff007f; min-height: 28px; margin-top: 6px; text-align: center;">
                     Tap targets as fast as possible in 30 seconds!
                 </div>
                 <div class="reflex-grid" id="reflex-grid-box">
                     <!-- 16 Cells generated dynamically -->
                 </div>
-                <button id="btn-reflex-start" class="btn-game-primary" onclick="startReflexGame()">
-                    ▶ Start Reflex Challenge (30s)
-                </button>
+                <div class="game-controls-row">
+                    <button id="btn-reflex-start" class="btn-game-primary" onclick="startReflexGame()">
+                        ▶ Start Reflex Challenge (30s)
+                    </button>
+                    <button id="btn-reflex-pause" class="btn-game-pause" onclick="togglePauseReflex()">
+                        ⏸️ Pause
+                    </button>
+                </div>
             </div>
 
             <!-- ============================================== -->
@@ -720,9 +812,14 @@
                         <button class="blitz-opt-btn" onclick="submitBlitzAnswer(3)">D</button>
                     </div>
                 </div>
-                <button id="btn-blitz-start" class="btn-game-primary" onclick="startBlitzGame()">
-                    ▶ Start Notation Blitz
-                </button>
+                <div class="game-controls-row">
+                    <button id="btn-blitz-start" class="btn-game-primary" onclick="startBlitzGame()">
+                        ▶ Start Notation Blitz
+                    </button>
+                    <button id="btn-blitz-pause" class="btn-game-pause" onclick="togglePauseBlitz()">
+                        ⏸️ Pause
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -796,6 +893,30 @@
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 0.26);
+                } else if (type === 'pause') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.setValueAtTime(380, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.19);
+                } else if (type === 'resume') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(380, now);
+                    osc.frequency.setValueAtTime(600, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.19);
                 } else if (type === 'note') {
                     const freqs = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
                     const freq = freqs[arguments[1] || 0] || 440;
@@ -834,9 +955,12 @@
             const targetPanel = document.getElementById('panel-' + gameId);
             if (targetPanel) targetPanel.classList.add('active');
 
-            // Pause other games if needed
-            if (gameId !== 'runner' && runnerActive) runnerActive = false;
-            if (gameId !== 'snake' && snakeActive) snakeActive = false;
+            // Pause other running games when switching tabs to avoid background collisions
+            if (gameId !== 'runner' && runnerActive && !runnerPaused) togglePauseRunner();
+            if (gameId !== 'snake' && snakeActive && !snakePaused) togglePauseSnake();
+            if (gameId !== 'simon' && simonActive && !simonPaused) togglePauseSimon();
+            if (gameId !== 'reflex' && reflexActive && !reflexPaused) togglePauseReflex();
+            if (gameId !== 'blitz' && blitzActive && !blitzPaused) togglePauseBlitz();
         }
 
         // ==========================================
@@ -845,6 +969,7 @@
         const runnerCanvas = document.getElementById('canvas-runner');
         const rCtx = runnerCanvas.getContext('2d');
         let runnerActive = false;
+        let runnerPaused = false;
         let runnerScore = 0;
         let runnerBest = parseInt(localStorage.getItem('cube_runner_best') || '0', 10);
         document.getElementById('runner-best').textContent = runnerBest;
@@ -861,18 +986,55 @@
         function startRunnerGame() {
             getAudioContext();
             runnerActive = true;
+            runnerPaused = false;
             cubeY = 160;
             cubeVy = 0;
             runnerScore = 0;
             document.getElementById('runner-score').textContent = '0';
             obstacles = [];
             document.getElementById('btn-runner-start').textContent = '🔄 Restart Cube Runner';
+            const pauseBtn = document.getElementById('btn-runner-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
             if (runnerAnimId) cancelAnimationFrame(runnerAnimId);
             runnerLoop();
         }
 
-        function jumpRunner() {
+        function togglePauseRunner() {
             if (!runnerActive) return;
+            runnerPaused = !runnerPaused;
+            const btn = document.getElementById('btn-runner-pause');
+            if (runnerPaused) {
+                playSfx('pause');
+                if (runnerAnimId) cancelAnimationFrame(runnerAnimId);
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                // Draw paused overlay on canvas
+                rCtx.fillStyle = 'rgba(2, 6, 23, 0.78)';
+                rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
+                rCtx.font = '26px "DynaPuff", cursive';
+                rCtx.fillStyle = '#FAED27';
+                rCtx.textAlign = 'center';
+                rCtx.fillText('⏸️ CUBE RUNNER PAUSED', runnerCanvas.width / 2, runnerCanvas.height / 2 - 10);
+                rCtx.font = '15px "Outfit", sans-serif';
+                rCtx.fillStyle = '#cbd5e1';
+                rCtx.fillText('Click Resume or press P to continue playing', runnerCanvas.width / 2, runnerCanvas.height / 2 + 25);
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                runnerAnimId = requestAnimationFrame(runnerLoop);
+            }
+        }
+
+        function jumpRunner() {
+            if (!runnerActive || runnerPaused) return;
             cubeVy = jumpStrength;
             playSfx('jump');
         }
@@ -889,7 +1051,7 @@
         });
 
         function runnerLoop() {
-            if (!runnerActive) return;
+            if (!runnerActive || runnerPaused) return;
             frameCount++;
             rCtx.clearRect(0, 0, runnerCanvas.width, runnerCanvas.height);
 
@@ -996,6 +1158,7 @@
 
         function gameOverRunner() {
             runnerActive = false;
+            runnerPaused = false;
             playSfx('crash');
             rCtx.fillStyle = 'rgba(0, 0, 0, 0.75)';
             rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
@@ -1011,6 +1174,11 @@
             rCtx.fillText('Tap or press Spacebar to play again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 55);
 
             document.getElementById('btn-runner-start').textContent = '▶ Play Again';
+            const pauseBtn = document.getElementById('btn-runner-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
         }
 
         // ==========================================
@@ -1024,11 +1192,13 @@
         let nextSnakeDir = 'RIGHT';
         let snakeFood = {x: 15, y: 10};
         let snakeActive = false;
+        let snakePaused = false;
         let snakeInterval = null;
         let snakeBest = parseInt(localStorage.getItem('cube_snake_best') || '3', 10);
         document.getElementById('snake-best').textContent = snakeBest;
 
         function setSnakeDir(dir) {
+            if (snakePaused) return;
             if (dir === 'UP' && snakeDir !== 'DOWN') nextSnakeDir = 'UP';
             if (dir === 'DOWN' && snakeDir !== 'UP') nextSnakeDir = 'DOWN';
             if (dir === 'LEFT' && snakeDir !== 'RIGHT') nextSnakeDir = 'LEFT';
@@ -1055,18 +1225,55 @@
         function startSnakeGame() {
             getAudioContext();
             snakeActive = true;
+            snakePaused = false;
             snake = [{x: 10, y: 10}, {x: 9, y: 10}, {x: 8, y: 10}];
             snakeDir = 'RIGHT';
             nextSnakeDir = 'RIGHT';
             spawnFood();
             document.getElementById('snake-score').textContent = '3';
             document.getElementById('btn-snake-start').textContent = '🔄 Restart Cube Snake';
+            const pauseBtn = document.getElementById('btn-snake-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
             if (snakeInterval) clearInterval(snakeInterval);
             snakeInterval = setInterval(snakeTick, 110);
         }
 
-        function snakeTick() {
+        function togglePauseSnake() {
             if (!snakeActive) return;
+            snakePaused = !snakePaused;
+            const btn = document.getElementById('btn-snake-pause');
+            if (snakePaused) {
+                playSfx('pause');
+                if (snakeInterval) clearInterval(snakeInterval);
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                // Draw paused overlay on snake canvas
+                sCtx.fillStyle = 'rgba(2, 6, 23, 0.78)';
+                sCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+                sCtx.font = '24px "DynaPuff", cursive';
+                sCtx.fillStyle = '#FAED27';
+                sCtx.textAlign = 'center';
+                sCtx.fillText('⏸️ CUBE SNAKE PAUSED', snakeCanvas.width / 2, snakeCanvas.height / 2 - 10);
+                sCtx.font = '15px "Outfit", sans-serif';
+                sCtx.fillStyle = '#cbd5e1';
+                sCtx.fillText('Click Resume or press P to continue playing', snakeCanvas.width / 2, snakeCanvas.height / 2 + 25);
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                snakeInterval = setInterval(snakeTick, 110);
+            }
+        }
+
+        function snakeTick() {
+            if (!snakeActive || snakePaused) return;
             snakeDir = nextSnakeDir;
             const head = {x: snake[0].x, y: snake[0].y};
             if (snakeDir === 'UP') head.y--;
@@ -1140,6 +1347,7 @@
 
         function gameOverSnake() {
             snakeActive = false;
+            snakePaused = false;
             clearInterval(snakeInterval);
             playSfx('crash');
             sCtx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -1152,6 +1360,11 @@
             sCtx.fillStyle = '#ffffff';
             sCtx.fillText(`Final Length: ${snake.length}  |  Record: ${snakeBest}`, snakeCanvas.width / 2, snakeCanvas.height / 2 + 25);
             document.getElementById('btn-snake-start').textContent = '▶ Play Again';
+            const pauseBtn = document.getElementById('btn-snake-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
         }
 
         // ==========================================
@@ -1160,19 +1373,53 @@
         let simonSequence = [];
         let simonPlayerStep = 0;
         let simonAcceptingInput = false;
+        let simonActive = false;
+        let simonPaused = false;
+        let simonSavedStatus = '';
         let simonBest = parseInt(localStorage.getItem('cube_simon_best') || '0', 10);
         document.getElementById('simon-best').textContent = simonBest;
 
         function startSimonGame() {
             getAudioContext();
+            simonActive = true;
+            simonPaused = false;
             simonSequence = [];
             simonPlayerStep = 0;
             document.getElementById('simon-score').textContent = '0';
             document.getElementById('btn-simon-start').textContent = '🔄 Restart Memory Game';
+            const pauseBtn = document.getElementById('btn-simon-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
             nextSimonRound();
         }
 
+        function togglePauseSimon() {
+            if (!simonActive) return;
+            simonPaused = !simonPaused;
+            const btn = document.getElementById('btn-simon-pause');
+            const statusEl = document.getElementById('simon-status');
+            if (simonPaused) {
+                playSfx('pause');
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                simonSavedStatus = statusEl.innerHTML;
+                statusEl.innerHTML = '⏸️ <strong>MEMORY CHALLENGE PAUSED</strong> (Click Resume or press P)';
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                statusEl.innerHTML = simonSavedStatus || '👉 Your turn! Repeat the pattern!';
+            }
+        }
+
         function nextSimonRound() {
+            if (!simonActive || simonPaused) return;
             simonPlayerStep = 0;
             simonAcceptingInput = false;
             simonSequence.push(Math.floor(Math.random() * 6));
@@ -1187,14 +1434,17 @@
             document.getElementById('simon-status').textContent = '👀 Watch carefully...';
             let idx = 0;
             const interval = setInterval(() => {
+                if (simonPaused) return; // wait while paused
                 if (idx < simonSequence.length) {
                     flashSimonBtn(simonSequence[idx]);
                     idx++;
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
-                        simonAcceptingInput = true;
-                        document.getElementById('simon-status').textContent = '👉 Your turn! Repeat the pattern!';
+                        if (!simonPaused) {
+                            simonAcceptingInput = true;
+                            document.getElementById('simon-status').textContent = '👉 Your turn! Repeat the pattern!';
+                        }
                     }, 350);
                 }
             }, 650);
@@ -1211,7 +1461,7 @@
         }
 
         function handleSimonInput(btnIndex) {
-            if (!simonAcceptingInput) return;
+            if (!simonAcceptingInput || simonPaused) return;
             flashSimonBtn(btnIndex);
 
             if (btnIndex === simonSequence[simonPlayerStep]) {
@@ -1224,9 +1474,16 @@
                 }
             } else {
                 simonAcceptingInput = false;
+                simonActive = false;
+                simonPaused = false;
                 playSfx('crash');
                 document.getElementById('simon-status').innerHTML = '❌ WRONG COLOR! Game over. Press Start to retry!';
                 document.getElementById('btn-simon-start').textContent = '▶ Play Again';
+                const pauseBtn = document.getElementById('btn-simon-pause');
+                if (pauseBtn) {
+                    pauseBtn.classList.remove('paused');
+                    pauseBtn.innerHTML = '⏸️ Pause';
+                }
             }
         }
 
@@ -1237,7 +1494,10 @@
         let reflexHits = 0;
         let reflexTimeLeft = 30;
         let reflexActive = false;
+        let reflexPaused = false;
         let reflexTimer = null;
+        let reflexElapsedBeforePause = 0;
+        let reflexSegmentStartTime = 0;
         let activeReflexTarget = -1;
 
         // Initialize 16 cells
@@ -1255,27 +1515,74 @@
             reflexHits = 0;
             reflexTimeLeft = 30.0;
             reflexActive = true;
+            reflexPaused = false;
+            reflexElapsedBeforePause = 0;
             document.getElementById('reflex-hits').textContent = '0';
             document.getElementById('reflex-tps').textContent = '0.00';
             document.getElementById('reflex-time').textContent = '30.0s';
             document.getElementById('reflex-status').textContent = '⚡ GO! Tap the glowing magenta targets!';
             document.getElementById('btn-reflex-start').textContent = '🔄 Restart Reflex Test';
+            const pauseBtn = document.getElementById('btn-reflex-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
 
             if (reflexTimer) clearInterval(reflexTimer);
             pickNextReflexTarget();
 
-            const startTime = performance.now();
+            reflexSegmentStartTime = performance.now();
             reflexTimer = setInterval(() => {
-                const elapsed = (performance.now() - startTime) / 1000;
-                reflexTimeLeft = Math.max(0, 30.0 - elapsed);
+                if (reflexPaused) return;
+                const currentSegment = (performance.now() - reflexSegmentStartTime) / 1000;
+                const totalElapsed = reflexElapsedBeforePause + currentSegment;
+                reflexTimeLeft = Math.max(0, 30.0 - totalElapsed);
                 document.getElementById('reflex-time').textContent = reflexTimeLeft.toFixed(1) + 's';
-                const tps = elapsed > 0 ? (reflexHits / elapsed).toFixed(2) : '0.00';
+                const tps = totalElapsed > 0 ? (reflexHits / totalElapsed).toFixed(2) : '0.00';
                 document.getElementById('reflex-tps').textContent = tps;
 
                 if (reflexTimeLeft <= 0) {
                     endReflexTest();
                 }
             }, 100);
+        }
+
+        function togglePauseReflex() {
+            if (!reflexActive) return;
+            reflexPaused = !reflexPaused;
+            const btn = document.getElementById('btn-reflex-pause');
+            const statusEl = document.getElementById('reflex-status');
+            if (reflexPaused) {
+                playSfx('pause');
+                if (reflexTimer) clearInterval(reflexTimer);
+                reflexElapsedBeforePause += (performance.now() - reflexSegmentStartTime) / 1000;
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                statusEl.innerHTML = `⏸️ <strong>REFLEX TEST PAUSED • ${reflexTimeLeft.toFixed(1)}s LEFT</strong> (Click Resume or press P)`;
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                statusEl.textContent = '⚡ GO! Tap the glowing magenta targets!';
+                reflexSegmentStartTime = performance.now();
+                reflexTimer = setInterval(() => {
+                    if (reflexPaused) return;
+                    const currentSegment = (performance.now() - reflexSegmentStartTime) / 1000;
+                    const totalElapsed = reflexElapsedBeforePause + currentSegment;
+                    reflexTimeLeft = Math.max(0, 30.0 - totalElapsed);
+                    document.getElementById('reflex-time').textContent = reflexTimeLeft.toFixed(1) + 's';
+                    const tps = totalElapsed > 0 ? (reflexHits / totalElapsed).toFixed(2) : '0.00';
+                    document.getElementById('reflex-tps').textContent = tps;
+
+                    if (reflexTimeLeft <= 0) {
+                        endReflexTest();
+                    }
+                }, 100);
+            }
         }
 
         function pickNextReflexTarget() {
@@ -1288,7 +1595,7 @@
         }
 
         function handleReflexClick(index) {
-            if (!reflexActive) return;
+            if (!reflexActive || reflexPaused) return;
             if (index === activeReflexTarget) {
                 reflexHits++;
                 playSfx('score');
@@ -1301,12 +1608,18 @@
 
         function endReflexTest() {
             reflexActive = false;
+            reflexPaused = false;
             clearInterval(reflexTimer);
             document.querySelectorAll('.reflex-cell').forEach(c => c.classList.remove('active-target'));
             playSfx('crash');
             const finalTps = (reflexHits / 30.0).toFixed(2);
             document.getElementById('reflex-status').innerHTML = `🏁 TIME UP! Final: <strong>${reflexHits} Hits</strong> | <strong>${finalTps} TPS</strong> ⚡`;
             document.getElementById('btn-reflex-start').textContent = '▶ Play Again';
+            const pauseBtn = document.getElementById('btn-reflex-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
         }
 
         // ==========================================
@@ -1328,6 +1641,7 @@
         ];
 
         let blitzActive = false;
+        let blitzPaused = false;
         let blitzScore = 0;
         let blitzStreak = 0;
         let blitzBest = parseInt(localStorage.getItem('cube_blitz_best') || '0', 10);
@@ -1336,21 +1650,73 @@
         let blitzTimerAnim = null;
         let blitzTimeRemaining = 1.0;
         let blitzCorrectIndex = 0;
+        let currentBlitzMove = '';
+        let blitzQuestionStartTime = 0;
+        let blitzCurrentQuestionDuration = 0;
+        let blitzRemainingDuration = 0;
 
         function startBlitzGame() {
             getAudioContext();
             blitzActive = true;
+            blitzPaused = false;
             blitzScore = 0;
             blitzStreak = 0;
             document.getElementById('blitz-score').textContent = '0';
             document.getElementById('blitz-streak').textContent = '0';
             document.getElementById('btn-blitz-start').textContent = '🔄 Restart Blitz';
+            const pauseBtn = document.getElementById('btn-blitz-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
             nextBlitzQuestion();
         }
 
-        function nextBlitzQuestion() {
+        function togglePauseBlitz() {
             if (!blitzActive) return;
+            blitzPaused = !blitzPaused;
+            const btn = document.getElementById('btn-blitz-pause');
+            const displayEl = document.getElementById('blitz-display');
+            if (blitzPaused) {
+                playSfx('pause');
+                if (blitzTimerAnim) cancelAnimationFrame(blitzTimerAnim);
+                const elapsed = performance.now() - blitzQuestionStartTime;
+                blitzRemainingDuration = Math.max(10, blitzCurrentQuestionDuration - elapsed);
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                displayEl.innerHTML = '<span style="color: #FAED27; font-size: 0.65em;">⏸️ PAUSED</span>';
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                displayEl.textContent = currentBlitzMove;
+                blitzQuestionStartTime = performance.now();
+                blitzCurrentQuestionDuration = blitzRemainingDuration;
+
+                function resumeCountdown(now) {
+                    if (!blitzActive || blitzPaused) return;
+                    const elapsed = now - blitzQuestionStartTime;
+                    blitzTimeRemaining = Math.max(0, 1 - (elapsed / blitzCurrentQuestionDuration));
+                    document.getElementById('blitz-timer-fill').style.width = (blitzTimeRemaining * 100) + '%';
+
+                    if (blitzTimeRemaining <= 0) {
+                        gameOverBlitz('Time expired!');
+                    } else {
+                        blitzTimerAnim = requestAnimationFrame(resumeCountdown);
+                    }
+                }
+                blitzTimerAnim = requestAnimationFrame(resumeCountdown);
+            }
+        }
+
+        function nextBlitzQuestion() {
+            if (!blitzActive || blitzPaused) return;
             const q = blitzMoves[Math.floor(Math.random() * blitzMoves.length)];
+            currentBlitzMove = q.move;
             document.getElementById('blitz-display').textContent = q.move;
 
             // Generate options
@@ -1371,13 +1737,13 @@
             // Start countdown
             blitzTimeRemaining = 1.0;
             if (blitzTimerAnim) cancelAnimationFrame(blitzTimerAnim);
-            const duration = Math.max(1600, 3200 - blitzStreak * 80);
-            const startTime = performance.now();
+            blitzCurrentQuestionDuration = Math.max(1600, 3200 - blitzStreak * 80);
+            blitzQuestionStartTime = performance.now();
 
             function countdown(now) {
-                if (!blitzActive) return;
-                const elapsed = now - startTime;
-                blitzTimeRemaining = Math.max(0, 1 - (elapsed / duration));
+                if (!blitzActive || blitzPaused) return;
+                const elapsed = now - blitzQuestionStartTime;
+                blitzTimeRemaining = Math.max(0, 1 - (elapsed / blitzCurrentQuestionDuration));
                 document.getElementById('blitz-timer-fill').style.width = (blitzTimeRemaining * 100) + '%';
 
                 if (blitzTimeRemaining <= 0) {
@@ -1390,7 +1756,7 @@
         }
 
         function submitBlitzAnswer(idx) {
-            if (!blitzActive) return;
+            if (!blitzActive || blitzPaused) return;
             if (blitzTimerAnim) cancelAnimationFrame(blitzTimerAnim);
 
             if (idx === blitzCorrectIndex) {
@@ -1412,11 +1778,32 @@
 
         function gameOverBlitz(reason) {
             blitzActive = false;
+            blitzPaused = false;
             playSfx('crash');
             document.getElementById('blitz-display').textContent = '💥 ' + reason;
             document.getElementById('blitz-timer-fill').style.width = '0%';
             document.getElementById('btn-blitz-start').textContent = '▶ Play Again';
+            const pauseBtn = document.getElementById('btn-blitz-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
         }
+
+        // ==========================================
+        // 8. UNIVERSAL KEYBOARD PAUSE SHORTCUT ('P' & 'Escape')
+        // ==========================================
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+                const activePanel = document.querySelector('.game-panel.active');
+                if (!activePanel) return;
+                if (activePanel.id === 'panel-runner') togglePauseRunner();
+                else if (activePanel.id === 'panel-snake') togglePauseSnake();
+                else if (activePanel.id === 'panel-simon') togglePauseSimon();
+                else if (activePanel.id === 'panel-reflex') togglePauseReflex();
+                else if (activePanel.id === 'panel-blitz') togglePauseBlitz();
+            }
+        });
 
         // Initialize First Game Render
         drawSnake();
