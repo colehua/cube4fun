@@ -1,35 +1,44 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Fix Flappy Cubie viewport and visibility so the user can see the whole game at once:
-   - Make `#canvas-flappy` fully responsive (`max-width: 100%; height: auto; max-height: min(420px, 48vh); aspect-ratio: 640 / 420; object-fit: contain;`) so it never overflows horizontally or vertically.
-   - Reorganize controls to top bar right above canvas (`btn-flappy-start`, `btn-flappy-survive`, `btn-flappy-pause`) matching Cube Runner 3D so primary buttons are always visible without scrolling.
-   - Add idle/start screen rendering (`renderFlappyIdle()`) with flying 3D cubie preview so the canvas is never a blank box.
-   - Render game-over stats and interactive golden Survive button overlay directly on the canvas with click hit-detection.
-   - Reduce vertical footprint so the entire Flappy Cubie game fits inside standard viewports without clipping.
-2. Verified live in Chrome DevTools MCP across desktop and responsive screen sizes with 0 errors.
-3. Committed and pushed changes to GitHub remote `origin/main`.
+1. Write "best!" right next to Cube Runner:
+   - On the tab switcher button: `🎮 Cube Runner <span class="badge-best">best!</span>`
+   - In the game panel header: `🎮 Cube Runner 3D <span class="badge-best">best!</span> • Highway Dash`
+   - On the primary action button: `▶ Start 3D Cube Runner <span class="badge-best">best!</span>` (and `🔄 Restart Highway Dash <span class="badge-best">best!</span>`, `▶ Dash Again <span class="badge-best">best!</span>`)
+   - Added animated vibrant CSS styling for `.badge-best` with pulse glow animation.
+2. Differentiate monster health in Cube Runner:
+   - Implemented varied health pools: 100 HP (Boss/Goliath), 50 HP (Brute/Fiend), 25 HP (Imp/Scout).
+   - Each laser shot deals exactly 25 damage:
+     - 100 HP monster requires exactly 4 shots to defeat (100 -> 75 -> 50 -> 25 -> 0).
+     - 50 HP monster requires exactly 2 shots to defeat (50 -> 25 -> 0).
+     - 25 HP monster requires exactly 1 shot to defeat (25 -> 0).
+   - Rendered dynamic 3D health bars above monsters with remaining HP and hits counter (`100 HP (4 Shots)`, `50 HP (2 Shots)`, `25 HP (1 Shot)`).
+   - Scaled and colored monsters based on health (100 HP Crimson Titan 1.35x, 50 HP Purple Brute 1.05x, 25 HP Emerald Imp 0.82x).
+   - Added hit flash visual feedback and floating damage numbers (`-25 HP! 💥 [X shots left]`).
+   - Rewarded bags of coins based on difficulty (25 HP: +10 💰, 50 HP: +20 💰, 100 HP: +50 💰).
+   - Supported both laser shooting (4 shots) and jump-stomping on Gun Monsters (+50 💰).
+3. Verified live in Chrome DevTools MCP with 0 errors across viewports.
+4. Git commit and push changes to GitHub remote `origin/main`.
 
 Next step: Done.
 
 Tasks:
 - [x] Update PROGRESS.md to IN PROGRESS
-- [x] Add responsive styles for `#canvas-flappy` and `.flappy-canvas-wrap`
-- [x] Move primary controls to `.flappy-top-bar` above the canvas
-- [x] Implement `renderFlappyIdle()` for immediate visual presentation on tab switch and load
-- [x] Render interactive game-over canvas overlay with on-canvas Survive button and click hit-testing
-- [x] Add smooth scroll into view on `switchGame('flappy')`
-- [x] Verify live in Chrome DevTools MCP
+- [x] Add `.badge-best` CSS and update HTML tab, title, and start button
+- [x] Implement monster health system (100, 50, 25 HP) with 25 damage per shot
+- [x] Implement 3D health bar and hits counter above monsters
+- [x] Implement distinct colors, sizes, and hit flash feedback for 100, 50, 25 HP
+- [x] Verify in Chrome DevTools MCP
 - [x] Commit and push to origin main
 
 Assumptions:
-- "i cant see the whole thing" means the game was clipped/overflowing the viewport (bottom buttons cut off below the fold, unconstrained 640px width on narrow screens, and blank canvas when idle).
+- "cube runner thingy" refers to the game tab, header, and start button.
+- 100 HP takes 4 shots, 50 HP takes 2 shots, 25 HP takes 1 shot (25 damage per laser shot).
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Pushed changes to GitHub origin main.
-- Verified live responsiveness, idle rendering, and survive button in Chrome DevTools MCP.
-- Implemented responsive canvas, top control bar, idle state, and on-canvas game-over survive button.
-- Initialized Flappy Cubie visibility and layout fix.
+- Verified monster health depletion (100 HP 4 shots, 50 HP 2 shots, 25 HP 1 shot) and badge in Chrome DevTools MCP.
+- Implemented monster HP tiers (100, 50, 25), 3D health bars, and "best!" badge.
+- Initialized Cube Runner "best!" badge and monster HP (100, 50, 25) implementation.

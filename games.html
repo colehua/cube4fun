@@ -320,6 +320,41 @@
             font-weight: 700;
         }
 
+        /* "best!" VIBRANT ANIMATED BADGE */
+        .badge-best {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+            color: #ffffff;
+            font-size: 0.72em;
+            font-weight: 900;
+            font-family: 'DynaPuff', cursive;
+            letter-spacing: 0.6px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1.5px solid #ffd700;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            vertical-align: middle;
+            margin-left: 6px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+            animation: badgePulse 1.8s ease-in-out infinite;
+            line-height: 1.2;
+            user-select: none;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% {
+                transform: scale(1.08);
+                filter: brightness(1.28);
+                box-shadow: 0 0 18px rgba(245, 158, 11, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            }
+        }
+
         @media (max-width: 768px) {
             .game-header-bar {
                 justify-content: center;
@@ -1131,7 +1166,7 @@
         <!-- GAME SWITCHER TABS (12 GAMES) -->
         <div class="game-tabs">
             <button class="game-tab-btn active" onclick="switchGame('runner')">
-                🎮 Cube Runner
+                🎮 Cube Runner <span class="badge-best">best!</span>
             </button>
             <button class="game-tab-btn" onclick="switchGame('snake')">
                 🐍 Cube Snake
@@ -1176,7 +1211,7 @@
             <!-- ============================================== -->
             <div id="panel-runner" class="game-panel active">
                 <div class="game-header-bar header-stacked">
-                    <h2 class="game-title-text">🎮 Cube Runner 3D • Highway Dash</h2>
+                    <h2 class="game-title-text">🎮 Cube Runner 3D <span class="badge-best">best!</span> • Highway Dash</h2>
                     <div class="game-score-display">
                         <span>DISTANCE: <span id="runner-score">0</span>m</span>
                         <span class="record-pill" style="border-color: #fbbf24; background: linear-gradient(135deg, rgba(251, 191, 36, 0.22) 0%, rgba(245, 158, 11, 0.22) 100%);">💰 COINS: <span id="runner-coins">0</span></span>
@@ -1188,7 +1223,7 @@
                 <!-- PRIMARY ACTION CONTROLS: RIGHT ON TOP OF THE GAME -->
                 <div class="game-controls-row runner-top-bar" style="margin: 4px 0 16px 0;">
                     <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()" title="Start or Dash Again (Spacebar)">
-                        ▶ Start 3D Cube Runner
+                        ▶ Start 3D Cube Runner <span class="badge-best" style="font-size:0.75em; margin-left:6px;">best!</span>
                     </button>
                     <button id="btn-runner-survive" class="btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
                         🛡️ SURVIVE WITH 100 COINS (100 💰)
@@ -1219,7 +1254,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 880px; line-height: 1.5;">
-                    👾 Blast Scramble Monsters for <strong>+10 💰</strong>! 🔫 <strong>Armed Gun Monsters</strong> shoot bullets forward: <strong>Jump in the air (W / ⬆️) to dodge bullets</strong>, and <strong>Jump on top of them (or Jump + S Dive-Stomp) to crush them for +50 💰</strong>! • <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive (100 💰)
+                    👾 <strong>Monsters have varied HP</strong>: <strong>25 HP</strong> (1 shot, +10 💰), <strong>50 HP</strong> (2 shots, +20 💰), and <strong>100 HP Bosses</strong> (4 shots, +50 💰)! 🔫 <strong>Armed Gun Monsters (100 HP)</strong>: Shoot 4 times or <strong>Jump on top of them (or S Dive-Stomp)</strong> to crush for +50 💰! Jump in the air (W / ⬆️) to dodge bullets! • <strong>Space / F</strong> Shoot • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>S / R</strong> Survive (100 💰)
                 </div>
             </div>
 
@@ -2033,7 +2068,7 @@
             document.getElementById('runner-speed').textContent = '0.5';
             const startBtn = document.getElementById('btn-runner-start');
             if (startBtn) {
-                startBtn.textContent = '🔄 Restart Highway Dash';
+                startBtn.innerHTML = '🔄 Restart Highway Dash <span class="badge-best" style="font-size:0.75em; margin-left:6px;">best!</span>';
                 startBtn.classList.remove('dash-again-highlight');
             }
             const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
@@ -2131,10 +2166,10 @@
             });
         }
 
-        function spawnMonsterExplosion(x, y) {
-            const colors = ['#ff007f', '#f97316', '#fde047', '#ffffff', '#a855f7'];
+        function spawnMonsterExplosion(x, y, count = 18) {
+            const colors = ['#ff007f', '#f97316', '#fde047', '#ffffff', '#a855f7', '#00f0ff'];
             const particles = [];
-            for (let i = 0; i < 18; i++) {
+            for (let i = 0; i < count; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const spd = Math.random() * 5 + 2;
                 particles.push({
@@ -2144,7 +2179,7 @@
                     vy: Math.sin(angle) * spd,
                     size: Math.random() * 5 + 3,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    life: 22
+                    life: 24
                 });
             }
             runnerExplosions.push(particles);
@@ -2192,15 +2227,19 @@
                 const laser = runnerLasers[li];
                 laser.z += 28 * Math.max(0.85, runnerSpeed);
 
-                // Check collision with monsters
+                // Check collision with monsters (Gun Monsters & Scramble Monsters)
                 let laserHit = false;
                 for (let oi = 0; oi < runnerObstacles.length; oi++) {
                     const ob = runnerObstacles[oi];
                     if (ob.type === 'gun_monster' && !ob.killed) {
-                        if (Math.abs(laser.lane - ob.lane) < 0.65 && Math.abs(laser.z - ob.z) < 70) {
-                            // Gun monster has heavy bulletproof armor! Lasers deflect off!
+                        if (Math.abs(laser.lane - ob.lane) < 0.65 && (Math.abs(laser.z - ob.z) < 75 || (laser.z >= ob.z - 25 && laser.z - 35 <= ob.z + 45))) {
                             laserHit = true;
-                            playSfx('bonk');
+                            if (ob.hp === undefined) ob.hp = 100;
+                            if (ob.maxHp === undefined) ob.maxHp = 100;
+                            
+                            // Each shot deals 25 damage: 100 HP needs 4 shots
+                            ob.hp -= 25;
+
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                             const horizonY = Math.round(runnerCanvas.height * 0.25);
                             const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
@@ -2208,24 +2247,58 @@
                             const bottomW = Math.round(runnerCanvas.width * 0.86);
                             const roadW = horizonW + t * (bottomW - horizonW);
                             const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-                            runnerFloatingTexts.push({
-                                text: '🛡️ ARMORED! JUMP-STOMP TO CRUSH (+50 💰)!',
-                                x: expX,
-                                y: expY - 45,
-                                color: '#38bdf8',
-                                life: 55
-                            });
-                            break;
+
+                            if (ob.hp <= 0) {
+                                // Gun Mech Destroyed!
+                                ob.killed = true;
+                                playSfx('explosion');
+                                setTimeout(() => playSfx('coins'), 140);
+                                setTimeout(() => playSfx('coins'), 280);
+                                spawnMonsterExplosion(expX, expY - 20, 26);
+
+                                runnerCoins += 50;
+                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                runnerDistance += 200;
+                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                document.getElementById('runner-score').textContent = runnerDistance;
+
+                                runnerFloatingTexts.push({
+                                    text: '💥 GUN MECH DESTROYED! +50 💰 MEGA BOUNTY!',
+                                    x: expX,
+                                    y: expY - 50,
+                                    color: '#ffd700',
+                                    life: 80
+                                });
+                                runnerObstacles.splice(oi, 1);
+                                break;
+                            } else {
+                                // Hurt Gun Mech
+                                ob.hitFlash = 10;
+                                playSfx('slice');
+                                const shotsLeft = Math.ceil(ob.hp / 25);
+                                runnerFloatingTexts.push({
+                                    text: `-25 HP! 🛡️ [${ob.hp}/100 HP • ${shotsLeft} ${shotsLeft === 1 ? 'SHOT' : 'SHOTS'} LEFT]`,
+                                    x: expX,
+                                    y: expY - 45,
+                                    color: '#38bdf8',
+                                    life: 45
+                                });
+                                spawnMonsterExplosion(expX, expY - 20, 8);
+                                break;
+                            }
                         }
                     } else if (ob.type === 'monster' && !ob.killed) {
-                        if (Math.abs(laser.lane - ob.lane) < 0.65 && Math.abs(laser.z - ob.z) < 70) {
-                            // KILL THE MONSTER!
-                            ob.killed = true;
+                        if (Math.abs(laser.lane - ob.lane) < 0.65 && (Math.abs(laser.z - ob.z) < 75 || (laser.z >= ob.z - 25 && laser.z - 35 <= ob.z + 45))) {
                             laserHit = true;
-                            playSfx('explosion');
-                            setTimeout(() => playSfx('coins'), 140);
+                            if (ob.hp === undefined) ob.hp = 25;
+                            if (ob.maxHp === undefined) ob.maxHp = 25;
 
-                            // Calculate screen position for explosion
+                            // USER RULE: Each shot takes 25 health!
+                            // 100 health needs 4 shots to defeat
+                            // 50 health needs 2 shots to defeat
+                            // 25 health needs 1 shot to defeat
+                            ob.hp -= 25;
+
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                             const horizonY = Math.round(runnerCanvas.height * 0.25);
                             const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
@@ -2233,25 +2306,59 @@
                             const bottomW = Math.round(runnerCanvas.width * 0.86);
                             const roadW = horizonW + t * (bottomW - horizonW);
                             const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-                            spawnMonsterExplosion(expX, expY - 20);
 
-                            // Kill rewards player with an ENTIRE BAG OF COINS (equals 10 coins)!
-                            runnerCoins += 10;
-                            localStorage.setItem('cube_arcade_coins', runnerCoins);
-                            runnerDistance += 50;
-                            document.getElementById('runner-coins').textContent = runnerCoins;
+                            if (ob.hp <= 0) {
+                                // Monster is defeated!
+                                ob.killed = true;
+                                playSfx('explosion');
+                                setTimeout(() => playSfx('coins'), 140);
+                                spawnMonsterExplosion(expX, expY - 20, ob.maxHp === 100 ? 26 : 18);
 
-                            // Floating text reward: Bag of Coins!
-                            runnerFloatingTexts.push({
-                                text: '+10 💰 BAG OF COINS!',
-                                x: expX,
-                                y: expY - 45,
-                                color: '#fde047',
-                                life: 65
-                            });
+                                // Reward bags of coins:
+                                // 25 HP: +10 coins (1 full bag of coins)
+                                // 50 HP: +20 coins (2 full bags of coins)
+                                // 100 HP: +50 coins (Mega Bounty sack)
+                                let rewardCoins = 10;
+                                let rewardLabel = '+10 💰 BAG OF COINS! [25 HP DEFEATED]';
+                                if (ob.maxHp === 100) {
+                                    rewardCoins = 50;
+                                    rewardLabel = '💥 +50 💰 MEGA BOUNTY SACK! [100 HP BOSS DEFEATED]';
+                                } else if (ob.maxHp === 50) {
+                                    rewardCoins = 20;
+                                    rewardLabel = '🔥 +20 💰 DOUBLE COIN BAGS! [50 HP DEFEATED]';
+                                }
 
-                            runnerObstacles.splice(oi, 1);
-                            break;
+                                runnerCoins += rewardCoins;
+                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                runnerDistance += ob.maxHp * 2;
+                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                document.getElementById('runner-score').textContent = runnerDistance;
+
+                                runnerFloatingTexts.push({
+                                    text: rewardLabel,
+                                    x: expX,
+                                    y: expY - 45,
+                                    color: ob.maxHp === 100 ? '#ffd700' : (ob.maxHp === 50 ? '#f59e0b' : '#fde047'),
+                                    life: 75
+                                });
+
+                                runnerObstacles.splice(oi, 1);
+                                break;
+                            } else {
+                                // Monster took damage but still alive!
+                                ob.hitFlash = 10;
+                                playSfx('slice');
+                                const shotsLeft = Math.ceil(ob.hp / 25);
+                                runnerFloatingTexts.push({
+                                    text: `-25 HP! 💥 [${ob.hp}/${ob.maxHp} HP • ${shotsLeft} ${shotsLeft === 1 ? 'SHOT' : 'SHOTS'} LEFT]`,
+                                    x: expX,
+                                    y: expY - 45,
+                                    color: '#ff4444',
+                                    life: 45
+                                });
+                                spawnMonsterExplosion(expX, expY - 20, 8);
+                                break;
+                            }
                         }
                     }
                 }
@@ -2281,11 +2388,29 @@
                     type = 'barrier';
                 }
 
+                // Monster health selection: 100, 50, 25 HP
+                let mHp = 25;
+                if (type === 'gun_monster') {
+                    mHp = 100;
+                } else if (type === 'monster') {
+                    const hpRoll = Math.random();
+                    if (hpRoll < 0.35) {
+                        mHp = 25; // 1 shot to defeat
+                    } else if (hpRoll < 0.70) {
+                        mHp = 50; // 2 shots to defeat
+                    } else {
+                        mHp = 100; // 4 shots to defeat
+                    }
+                }
+
                 runnerObstacles.push({
                     lane: lane,
                     type: type,
                     z: 1000,
                     killed: false,
+                    hp: mHp,
+                    maxHp: mHp,
+                    hitFlash: 0,
                     shootTimer: type === 'gun_monster' ? 35 + Math.floor(Math.random() * 25) : 0,
                     muzzleFlash: 0
                 });
@@ -2294,11 +2419,21 @@
                 if (type !== 'monster' && type !== 'gun_monster' && Math.random() < 0.30) {
                     const secondLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
                     const secondType = Math.random() < 0.45 ? 'gun_monster' : 'monster';
+                    let secondHp = 25;
+                    if (secondType === 'gun_monster') {
+                        secondHp = 100;
+                    } else {
+                        const sRoll = Math.random();
+                        secondHp = sRoll < 0.35 ? 25 : (sRoll < 0.70 ? 50 : 100);
+                    }
                     runnerObstacles.push({
                         lane: secondLane,
                         type: secondType,
                         z: 1000,
                         killed: false,
+                        hp: secondHp,
+                        maxHp: secondHp,
+                        hitFlash: 0,
                         shootTimer: secondType === 'gun_monster' ? 45 + Math.floor(Math.random() * 25) : 0,
                         muzzleFlash: 0
                     });
@@ -2369,6 +2504,7 @@
             for (let i = runnerObstacles.length - 1; i >= 0; i--) {
                 const ob = runnerObstacles[i];
                 ob.z -= runnerSpeed * 14;
+                if (ob.hitFlash > 0) ob.hitFlash--;
 
                 // Gun monster shoots forward down track towards player
                 if (ob.type === 'gun_monster' && !ob.killed) {
@@ -2547,8 +2683,52 @@
                             runnerObstacles.splice(i, 1);
                             continue;
                         } else if (ob.type === 'monster') {
-                            // MONSTER KILLS THE PLAYER!
-                            gameOverRunner('Devoured by the Scramble Monster! Blast them with 🔥 SHOOT (Space/F)!');
+                            // JUMP-STOMP CRUSH or GROUND COLLISION
+                            if (runnerIsJumping && runnerJumpY >= 18) {
+                                ob.killed = true;
+                                playSfx('explosion');
+                                setTimeout(() => playSfx('coins'), 140);
+
+                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                                const horizonY = Math.round(runnerCanvas.height * 0.25);
+                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                                const horizonW = Math.round(runnerCanvas.width * 0.25);
+                                const bottomW = Math.round(runnerCanvas.width * 0.86);
+                                const roadW = horizonW + t * (bottomW - horizonW);
+                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+
+                                spawnMonsterExplosion(expX, expY - 20, ob.maxHp === 100 ? 26 : 18);
+
+                                runnerJumpVy = 11;
+                                runnerJumpY = Math.max(runnerJumpY, 26);
+                                runnerIsJumping = true;
+                                const wasDive = runnerIsDiveStomping;
+                                runnerIsDiveStomping = false;
+
+                                let rewardCoins = 10;
+                                if (ob.maxHp === 100) rewardCoins = 50;
+                                else if (ob.maxHp === 50) rewardCoins = 20;
+
+                                runnerCoins += rewardCoins;
+                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                runnerDistance += (ob.maxHp || 25) * 2;
+                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                document.getElementById('runner-score').textContent = runnerDistance;
+
+                                runnerFloatingTexts.push({
+                                    text: wasDive ? `💥 SUPER SLAM STOMP! +${rewardCoins} 💰` : `💥 JUMP-STOMP CRUSH! +${rewardCoins} 💰`,
+                                    x: expX,
+                                    y: expY - 50,
+                                    color: '#ffd700',
+                                    life: 80
+                                });
+
+                                runnerObstacles.splice(i, 1);
+                                continue;
+                            }
+                            // Ground collision: MONSTER KILLS THE PLAYER!
+                            const hpNotice = ob.maxHp ? `${ob.maxHp} HP ` : '';
+                            gameOverRunner(`Devoured by a ${hpNotice}Scramble Monster! Blast them with 🔥 SHOOT (Space/F)!`);
                             return;
                         } else if (ob.type === 'hurdle') {
                             if (runnerJumpY < 24) {
@@ -2819,27 +2999,74 @@
                         rCtx.fillRect(bagW * 0.4, -bagH * 0.7, 4 * scale, 4 * scale);
                     }
                 } else if (ob.type === 'monster') {
-                    // SCRAMBLE GLITCH MONSTER (CAN KILL YOU!)
-                    const stompY = Math.sin(runnerFrame * 0.25 + ob.lane) * 6 * scale;
+                    // SCRAMBLE GLITCH MONSTER (HEALTH: 100, 50, OR 25 HP)
+                    const hp = ob.hp !== undefined ? ob.hp : 25;
+                    const maxHp = ob.maxHp !== undefined ? ob.maxHp : 25;
+                    const hpRatio = Math.max(0, hp / maxHp);
+                    const shotsLeft = Math.max(1, Math.ceil(hp / 25));
+
+                    // Scale multiplier based on maxHp:
+                    // 100 HP is large boss (1.35x)
+                    // 50 HP is medium beast (1.05x)
+                    // 25 HP is small imp (0.82x)
+                    const sizeMult = maxHp === 100 ? 1.35 : (maxHp === 50 ? 1.05 : 0.82);
+
+                    const stompY = Math.sin(runnerFrame * 0.25 + ob.lane) * (maxHp === 100 ? 8 : 5) * scale;
                     rCtx.translate(0, stompY);
 
-                    const mW = 50 * scale;
-                    const mH = 50 * scale;
+                    const mW = 50 * scale * sizeMult;
+                    const mH = 50 * scale * sizeMult;
 
-                    // Red menacing aura
-                    rCtx.shadowColor = '#dc2626';
-                    rCtx.shadowBlur = 18 * scale;
+                    // Color palette based on maxHp
+                    let auraColor = '#00f0ff';
+                    let bodyColor = '#064e3b';
+                    let strokeColor = '#10b981';
+                    let eyeColor = '#00f0ff';
+                    let icon = '👾';
 
-                    // Monster spiky dark crystal body
-                    rCtx.fillStyle = '#581c87';
-                    rCtx.strokeStyle = '#dc2626';
+                    if (maxHp === 100) {
+                        // 100 HP Boss Goliath (Needs 4 shots)
+                        auraColor = '#ff0055';
+                        bodyColor = '#450a0a';
+                        strokeColor = '#ef4444';
+                        eyeColor = '#f43f5e';
+                        icon = '💀';
+                    } else if (maxHp === 50) {
+                        // 50 HP Glitch Fiend (Needs 2 shots)
+                        auraColor = '#a855f7';
+                        bodyColor = '#581c87';
+                        strokeColor = '#ec4899';
+                        eyeColor = '#fde047';
+                        icon = '👹';
+                    } else {
+                        // 25 HP Glitch Imp (Needs 1 shot)
+                        auraColor = '#00f0ff';
+                        bodyColor = '#064e3b';
+                        strokeColor = '#10b981';
+                        eyeColor = '#00f0ff';
+                        icon = '👾';
+                    }
+
+                    // Laser hit flash feedback
+                    if (ob.hitFlash > 0) {
+                        bodyColor = '#ffffff';
+                        auraColor = '#ffffff';
+                        strokeColor = '#ffd700';
+                    }
+
+                    rCtx.shadowColor = auraColor;
+                    rCtx.shadowBlur = (maxHp === 100 ? 24 : (maxHp === 50 ? 18 : 12)) * scale;
+
+                    // Spiky crystal body
+                    rCtx.fillStyle = bodyColor;
+                    rCtx.strokeStyle = strokeColor;
                     rCtx.lineWidth = 2.5 * scale;
 
                     rCtx.beginPath();
                     rCtx.moveTo(-mW * 0.5, -mH * 0.2);
                     rCtx.lineTo(-mW * 0.6, -mH * 0.9); // Left Horn
                     rCtx.lineTo(-mW * 0.25, -mH * 0.7);
-                    rCtx.lineTo(0, -mH * 1.05); // Center Horn
+                    rCtx.lineTo(0, -mH * (maxHp === 100 ? 1.25 : 1.05)); // Center Horn
                     rCtx.lineTo(mW * 0.25, -mH * 0.7);
                     rCtx.lineTo(mW * 0.6, -mH * 0.9); // Right Horn
                     rCtx.lineTo(mW * 0.5, -mH * 0.2);
@@ -2850,7 +3077,7 @@
                     rCtx.stroke();
 
                     // Glowing menacing triangular eyes
-                    rCtx.fillStyle = '#fde047';
+                    rCtx.fillStyle = eyeColor;
                     rCtx.beginPath();
                     rCtx.moveTo(-mW * 0.3, -mH * 0.55);
                     rCtx.lineTo(-mW * 0.1, -mH * 0.5);
@@ -2865,11 +3092,10 @@
                     rCtx.closePath();
                     rCtx.fill();
 
-                    // Jagged mouth with fangs
+                    // Jagged mouth with sharp fangs
                     rCtx.fillStyle = '#0f172a';
                     rCtx.fillRect(-mW * 0.25, -mH * 0.3, mW * 0.5, mH * 0.18);
                     rCtx.fillStyle = '#ffffff';
-                    // Sharp fangs
                     for (let f = -mW * 0.2; f <= mW * 0.15; f += mW * 0.1) {
                         rCtx.beginPath();
                         rCtx.moveTo(f, -mH * 0.3);
@@ -2878,21 +3104,67 @@
                         rCtx.closePath();
                         rCtx.fill();
                     }
+
+                    // 3D HEALTH BAR ABOVE MONSTER
+                    const barW = Math.max(34, 54 * scale * sizeMult);
+                    const barH = Math.max(5, 7 * scale);
+                    const barY = -mH * (maxHp === 100 ? 1.35 : 1.18);
+
+                    rCtx.shadowBlur = 0;
+                    rCtx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                    rCtx.strokeStyle = '#ffffff';
+                    rCtx.lineWidth = 1.5;
+                    rCtx.fillRect(-barW / 2, barY, barW, barH);
+                    rCtx.strokeRect(-barW / 2, barY, barW, barH);
+
+                    const barFillColor = hpRatio > 0.5 ? '#22c55e' : (hpRatio > 0.25 ? '#f59e0b' : '#ef4444');
+                    rCtx.fillStyle = barFillColor;
+                    rCtx.fillRect(-barW / 2 + 1, barY + 1, Math.max(0, (barW - 2) * hpRatio), barH - 2);
+
+                    // HEALTH BADGE & SHOTS TEXT ABOVE BAR
+                    const textSize = Math.max(9, Math.round(11 * scale * sizeMult));
+                    rCtx.font = `bold ${textSize}px "DynaPuff", cursive`;
+                    rCtx.textAlign = 'center';
+                    rCtx.textBaseline = 'bottom';
+                    
+                    // Floating cleanly above the health bar
+                    const textY = barY - 4 * scale - 2;
+                    rCtx.fillStyle = '#000000';
+                    rCtx.fillText(`${icon} ${hp} HP (${shotsLeft} ${shotsLeft === 1 ? 'Shot' : 'Shots'})`, 1, textY + 1);
+                    
+                    rCtx.fillStyle = maxHp === 100 ? '#ff4444' : (maxHp === 50 ? '#fde047' : '#00f0ff');
+                    rCtx.fillText(`${icon} ${hp} HP (${shotsLeft} ${shotsLeft === 1 ? 'Shot' : 'Shots'})`, 0, textY);
+
                 } else if (ob.type === 'gun_monster') {
                     // ARMED GUN MONSTER (CYBER BATTLE MECH WITH DUAL FORWARD CANNONS)
+                    const hp = ob.hp !== undefined ? ob.hp : 100;
+                    const maxHp = ob.maxHp !== undefined ? ob.maxHp : 100;
+                    const hpRatio = Math.max(0, hp / maxHp);
+                    const shotsLeft = Math.max(1, Math.ceil(hp / 25));
+
                     const hoverY = Math.sin(runnerFrame * 0.28 + ob.lane) * 7 * scale;
                     rCtx.translate(0, hoverY);
 
                     const mW = 54 * scale;
                     const mH = 54 * scale;
 
+                    // Hit flash feedback
+                    let mechAura = '#f59e0b';
+                    let mechBase = '#1e1b4b';
+                    let mechTrim = '#f59e0b';
+                    if (ob.hitFlash > 0) {
+                        mechAura = '#ffffff';
+                        mechBase = '#ffffff';
+                        mechTrim = '#ffd700';
+                    }
+
                     // Amber/Gold menace aura
-                    rCtx.shadowColor = '#f59e0b';
+                    rCtx.shadowColor = mechAura;
                     rCtx.shadowBlur = 20 * scale;
 
                     // Cyber Armored Chassis (Titanium Crimson with Gold Trim)
-                    rCtx.fillStyle = '#1e1b4b'; // Dark cyber base
-                    rCtx.strokeStyle = '#f59e0b'; // Gold armor trim
+                    rCtx.fillStyle = mechBase;
+                    rCtx.strokeStyle = mechTrim;
                     rCtx.lineWidth = 3 * scale;
 
                     // Main Hexagonal Armored Torso
@@ -2969,12 +3241,32 @@
                     rCtx.lineTo(0, 48 * scale);
                     rCtx.stroke();
 
-                    // Floating Bounty Badge above head
+                    // 3D HEALTH BAR ABOVE GUN MONSTER
+                    const barW = Math.max(38, 58 * scale);
+                    const barH = Math.max(5, 7 * scale);
+                    const barY = -mH * 1.25;
+
                     rCtx.shadowBlur = 0;
-                    rCtx.font = `bold ${Math.max(10, Math.round(12 * scale))}px "DynaPuff", cursive`;
-                    rCtx.fillStyle = '#ffd700';
+                    rCtx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                    rCtx.strokeStyle = '#ffd700';
+                    rCtx.lineWidth = 1.5;
+                    rCtx.fillRect(-barW / 2, barY, barW, barH);
+                    rCtx.strokeRect(-barW / 2, barY, barW, barH);
+
+                    const barFillColor = hpRatio > 0.5 ? '#22c55e' : (hpRatio > 0.25 ? '#f59e0b' : '#ef4444');
+                    rCtx.fillStyle = barFillColor;
+                    rCtx.fillRect(-barW / 2 + 1, barY + 1, Math.max(0, (barW - 2) * hpRatio), barH - 2);
+
+                    // Text badge above health bar
+                    const textSize = Math.max(9, Math.round(11 * scale));
+                    rCtx.font = `bold ${textSize}px "DynaPuff", cursive`;
                     rCtx.textAlign = 'center';
-                    rCtx.fillText('🔫 50 💰', 0, -mH * 0.96);
+                    rCtx.textBaseline = 'bottom';
+                    const textY = barY - 4 * scale - 2;
+                    rCtx.fillStyle = '#000000';
+                    rCtx.fillText(`🔫 ${hp} HP (${shotsLeft} ${shotsLeft === 1 ? 'Shot' : 'Shots'} / Jump)`, 1, textY + 1);
+                    rCtx.fillStyle = '#ffd700';
+                    rCtx.fillText(`🔫 ${hp} HP (${shotsLeft} ${shotsLeft === 1 ? 'Shot' : 'Shots'} / Jump)`, 0, textY);
                 } else if (ob.type === 'hurdle') {
                     // Low scramble block (Jump over)
                     const wBox = 44 * scale;
@@ -3260,7 +3552,7 @@
 
             const startBtn = document.getElementById('btn-runner-start');
             if (startBtn) {
-                startBtn.innerHTML = '▶ Dash Again <span style="font-size:0.85em; opacity:0.9;">[Space]</span>';
+                startBtn.innerHTML = '▶ Dash Again <span class="badge-best" style="font-size:0.75em; margin-left:6px;">best!</span> <span style="font-size:0.85em; opacity:0.9;">[Space]</span>';
                 startBtn.classList.add('dash-again-highlight');
             }
             const pauseBtn = document.getElementById('btn-runner-pause');
@@ -3326,7 +3618,7 @@
 
             const startBtn = document.getElementById('btn-runner-start');
             if (startBtn) {
-                startBtn.textContent = '🔄 Restart Highway Dash';
+                startBtn.innerHTML = '🔄 Restart Highway Dash <span class="badge-best" style="font-size:0.75em; margin-left:6px;">best!</span>';
                 startBtn.classList.remove('dash-again-highlight');
             }
             const pauseBtn = document.getElementById('btn-runner-pause');
