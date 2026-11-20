@@ -2625,38 +2625,52 @@
         }
 
         function createMegaminxSvgMarkup(faceKey, stickerColors) {
-            const cx = 80, cy = 80, rIn = 26, rOut = 74;
-            const vIn = [], vOut = [];
+            const cx = 80, cy = 80, rOut = 74, rIn = 38;
+            const vOut = [], vIn = [];
             for (let k = 0; k < 5; k++) {
                 const ang = (-90 + k * 72) * Math.PI / 180;
-                vIn.push({ x: +(cx + rIn * Math.cos(ang)).toFixed(2), y: +(cy + rIn * Math.sin(ang)).toFixed(2) });
                 vOut.push({ x: +(cx + rOut * Math.cos(ang)).toFixed(2), y: +(cy + rOut * Math.sin(ang)).toFixed(2) });
+                vIn.push({ x: +(cx + rIn * Math.cos(ang)).toFixed(2), y: +(cy + rIn * Math.sin(ang)).toFixed(2) });
             }
-            function lerp(p1, p2, t) {
-                return { x: +(p1.x + (p2.x - p1.x) * t).toFixed(2), y: +(p1.y + (p2.y - p1.y) * t).toFixed(2) };
+
+            function lineIntersect(p1, p2, p3, p4) {
+                const denom = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
+                if (Math.abs(denom) < 1e-6) return null;
+                const ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denom;
+                return {
+                    x: +(p1.x + ua * (p2.x - p1.x)).toFixed(2),
+                    y: +(p1.y + ua * (p2.y - p1.y)).toFixed(2)
+                };
             }
-            const polys = [];
-            polys.push(vIn.map(p => p.x + ',' + p.y).join(' '));
+
+            const eLeft = [], eRight = [];
             for (let k = 0; k < 5; k++) {
-                const next = (k + 1) % 5;
-                const in1 = lerp(vIn[k], vIn[next], 0.2);
-                const in2 = lerp(vIn[k], vIn[next], 0.8);
-                const out2 = lerp(vOut[k], vOut[next], 0.68);
-                const out1 = lerp(vOut[k], vOut[next], 0.32);
-                polys.push([in1, in2, out2, out1].map(p => p.x + ',' + p.y).join(' '));
-            }
-            for (let k = 0; k < 5; k++) {
-                const next = (k + 1) % 5;
                 const prev = (k + 4) % 5;
-                const out1 = lerp(vOut[k], vOut[next], 0.32);
-                const in1 = lerp(vIn[k], vIn[next], 0.2);
-                const prev_in2 = lerp(vIn[prev], vIn[k], 0.8);
-                const prev_out2 = lerp(vOut[prev], vOut[k], 0.68);
-                polys.push([vOut[k], out1, in1, vIn[k], prev_in2, prev_out2].map(p => p.x + ',' + p.y).join(' '));
+                const next = (k + 1) % 5;
+                const next2 = (k + 2) % 5;
+                eLeft.push(lineIntersect(vIn[prev], vIn[k], vOut[k], vOut[next]));
+                eRight.push(lineIntersect(vIn[next], vIn[next2], vOut[k], vOut[next]));
             }
+
+            const polys = [];
+            // 0: Center (Regular Pentagon)
+            polys.push(vIn.map(p => p.x + ',' + p.y).join(' '));
+
+            // 1-5: Edges (Isosceles Trapezoids)
+            for (let k = 0; k < 5; k++) {
+                const next = (k + 1) % 5;
+                polys.push([vIn[k], eLeft[k], eRight[k], vIn[next]].map(p => p.x + ',' + p.y).join(' '));
+            }
+
+            // 6-10: Corners (Symmetrical Kites/Diamonds)
+            for (let k = 0; k < 5; k++) {
+                const prev = (k + 4) % 5;
+                polys.push([vOut[k], eLeft[k], vIn[k], eRight[prev]].map(p => p.x + ',' + p.y).join(' '));
+            }
+
             let svg = '<svg viewBox="0 0 160 160" width="160" height="160" class="mega-pentagon-svg">';
             polys.forEach((pts, idx) => {
-                const col = stickerColors[idx] || '#64748b';
+                const col = (stickerColors && stickerColors[idx]) || '#64748b';
                 svg += `<polygon class="mega-polygon" data-face="${faceKey}" data-index="${idx}" points="${pts}" fill="${col}" stroke="#0f172a" stroke-width="2.5" stroke-linejoin="round"/>`;
             });
             svg += '</svg>';
@@ -3421,6 +3435,8 @@
             if (st3d) {
                 if (st3d.tagName && st3d.tagName.toLowerCase() === 'polygon') {
                     st3d.setAttribute('fill', hex);
+                    st3d.style.filter = 'brightness(1.4) drop-shadow(0 0 6px ' + hex + ')';
+                    setTimeout(() => { if (st3d) st3d.style.filter = ''; }, 130);
                 } else {
                     st3d.style.backgroundColor = hex;
                     st3d.style.transform = (st3d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.2)';
@@ -3434,6 +3450,8 @@
             if (st2d) {
                 if (st2d.tagName && st2d.tagName.toLowerCase() === 'polygon') {
                     st2d.setAttribute('fill', hex);
+                    st2d.style.filter = 'brightness(1.4) drop-shadow(0 0 6px ' + hex + ')';
+                    setTimeout(() => { if (st2d) st2d.style.filter = ''; }, 130);
                 } else {
                     st2d.style.backgroundColor = hex;
                     st2d.style.transform = (st2d.classList.contains('skewb-center')) ? 'rotate(45deg) scale(1.15)' : 'scale(1.18)';

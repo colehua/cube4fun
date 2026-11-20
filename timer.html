@@ -14,8 +14,20 @@
     <script src="db-config.js"></script>
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
+    <script src="gangnam-music.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* Intense Music Pulsing state */
+        .btn-intense-music-active {
+            background: linear-gradient(135deg, #ff0844 0%, #f77062 50%, #fe5196 100%) !important;
+            color: #ffffff !important;
+            animation: intensePulse 1.2s infinite alternate ease-in-out !important;
+            box-shadow: 0 0 16px rgba(255, 8, 68, 0.75), 0 4px 0 #1e272e !important;
+        }
+        @keyframes intensePulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.04); filter: brightness(1.25); }
+        }
         html {
             scroll-behavior: smooth;
         }
@@ -1427,6 +1439,8 @@
                 <button id="btn-new-scramble" class="btn-action">New Scramble 🔄</button>
                 <button id="btn-next-scramble" class="btn-action" style="background-color: var(--cyan-blob);" title="Next Scramble">Next ▶</button>
                 <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
+                <button id="btn-intense-music" class="btn-action btn-intense-music" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: #ffffff; font-weight: 800; border-color: #1e272e;" title="Play Gangnam Style Intense Speedcubing Music">🔥 Intense Music 🎵</button>
+                <button id="btn-audio-device" class="btn-action btn-audio-device" style="background-color: #6c5ce7; color: #ffffff; font-size: 0.95em; border-color: #1e272e;" title="Connect or switch audio to Headphones / Earphones">🎧 Headphones: Auto</button>
                 <a href="practice-speed.html" class="btn-action" style="background-color: #2ed573; color: white; text-decoration: none;" title="Go to Practice Speed with Goals">⚡ Practice Speed 🎯</a>
                 <a href="challenges.html" class="btn-action" style="background-color: #ff4757; color: white; text-decoration: none;" title="Go to Challenges of Cubing">🏆 Challenges ♾️</a>
             </div>
