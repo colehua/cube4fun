@@ -52,9 +52,9 @@
         }
 
         .arcade-container {
-            max-width: 1100px;
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 20px 16px 80px 16px;
+            padding: 24px 20px 90px 20px;
             position: relative;
             z-index: 2;
         }
@@ -203,19 +203,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 26px;
+            margin-bottom: 28px;
         }
 
         .game-tab-btn {
             background: rgba(15, 23, 42, 0.85);
             color: #cbd5e1;
             border: 2px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 18px;
+            padding: 11px 20px;
             border-radius: 14px;
             font-family: 'DynaPuff', cursive;
-            font-size: 0.98em;
+            font-size: 1.02em;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -242,12 +242,12 @@
         /* GAME STAGE CONTAINER */
         .game-stage-card {
             background: var(--card-bg);
-            border: 2px solid rgba(0, 240, 255, 0.4);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(0, 240, 255, 0.45);
+            border-radius: 26px;
+            padding: 34px 28px;
+            box-shadow: 0 0 45px rgba(0, 240, 255, 0.18), inset 0 0 25px rgba(0, 0, 0, 0.7);
             position: relative;
-            min-height: 520px;
+            min-height: 580px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -400,27 +400,27 @@
         /* 2048 CUBING GRID */
         .grid-2048 {
             display: grid;
-            grid-template-columns: repeat(4, 82px);
-            grid-template-rows: repeat(4, 82px);
-            gap: 10px;
+            grid-template-columns: repeat(4, 98px);
+            grid-template-rows: repeat(4, 98px);
+            gap: 12px;
             background: #020617;
-            padding: 14px;
-            border-radius: 18px;
+            padding: 16px;
+            border-radius: 20px;
             border: 2px solid #334155;
             margin: 14px 0;
             box-shadow: 0 0 25px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.6);
         }
         @media (max-width: 480px) {
             .grid-2048 {
-                grid-template-columns: repeat(4, 66px);
-                grid-template-rows: repeat(4, 66px);
+                grid-template-columns: repeat(4, 70px);
+                grid-template-rows: repeat(4, 70px);
                 gap: 8px;
                 padding: 10px;
             }
         }
 
         .tile-2048 {
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -434,11 +434,11 @@
             padding: 4px;
         }
         .tile-val {
-            font-size: 1.25em;
+            font-size: 1.35em;
             line-height: 1;
         }
         .tile-sub {
-            font-size: 0.62em;
+            font-size: 0.65em;
             opacity: 0.9;
             margin-top: 2px;
         }
@@ -446,21 +446,21 @@
         /* SIMON GRID */
         .simon-grid {
             display: grid;
-            grid-template-columns: repeat(3, 110px);
-            gap: 16px;
+            grid-template-columns: repeat(3, 122px);
+            gap: 18px;
             margin: 20px 0;
         }
         @media (max-width: 480px) {
             .simon-grid {
-                grid-template-columns: repeat(3, 85px);
+                grid-template-columns: repeat(3, 90px);
                 gap: 12px;
             }
         }
 
         .simon-cube-btn {
-            width: 110px;
-            height: 110px;
-            border-radius: 20px;
+            width: 122px;
+            height: 122px;
+            border-radius: 22px;
             border: 3px solid #ffffff;
             cursor: pointer;
             display: flex;
@@ -468,7 +468,7 @@
             align-items: center;
             justify-content: center;
             font-family: 'DynaPuff', cursive;
-            font-size: 1.1em;
+            font-size: 1.15em;
             font-weight: 800;
             color: #000000;
             transition: all 0.12s ease;
@@ -476,8 +476,8 @@
         }
         @media (max-width: 480px) {
             .simon-cube-btn {
-                width: 85px;
-                height: 85px;
+                width: 90px;
+                height: 90px;
                 font-size: 0.9em;
             }
         }
@@ -491,33 +491,39 @@
         /* REFLEX TARGET GRID */
         .reflex-grid {
             display: grid;
-            grid-template-columns: repeat(4, 95px);
-            gap: 14px;
+            grid-template-columns: repeat(4, 108px);
+            gap: 16px;
             margin: 20px 0;
         }
         @media (max-width: 500px) {
             .reflex-grid {
-                grid-template-columns: repeat(4, 70px);
+                grid-template-columns: repeat(4, 74px);
                 gap: 10px;
             }
         }
 
         .reflex-cell {
-            width: 95px;
-            height: 95px;
+            width: 108px;
+            height: 108px;
             background: #0f172a;
             border: 2px solid #334155;
-            border-radius: 18px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'DynaPuff', cursive;
-            font-size: 1.8em;
+            font-size: 1.9em;
             color: #64748b;
             cursor: pointer;
             transition: all 0.15s ease;
         }
         @media (max-width: 500px) {
+            .reflex-cell {
+                width: 74px;
+                height: 74px;
+                font-size: 1.4em;
+            }
+        }
             .reflex-cell {
                 width: 70px;
                 height: 70px;
@@ -723,31 +729,31 @@
         /* GAME 10: WHACK-A-CUBIE */
         .whack-grid {
             display: grid;
-            grid-template-columns: repeat(3, 105px);
-            gap: 14px;
+            grid-template-columns: repeat(3, 118px);
+            gap: 16px;
             margin: 16px auto;
             justify-content: center;
         }
         @media (max-width: 480px) {
             .whack-grid {
-                grid-template-columns: repeat(3, 85px);
+                grid-template-columns: repeat(3, 88px);
                 gap: 10px;
             }
         }
         .whack-hole {
-            width: 105px;
-            height: 105px;
+            width: 118px;
+            height: 118px;
             background: #090d16;
             border: 3px solid #1e293b;
-            border-radius: 20px;
+            border-radius: 22px;
             position: relative;
             overflow: hidden;
             box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 240, 255, 0.1);
         }
         @media (max-width: 480px) {
             .whack-hole {
-                width: 85px;
-                height: 85px;
+                width: 88px;
+                height: 88px;
             }
         }
         .whack-key-tag {
@@ -815,21 +821,21 @@
         /* GAME 12: SCRAMBLE MATCH PAIRS */
         .pairs-grid {
             display: grid;
-            grid-template-columns: repeat(4, 82px);
-            gap: 12px;
+            grid-template-columns: repeat(4, 94px);
+            gap: 14px;
             margin: 16px auto;
             justify-content: center;
             perspective: 800px;
         }
         @media (max-width: 480px) {
             .pairs-grid {
-                grid-template-columns: repeat(4, 68px);
+                grid-template-columns: repeat(4, 70px);
                 gap: 8px;
             }
         }
         .pair-card {
-            width: 82px;
-            height: 82px;
+            width: 94px;
+            height: 94px;
             position: relative;
             cursor: pointer;
             user-select: none;
@@ -837,8 +843,8 @@
         }
         @media (max-width: 480px) {
             .pair-card {
-                width: 68px;
-                height: 68px;
+                width: 70px;
+                height: 70px;
             }
         }
         .pair-card-inner {
@@ -986,23 +992,31 @@
         <div class="game-stage-card">
 
             <!-- ============================================== -->
-            <!-- GAME 1: CUBE RUNNER (FLAPPY CUBE) -->
+            <!-- GAME 1: CUBE RUNNER 3D (3-LANE HIGHWAY) -->
             <!-- ============================================== -->
             <div id="panel-runner" class="game-panel active">
-                <div class="game-header-bar">
-                    <h2 class="game-title-text">🎮 Cube Runner 3D</h2>
+                <div class="game-header-bar header-stacked">
+                    <h2 class="game-title-text">🎮 Cube Runner 3D • Highway Dash</h2>
                     <div class="game-score-display">
-                        <span>SCORE: <span id="runner-score">0</span></span>
-                        <span>BEST: <span id="runner-best">0</span></span>
+                        <span>DISTANCE: <span id="runner-score">0</span>m</span>
+                        <span>SPEED: <span id="runner-speed">1.0</span>x</span>
+                        <span>GEMS: <span id="runner-gems">0</span></span>
+                        <span class="record-pill">🏆 BEST: <span id="runner-best">0</span>m</span>
                     </div>
                 </div>
-                <canvas id="canvas-runner" class="arcade-canvas" width="600" height="380"></canvas>
-                <div style="margin-top: 14px; text-align: center; color: #94a3b8; font-size: 0.95em;">
-                    Press <strong>SPACEBAR</strong>, <strong>CLICK</strong>, or <strong>TAP</strong> anywhere on the screen to jump & flap!
+                <canvas id="canvas-runner" class="arcade-canvas" width="680" height="420"></canvas>
+                <div class="runner-lane-controls" style="display: flex; gap: 14px; margin-top: 14px; justify-content: center; flex-wrap: wrap;">
+                    <button class="dpad-btn" onclick="moveRunnerLane(-1)" title="Left (A / ⬅️)">⬅️ Left</button>
+                    <button class="dpad-btn" onclick="runnerJumpAction()" title="Jump (W / ⬆️ / Space)">⬆️ Jump</button>
+                    <button class="dpad-btn" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
+                    <button class="dpad-btn" onclick="moveRunnerLane(1)" title="Right (D / ➡️)">➡️ Right</button>
+                </div>
+                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em;">
+                    Dodge scramble obstacles across 3 lanes! Collect rainbow gems! <strong>A / D / ⬅️ / ➡️</strong> Switch Lanes • <strong>W / ⬆️ / Space</strong> Jump • <strong>S / ⬇️</strong> Slide
                 </div>
                 <div class="game-controls-row">
                     <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()">
-                        ▶ Start Cube Runner
+                        ▶ Start 3D Cube Runner
                     </button>
                     <button id="btn-runner-pause" class="btn-game-pause" onclick="togglePauseRunner()">
                         ⏸️ Pause
@@ -1014,14 +1028,14 @@
             <!-- GAME 2: CUBE SNAKE (RUBIK'S ARCADE) -->
             <!-- ============================================== -->
             <div id="panel-snake" class="game-panel">
-                <div class="game-header-bar">
+                <div class="game-header-bar header-stacked">
                     <h2 class="game-title-text">🐍 Rubik's Cube Snake</h2>
                     <div class="game-score-display">
                         <span>LENGTH: <span id="snake-score">3</span></span>
-                        <span>RECORD: <span id="snake-best">3</span></span>
+                        <span class="record-pill">🏆 RECORD: <span id="snake-best">3</span></span>
                     </div>
                 </div>
-                <canvas id="canvas-snake" class="arcade-canvas" width="480" height="360"></canvas>
+                <canvas id="canvas-snake" class="arcade-canvas" width="560" height="400"></canvas>
                 <div class="mobile-controls">
                     <button class="dpad-btn" onclick="setSnakeDir('UP')">⬆️</button>
                     <div style="display: flex; gap: 30px; width: 100%; justify-content: center;">
@@ -1055,7 +1069,7 @@
                         <span>BEST: <span id="breaker-best">0</span></span>
                     </div>
                 </div>
-                <canvas id="canvas-breaker" class="arcade-canvas" width="560" height="380"></canvas>
+                <canvas id="canvas-breaker" class="arcade-canvas" width="640" height="420"></canvas>
                 <div class="mobile-controls">
                     <button class="dpad-btn" onclick="moveBreakerPaddle(-30)" style="width: 100px;">⬅️ LEFT</button>
                     <button class="dpad-btn" onclick="moveBreakerPaddle(30)" style="width: 100px;">RIGHT ➡️</button>
@@ -1077,15 +1091,15 @@
             <!-- GAME 4: SPACE SCRAMBLE DEFENDER -->
             <!-- ============================================== -->
             <div id="panel-space" class="game-panel">
-                <div class="game-header-bar">
+                <div class="game-header-bar header-stacked">
                     <h2 class="game-title-text">🚀 Space Scramble Defender</h2>
                     <div class="game-score-display">
                         <span>SHIELD: <span id="space-shields">🛡️🛡️🛡️</span></span>
                         <span>SCORE: <span id="space-score">0</span></span>
-                        <span>BEST: <span id="space-best">0</span></span>
+                        <span class="record-pill">🏆 BEST: <span id="space-best">0</span></span>
                     </div>
                 </div>
-                <canvas id="canvas-space" class="arcade-canvas" width="560" height="380"></canvas>
+                <canvas id="canvas-space" class="arcade-canvas" width="640" height="440"></canvas>
                 <div class="mobile-controls">
                     <button class="dpad-btn" onclick="moveSpaceShip(-25)">⬅️</button>
                     <button class="dpad-btn" onclick="shootSpaceLaser()" style="width: 90px; background: #ff007f;">🔥 FIRE</button>
@@ -1255,7 +1269,7 @@
                     Press SPACE or Click STACK to build the God Cube Tower!
                 </div>
                 <div class="stacker-container">
-                    <canvas id="canvas-stacker" width="350" height="420" style="background: #020617; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); touch-action: none; cursor: pointer;"></canvas>
+                    <canvas id="canvas-stacker" width="380" height="460" style="background: #020617; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); touch-action: none; cursor: pointer;"></canvas>
                     <button id="btn-stack-trigger" class="btn-stack-action" onclick="stackLayer()">
                         🧱 STACK LAYER! (Space)
                     </button>
@@ -1338,19 +1352,19 @@
             <!-- GAME 11: FLAPPY CUBIE (SKY SCRAMBLE) -->
             <!-- ============================================== -->
             <div id="panel-flappy" class="game-panel">
-                <div class="game-header-bar">
+                <div class="game-header-bar header-stacked">
                     <h2 class="game-title-text">🪂 Flappy Cubie</h2>
                     <div class="game-score-display">
                         <span>SCORE: <span id="flappy-score">0</span></span>
                         <span>PIPES: <span id="flappy-pipes">0</span></span>
-                        <span>RECORD: <span id="flappy-best">0</span></span>
+                        <span class="record-pill">🏆 RECORD: <span id="flappy-best">0</span></span>
                     </div>
                 </div>
                 <div id="flappy-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #f59e0b; min-height: 28px; margin-top: 4px; text-align: center;">
                     Flap through Scramble Pillar Towers! Tap or Space!
                 </div>
                 <div style="position: relative; display: inline-block; margin: 10px 0;">
-                    <canvas id="canvas-flappy" width="560" height="400" style="background: #020617; border: 2px solid #f59e0b; border-radius: 16px; box-shadow: 0 0 25px rgba(245, 158, 11, 0.25); touch-action: none; cursor: pointer;"></canvas>
+                    <canvas id="canvas-flappy" width="640" height="420" style="background: #020617; border: 2px solid #f59e0b; border-radius: 16px; box-shadow: 0 0 25px rgba(245, 158, 11, 0.25); touch-action: none; cursor: pointer;"></canvas>
                 </div>
                 <div class="flappy-controls-row">
                     <button class="btn-flap-action" onclick="flapCubie()">
@@ -1693,35 +1707,53 @@
         }
 
         // ==========================================
-        // 3. GAME 1: CUBE RUNNER (FLAPPY CUBE)
+        // 3. GAME 1: CUBE RUNNER 3D (3-LANE HIGHWAY DASH)
         // ==========================================
         const runnerCanvas = document.getElementById('canvas-runner');
-        const rCtx = runnerCanvas.getContext('2d');
+        const rCtx = runnerCanvas ? runnerCanvas.getContext('2d') : null;
         let runnerActive = false;
         let runnerPaused = false;
-        let runnerScore = 0;
+        let runnerDistance = 0;
+        let runnerGems = 0;
+        let runnerSpeed = 1.0;
         let runnerBest = parseInt(localStorage.getItem('cube_runner_best') || '0', 10);
         document.getElementById('runner-best').textContent = runnerBest;
 
-        let cubeX = 80;
-        let cubeY = 160;
-        let cubeVy = 0;
-        const gravity = 0.42;
-        const jumpStrength = -7.5;
-        let obstacles = [];
+        let runnerTargetLane = 1; // 0: Left, 1: Center, 2: Right
+        let runnerCurrentLaneX = 1.0;
+        let runnerJumpY = 0;
+        let runnerJumpVy = 0;
+        let runnerIsJumping = false;
+        let runnerIsSliding = false;
+        let runnerSlideTimer = 0;
+
+        let runnerObstacles = [];
         let runnerAnimId = null;
-        let frameCount = 0;
+        let runnerRoadZ = 0;
+        let runnerFrame = 0;
 
         function startRunnerGame() {
             getAudioContext();
             runnerActive = true;
             runnerPaused = false;
-            cubeY = 160;
-            cubeVy = 0;
-            runnerScore = 0;
+            runnerDistance = 0;
+            runnerGems = 0;
+            runnerSpeed = 1.0;
+            runnerTargetLane = 1;
+            runnerCurrentLaneX = 1.0;
+            runnerJumpY = 0;
+            runnerJumpVy = 0;
+            runnerIsJumping = false;
+            runnerIsSliding = false;
+            runnerSlideTimer = 0;
+            runnerObstacles = [];
+            runnerRoadZ = 0;
+            runnerFrame = 0;
+
             document.getElementById('runner-score').textContent = '0';
-            obstacles = [];
-            document.getElementById('btn-runner-start').textContent = '🔄 Restart Cube Runner';
+            document.getElementById('runner-speed').textContent = '1.0';
+            document.getElementById('runner-gems').textContent = '0';
+            document.getElementById('btn-runner-start').textContent = '🔄 Restart Highway Dash';
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
@@ -1742,15 +1774,17 @@
                     btn.classList.add('paused');
                     btn.innerHTML = '▶️ Resume';
                 }
-                rCtx.fillStyle = 'rgba(2, 6, 23, 0.78)';
-                rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
-                rCtx.font = '26px "DynaPuff", cursive';
-                rCtx.fillStyle = '#FAED27';
-                rCtx.textAlign = 'center';
-                rCtx.fillText('⏸️ CUBE RUNNER PAUSED', runnerCanvas.width / 2, runnerCanvas.height / 2 - 10);
-                rCtx.font = '15px "Outfit", sans-serif';
-                rCtx.fillStyle = '#cbd5e1';
-                rCtx.fillText('Click Resume or press P to continue playing', runnerCanvas.width / 2, runnerCanvas.height / 2 + 25);
+                if (rCtx) {
+                    rCtx.fillStyle = 'rgba(2, 6, 23, 0.82)';
+                    rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
+                    rCtx.font = '26px "DynaPuff", cursive';
+                    rCtx.fillStyle = '#FAED27';
+                    rCtx.textAlign = 'center';
+                    rCtx.fillText('⏸️ HIGHWAY DASH PAUSED', runnerCanvas.width / 2, runnerCanvas.height / 2 - 10);
+                    rCtx.font = '15px "Outfit", sans-serif';
+                    rCtx.fillStyle = '#cbd5e1';
+                    rCtx.fillText('Click Resume or press P to continue playing', runnerCanvas.width / 2, runnerCanvas.height / 2 + 25);
+                }
             } else {
                 playSfx('resume');
                 if (btn) {
@@ -1761,146 +1795,389 @@
             }
         }
 
-        function jumpRunner() {
+        function moveRunnerLane(dir) {
             if (!runnerActive || runnerPaused) return;
-            cubeVy = jumpStrength;
-            playSfx('jump');
+            const nextLane = Math.max(0, Math.min(2, runnerTargetLane + dir));
+            if (nextLane !== runnerTargetLane) {
+                runnerTargetLane = nextLane;
+                playSfx('jump');
+            }
         }
 
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && document.getElementById('panel-runner').classList.contains('active')) {
-                e.preventDefault();
-                jumpRunner();
+        function runnerJumpAction() {
+            if (!runnerActive || runnerPaused) return;
+            if (!runnerIsJumping && !runnerIsSliding) {
+                runnerIsJumping = true;
+                runnerJumpVy = 13.5;
+                playSfx('jump');
             }
-        });
-        runnerCanvas.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            jumpRunner();
-        });
+        }
+
+        function runnerSlideAction() {
+            if (!runnerActive || runnerPaused) return;
+            if (!runnerIsJumping && !runnerIsSliding) {
+                runnerIsSliding = true;
+                runnerSlideTimer = 26;
+                playSfx('slice');
+            }
+        }
 
         function runnerLoop() {
-            if (!runnerActive || runnerPaused) return;
-            frameCount++;
-            rCtx.clearRect(0, 0, runnerCanvas.width, runnerCanvas.height);
+            if (!runnerActive || runnerPaused || !rCtx) return;
+            runnerFrame++;
 
-            // Background grid
-            rCtx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
-            rCtx.lineWidth = 1;
-            for (let x = 0; x < runnerCanvas.width; x += 40) {
-                rCtx.beginPath(); rCtx.moveTo(x, 0); rCtx.lineTo(x, runnerCanvas.height); rCtx.stroke();
+            // Distance & Speed
+            runnerDistance += Math.floor(runnerSpeed * 1.5);
+            runnerRoadZ += runnerSpeed * 12;
+            if (runnerFrame % 300 === 0 && runnerSpeed < 3.2) {
+                runnerSpeed = +(runnerSpeed + 0.15).toFixed(1);
             }
+            document.getElementById('runner-score').textContent = runnerDistance;
+            document.getElementById('runner-speed').textContent = runnerSpeed.toFixed(1);
 
-            // Physics
-            cubeVy += gravity;
-            cubeY += cubeVy;
+            // Interpolate lane position
+            runnerCurrentLaneX += (runnerTargetLane - runnerCurrentLaneX) * 0.22;
 
-            // Draw player cube (Rubik's cube sticker look)
-            const size = 32;
-            rCtx.save();
-            rCtx.translate(cubeX, cubeY);
-            const angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, cubeVy * 0.08));
-            rCtx.rotate(angle);
-
-            rCtx.fillStyle = '#0f172a';
-            rCtx.fillRect(-size/2, -size/2, size, size);
-            rCtx.strokeStyle = '#00f0ff';
-            rCtx.lineWidth = 2;
-            rCtx.strokeRect(-size/2, -size/2, size, size);
-
-            const colors = ['#ffffff', '#ff007f', '#39ff14', '#00f0ff', '#FAED27', '#ff6600'];
-            const sub = size / 3;
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    rCtx.fillStyle = colors[(i * 3 + j) % colors.length];
-                    rCtx.fillRect(-size/2 + i * sub + 1.5, -size/2 + j * sub + 1.5, sub - 3, sub - 3);
+            // Jump physics
+            if (runnerIsJumping) {
+                runnerJumpY += runnerJumpVy;
+                runnerJumpVy -= 0.85;
+                if (runnerJumpY <= 0) {
+                    runnerJumpY = 0;
+                    runnerIsJumping = false;
                 }
             }
-            rCtx.restore();
+
+            // Slide timer
+            if (runnerIsSliding) {
+                runnerSlideTimer--;
+                if (runnerSlideTimer <= 0) {
+                    runnerIsSliding = false;
+                }
+            }
 
             // Spawn obstacles
-            if (frameCount % 90 === 0) {
-                const gap = 120;
-                const topH = Math.floor(Math.random() * (runnerCanvas.height - gap - 60)) + 30;
-                obstacles.push({
-                    x: runnerCanvas.width,
-                    top: topH,
-                    bottom: topH + gap,
-                    passed: false
+            const spawnInterval = Math.max(32, Math.floor(65 - runnerSpeed * 10));
+            if (runnerFrame % spawnInterval === 0) {
+                const lane = Math.floor(Math.random() * 3);
+                const rand = Math.random();
+                let type = 'hurdle';
+                if (rand < 0.22) type = 'gem';
+                else if (rand < 0.52) type = 'hurdle';
+                else if (rand < 0.80) type = 'laser';
+                else type = 'barrier';
+
+                runnerObstacles.push({
+                    lane: lane,
+                    type: type,
+                    z: 1000,
+                    collected: false
                 });
+
+                // Occasionally spawn a gem in another lane
+                if (type !== 'gem' && Math.random() < 0.35) {
+                    const gemLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
+                    runnerObstacles.push({
+                        lane: gemLane,
+                        type: 'gem',
+                        z: 1000,
+                        collected: false
+                    });
+                }
             }
 
-            // Update & draw obstacles
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                const ob = obstacles[i];
-                ob.x -= 2.6;
+            // Update obstacles
+            for (let i = runnerObstacles.length - 1; i >= 0; i--) {
+                const ob = runnerObstacles[i];
+                ob.z -= runnerSpeed * 14;
 
-                // Draw pillar
-                rCtx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-                rCtx.strokeStyle = '#ff007f';
-                rCtx.lineWidth = 2.5;
-
-                // Top pillar
-                rCtx.fillRect(ob.x, 0, 48, ob.top);
-                rCtx.strokeRect(ob.x, 0, 48, ob.top);
-
-                // Bottom pillar
-                rCtx.fillRect(ob.x, ob.bottom, 48, runnerCanvas.height - ob.bottom);
-                rCtx.strokeRect(ob.x, ob.bottom, 48, runnerCanvas.height - ob.bottom);
-
-                // Score check
-                if (!ob.passed && ob.x + 48 < cubeX) {
-                    ob.passed = true;
-                    runnerScore++;
-                    document.getElementById('runner-score').textContent = runnerScore;
-                    if (runnerScore > runnerBest) {
-                        runnerBest = runnerScore;
-                        localStorage.setItem('cube_runner_best', runnerBest);
-                        document.getElementById('runner-best').textContent = runnerBest;
+                // Collision check (when approaching player at z between 50 and 130)
+                if (ob.z < 130 && ob.z > 50 && !ob.collected) {
+                    const laneDiff = Math.abs(runnerCurrentLaneX - ob.lane);
+                    if (laneDiff < 0.55) {
+                        if (ob.type === 'gem') {
+                            ob.collected = true;
+                            runnerGems++;
+                            runnerDistance += 50;
+                            playSfx('bonus');
+                            document.getElementById('runner-gems').textContent = runnerGems;
+                            document.getElementById('runner-score').textContent = runnerDistance;
+                        } else if (ob.type === 'hurdle') {
+                            if (runnerJumpY < 24) {
+                                gameOverRunner('Hit a scramble hurdle! Jump with Space or ⬆️!');
+                                return;
+                            }
+                        } else if (ob.type === 'laser') {
+                            if (!runnerIsSliding) {
+                                gameOverRunner('Struck by laser barrier! Slide under with S or ⬇️!');
+                                return;
+                            }
+                        } else if (ob.type === 'barrier') {
+                            gameOverRunner('Crashed into a solid Rubik wall! Switch lanes!');
+                            return;
+                        }
                     }
-                    playSfx('score');
                 }
 
-                // Collision check
-                const buffer = 10;
-                if (cubeX + size/2 - buffer > ob.x && cubeX - size/2 + buffer < ob.x + 48) {
-                    if (cubeY - size/2 + buffer < ob.top || cubeY + size/2 - buffer > ob.bottom) {
-                        gameOverRunner();
-                        return;
-                    }
-                }
-
-                if (ob.x < -60) {
-                    obstacles.splice(i, 1);
+                if (ob.z < 0) {
+                    runnerObstacles.splice(i, 1);
                 }
             }
 
-            // Floor & Ceiling collision
-            if (cubeY + size/2 > runnerCanvas.height || cubeY - size/2 < 0) {
-                gameOverRunner();
-                return;
-            }
+            // Draw everything
+            draw3DHighway();
 
             runnerAnimId = requestAnimationFrame(runnerLoop);
         }
 
-        function gameOverRunner() {
+        function draw3DHighway() {
+            const w = runnerCanvas.width;
+            const h = runnerCanvas.height;
+            const centerX = w / 2;
+            const horizonY = 110;
+            const bottomY = h;
+
+            // Background cyber sky
+            const skyGrad = rCtx.createLinearGradient(0, 0, 0, horizonY);
+            skyGrad.addColorStop(0, '#020617');
+            skyGrad.addColorStop(1, '#09132b');
+            rCtx.fillStyle = skyGrad;
+            rCtx.fillRect(0, 0, w, horizonY);
+
+            // Horizon neon glow
+            rCtx.strokeStyle = '#00f0ff';
+            rCtx.lineWidth = 2;
+            rCtx.beginPath();
+            rCtx.moveTo(0, horizonY);
+            rCtx.lineTo(w, horizonY);
+            rCtx.stroke();
+
+            // Neon sun on horizon
+            const sunGrad = rCtx.createRadialGradient(centerX, horizonY, 5, centerX, horizonY, 60);
+            sunGrad.addColorStop(0, '#ff007f');
+            sunGrad.addColorStop(0.5, 'rgba(0, 240, 255, 0.4)');
+            sunGrad.addColorStop(1, 'transparent');
+            rCtx.fillStyle = sunGrad;
+            rCtx.beginPath();
+            rCtx.arc(centerX, horizonY, 60, Math.PI, 0);
+            rCtx.fill();
+
+            // Ground highway polygon
+            const horizonW = 160;
+            const bottomW = 580;
+            rCtx.fillStyle = '#050b18';
+            rCtx.beginPath();
+            rCtx.moveTo(centerX - horizonW / 2, horizonY);
+            rCtx.lineTo(centerX + horizonW / 2, horizonY);
+            rCtx.lineTo(centerX + bottomW / 2, bottomY);
+            rCtx.lineTo(centerX - bottomW / 2, bottomY);
+            rCtx.closePath();
+            rCtx.fill();
+
+            // Road borders
+            rCtx.strokeStyle = '#00f0ff';
+            rCtx.lineWidth = 3;
+            rCtx.beginPath();
+            rCtx.moveTo(centerX - horizonW / 2, horizonY);
+            rCtx.lineTo(centerX - bottomW / 2, bottomY);
+            rCtx.moveTo(centerX + horizonW / 2, horizonY);
+            rCtx.lineTo(centerX + bottomW / 2, bottomY);
+            rCtx.stroke();
+
+            // Lane dividers (between lanes 0-1 and 1-2)
+            const divOffset1 = -1/6;
+            const divOffset2 = 1/6;
+            rCtx.strokeStyle = 'rgba(254, 224, 71, 0.4)';
+            rCtx.lineWidth = 2;
+            rCtx.setLineDash([16, 16]);
+            rCtx.lineDashOffset = -runnerRoadZ;
+
+            rCtx.beginPath();
+            rCtx.moveTo(centerX + divOffset1 * horizonW * 2, horizonY);
+            rCtx.lineTo(centerX + divOffset1 * bottomW * 2, bottomY);
+            rCtx.moveTo(centerX + divOffset2 * horizonW * 2, horizonY);
+            rCtx.lineTo(centerX + divOffset2 * bottomW * 2, bottomY);
+            rCtx.stroke();
+            rCtx.setLineDash([]);
+
+            // Sort obstacles from back (z=1000) to front (z=0)
+            const sortedObstacles = [...runnerObstacles].sort((a, b) => b.z - a.z);
+
+            sortedObstacles.forEach(ob => {
+                if (ob.collected) return;
+                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                const y = horizonY + (t * t) * (bottomY - horizonY);
+                const roadW = horizonW + t * (bottomW - horizonW);
+                const laneW = roadW / 3;
+                const x = centerX + (ob.lane - 1) * laneW;
+                const scale = 0.25 + t * 0.9;
+
+                rCtx.save();
+                rCtx.translate(x, y);
+
+                if (ob.type === 'gem') {
+                    // Floating rotating rainbow gem
+                    const gemSize = 22 * scale;
+                    rCtx.fillStyle = '#fde047';
+                    rCtx.shadowColor = '#fde047';
+                    rCtx.shadowBlur = 14;
+                    rCtx.beginPath();
+                    rCtx.moveTo(0, -gemSize);
+                    rCtx.lineTo(gemSize * 0.8, 0);
+                    rCtx.lineTo(0, gemSize);
+                    rCtx.lineTo(-gemSize * 0.8, 0);
+                    rCtx.closePath();
+                    rCtx.fill();
+                    rCtx.strokeStyle = '#ffffff';
+                    rCtx.lineWidth = 1.5;
+                    rCtx.stroke();
+                } else if (ob.type === 'hurdle') {
+                    // Low scramble block
+                    const wBox = 44 * scale;
+                    const hBox = 26 * scale;
+                    rCtx.fillStyle = '#ef4444';
+                    rCtx.shadowColor = '#ef4444';
+                    rCtx.shadowBlur = 10;
+                    rCtx.fillRect(-wBox / 2, -hBox, wBox, hBox);
+                    rCtx.strokeStyle = '#ffffff';
+                    rCtx.lineWidth = 2;
+                    rCtx.strokeRect(-wBox / 2, -hBox, wBox, hBox);
+
+                    // Mini stickers on hurdle
+                    rCtx.fillStyle = '#fde047';
+                    rCtx.fillRect(-wBox / 2 + 2, -hBox + 2, wBox / 2 - 3, hBox - 4);
+                } else if (ob.type === 'laser') {
+                    // High laser barrier
+                    const wBar = 56 * scale;
+                    const hBar = 16 * scale;
+                    const elevate = 48 * scale;
+                    rCtx.fillStyle = '#ff007f';
+                    rCtx.shadowColor = '#ff007f';
+                    rCtx.shadowBlur = 16;
+                    rCtx.fillRect(-wBar / 2, -elevate, wBar, hBar);
+                    rCtx.strokeStyle = '#ffffff';
+                    rCtx.lineWidth = 1.5;
+                    rCtx.strokeRect(-wBar / 2, -elevate, wBar, hBar);
+
+                    // Support posts
+                    rCtx.strokeStyle = '#475569';
+                    rCtx.lineWidth = 2;
+                    rCtx.beginPath();
+                    rCtx.moveTo(-wBar / 2 + 3, -elevate + hBar);
+                    rCtx.lineTo(-wBar / 2 + 3, 0);
+                    rCtx.moveTo(wBar / 2 - 3, -elevate + hBar);
+                    rCtx.lineTo(wBar / 2 - 3, 0);
+                    rCtx.stroke();
+                } else if (ob.type === 'barrier') {
+                    // Full solid Rubik wall
+                    const wWall = 48 * scale;
+                    const hWall = 56 * scale;
+                    rCtx.fillStyle = '#0f172a';
+                    rCtx.fillRect(-wWall / 2, -hWall, wWall, hWall);
+                    rCtx.strokeStyle = '#38bdf8';
+                    rCtx.lineWidth = 2;
+                    rCtx.strokeRect(-wWall / 2, -hWall, wWall, hWall);
+
+                    // 4 color segments
+                    const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316'];
+                    for (let ci = 0; ci < 4; ci++) {
+                        rCtx.fillStyle = colors[ci];
+                        rCtx.fillRect(-wWall / 2 + 3 + (ci % 2) * (wWall / 2 - 3), -hWall + 3 + Math.floor(ci / 2) * (hWall / 2 - 3), wWall / 2 - 4, hWall / 2 - 4);
+                    }
+                }
+
+                rCtx.restore();
+            });
+
+            // Draw Player Cube
+            const playerT = 0.88;
+            const playerBaseY = horizonY + (playerT * playerT) * (bottomY - horizonY);
+            const playerRoadW = horizonW + playerT * (bottomW - horizonW);
+            const playerLaneW = playerRoadW / 3;
+            const playerX = centerX + (runnerCurrentLaneX - 1) * playerLaneW;
+            const playerY = playerBaseY - runnerJumpY;
+
+            rCtx.save();
+            rCtx.translate(playerX, playerY);
+
+            // Ground shadow
+            rCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            rCtx.beginPath();
+            rCtx.ellipse(0, runnerJumpY, 26, 8, 0, 0, Math.PI * 2);
+            rCtx.fill();
+
+            if (runnerIsSliding) {
+                // Sliding flat spinning cubie
+                rCtx.fillStyle = '#00f0ff';
+                rCtx.shadowColor = '#00f0ff';
+                rCtx.shadowBlur = 18;
+                rCtx.fillRect(-28, -12, 56, 12);
+                rCtx.strokeStyle = '#ffffff';
+                rCtx.lineWidth = 2;
+                rCtx.strokeRect(-28, -12, 56, 12);
+
+                // Slide spark trail
+                rCtx.fillStyle = '#fde047';
+                for (let s = 0; s < 4; s++) {
+                    rCtx.fillRect(-30 - Math.random() * 18, -Math.random() * 8, 4, 4);
+                }
+            } else {
+                // Normal 3D Isometric Rubik's Cube
+                const cubeSize = 42;
+                rCtx.fillStyle = '#020617';
+                rCtx.fillRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
+                rCtx.strokeStyle = '#00f0ff';
+                rCtx.lineWidth = 2.5;
+                rCtx.shadowColor = '#00f0ff';
+                rCtx.shadowBlur = 12;
+                rCtx.strokeRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
+                rCtx.shadowBlur = 0;
+
+                // 3x3 Rubik Stickers
+                const sub = (cubeSize - 6) / 3;
+                const stickers = ['#ef4444', '#ffffff', '#3b82f6', '#22c55e', '#FAED27', '#f97316', '#ff007f', '#00f0ff', '#ffffff'];
+                for (let r = 0; r < 3; r++) {
+                    for (let c = 0; c < 3; c++) {
+                        rCtx.fillStyle = stickers[(r * 3 + c) % stickers.length];
+                        rCtx.fillRect(-cubeSize / 2 + 3 + c * sub, -cubeSize + 3 + r * sub, sub - 1.5, sub - 1.5);
+                    }
+                }
+            }
+
+            rCtx.restore();
+        }
+
+        function gameOverRunner(reason) {
             runnerActive = false;
             runnerPaused = false;
             playSfx('crash');
-            rCtx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-            rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
 
-            rCtx.font = '24px "DynaPuff", cursive';
-            rCtx.fillStyle = '#ff007f';
-            rCtx.textAlign = 'center';
-            rCtx.fillText('💥 GAME OVER!', runnerCanvas.width / 2, runnerCanvas.height / 2 - 10);
+            if (runnerDistance > runnerBest) {
+                runnerBest = runnerDistance;
+                localStorage.setItem('cube_runner_best', runnerBest);
+                document.getElementById('runner-best').textContent = runnerBest;
+            }
 
-            rCtx.font = '16px "Outfit", sans-serif';
-            rCtx.fillStyle = '#ffffff';
-            rCtx.fillText(`Final Score: ${runnerScore}  |  Best: ${runnerBest}`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 25);
-            rCtx.fillText('Tap or press Spacebar to play again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 55);
+            if (rCtx) {
+                rCtx.fillStyle = 'rgba(2, 6, 23, 0.85)';
+                rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
 
-            document.getElementById('btn-runner-start').textContent = '▶ Play Again';
+                rCtx.font = '28px "DynaPuff", cursive';
+                rCtx.fillStyle = '#ff007f';
+                rCtx.textAlign = 'center';
+                rCtx.fillText('💥 CRASH! HIGHWAY DASH OVER', runnerCanvas.width / 2, runnerCanvas.height / 2 - 25);
+
+                rCtx.font = '16px "Outfit", sans-serif';
+                rCtx.fillStyle = '#fde047';
+                rCtx.fillText(reason || 'Crashed on the cubing highway!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 10);
+
+                rCtx.font = '15px "Outfit", sans-serif';
+                rCtx.fillStyle = '#cbd5e1';
+                rCtx.fillText(`Distance: ${runnerDistance}m  |  Gems: ${runnerGems}  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 38);
+                rCtx.fillText('Click Restart or press Spacebar to dash again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 65);
+            }
+
+            document.getElementById('btn-runner-start').textContent = '▶ Dash Again';
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
@@ -4118,9 +4395,25 @@
                 else if (activePanel.id === 'panel-pairs') togglePausePairs();
             }
 
+            // Spacebar & Action Controls
+            if (activePanel && activePanel.id === 'panel-runner' && runnerActive && !runnerPaused) {
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                    e.preventDefault();
+                    moveRunnerLane(-1);
+                } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                    e.preventDefault();
+                    moveRunnerLane(1);
+                } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') {
+                    e.preventDefault();
+                    runnerJumpAction();
+                } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+                    e.preventDefault();
+                    runnerSlideAction();
+                }
+            }
+
             // Spacebar Action for Stacker and Flappy
             if (e.code === 'Space') {
-                const activePanel = document.querySelector('.game-panel.active');
                 if (!activePanel) return;
                 if (activePanel.id === 'panel-stacker') {
                     e.preventDefault();
