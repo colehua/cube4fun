@@ -1,33 +1,38 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Dock game controls snug against the Cube Runner 3D picture:
-   - Relocated `.arcade-control-deck` inside `.runner-screen-wrap` directly touching the bottom bezel of `#canvas-runner` (reduced vertical gap from 127.8px down to 0px).
-   - Reduced `.runner-arena` horizontal gap from 18px down to 8px so the side dock sits tightly alongside the right edge of the canvas.
-   - Reorganized `.runner-side-dock` so all movement and action controls (`▶ Dash Again`, `⚡ DASH`, `Left`, `Right`, `Jump`, `Slide`, `Shoot`, `Survive`, `Pause`, `Auto`) sit at eye level directly alongside the highway screen.
-   - Added `▶ Dash Again` and survive buttons to the bottom control deck for instant access right below the picture.
-   - Synchronized auto-survive checkboxes (`#chk-auto-survive` and `#chk-auto-survive-deck`) across both control decks.
-2. Verified live in Chrome DevTools MCP: 0px bottom gap, 8px side gap, 0 console errors, interactive button responsiveness.
+1. Make the screen picture thingy bigger and make controls compact and zero-distance:
+   - Expanded screen picture width to full container width (up to 1480px, +59% larger screen area from 481,000px² to 766,000px²).
+   - Eliminated the 240px x 539px bulky side tower that cramped the screen picture.
+   - Placed compact HUD controls directly ON the picture (zero distance):
+     - Top HUD: `▶ Dash Again best!`, `🛡️ SURVIVE`, `⏸️ Pause`, `🛡️ Auto`.
+     - Bottom-Left HUD: compact `⬅️` and `➡️` steer buttons.
+     - Bottom-Right HUD: compact `⚡ DASH`, `⬆️ JUMP`, `⬇️ SLIDE`, `🔥 SHOOT`.
+   - Added direct canvas tap steering: click/tap left side of the picture to steer left, tap right side to steer right.
+   - Replaced bulky 188px multi-row control deck with an ultra-slim, compact 38px single-row bezel bar.
+2. Verified live in Chrome DevTools MCP: 1167px x 656px canvas picture, 38px deck height, HUD buttons inside canvas, 0 console errors, interactive steering/jumping/shooting/dashing confirmed.
 3. Committed and pushed changes to remote repository `origin/main`.
 
 Next step: Done.
 
 Tasks:
-- [x] Restructure CSS for `.runner-screen-wrap` and `.arcade-control-deck` to dock directly against bottom of canvas (0px gap)
-- [x] Reduce horizontal gap between canvas and `.runner-side-dock` to 8px
-- [x] Reorder side dock controls so all action buttons are adjacent to the highway picture at eye level
-- [x] Add Dash Again and survive controls to the bottom arcade deck
-- [x] Sync auto-survive checkboxes across both control locations
-- [x] Verify live in Chrome DevTools MCP (measure bounding boxes and test button actions)
+- [x] Expand canvas container and CSS to 1480px full width (make picture thingy bigger)
+- [x] Add on-screen HUD controls directly on the picture (zero distance from picture)
+- [x] Streamline bottom control deck into an ultra-slim 38px single row (fix "too big" controls)
+- [x] Add direct canvas click-to-steer controls (tap left/right on picture)
+- [x] Verify live in Chrome DevTools MCP (measure dimensions and test actions)
 - [x] Git commit and push changes to origin/main
 
 Assumptions:
-- "the contrels of the game is too far away from the picture" refers to Cube Runner 3D's control buttons being separated from the canvas by large vertical (128px) and horizontal gaps; docking the controls flush against the canvas borders solves the distance problem completely.
+- "the contrals are still too far away and they are too big make the screen picture thingy bigger" requires:
+  1) Expanding the canvas picture to full width without a bulky side-dock squeezing it.
+  2) Placing sleek, compact HUD buttons directly on the picture so distance is zero.
+  3) Shrinking control bar height from 188px down to 38px so controls are compact, not huge.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Verified 0px gap below canvas and 8px gap beside canvas with zero console errors in Chrome DevTools MCP.
-- Docked arcade control deck flush against canvas bottom and reorganized side dock controls adjacent to the picture in games.html.
-- Initialized game control proximity fix for Cube Runner 3D.
+- Verified 1167x656 canvas area (+59% larger), 38px slim deck, and active HUD buttons with 0 console errors in Chrome DevTools MCP.
+- Implemented on-screen HUD controls, canvas click-to-steer, and 38px ultra-slim deck in games.html.
+- Initialized big screen and compact on-picture controls task for Cube Runner 3D.
