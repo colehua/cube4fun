@@ -410,7 +410,7 @@
             border-radius: 20px;
             padding: 10px 18px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-            max-width: 680px;
+            max-width: 880px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -727,6 +727,16 @@
         .btn-game-primary:hover {
             transform: scale(1.05);
             box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
+        }
+        .btn-game-primary.dash-again-highlight {
+            background: linear-gradient(135deg, #00f0ff 0%, #ff007f 100%);
+            border: 2.5px solid #ffffff;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.8), 0 0 16px rgba(255, 0, 127, 0.7);
+            animation: dashPulse 1.2s infinite alternate ease-in-out;
+        }
+        @keyframes dashPulse {
+            0% { transform: scale(1.02); box-shadow: 0 0 18px rgba(0, 240, 255, 0.6); }
+            100% { transform: scale(1.08); box-shadow: 0 0 36px rgba(0, 240, 255, 0.95), 0 0 22px rgba(255, 0, 127, 0.85); }
         }
 
         /* PAUSE BUTTON STYLING */
@@ -1131,7 +1141,23 @@
                         <span class="record-pill">🏆 BEST: <span id="runner-best">0</span>m</span>
                     </div>
                 </div>
-                <canvas id="canvas-runner" class="arcade-canvas" width="680" height="420"></canvas>
+
+                <!-- PRIMARY ACTION CONTROLS: RIGHT ON TOP OF THE GAME -->
+                <div class="game-controls-row runner-top-bar" style="margin: 4px 0 16px 0;">
+                    <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()" title="Start or Dash Again (Spacebar)">
+                        ▶ Start 3D Cube Runner
+                    </button>
+                    <button id="btn-runner-revive" class="btn-game-revive" onclick="reviveRunnerWithCoins()" style="display: none;" title="Revive with 100 Coins (Press R)">
+                        ❤️ Revive with 100 Coins (100 💰)
+                    </button>
+                    <button id="btn-runner-pause" class="btn-game-pause" onclick="togglePauseRunner()">
+                        ⏸️ Pause
+                    </button>
+                </div>
+
+                <!-- BIG WIDESCREEN ARCADE HIGHWAY CANVAS -->
+                <canvas id="canvas-runner" class="arcade-canvas" width="880" height="520" style="cursor: pointer;"></canvas>
+
                 <div class="arcade-control-deck">
                     <div class="control-group">
                         <button class="deck-btn btn-steer" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
@@ -1143,19 +1169,8 @@
                         <button class="deck-btn btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
                     </div>
                 </div>
-                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 680px;">
+                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 880px;">
                     👾 Blast Scramble Monsters with lasers to get a <strong>Bag of Coins (+10 💰)</strong>! <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide • <strong>Space / F</strong> Shoot • <strong>R</strong> Revive (100 💰)
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()">
-                        ▶ Start 3D Cube Runner
-                    </button>
-                    <button id="btn-runner-revive" class="btn-game-revive" onclick="reviveRunnerWithCoins()" style="display: none;" title="Revive with 100 Coins (Press R)">
-                        ❤️ Revive with 100 Coins (100 💰)
-                    </button>
-                    <button id="btn-runner-pause" class="btn-game-pause" onclick="togglePauseRunner()">
-                        ⏸️ Pause
-                    </button>
                 </div>
             </div>
 
@@ -1917,9 +1932,9 @@
         let runnerFrame = 0;
 
         // Background stars
-        const runnerStars = Array.from({ length: 45 }, () => ({
-            x: Math.random() * 680,
-            y: Math.random() * 110,
+        const runnerStars = Array.from({ length: 65 }, () => ({
+            x: Math.random() * 880,
+            y: Math.random() * 140,
             size: Math.random() * 2 + 1,
             alpha: Math.random() * 0.7 + 0.3
         }));
@@ -1950,7 +1965,11 @@
             document.getElementById('runner-score').textContent = '0';
             document.getElementById('runner-coins').textContent = runnerCoins;
             document.getElementById('runner-speed').textContent = '0.5';
-            document.getElementById('btn-runner-start').textContent = '🔄 Restart Highway Dash';
+            const startBtn = document.getElementById('btn-runner-start');
+            if (startBtn) {
+                startBtn.textContent = '🔄 Restart Highway Dash';
+                startBtn.classList.remove('dash-again-highlight');
+            }
             const reviveBtn = document.getElementById('btn-runner-revive');
             if (reviveBtn) reviveBtn.style.display = 'none';
             const pauseBtn = document.getElementById('btn-runner-pause');
@@ -2108,8 +2127,11 @@
 
                             // Calculate screen position for explosion
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                            const expY = 110 + (t * t) * (runnerCanvas.height - 110);
-                            const roadW = 160 + t * 420;
+                            const horizonY = Math.round(runnerCanvas.height * 0.25);
+                            const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                            const horizonW = Math.round(runnerCanvas.width * 0.25);
+                            const bottomW = Math.round(runnerCanvas.width * 0.86);
+                            const roadW = horizonW + t * (bottomW - horizonW);
                             const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
                             spawnMonsterExplosion(expX, expY - 20);
 
@@ -2196,8 +2218,12 @@
 
                             // Calculate floating notification position
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                            const notifY = 110 + (t * t) * (runnerCanvas.height - 110);
-                            const notifX = runnerCanvas.width / 2 + (runnerCurrentLaneX - 1) * (560 / 3);
+                            const horizonY = Math.round(runnerCanvas.height * 0.25);
+                            const notifY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                            const horizonW = Math.round(runnerCanvas.width * 0.25);
+                            const bottomW = Math.round(runnerCanvas.width * 0.86);
+                            const roadW = horizonW + t * (bottomW - horizonW);
+                            const notifX = runnerCanvas.width / 2 + (runnerCurrentLaneX - 1) * (roadW / 3);
                             runnerFloatingTexts.push({
                                 text: '+10 💰 BAG OF COINS!',
                                 x: notifX,
@@ -2213,8 +2239,11 @@
                             if (ob.type === 'monster') {
                                 playSfx('explosion');
                                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const expY = 110 + (t * t) * (runnerCanvas.height - 110);
-                                const roadW = 160 + t * 420;
+                                const horizonY = Math.round(runnerCanvas.height * 0.25);
+                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                                const horizonW = Math.round(runnerCanvas.width * 0.25);
+                                const bottomW = Math.round(runnerCanvas.width * 0.86);
+                                const roadW = horizonW + t * (bottomW - horizonW);
                                 const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
                                 spawnMonsterExplosion(expX, expY - 20);
                             }
@@ -2277,7 +2306,7 @@
             const w = runnerCanvas.width;
             const h = runnerCanvas.height;
             const centerX = w / 2;
-            const horizonY = 110;
+            const horizonY = Math.round(h * 0.25);
             const bottomY = h;
 
             // Background cyber sky
@@ -2303,7 +2332,7 @@
             rCtx.stroke();
 
             // Synthwave Sun with horizontal slice lines
-            const sunRadius = 45;
+            const sunRadius = Math.round(h * 0.12);
             const sunGrad = rCtx.createLinearGradient(centerX, horizonY - sunRadius, centerX, horizonY);
             sunGrad.addColorStop(0, '#ff007f');
             sunGrad.addColorStop(0.5, '#f43f5e');
@@ -2315,14 +2344,14 @@
 
             // Sun horizontal slices (clean retro aesthetic)
             rCtx.fillStyle = '#070f26';
-            for (let sy = horizonY - sunRadius + 18; sy < horizonY; sy += 7) {
-                const sliceH = Math.min(3, (sy - (horizonY - sunRadius)) * 0.08);
+            for (let sy = horizonY - sunRadius + 20; sy < horizonY; sy += 8) {
+                const sliceH = Math.min(3.5, (sy - (horizonY - sunRadius)) * 0.08);
                 rCtx.fillRect(centerX - sunRadius, sy, sunRadius * 2, sliceH);
             }
 
             // Ground highway polygon
-            const horizonW = 160;
-            const bottomW = 580;
+            const horizonW = Math.round(w * 0.25);
+            const bottomW = Math.round(w * 0.86);
             const roadGrad = rCtx.createLinearGradient(0, horizonY, 0, bottomY);
             roadGrad.addColorStop(0, '#060d1f');
             roadGrad.addColorStop(1, '#020617');
@@ -2606,19 +2635,19 @@
                 rCtx.fillStyle = '#00f0ff';
                 rCtx.shadowColor = '#00f0ff';
                 rCtx.shadowBlur = 18;
-                rCtx.fillRect(-28, -12, 56, 12);
+                rCtx.fillRect(-34, -14, 68, 14);
                 rCtx.strokeStyle = '#ffffff';
                 rCtx.lineWidth = 2;
-                rCtx.strokeRect(-28, -12, 56, 12);
+                rCtx.strokeRect(-34, -14, 68, 14);
 
                 // Slide spark trail
                 rCtx.fillStyle = '#fde047';
-                for (let s = 0; s < 4; s++) {
-                    rCtx.fillRect(-30 - Math.random() * 18, -Math.random() * 8, 4, 4);
+                for (let s = 0; s < 5; s++) {
+                    rCtx.fillRect(-36 - Math.random() * 22, -Math.random() * 8, 4, 4);
                 }
             } else {
                 // Normal 3D Isometric Rubik's Cube
-                const cubeSize = 42;
+                const cubeSize = 48;
                 rCtx.fillStyle = '#020617';
                 rCtx.fillRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
                 rCtx.strokeStyle = '#00f0ff';
@@ -2721,23 +2750,39 @@
                     rCtx.fillText('❤️ REVIVE AVAILABLE! Press [R] or click Revive (Costs 100 💰)', runnerCanvas.width / 2, runnerCanvas.height / 2 + 52);
                     rCtx.font = '13px "Outfit", sans-serif';
                     rCtx.fillStyle = '#94a3b8';
-                    rCtx.fillText('Or click "Dash Again" to start fresh', runnerCanvas.width / 2, runnerCanvas.height / 2 + 76);
+                    rCtx.fillText('Or click "Dash Again" above to start fresh', runnerCanvas.width / 2, runnerCanvas.height / 2 + 76);
                 } else {
                     rCtx.font = '15px "Outfit", sans-serif';
                     rCtx.fillStyle = '#fb7185';
                     rCtx.fillText(`💰 Need ${100 - runnerCoins} more coins to revive (Have ${runnerCoins}/100 💰). Blast more monsters!`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 52);
                     rCtx.font = '13px "Outfit", sans-serif';
                     rCtx.fillStyle = '#94a3b8';
-                    rCtx.fillText('Click Restart or press Spacebar to dash again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 76);
+                    rCtx.fillText('Click "▶ Dash Again" above, tap screen, or press Spacebar!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 76);
                 }
+
+                rCtx.font = 'bold 16px "DynaPuff", cursive';
+                rCtx.fillStyle = '#00f0ff';
+                rCtx.fillText('👆 Click "▶ Dash Again" on top of the screen to dash again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 104);
             }
 
-            document.getElementById('btn-runner-start').textContent = '▶ Dash Again';
+            const startBtn = document.getElementById('btn-runner-start');
+            if (startBtn) {
+                startBtn.innerHTML = '▶ Dash Again <span style="font-size:0.85em; opacity:0.9;">[Space]</span>';
+                startBtn.classList.add('dash-again-highlight');
+            }
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
                 pauseBtn.innerHTML = '⏸️ Pause';
             }
+        }
+
+        if (runnerCanvas) {
+            runnerCanvas.addEventListener('click', () => {
+                if (!runnerActive) {
+                    startRunnerGame();
+                }
+            });
         }
 
         function reviveRunnerWithCoins() {
@@ -2773,7 +2818,11 @@
             const reviveBtn = document.getElementById('btn-runner-revive');
             if (reviveBtn) reviveBtn.style.display = 'none';
 
-            document.getElementById('btn-runner-start').textContent = '🔄 Restart Highway Dash';
+            const startBtn = document.getElementById('btn-runner-start');
+            if (startBtn) {
+                startBtn.textContent = '🔄 Restart Highway Dash';
+                startBtn.classList.remove('dash-again-highlight');
+            }
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
