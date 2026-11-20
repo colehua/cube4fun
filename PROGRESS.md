@@ -1,32 +1,36 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Cube Runner 3D Highway Dash:
-   - Menacing Scramble Monsters spawn in lanes and kill player upon collision
-   - Laser Blaster projectile firing system with dedicated [🔥 SHOOT!] button and keyboard keys (Space / F)
-   - Killing a monster awards an entire Bag of Coins (equals +10 coins!) with explosion particles, floating celebratory banner, and audio chime
-   - Scoreboard displays COINS counter: DISTANCE, COINS (💰), SPEED, BEST
-2. Neatness & Aesthetic Polish:
-   - Reorganized arcade control console into neat steering and action button clusters
-   - Polished synthwave visuals: horizontal sun slices, glowing curbs, starfield, animated spiky monsters with glowing eyes, and 3D coin bag sprites
-   - Crisp unified arcade cards, badges, and typography
-3. Verified via Chrome DevTools MCP with zero errors.
-4. Committed and pushed to remote origin main.
+1. 100-Coin Revival System upon Death:
+   - When the player dies in Cube Runner (or Flappy Cubie), a prominent glowing Revive button ("❤️ Revive with 100 Coins (100 💰) [Press R]") appears alongside the restart button.
+   - Global / persistent coin wallet (`cube_arcade_coins` in localStorage) preserves collected coins across runs.
+   - If player has >= 100 coins, clicking Revive or pressing 'R':
+     - Deducts exactly 100 coins from the wallet
+     - Plays uplifting revival sound fanfare (`playSfx('revive')`)
+     - Clears hazards in front of the player (safe zone)
+     - Grants a temporary invulnerability forcefield shield (~2.5s) with glowing animated aura that absorbs collisions and zaps hazards
+     - Resumes the active run with score and distance preserved
+   - If player has < 100 coins, button displays "❤️ Need 100 💰 to Revive (X/100)" and clicking shows instructions to blast monsters for more coins (+10 💰 per kill).
+2. Keyboard shortcut 'R' wired for fast revival on game over screen.
+3. Verified in Chrome DevTools MCP with automated testing (100% pass rate).
+4. Changes committed and pushed to GitHub remote `origin/main`.
 
 Next step: Completed.
 
 Tasks:
-- [x] Add synthesized Web Audio SFX for bag of coins chime and monster explosion
-- [x] Beautify and neaten arcade styling, control decks, and scoreboard pill badges
-- [x] Add COINS counter and [🔥 SHOOT!] console controls to panel-runner
-- [x] Implement monster entity, laser blaster system, hit detection, particle explosion, and +10 coin bag rewards
-- [x] Implement monster devouring game-over mechanic if player collides without shooting
-- [x] Verify live gameplay, laser firing, monster hit detection, and pause controls in Chrome DevTools MCP
-- [x] Commit and push changes to GitHub origin/main
+- [x] Update PROGRESS.md to IN PROGRESS
+- [x] Add persistent coin wallet system (`cube_arcade_coins` in localStorage)
+- [x] Add synthesized Web Audio revival sound effect (`revive`)
+- [x] Add revive UI button (`.btn-game-revive`) and canvas death overlay
+- [x] Implement `reviveRunnerWithCoins()`: deducts 100 coins, grants invulnerability shield, clears nearby threats, and resumes game loop
+- [x] Implement invulnerability shield aura rendering and collision absorption in `runnerLoop()`
+- [x] Add `reviveFlappyWithCoins()` for Flappy Cubie
+- [x] Add universal keyboard shortcut 'R' for revival
+- [x] Verify live gameplay, death, revive deduction, shield invulnerability, and insufficient coins handling
+- [x] Commit and push to origin main
 
 Assumptions:
-- Spacebar, F, and Enter fire laser blaster; Up/W jumps, Down/S slides, Left/Right/A/D steers.
-- On-screen [🔥 SHOOT!] button provides instant touch & click firing.
-- Destroying a monster immediately awards the entire Bag of Coins (+10 coins) and increments the score.
+- 100 coins can be accumulated from monster kills across runs via localStorage wallet.
+- Reviving costs 100 coins, clears hazards in front of the player, and gives a 2.5-second glowing shield.
 
 Blockers (what I need to do): None.
 
@@ -34,6 +38,4 @@ Found, not done: None.
 
 Log (newest first, one line each):
 - Completed live verification in Chrome DevTools MCP and pushed to origin main.
-- Wired universal keyboard shortcuts (Space / F for shooting) and fixed syntax error.
-- Implemented laser blaster system, monsters, 10-coin bag drops, and audio effects.
-- Implemented sleek grouped arcade control deck and neon synthwave highway aesthetics.
+- Implemented 100-coin revival system, invulnerability forcefield shield, and 'R' shortcut.
