@@ -3532,12 +3532,14 @@
 
     // Check distinct colors: MUST have at least 6 distinct colors (4 for Pyraminx, 12 for Megaminx)
     // If all colors are the same, it is an invalid impossible cube!
-    const allStickers = [];
-    for (const f of faceKeys) {
-      for (const c of faces[f]) allStickers.push(c);
-    }
-    const distinctColors = new Set(allStickers);
     const reqColors = (size === 'pyraminx') ? 4 : (size === 'megaminx' ? 12 : 6);
+    const distinctColors = new Set();
+    for (const f of faceKeys) {
+      const arr = faces[f];
+      for (let i = 0; i < arr.length; i++) {
+        distinctColors.add(arr[i]);
+      }
+    }
     if (distinctColors.size !== reqColors) {
       return { success: false, error: UNSOLVABLE_ERROR };
     }

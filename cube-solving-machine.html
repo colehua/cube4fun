@@ -2187,21 +2187,21 @@
         let isPlayerAutoPlaying = false;
 
         const PALETTE_COLORS = {
-            white:     { hex: '#ffffff', name: 'White (Top Face)' },
-            yellow:    { hex: '#ffd700', name: 'Yellow (Down Face)' },
-            green:     { hex: '#22c55e', name: 'Green (Front Face)' },
-            blue:      { hex: '#3b82f6', name: 'Blue (Back Face)' },
-            orange:    { hex: '#f97316', name: 'Orange (Left Face)' },
-            red:       { hex: '#ef4444', name: 'Red (Right Face)' },
-            purple:    { hex: '#a855f7', name: 'Purple (FL Face)' },
-            darkblue:  { hex: '#1d4ed8', name: 'Dark Blue (BR Face)' },
-            darkgreen: { hex: '#15803d', name: 'Dark Green (BL Face)' },
-            pink:      { hex: '#f472b6', name: 'Pink (DR Face)' },
-            cyan:      { hex: '#06b6d4', name: 'Light Blue / Cyan (DBR Face)' },
-            lime:      { hex: '#84cc16', name: 'Light Green / Lime (DL Face)' },
-            cream:     { hex: '#fef08a', name: 'Cream / Beige (DF Face)' },
-            silver:    { hex: '#94a3b8', name: 'Silver / Grey (D Face)' },
-            grey:      { hex: '#64748b', name: 'Grey (Erase / Clear Spot)' }
+            white:     { hex: '#ffffff', rgb: [255, 255, 255], name: 'White (Top Face)' },
+            yellow:    { hex: '#ffd700', rgb: [255, 215, 0],   name: 'Yellow (Down Face)' },
+            green:     { hex: '#22c55e', rgb: [34, 197, 94],   name: 'Green (Front Face)' },
+            blue:      { hex: '#3b82f6', rgb: [59, 130, 246],  name: 'Blue (Back Face)' },
+            orange:    { hex: '#f97316', rgb: [249, 115, 22],  name: 'Orange (Left Face)' },
+            red:       { hex: '#ef4444', rgb: [239, 68, 68],   name: 'Red (Right Face)' },
+            purple:    { hex: '#a855f7', rgb: [168, 85, 247],  name: 'Purple (FL Face)' },
+            darkblue:  { hex: '#1d4ed8', rgb: [29, 78, 216],   name: 'Dark Blue (BR Face)' },
+            darkgreen: { hex: '#15803d', rgb: [21, 128, 61],   name: 'Dark Green (BL Face)' },
+            pink:      { hex: '#f472b6', rgb: [244, 114, 182], name: 'Pink (DR Face)' },
+            cyan:      { hex: '#06b6d4', rgb: [6, 182, 212],   name: 'Light Blue / Cyan (DBR Face)' },
+            lime:      { hex: '#84cc16', rgb: [132, 204, 22],  name: 'Light Green / Lime (DL Face)' },
+            cream:     { hex: '#fef08a', rgb: [254, 240, 138], name: 'Cream / Beige (DF Face)' },
+            silver:    { hex: '#94a3b8', rgb: [148, 163, 184], name: 'Silver / Grey (D Face)' },
+            grey:      { hex: '#64748b', rgb: [100, 116, 139], name: 'Grey (Erase / Clear Spot)' }
         };
 
         function initSolverFaces(size) {
@@ -2610,6 +2610,65 @@
             return svg;
         }
 
+        // Helper for bold brush painting on big cubes (100x100 and 1000x1000)
+        function paintBrushOnFace(faceKey, cx, cy, canvasSize, N) {
+            if (!solverFaces || !solverFaces[faceKey]) return;
+            const hex = PALETTE_COLORS[solverColor] ? PALETTE_COLORS[solverColor].hex : solverColor;
+            const brushR3D = 14;
+            const brushR2D = 11;
+
+            // 1. Paint stroke on 3D canvas
+            const c3d = document.querySelector(`canvas.solver-3d-face.face-${faceKey}`);
+            if (c3d) {
+                const ctx3d = c3d.getContext('2d');
+                const x3d = (canvasSize === 200) ? cx : cx * (200 / 160);
+                const y3d = (canvasSize === 200) ? cy : cy * (200 / 160);
+                ctx3d.fillStyle = hex;
+                ctx3d.beginPath();
+                ctx3d.arc(x3d, y3d, brushR3D, 0, Math.PI * 2);
+                ctx3d.fill();
+            }
+
+            // 2. Paint stroke on 2D net canvas
+            const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
+            if (c2d) {
+                const ctx2d = c2d.getContext('2d');
+                const x2d = (canvasSize === 160) ? cx : cx * (160 / 200);
+                const y2d = (canvasSize === 160) ? cy : cy * (160 / 200);
+                ctx2d.fillStyle = hex;
+                ctx2d.beginPath();
+                ctx2d.arc(x2d, y2d, brushR2D, 0, Math.PI * 2);
+                ctx2d.fill();
+            }
+
+            // 3. Update sticker data in solverFaces[faceKey]
+            const normX = cx / canvasSize;
+            const normY = cy / canvasSize;
+            const gridX = Math.floor(normX * N);
+            const gridY = Math.floor(normY * N);
+            const activeBrushR = (canvasSize === 200) ? brushR3D : brushR2D;
+            const gridR = Math.max(1, Math.floor((activeBrushR / canvasSize) * N));
+
+            const minY = Math.max(0, gridY - gridR);
+            const maxY = Math.min(N - 1, gridY + gridR);
+            const minX = Math.max(0, gridX - gridR);
+            const maxX = Math.min(N - 1, gridX + gridR);
+            const r2 = gridR * gridR;
+
+            const faceArr = solverFaces[faceKey];
+            for (let r = minY; r <= maxY; r++) {
+                const dy = r - gridY;
+                const dy2 = dy * dy;
+                const rowOffset = r * N;
+                for (let c = minX; c <= maxX; c++) {
+                    const dx = c - gridX;
+                    if (dx * dx + dy2 <= r2) {
+                        faceArr[rowOffset + c] = solverColor;
+                    }
+                }
+            }
+        }
+
         function renderSolver3DCube() {
             const cubeEl = document.getElementById('solver-3d-cube');
             if (!cubeEl) return;
@@ -2723,12 +2782,32 @@
                     canvas.height = 200;
                     canvas.style.padding = '0';
                     canvas.style.display = 'block';
-                    canvas.style.cursor = 'crosshair';
-                    canvas.title = `Face ${f} (${N}x${N}) - Click or drag to paint with ${solverColor}!`;
+                    canvas.style.cursor = 'pointer';
+                    canvas.title = `Face ${f} (${N}x${N}) - Click to fill entire face with ${solverColor}, or drag to brush-paint!`;
 
                     const ctx = canvas.getContext('2d');
                     const colors = solverFaces[f] || [];
-                    if (N === 100) {
+                    const firstColor = colors[0] || 'grey';
+                    let isUniform = (colors.length === N * N);
+                    if (isUniform && N >= 100) {
+                        const step = Math.floor(colors.length / 10);
+                        for (let s = step; s < colors.length; s += step) {
+                            if (colors[s] !== firstColor) { isUniform = false; break; }
+                        }
+                        if (isUniform) {
+                            for (let i = 0; i < colors.length; i++) {
+                                if (colors[i] !== firstColor) { isUniform = false; break; }
+                            }
+                        }
+                    } else if (isUniform) {
+                        isUniform = colors.every(c => c === firstColor);
+                    }
+
+                    if (isUniform) {
+                        const hex = PALETTE_COLORS[firstColor] ? PALETTE_COLORS[firstColor].hex : firstColor;
+                        ctx.fillStyle = hex;
+                        ctx.fillRect(0, 0, 200, 200);
+                    } else if (N === 100) {
                         for (let r = 0; r < 100; r++) {
                             for (let c = 0; c < 100; c++) {
                                 const idx = r * 100 + c;
@@ -2741,17 +2820,13 @@
                         // Fast canvas rendering for 1000x1000 using 200x200 pixel buffer
                         const imgData = ctx.createImageData(200, 200);
                         const data = imgData.data;
-                        const COLOR_RGB = {
-                            white: [255, 255, 255], yellow: [255, 215, 0], green: [34, 197, 94],
-                            blue: [59, 130, 246], orange: [249, 115, 22], red: [239, 68, 68], grey: [100, 116, 139]
-                        };
                         for (let y = 0; y < 200; y++) {
                             const r = y * 5;
                             for (let x = 0; x < 200; x++) {
                                 const c = x * 5;
                                 const idx = r * 1000 + c;
                                 const col = colors[idx] || 'grey';
-                                const rgb = COLOR_RGB[col] || [100, 116, 139];
+                                const rgb = (PALETTE_COLORS[col] && PALETTE_COLORS[col].rgb) || [100, 116, 139];
                                 const pIdx = (y * 200 + x) * 4;
                                 data[pIdx] = rgb[0];
                                 data[pIdx + 1] = rgb[1];
@@ -2762,35 +2837,53 @@
                         ctx.putImageData(imgData, 0, 0);
                     }
 
-                    const handlePaintAt = (e) => {
+                    let isPainting = false;
+                    let hasDragged = false;
+                    let pStartX = 0;
+                    let pStartY = 0;
+
+                    const paintAtPoint = (clientX, clientY) => {
                         const rect = canvas.getBoundingClientRect();
-                        const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
-                        const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
-                        if (clientX === undefined) return;
+                        if (rect.width === 0 || rect.height === 0) return;
                         const x = Math.max(0, Math.min(199, Math.floor((clientX - rect.left) * (200 / rect.width))));
                         const y = Math.max(0, Math.min(199, Math.floor((clientY - rect.top) * (200 / rect.height))));
-                        const col = Math.min(N - 1, Math.floor(x * (N / 200)));
-                        const row = Math.min(N - 1, Math.floor(y * (N / 200)));
-                        paintSticker(f, row * N + col);
+                        paintBrushOnFace(f, x, y, 200, N);
                     };
-
-                    canvas.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        handlePaintAt(e);
-                    });
 
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
-                        isStickerMouseDown = true;
-                        handlePaintAt(e);
+                        isPainting = true;
+                        hasDragged = false;
+                        pStartX = e.clientX;
+                        pStartY = e.clientY;
+                        try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
                     });
 
                     canvas.addEventListener('pointermove', (e) => {
-                        if (isStickerMouseDown) {
-                            e.stopPropagation();
-                            handlePaintAt(e);
+                        if (!isPainting) return;
+                        e.stopPropagation();
+                        const dist = Math.hypot(e.clientX - pStartX, e.clientY - pStartY);
+                        if (dist > 4) {
+                            hasDragged = true;
+                            paintAtPoint(e.clientX, e.clientY);
                         }
                     });
+
+                    const handlePointerEnd = (e) => {
+                        if (!isPainting) return;
+                        isPainting = false;
+                        e.stopPropagation();
+                        try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+                        if (!hasDragged) {
+                            fillWholeFace(f);
+                        } else {
+                            updateColorBadgesAndBanner();
+                            playSound('turn');
+                        }
+                    };
+
+                    canvas.addEventListener('pointerup', handlePointerEnd);
+                    canvas.addEventListener('pointercancel', handlePointerEnd);
 
                     cubeEl.appendChild(canvas);
                 });
@@ -3068,16 +3161,36 @@
                     canvas.className = `net-canvas net-canvas-${item.key}`;
                     canvas.width = 160;
                     canvas.height = 160;
-                    canvas.style.cursor = 'crosshair';
+                    canvas.style.cursor = 'pointer';
                     canvas.style.display = 'block';
                     canvas.style.margin = '4px auto';
                     canvas.style.borderRadius = '4px';
                     canvas.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                    canvas.title = `Face ${item.key} (${N}x${N}) - Click to fill entire face with ${solverColor}, or drag to brush-paint!`;
 
                     const ctx = canvas.getContext('2d');
                     const colors = solverFaces[item.key] || [];
+                    const firstColor = colors[0] || 'grey';
+                    let isUniform = (colors.length === N * N);
+                    if (isUniform && N >= 100) {
+                        const step = Math.floor(colors.length / 10);
+                        for (let s = step; s < colors.length; s += step) {
+                            if (colors[s] !== firstColor) { isUniform = false; break; }
+                        }
+                        if (isUniform) {
+                            for (let i = 0; i < colors.length; i++) {
+                                if (colors[i] !== firstColor) { isUniform = false; break; }
+                            }
+                        }
+                    } else if (isUniform) {
+                        isUniform = colors.every(c => c === firstColor);
+                    }
 
-                    if (N === 100) {
+                    if (isUniform) {
+                        const hex = PALETTE_COLORS[firstColor] ? PALETTE_COLORS[firstColor].hex : firstColor;
+                        ctx.fillStyle = hex;
+                        ctx.fillRect(0, 0, 160, 160);
+                    } else if (N === 100) {
                         const step = 160 / 100;
                         for (let r = 0; r < 100; r++) {
                             for (let c = 0; c < 100; c++) {
@@ -3091,17 +3204,13 @@
                         // Fast canvas net for 1000x1000
                         const imgData = ctx.createImageData(160, 160);
                         const data = imgData.data;
-                        const COLOR_RGB = {
-                            white: [255, 255, 255], yellow: [255, 215, 0], green: [34, 197, 94],
-                            blue: [59, 130, 246], orange: [249, 115, 22], red: [239, 68, 68], grey: [100, 116, 139]
-                        };
                         for (let y = 0; y < 160; y++) {
                             const r = Math.floor(y * (1000 / 160));
                             for (let x = 0; x < 160; x++) {
                                 const c = Math.floor(x * (1000 / 160));
                                 const idx = r * 1000 + c;
                                 const col = colors[idx] || 'grey';
-                                const rgb = COLOR_RGB[col] || [100, 116, 139];
+                                const rgb = (PALETTE_COLORS[col] && PALETTE_COLORS[col].rgb) || [100, 116, 139];
                                 const pIdx = (y * 160 + x) * 4;
                                 data[pIdx] = rgb[0];
                                 data[pIdx + 1] = rgb[1];
@@ -3112,33 +3221,53 @@
                         ctx.putImageData(imgData, 0, 0);
                     }
 
-                    const handleNetPaint = (e) => {
+                    let isNetPainting = false;
+                    let hasNetDragged = false;
+                    let netStartX = 0;
+                    let netStartY = 0;
+
+                    const paintNetAtPoint = (clientX, clientY) => {
                         const rect = canvas.getBoundingClientRect();
-                        const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
-                        const clientY = e.clientY ?? (e.touches && e.touches[0].clientY);
-                        if (clientX === undefined) return;
+                        if (rect.width === 0 || rect.height === 0) return;
                         const x = Math.max(0, Math.min(159, Math.floor((clientX - rect.left) * (160 / rect.width))));
                         const y = Math.max(0, Math.min(159, Math.floor((clientY - rect.top) * (160 / rect.height))));
-                        const col = Math.min(N - 1, Math.floor(x * (N / 160)));
-                        const row = Math.min(N - 1, Math.floor(y * (N / 160)));
-                        paintSticker(item.key, row * N + col);
+                        paintBrushOnFace(item.key, x, y, 160, N);
                     };
 
-                    canvas.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        handleNetPaint(e);
-                    });
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
-                        isStickerMouseDown = true;
-                        handleNetPaint(e);
+                        isNetPainting = true;
+                        hasNetDragged = false;
+                        netStartX = e.clientX;
+                        netStartY = e.clientY;
+                        try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
                     });
+
                     canvas.addEventListener('pointermove', (e) => {
-                        if (isStickerMouseDown) {
-                            e.stopPropagation();
-                            handleNetPaint(e);
+                        if (!isNetPainting) return;
+                        e.stopPropagation();
+                        const dist = Math.hypot(e.clientX - netStartX, e.clientY - netStartY);
+                        if (dist > 4) {
+                            hasNetDragged = true;
+                            paintNetAtPoint(e.clientX, e.clientY);
                         }
                     });
+
+                    const handleNetPointerEnd = (e) => {
+                        if (!isNetPainting) return;
+                        isNetPainting = false;
+                        e.stopPropagation();
+                        try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+                        if (!hasNetDragged) {
+                            fillWholeFace(item.key);
+                        } else {
+                            updateColorBadgesAndBanner();
+                            playSound('turn');
+                        }
+                    };
+
+                    canvas.addEventListener('pointerup', handleNetPointerEnd);
+                    canvas.addEventListener('pointercancel', handleNetPointerEnd);
 
                     faceEl.appendChild(canvas);
                     container.appendChild(faceEl);
@@ -3237,8 +3366,9 @@
                     const col = index % N;
                     const row = Math.floor(index / N);
                     const scale = 200 / N;
+                    const dotSize = Math.max(10, scale);
                     ctx.fillStyle = hex;
-                    ctx.fillRect(col * scale, row * scale, Math.max(1, scale), Math.max(1, scale));
+                    ctx.fillRect(Math.max(0, col * scale - dotSize / 2), Math.max(0, row * scale - dotSize / 2), dotSize, dotSize);
                 }
                 const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
                 if (c2d) {
@@ -3246,8 +3376,9 @@
                     const col = index % N;
                     const row = Math.floor(index / N);
                     const scale = 160 / N;
+                    const dotSize = Math.max(8, scale);
                     ctx.fillStyle = hex;
-                    ctx.fillRect(col * scale, row * scale, Math.max(1, scale), Math.max(1, scale));
+                    ctx.fillRect(Math.max(0, col * scale - dotSize / 2), Math.max(0, row * scale - dotSize / 2), dotSize, dotSize);
                 }
                 playSound('turn');
                 updateColorBadgesAndBanner();
@@ -3319,6 +3450,24 @@
                 if (solverFaces && solverFaces[f]) {
                     const arr = solverFaces[f];
                     const len = arr.length;
+                    if (len >= 10000) {
+                        const first = arr[0];
+                        let allSame = true;
+                        const step = Math.floor(len / 10);
+                        for (let s = step; s < len; s += step) {
+                            if (arr[s] !== first) { allSame = false; break; }
+                        }
+                        if (allSame) {
+                            for (let i = 0; i < len; i++) {
+                                if (arr[i] !== first) { allSame = false; break; }
+                            }
+                        }
+                        if (allSame) {
+                            if (counts[first] !== undefined) counts[first] += len;
+                            else counts.grey += len;
+                            return;
+                        }
+                    }
                     for (let i = 0; i < len; i++) {
                         const c = arr[i];
                         if (counts[c] !== undefined) counts[c]++;
@@ -3639,7 +3788,9 @@
                     showFrozenNotice();
                     return;
                 }
-                if (e.target.classList.contains('solver-3d-sticker')) return;
+                if (e.target.classList.contains('solver-3d-sticker') ||
+                    e.target.classList.contains('solver-3d-face') ||
+                    e.target.closest('.solver-3d-face')) return;
                 isOrbitDragging = true;
                 orbitStartX = e.clientX;
                 orbitStartY = e.clientY;
