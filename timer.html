@@ -3944,7 +3944,7 @@
             }
             
             // Only update bubble if it's the welcome state or record beat state
-            if (buddyBubble && (buddyBubble.textContent.includes("Welcome to Cole's") || buddyBubble.textContent.includes("Can you beat my"))) {
+            if (buddyBubble && record && (buddyBubble.textContent.includes("Welcome to Cole's") || buddyBubble.textContent.includes("Can you beat my"))) {
                 const singleStr = type === '3x3-fmc' ? `${record.single.toFixed(0)} moves` : formatTime(record.single);
                 buddyBubble.textContent = `Welcome to Cole's ${type} Timer! Can you beat my ${singleStr} single record? ⚡`;
             }

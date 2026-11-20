@@ -10,23 +10,34 @@ class CubeMusicEngine {
         this.activeTrack = null; // 'cool' or 'intense'
         this.timerId = null;
         this.currentStep = 0;
-        this.bpm = 104;
-        this.volume = parseFloat(localStorage.getItem('cube_music_vol')) || 0.65;
+        this.bpm = 100;
+        this.volume = 0.85;
+        this.pendingAutoplayTrack = null;
+        this._unlockBound = false;
+
+        const savedVol = localStorage.getItem('cube_music_vol');
+        if (savedVol !== null) {
+            const parsed = parseFloat(savedVol);
+            if (!isNaN(parsed) && parsed > 0.05) {
+                this.volume = Math.min(1.0, parsed);
+            }
+        }
+
         this.masterGain = null;
         this.compressor = null;
         this.nextNoteTime = 0;
-        this.scheduleAheadTime = 0.12;
+        this.scheduleAheadTime = 0.15;
         this.lookaheadMs = 25;
         this.noiseBuffer = null;
 
         // Frequencies (Hz)
         this.N = {
             G1: 49.00, A1: 55.00, Bb1: 58.27, B1: 61.74, C2: 65.41, Cs2: 69.30, D2: 73.42,
-            E2: 82.41, F2: 87.31, Fs2: 92.50, G2: 98.00, Gs2: 103.83, A2: 110.00, Bb2: 116.54,
-            B2: 123.47, C3: 130.81, Cs3: 138.59, D3: 146.83, E3: 164.81, F3: 174.61, Fs3: 185.00,
+            Eb2: 77.78, E2: 82.41, F2: 87.31, Fs2: 92.50, G2: 98.00, Gs2: 103.83, A2: 110.00, Bb2: 116.54,
+            B2: 123.47, C3: 130.81, Cs3: 138.59, D3: 146.83, Eb3: 155.56, E3: 164.81, F3: 174.61, Fs3: 185.00,
             G3: 196.00, Gs3: 207.65, A3: 220.00, Bb3: 233.08, B3: 246.94, C4: 261.63, Cs4: 277.18,
-            D4: 293.66, E4: 329.63, F4: 349.23, Fs4: 369.99, G4: 392.00, Gs4: 415.30, A4: 440.00,
-            Bb4: 466.16, B4: 493.88, C5: 523.25, Cs5: 554.37, D5: 587.33, E5: 659.25, F5: 698.46,
+            D4: 293.66, Eb4: 311.13, E4: 329.63, F4: 349.23, Fs4: 369.99, G4: 392.00, Gs4: 415.30, A4: 440.00,
+            Bb4: 466.16, B4: 493.88, C5: 523.25, Cs5: 554.37, D5: 587.33, Eb5: 622.25, E5: 659.25, F5: 698.46,
             Fs5: 739.99, G5: 783.99, Gs5: 830.61, A5: 880.00, B5: 987.77
         };
 
@@ -71,63 +82,84 @@ class CubeMusicEngine {
             N.Fs2, N.Gs2, N.A2, N.B2,  N.Cs3, N.D3, N.E3, N.Fs3,  N.B1, 0, N.B1, 0,  N.B1, N.A1, N.Fs1, N.E1
         ];
 
-        // 2. COOL SPEEDCUBING LO-FI CHILL GROOVE (104 BPM, 128 steps)
+        // 2. COOL SPEEDCUBING LO-FI CHILL GROOVE (100 BPM, 128 steps)
         this.coolLeadScore = [
-            // Bar 1 - Smooth Dm9 riff
-            N.A4, 0, 0, N.C5,  0, 0, N.D5, 0,  0, 0, N.C5, 0,  N.A4, 0, 0, 0,
-            // Bar 2
-            N.F4, 0, 0, N.G4,  0, 0, N.A4, 0,  0, 0, N.F4, 0,  N.D4, 0, 0, 0,
-            // Bar 3 - Flowing Bbmaj9 run
-            N.F4, 0, N.A4, 0,  N.C5, 0, N.D5, 0,  N.E5, 0, N.D5, 0,  N.C5, 0, 0, 0,
-            // Bar 4
-            N.C5, 0, 0, 0,  N.A4, 0, 0, 0,  N.F4, 0, N.G4, 0,  N.A4, 0, 0, 0,
-            // Bar 5 - Gm9 soulful groove
-            N.G4, 0, 0, N.Bb4,  0, 0, N.D5, 0,  0, 0, N.C5, 0,  N.Bb4, 0, 0, 0,
-            // Bar 6 - C9 bright resolution
-            N.C5, 0, 0, N.E5,  0, 0, N.G5, 0,  0, 0, N.E5, 0,  N.C5, 0, 0, 0,
-            // Bar 7 - A7alt turnaround
-            N.D5, 0, 0, N.C5,  0, 0, N.A4, 0,  0, 0, N.F4, 0,  N.G4, 0, 0, 0,
-            // Bar 8 - Sweet finish to loop
-            N.A4, 0, 0, 0,  N.F4, 0, 0, 0,  N.D4, 0, 0, 0,  N.D4, 0, 0, 0
+            // Bar 1 - Dm9 lyrical intro
+            N.A4, 0, N.C5, 0,  N.D5, 0, 0, N.C5,  N.A4, 0, 0, 0,  N.F4, 0, N.G4, 0,
+            // Bar 2 - G13 floating hook
+            N.A4, 0, 0, 0,     N.E5, 0, 0, N.D5,  N.B4, 0, 0, 0,  N.G4, 0, N.A4, 0,
+            // Bar 3 - Cmaj9 sweet cascade
+            N.B4, 0, N.C5, 0,  N.D5, 0, 0, N.E5,  N.G5, 0, 0, 0,  N.E5, 0, N.D5, 0,
+            // Bar 4 - A7alt resolution
+            N.Cs5, 0, 0, 0,    N.F5, 0, 0, N.E5,  N.Cs5, 0, 0, 0, N.A4, 0, N.Bb4, 0,
+            // Bar 5 - Dm9 variation
+            N.A4, 0, N.D5, 0,  N.F5, 0, 0, N.E5,  N.D5, 0, 0, 0,  N.C5, 0, N.A4, 0,
+            // Bar 6 - Bbmaj9 smooth run
+            N.Bb4, 0, N.C5, 0, N.D5, 0, 0, N.F5,  N.D5, 0, 0, 0,  N.C5, 0, N.Bb4, 0,
+            // Bar 7 - Em7b5 turnaround
+            N.G4, 0, N.Bb4, 0, N.D5, 0, 0, N.E5,  N.D5, 0, 0, 0,  N.Bb4, 0, N.G4, 0,
+            // Bar 8 - A7b9 finish
+            N.A4, 0, 0, 0,     N.Cs5, 0, 0, N.E5, N.D5, 0, 0, 0,  N.D4, 0, 0, 0
         ];
 
         this.coolBassScore = [
-            // Bars 1-2 (Dm9)
-            N.D2, 0, 0, 0,  N.D2, 0, N.F2, 0,  N.G2, 0, 0, 0,  N.A2, 0, N.C3, 0,
-            N.D2, 0, 0, 0,  N.D2, 0, N.C3, 0,  N.A2, 0, N.G2, 0,  N.F2, 0, N.E2, 0,
-            // Bars 3-4 (Bbmaj9)
-            N.Bb1, 0, 0, 0,  N.Bb1, 0, N.D2, 0,  N.F2, 0, 0, 0,  N.G2, 0, N.F2, 0,
-            N.Bb1, 0, 0, 0,  N.C2, 0, N.D2, 0,  N.F2, 0, N.G2, 0,  N.A2, 0, N.F2, 0,
-            // Bars 5-6 (Gm9 -> C9)
-            N.G1, 0, 0, 0,  N.G1, 0, N.Bb1, 0,  N.D2, 0, 0, 0,  N.F2, 0, N.D2, 0,
-            N.C2, 0, 0, 0,  N.C2, 0, N.E2, 0,  N.G2, 0, N.Bb2, 0,  N.C3, 0, N.Bb2, 0,
-            // Bars 7-8 (A7 -> Dm)
-            N.A1, 0, 0, 0,  N.A1, 0, N.Cs2, 0,  N.E2, 0, N.G2, 0,  N.A2, 0, N.G2, 0,
-            N.D2, 0, 0, 0,  N.D2, 0, N.F2, 0,  N.A2, 0, N.C3, 0,  N.D3, 0, 0, 0
+            // Bar 1 (Dm9)
+            N.D2, 0, 0, 0,  N.D2, 0, 0, N.F2,  N.A2, 0, 0, 0,  N.C3, 0, N.A2, 0,
+            // Bar 2 (G13)
+            N.G2, 0, 0, 0,  N.G2, 0, 0, N.B2,  N.D3, 0, 0, 0,  N.F2, 0, N.E2, 0,
+            // Bar 3 (Cmaj9)
+            N.C2, 0, 0, 0,  N.C2, 0, 0, N.E2,  N.G2, 0, 0, 0,  N.B2, 0, N.G2, 0,
+            // Bar 4 (A7alt)
+            N.A1, 0, 0, 0,  N.A1, 0, 0, N.Cs2, N.E2, 0, 0, 0,  N.G2, 0, N.F2, 0,
+            // Bar 5 (Dm9)
+            N.D2, 0, 0, 0,  N.D2, 0, 0, N.F2,  N.A2, 0, 0, 0,  N.D3, 0, N.C3, 0,
+            // Bar 6 (Bbmaj9)
+            N.Bb1, 0, 0, 0, N.Bb1, 0, 0, N.D2, N.F2, 0, 0, 0,  N.A2, 0, N.F2, 0,
+            // Bar 7 (Em7b5)
+            N.E2, 0, 0, 0,  N.E2, 0, 0, N.G2,  N.Bb2, 0, 0, 0, N.D3, 0, N.Bb2, 0,
+            // Bar 8 (A7b9)
+            N.A1, 0, 0, 0,  N.A1, 0, 0, N.Cs2, N.E2, 0, 0, 0,  N.A2, 0, N.G2, 0
         ];
 
-        // Chords for Cool Music (per bar)
+        // Rich Rhodes Chords for Cool Music (Triggered on step 0 and step 8 of each bar)
         this.coolChords = {
-            0:  [N.D3, N.F3, N.A3, N.C4, N.E4],   // Dm9
-            16: [N.D3, N.F3, N.A3, N.C4],         // Dm7
-            32: [N.Bb2, N.D3, N.F3, N.A3, N.C4],  // Bbmaj9
-            48: [N.Bb2, N.D3, N.F3, N.A3],        // Bbmaj7
-            64: [N.G2, N.Bb2, N.D3, N.F3, N.A3],  // Gm9
-            80: [N.C3, N.E3, N.G3, N.Bb3, N.D4],  // C9
-            96: [N.A2, N.Cs3, N.E3, N.G3, N.Bb3], // A7(b9)
-            112:[N.D3, N.F3, N.A3, N.C4, N.E4]   // Dm9 resolve
+            // Bar 1: Dm9
+            0:   [N.D3, N.F3, N.A3, N.C4, N.E4],
+            8:   [N.F3, N.A3, N.C4, N.E4],
+            // Bar 2: G13
+            16:  [N.G2, N.F3, N.B3, N.E4, N.A4],
+            24:  [N.F3, N.B3, N.E4],
+            // Bar 3: Cmaj9
+            32:  [N.C3, N.E3, N.G3, N.B3, N.D4],
+            40:  [N.E3, N.G3, N.B3, N.D4],
+            // Bar 4: A7alt
+            48:  [N.A2, N.G3, N.Cs4, N.F4, N.A4],
+            56:  [N.G3, N.Cs4, N.F4],
+            // Bar 5: Dm9
+            64:  [N.D3, N.F3, N.A3, N.C4, N.E4],
+            72:  [N.F3, N.A3, N.C4, N.E4],
+            // Bar 6: Bbmaj9
+            80:  [N.Bb2, N.D3, N.F3, N.A3, N.C4],
+            88:  [N.D3, N.F3, N.A3, N.C4],
+            // Bar 7: Em7b5
+            96:  [N.E3, N.G3, N.Bb3, N.D4],
+            104: [N.G3, N.Bb3, N.D4],
+            // Bar 8: A7b9
+            112: [N.A2, N.Cs3, N.G3, N.Bb3, N.E4],
+            120: [N.Cs3, N.G3, N.Bb3, N.E4]
         };
     }
 
     initContext() {
         if (this.ctx) return;
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AudioContext();
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        this.ctx = new AudioCtx();
 
         this.compressor = this.ctx.createDynamicsCompressor();
-        this.compressor.threshold.setValueAtTime(-16, this.ctx.currentTime);
+        this.compressor.threshold.setValueAtTime(-14, this.ctx.currentTime);
         this.compressor.knee.setValueAtTime(10, this.ctx.currentTime);
-        this.compressor.ratio.setValueAtTime(6, this.ctx.currentTime);
+        this.compressor.ratio.setValueAtTime(4, this.ctx.currentTime);
         this.compressor.attack.setValueAtTime(0.005, this.ctx.currentTime);
         this.compressor.release.setValueAtTime(0.12, this.ctx.currentTime);
 
@@ -254,48 +286,64 @@ class CubeMusicEngine {
     }
 
     // --- COOL LO-FI CHILL INSTRUMENTS ---
-    playCoolKick(time) {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(95, time);
-        osc.frequency.exponentialRampToValueAtTime(42, time + 0.12);
-        gain.gain.setValueAtTime(0.55, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
-        osc.connect(gain);
-        gain.connect(this.masterGain);
-        osc.start(time);
-        osc.stop(time + 0.13);
+    playCoolKick(time, intensity = 1.0) {
+        // 1. High Punch Knock (clearly audible on laptop & phone speakers)
+        const punch = this.ctx.createOscillator();
+        const punchGain = this.ctx.createGain();
+        punch.type = 'triangle';
+        punch.frequency.setValueAtTime(220, time);
+        punch.frequency.exponentialRampToValueAtTime(55, time + 0.05);
+        punchGain.gain.setValueAtTime(0.45 * intensity, time);
+        punchGain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+        punch.connect(punchGain);
+        punchGain.connect(this.masterGain);
+        punch.start(time);
+        punch.stop(time + 0.06);
+
+        // 2. Warm Sub Thump (earphones & subwoofers)
+        const sub = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(95, time);
+        sub.frequency.exponentialRampToValueAtTime(42, time + 0.16);
+        subGain.gain.setValueAtTime(0.65 * intensity, time);
+        subGain.gain.exponentialRampToValueAtTime(0.001, time + 0.16);
+        sub.connect(subGain);
+        subGain.connect(this.masterGain);
+        sub.start(time);
+        sub.stop(time + 0.17);
     }
 
     playCoolSnare(time) {
         if (!this.noiseBuffer) return;
+        // Crisp Rimshot Noise Snap
         const noise = this.ctx.createBufferSource();
         noise.buffer = this.noiseBuffer;
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'highpass';
-        filter.frequency.setValueAtTime(1800, time);
-        const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.22, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(this.masterGain);
+        const noiseFilter = this.ctx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(2400, time);
+        noiseFilter.Q.setValueAtTime(1.2, time);
+        const noiseGain = this.ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.32, time);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.13);
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(this.masterGain);
+        noise.start(time);
+        noise.stop(time + 0.14);
 
+        // Body Pop
         const tone = this.ctx.createOscillator();
         tone.type = 'triangle';
-        tone.frequency.setValueAtTime(140, time);
-        tone.frequency.exponentialRampToValueAtTime(80, time + 0.08);
+        tone.frequency.setValueAtTime(220, time);
+        tone.frequency.exponentialRampToValueAtTime(90, time + 0.09);
         const toneGain = this.ctx.createGain();
-        toneGain.gain.setValueAtTime(0.16, time);
-        toneGain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+        toneGain.gain.setValueAtTime(0.28, time);
+        toneGain.gain.exponentialRampToValueAtTime(0.001, time + 0.09);
         tone.connect(toneGain);
         toneGain.connect(this.masterGain);
-
-        noise.start(time);
-        noise.stop(time + 0.11);
         tone.start(time);
-        tone.stop(time + 0.09);
+        tone.stop(time + 0.1);
     }
 
     playCoolHat(time, isOpen) {
@@ -304,11 +352,11 @@ class CubeMusicEngine {
         noise.buffer = this.noiseBuffer;
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(7200, time);
-        filter.Q.setValueAtTime(1.8, time);
-        const dur = isOpen ? 0.14 : 0.04;
+        filter.frequency.setValueAtTime(6800, time);
+        filter.Q.setValueAtTime(2.2, time);
+        const dur = isOpen ? 0.15 : 0.045;
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(isOpen ? 0.12 : 0.07, time);
+        gain.gain.setValueAtTime(isOpen ? 0.20 : 0.11, time);
         gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
         noise.connect(filter);
         filter.connect(gain);
@@ -319,69 +367,96 @@ class CubeMusicEngine {
 
     playCoolBass(time, freq, dur) {
         if (!freq) return;
+        // Warm round electric bass (triangle with filter)
         const osc = this.ctx.createOscillator();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, time);
+
+        // Sub foundation (sine)
+        const sub = this.ctx.createOscillator();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(freq, time);
+
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, time);
+        filter.frequency.setValueAtTime(520, time);
+
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.36, time);
+        gain.gain.setValueAtTime(0.42, time);
         gain.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.95);
+
         osc.connect(filter);
+        sub.connect(filter);
         filter.connect(gain);
         gain.connect(this.masterGain);
+
         osc.start(time);
+        sub.start(time);
         osc.stop(time + dur);
+        sub.stop(time + dur);
     }
 
     playCoolChord(time, notes, dur) {
         if (!notes || !notes.length) return;
+        // Lush Rhodes electric piano emulation with warm chorusing
         notes.forEach((freq, idx) => {
-            const osc = this.ctx.createOscillator();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, time);
+            const osc1 = this.ctx.createOscillator();
+            const osc2 = this.ctx.createOscillator();
+            osc1.type = 'sine';
+            osc2.type = 'triangle';
+            osc1.frequency.setValueAtTime(freq, time);
+            osc2.frequency.setValueAtTime(freq * 1.002, time); // warm chorus detune
+
             const filter = this.ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(1100 + idx * 80, time);
+            filter.frequency.setValueAtTime(1400 + idx * 90, time);
+
             const gain = this.ctx.createGain();
-            gain.gain.setValueAtTime(0.06, time);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.95);
-            osc.connect(filter);
+            // Gentle attack and long warm decay
+            gain.gain.setValueAtTime(0.001, time);
+            gain.gain.linearRampToValueAtTime(0.14, time + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.96);
+
+            osc1.connect(filter);
+            osc2.connect(filter);
             filter.connect(gain);
             gain.connect(this.masterGain);
-            osc.start(time);
-            osc.stop(time + dur);
+
+            osc1.start(time);
+            osc2.start(time);
+            osc1.stop(time + dur);
+            osc2.stop(time + dur);
         });
     }
 
     playCoolLead(time, freq, dur) {
         if (!freq) return;
-        const osc = this.ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, time);
-
+        // Soulful warm jazz/chill synth lead
+        const osc1 = this.ctx.createOscillator();
         const osc2 = this.ctx.createOscillator();
-        osc2.type = 'triangle';
-        osc2.frequency.setValueAtTime(freq, time);
+        osc1.type = 'triangle';
+        osc2.type = 'sine';
+        osc1.frequency.setValueAtTime(freq, time);
+        osc2.frequency.setValueAtTime(freq * 1.003, time);
 
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1800, time);
-        filter.Q.setValueAtTime(2.2, time);
+        filter.frequency.setValueAtTime(2200, time);
+        filter.Q.setValueAtTime(2.0, time);
 
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.18, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.92);
+        gain.gain.setValueAtTime(0.001, time);
+        gain.gain.linearRampToValueAtTime(0.28, time + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.94);
 
-        osc.connect(filter);
+        osc1.connect(filter);
         osc2.connect(filter);
         filter.connect(gain);
         gain.connect(this.masterGain);
 
-        osc.start(time);
+        osc1.start(time);
         osc2.start(time);
-        osc.stop(time + dur);
+        osc1.stop(time + dur);
         osc2.stop(time + dur);
     }
 
@@ -413,51 +488,98 @@ class CubeMusicEngine {
         const step16 = (60 / this.bpm) / 4;
         const beatInBar = (step % 16);
 
-        // Warm kick on 0, 8 and soft ghost on 14
-        if (beatInBar === 0 || beatInBar === 8 || beatInBar === 14) {
-            this.playCoolKick(time);
+        // 1. Warm punchy lo-fi kick:
+        // Beat 1 (step 0), Beat 3+ (step 10), and soft touch on step 14
+        if (beatInBar === 0 || beatInBar === 10) {
+            this.playCoolKick(time, 1.0);
+        } else if (beatInBar === 14) {
+            this.playCoolKick(time, 0.45); // ghost kick
         }
 
-        // Snappy rimshot on 4, 12
+        // 2. Crisp lo-fi rimshot snare:
+        // Beat 2 (step 4) and Beat 4 (step 12)
         if (beatInBar === 4 || beatInBar === 12) {
             this.playCoolSnare(time);
         }
 
-        // Lo-fi hi-hat (swung 16ths, open on 10)
-        const isOpen = (beatInBar === 10);
-        this.playCoolHat(time, isOpen);
+        // 3. Swung lo-fi hi-hats:
+        if (beatInBar % 2 === 0) {
+            const isOpen = (beatInBar === 6 || (beatInBar === 14 && step % 32 === 30));
+            this.playCoolHat(time, isOpen);
+        }
 
-        // Smooth walking bass
+        // 4. Smooth walking bassline:
         const bassFreq = this.coolBassScore[step % this.coolBassScore.length];
         if (bassFreq) {
-            this.playCoolBass(time, bassFreq, step16 * 1.8);
+            this.playCoolBass(time, bassFreq, step16 * 1.85);
         }
 
-        // Rich chord pads
+        // 5. Lush sustained Rhodes chords:
         const chord = this.coolChords[step % 128];
         if (chord) {
-            this.playCoolChord(time, chord, step16 * 7.5);
+            this.playCoolChord(time, chord, step16 * 7.6);
         }
 
-        // Soulful lead pluck
+        // 6. Soulful chill melody lead:
         const leadFreq = this.coolLeadScore[step % this.coolLeadScore.length];
         if (leadFreq) {
-            this.playCoolLead(time, leadFreq, step16 * 1.6);
+            this.playCoolLead(time, leadFreq, step16 * 1.75);
         }
+    }
+
+    setupUnlockListener() {
+        if (this._unlockBound) return;
+        this._unlockBound = true;
+        const unlock = async () => {
+            if (this.ctx && this.ctx.state === 'suspended') {
+                try {
+                    await this.ctx.resume();
+                } catch(e) {}
+            }
+            if (this.pendingAutoplayTrack && !this.isPlaying) {
+                const track = this.pendingAutoplayTrack;
+                this.pendingAutoplayTrack = null;
+                this.start(track);
+            }
+            window.removeEventListener('pointerdown', unlock);
+            window.removeEventListener('keydown', unlock);
+            window.removeEventListener('click', unlock);
+            window.removeEventListener('touchstart', unlock);
+            this._unlockBound = false;
+        };
+        window.addEventListener('pointerdown', unlock, { passive: true });
+        window.addEventListener('keydown', unlock, { passive: true });
+        window.addEventListener('click', unlock, { passive: true });
+        window.addEventListener('touchstart', unlock, { passive: true });
     }
 
     start(track = 'cool') {
         this.initContext();
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
+
+        // If context is suspended (browser autoplay policy before user gesture)
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.pendingAutoplayTrack = track;
+            this.isPlaying = false;
+            this.updateUI();
+            this.setupUnlockListener();
+            this.ctx.resume().then(() => {
+                if (this.ctx && this.ctx.state === 'running' && this.pendingAutoplayTrack === track) {
+                    this.pendingAutoplayTrack = null;
+                    this.start(track);
+                }
+            }).catch(() => {});
+            return;
         }
 
+        this.pendingAutoplayTrack = null;
         if (this.isPlaying && this.activeTrack === track) return;
 
         this.isPlaying = true;
         this.activeTrack = track;
-        this.bpm = (track === 'cool') ? 104 : 132;
+        this.bpm = (track === 'cool') ? 100 : 132;
         this.currentStep = 0;
+        
+        // Strict clock synchronization to prevent scheduling in the past
         this.nextNoteTime = this.ctx.currentTime + 0.05;
 
         if (this.timerId) {
@@ -465,12 +587,17 @@ class CubeMusicEngine {
             this.timerId = null;
         }
 
-        const s16 = (60 / this.bpm) / 4;
         const loopLength = (track === 'cool') ? this.coolLeadScore.length : this.intenseLeadScore.length;
 
-        // INFINITE LOOPING: Runs forever as long as isPlaying is true
+        // INFINITE LOOPING: Runs forever until explicitly stopped
         this.timerId = setInterval(() => {
-            if (!this.isPlaying) return;
+            if (!this.isPlaying || !this.ctx) return;
+
+            // Guard against background tab clock drift
+            if (this.nextNoteTime < this.ctx.currentTime) {
+                this.nextNoteTime = this.ctx.currentTime + 0.02;
+            }
+
             while (this.nextNoteTime < this.ctx.currentTime + this.scheduleAheadTime) {
                 this.scheduleStep(this.currentStep, this.nextNoteTime);
                 this.nextNoteTime += (60 / this.bpm) / 4;
@@ -484,6 +611,7 @@ class CubeMusicEngine {
     stop() {
         this.isPlaying = false;
         this.activeTrack = null;
+        this.pendingAutoplayTrack = null;
         if (this.timerId) {
             clearInterval(this.timerId);
             this.timerId = null;
@@ -492,26 +620,46 @@ class CubeMusicEngine {
     }
 
     toggleCool() {
+        this.initContext();
+        this.pendingAutoplayTrack = null;
         if (this.isPlaying && this.activeTrack === 'cool') {
             this.stop();
         } else {
-            this.start('cool');
+            if (this.ctx && this.ctx.state === 'suspended') {
+                this.ctx.resume().then(() => {
+                    this.start('cool');
+                }).catch(() => {
+                    this.start('cool');
+                });
+            } else {
+                this.start('cool');
+            }
         }
     }
 
     toggleIntense() {
+        this.initContext();
+        this.pendingAutoplayTrack = null;
         if (this.isPlaying && this.activeTrack === 'intense') {
             this.stop();
         } else {
-            this.start('intense');
+            if (this.ctx && this.ctx.state === 'suspended') {
+                this.ctx.resume().then(() => {
+                    this.start('intense');
+                }).catch(() => {
+                    this.start('intense');
+                });
+            } else {
+                this.start('intense');
+            }
         }
     }
 
-    toggle(track = 'intense') {
-        if (this.isPlaying && this.activeTrack === track) {
-            this.stop();
+    toggle(track = 'cool') {
+        if (track === 'intense') {
+            this.toggleIntense();
         } else {
-            this.start(track);
+            this.toggleCool();
         }
     }
 
@@ -544,7 +692,7 @@ class CubeMusicEngine {
     }
 }
 
-// Global instances
+// Global singleton instances
 window.CubeMusic = new CubeMusicEngine();
 window.GangnamMusic = window.CubeMusic; // Backwards compatibility
 
@@ -558,10 +706,16 @@ window.toggleIntenseMusic = function() {
 
 function initMusicButtons() {
     document.querySelectorAll('.btn-cool-music').forEach(btn => {
-        btn.onclick = () => window.CubeMusic.toggleCool();
+        btn.onclick = (e) => {
+            e.preventDefault();
+            window.CubeMusic.toggleCool();
+        };
     });
     document.querySelectorAll('.btn-intense-music').forEach(btn => {
-        btn.onclick = () => window.CubeMusic.toggleIntense();
+        btn.onclick = (e) => {
+            e.preventDefault();
+            window.CubeMusic.toggleIntense();
+        };
     });
     if (window.CubeMusic) {
         window.CubeMusic.updateUI();
@@ -573,26 +727,9 @@ function autoStartCoolMusicIfOnTimer() {
     const isTimerPage = window.location.pathname.includes('timer.html') || document.getElementById('scramble-display-text');
     if (!isTimerPage) return;
 
-    const startIfReady = () => {
-        if (window.CubeMusic && !window.CubeMusic.isPlaying) {
-            window.CubeMusic.start('cool');
-        }
-    };
-
-    // Attempt direct start
-    startIfReady();
-
-    // Browser audio policy gesture unlock: first interaction (click anywhere, spacebar) starts Cool Music
-    const unlockAudio = () => {
-        startIfReady();
-        window.removeEventListener('pointerdown', unlockAudio);
-        window.removeEventListener('keydown', unlockAudio);
-        window.removeEventListener('touchstart', unlockAudio);
-    };
-
-    window.addEventListener('pointerdown', unlockAudio, { once: true, passive: true });
-    window.addEventListener('keydown', unlockAudio, { once: true, passive: true });
-    window.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+    if (window.CubeMusic) {
+        window.CubeMusic.start('cool');
+    }
 }
 
 if (document.readyState === 'loading') {

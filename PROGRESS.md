@@ -1,47 +1,61 @@
 # Summary
 - **What changed**:
-  1. Fixed a rogue CSS brace in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) that caused browsers to drop `.scramble-text` styling.
-  2. Upgraded `.scramble-box` in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) and [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) with a high-contrast dark background (`#080d1a`), a neon cyan border (`2.5px solid #00f0ff`), and an ambient glow.
-  3. Upgraded scramble text `#scramble-display-text` to 35.2px (`clamp(1.6rem, 3.2vw, 2.4rem)`), bold font weight 900, monospace stack (`Courier New, Consolas, Outfit`), white color with cyan text shadow, and increased word spacing (6px).
-  4. Upgraded beginner explanation text to bold gold (`#fde047`, 18.4px) and inverse scramble text to bold coral (`#ff7675`).
+  1. **Fixed Cool Music Button & Playback ([gangnam-music.js](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/gangnam-music.js))**:
+     - Resolved the browser autoplay state bug where un-interacted page loads set `isPlaying = true` while `AudioContext` was suspended, causing subsequent button clicks to immediately trigger `stop()`.
+     - Added synchronous `AudioContext.resume()` in `toggleCool()` and `toggleIntense()` directly on user click events so audio starts immediately without gesture race conditions.
+     - Added clock drift protection (`nextNoteTime < currentTime`) to prevent bursts of expired audio nodes from locking up the Web Audio thread.
+     - Upgraded the Cool Lo-Fi synthesizer instruments:
+       - Warm lo-fi kick with a punchy 220Hz->55Hz thump audible on laptop/phone speakers and a 95Hz->42Hz sub-bass thud.
+       - Crisp rimshot snare with body pop (220Hz->90Hz) and bandpassed noise snap.
+       - Lush Rhodes electric piano emulation with warm chorus detuning and comping chords on beats 1 and 3 that sustain through the entire bar.
+       - Smooth walking bassline with fundamental sub-sine and filtered triangle body.
+       - Mellow, lyrical jazz/chill synth lead.
+  2. **Fixed Record Undefined Guard ([timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html))**:
+     - Added `record &&` guard in `updateColeRecordDisplay` (line 3947) to eliminate `TypeError: Cannot read properties of undefined (reading 'single')`.
 - **How verified**:
-  - Live inspection via Chrome DevTools MCP on [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html):
-    - Evaluated computed styles: `#scramble-display-text` font size = 35.2px, font weight = 900, color = `rgb(255, 255, 255)`, background = `rgb(8, 13, 26)`.
-    - Verified high-contrast visibility in both dark mode and light mode.
-    - Verified beginner explanation text rendered in gold (`rgb(253, 224, 71)`, 18.4px, weight 700).
-    - Verified dynamic scramble updates on puzzle change and "New Scramble" button.
+  - Live inspection and interaction via Chrome DevTools MCP across [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html), [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html), and [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html):
+    - Verified initial state on page load: `isPlaying: false`, `activeTrack: null`, `btnText: "😎 Cool Music 🎵"`.
+    - Verified first button click: `ctxState: "running"`, `isPlaying: true`, `activeTrack: "cool"`, `btnText: "😎 Cool Music: PLAYING 🎶 (Click to Stop)"`.
+    - Verified audio signal amplitude using Web Audio `AnalyserNode`: `relativeAmplitude: 0.938` (previously 0.35 with silences).
+    - Verified second button click: stops audio cleanly, `isPlaying: false`, `btnText: "😎 Cool Music 🎵"`.
+    - Verified third click: resumes playback instantly.
+    - Verified seamless track switching between Cool Lo-Fi (100 BPM) and Intense EDM (132 BPM).
+    - Verified zero runtime errors in console.
+    - Syntax validation using Node.js: `node -c cube4fun/gangnam-music.js` passed with code 0.
 - **What to review**:
-  - Open [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) in your browser to inspect the bold, high-contrast scramble display.
+  - Open [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) and click the **😎 Cool Music 🎵** button to hear the rich Lo-Fi chillhop beat.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Fix scramble visibility in timer.html: make scramble large, bold, high-contrast, and readable from distance.
-2. Fix CSS syntax error in timer.html (rogue brace discarding .scramble-text rule).
-3. Enhance .scramble-box container with high-contrast background (#080d1a) and neon cyan border/glow.
-4. Scale scramble font to clamp(1.6rem, 3.2vw, 2.4rem) [~35.2px] with font-weight 900, Courier New/Consolas monospace, and vibrant text shadow.
-5. Upgrade beginner mode translation to 1.15em bold gold (#fde047) and inverse scramble to bold coral (#ff7675).
-6. Verify live rendering in Chrome DevTools MCP across themes, validate syntax, and push changes to GitHub remote.
+1. Fix "cool music" button producing no sound in timer.html and across the site.
+2. Resolve browser autoplay race condition where unverified autoplay marked isPlaying=true, causing button clicks to immediately call stop().
+3. Make start() and context resumption robust and immediate on user click / interaction, with strict nextNoteTime clock synchronization.
+4. Redesign Cool Lo-Fi music synthesizer voices (warm kick with laptop-audible harmonics, crisp rimshot snare, lush sustained Rhodes chords, walking bass, and mellow chill lead) so it sounds full, rich, continuous, and clearly audible on headphones, earphones, and laptop speakers.
+5. Fix record undefined check in updateColeRecordDisplay (timer.html).
+6. Verify audio playback live in browser via Chrome DevTools MCP, validate syntax, and push changes to GitHub remote.
 
 Next step: All tasks complete.
 
 Tasks:
-- [x] Upgrade .scramble-box and #scramble-display-text in timer.html for maximum visibility
-- [x] Ensure theme.css supports high-contrast scramble visibility in all themes
-- [x] Verify live rendering and font size in Chrome DevTools MCP (verified 35.2px, 900 weight, cyan border)
-- [x] Validate syntax with node
+- [x] Fix autoplay/gesture race condition in gangnam-music.js
+- [x] Upgrade Cool Lo-Fi synthesizer instruments and score for rich continuous sound
+- [x] Fix record undefined guard in timer.html
+- [x] Verify live audio playback and button state in Chrome DevTools MCP (verified relativeAmplitude 0.938)
+- [x] Validate JS syntax with node
 - [x] Commit and push to origin main
 
 Assumptions:
-- Monospace font with prominent size (~35px), bold 900 weight, and cyan/white contrast on a deep box provides optimal readability from cubing distance.
+- Cool music must play immediately when the user clicks the "Cool Music" button, without delays, race conditions, or requiring secondary gestures.
+- Cool Lo-Fi music should have lush, continuous chords and audible beats that sound great on both headphones and built-in laptop/phone speakers.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Pushed scramble visibility upgrade to GitHub origin main.
-- Verified live rendering, high-contrast readability, and dynamic scramble updates in Chrome DevTools MCP.
-- Upgraded theme.css to guarantee deep background and cyan border in dark and light modes.
-- Fixed rogue CSS closing brace in timer.html that broke .scramble-text stylesheet rule.
-- Started scramble visibility upgrade in timer.html.
+- Verified live audio amplitude (0.938), button toggle, track switching, and console cleanliness via Chrome DevTools MCP.
+- Redesigned Cool Lo-Fi synthesizer instruments in gangnam-music.js with Rhodes electric piano, punchy kick, rimshot snare, walking bass, and chill lead.
+- Fixed autoplay race condition and clock synchronization in gangnam-music.js.
+- Added record guard to updateColeRecordDisplay in timer.html.
+- Diagnosed root causes: autoplay set isPlaying=true while suspended, causing button click to trigger stop(); past-timestamp schedule bug; quiet lo-fi synthesis.
