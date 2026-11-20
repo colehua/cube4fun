@@ -1,65 +1,47 @@
 # Summary
 - **What changed**:
-  1. **Speedcubing Timer ([timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html))**:
-     - Separated the crowded 10-button single-wrap toolbar into two distinct, balanced rows:
-       - Row 1 (Scramble Toolbar): Puzzle selector dropdown, scramble length input, ◀ Prev, New Scramble 🔄, Next ▶, Copy 📋.
-       - Row 2 (Controls & Media Strip): Difficulty options (Easy, Medium, Hard, Advanced, Random), music controls (😎 Cool Music 🎵, 🔥 Intense Music 🎵), and quick navigation (⚡ Practice Speed 🎯, 🏆 Challenges ♾️).
-       - Row 3: Centered scramble text display with clean translate toggle and notation guide link.
-     - Replaced the large distracting Practice Speed block above the timer with a compact, modern alert pill bar (`practice-speed-banner-compact`) to keep the timer area spacious and focused.
-     - Aligned all control and button heights to a uniform 38px.
-  2. **Cube Solving Machine ([cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html))**:
-     - Grouped the 14 previously scattered puzzle buttons into 4 clean, categorized rows:
-       - Standard: 2x2x2, 3x3x3, 4x4x4, 5x5x5
-       - Big Cubes: 6x6x6, 7x7x7, 8x8x8, 9x9x9, 10x10x10
-       - Hyper: 100x100x100, 1000x1000x1000 (`very laggy` tag)
-       - Shapes: Pyraminx, Skewb, Megaminx
-     - Structured `.solver-toolbar` into a dedicated color count status strip and a centered quick-action tool row with uniform button heights.
-     - Streamlined the giant orientation warning box into a compact, modern orientation chip strip (`updateOrientationGuide()`).
-  3. **Practice Speed Mode ([practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html))**:
-     - Unified heights of dropdown selectors and action buttons to a clean 38px baseline.
-     - Harmonized top navigation bar to clean pill styling without mismatched inline colors.
-  4. **Challenges of Cubing ([challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html))**:
-     - Compacted `.btn-cubing-action` buttons from oversized blocks into a crisp, unified 38px height action row.
-     - Harmonized top navigation bar styling.
-  5. **Top Navigation Bars Across Pages**:
-     - Replaced chaotic, mismatched inline colors with a modern, cohesive pill navigation bar.
+  1. Fixed a rogue CSS brace in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) that caused browsers to drop `.scramble-text` styling.
+  2. Upgraded `.scramble-box` in [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) and [theme.css](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/theme.css) with a high-contrast dark background (`#080d1a`), a neon cyan border (`2.5px solid #00f0ff`), and an ambient glow.
+  3. Upgraded scramble text `#scramble-display-text` to 35.2px (`clamp(1.6rem, 3.2vw, 2.4rem)`), bold font weight 900, monospace stack (`Courier New, Consolas, Outfit`), white color with cyan text shadow, and increased word spacing (6px).
+  4. Upgraded beginner explanation text to bold gold (`#fde047`, 18.4px) and inverse scramble text to bold coral (`#ff7675`).
 - **How verified**:
-  - Live testing via Chrome DevTools MCP on [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html), [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html), [practice-speed.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/practice-speed.html), and [challenges.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/challenges.html):
-    - Verified element heights: all row buttons and selects evaluate to exactly 38px.
-    - Verified puzzle tab category switching across Standard, Big Cubes, Hyper, and Shapes (`is2Active: true`, `is6Active: true`, `is1000Active: true`, `isSkewbActive: true`, `is3Active: true`).
-    - Verified scramble generation and difficulty selection on [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) (`scrambleChanged: true`, `isEasyActive: true`).
-    - Verified inline script validation across all modified files (0 errors).
+  - Live inspection via Chrome DevTools MCP on [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html):
+    - Evaluated computed styles: `#scramble-display-text` font size = 35.2px, font weight = 900, color = `rgb(255, 255, 255)`, background = `rgb(8, 13, 26)`.
+    - Verified high-contrast visibility in both dark mode and light mode.
+    - Verified beginner explanation text rendered in gold (`rgb(253, 224, 71)`, 18.4px, weight 700).
+    - Verified dynamic scramble updates on puzzle change and "New Scramble" button.
 - **What to review**:
-  - Open [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) to see the clean two-row toolbar and spacious timer layout.
-  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) to see the categorized puzzle tabs and compact orientation strip.
+  - Open [timer.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/timer.html) in your browser to inspect the bold, high-contrast scramble display.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Clean up messy toolbars, crowded buttons, and unorganized layouts across timer.html, cube-solving-machine.html, practice-speed.html, and challenges.html.
-2. Group the 14 puzzle buttons in Cube Solving Machine into clean, neat categories (Standard Cubes, Big Cubes, Hyper/Giant, Other Shapes).
-3. Neatly structure the top scramble bar, music controls, and quick links in Speedcubing Timer (timer.html).
-4. Organize quick actions and color count badges into clean, aligned toolbars.
-5. Harmonize navigation bars and remove cluttered/overlapping UI elements.
-6. Verify layout and functionality live via Chrome DevTools MCP, check syntax, and push changes to GitHub remote.
+1. Fix scramble visibility in timer.html: make scramble large, bold, high-contrast, and readable from distance.
+2. Fix CSS syntax error in timer.html (rogue brace discarding .scramble-text rule).
+3. Enhance .scramble-box container with high-contrast background (#080d1a) and neon cyan border/glow.
+4. Scale scramble font to clamp(1.6rem, 3.2vw, 2.4rem) [~35.2px] with font-weight 900, Courier New/Consolas monospace, and vibrant text shadow.
+5. Upgrade beginner mode translation to 1.15em bold gold (#fde047) and inverse scramble to bold coral (#ff7675).
+6. Verify live rendering in Chrome DevTools MCP across themes, validate syntax, and push changes to GitHub remote.
 
-Next step: Done.
+Next step: All tasks complete.
 
 Tasks:
-- [x] Clean up and organize timer.html (scramble toolbar, music/mode controls, compact practice banner, clean stats grid)
-- [x] Clean up and organize cube-solving-machine.html (categorized puzzle selector tabs, neat quick-action toolbar, clean orientation chip banner, balanced 3D stage)
-- [x] Clean up and organize practice-speed.html (clean toolbar groups, balanced scramble & preview cards)
-- [x] Clean up and organize challenges.html (streamlined action button row, neat arena cards)
-- [x] Harmonize top navigation bars for consistent, neat appearance
-- [x] Verify live rendering and behavior in Chrome DevTools MCP
-- [x] Check syntax with node --check and Function compilation
+- [x] Upgrade .scramble-box and #scramble-display-text in timer.html for maximum visibility
+- [x] Ensure theme.css supports high-contrast scramble visibility in all themes
+- [x] Verify live rendering and font size in Chrome DevTools MCP (verified 35.2px, 900 weight, cyan border)
+- [x] Validate syntax with node
 - [x] Commit and push to origin main
 
 Assumptions:
-- "make everything more neat because some of the things are very messy" targets visual clutter, uneven button wrapping, chaotic colors in the navbar, crammed toolbars, and bloated warning boxes while keeping all features fully operational.
+- Monospace font with prominent size (~35px), bold 900 weight, and cyan/white contrast on a deep box provides optimal readability from cubing distance.
 
 Blockers (what I need to do): None.
 
+Found, not done: None.
+
 Log (newest first, one line each):
-- Completed site-wide visual cleanup and verification across timer, solver machine, practice speed, and challenges.
-- Initialized comprehensive cleanup task to organize messy toolbars, cards, and puzzle selectors across the project.
+- Pushed scramble visibility upgrade to GitHub origin main.
+- Verified live rendering, high-contrast readability, and dynamic scramble updates in Chrome DevTools MCP.
+- Upgraded theme.css to guarantee deep background and cyan border in dark and light modes.
+- Fixed rogue CSS closing brace in timer.html that broke .scramble-text stylesheet rule.
+- Started scramble visibility upgrade in timer.html.
