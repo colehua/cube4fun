@@ -112,6 +112,83 @@
 
         updateThemeButtons();
         ensureHomeButton();
+        initSecretRocketPortal();
+    }
+
+    // Universal Secret Rocket Button & Game Mode Launch Portal
+    function initSecretRocketPortal() {
+        document.querySelectorAll('.secret-rocket-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const path = window.location.pathname.toLowerCase();
+                if (path.endsWith('/games.html') || path.endsWith('\\games.html') || path.includes('games.html')) {
+                    return;
+                }
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                // 1. Synthesize rocket blast-off sound
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) {
+                        const ctx = new AudioCtx();
+                        const now = ctx.currentTime;
+                        // Noise thruster
+                        const sampleRate = ctx.sampleRate;
+                        const buffer = ctx.createBuffer(1, sampleRate * 0.4, sampleRate);
+                        const data = buffer.getChannelData(0);
+                        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+                        const noise = ctx.createBufferSource();
+                        noise.buffer = buffer;
+                        const filter = ctx.createBiquadFilter();
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(400, now);
+                        filter.frequency.exponentialRampToValueAtTime(2800, now + 0.35);
+                        const gain = ctx.createGain();
+                        gain.gain.setValueAtTime(0.3, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+                        noise.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(ctx.destination);
+                        noise.start(now);
+                        noise.stop(now + 0.4);
+
+                        // Ascending rocket pitch
+                        const osc = ctx.createOscillator();
+                        const oscGain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(180, now);
+                        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.35);
+                        oscGain.gain.setValueAtTime(0.2, now);
+                        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+                        osc.connect(oscGain);
+                        oscGain.connect(ctx.destination);
+                        osc.start(now);
+                        osc.stop(now + 0.4);
+                    }
+                } catch(err) {}
+
+                // 2. Show rocket launch transition overlay
+                let overlay = document.getElementById('rocket-launch-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'rocket-launch-overlay';
+                    overlay.innerHTML = `
+                        <div class="rocket-blast-icon">🚀 💨 ✨</div>
+                        <h2 class="rocket-launch-title">Entering Game Mode!</h2>
+                        <p class="rocket-launch-subtitle">BLASTING INTO AGENT COLE'S CUBE ARCADE...</p>
+                    `;
+                    document.body.appendChild(overlay);
+                }
+
+                overlay.classList.add('active');
+
+                // 3. Navigate to games.html
+                setTimeout(() => {
+                    window.location.href = 'games.html';
+                }, 220);
+            });
+        });
     }
 
     // Automatic Home button for any sub-page or upcoming little pages
