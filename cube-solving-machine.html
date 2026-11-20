@@ -207,42 +207,81 @@
             box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
         }
 
-        /* CUBE TYPE SELECTOR */
-        .solver-type-selector {
+        /* CUBE TYPE SELECTOR - CATEGORIZED CLEAN GRID */
+        .solver-puzzle-tabs-wrapper {
             display: flex;
-            justify-content: center;
-            gap: 12px;
+            flex-direction: column;
+            gap: 10px;
+            margin: 16px 0 20px 0;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1.5px solid rgba(0, 240, 255, 0.25);
+            border-radius: 18px;
+            padding: 12px 18px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .solver-puzzle-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             flex-wrap: wrap;
-            margin: 15px 0 22px 0;
+        }
+
+        .solver-puzzle-cat {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.82em;
+            font-weight: 800;
+            color: #38bdf8;
+            min-width: 82px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            user-select: none;
         }
 
         .solver-type-btn {
             background: rgba(15, 23, 42, 0.9);
             color: #94a3b8;
-            border: 2px solid rgba(0, 240, 255, 0.3);
-            border-radius: 14px;
-            padding: 10px 22px;
+            border: 1.5px solid rgba(0, 240, 255, 0.3);
+            border-radius: 10px;
+            padding: 6px 14px;
             font-family: 'DynaPuff', cursive;
-            font-size: 1.1em;
+            font-size: 0.95em;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+            transition: all 0.15s ease;
+            box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 36px;
+            box-sizing: border-box;
+            white-space: nowrap;
         }
 
         .solver-type-btn:hover {
             color: #ffffff;
             border-color: var(--neon-cyan);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 240, 255, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.6), 0 0 12px rgba(0, 240, 255, 0.4);
         }
 
         .solver-type-btn.active {
             background: linear-gradient(135deg, #00f0ff 0%, #0077ff 100%);
             color: #030712 !important;
             border-color: #ffffff;
-            box-shadow: 0 4px 0 #004499, 0 0 20px rgba(0, 240, 255, 0.6);
+            box-shadow: 0 3px 0 #004499, 0 0 16px rgba(0, 240, 255, 0.6);
             transform: translateY(0);
+        }
+
+        .tag-laggy {
+            font-size: 0.7em;
+            background: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            padding: 1px 5px;
+            font-weight: 800;
+            margin-left: 2px;
         }
 
         /* 3D CUBE & SIDEBAR PALETTE STAGE */
@@ -350,20 +389,32 @@
             box-shadow: 0 0 16px rgba(0, 240, 255, 0.9), 0 0 0 3px #00f0ff;
         }
 
-        /* TOOLBAR & STATUS */
+        /* TOOLBAR & STATUS - STRUCTURED & ALIGNED */
         .solver-toolbar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 12px;
             margin-bottom: 16px;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 12px 16px;
+        }
+
+        .solver-status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .color-count-badges {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
         }
 
         .cnt-badge {
@@ -372,11 +423,12 @@
             gap: 5px;
             padding: 4px 10px;
             border-radius: 10px;
-            font-size: 0.85em;
+            font-size: 0.82em;
             font-weight: 700;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: #cbd5e1;
+            white-space: nowrap;
         }
 
         .cnt-badge.valid {
@@ -394,6 +446,32 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-solver-tool {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.88em;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 36px;
+            box-sizing: border-box;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.5);
+            white-space: nowrap;
+            border: 2px solid transparent;
+        }
+
+        .btn-solver-tool:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.6);
         }
 
         .solver-banner {
@@ -1860,50 +1938,34 @@
                 </span>
             </div>
 
-            <!-- 1. PUZZLE TYPE SELECTOR (2x2x2 to 6x6x6, Pyraminx, Skewb) -->
-            <div class="solver-type-selector">
-                <button class="solver-type-btn" id="solver-tab-2" onclick="switchSolverCube(2)">
-                    2x2x2
-                </button>
-                <button class="solver-type-btn active" id="solver-tab-3" onclick="switchSolverCube(3)">
-                    3x3x3
-                </button>
-                <button class="solver-type-btn" id="solver-tab-4" onclick="switchSolverCube(4)">
-                    4x4x4
-                </button>
-                <button class="solver-type-btn" id="solver-tab-5" onclick="switchSolverCube(5)">
-                    5x5x5
-                </button>
-                <button class="solver-type-btn" id="solver-tab-6" onclick="switchSolverCube(6)">
-                    6x6x6
-                </button>
-                <button class="solver-type-btn" id="solver-tab-7" onclick="switchSolverCube(7)">
-                    7x7x7
-                </button>
-                <button class="solver-type-btn" id="solver-tab-8" onclick="switchSolverCube(8)">
-                    8x8x8
-                </button>
-                <button class="solver-type-btn" id="solver-tab-9" onclick="switchSolverCube(9)">
-                    9x9x9
-                </button>
-                <button class="solver-type-btn" id="solver-tab-10" onclick="switchSolverCube(10)">
-                    10x10x10
-                </button>
-                <button class="solver-type-btn" id="solver-tab-100" onclick="switchSolverCube(100)">
-                    100x100x100
-                </button>
-                <button class="solver-type-btn" id="solver-tab-1000" onclick="switchSolverCube(1000)">
-                    1000x1000x1000 (very laggy)
-                </button>
-                <button class="solver-type-btn" id="solver-tab-pyraminx" onclick="switchSolverCube('pyraminx')">
-                    Pyraminx
-                </button>
-                <button class="solver-type-btn" id="solver-tab-skewb" onclick="switchSolverCube('skewb')">
-                    Skewb
-                </button>
-                <button class="solver-type-btn" id="solver-tab-megaminx" onclick="switchSolverCube('megaminx')">
-                    Megaminx
-                </button>
+            <!-- 1. PUZZLE TYPE SELECTOR - CATEGORIZED TABS -->
+            <div class="solver-puzzle-tabs-wrapper">
+                <div class="solver-puzzle-row">
+                    <span class="solver-puzzle-cat">Standard:</span>
+                    <button class="solver-type-btn" id="solver-tab-2" onclick="switchSolverCube(2)">2x2x2</button>
+                    <button class="solver-type-btn active" id="solver-tab-3" onclick="switchSolverCube(3)">3x3x3</button>
+                    <button class="solver-type-btn" id="solver-tab-4" onclick="switchSolverCube(4)">4x4x4</button>
+                    <button class="solver-type-btn" id="solver-tab-5" onclick="switchSolverCube(5)">5x5x5</button>
+                </div>
+                <div class="solver-puzzle-row">
+                    <span class="solver-puzzle-cat">Big Cubes:</span>
+                    <button class="solver-type-btn" id="solver-tab-6" onclick="switchSolverCube(6)">6x6x6</button>
+                    <button class="solver-type-btn" id="solver-tab-7" onclick="switchSolverCube(7)">7x7x7</button>
+                    <button class="solver-type-btn" id="solver-tab-8" onclick="switchSolverCube(8)">8x8x8</button>
+                    <button class="solver-type-btn" id="solver-tab-9" onclick="switchSolverCube(9)">9x9x9</button>
+                    <button class="solver-type-btn" id="solver-tab-10" onclick="switchSolverCube(10)">10x10x10</button>
+                </div>
+                <div class="solver-puzzle-row">
+                    <span class="solver-puzzle-cat">Hyper:</span>
+                    <button class="solver-type-btn" id="solver-tab-100" onclick="switchSolverCube(100)">100x100x100</button>
+                    <button class="solver-type-btn" id="solver-tab-1000" onclick="switchSolverCube(1000)">1000x1000x1000 <span class="tag-laggy">very laggy</span></button>
+                </div>
+                <div class="solver-puzzle-row">
+                    <span class="solver-puzzle-cat">Shapes:</span>
+                    <button class="solver-type-btn" id="solver-tab-pyraminx" onclick="switchSolverCube('pyraminx')">Pyraminx</button>
+                    <button class="solver-type-btn" id="solver-tab-skewb" onclick="switchSolverCube('skewb')">Skewb</button>
+                    <button class="solver-type-btn" id="solver-tab-megaminx" onclick="switchSolverCube('megaminx')">Megaminx</button>
+                </div>
             </div>
 
             <!-- 2. COLOR COUNTS & QUICK ACTIONS -->
@@ -1912,26 +1974,26 @@
                     <!-- Populated dynamically -->
                 </div>
                 <div class="solver-quick-btns">
-                    <button class="btn-camera-scanner-top" style="padding: 7px 14px; font-size: 0.88em;" onclick="openCameraScannerModal()" title="Take a picture to memorize colors">
+                    <button class="btn-solver-tool btn-camera-scanner-top" onclick="openCameraScannerModal()" title="Take a picture to memorize colors">
                         📸 Scan with Camera
                     </button>
-                    <button class="btn-cyber btn-green" onclick="fillAllSolvedColors()" style="padding: 7px 14px; font-size: 0.9em;" title="Instantly fill all 6 faces with standard solved colors">
+                    <button class="btn-solver-tool btn-cyber btn-green" onclick="fillAllSolvedColors()" title="Instantly fill all 6 faces with standard solved colors">
                         ✨ Fill All Faces (Solved)
                     </button>
-                    <button class="btn-cyber btn-cyan" onclick="fillCurrentVisibleFace()" style="padding: 7px 14px; font-size: 0.9em;" title="Fill currently viewed face with active palette color">
+                    <button class="btn-solver-tool btn-cyber btn-cyan" onclick="fillCurrentVisibleFace()" title="Fill currently viewed face with active palette color">
                         🎨 Fill Face
                     </button>
-                    <button class="btn-cyber btn-purple" onclick="scrambleCurrentPuzzle()" style="padding: 7px 14px; font-size: 0.9em;" title="Scramble puzzle with legal moves">
+                    <button class="btn-solver-tool btn-cyber btn-purple" onclick="scrambleCurrentPuzzle()" title="Scramble puzzle with legal moves">
                         🎲 Scramble
                     </button>
-                    <button class="btn-cyber btn-pink" onclick="resetToGreyCube()" style="padding: 7px 14px; font-size: 0.9em;" title="Resets all stickers to grey">
+                    <button class="btn-solver-tool btn-cyber btn-pink" onclick="resetToGreyCube()" title="Resets all stickers to grey">
                         🧹 Reset to Grey
                     </button>
                 </div>
             </div>
 
             <!-- CRITICAL ORIENTATION GUIDE BANNER -->
-            <div id="orientation-guide-box" style="margin-bottom: 16px; background: rgba(3, 7, 18, 0.85); border: 2px solid #38bdf8; border-radius: 14px; padding: 14px 18px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);">
+            <div id="orientation-guide-box" style="margin-bottom: 14px; background: rgba(3, 7, 18, 0.85); border: 1.5px solid rgba(56, 189, 248, 0.5); border-radius: 12px; padding: 10px 16px; box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);">
                 <!-- Populated dynamically by updateOrientationGuide() -->
             </div>
 
@@ -2475,66 +2537,60 @@
             if (!box) return;
             if (solverSize === 'pyraminx') {
                 box.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <span style="font-size: 1.4em;">⚠️</span>
-                        <h3 style="margin: 0; color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 1.1em; letter-spacing: 0.5px;">
-                            CRITICAL ORIENTATION: HOLD YELLOW ON TOP, GREEN ON LEFT, RED ON RIGHT
-                        </h3>
-                    </div>
-                    <p style="margin: 0 0 10px 0; color: #e2e8f0; font-size: 0.95em; line-height: 1.5;">
-                        To guarantee correct solutions, always hold your physical Pyraminx with <strong>YELLOW ON TOP (U)</strong>, <strong>GREEN ON LEFT (L)</strong>, <strong>RED ON RIGHT (R)</strong>, and <strong>BLUE ON BOTTOM BASE (B)</strong> when filling in colors and executing solution moves!
-                    </p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.85em; font-weight: 700;">
-                        <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 4px 10px; border-radius: 8px;">🟡 Top (U): Yellow</span>
-                        <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; padding: 4px 10px; border-radius: 8px;">🟢 Left (L): Green</span>
-                        <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 8px;">🔴 Right (R): Red</span>
-                        <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 8px;">🔵 Bottom Base (B): Blue</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2em;">🧭</span>
+                            <strong style="color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 0.95em;">Pyraminx Orientation:</strong>
+                            <span style="color: #cbd5e1; font-size: 0.88em;">Hold <strong>YELLOW Top</strong>, <strong>GREEN Left</strong> &amp; <strong>RED Right</strong></span>
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 0.82em; font-weight: 700;">
+                            <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 2px 8px; border-radius: 6px;">🟡 U: Yellow</span>
+                            <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; padding: 2px 8px; border-radius: 6px;">🟢 L: Green</span>
+                            <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 2px 8px; border-radius: 6px;">🔴 R: Red</span>
+                            <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; padding: 2px 8px; border-radius: 6px;">🔵 B: Blue</span>
+                        </div>
                     </div>
                 `;
             } else if (solverSize === 'megaminx') {
                 box.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <span style="font-size: 1.4em;">⚠️</span>
-                        <h3 style="margin: 0; color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 1.1em; letter-spacing: 0.5px;">
-                            CRITICAL ORIENTATION: HOLD WHITE ON TOP, RED IN FRONT
-                        </h3>
-                    </div>
-                    <p style="margin: 0 0 10px 0; color: #e2e8f0; font-size: 0.95em; line-height: 1.5;">
-                        To guarantee correct solutions, always hold your Megaminx with <strong>WHITE ON TOP (U)</strong> and <strong>RED IN FRONT (F)</strong> when filling in colors and executing moves!
-                    </p>
-                    <div style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 0.8em; font-weight: 700;">
-                        <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid #ffffff; padding: 2px 7px; border-radius: 6px;">⚪ U: White</span>
-                        <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 2px 7px; border-radius: 6px;">🔴 F: Red</span>
-                        <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 2px 7px; border-radius: 6px;">🟡 FR: Yellow</span>
-                        <span style="background: rgba(29, 78, 216, 0.15); color: #60a5fa; border: 1px solid #1d4ed8; padding: 2px 7px; border-radius: 6px;">🔷 BR: Blue</span>
-                        <span style="background: rgba(21, 128, 61, 0.15); color: #4ade80; border: 1px solid #15803d; padding: 2px 7px; border-radius: 6px;">🟢 BL: Green</span>
-                        <span style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #a855f7; padding: 2px 7px; border-radius: 6px;">🟣 FL: Purple</span>
-                        <span style="background: rgba(244, 114, 182, 0.15); color: #f472b6; border: 1px solid #ec4899; padding: 2px 7px; border-radius: 6px;">🌸 DR: Pink</span>
-                        <span style="background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid #06b6d4; padding: 2px 7px; border-radius: 6px;">💠 DBR: Cyan</span>
-                        <span style="background: rgba(132, 204, 22, 0.15); color: #a3e635; border: 1px solid #84cc16; padding: 2px 7px; border-radius: 6px;">🍏 DL: Lime</span>
-                        <span style="background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid #f97316; padding: 2px 7px; border-radius: 6px;">🟠 DBL: Orange</span>
-                        <span style="background: rgba(254, 240, 138, 0.15); color: #fef08a; border: 1px solid #eab308; padding: 2px 7px; border-radius: 6px;">🍦 DF: Cream</span>
-                        <span style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid #94a3b8; padding: 2px 7px; border-radius: 6px;">🔘 D: Silver</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2em;">🧭</span>
+                            <strong style="color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 0.95em;">Megaminx Orientation:</strong>
+                            <span style="color: #cbd5e1; font-size: 0.88em;">Hold <strong>WHITE on Top (U)</strong> and <strong>RED in Front (F)</strong></span>
+                        </div>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap; font-size: 0.8em; font-weight: 700;">
+                            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid #ffffff; padding: 2px 6px; border-radius: 6px;">⚪ U</span>
+                            <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 6px;">🔴 F</span>
+                            <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 2px 6px; border-radius: 6px;">🟡 FR</span>
+                            <span style="background: rgba(29, 78, 216, 0.15); color: #60a5fa; border: 1px solid #1d4ed8; padding: 2px 6px; border-radius: 6px;">🔷 BR</span>
+                            <span style="background: rgba(21, 128, 61, 0.15); color: #4ade80; border: 1px solid #15803d; padding: 2px 6px; border-radius: 6px;">🟢 BL</span>
+                            <span style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #a855f7; padding: 2px 6px; border-radius: 6px;">🟣 FL</span>
+                            <span style="background: rgba(244, 114, 182, 0.15); color: #f472b6; border: 1px solid #ec4899; padding: 2px 6px; border-radius: 6px;">🌸 DR</span>
+                            <span style="background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid #06b6d4; padding: 2px 6px; border-radius: 6px;">💠 DBR</span>
+                            <span style="background: rgba(132, 204, 22, 0.15); color: #a3e635; border: 1px solid #84cc16; padding: 2px 6px; border-radius: 6px;">🍏 DL</span>
+                            <span style="background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid #f97316; padding: 2px 6px; border-radius: 6px;">🟠 DBL</span>
+                            <span style="background: rgba(254, 240, 138, 0.15); color: #fef08a; border: 1px solid #eab308; padding: 2px 6px; border-radius: 6px;">🍦 DF</span>
+                            <span style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid #94a3b8; padding: 2px 6px; border-radius: 6px;">🔘 D</span>
+                        </div>
                     </div>
                 `;
             } else {
                 box.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <span style="font-size: 1.4em;">⚠️</span>
-                        <h3 style="margin: 0; color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 1.1em; letter-spacing: 0.5px;">
-                            CRITICAL ORIENTATION: HOLD WHITE ON TOP, GREEN IN FRONT
-                        </h3>
-                    </div>
-                    <p style="margin: 0 0 10px 0; color: #e2e8f0; font-size: 0.95em; line-height: 1.5;">
-                        To guarantee correct solutions, always hold your physical cube with <strong>WHITE ON TOP (U)</strong> and <strong>GREEN IN FRONT (F)</strong> when filling in colors and when executing the solution moves!
-                    </p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.85em; font-weight: 700;">
-                        <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid #ffffff; padding: 4px 10px; border-radius: 8px;">⚪ Top (U): White</span>
-                        <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; padding: 4px 10px; border-radius: 8px;">🟢 Front (F): Green</span>
-                        <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 8px;">🔴 Right (R): Red</span>
-                        <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 8px;">🔵 Back (B): Blue</span>
-                        <span style="background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid #f97316; padding: 4px 10px; border-radius: 8px;">🟠 Left (L): Orange</span>
-                        <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 4px 10px; border-radius: 8px;">🟡 Bottom (D): Yellow</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2em;">🧭</span>
+                            <strong style="color: #38bdf8; font-family: 'DynaPuff', cursive; font-size: 0.95em;">Cube Orientation:</strong>
+                            <span style="color: #cbd5e1; font-size: 0.88em;">Hold <strong>WHITE Top (U)</strong> &amp; <strong>GREEN Front (F)</strong> while filling &amp; solving</span>
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 0.82em; font-weight: 700;">
+                            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid #ffffff; padding: 2px 8px; border-radius: 6px;">⚪ U: White</span>
+                            <span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; padding: 2px 8px; border-radius: 6px;">🟢 F: Green</span>
+                            <span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; padding: 2px 8px; border-radius: 6px;">🔴 R: Red</span>
+                            <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; padding: 2px 8px; border-radius: 6px;">🔵 B: Blue</span>
+                            <span style="background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid #f97316; padding: 2px 8px; border-radius: 6px;">🟠 L: Orange</span>
+                            <span style="background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #eab308; padding: 2px 8px; border-radius: 6px;">🟡 D: Yellow</span>
+                        </div>
                     </div>
                 `;
             }

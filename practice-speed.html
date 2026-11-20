@@ -100,23 +100,24 @@
             text-decoration: none;
             color: #1e272e;
             background: #ffffff;
-            padding: 8px 16px;
-            border-radius: 14px;
+            padding: 7px 15px;
+            border-radius: 12px;
             font-weight: 700;
             font-family: 'DynaPuff', cursive;
-            font-size: 0.95em;
-            border: 3px solid #1e272e;
-            box-shadow: 0 4px 0 #1e272e;
+            font-size: 0.9em;
+            border: 2px solid #1e272e;
+            box-shadow: 0 3px 0 #1e272e;
             transition: all 0.15s ease;
             user-select: none;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
 
         .nav-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 0 #1e272e;
+            box-shadow: 0 5px 0 #1e272e;
         }
 
         .nav-button:active {
@@ -127,6 +128,8 @@
         .nav-button.active {
             background-color: var(--accent-green) !important;
             color: #ffffff !important;
+            border-color: #059669 !important;
+            box-shadow: 0 3px 0 #059669, 0 0 12px rgba(16, 185, 129, 0.4) !important;
         }
 
         /* PAGE TITLE */
@@ -179,7 +182,7 @@
         }
 
         .ps-select {
-            padding: 8px 14px;
+            padding: 6px 14px;
             border: 2.5px solid #1e272e;
             border-radius: 12px;
             font-family: 'Outfit', sans-serif;
@@ -189,6 +192,9 @@
             color: #1e272e;
             outline: none;
             cursor: pointer;
+            height: 38px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 0 #1e272e;
         }
 
         .btn-action {
@@ -196,10 +202,10 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 8px 16px;
+            padding: 6px 15px;
             border-radius: 12px;
             font-family: 'DynaPuff', cursive;
-            font-size: 0.95em;
+            font-size: 0.92em;
             font-weight: 700;
             color: #1e272e;
             background: #ffffff;
@@ -209,6 +215,9 @@
             transition: all 0.15s ease;
             user-select: none;
             text-decoration: none;
+            height: 38px;
+            box-sizing: border-box;
+            white-space: nowrap;
         }
 
         .btn-action:hover {
@@ -1015,17 +1024,17 @@
         <!-- SITE NAVIGATION -->
         <div class="cs-site-nav">
             <a href="index.html" class="nav-button">🏠 Home</a>
-            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Timer</a>
-            <a href="practice-speed.html" class="nav-button active" style="background-color: var(--accent-green); color: white;">⚡ Practice Speed</a>
-            <a href="challenges.html" class="nav-button" style="background-color: #FF6584; color: white;">🏆 Challenges ♾️</a>
-            <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white;">📰 News</a>
-            <a href="blog.html" class="nav-button" style="background-color: #FAED27;">✍️ Blog</a>
-            <a href="algorithms.html" class="nav-button" style="background-color: #a29bfe; color: white;">🧩 Algorithms</a>
-            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Trainer</a>
-            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 3D Play</a>
-            <a href="guide.html" class="nav-button" style="background-color: #E2C2FF;">📖 Finger Tricks</a>
-            <a href="notation.html" class="nav-button" style="background-color: #dfe6e9;">📖 Notation</a>
-            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="background-color: #f1f2f6; cursor: pointer;">
+            <a href="timer.html" class="nav-button">⏱️ Timer</a>
+            <a href="practice-speed.html" class="nav-button active">⚡ Practice Speed</a>
+            <a href="challenges.html" class="nav-button">🏆 Challenges ♾️</a>
+            <a href="news.html" class="nav-button">📰 News</a>
+            <a href="blog.html" class="nav-button">✍️ Blog</a>
+            <a href="algorithms.html" class="nav-button">🧩 Algorithms</a>
+            <a href="trainer.html" class="nav-button">🧠 Trainer</a>
+            <a href="play.html" class="nav-button">🎮 3D Play</a>
+            <a href="guide.html" class="nav-button">📖 Finger Tricks</a>
+            <a href="notation.html" class="nav-button">📖 Notation</a>
+            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="cursor: pointer;">
                 <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark Mode</span>
             </button>
         </div>

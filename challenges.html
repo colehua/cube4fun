@@ -79,36 +79,44 @@
             position: relative;
         }
 
-        /* NAVIGATION BAR */
+        /* NAVIGATION BAR - CLEAN UNIFIED PILL STYLE */
         .nav-buttons {
             display: flex;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 8px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .nav-button {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background-color: var(--cyan-blob);
-            color: var(--text-dark);
-            padding: 10px 20px;
-            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e272e;
+            padding: 7px 15px;
+            border-radius: 12px;
             text-decoration: none;
             font-family: 'DynaPuff', cursive;
-            font-size: 1.05em;
-            border: 3px solid #1e272e;
-            box-shadow: 0px 5px 0px #1e272e;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            top: 0;
+            font-size: 0.9em;
+            font-weight: 700;
+            border: 2px solid #1e272e;
+            box-shadow: 0px 3px 0px #1e272e;
+            transition: all 0.15s ease;
+            white-space: nowrap;
         }
 
         .nav-button:hover {
-            top: 2px;
-            box-shadow: 0px 3px 0px #1e272e;
-            transform: scale(1.02);
+            transform: translateY(-2px);
+            box-shadow: 0px 5px 0px #1e272e;
+            background: #ffffff;
+        }
+
+        .nav-button.active {
+            background-color: #FF6584 !important;
+            color: #ffffff !important;
+            border-color: #d63031 !important;
+            box-shadow: 0 3px 0 #d63031, 0 0 12px rgba(255, 101, 132, 0.4) !important;
         }
 
         h1.main-title {
@@ -417,34 +425,41 @@
             color: #e67e22;
         }
 
-        /* ACTION BUTTONS */
+        /* ACTION BUTTONS - CLEAN COMPACT GRID */
         .controls-button-group {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
+            margin-top: 14px;
         }
 
         .btn-cubing-action {
             font-family: 'DynaPuff', cursive;
-            font-size: 1.15em;
-            padding: 12px 22px;
-            border: 3px solid #1e272e;
-            border-radius: 20px;
+            font-size: 0.92em;
+            padding: 7px 15px;
+            border: 2.5px solid #1e272e;
+            border-radius: 12px;
             cursor: pointer;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 6px 0 #1e272e;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 3px 0 #1e272e;
             transition: all 0.15s ease;
             position: relative;
             top: 0;
+            height: 38px;
+            box-sizing: border-box;
+            white-space: nowrap;
         }
 
         .btn-cubing-action:hover {
-            top: 2px;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 #1e272e;
+        }
             box-shadow: 0 4px 0 #1e272e;
             transform: scale(1.02);
         }
@@ -1427,15 +1442,16 @@
         <!-- NAVIGATION BAR -->
         <div class="nav-buttons">
             <a href="index.html" class="nav-button">🏠 Home</a>
-            <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Timer</a>
-            <a href="practice-speed.html" class="nav-button" style="background-color: #2ed573; color: white;">⚡ Practice Speed</a>
-            <a href="news.html" class="nav-button" style="background-color: #FFA502; color: white;">📰 News</a>
-            <a href="blog.html" class="nav-button" style="background-color: #FFD3B6;">✍️ Blog</a>
-            <a href="algorithms.html" class="nav-button" style="background-color: #A8E6CF;">🧩 Algorithms</a>
-            <a href="trainer.html" class="nav-button" style="background-color: #FFD1D1;">🧠 Case Trainer</a>
-            <a href="play.html" class="nav-button" style="background-color: #2ECC71; color: white;">🎮 Virtual 3D Cube</a>
-            <a href="tutorial-3x3.html" class="nav-button" style="background-color: #FF6B6B; color: white;">🧊 Tutorials</a>
-            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="background-color: #f1f2f6; cursor: pointer;">
+            <a href="timer.html" class="nav-button">⏱️ Timer</a>
+            <a href="practice-speed.html" class="nav-button">⚡ Practice Speed</a>
+            <a href="challenges.html" class="nav-button active">🏆 Challenges ♾️</a>
+            <a href="news.html" class="nav-button">📰 News</a>
+            <a href="blog.html" class="nav-button">✍️ Blog</a>
+            <a href="algorithms.html" class="nav-button">🧩 Algorithms</a>
+            <a href="trainer.html" class="nav-button">🧠 Case Trainer</a>
+            <a href="play.html" class="nav-button">🎮 Virtual 3D Cube</a>
+            <a href="tutorial-3x3.html" class="nav-button">🧊 Tutorials</a>
+            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="cursor: pointer;">
                 <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark Mode</span>
             </button>
         </div>
