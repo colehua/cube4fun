@@ -265,6 +265,14 @@
             margin-bottom: 18px;
         }
 
+        .game-header-bar.header-stacked {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
+        }
+
         .game-title-text {
             font-family: 'DynaPuff', cursive;
             font-size: 1.5em;
@@ -278,14 +286,60 @@
         .game-score-display {
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 12px;
             font-family: 'Press Start 2P', monospace;
-            font-size: 0.78em;
+            font-size: 0.72em;
             color: #fde047;
             background: #020617;
-            padding: 8px 16px;
-            border-radius: 12px;
+            padding: 8px 14px;
+            border-radius: 14px;
             border: 1px solid #334155;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .game-score-display > span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .game-score-display .record-pill,
+        .game-score-display span.record-pill {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.22) 0%, rgba(249, 115, 22, 0.22) 100%);
+            border: 1px solid #eab308;
+            color: #fde047;
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.3);
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .game-header-bar {
+                justify-content: center;
+                text-align: center;
+            }
+            .game-title-text {
+                justify-content: center;
+                width: 100%;
+                text-align: center;
+                font-size: 1.35em;
+            }
+            .game-score-display {
+                width: 100%;
+                font-size: 0.64em;
+                gap: 6px 8px;
+                padding: 6px 8px;
+            }
+            .game-score-display > span {
+                padding: 3px 6px;
+            }
         }
 
         .game-panel {
@@ -1220,13 +1274,13 @@
             <!-- GAME 10: WHACK-A-CUBIE SPEED REFLEX -->
             <!-- ============================================== -->
             <div id="panel-whack" class="game-panel">
-                <div class="game-header-bar">
+                <div class="game-header-bar header-stacked">
                     <h2 class="game-title-text">🔨 Whack-A-Cubie</h2>
                     <div class="game-score-display">
                         <span>SCORE: <span id="whack-score">0</span></span>
                         <span>TIME: <span id="whack-time">30.0s</span></span>
                         <span>STREAK: <span id="whack-streak">0</span></span>
-                        <span>RECORD: <span id="whack-best">0</span></span>
+                        <span class="record-pill">🏆 RECORD: <span id="whack-best">0</span></span>
                     </div>
                 </div>
                 <div id="whack-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #ff007f; min-height: 28px; margin-top: 4px; text-align: center;">
@@ -1317,13 +1371,13 @@
             <!-- GAME 12: SCRAMBLE MATCH PAIRS -->
             <!-- ============================================== -->
             <div id="panel-pairs" class="game-panel">
-                <div class="game-header-bar">
+                <div class="game-header-bar header-stacked">
                     <h2 class="game-title-text">🃏 Scramble Match Pairs</h2>
                     <div class="game-score-display">
                         <span>MATCHES: <span id="pairs-matches">0</span>/8</span>
                         <span>MOVES: <span id="pairs-moves">0</span></span>
                         <span>TIME: <span id="pairs-time">00:00</span></span>
-                        <span>RECORD: <span id="pairs-best">--</span></span>
+                        <span class="record-pill">🏆 RECORD: <span id="pairs-best">--</span></span>
                     </div>
                 </div>
                 <div id="pairs-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #10b981; min-height: 28px; margin-top: 4px; text-align: center;">
