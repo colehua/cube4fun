@@ -1,52 +1,55 @@
 # Summary
 - **What changed**:
-  1. **Fixed Computer/Desktop Color Filling on 3D Cube Across All Puzzle Sizes**:
-     - Added immediate `pointerdown` and `mousedown` listeners to all 3D stickers (2x2 to 10x10, Pyraminx, Skewb, Megaminx), eliminating missed clicks caused by mouse movement during click.
-     - Added drag-to-paint (`pointerenter` and `mouseenter` while mouse is down) across 3D stickers on desktop.
-     - Added double-click on any sticker and single-click on face background to instantly fill that face (`fillWholeFace`).
-     - Added explicit `click` event listener on 100x100 and 1000x1000 canvases (both 3D and 2D net) with a 10px jitter tolerance to ensure natural mouse clicks reliably fill the entire face.
-     - Added toolbar buttons: `✨ Fill All Faces (Solved)` to fill all faces in 1 click and `🎨 Fill Face` to fill the current face.
-     - Added direct link from `timer.html` scramble preview to [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) for immediate access to color filling.
+  1. **Strict Single-Square Color Filling Across All Puzzle Sizes**:
+     - Removed automatic whole-face flood fill on canvas click and pointer release in 100x100 and 1000x1000 3D and 2D nets.
+     - Removed multi-sticker radius brush (`paintBrushOnFace`) that was modifying 15,000+ squares at once.
+     - Replaced canvas drag and click with single-square precision coordinate calculation (`paintSticker(face, row * N + col)`), filling exactly one square per coordinate step.
+     - Reduced canvas paint dot size in `paintSticker` from 10px (which visually covered 2,500 squares) to exact 1px/2px single square pixels.
+     - Removed double-click (`dblclick`) and face container (`faceDiv`) whole-face fill across 2x2 through 10x10, Pyraminx, Skewb, and Megaminx so rapid clicks or border clicks never flood the entire face.
+     - Added scheduled color badge updates via `requestAnimationFrame` for smooth 60 FPS drag painting without lag.
+     - Guarded sticker drag-painting with `e.buttons === 1` so cursor hovering without mouse button pressed never fills stickers accidentally.
 - **How verified**:
   - Live interaction in Chrome DevTools MCP:
-    - 3x3 drag-to-paint across 3 stickers verified: all 3 painted blue on mouse drag (`all3Painted: true`).
-    - Double click and face click verified: filled all 9 face stickers instantly (`fRedCount: 9`).
-    - `fillAllSolvedColors()` verified: all 54 stickers set to standard colors, banner set to ready.
-    - 1000x1000 mouse click verified: filled all 1,000,000 stickers with yellow.
-    - `timer.html` verified: navigation link to Cube Solving Machine renders under the scramble preview.
-  - Node syntax checks (`node --check`) passed with 0 errors across all modified files.
+    - 3x3 click: clicked sticker (0,0) -> exactly 1 sticker colored yellow (`yellowCount: 1`).
+    - 3x3 double click & face border click: verified 0 flood fill occurs (`yellowCountAfterDblClick: 1`, `yellowCountAfterFaceClick: 1`).
+    - 1000x1000 3D canvas single click: verified exactly 1 square colored (`yellowCount: 1` out of 1,000,000).
+    - 1000x1000 3D canvas drag across 2 more stickers: verified count increments one by one (`yellowCountAfterDrag: 3`).
+    - 1000x1000 2D flat net click: verified exactly 1 square colored (`redCount: 1`).
+    - Pyraminx, Skewb, and Megaminx single clicks: verified each click fills exactly 1 sticker (`countPyra: 1`, `countSkewb: 1`, `countMega: 1`).
+  - Python BeautifulSoup extraction and Node syntax checks (`node --check`) passed with 0 errors.
 - **What to review**:
-  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) on a computer with a mouse:
-    - Click or click-and-drag across stickers on the 3D cube: colors apply immediately.
-    - Click `✨ Fill All Faces (Solved)` or `🎨 Fill Face`: colors fill instantly.
-    - Switch to `1000x1000x1000 (very laggy)`: click any face to fill it with color.
+  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html):
+    - Click any square on 3x3 or any cube: only that single square is colored.
+    - Switch to `1000x1000x1000 (very laggy)`: click on the cube -> only 1 single square is filled (badge shows `1 / 1,000,000`).
+    - Drag across the canvas: squares fill one by one under the cursor like a pencil.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Fix color filling on computer across 3D cube and 2D net.
+1. Ensure color filling only fills one square at a time on click and drag.
 2. Verify live in Chrome DevTools and Node syntax checks.
 3. Commit and push changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Fix pointerdown/mousedown painting on 3D stickers so desktop mouse clicks register immediately
-- [x] Enable desktop drag-to-paint on 3D cube across stickers
-- [x] Add face-fill on double click and face background click
-- [x] Add click listener and 10px drag threshold on 1000x1000 / 100x100 canvas
-- [x] Add "Fill All Faces (Solved)" and "Fill Face" buttons to solver toolbar
-- [x] Add Cube Solving Machine direct link to timer.html scramble preview
-- [x] Verify live in Chrome DevTools MCP and Node syntax check
+- [x] Remove whole-face fill on canvas click and pointer release in 100x100 and 1000x1000
+- [x] Remove multi-sticker radius brush (paintBrushOnFace)
+- [x] Update 100x100 and 1000x1000 click and drag to paint only the single square at pointer coordinates
+- [x] Fix canvas paint dot size in paintSticker to exact single square pixels
+- [x] Remove dblclick and faceDiv click whole-face fill on standard cubes, Pyraminx, Skewb, and Megaminx
+- [x] Add requestAnimationFrame scheduled badge updates for smooth drag painting
+- [x] Verify live in Chrome DevTools MCP across all cube types
 - [x] Update PROGRESS.md
 - [x] Commit and push changes to origin main
 
 Assumptions:
-- Desktop mouse interaction should support both instant click, drag painting, and whole-face quick fill.
+- Users want precision single-square filling by default when clicking or dragging on any puzzle. Whole-face fill remains accessible via the dedicated "Fill Face" toolbar button or 2D net header buttons when deliberately requested.
 
 Blockers (what I need to do): None.
 Found, not done: None.
 Log (newest first, one line each):
+- 2026-11-19: Ensured color filling only fills one square at a time; removed whole-face flood fills from canvas click, dblclick, and faceDiv click; replaced brush with single-square pencil painting.
 - 2026-11-19: Fixed computer desktop color filling: added mousedown/pointerdown immediate painting, 3D drag-to-paint, double-click face fill, Fill All Faces button, and timer.html link.
 - 2026-11-19: Fixed 1000x1000 color filling with instant face-fill on click, bold brush dragging, orbit listener guard, and uniform render optimization.
 - 2026-11-19: Added "very laggy" label next to 1000x1000x1000 in solver robot, timer, and practice speed.

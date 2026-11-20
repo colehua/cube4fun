@@ -2663,65 +2663,6 @@
             return svg;
         }
 
-        // Helper for bold brush painting on big cubes (100x100 and 1000x1000)
-        function paintBrushOnFace(faceKey, cx, cy, canvasSize, N) {
-            if (!solverFaces || !solverFaces[faceKey]) return;
-            const hex = PALETTE_COLORS[solverColor] ? PALETTE_COLORS[solverColor].hex : solverColor;
-            const brushR3D = 14;
-            const brushR2D = 11;
-
-            // 1. Paint stroke on 3D canvas
-            const c3d = document.querySelector(`canvas.solver-3d-face.face-${faceKey}`);
-            if (c3d) {
-                const ctx3d = c3d.getContext('2d');
-                const x3d = (canvasSize === 200) ? cx : cx * (200 / 160);
-                const y3d = (canvasSize === 200) ? cy : cy * (200 / 160);
-                ctx3d.fillStyle = hex;
-                ctx3d.beginPath();
-                ctx3d.arc(x3d, y3d, brushR3D, 0, Math.PI * 2);
-                ctx3d.fill();
-            }
-
-            // 2. Paint stroke on 2D net canvas
-            const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
-            if (c2d) {
-                const ctx2d = c2d.getContext('2d');
-                const x2d = (canvasSize === 160) ? cx : cx * (160 / 200);
-                const y2d = (canvasSize === 160) ? cy : cy * (160 / 200);
-                ctx2d.fillStyle = hex;
-                ctx2d.beginPath();
-                ctx2d.arc(x2d, y2d, brushR2D, 0, Math.PI * 2);
-                ctx2d.fill();
-            }
-
-            // 3. Update sticker data in solverFaces[faceKey]
-            const normX = cx / canvasSize;
-            const normY = cy / canvasSize;
-            const gridX = Math.floor(normX * N);
-            const gridY = Math.floor(normY * N);
-            const activeBrushR = (canvasSize === 200) ? brushR3D : brushR2D;
-            const gridR = Math.max(1, Math.floor((activeBrushR / canvasSize) * N));
-
-            const minY = Math.max(0, gridY - gridR);
-            const maxY = Math.min(N - 1, gridY + gridR);
-            const minX = Math.max(0, gridX - gridR);
-            const maxX = Math.min(N - 1, gridX + gridR);
-            const r2 = gridR * gridR;
-
-            const faceArr = solverFaces[faceKey];
-            for (let r = minY; r <= maxY; r++) {
-                const dy = r - gridY;
-                const dy2 = dy * dy;
-                const rowOffset = r * N;
-                for (let c = minX; c <= maxX; c++) {
-                    const dx = c - gridX;
-                    if (dx * dx + dy2 <= r2) {
-                        faceArr[rowOffset + c] = solverColor;
-                    }
-                }
-            }
-        }
-
         function renderSolver3DCube() {
             const cubeEl = document.getElementById('solver-3d-cube');
             if (!cubeEl) return;
@@ -2772,19 +2713,11 @@
                         st.addEventListener('pointerdown', paintPyra);
                         st.addEventListener('mousedown', paintPyra);
                         st.addEventListener('click', paintPyra);
-                        st.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f.key, i); });
-                        st.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f.key, i); });
-                        st.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f.key); });
+                        st.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f.key, i); });
+                        st.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f.key, i); });
 
                         faceDiv.appendChild(st);
                     }
-
-                    faceDiv.addEventListener('click', (e) => {
-                        if (e.target === faceDiv) {
-                            e.stopPropagation();
-                            fillWholeFace(f.key);
-                        }
-                    });
 
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2807,9 +2740,8 @@
                     cSt.addEventListener('pointerdown', paintCenter);
                     cSt.addEventListener('mousedown', paintCenter);
                     cSt.addEventListener('click', paintCenter);
-                    cSt.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, 0); });
-                    cSt.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, 0); });
-                    cSt.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
+                    cSt.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, 0); });
+                    cSt.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, 0); });
                     faceDiv.appendChild(cSt);
 
                     // 4 Corners (1: TL, 2: TR, 3: BL, 4: BR)
@@ -2825,18 +2757,10 @@
                         corn.addEventListener('pointerdown', paintCorn);
                         corn.addEventListener('mousedown', paintCorn);
                         corn.addEventListener('click', paintCorn);
-                        corn.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
-                        corn.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
-                        corn.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
+                        corn.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
+                        corn.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
                         faceDiv.appendChild(corn);
                     }
-
-                    faceDiv.addEventListener('click', (e) => {
-                        if (e.target === faceDiv) {
-                            e.stopPropagation();
-                            fillWholeFace(f);
-                        }
-                    });
 
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2858,15 +2782,8 @@
                         poly.addEventListener('pointerdown', paintPoly);
                         poly.addEventListener('mousedown', paintPoly);
                         poly.addEventListener('click', paintPoly);
-                        poly.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, idx); });
-                        poly.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, idx); });
-                        poly.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
-                    });
-                    faceDiv.addEventListener('click', (e) => {
-                        if (e.target === faceDiv) {
-                            e.stopPropagation();
-                            fillWholeFace(f);
-                        }
+                        poly.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, idx); });
+                        poly.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, idx); });
                     });
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2881,8 +2798,8 @@
                     canvas.height = 200;
                     canvas.style.padding = '0';
                     canvas.style.display = 'block';
-                    canvas.style.cursor = 'pointer';
-                    canvas.title = `Face ${f} (${N}x${N}) - Click to fill entire face with ${solverColor}, or drag to brush-paint!`;
+                    canvas.style.cursor = 'crosshair';
+                    canvas.title = `Face ${f} (${N}x${N}) - Click or drag to fill squares with ${solverColor}`;
 
                     const ctx = canvas.getContext('2d');
                     const colors = solverFaces[f] || [];
@@ -2937,55 +2854,45 @@
                     }
 
                     let isPainting = false;
-                    let hasDragged = false;
-                    let pStartX = 0;
-                    let pStartY = 0;
+                    let lastPaintedIndex = -1;
 
                     const paintAtPoint = (clientX, clientY) => {
                         const rect = canvas.getBoundingClientRect();
                         if (rect.width === 0 || rect.height === 0) return;
-                        const x = Math.max(0, Math.min(199, Math.floor((clientX - rect.left) * (200 / rect.width))));
-                        const y = Math.max(0, Math.min(199, Math.floor((clientY - rect.top) * (200 / rect.height))));
-                        paintBrushOnFace(f, x, y, 200, N);
+                        const normX = Math.max(0, Math.min(0.999999, (clientX - rect.left) / rect.width));
+                        const normY = Math.max(0, Math.min(0.999999, (clientY - rect.top) / rect.height));
+                        const col = Math.floor(normX * N);
+                        const row = Math.floor(normY * N);
+                        const index = row * N + col;
+                        if (index !== lastPaintedIndex) {
+                            lastPaintedIndex = index;
+                            paintSticker(f, index);
+                        }
                     };
-
-                    canvas.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        fillWholeFace(f);
-                    });
 
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
                         isPainting = true;
-                        hasDragged = false;
-                        pStartX = e.clientX;
-                        pStartY = e.clientY;
+                        lastPaintedIndex = -1;
+                        paintAtPoint(e.clientX, e.clientY);
                     });
 
                     canvas.addEventListener('pointermove', (e) => {
                         if (!isPainting) return;
                         e.stopPropagation();
-                        const dist = Math.hypot(e.clientX - pStartX, e.clientY - pStartY);
-                        if (dist > 10) {
-                            hasDragged = true;
-                            paintAtPoint(e.clientX, e.clientY);
-                        }
+                        paintAtPoint(e.clientX, e.clientY);
                     });
 
                     const handlePointerEnd = (e) => {
                         if (!isPainting) return;
                         isPainting = false;
+                        lastPaintedIndex = -1;
                         e.stopPropagation();
-                        if (hasDragged) {
-                            updateColorBadgesAndBanner();
-                            playSound('turn');
-                        } else {
-                            fillWholeFace(f);
-                        }
                     };
 
                     canvas.addEventListener('pointerup', handlePointerEnd);
                     canvas.addEventListener('pointercancel', handlePointerEnd);
+                    canvas.addEventListener('pointerleave', handlePointerEnd);
 
                     cubeEl.appendChild(canvas);
                 });
@@ -3029,19 +2936,11 @@
                         st.addEventListener('pointerdown', paintSt);
                         st.addEventListener('mousedown', paintSt);
                         st.addEventListener('click', paintSt);
-                        st.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
-                        st.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
-                        st.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
+                        st.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
+                        st.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
 
                         faceDiv.appendChild(st);
                     }
-
-                    faceDiv.addEventListener('click', (e) => {
-                        if (e.target === faceDiv) {
-                            e.stopPropagation();
-                            fillWholeFace(f);
-                        }
-                    });
 
                     cubeEl.appendChild(faceDiv);
                 });
@@ -3123,10 +3022,11 @@
 
                         st.addEventListener('mousedown', (e) => {
                             e.preventDefault();
+                            isStickerMouseDown = true;
                             paintSticker(item.key, i);
                         });
-                        st.addEventListener('mouseenter', () => {
-                            if (isStickerMouseDown) paintSticker(item.key, i);
+                        st.addEventListener('mouseenter', (e) => {
+                            if (isStickerMouseDown || e.buttons === 1) paintSticker(item.key, i);
                         });
 
                         gridBox.appendChild(st);
@@ -3173,8 +3073,8 @@
                     cSt.style.backgroundColor = PALETTE_COLORS[curC] ? PALETTE_COLORS[curC].hex : curC;
                     cSt.dataset.face = item.key;
                     cSt.dataset.index = 0;
-                    cSt.addEventListener('mousedown', (e) => { e.preventDefault(); paintSticker(item.key, 0); });
-                    cSt.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(item.key, 0); });
+                    cSt.addEventListener('mousedown', (e) => { e.preventDefault(); isStickerMouseDown = true; paintSticker(item.key, 0); });
+                    cSt.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(item.key, 0); });
                     gridBox.appendChild(cSt);
 
                     // Corners (1: TL, 2: TR, 3: BL, 4: BR)
@@ -3186,8 +3086,8 @@
                         corn.style.backgroundColor = PALETTE_COLORS[curCorn] ? PALETTE_COLORS[curCorn].hex : curCorn;
                         corn.dataset.face = item.key;
                         corn.dataset.index = i;
-                        corn.addEventListener('mousedown', (e) => { e.preventDefault(); paintSticker(item.key, i); });
-                        corn.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(item.key, i); });
+                        corn.addEventListener('mousedown', (e) => { e.preventDefault(); isStickerMouseDown = true; paintSticker(item.key, i); });
+                        corn.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(item.key, i); });
                         gridBox.appendChild(corn);
                     }
 
@@ -3233,11 +3133,12 @@
                     svgWrapper.querySelectorAll('.mega-polygon').forEach(poly => {
                         poly.addEventListener('mousedown', (e) => {
                             e.preventDefault();
+                            isStickerMouseDown = true;
                             const idx = parseInt(poly.dataset.index, 10);
                             paintSticker(item.key, idx);
                         });
-                        poly.addEventListener('mouseenter', () => {
-                            if (isStickerMouseDown) {
+                        poly.addEventListener('mouseenter', (e) => {
+                            if (isStickerMouseDown || e.buttons === 1) {
                                 const idx = parseInt(poly.dataset.index, 10);
                                 paintSticker(item.key, idx);
                             }
@@ -3277,12 +3178,12 @@
                     canvas.className = `net-canvas net-canvas-${item.key}`;
                     canvas.width = 160;
                     canvas.height = 160;
-                    canvas.style.cursor = 'pointer';
+                    canvas.style.cursor = 'crosshair';
                     canvas.style.display = 'block';
                     canvas.style.margin = '4px auto';
                     canvas.style.borderRadius = '4px';
                     canvas.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-                    canvas.title = `Face ${item.key} (${N}x${N}) - Click to fill entire face with ${solverColor}, or drag to brush-paint!`;
+                    canvas.title = `Face ${item.name} (${N}x${N}) - Click or drag to fill squares with ${solverColor}`;
 
                     const ctx = canvas.getContext('2d');
                     const colors = solverFaces[item.key] || [];
@@ -3338,55 +3239,45 @@
                     }
 
                     let isNetPainting = false;
-                    let hasNetDragged = false;
-                    let netStartX = 0;
-                    let netStartY = 0;
+                    let lastNetPaintedIndex = -1;
 
                     const paintNetAtPoint = (clientX, clientY) => {
                         const rect = canvas.getBoundingClientRect();
                         if (rect.width === 0 || rect.height === 0) return;
-                        const x = Math.max(0, Math.min(159, Math.floor((clientX - rect.left) * (160 / rect.width))));
-                        const y = Math.max(0, Math.min(159, Math.floor((clientY - rect.top) * (160 / rect.height))));
-                        paintBrushOnFace(item.key, x, y, 160, N);
+                        const normX = Math.max(0, Math.min(0.999999, (clientX - rect.left) / rect.width));
+                        const normY = Math.max(0, Math.min(0.999999, (clientY - rect.top) / rect.height));
+                        const col = Math.floor(normX * N);
+                        const row = Math.floor(normY * N);
+                        const index = row * N + col;
+                        if (index !== lastNetPaintedIndex) {
+                            lastNetPaintedIndex = index;
+                            paintSticker(item.key, index);
+                        }
                     };
-
-                    canvas.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        fillWholeFace(item.key);
-                    });
 
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
                         isNetPainting = true;
-                        hasNetDragged = false;
-                        netStartX = e.clientX;
-                        netStartY = e.clientY;
+                        lastNetPaintedIndex = -1;
+                        paintNetAtPoint(e.clientX, e.clientY);
                     });
 
                     canvas.addEventListener('pointermove', (e) => {
                         if (!isNetPainting) return;
                         e.stopPropagation();
-                        const dist = Math.hypot(e.clientX - netStartX, e.clientY - netStartY);
-                        if (dist > 10) {
-                            hasNetDragged = true;
-                            paintNetAtPoint(e.clientX, e.clientY);
-                        }
+                        paintNetAtPoint(e.clientX, e.clientY);
                     });
 
                     const handleNetPointerEnd = (e) => {
                         if (!isNetPainting) return;
                         isNetPainting = false;
+                        lastNetPaintedIndex = -1;
                         e.stopPropagation();
-                        if (hasNetDragged) {
-                            updateColorBadgesAndBanner();
-                            playSound('turn');
-                        } else {
-                            fillWholeFace(item.key);
-                        }
                     };
 
                     canvas.addEventListener('pointerup', handleNetPointerEnd);
                     canvas.addEventListener('pointercancel', handleNetPointerEnd);
+                    canvas.addEventListener('pointerleave', handleNetPointerEnd);
 
                     faceEl.appendChild(canvas);
                     container.appendChild(faceEl);
@@ -3453,11 +3344,12 @@
 
                         st.addEventListener('mousedown', (e) => {
                             e.preventDefault();
+                            isStickerMouseDown = true;
                             paintSticker(item.key, i);
                         });
 
-                        st.addEventListener('mouseenter', () => {
-                            if (isStickerMouseDown) {
+                        st.addEventListener('mouseenter', (e) => {
+                            if (isStickerMouseDown || e.buttons === 1) {
                                 paintSticker(item.key, i);
                             }
                         });
@@ -3469,6 +3361,16 @@
                     container.appendChild(faceEl);
                 });
             }
+        }
+
+        let bannerUpdateScheduled = false;
+        function scheduleUpdateColorBadgesAndBanner() {
+            if (bannerUpdateScheduled) return;
+            bannerUpdateScheduled = true;
+            requestAnimationFrame(() => {
+                bannerUpdateScheduled = false;
+                updateColorBadgesAndBanner();
+            });
         }
 
         // --- PAINT STICKER ON 3D & 2D ---
@@ -3484,23 +3386,34 @@
                     const ctx = c3d.getContext('2d');
                     const col = index % N;
                     const row = Math.floor(index / N);
-                    const scale = 200 / N;
-                    const dotSize = Math.max(10, scale);
                     ctx.fillStyle = hex;
-                    ctx.fillRect(Math.max(0, col * scale - dotSize / 2), Math.max(0, row * scale - dotSize / 2), dotSize, dotSize);
+                    if (N === 100) {
+                        ctx.fillRect(col * 2, row * 2, 2, 2);
+                    } else {
+                        // 1000x1000: single square pixel on 200x200 canvas
+                        const px = Math.floor(col * 0.2);
+                        const py = Math.floor(row * 0.2);
+                        ctx.fillRect(px, py, 1, 1);
+                    }
                 }
                 const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
                 if (c2d) {
                     const ctx = c2d.getContext('2d');
                     const col = index % N;
                     const row = Math.floor(index / N);
-                    const scale = 160 / N;
-                    const dotSize = Math.max(8, scale);
                     ctx.fillStyle = hex;
-                    ctx.fillRect(Math.max(0, col * scale - dotSize / 2), Math.max(0, row * scale - dotSize / 2), dotSize, dotSize);
+                    if (N === 100) {
+                        const step = 160 / 100;
+                        ctx.fillRect(col * step, row * step, step + 0.1, step + 0.1);
+                    } else {
+                        // 1000x1000: single square pixel on 160x160 canvas
+                        const px = Math.floor(col * 0.16);
+                        const py = Math.floor(row * 0.16);
+                        ctx.fillRect(px, py, 1, 1);
+                    }
                 }
                 playSound('turn');
-                updateColorBadgesAndBanner();
+                scheduleUpdateColorBadgesAndBanner();
                 return;
             }
 
@@ -3531,12 +3444,12 @@
             }
 
             playSound('turn');
-            updateColorBadgesAndBanner();
+            scheduleUpdateColorBadgesAndBanner();
         }
 
-        window.addEventListener('mousedown', () => { isStickerMouseDown = true; });
+        window.addEventListener('mousedown', (e) => { if (e.button === 0) isStickerMouseDown = true; });
         window.addEventListener('mouseup', () => { isStickerMouseDown = false; });
-        window.addEventListener('pointerdown', () => { isStickerMouseDown = true; });
+        window.addEventListener('pointerdown', (e) => { if (e.isPrimary) isStickerMouseDown = true; });
         window.addEventListener('pointerup', () => { isStickerMouseDown = false; });
         window.addEventListener('pointercancel', () => { isStickerMouseDown = false; });
 
