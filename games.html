@@ -1179,8 +1179,8 @@
                         </label>
                     </div>
                 </div>
-                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 880px;">
-                    👾 Blast Scramble Monsters with lasers to get a <strong>Bag of Coins (+10 💰)</strong>! <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive for 100 Coins (100 💰)
+                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 880px; line-height: 1.5;">
+                    👾 Blast Scramble Monsters for <strong>+10 💰</strong>! 🔫 <strong>Armed Gun Monsters</strong> shoot bullets forward: <strong>Jump in the air (W / ⬆️) to dodge bullets</strong>, and <strong>Jump on top of them (or Jump + S Dive-Stomp) to crush them for +50 💰</strong>! • <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive (100 💰)
                 </div>
             </div>
 
@@ -1941,6 +1941,8 @@
         let runnerRoadZ = 0;
         let runnerFrame = 0;
         let runnerSurviveBtnRect = null;
+        let runnerIsDiveStomping = false;
+        let runnerMonsterBullets = [];
 
         // Background stars
         const runnerStars = Array.from({ length: 65 }, () => ({
@@ -1968,11 +1970,13 @@
             runnerShootCooldown = 0;
             runnerObstacles = [];
             runnerLasers = [];
+            runnerMonsterBullets = [];
             runnerExplosions = [];
             runnerFloatingTexts = [];
             runnerRoadZ = 0;
             runnerFrame = 0;
             runnerSurviveBtnRect = null;
+            runnerIsDiveStomping = false;
 
             document.getElementById('runner-score').textContent = '0';
             document.getElementById('runner-coins').textContent = runnerCoins;
@@ -2045,7 +2049,19 @@
 
         function runnerSlideAction() {
             if (!runnerActive || runnerPaused) return;
-            if (!runnerIsJumping && !runnerIsSliding) {
+            if (runnerIsJumping) {
+                // COMPLEX MOVE: Mid-air Aerial Dive-Stomp / Ground Pound onto monsters!
+                runnerIsDiveStomping = true;
+                runnerJumpVy = -15.5; // High speed downward rocket plunge
+                playSfx('slice');
+                runnerFloatingTexts.push({
+                    text: '⚡ AERIAL DIVE-STOMP!',
+                    x: runnerCanvas.width / 2,
+                    y: runnerCanvas.height * 0.45,
+                    color: '#00f0ff',
+                    life: 25
+                });
+            } else if (!runnerIsSliding) {
                 runnerIsSliding = true;
                 runnerSlideTimer = 26;
                 playSfx('slice');
@@ -2105,10 +2121,11 @@
             // Jump physics
             if (runnerIsJumping) {
                 runnerJumpY += runnerJumpVy;
-                runnerJumpVy -= 0.85;
+                runnerJumpVy -= (runnerIsDiveStomping ? 1.4 : 0.85);
                 if (runnerJumpY <= 0) {
                     runnerJumpY = 0;
                     runnerIsJumping = false;
+                    runnerIsDiveStomping = false;
                 }
             }
 
@@ -2129,7 +2146,28 @@
                 let laserHit = false;
                 for (let oi = 0; oi < runnerObstacles.length; oi++) {
                     const ob = runnerObstacles[oi];
-                    if (ob.type === 'monster' && !ob.killed) {
+                    if (ob.type === 'gun_monster' && !ob.killed) {
+                        if (Math.abs(laser.lane - ob.lane) < 0.65 && Math.abs(laser.z - ob.z) < 70) {
+                            // Gun monster has heavy bulletproof armor! Lasers deflect off!
+                            laserHit = true;
+                            playSfx('bonk');
+                            const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                            const horizonY = Math.round(runnerCanvas.height * 0.25);
+                            const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                            const horizonW = Math.round(runnerCanvas.width * 0.25);
+                            const bottomW = Math.round(runnerCanvas.width * 0.86);
+                            const roadW = horizonW + t * (bottomW - horizonW);
+                            const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                            runnerFloatingTexts.push({
+                                text: '🛡️ ARMORED! JUMP-STOMP TO CRUSH (+50 💰)!',
+                                x: expX,
+                                y: expY - 45,
+                                color: '#38bdf8',
+                                life: 55
+                            });
+                            break;
+                        }
+                    } else if (ob.type === 'monster' && !ob.killed) {
                         if (Math.abs(laser.lane - ob.lane) < 0.65 && Math.abs(laser.z - ob.z) < 70) {
                             // KILL THE MONSTER!
                             ob.killed = true;
@@ -2180,12 +2218,14 @@
                 const rand = Math.random();
                 let type = 'hurdle';
 
-                // High monster spawn chance (32% monster!)
-                if (rand < 0.32) {
+                // Spawn table: Armed Gun Monsters (+50 💰), normal monsters (+10 💰), hurdles, lasers, barriers
+                if (rand < 0.20) {
+                    type = 'gun_monster';
+                } else if (rand < 0.40) {
                     type = 'monster';
-                } else if (rand < 0.54) {
+                } else if (rand < 0.60) {
                     type = 'hurdle';
-                } else if (rand < 0.78) {
+                } else if (rand < 0.82) {
                     type = 'laser';
                 } else {
                     type = 'barrier';
@@ -2195,18 +2235,83 @@
                     lane: lane,
                     type: type,
                     z: 1000,
-                    killed: false
+                    killed: false,
+                    shootTimer: type === 'gun_monster' ? 35 + Math.floor(Math.random() * 25) : 0,
+                    muzzleFlash: 0
                 });
 
-                // Occasionally spawn a monster in a second lane for multi-lane danger
-                if (type !== 'monster' && Math.random() < 0.30) {
+                // Occasionally spawn in a second lane for multi-lane danger
+                if (type !== 'monster' && type !== 'gun_monster' && Math.random() < 0.30) {
                     const secondLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
+                    const secondType = Math.random() < 0.45 ? 'gun_monster' : 'monster';
                     runnerObstacles.push({
                         lane: secondLane,
-                        type: 'monster',
+                        type: secondType,
                         z: 1000,
-                        killed: false
+                        killed: false,
+                        shootTimer: secondType === 'gun_monster' ? 45 + Math.floor(Math.random() * 25) : 0,
+                        muzzleFlash: 0
                     });
+                }
+            }
+
+            // Update Monster Gun Bullets (Shooting forward down the highway)
+            for (let bi = runnerMonsterBullets.length - 1; bi >= 0; bi--) {
+                const b = runnerMonsterBullets[bi];
+                b.z -= (18 + runnerSpeed * 12);
+
+                // Collision check against player (z between 50 and 130)
+                if (b.z < 130 && b.z > 50) {
+                    const laneDiff = Math.abs(runnerCurrentLaneX - b.lane);
+                    if (laneDiff < 0.52) {
+                        // IMMUNITY RULE: "and the bullets can not shoot you anymore if you are jumping in the air"
+                        if (runnerIsJumping || runnerJumpY > 15) {
+                            // BULLET PASSES HARMLESSLY UNDER JUMPING PLAYER!
+                            const t = Math.max(0, Math.min(1, 1 - (b.z / 1000)));
+                            const horizonY = Math.round(runnerCanvas.height * 0.25);
+                            const by = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                            const horizonW = Math.round(runnerCanvas.width * 0.25);
+                            const bottomW = Math.round(runnerCanvas.width * 0.86);
+                            const roadW = horizonW + t * (bottomW - horizonW);
+                            const bx = runnerCanvas.width / 2 + (b.lane - 1) * (roadW / 3);
+
+                            runnerFloatingTexts.push({
+                                text: '💨 AIR DODGE!',
+                                x: bx,
+                                y: by - runnerJumpY - 24,
+                                color: '#38bdf8',
+                                life: 40
+                            });
+                            runnerMonsterBullets.splice(bi, 1);
+                            continue;
+                        } else if (runnerInvulnerable > 0) {
+                            playSfx('explosion');
+                            runnerMonsterBullets.splice(bi, 1);
+                            continue;
+                        } else if (document.getElementById('chk-auto-survive') && document.getElementById('chk-auto-survive').checked && runnerCoins >= 100) {
+                            runnerCoins -= 100;
+                            localStorage.setItem('cube_arcade_coins', runnerCoins);
+                            document.getElementById('runner-coins').textContent = runnerCoins;
+                            runnerInvulnerable = 150;
+                            playSfx('revive');
+                            runnerFloatingTexts.push({
+                                text: '🛡️ AUTO-SURVIVE! -100 💰',
+                                x: runnerCanvas.width / 2,
+                                y: runnerCanvas.height / 2 - 30,
+                                color: '#ffd700',
+                                life: 75
+                            });
+                            runnerMonsterBullets.splice(bi, 1);
+                            continue;
+                        } else {
+                            gameOverRunner('Shot down by Gun Monster bullets! Jump in the air (W / ⬆️) to dodge bullets!');
+                            return;
+                        }
+                    }
+                }
+
+                if (b.z < 0) {
+                    runnerMonsterBullets.splice(bi, 1);
                 }
             }
 
@@ -2214,6 +2319,25 @@
             for (let i = runnerObstacles.length - 1; i >= 0; i--) {
                 const ob = runnerObstacles[i];
                 ob.z -= runnerSpeed * 14;
+
+                // Gun monster shoots forward down track towards player
+                if (ob.type === 'gun_monster' && !ob.killed) {
+                    if (ob.shootTimer === undefined) ob.shootTimer = 35 + Math.floor(Math.random() * 20);
+                    ob.shootTimer--;
+                    if (ob.muzzleFlash > 0) ob.muzzleFlash--;
+
+                    // When approaching within range (z between 220 and 850), gun monster shoots 1m forwards
+                    if (ob.shootTimer <= 0 && ob.z > 220 && ob.z < 850) {
+                        ob.shootTimer = 55 + Math.floor(Math.random() * 30);
+                        ob.muzzleFlash = 10;
+                        playSfx('laser');
+                        runnerMonsterBullets.push({
+                            lane: ob.lane,
+                            z: ob.z - 40,
+                            life: 90
+                        });
+                    }
+                }
 
                 // Collision check (when reaching player at z between 50 and 130)
                 if (ob.z < 130 && ob.z > 50) {
@@ -2246,6 +2370,90 @@
 
                             runnerObstacles.splice(i, 1);
                             continue;
+                        } else if (ob.type === 'gun_monster') {
+                            // COMPLEX JUMP MOVE: "to kill it you have to jump on it with some complex moves"
+                            if (runnerIsJumping && runnerJumpY >= 18) {
+                                // SUCCESSFUL JUMP-STOMP CRUSH MOVE!
+                                ob.killed = true;
+                                playSfx('explosion');
+                                setTimeout(() => playSfx('coins'), 120);
+                                setTimeout(() => playSfx('coins'), 240);
+
+                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                                const horizonY = Math.round(runnerCanvas.height * 0.25);
+                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                                const horizonW = Math.round(runnerCanvas.width * 0.25);
+                                const bottomW = Math.round(runnerCanvas.width * 0.86);
+                                const roadW = horizonW + t * (bottomW - horizonW);
+                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+
+                                spawnMonsterExplosion(expX, expY - 20);
+                                spawnMonsterExplosion(expX + 18, expY - 32);
+                                spawnMonsterExplosion(expX - 18, expY - 10);
+
+                                // Bounce high into the air!
+                                runnerJumpVy = 11.5;
+                                runnerJumpY = Math.max(runnerJumpY, 28);
+                                runnerIsJumping = true;
+                                const wasDive = runnerIsDiveStomping;
+                                runnerIsDiveStomping = false;
+
+                                // REWARD 50 COINS!
+                                runnerCoins += 50;
+                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                runnerDistance += 200;
+                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                document.getElementById('runner-score').textContent = runnerDistance;
+
+                                runnerFloatingTexts.push({
+                                    text: wasDive ? '💥 SUPER SLAM STOMP! +50 💰' : '💥 JUMP-STOMP CRUSH! +50 💰 MEGA BOUNTY!',
+                                    x: expX,
+                                    y: expY - 55,
+                                    color: '#ffd700',
+                                    life: 85
+                                });
+
+                                runnerObstacles.splice(i, 1);
+                                continue;
+                            } else if (runnerInvulnerable > 0) {
+                                playSfx('explosion');
+                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                                const horizonY = Math.round(runnerCanvas.height * 0.25);
+                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                                const horizonW = Math.round(runnerCanvas.width * 0.25);
+                                const bottomW = Math.round(runnerCanvas.width * 0.86);
+                                const roadW = horizonW + t * (bottomW - horizonW);
+                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                                spawnMonsterExplosion(expX, expY - 20);
+                                runnerObstacles.splice(i, 1);
+                                continue;
+                            } else if (document.getElementById('chk-auto-survive') && document.getElementById('chk-auto-survive').checked && runnerCoins >= 100) {
+                                runnerCoins -= 100;
+                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                runnerInvulnerable = 150;
+                                playSfx('revive');
+                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                                const horizonY = Math.round(runnerCanvas.height * 0.25);
+                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                                const horizonW = Math.round(runnerCanvas.width * 0.25);
+                                const bottomW = Math.round(runnerCanvas.width * 0.86);
+                                const roadW = horizonW + t * (bottomW - horizonW);
+                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                                spawnMonsterExplosion(expX, expY - 20);
+                                runnerFloatingTexts.push({
+                                    text: '🛡️ AUTO-SURVIVE! -100 💰',
+                                    x: runnerCanvas.width / 2,
+                                    y: runnerCanvas.height / 2 - 30,
+                                    color: '#ffd700',
+                                    life: 75
+                                });
+                                runnerObstacles.splice(i, 1);
+                                continue;
+                            } else {
+                                gameOverRunner('Crashed into Armed Gun Monster! Jump on top of it with complex moves (⬆️ / W, or S Dive-Stomp) to crush it for +50 💰!');
+                                return;
+                            }
                         } else if (runnerInvulnerable > 0) {
                             // Energy Forcefield Shield absorbs collision & zaps hazard!
                             if (ob.type === 'monster') {
@@ -2454,6 +2662,41 @@
                 rCtx.restore();
             });
 
+            // Draw Monster Plasma Bullets (Shooting forward)
+            runnerMonsterBullets.forEach(b => {
+                const t = Math.max(0, Math.min(1, 1 - (b.z / 1000)));
+                const by = horizonY + (t * t) * (bottomY - horizonY);
+                const roadW = horizonW + t * (bottomW - horizonW);
+                const laneW = roadW / 3;
+                const bx = centerX + (b.lane - 1) * laneW;
+                const scale = 0.3 + t * 0.85;
+
+                rCtx.save();
+                rCtx.translate(bx, by - 12 * scale);
+
+                // Fiery plasma energy bullet
+                rCtx.fillStyle = '#ff0055';
+                rCtx.shadowColor = '#ff0055';
+                rCtx.shadowBlur = 18 * scale;
+                rCtx.strokeStyle = '#fde047';
+                rCtx.lineWidth = 2.5 * scale;
+
+                const bW = 10 * scale;
+                const bH = 20 * scale;
+                rCtx.beginPath();
+                rCtx.ellipse(0, 0, bW, bH, 0, 0, Math.PI * 2);
+                rCtx.fill();
+                rCtx.stroke();
+
+                // Bright white hot core
+                rCtx.fillStyle = '#ffffff';
+                rCtx.beginPath();
+                rCtx.ellipse(0, 0, bW * 0.45, bH * 0.45, 0, 0, Math.PI * 2);
+                rCtx.fill();
+
+                rCtx.restore();
+            });
+
             // Sort obstacles from back (z=1000) to front (z=0)
             const sortedObstacles = [...runnerObstacles].sort((a, b) => b.z - a.z);
 
@@ -2585,6 +2828,103 @@
                         rCtx.closePath();
                         rCtx.fill();
                     }
+                } else if (ob.type === 'gun_monster') {
+                    // ARMED GUN MONSTER (CYBER BATTLE MECH WITH DUAL FORWARD CANNONS)
+                    const hoverY = Math.sin(runnerFrame * 0.28 + ob.lane) * 7 * scale;
+                    rCtx.translate(0, hoverY);
+
+                    const mW = 54 * scale;
+                    const mH = 54 * scale;
+
+                    // Amber/Gold menace aura
+                    rCtx.shadowColor = '#f59e0b';
+                    rCtx.shadowBlur = 20 * scale;
+
+                    // Cyber Armored Chassis (Titanium Crimson with Gold Trim)
+                    rCtx.fillStyle = '#1e1b4b'; // Dark cyber base
+                    rCtx.strokeStyle = '#f59e0b'; // Gold armor trim
+                    rCtx.lineWidth = 3 * scale;
+
+                    // Main Hexagonal Armored Torso
+                    rCtx.beginPath();
+                    rCtx.moveTo(-mW * 0.45, -mH * 0.85);
+                    rCtx.lineTo(mW * 0.45, -mH * 0.85);
+                    rCtx.lineTo(mW * 0.6, -mH * 0.35);
+                    rCtx.lineTo(mW * 0.35, 0);
+                    rCtx.lineTo(-mW * 0.35, 0);
+                    rCtx.lineTo(-mW * 0.6, -mH * 0.35);
+                    rCtx.closePath();
+                    rCtx.fill();
+                    rCtx.stroke();
+
+                    // Heavy Chest Armor Plate
+                    rCtx.fillStyle = '#dc2626';
+                    rCtx.fillRect(-mW * 0.32, -mH * 0.65, mW * 0.64, mH * 0.42);
+
+                    // Dual Forward Guns / Laser Cannons pointing forward!
+                    // Left Cannon
+                    rCtx.fillStyle = '#334155';
+                    rCtx.strokeStyle = '#ffd700';
+                    rCtx.lineWidth = 2 * scale;
+                    rCtx.fillRect(-mW * 0.75, -mH * 0.55, mW * 0.24, mH * 0.4);
+                    rCtx.strokeRect(-mW * 0.75, -mH * 0.55, mW * 0.24, mH * 0.4);
+                    // Left Barrel (protruding forward towards camera)
+                    rCtx.fillStyle = '#0f172a';
+                    rCtx.fillRect(-mW * 0.71, -mH * 0.18, mW * 0.16, mH * 0.22);
+                    // Left Barrel Muzzle Port
+                    rCtx.fillStyle = '#ff0055';
+                    rCtx.beginPath();
+                    rCtx.ellipse(-mW * 0.63, 0.04 * mH, mW * 0.08, mH * 0.06, 0, 0, Math.PI * 2);
+                    rCtx.fill();
+
+                    // Right Cannon
+                    rCtx.fillStyle = '#334155';
+                    rCtx.fillRect(mW * 0.51, -mH * 0.55, mW * 0.24, mH * 0.4);
+                    rCtx.strokeRect(mW * 0.51, -mH * 0.55, mW * 0.24, mH * 0.4);
+                    // Right Barrel (protruding forward towards camera)
+                    rCtx.fillStyle = '#0f172a';
+                    rCtx.fillRect(mW * 0.55, -mH * 0.18, mW * 0.16, mH * 0.22);
+                    // Right Barrel Muzzle Port
+                    rCtx.fillStyle = '#ff0055';
+                    rCtx.beginPath();
+                    rCtx.ellipse(mW * 0.63, 0.04 * mH, mW * 0.08, mH * 0.06, 0, 0, Math.PI * 2);
+                    rCtx.fill();
+
+                    // Muzzle Flash Effect when shooting!
+                    if (ob.muzzleFlash > 0) {
+                        rCtx.fillStyle = '#fde047';
+                        rCtx.shadowColor = '#ff0055';
+                        rCtx.shadowBlur = 18 * scale;
+                        // Left flash
+                        rCtx.beginPath();
+                        rCtx.arc(-mW * 0.63, 0.06 * mH, 10 * scale, 0, Math.PI * 2);
+                        rCtx.fill();
+                        // Right flash
+                        rCtx.beginPath();
+                        rCtx.arc(mW * 0.63, 0.06 * mH, 10 * scale, 0, Math.PI * 2);
+                        rCtx.fill();
+                    }
+
+                    // Menacing Glowing Cyber Visor
+                    rCtx.shadowBlur = 14 * scale;
+                    rCtx.shadowColor = '#00f0ff';
+                    rCtx.fillStyle = '#00f0ff';
+                    rCtx.fillRect(-mW * 0.26, -mH * 0.78, mW * 0.52, mH * 0.12);
+
+                    // Targeting laser beam pointing down highway towards player
+                    rCtx.strokeStyle = 'rgba(239, 68, 68, 0.55)';
+                    rCtx.lineWidth = 1.5 * scale;
+                    rCtx.beginPath();
+                    rCtx.moveTo(0, 0);
+                    rCtx.lineTo(0, 48 * scale);
+                    rCtx.stroke();
+
+                    // Floating Bounty Badge above head
+                    rCtx.shadowBlur = 0;
+                    rCtx.font = `bold ${Math.max(10, Math.round(12 * scale))}px "DynaPuff", cursive`;
+                    rCtx.fillStyle = '#ffd700';
+                    rCtx.textAlign = 'center';
+                    rCtx.fillText('🔫 50 💰', 0, -mH * 0.96);
                 } else if (ob.type === 'hurdle') {
                     // Low scramble block (Jump over)
                     const wBox = 44 * scale;
@@ -2705,6 +3045,18 @@
                         rCtx.fillRect(-cubeSize / 2 + 3 + c * sub, -cubeSize + 3 + r * sub, sub - 1.5, sub - 1.5);
                     }
                 }
+            }
+
+            // Dive-Stomp rocket thrusters & speed lines
+            if (runnerIsDiveStomping) {
+                rCtx.save();
+                rCtx.fillStyle = '#00f0ff';
+                rCtx.shadowColor = '#00f0ff';
+                rCtx.shadowBlur = 18;
+                for (let tp = 0; tp < 4; tp++) {
+                    rCtx.fillRect(-12 + Math.random() * 24, -48 - 12 - Math.random() * 22, 4, 12);
+                }
+                rCtx.restore();
             }
 
             // Draw Invulnerability Energy Forcefield Shield
