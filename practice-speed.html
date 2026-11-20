@@ -1019,7 +1019,7 @@
                     <select id="scramble-puzzle-select" class="ps-select" onchange="onPuzzleChanged()">
                         <option value="3x3" selected>3x3x3 Rubik's Cube</option>
                         <option value="2x2">2x2x2 Rubik's Cube</option>
-                        <option value="1000x1000">1000x1000x1000 Cube 🌌</option>
+                        <option value="1000x1000">1000x1000x1000 (very laggy) Cube 🌌</option>
                         <option value="100x100">100x100x100 Cube 🌟</option>
                     </select>
 
@@ -1544,7 +1544,7 @@
                 badge.style.fontSize = '0.85em';
                 badge.style.color = '#38bdf8';
                 badge.style.fontWeight = 'bold';
-                badge.textContent = `🌌 ${N}x${N}x${N} Hyper-Cube Preview`;
+                badge.textContent = `🌌 ${N}x${N}x${N} Hyper-Cube Preview${N === 1000 ? ' (very laggy)' : ''}`;
                 container.appendChild(badge);
             } else if (currentPuzzle === '3x3') {
                 applyScramble3x3(currentScramble);
