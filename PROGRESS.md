@@ -1,41 +1,35 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. 100-Coin Revival System upon Death:
-   - When the player dies in Cube Runner (or Flappy Cubie), a prominent glowing Revive button ("❤️ Revive with 100 Coins (100 💰) [Press R]") appears alongside the restart button.
-   - Global / persistent coin wallet (`cube_arcade_coins` in localStorage) preserves collected coins across runs.
-   - If player has >= 100 coins, clicking Revive or pressing 'R':
-     - Deducts exactly 100 coins from the wallet
-     - Plays uplifting revival sound fanfare (`playSfx('revive')`)
-     - Clears hazards in front of the player (safe zone)
-     - Grants a temporary invulnerability forcefield shield (~2.5s) with glowing animated aura that absorbs collisions and zaps hazards
-     - Resumes the active run with score and distance preserved
-   - If player has < 100 coins, button displays "❤️ Need 100 💰 to Revive (X/100)" and clicking shows instructions to blast monsters for more coins (+10 💰 per kill).
-2. Keyboard shortcut 'R' wired for fast revival on game over screen.
-3. Verified in Chrome DevTools MCP with automated testing (100% pass rate).
-4. Changes committed and pushed to GitHub remote `origin/main`.
+1. Dynamic Speed Progression for Cube Runner 3D:
+   - When the game starts (or restarts after death), speed starts VERY SLOW (0.5x speed).
+   - Speed gradually ramps up continuously ("faster and faster") as the player survives and travels further (+0.001 per frame).
+   - Live speedometer HUD shows real-time speed acceleration (`SPEED: 0.5x -> 0.6x -> 1.0x -> ...`).
+   - Obstacle spawn rate dynamically scales with speed (generous 150-frame spacing when slow, scaling to rapid flurry when fast).
+   - When the player dies and tries again, speed strictly resets back to the very slow starting baseline (0.5x) and ramps up again until death.
+   - When the player revives with 100 coins, speed resets to a safe 0.6x pace with shield invulnerability before accelerating again.
+2. Verified in Chrome DevTools MCP with automated tests (100% pass rate).
+3. Committed and pushed to GitHub remote `origin/main`.
 
 Next step: Completed.
 
 Tasks:
 - [x] Update PROGRESS.md to IN PROGRESS
-- [x] Add persistent coin wallet system (`cube_arcade_coins` in localStorage)
-- [x] Add synthesized Web Audio revival sound effect (`revive`)
-- [x] Add revive UI button (`.btn-game-revive`) and canvas death overlay
-- [x] Implement `reviveRunnerWithCoins()`: deducts 100 coins, grants invulnerability shield, clears nearby threats, and resumes game loop
-- [x] Implement invulnerability shield aura rendering and collision absorption in `runnerLoop()`
-- [x] Add `reviveFlappyWithCoins()` for Flappy Cubie
-- [x] Add universal keyboard shortcut 'R' for revival
-- [x] Verify live gameplay, death, revive deduction, shield invulnerability, and insufficient coins handling
+- [x] Adjust initial starting speed in `startRunnerGame()` to very slow (0.5x)
+- [x] Implement smooth continuous speed acceleration in `runnerLoop()` ("faster and faster until you die")
+- [x] Dynamically scale obstacle spawn rate and distance based on live speed
+- [x] Ensure death and restart strictly reset speed back to slow baseline (0.5x)
+- [x] Verify live speed progression and restart reset in Chrome DevTools MCP
 - [x] Commit and push to origin main
 
 Assumptions:
-- 100 coins can be accumulated from monster kills across runs via localStorage wallet.
-- Reviving costs 100 coins, clears hazards in front of the player, and gives a 2.5-second glowing shield.
+- Starting speed at 0.5x provides a relaxed, beginner-friendly entry pace.
+- Speed increases continuously every frame, steadily scaling up the highway dash challenge until death.
+- On death and retry, speed always resets to 0.5x.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Completed live verification in Chrome DevTools MCP and pushed to origin main.
-- Implemented 100-coin revival system, invulnerability forcefield shield, and 'R' shortcut.
+- Completed verification in Chrome DevTools MCP and pushed to origin main.
+- Implemented 0.5x slow start, continuous acceleration (+0.001/frame), dynamic obstacle pacing, and retry speed reset.
