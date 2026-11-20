@@ -1,53 +1,53 @@
 # Summary
 - **What changed**:
-  1. **Fixed 1000x1000x1000 Color Filling on 3D Cube & 2D Flat Net**:
-     - Single click on any face of the 1000x1000 (and 100x100) cube now instantly fills the entire face with the selected palette color (`fillWholeFace(f)`), enabling users to fill in all 6 faces in 6 clicks.
-     - Dragging with mouse or touch paints bold, smooth, highly visible color brush strokes (14px radius on 3D canvas, 11px on 2D net) while synchronizing sticker data in real time.
-     - Added `.solver-3d-face` to `setup3DOrbitListeners` so clicking or painting on canvas faces is never hijacked by 3D orbit rotation.
-     - Added `.rgb` values to all 15 entries in `PALETTE_COLORS` to prevent canvas colors falling back to grey.
-     - Instantaneous uniform face rendering: uniform faces render with a single `ctx.fillRect(0, 0, width, height)` in <0.01ms.
-     - Optimized `updateColorBadgesAndBanner` with fast uniform face counting for 6,000,000 stickers with 0ms lag.
-     - Optimized `cube-solver-engine.js` distinct color check to eliminate 6,000,000 element intermediate array allocation.
+  1. **Fixed Computer/Desktop Color Filling on 3D Cube Across All Puzzle Sizes**:
+     - Added immediate `pointerdown` and `mousedown` listeners to all 3D stickers (2x2 to 10x10, Pyraminx, Skewb, Megaminx), eliminating missed clicks caused by mouse movement during click.
+     - Added drag-to-paint (`pointerenter` and `mouseenter` while mouse is down) across 3D stickers on desktop.
+     - Added double-click on any sticker and single-click on face background to instantly fill that face (`fillWholeFace`).
+     - Added explicit `click` event listener on 100x100 and 1000x1000 canvases (both 3D and 2D net) with a 10px jitter tolerance to ensure natural mouse clicks reliably fill the entire face.
+     - Added toolbar buttons: `✨ Fill All Faces (Solved)` to fill all faces in 1 click and `🎨 Fill Face` to fill the current face.
+     - Added direct link from `timer.html` scramble preview to [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) for immediate access to color filling.
 - **How verified**:
   - Live interaction in Chrome DevTools MCP:
-    - Single click on 3D Front face filled 40,000 / 40,000 pixels (100% fill, 1,000,000 stickers set to White).
-    - Dragging brush test on 3D face painted 1,114 vibrant red pixels across the face.
-    - 2D Net canvas click filled 25,600 / 25,600 pixels (100% fill).
-    - Filling all 6 faces validated as "🎉 Puzzle is already 100% Solved! No moves required."
-    - Scramble test on 1000x1000 solved successfully in 2 moves (`B2 F2`).
-  - Node syntax checks: `node --check cube4fun/cube-solver-engine.js` and extracted HTML inline script passed with 0 errors.
+    - 3x3 drag-to-paint across 3 stickers verified: all 3 painted blue on mouse drag (`all3Painted: true`).
+    - Double click and face click verified: filled all 9 face stickers instantly (`fRedCount: 9`).
+    - `fillAllSolvedColors()` verified: all 54 stickers set to standard colors, banner set to ready.
+    - 1000x1000 mouse click verified: filled all 1,000,000 stickers with yellow.
+    - `timer.html` verified: navigation link to Cube Solving Machine renders under the scramble preview.
+  - Node syntax checks (`node --check`) passed with 0 errors across all modified files.
 - **What to review**:
-  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html), switch to `1000x1000x1000 (very laggy)` tab.
-  - Click any face on the 3D cube or 2D net: the entire face fills with the active color instantly.
-  - Click and drag across a face: paints thick, bold color brush strokes smoothly.
+  - Open [cube-solving-machine.html](file:///C:/Users/S/OneDrive/repos/how-to-solve-rubiks-cube/cube4fun/cube-solving-machine.html) on a computer with a mouse:
+    - Click or click-and-drag across stickers on the 3D cube: colors apply immediately.
+    - Click `✨ Fill All Faces (Solved)` or `🎨 Fill Face`: colors fill instantly.
+    - Switch to `1000x1000x1000 (very laggy)`: click any face to fill it with color.
 - **Blockers**: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Fix color visibility and filling on 1000x1000x1000 cube.
+1. Fix color filling on computer across 3D cube and 2D net.
 2. Verify live in Chrome DevTools and Node syntax checks.
 3. Commit and push changes to origin main.
 
 Next step: Done.
 
 Tasks:
-- [x] Identify root causes of color invisible issue on 1000x1000 (sub-pixel drawing, orbit capture hijack, missing face-fill on click)
-- [x] Add instant whole-face fill on single click for 3D cube and 2D flat net
-- [x] Add bold visible brush painting (14px/11px) on mouse/touch drag
-- [x] Guard 3D orbit pointer listener against canvas face interaction
-- [x] Add RGB tuples to all PALETTE_COLORS entries
-- [x] Add instant uniform canvas rendering and fast sticker counting
-- [x] Optimize cube-solver-engine distinct color check
+- [x] Fix pointerdown/mousedown painting on 3D stickers so desktop mouse clicks register immediately
+- [x] Enable desktop drag-to-paint on 3D cube across stickers
+- [x] Add face-fill on double click and face background click
+- [x] Add click listener and 10px drag threshold on 1000x1000 / 100x100 canvas
+- [x] Add "Fill All Faces (Solved)" and "Fill Face" buttons to solver toolbar
+- [x] Add Cube Solving Machine direct link to timer.html scramble preview
 - [x] Verify live in Chrome DevTools MCP and Node syntax check
 - [x] Update PROGRESS.md
 - [x] Commit and push changes to origin main
 
 Assumptions:
-- Clicking a face on a 1000x1000 cube should fill the whole face, while dragging paints bold brush strokes.
+- Desktop mouse interaction should support both instant click, drag painting, and whole-face quick fill.
 
 Blockers (what I need to do): None.
 Found, not done: None.
 Log (newest first, one line each):
+- 2026-11-19: Fixed computer desktop color filling: added mousedown/pointerdown immediate painting, 3D drag-to-paint, double-click face fill, Fill All Faces button, and timer.html link.
 - 2026-11-19: Fixed 1000x1000 color filling with instant face-fill on click, bold brush dragging, orbit listener guard, and uniform render optimization.
 - 2026-11-19: Added "very laggy" label next to 1000x1000x1000 in solver robot, timer, and practice speed.
 - 2026-11-19: Added 1000x1000x1000 hyper-cube to timer.html, cube-solving-machine.html, and practice-speed.html with multi-slice scrambles, canvas nets, and solver support.

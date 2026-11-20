@@ -1915,6 +1915,12 @@
                     <button class="btn-camera-scanner-top" style="padding: 7px 14px; font-size: 0.88em;" onclick="openCameraScannerModal()" title="Take a picture to memorize colors">
                         📸 Scan with Camera
                     </button>
+                    <button class="btn-cyber btn-green" onclick="fillAllSolvedColors()" style="padding: 7px 14px; font-size: 0.9em;" title="Instantly fill all 6 faces with standard solved colors">
+                        ✨ Fill All Faces (Solved)
+                    </button>
+                    <button class="btn-cyber btn-cyan" onclick="fillCurrentVisibleFace()" style="padding: 7px 14px; font-size: 0.9em;" title="Fill currently viewed face with active palette color">
+                        🎨 Fill Face
+                    </button>
                     <button class="btn-cyber btn-purple" onclick="scrambleCurrentPuzzle()" style="padding: 7px 14px; font-size: 0.9em;" title="Scramble puzzle with legal moves">
                         🎲 Scramble
                     </button>
@@ -2533,41 +2539,88 @@
             }
         }
 
+        let currentFaceView = 'F';
+
         function setCubeAngle(angle) {
             if (isCubeFrozen) {
                 showFrozenNotice();
                 return;
             }
             if (solverSize === 'pyraminx') {
-                if (angle === 'iso' || angle === '3d') { rotX = -18; rotY = -35; }
-                else if (angle === 'top' || angle === 'U') { rotX = -19.47; rotY = 0; }
-                else if (angle === 'left' || angle === 'L') { rotX = -19.47; rotY = 120; }
-                else if (angle === 'right' || angle === 'R') { rotX = -19.47; rotY = -120; }
-                else if (angle === 'bottom' || angle === 'B') { rotX = 90; rotY = 0; }
+                if (angle === 'iso' || angle === '3d') { rotX = -18; rotY = -35; currentFaceView = 'U'; }
+                else if (angle === 'top' || angle === 'U') { rotX = -19.47; rotY = 0; currentFaceView = 'U'; }
+                else if (angle === 'left' || angle === 'L') { rotX = -19.47; rotY = 120; currentFaceView = 'L'; }
+                else if (angle === 'right' || angle === 'R') { rotX = -19.47; rotY = -120; currentFaceView = 'R'; }
+                else if (angle === 'bottom' || angle === 'B') { rotX = 90; rotY = 0; currentFaceView = 'B'; }
             } else if (solverSize === 'megaminx') {
-                if (angle === 'iso' || angle === '3d') { rotX = -20; rotY = -30; }
-                else if (angle === 'U') { rotX = -90; rotY = 0; }
-                else if (angle === 'F') { rotX = -26.5; rotY = 0; }
-                else if (angle === 'FR') { rotX = -26.5; rotY = 72; }
-                else if (angle === 'BR') { rotX = -26.5; rotY = 144; }
-                else if (angle === 'BL') { rotX = -26.5; rotY = 216; }
-                else if (angle === 'FL') { rotX = -26.5; rotY = 288; }
-                else if (angle === 'DR') { rotX = 26.5; rotY = 36; }
-                else if (angle === 'DBR') { rotX = 26.5; rotY = 108; }
-                else if (angle === 'DL') { rotX = 26.5; rotY = 180; }
-                else if (angle === 'DBL') { rotX = 26.5; rotY = 252; }
-                else if (angle === 'DF') { rotX = 26.5; rotY = 324; }
-                else if (angle === 'D') { rotX = 90; rotY = 0; }
+                if (angle === 'iso' || angle === '3d') { rotX = -20; rotY = -30; currentFaceView = 'F'; }
+                else if (angle === 'U') { rotX = -90; rotY = 0; currentFaceView = 'U'; }
+                else if (angle === 'F') { rotX = -26.5; rotY = 0; currentFaceView = 'F'; }
+                else if (angle === 'FR') { rotX = -26.5; rotY = 72; currentFaceView = 'FR'; }
+                else if (angle === 'BR') { rotX = -26.5; rotY = 144; currentFaceView = 'BR'; }
+                else if (angle === 'BL') { rotX = -26.5; rotY = 216; currentFaceView = 'BL'; }
+                else if (angle === 'FL') { rotX = -26.5; rotY = 288; currentFaceView = 'FL'; }
+                else if (angle === 'DR') { rotX = 26.5; rotY = 36; currentFaceView = 'DR'; }
+                else if (angle === 'DBR') { rotX = 26.5; rotY = 108; currentFaceView = 'DBR'; }
+                else if (angle === 'DL') { rotX = 26.5; rotY = 180; currentFaceView = 'DL'; }
+                else if (angle === 'DBL') { rotX = 26.5; rotY = 252; currentFaceView = 'DBL'; }
+                else if (angle === 'DF') { rotX = 26.5; rotY = 324; currentFaceView = 'DF'; }
+                else if (angle === 'D') { rotX = 90; rotY = 0; currentFaceView = 'D'; }
             } else {
-                if (angle === 'iso' || angle === '3d') { rotX = -25; rotY = -45; }
-                else if (angle === 'front') { rotX = 0; rotY = 0; }
-                else if (angle === 'top') { rotX = -90; rotY = 0; }
-                else if (angle === 'right') { rotX = 0; rotY = -90; }
-                else if (angle === 'back') { rotX = 0; rotY = 180; }
-                else if (angle === 'left') { rotX = 0; rotY = 90; }
-                else if (angle === 'bottom') { rotX = 90; rotY = 0; }
+                if (angle === 'iso' || angle === '3d') { rotX = -25; rotY = -45; currentFaceView = 'F'; }
+                else if (angle === 'front') { rotX = 0; rotY = 0; currentFaceView = 'F'; }
+                else if (angle === 'top') { rotX = -90; rotY = 0; currentFaceView = 'U'; }
+                else if (angle === 'right') { rotX = 0; rotY = -90; currentFaceView = 'R'; }
+                else if (angle === 'back') { rotX = 0; rotY = 180; currentFaceView = 'B'; }
+                else if (angle === 'left') { rotX = 0; rotY = 90; currentFaceView = 'L'; }
+                else if (angle === 'bottom') { rotX = 90; rotY = 0; currentFaceView = 'D'; }
             }
             apply3DRotation();
+            playSound('turn');
+        }
+
+        function fillCurrentVisibleFace() {
+            fillWholeFace(currentFaceView || 'F');
+        }
+
+        function fillAllSolvedColors() {
+            if (solverSize === 'pyraminx') {
+                solverFaces = {
+                    U: new Array(9).fill('yellow'),
+                    L: new Array(9).fill('green'),
+                    R: new Array(9).fill('red'),
+                    B: new Array(9).fill('blue')
+                };
+            } else if (solverSize === 'skewb') {
+                solverFaces = {
+                    U: new Array(5).fill('white'),
+                    D: new Array(5).fill('yellow'),
+                    F: new Array(5).fill('green'),
+                    B: new Array(5).fill('blue'),
+                    L: new Array(5).fill('orange'),
+                    R: new Array(5).fill('red')
+                };
+            } else if (solverSize === 'megaminx') {
+                const colors = ['white', 'red', 'yellow', 'darkblue', 'darkgreen', 'purple', 'silver', 'cream', 'pink', 'cyan', 'orange', 'lime'];
+                const faceKeys = ['U', 'F', 'FR', 'BR', 'BL', 'FL', 'D', 'DF', 'DR', 'DBR', 'DBL', 'DL'];
+                solverFaces = {};
+                faceKeys.forEach((f, idx) => {
+                    solverFaces[f] = new Array(11).fill(colors[idx]);
+                });
+            } else {
+                const N = solverSize;
+                solverFaces = {
+                    U: new Array(N * N).fill('white'),
+                    D: new Array(N * N).fill('yellow'),
+                    F: new Array(N * N).fill('green'),
+                    B: new Array(N * N).fill('blue'),
+                    L: new Array(N * N).fill('orange'),
+                    R: new Array(N * N).fill('red')
+                };
+            }
+            renderSolver3DCube();
+            renderSolverNet();
+            updateColorBadgesAndBanner();
             playSound('turn');
         }
 
@@ -2711,13 +2764,27 @@
                         st.dataset.face = f.key;
                         st.dataset.index = i;
 
-                        st.addEventListener('click', (e) => {
+                        const paintPyra = (e) => {
                             e.stopPropagation();
+                            isStickerMouseDown = true;
                             paintSticker(f.key, i);
-                        });
+                        };
+                        st.addEventListener('pointerdown', paintPyra);
+                        st.addEventListener('mousedown', paintPyra);
+                        st.addEventListener('click', paintPyra);
+                        st.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f.key, i); });
+                        st.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f.key, i); });
+                        st.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f.key); });
 
                         faceDiv.appendChild(st);
                     }
+
+                    faceDiv.addEventListener('click', (e) => {
+                        if (e.target === faceDiv) {
+                            e.stopPropagation();
+                            fillWholeFace(f.key);
+                        }
+                    });
 
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2736,7 +2803,13 @@
                     cSt.style.backgroundColor = PALETTE_COLORS[curC] ? PALETTE_COLORS[curC].hex : curC;
                     cSt.dataset.face = f;
                     cSt.dataset.index = 0;
-                    cSt.addEventListener('click', (e) => { e.stopPropagation(); paintSticker(f, 0); });
+                    const paintCenter = (e) => { e.stopPropagation(); isStickerMouseDown = true; paintSticker(f, 0); };
+                    cSt.addEventListener('pointerdown', paintCenter);
+                    cSt.addEventListener('mousedown', paintCenter);
+                    cSt.addEventListener('click', paintCenter);
+                    cSt.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, 0); });
+                    cSt.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, 0); });
+                    cSt.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
                     faceDiv.appendChild(cSt);
 
                     // 4 Corners (1: TL, 2: TR, 3: BL, 4: BR)
@@ -2748,9 +2821,22 @@
                         corn.style.backgroundColor = PALETTE_COLORS[curCorn] ? PALETTE_COLORS[curCorn].hex : curCorn;
                         corn.dataset.face = f;
                         corn.dataset.index = i;
-                        corn.addEventListener('click', (e) => { e.stopPropagation(); paintSticker(f, i); });
+                        const paintCorn = (e) => { e.stopPropagation(); isStickerMouseDown = true; paintSticker(f, i); };
+                        corn.addEventListener('pointerdown', paintCorn);
+                        corn.addEventListener('mousedown', paintCorn);
+                        corn.addEventListener('click', paintCorn);
+                        corn.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
+                        corn.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
+                        corn.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
                         faceDiv.appendChild(corn);
                     }
+
+                    faceDiv.addEventListener('click', (e) => {
+                        if (e.target === faceDiv) {
+                            e.stopPropagation();
+                            fillWholeFace(f);
+                        }
+                    });
 
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2763,11 +2849,24 @@
                     const colors = (solverFaces[f] || []).map(c => PALETTE_COLORS[c] ? PALETTE_COLORS[c].hex : c);
                     faceDiv.innerHTML = createMegaminxSvgMarkup(f, colors);
                     faceDiv.querySelectorAll('.mega-polygon').forEach(poly => {
-                        poly.addEventListener('click', (e) => {
+                        const idx = parseInt(poly.dataset.index, 10);
+                        const paintPoly = (e) => {
                             e.stopPropagation();
-                            const idx = parseInt(poly.dataset.index, 10);
+                            isStickerMouseDown = true;
                             paintSticker(f, idx);
-                        });
+                        };
+                        poly.addEventListener('pointerdown', paintPoly);
+                        poly.addEventListener('mousedown', paintPoly);
+                        poly.addEventListener('click', paintPoly);
+                        poly.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, idx); });
+                        poly.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, idx); });
+                        poly.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
+                    });
+                    faceDiv.addEventListener('click', (e) => {
+                        if (e.target === faceDiv) {
+                            e.stopPropagation();
+                            fillWholeFace(f);
+                        }
                     });
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2850,20 +2949,24 @@
                         paintBrushOnFace(f, x, y, 200, N);
                     };
 
+                    canvas.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        fillWholeFace(f);
+                    });
+
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
                         isPainting = true;
                         hasDragged = false;
                         pStartX = e.clientX;
                         pStartY = e.clientY;
-                        try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
                     });
 
                     canvas.addEventListener('pointermove', (e) => {
                         if (!isPainting) return;
                         e.stopPropagation();
                         const dist = Math.hypot(e.clientX - pStartX, e.clientY - pStartY);
-                        if (dist > 4) {
+                        if (dist > 10) {
                             hasDragged = true;
                             paintAtPoint(e.clientX, e.clientY);
                         }
@@ -2873,12 +2976,11 @@
                         if (!isPainting) return;
                         isPainting = false;
                         e.stopPropagation();
-                        try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
-                        if (!hasDragged) {
-                            fillWholeFace(f);
-                        } else {
+                        if (hasDragged) {
                             updateColorBadgesAndBanner();
                             playSound('turn');
+                        } else {
+                            fillWholeFace(f);
                         }
                     };
 
@@ -2919,13 +3021,27 @@
                         st.dataset.face = f;
                         st.dataset.index = i;
 
-                        st.addEventListener('click', (e) => {
+                        const paintSt = (e) => {
                             e.stopPropagation();
+                            isStickerMouseDown = true;
                             paintSticker(f, i);
-                        });
+                        };
+                        st.addEventListener('pointerdown', paintSt);
+                        st.addEventListener('mousedown', paintSt);
+                        st.addEventListener('click', paintSt);
+                        st.addEventListener('pointerenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
+                        st.addEventListener('mouseenter', () => { if (isStickerMouseDown) paintSticker(f, i); });
+                        st.addEventListener('dblclick', (e) => { e.stopPropagation(); fillWholeFace(f); });
 
                         faceDiv.appendChild(st);
                     }
+
+                    faceDiv.addEventListener('click', (e) => {
+                        if (e.target === faceDiv) {
+                            e.stopPropagation();
+                            fillWholeFace(f);
+                        }
+                    });
 
                     cubeEl.appendChild(faceDiv);
                 });
@@ -3234,20 +3350,24 @@
                         paintBrushOnFace(item.key, x, y, 160, N);
                     };
 
+                    canvas.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        fillWholeFace(item.key);
+                    });
+
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
                         isNetPainting = true;
                         hasNetDragged = false;
                         netStartX = e.clientX;
                         netStartY = e.clientY;
-                        try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
                     });
 
                     canvas.addEventListener('pointermove', (e) => {
                         if (!isNetPainting) return;
                         e.stopPropagation();
                         const dist = Math.hypot(e.clientX - netStartX, e.clientY - netStartY);
-                        if (dist > 4) {
+                        if (dist > 10) {
                             hasNetDragged = true;
                             paintNetAtPoint(e.clientX, e.clientY);
                         }
@@ -3257,12 +3377,11 @@
                         if (!isNetPainting) return;
                         isNetPainting = false;
                         e.stopPropagation();
-                        try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
-                        if (!hasNetDragged) {
-                            fillWholeFace(item.key);
-                        } else {
+                        if (hasNetDragged) {
                             updateColorBadgesAndBanner();
                             playSound('turn');
+                        } else {
+                            fillWholeFace(item.key);
                         }
                     };
 
@@ -3417,6 +3536,9 @@
 
         window.addEventListener('mousedown', () => { isStickerMouseDown = true; });
         window.addEventListener('mouseup', () => { isStickerMouseDown = false; });
+        window.addEventListener('pointerdown', () => { isStickerMouseDown = true; });
+        window.addEventListener('pointerup', () => { isStickerMouseDown = false; });
+        window.addEventListener('pointercancel', () => { isStickerMouseDown = false; });
 
         function updateColorBadgesAndBanner() {
             const counts = {};
@@ -3790,7 +3912,9 @@
                 }
                 if (e.target.classList.contains('solver-3d-sticker') ||
                     e.target.classList.contains('solver-3d-face') ||
-                    e.target.closest('.solver-3d-face')) return;
+                    e.target.classList.contains('mega-polygon') ||
+                    e.target.closest('.solver-3d-face') ||
+                    e.target.closest('.solver-3d-sticker')) return;
                 isOrbitDragging = true;
                 orbitStartX = e.clientX;
                 orbitStartY = e.clientY;
