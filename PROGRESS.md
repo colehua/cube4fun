@@ -1,43 +1,39 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Redesign Game 1 (Cube Runner 3D) into a true 3-Lane Pseudo-3D Highway Dash:
-   - Completely distinguish it from Game 11 (Flappy Cubie)
-   - 3 Lanes (Left, Middle, Right) with smooth lane-shifting
-   - Jump (Up / Space) over low scramble blocks and Slide (Down) under high laser barriers
-   - Collect glowing solved sticker gems (+50 pts)
-   - Retro pseudo-3D perspective grid road receding into the horizon
-   - Responsive on-screen controls (Left, Right, Jump, Slide) + keyboard (Arrow keys / WASD / Space)
-   - Full pause/resume support (P / Esc) and synthesized Web Audio SFX
-2. Make more space for all arcade games:
-   - Expand .arcade-container from 1100px to 1320px
-   - Increase .game-stage-card padding (34px 28px) and minimum height (580px)
-   - Upsize game canvases (Runner to 680x420, Snake to 560x400, Breaker to 640x420, Space to 640x440, Flappy to 640x420, Stacker to 380x460)
-   - Upsize interactive grids (2048 tiles to 98px, Simon buttons to 122px, Reflex targets to 108px, Whack holes to 118px, Pairs cards to 94px)
-   - Ensure responsive scaling across mobile, tablet, and desktop
-3. Verify live gameplay and rendering across all games in Chrome DevTools MCP.
-4. Commit and push all changes to GitHub remote (origin/main).
+1. Cube Runner 3D Highway Dash:
+   - Menacing Scramble Monsters spawn in lanes and kill player upon collision
+   - Laser Blaster projectile firing system with dedicated [🔥 SHOOT!] button and keyboard keys (Space / F)
+   - Killing a monster awards an entire Bag of Coins (equals +10 coins!) with explosion particles, floating celebratory banner, and audio chime
+   - Scoreboard displays COINS counter: DISTANCE, COINS (💰), SPEED, BEST
+2. Neatness & Aesthetic Polish:
+   - Reorganized arcade control console into neat steering and action button clusters
+   - Polished synthwave visuals: horizontal sun slices, glowing curbs, starfield, animated spiky monsters with glowing eyes, and 3D coin bag sprites
+   - Crisp unified arcade cards, badges, and typography
+3. Verified via Chrome DevTools MCP with zero errors.
+4. Committed and pushed to remote origin main.
 
-Next step: Done.
+Next step: Completed.
 
 Tasks:
-- [x] Update PROGRESS.md to IN PROGRESS
-- [x] Expand container, card, canvas, and grid CSS sizes for spacious gameplay
-- [x] Add 3-lane runner controls and UI to panel-runner in games.html
-- [x] Implement true 3D 3-lane runner engine with perspective, lane switching, jumping, sliding, obstacles, and gems
-- [x] Verify live rendering and controls in Chrome DevTools MCP
-- [x] Commit and push to origin/main
+- [x] Add synthesized Web Audio SFX for bag of coins chime and monster explosion
+- [x] Beautify and neaten arcade styling, control decks, and scoreboard pill badges
+- [x] Add COINS counter and [🔥 SHOOT!] console controls to panel-runner
+- [x] Implement monster entity, laser blaster system, hit detection, particle explosion, and +10 coin bag rewards
+- [x] Implement monster devouring game-over mechanic if player collides without shooting
+- [x] Verify live gameplay, laser firing, monster hit detection, and pause controls in Chrome DevTools MCP
+- [x] Commit and push changes to GitHub origin/main
 
 Assumptions:
-- Transforming Cube Runner into a 3-lane Highway Dash eliminates duplication with Flappy Cubie.
-- Expanding container max-width to 1320px and canvas/grid dimensions gives players generous, arcade-quality space.
+- Spacebar, F, and Enter fire laser blaster; Up/W jumps, Down/S slides, Left/Right/A/D steers.
+- On-screen [🔥 SHOOT!] button provides instant touch & click firing.
+- Destroying a monster immediately awards the entire Bag of Coins (+10 coins) and increments the score.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Pushed changes to GitHub remote (origin/main).
-- Verified 3D Highway Dash live gameplay, lane shifts, jumping, sliding, and Flappy Cubie separation in Chrome DevTools MCP.
-- Upsized all game canvases and interactive puzzle grids for spacious gameplay.
-- Expanded .arcade-container to 1320px and .game-stage-card to 580px min-height.
-- Re-architected Game 1 (Cube Runner 3D) into a true 3-lane forward-racing Highway Dash.
+- Completed live verification in Chrome DevTools MCP and pushed to origin main.
+- Wired universal keyboard shortcuts (Space / F for shooting) and fixed syntax error.
+- Implemented laser blaster system, monsters, 10-coin bag drops, and audio effects.
+- Implemented sleek grouped arcade control deck and neon synthwave highway aesthetics.

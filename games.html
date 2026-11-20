@@ -397,6 +397,92 @@
             color: #000;
         }
 
+        /* NEAT ARCADE CONSOLE CONTROLS */
+        .arcade-control-deck {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 10px 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            max-width: 680px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .control-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .deck-btn {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            border: 2px solid transparent;
+        }
+        .deck-btn:active {
+            transform: scale(0.93);
+        }
+
+        .btn-steer {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+        .btn-steer:hover {
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+            background: #0f172a;
+        }
+
+        .btn-action-jump {
+            background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+            border-color: #818cf8;
+            color: #ffffff;
+        }
+        .btn-action-jump:hover {
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-action-slide {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            border-color: #a78bfa;
+            color: #ffffff;
+        }
+        .btn-action-slide:hover {
+            box-shadow: 0 0 16px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-action-shoot {
+            background: linear-gradient(135deg, #ff007f 0%, #e11d48 50%, #f97316 100%);
+            border-color: #f43f5e;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.45);
+            animation: shootPulse 1.8s infinite ease-in-out;
+        }
+        @keyframes shootPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); transform: scale(1); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 127, 0.75); transform: scale(1.03); }
+        }
+
         /* 2048 CUBING GRID */
         .grid-2048 {
             display: grid;
@@ -999,20 +1085,25 @@
                     <h2 class="game-title-text">🎮 Cube Runner 3D • Highway Dash</h2>
                     <div class="game-score-display">
                         <span>DISTANCE: <span id="runner-score">0</span>m</span>
+                        <span class="record-pill" style="border-color: #fbbf24; background: linear-gradient(135deg, rgba(251, 191, 36, 0.22) 0%, rgba(245, 158, 11, 0.22) 100%);">💰 COINS: <span id="runner-coins">0</span></span>
                         <span>SPEED: <span id="runner-speed">1.0</span>x</span>
-                        <span>GEMS: <span id="runner-gems">0</span></span>
                         <span class="record-pill">🏆 BEST: <span id="runner-best">0</span>m</span>
                     </div>
                 </div>
                 <canvas id="canvas-runner" class="arcade-canvas" width="680" height="420"></canvas>
-                <div class="runner-lane-controls" style="display: flex; gap: 14px; margin-top: 14px; justify-content: center; flex-wrap: wrap;">
-                    <button class="dpad-btn" onclick="moveRunnerLane(-1)" title="Left (A / ⬅️)">⬅️ Left</button>
-                    <button class="dpad-btn" onclick="runnerJumpAction()" title="Jump (W / ⬆️ / Space)">⬆️ Jump</button>
-                    <button class="dpad-btn" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
-                    <button class="dpad-btn" onclick="moveRunnerLane(1)" title="Right (D / ➡️)">➡️ Right</button>
+                <div class="arcade-control-deck">
+                    <div class="control-group">
+                        <button class="deck-btn btn-steer" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
+                        <button class="deck-btn btn-steer" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
+                    </div>
+                    <div class="control-group">
+                        <button class="deck-btn btn-action-jump" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">⬆️ Jump</button>
+                        <button class="deck-btn btn-action-slide" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
+                        <button class="deck-btn btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
+                    </div>
                 </div>
-                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em;">
-                    Dodge scramble obstacles across 3 lanes! Collect rainbow gems! <strong>A / D / ⬅️ / ➡️</strong> Switch Lanes • <strong>W / ⬆️ / Space</strong> Jump • <strong>S / ⬇️</strong> Slide
+                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 680px;">
+                    👾 Blast Scramble Monsters with lasers to get a <strong>Bag of Coins (+10 💰)</strong>! <strong>A / D / ⬅️ / ➡️</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide • <strong>Space / F</strong> Shoot
                 </div>
                 <div class="game-controls-row">
                     <button id="btn-runner-start" class="btn-game-primary" onclick="startRunnerGame()">
@@ -1600,6 +1691,32 @@
                     osc1.stop(now + 0.1);
                     osc2.start(now + 0.08);
                     osc2.stop(now + 0.22);
+                } else if (type === 'coins') {
+                    // Bag of Coins Reward Fanfare: 3 bright rapid bell chimes
+                    [987.77, 1318.51, 1567.98].forEach((f, i) => {
+                        const o = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        o.type = 'sine';
+                        o.frequency.setValueAtTime(f, now + i * 0.08);
+                        g.gain.setValueAtTime(0.28, now + i * 0.08);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.28);
+                        o.connect(g);
+                        g.connect(ctx.destination);
+                        o.start(now + i * 0.08);
+                        o.stop(now + i * 0.08 + 0.3);
+                    });
+                } else if (type === 'explosion') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(35, now + 0.28);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.31);
                 } else if (type === 'bomb') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -1714,7 +1831,7 @@
         let runnerActive = false;
         let runnerPaused = false;
         let runnerDistance = 0;
-        let runnerGems = 0;
+        let runnerCoins = 0;
         let runnerSpeed = 1.0;
         let runnerBest = parseInt(localStorage.getItem('cube_runner_best') || '0', 10);
         document.getElementById('runner-best').textContent = runnerBest;
@@ -1726,18 +1843,30 @@
         let runnerIsJumping = false;
         let runnerIsSliding = false;
         let runnerSlideTimer = 0;
+        let runnerShootCooldown = 0;
 
         let runnerObstacles = [];
+        let runnerLasers = [];
+        let runnerExplosions = [];
+        let runnerFloatingTexts = [];
         let runnerAnimId = null;
         let runnerRoadZ = 0;
         let runnerFrame = 0;
+
+        // Background stars
+        const runnerStars = Array.from({ length: 45 }, () => ({
+            x: Math.random() * 680,
+            y: Math.random() * 110,
+            size: Math.random() * 2 + 1,
+            alpha: Math.random() * 0.7 + 0.3
+        }));
 
         function startRunnerGame() {
             getAudioContext();
             runnerActive = true;
             runnerPaused = false;
             runnerDistance = 0;
-            runnerGems = 0;
+            runnerCoins = 0;
             runnerSpeed = 1.0;
             runnerTargetLane = 1;
             runnerCurrentLaneX = 1.0;
@@ -1746,13 +1875,17 @@
             runnerIsJumping = false;
             runnerIsSliding = false;
             runnerSlideTimer = 0;
+            runnerShootCooldown = 0;
             runnerObstacles = [];
+            runnerLasers = [];
+            runnerExplosions = [];
+            runnerFloatingTexts = [];
             runnerRoadZ = 0;
             runnerFrame = 0;
 
             document.getElementById('runner-score').textContent = '0';
+            document.getElementById('runner-coins').textContent = '0';
             document.getElementById('runner-speed').textContent = '1.0';
-            document.getElementById('runner-gems').textContent = '0';
             document.getElementById('btn-runner-start').textContent = '🔄 Restart Highway Dash';
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
@@ -1775,7 +1908,7 @@
                     btn.innerHTML = '▶️ Resume';
                 }
                 if (rCtx) {
-                    rCtx.fillStyle = 'rgba(2, 6, 23, 0.82)';
+                    rCtx.fillStyle = 'rgba(2, 6, 23, 0.85)';
                     rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
                     rCtx.font = '26px "DynaPuff", cursive';
                     rCtx.fillStyle = '#FAED27';
@@ -1822,6 +1955,38 @@
             }
         }
 
+        function runnerShootAction() {
+            if (!runnerActive || runnerPaused) return;
+            if (runnerShootCooldown > 0) return;
+            runnerShootCooldown = 12; // cooldown frames
+            playSfx('laser');
+
+            // Fire laser projectile in player's current lane
+            runnerLasers.push({
+                lane: runnerTargetLane,
+                z: 80
+            });
+        }
+
+        function spawnMonsterExplosion(x, y) {
+            const colors = ['#ff007f', '#f97316', '#fde047', '#ffffff', '#a855f7'];
+            const particles = [];
+            for (let i = 0; i < 18; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const spd = Math.random() * 5 + 2;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * spd,
+                    vy: Math.sin(angle) * spd,
+                    size: Math.random() * 5 + 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    life: 22
+                });
+            }
+            runnerExplosions.push(particles);
+        }
+
         function runnerLoop() {
             if (!runnerActive || runnerPaused || !rCtx) return;
             runnerFrame++;
@@ -1832,6 +1997,8 @@
             if (runnerFrame % 300 === 0 && runnerSpeed < 3.2) {
                 runnerSpeed = +(runnerSpeed + 0.15).toFixed(1);
             }
+            if (runnerShootCooldown > 0) runnerShootCooldown--;
+
             document.getElementById('runner-score').textContent = runnerDistance;
             document.getElementById('runner-speed').textContent = runnerSpeed.toFixed(1);
 
@@ -1856,32 +2023,88 @@
                 }
             }
 
-            // Spawn obstacles
-            const spawnInterval = Math.max(32, Math.floor(65 - runnerSpeed * 10));
+            // Update Laser Projectiles
+            for (let li = runnerLasers.length - 1; li >= 0; li--) {
+                const laser = runnerLasers[li];
+                laser.z += 28 * runnerSpeed;
+
+                // Check collision with monsters
+                let laserHit = false;
+                for (let oi = 0; oi < runnerObstacles.length; oi++) {
+                    const ob = runnerObstacles[oi];
+                    if (ob.type === 'monster' && !ob.killed) {
+                        if (Math.abs(laser.lane - ob.lane) < 0.65 && Math.abs(laser.z - ob.z) < 70) {
+                            // KILL THE MONSTER!
+                            ob.killed = true;
+                            laserHit = true;
+                            playSfx('explosion');
+                            setTimeout(() => playSfx('coins'), 140);
+
+                            // Calculate screen position for explosion
+                            const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                            const expY = 110 + (t * t) * (runnerCanvas.height - 110);
+                            const roadW = 160 + t * 420;
+                            const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                            spawnMonsterExplosion(expX, expY - 20);
+
+                            // Kill rewards player with an ENTIRE BAG OF COINS (equals 10 coins)!
+                            runnerCoins += 10;
+                            runnerDistance += 50;
+                            document.getElementById('runner-coins').textContent = runnerCoins;
+
+                            // Floating text reward: Bag of Coins!
+                            runnerFloatingTexts.push({
+                                text: '+10 💰 BAG OF COINS!',
+                                x: expX,
+                                y: expY - 45,
+                                color: '#fde047',
+                                life: 65
+                            });
+
+                            runnerObstacles.splice(oi, 1);
+                            break;
+                        }
+                    }
+                }
+
+                if (laserHit || laser.z > 1050) {
+                    runnerLasers.splice(li, 1);
+                }
+            }
+
+            // Spawn obstacles and monsters
+            const spawnInterval = Math.max(34, Math.floor(65 - runnerSpeed * 10));
             if (runnerFrame % spawnInterval === 0) {
                 const lane = Math.floor(Math.random() * 3);
                 const rand = Math.random();
                 let type = 'hurdle';
-                if (rand < 0.22) type = 'gem';
-                else if (rand < 0.52) type = 'hurdle';
-                else if (rand < 0.80) type = 'laser';
-                else type = 'barrier';
+
+                // High monster spawn chance (32% monster!)
+                if (rand < 0.32) {
+                    type = 'monster';
+                } else if (rand < 0.54) {
+                    type = 'hurdle';
+                } else if (rand < 0.78) {
+                    type = 'laser';
+                } else {
+                    type = 'barrier';
+                }
 
                 runnerObstacles.push({
                     lane: lane,
                     type: type,
                     z: 1000,
-                    collected: false
+                    killed: false
                 });
 
-                // Occasionally spawn a gem in another lane
-                if (type !== 'gem' && Math.random() < 0.35) {
-                    const gemLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
+                // Occasionally spawn a monster in a second lane for multi-lane danger
+                if (type !== 'monster' && Math.random() < 0.30) {
+                    const secondLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
                     runnerObstacles.push({
-                        lane: gemLane,
-                        type: 'gem',
+                        lane: secondLane,
+                        type: 'monster',
                         z: 1000,
-                        collected: false
+                        killed: false
                     });
                 }
             }
@@ -1891,25 +2114,44 @@
                 const ob = runnerObstacles[i];
                 ob.z -= runnerSpeed * 14;
 
-                // Collision check (when approaching player at z between 50 and 130)
-                if (ob.z < 130 && ob.z > 50 && !ob.collected) {
+                // Collision check (when reaching player at z between 50 and 130)
+                if (ob.z < 130 && ob.z > 50) {
                     const laneDiff = Math.abs(runnerCurrentLaneX - ob.lane);
                     if (laneDiff < 0.55) {
-                        if (ob.type === 'gem') {
-                            ob.collected = true;
-                            runnerGems++;
-                            runnerDistance += 50;
-                            playSfx('bonus');
-                            document.getElementById('runner-gems').textContent = runnerGems;
+                        if (ob.type === 'coin_bag') {
+                            // Collect entire Bag of Coins (+10 coins!)
+                            runnerCoins += 10;
+                            runnerDistance += 100;
+                            playSfx('coins');
+                            document.getElementById('runner-coins').textContent = runnerCoins;
                             document.getElementById('runner-score').textContent = runnerDistance;
+
+                            // Calculate floating notification position
+                            const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                            const notifY = 110 + (t * t) * (runnerCanvas.height - 110);
+                            const notifX = runnerCanvas.width / 2 + (runnerCurrentLaneX - 1) * (560 / 3);
+                            runnerFloatingTexts.push({
+                                text: '+10 💰 BAG OF COINS!',
+                                x: notifX,
+                                y: notifY - 30,
+                                color: '#fde047',
+                                life: 60
+                            });
+
+                            runnerObstacles.splice(i, 1);
+                            continue;
+                        } else if (ob.type === 'monster') {
+                            // MONSTER KILLS THE PLAYER!
+                            gameOverRunner('Devoured by the Scramble Monster! Blast them with 🔥 SHOOT (Space/F)!');
+                            return;
                         } else if (ob.type === 'hurdle') {
                             if (runnerJumpY < 24) {
-                                gameOverRunner('Hit a scramble hurdle! Jump with Space or ⬆️!');
+                                gameOverRunner('Hit a scramble hurdle! Jump over with ⬆️ or Space!');
                                 return;
                             }
                         } else if (ob.type === 'laser') {
                             if (!runnerIsSliding) {
-                                gameOverRunner('Struck by laser barrier! Slide under with S or ⬇️!');
+                                gameOverRunner('Struck by laser barrier! Slide under with ⬇️ or S!');
                                 return;
                             }
                         } else if (ob.type === 'barrier') {
@@ -1922,6 +2164,27 @@
                 if (ob.z < 0) {
                     runnerObstacles.splice(i, 1);
                 }
+            }
+
+            // Update particle explosions
+            for (let ei = runnerExplosions.length - 1; ei >= 0; ei--) {
+                const parts = runnerExplosions[ei];
+                for (let pi = parts.length - 1; pi >= 0; pi--) {
+                    const p = parts[pi];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life--;
+                    if (p.life <= 0) parts.splice(pi, 1);
+                }
+                if (parts.length === 0) runnerExplosions.splice(ei, 1);
+            }
+
+            // Update floating texts
+            for (let fi = runnerFloatingTexts.length - 1; fi >= 0; fi--) {
+                const ft = runnerFloatingTexts[fi];
+                ft.y -= 1.2;
+                ft.life--;
+                if (ft.life <= 0) runnerFloatingTexts.splice(fi, 1);
             }
 
             // Draw everything
@@ -1940,32 +2203,50 @@
             // Background cyber sky
             const skyGrad = rCtx.createLinearGradient(0, 0, 0, horizonY);
             skyGrad.addColorStop(0, '#020617');
-            skyGrad.addColorStop(1, '#09132b');
+            skyGrad.addColorStop(0.7, '#070f26');
+            skyGrad.addColorStop(1, '#1e1145');
             rCtx.fillStyle = skyGrad;
             rCtx.fillRect(0, 0, w, horizonY);
 
-            // Horizon neon glow
-            rCtx.strokeStyle = '#00f0ff';
+            // Twinkling stars
+            runnerStars.forEach(st => {
+                rCtx.fillStyle = `rgba(255, 255, 255, ${st.alpha * (0.6 + Math.sin(runnerFrame * 0.05 + st.x) * 0.4)})`;
+                rCtx.fillRect(st.x, st.y, st.size, st.size);
+            });
+
+            // Horizon neon glow strip
+            rCtx.strokeStyle = 'rgba(0, 240, 255, 0.7)';
             rCtx.lineWidth = 2;
             rCtx.beginPath();
             rCtx.moveTo(0, horizonY);
             rCtx.lineTo(w, horizonY);
             rCtx.stroke();
 
-            // Neon sun on horizon
-            const sunGrad = rCtx.createRadialGradient(centerX, horizonY, 5, centerX, horizonY, 60);
+            // Synthwave Sun with horizontal slice lines
+            const sunRadius = 45;
+            const sunGrad = rCtx.createLinearGradient(centerX, horizonY - sunRadius, centerX, horizonY);
             sunGrad.addColorStop(0, '#ff007f');
-            sunGrad.addColorStop(0.5, 'rgba(0, 240, 255, 0.4)');
-            sunGrad.addColorStop(1, 'transparent');
+            sunGrad.addColorStop(0.5, '#f43f5e');
+            sunGrad.addColorStop(1, '#fbbf24');
             rCtx.fillStyle = sunGrad;
             rCtx.beginPath();
-            rCtx.arc(centerX, horizonY, 60, Math.PI, 0);
+            rCtx.arc(centerX, horizonY, sunRadius, Math.PI, 0);
             rCtx.fill();
+
+            // Sun horizontal slices (clean retro aesthetic)
+            rCtx.fillStyle = '#070f26';
+            for (let sy = horizonY - sunRadius + 18; sy < horizonY; sy += 7) {
+                const sliceH = Math.min(3, (sy - (horizonY - sunRadius)) * 0.08);
+                rCtx.fillRect(centerX - sunRadius, sy, sunRadius * 2, sliceH);
+            }
 
             // Ground highway polygon
             const horizonW = 160;
             const bottomW = 580;
-            rCtx.fillStyle = '#050b18';
+            const roadGrad = rCtx.createLinearGradient(0, horizonY, 0, bottomY);
+            roadGrad.addColorStop(0, '#060d1f');
+            roadGrad.addColorStop(1, '#020617');
+            rCtx.fillStyle = roadGrad;
             rCtx.beginPath();
             rCtx.moveTo(centerX - horizonW / 2, horizonY);
             rCtx.lineTo(centerX + horizonW / 2, horizonY);
@@ -1974,22 +2255,25 @@
             rCtx.closePath();
             rCtx.fill();
 
-            // Road borders
+            // Road borders (neon cyan glowing curbs)
             rCtx.strokeStyle = '#00f0ff';
             rCtx.lineWidth = 3;
+            rCtx.shadowColor = '#00f0ff';
+            rCtx.shadowBlur = 10;
             rCtx.beginPath();
             rCtx.moveTo(centerX - horizonW / 2, horizonY);
             rCtx.lineTo(centerX - bottomW / 2, bottomY);
             rCtx.moveTo(centerX + horizonW / 2, horizonY);
             rCtx.lineTo(centerX + bottomW / 2, bottomY);
             rCtx.stroke();
+            rCtx.shadowBlur = 0;
 
             // Lane dividers (between lanes 0-1 and 1-2)
             const divOffset1 = -1/6;
             const divOffset2 = 1/6;
-            rCtx.strokeStyle = 'rgba(254, 224, 71, 0.4)';
-            rCtx.lineWidth = 2;
-            rCtx.setLineDash([16, 16]);
+            rCtx.strokeStyle = 'rgba(254, 224, 71, 0.45)';
+            rCtx.lineWidth = 2.5;
+            rCtx.setLineDash([18, 18]);
             rCtx.lineDashOffset = -runnerRoadZ;
 
             rCtx.beginPath();
@@ -2000,11 +2284,32 @@
             rCtx.stroke();
             rCtx.setLineDash([]);
 
+            // Draw Laser Projectiles
+            runnerLasers.forEach(laser => {
+                const t = Math.max(0, Math.min(1, 1 - (laser.z / 1000)));
+                const ly = horizonY + (t * t) * (bottomY - horizonY);
+                const roadW = horizonW + t * (bottomW - horizonW);
+                const laneW = roadW / 3;
+                const lx = centerX + (laser.lane - 1) * laneW;
+                const scale = 0.35 + t * 0.8;
+
+                rCtx.save();
+                rCtx.fillStyle = '#00f0ff';
+                rCtx.shadowColor = '#00f0ff';
+                rCtx.shadowBlur = 16;
+                // Dual glowing laser bolts
+                rCtx.fillRect(lx - 9 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
+                rCtx.fillRect(lx + 4 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
+                rCtx.fillStyle = '#ffffff';
+                rCtx.fillRect(lx - 8 * scale, ly - 20 * scale, 3 * scale, 16 * scale);
+                rCtx.fillRect(lx + 5 * scale, ly - 20 * scale, 3 * scale, 16 * scale);
+                rCtx.restore();
+            });
+
             // Sort obstacles from back (z=1000) to front (z=0)
             const sortedObstacles = [...runnerObstacles].sort((a, b) => b.z - a.z);
 
             sortedObstacles.forEach(ob => {
-                if (ob.collected) return;
                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                 const y = horizonY + (t * t) * (bottomY - horizonY);
                 const roadW = horizonW + t * (bottomW - horizonW);
@@ -2015,24 +2320,125 @@
                 rCtx.save();
                 rCtx.translate(x, y);
 
-                if (ob.type === 'gem') {
-                    // Floating rotating rainbow gem
-                    const gemSize = 22 * scale;
-                    rCtx.fillStyle = '#fde047';
-                    rCtx.shadowColor = '#fde047';
-                    rCtx.shadowBlur = 14;
+                if (ob.type === 'coin_bag') {
+                    // ENTIRE BAG OF COINS (10 COINS)
+                    const bobY = Math.sin(runnerFrame * 0.2) * 5 * scale;
+                    rCtx.translate(0, bobY);
+
+                    // Golden glowing aura
+                    rCtx.shadowColor = '#f59e0b';
+                    rCtx.shadowBlur = 22 * scale;
+
+                    // Bag body (rich golden brown sack)
+                    const bagW = 38 * scale;
+                    const bagH = 42 * scale;
+
+                    rCtx.fillStyle = '#d97706';
                     rCtx.beginPath();
-                    rCtx.moveTo(0, -gemSize);
-                    rCtx.lineTo(gemSize * 0.8, 0);
-                    rCtx.lineTo(0, gemSize);
-                    rCtx.lineTo(-gemSize * 0.8, 0);
+                    rCtx.ellipse(0, -bagH * 0.45, bagW * 0.5, bagH * 0.45, 0, 0, Math.PI * 2);
+                    rCtx.fill();
+
+                    // Tied sack top ruffles
+                    rCtx.fillStyle = '#f59e0b';
+                    rCtx.beginPath();
+                    rCtx.moveTo(-bagW * 0.35, -bagH * 0.85);
+                    rCtx.lineTo(0, -bagH * 1.1);
+                    rCtx.lineTo(bagW * 0.35, -bagH * 0.85);
                     rCtx.closePath();
                     rCtx.fill();
-                    rCtx.strokeStyle = '#ffffff';
-                    rCtx.lineWidth = 1.5;
+
+                    // Tied gold string
+                    rCtx.strokeStyle = '#fde047';
+                    rCtx.lineWidth = 3 * scale;
+                    rCtx.beginPath();
+                    rCtx.moveTo(-bagW * 0.3, -bagH * 0.78);
+                    rCtx.lineTo(bagW * 0.3, -bagH * 0.78);
                     rCtx.stroke();
+
+                    // Giant gold coin badge on bag
+                    rCtx.fillStyle = '#fde047';
+                    rCtx.beginPath();
+                    rCtx.arc(0, -bagH * 0.45, 12 * scale, 0, Math.PI * 2);
+                    rCtx.fill();
+                    rCtx.strokeStyle = '#b45309';
+                    rCtx.lineWidth = 2 * scale;
+                    rCtx.stroke();
+
+                    // Dollar/Coin symbol
+                    rCtx.fillStyle = '#b45309';
+                    rCtx.font = `bold ${Math.floor(13 * scale)}px sans-serif`;
+                    rCtx.textAlign = 'center';
+                    rCtx.textBaseline = 'middle';
+                    rCtx.fillText('💰', 0, -bagH * 0.45);
+
+                    // Sparkling star glints
+                    rCtx.fillStyle = '#ffffff';
+                    const star1 = Math.sin(runnerFrame * 0.3);
+                    if (star1 > 0.2) {
+                        rCtx.fillRect(bagW * 0.4, -bagH * 0.7, 4 * scale, 4 * scale);
+                    }
+                } else if (ob.type === 'monster') {
+                    // SCRAMBLE GLITCH MONSTER (CAN KILL YOU!)
+                    const stompY = Math.sin(runnerFrame * 0.25 + ob.lane) * 6 * scale;
+                    rCtx.translate(0, stompY);
+
+                    const mW = 50 * scale;
+                    const mH = 50 * scale;
+
+                    // Red menacing aura
+                    rCtx.shadowColor = '#dc2626';
+                    rCtx.shadowBlur = 18 * scale;
+
+                    // Monster spiky dark crystal body
+                    rCtx.fillStyle = '#581c87';
+                    rCtx.strokeStyle = '#dc2626';
+                    rCtx.lineWidth = 2.5 * scale;
+
+                    rCtx.beginPath();
+                    rCtx.moveTo(-mW * 0.5, -mH * 0.2);
+                    rCtx.lineTo(-mW * 0.6, -mH * 0.9); // Left Horn
+                    rCtx.lineTo(-mW * 0.25, -mH * 0.7);
+                    rCtx.lineTo(0, -mH * 1.05); // Center Horn
+                    rCtx.lineTo(mW * 0.25, -mH * 0.7);
+                    rCtx.lineTo(mW * 0.6, -mH * 0.9); // Right Horn
+                    rCtx.lineTo(mW * 0.5, -mH * 0.2);
+                    rCtx.lineTo(mW * 0.35, 0); // Right Foot
+                    rCtx.lineTo(-mW * 0.35, 0); // Left Foot
+                    rCtx.closePath();
+                    rCtx.fill();
+                    rCtx.stroke();
+
+                    // Glowing menacing triangular eyes
+                    rCtx.fillStyle = '#fde047';
+                    rCtx.beginPath();
+                    rCtx.moveTo(-mW * 0.3, -mH * 0.55);
+                    rCtx.lineTo(-mW * 0.1, -mH * 0.5);
+                    rCtx.lineTo(-mW * 0.25, -mH * 0.4);
+                    rCtx.closePath();
+                    rCtx.fill();
+
+                    rCtx.beginPath();
+                    rCtx.moveTo(mW * 0.3, -mH * 0.55);
+                    rCtx.lineTo(mW * 0.1, -mH * 0.5);
+                    rCtx.lineTo(mW * 0.25, -mH * 0.4);
+                    rCtx.closePath();
+                    rCtx.fill();
+
+                    // Jagged mouth with fangs
+                    rCtx.fillStyle = '#0f172a';
+                    rCtx.fillRect(-mW * 0.25, -mH * 0.3, mW * 0.5, mH * 0.18);
+                    rCtx.fillStyle = '#ffffff';
+                    // Sharp fangs
+                    for (let f = -mW * 0.2; f <= mW * 0.15; f += mW * 0.1) {
+                        rCtx.beginPath();
+                        rCtx.moveTo(f, -mH * 0.3);
+                        rCtx.lineTo(f + mW * 0.05, -mH * 0.2);
+                        rCtx.lineTo(f + mW * 0.1, -mH * 0.3);
+                        rCtx.closePath();
+                        rCtx.fill();
+                    }
                 } else if (ob.type === 'hurdle') {
-                    // Low scramble block
+                    // Low scramble block (Jump over)
                     const wBox = 44 * scale;
                     const hBox = 26 * scale;
                     rCtx.fillStyle = '#ef4444';
@@ -2047,7 +2453,7 @@
                     rCtx.fillStyle = '#fde047';
                     rCtx.fillRect(-wBox / 2 + 2, -hBox + 2, wBox / 2 - 3, hBox - 4);
                 } else if (ob.type === 'laser') {
-                    // High laser barrier
+                    // High laser barrier (Slide under)
                     const wBar = 56 * scale;
                     const hBar = 16 * scale;
                     const elevate = 48 * scale;
@@ -2069,7 +2475,7 @@
                     rCtx.lineTo(wBar / 2 - 3, 0);
                     rCtx.stroke();
                 } else if (ob.type === 'barrier') {
-                    // Full solid Rubik wall
+                    // Solid Rubik wall
                     const wWall = 48 * scale;
                     const hWall = 56 * scale;
                     rCtx.fillStyle = '#0f172a';
@@ -2078,7 +2484,6 @@
                     rCtx.lineWidth = 2;
                     rCtx.strokeRect(-wWall / 2, -hWall, wWall, hWall);
 
-                    // 4 color segments
                     const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316'];
                     for (let ci = 0; ci < 4; ci++) {
                         rCtx.fillStyle = colors[ci];
@@ -2087,6 +2492,16 @@
                 }
 
                 rCtx.restore();
+            });
+
+            // Draw Particle Explosions
+            runnerExplosions.forEach(parts => {
+                parts.forEach(p => {
+                    rCtx.fillStyle = p.color;
+                    rCtx.shadowColor = p.color;
+                    rCtx.shadowBlur = 8;
+                    rCtx.fillRect(p.x, p.y, p.size, p.size);
+                });
             });
 
             // Draw Player Cube
@@ -2101,7 +2516,7 @@
             rCtx.translate(playerX, playerY);
 
             // Ground shadow
-            rCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            rCtx.fillStyle = 'rgba(0, 0, 0, 0.55)';
             rCtx.beginPath();
             rCtx.ellipse(0, runnerJumpY, 26, 8, 0, 0, Math.PI * 2);
             rCtx.fill();
@@ -2145,6 +2560,19 @@
             }
 
             rCtx.restore();
+
+            // Draw Floating Reward Notifications
+            runnerFloatingTexts.forEach(ft => {
+                rCtx.save();
+                rCtx.font = 'bold 18px "DynaPuff", cursive';
+                rCtx.fillStyle = ft.color;
+                rCtx.shadowColor = ft.color;
+                rCtx.shadowBlur = 12;
+                rCtx.textAlign = 'center';
+                rCtx.globalAlpha = Math.max(0, ft.life / 50);
+                rCtx.fillText(ft.text, ft.x, ft.y);
+                rCtx.restore();
+            });
         }
 
         function gameOverRunner(reason) {
@@ -2159,21 +2587,21 @@
             }
 
             if (rCtx) {
-                rCtx.fillStyle = 'rgba(2, 6, 23, 0.85)';
+                rCtx.fillStyle = 'rgba(2, 6, 23, 0.88)';
                 rCtx.fillRect(0, 0, runnerCanvas.width, runnerCanvas.height);
 
                 rCtx.font = '28px "DynaPuff", cursive';
                 rCtx.fillStyle = '#ff007f';
                 rCtx.textAlign = 'center';
-                rCtx.fillText('💥 CRASH! HIGHWAY DASH OVER', runnerCanvas.width / 2, runnerCanvas.height / 2 - 25);
+                rCtx.fillText('💥 HIGHWAY DASH OVER!', runnerCanvas.width / 2, runnerCanvas.height / 2 - 28);
 
                 rCtx.font = '16px "Outfit", sans-serif';
                 rCtx.fillStyle = '#fde047';
-                rCtx.fillText(reason || 'Crashed on the cubing highway!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 10);
+                rCtx.fillText(reason || 'Defeated on the cubing highway!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 6);
 
                 rCtx.font = '15px "Outfit", sans-serif';
                 rCtx.fillStyle = '#cbd5e1';
-                rCtx.fillText(`Distance: ${runnerDistance}m  |  Gems: ${runnerGems}  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 38);
+                rCtx.fillText(`Distance: ${runnerDistance}m  |  Coins: ${runnerCoins} 💰  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 + 36);
                 rCtx.fillText('Click Restart or press Spacebar to dash again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 65);
             }
 
@@ -4377,10 +4805,11 @@
         // 15. UNIVERSAL KEYBOARD SHORTCUTS
         // ==========================================
         window.addEventListener('keydown', (e) => {
+            const activePanel = document.querySelector('.game-panel.active');
+            if (!activePanel) return;
+
             // Pause / Resume Shortcut ('P' & 'Escape')
             if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
-                const activePanel = document.querySelector('.game-panel.active');
-                if (!activePanel) return;
                 if (activePanel.id === 'panel-runner') togglePauseRunner();
                 else if (activePanel.id === 'panel-snake') togglePauseSnake();
                 else if (activePanel.id === 'panel-breaker') togglePauseBreaker();
@@ -4393,28 +4822,31 @@
                 else if (activePanel.id === 'panel-whack') togglePauseWhack();
                 else if (activePanel.id === 'panel-flappy') togglePauseFlappy();
                 else if (activePanel.id === 'panel-pairs') togglePausePairs();
+                return;
             }
 
-            // Spacebar & Action Controls
-            if (activePanel && activePanel.id === 'panel-runner' && runnerActive && !runnerPaused) {
+            // Runner Action Controls
+            if (activePanel.id === 'panel-runner' && runnerActive && !runnerPaused) {
                 if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
                     e.preventDefault();
                     moveRunnerLane(-1);
                 } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
                     e.preventDefault();
                     moveRunnerLane(1);
-                } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') {
+                } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
                     e.preventDefault();
                     runnerJumpAction();
                 } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
                     e.preventDefault();
                     runnerSlideAction();
+                } else if (e.code === 'Space' || e.key === 'f' || e.key === 'F' || e.key === 'Enter') {
+                    e.preventDefault();
+                    runnerShootAction();
                 }
             }
 
             // Spacebar Action for Stacker and Flappy
             if (e.code === 'Space') {
-                if (!activePanel) return;
                 if (activePanel.id === 'panel-stacker') {
                     e.preventDefault();
                     stackLayer();
@@ -4426,8 +4858,7 @@
 
             // Number Keys 1-9 for Whack-A-Cubie
             if (['1','2','3','4','5','6','7','8','9'].includes(e.key)) {
-                const activePanel = document.querySelector('.game-panel.active');
-                if (activePanel && activePanel.id === 'panel-whack') {
+                if (activePanel.id === 'panel-whack') {
                     e.preventDefault();
                     handleWhackClick(parseInt(e.key, 10) - 1);
                 }
