@@ -1,41 +1,49 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Add new arcade games to Secret Game Mode (games.html):
-   - Game 3: 🧱 Cube Brick Breaker (Rubik's sticker wall arkanoid breakout with paddle, ball, and lives)
-   - Game 4: 🚀 Space Scramble Defender (Top-down arcade shooter piloting a space cubie blasting scramble asteroids)
-   - Game 5: 🎲 2048: Cubing Edition (Slide & merge cubes from 2x2 up to 1000x1000 God Cube)
-2. Ensure every new game has:
-   - Dedicated Pause / Resume button with amber pulse state and state preservation
-   - Keyboard controls + touch/on-screen controls
+1. Expand Game Mode in games.html from 8 games to 12 games:
+   - Game 9: 🏗️ Cube Tower Stacker (Timing-based arcade layer stacker with slicing mechanics)
+   - Game 10: 🔨 Whack-A-Cubie (3x3 speed reflex whack-a-mole with Golden Cubies & Bombs)
+   - Game 11: 🪂 Flappy Cubie (Sky scramble flying cubie through Rubik's pillar gaps)
+   - Game 12: 🃏 Scramble Match Pairs (4x4 speed memory card flip matching 8 cubing pairs)
+2. Ensure every single game includes:
+   - Dedicated Pause / Resume button with amber glow indicator
+   - Game state preservation during pause
+   - Keyboard controls (Space / Arrows / Numbers / P / Escape) + mobile touch controls
    - Web Audio synthesized retro sound FX
-   - LocalStorage high-score tracking
-   - Responsive design on desktop and mobile
-3. Update tabs in games.html and ensure switchGame() supports all 8 games.
-4. Verify live in browser via Chrome DevTools MCP and push changes to GitHub remote.
+   - LocalStorage best score / best time persistence
+   - Responsive CSS layouts
+3. Verify all 12 games live in Chrome DevTools MCP (tab switching, start, pause, resume, zero console errors).
+4. Stage, commit, and push changes to GitHub remote (origin/main).
 
 Next step: Done.
 
 Tasks:
-- [x] Add Brick Breaker, Space Scramble, and 2048 to game tabs and stage cards in games.html
-- [x] Implement Cube Brick Breaker game engine with paddle, ball physics, sticker grid, and pause/resume
-- [x] Implement Space Scramble Defender game engine with lasers, rogue cubies, particle blasts, and pause/resume
-- [x] Implement 2048 Cubing Edition grid logic with tile merging, animations, D-pad, and pause/resume
-- [x] Add sound effects for brick break, laser shoot, and 2048 merge
-- [x] Verify live rendering, gameplay, and pause functionality in Chrome DevTools MCP
-- [x] Commit and push to origin main
+- [x] Update PROGRESS.md to IN PROGRESS
+- [x] Add CSS styling for Stacker, Whack-A-Cubie, Flappy Cubie, and Match Pairs
+- [x] Add 4 new tab buttons in .game-tabs
+- [x] Add 4 HTML game panels with headers, scoreboards, canvases/grids, and control buttons
+- [x] Implement game loop & pause/resume logic for Cube Tower Stacker
+- [x] Implement game loop & pause/resume logic for Whack-A-Cubie
+- [x] Implement game loop & pause/resume logic for Flappy Cubie
+- [x] Implement game loop & pause/resume logic for Scramble Match Pairs
+- [x] Update switchGame() to auto-pause all 12 games
+- [x] Update universal P / Escape keyboard listener for all 12 games
+- [x] Verify live rendering and gameplay in Chrome DevTools MCP
+- [x] Commit and push to origin/main
 
 Assumptions:
-- Adding 3 rich games (Brick Breaker, Space Scramble, 2048 Cubing Edition) brings the total to 8 comprehensive cubing arcade games.
-- Every game includes full pause/resume support with button styling and keyboard shortcuts (P / Escape).
+- 12 comprehensive games provides a rich, varied arcade experience for both quick reflex and puzzle lovers.
+- Full pause/resume with amber indicators and state preservation applies across all 12 games.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Pushed changes to GitHub remote (origin main).
-- Verified live rendering, tab switching, and pause/resume states across all 8 games with Chrome DevTools MCP.
-- Implemented 2048 Cubing Edition with 4x4 sliding grid, merge chimes, touch D-Pad, and pause controls.
-- Implemented Space Scramble Defender with canvas starfield, player ship, lasers, rogue cubies, and pause controls.
-- Implemented Cube Brick Breaker with paddle, bouncing ball physics, sticker bricks, score/lives, and pause controls.
-- Expanded Game Mode selector to 8 games in games.html.
+- Pushed changes to GitHub remote (origin/main).
+- Verified tab switching, game engines, and pause/resume states across all 12 games in Chrome DevTools MCP.
+- Implemented Scramble Match Pairs with 4x4 interactive card flip grid, match chimes, timer, and pause controls.
+- Implemented Flappy Cubie with canvas physics, fluttering wings, Rubik pillar obstacles, and pause controls.
+- Implemented Whack-A-Cubie with 3x3 Rubik face holes, golden cubies, bombs, keyboard triggers 1-9, and pause controls.
+- Implemented Cube Tower Stacker with canvas grid, block slicing, rising tones, and pause controls.
+- Added CSS styles, 4 new tab buttons, and 4 game panels to games.html.

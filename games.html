@@ -639,6 +639,203 @@
             font-weight: 700;
         }
 
+        /* GAME 9: TOWER STACKER */
+        .stacker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin: 10px 0;
+        }
+        .btn-stack-action {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: #ffffff;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2em;
+            font-weight: 800;
+            padding: 14px 38px;
+            border-radius: 16px;
+            border: 2px solid #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            transition: all 0.15s ease;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .btn-stack-action:active {
+            transform: scale(0.95);
+        }
+
+        /* GAME 10: WHACK-A-CUBIE */
+        .whack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 105px);
+            gap: 14px;
+            margin: 16px auto;
+            justify-content: center;
+        }
+        @media (max-width: 480px) {
+            .whack-grid {
+                grid-template-columns: repeat(3, 85px);
+                gap: 10px;
+            }
+        }
+        .whack-hole {
+            width: 105px;
+            height: 105px;
+            background: #090d16;
+            border: 3px solid #1e293b;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 240, 255, 0.1);
+        }
+        @media (max-width: 480px) {
+            .whack-hole {
+                width: 85px;
+                height: 85px;
+            }
+        }
+        .whack-key-tag {
+            position: absolute;
+            top: 5px;
+            left: 7px;
+            font-size: 0.65em;
+            color: #64748b;
+            font-weight: 800;
+            z-index: 2;
+            pointer-events: none;
+            font-family: monospace;
+        }
+        .whack-cubie {
+            position: absolute;
+            inset: 8px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(115%);
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.05em;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+        .whack-hole.up .whack-cubie {
+            transform: translateY(0);
+        }
+        .whack-hole.whacked .whack-cubie {
+            transform: scale(0.85);
+            filter: brightness(1.6);
+        }
+
+        /* GAME 11: FLAPPY CUBIE */
+        .flappy-controls-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .btn-flap-action {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: #ffffff;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2em;
+            font-weight: 800;
+            padding: 12px 34px;
+            border-radius: 16px;
+            border: 2px solid #fbbf24;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .btn-flap-action:active {
+            transform: scale(0.95);
+        }
+
+        /* GAME 12: SCRAMBLE MATCH PAIRS */
+        .pairs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 82px);
+            gap: 12px;
+            margin: 16px auto;
+            justify-content: center;
+            perspective: 800px;
+        }
+        @media (max-width: 480px) {
+            .pairs-grid {
+                grid-template-columns: repeat(4, 68px);
+                gap: 8px;
+            }
+        }
+        .pair-card {
+            width: 82px;
+            height: 82px;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        @media (max-width: 480px) {
+            .pair-card {
+                width: 68px;
+                height: 68px;
+            }
+        }
+        .pair-card-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+        .pair-card.flipped .pair-card-inner,
+        .pair-card.matched .pair-card-inner {
+            transform: rotateY(180deg);
+        }
+        .pair-card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: 800;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+        }
+        .pair-card-front {
+            background: #090d16;
+            border: 2px solid #334155;
+            color: #00f0ff;
+            font-size: 1.4em;
+        }
+        .pair-card-front:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+        }
+        .pair-card-back {
+            transform: rotateY(180deg);
+            border: 2px solid #ffffff;
+        }
+        .pair-card.matched .pair-card-back {
+            border-color: #22c55e;
+            box-shadow: 0 0 16px rgba(34, 197, 94, 0.6);
+            animation: matchPop 0.3s ease-out;
+        }
+        @keyframes matchPop {
+            0% { transform: rotateY(180deg) scale(0.9); }
+            50% { transform: rotateY(180deg) scale(1.1); }
+            100% { transform: rotateY(180deg) scale(1.0); }
+        }
+
         /* FOOTER */
         .arcade-footer {
             text-align: center;
@@ -672,7 +869,7 @@
         <!-- HERO TITLE -->
         <header class="arcade-header">
             <h1 class="arcade-title">🎮 Secret Game Mode 🚀</h1>
-            <p class="arcade-subtitle">You found the secret rocket portal! 8 retro speedcubing games loaded and ready to play!</p>
+            <p class="arcade-subtitle">You found the secret rocket portal! 12 retro speedcubing games loaded and ready to play!</p>
             <div class="pause-key-hint">
                 💡 Tip: Press <span class="key-badge">P</span> or <span class="key-badge">Esc</span> anytime to quickly Pause or Resume any game!
             </div>
@@ -691,7 +888,7 @@
             </button>
         </div>
 
-        <!-- GAME SWITCHER TABS (8 GAMES) -->
+        <!-- GAME SWITCHER TABS (12 GAMES) -->
         <div class="game-tabs">
             <button class="game-tab-btn active" onclick="switchGame('runner')">
                 🎮 Cube Runner
@@ -716,6 +913,18 @@
             </button>
             <button class="game-tab-btn" onclick="switchGame('blitz')">
                 ⚡ Notation Blitz
+            </button>
+            <button class="game-tab-btn" onclick="switchGame('stacker')">
+                🏗️ Tower Stacker
+            </button>
+            <button class="game-tab-btn" onclick="switchGame('whack')">
+                🔨 Whack-A-Cubie
+            </button>
+            <button class="game-tab-btn" onclick="switchGame('flappy')">
+                🪂 Flappy Cubie
+            </button>
+            <button class="game-tab-btn" onclick="switchGame('pairs')">
+                🃏 Scramble Match
             </button>
         </div>
 
@@ -976,6 +1185,163 @@
                 </div>
             </div>
 
+            <!-- ============================================== -->
+            <!-- GAME 9: CUBE TOWER STACKER -->
+            <!-- ============================================== -->
+            <div id="panel-stacker" class="game-panel">
+                <div class="game-header-bar">
+                    <h2 class="game-title-text">🏗️ Cube Tower Stacker</h2>
+                    <div class="game-score-display">
+                        <span>FLOOR: <span id="stacker-level">1</span>/10</span>
+                        <span>BLOCKS: <span id="stacker-blocks">3</span></span>
+                        <span>RECORD: <span id="stacker-best">0</span></span>
+                    </div>
+                </div>
+                <div id="stacker-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #00f0ff; min-height: 28px; margin-top: 4px; text-align: center;">
+                    Press SPACE or Click STACK to build the God Cube Tower!
+                </div>
+                <div class="stacker-container">
+                    <canvas id="canvas-stacker" width="350" height="420" style="background: #020617; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); touch-action: none; cursor: pointer;"></canvas>
+                    <button id="btn-stack-trigger" class="btn-stack-action" onclick="stackLayer()">
+                        🧱 STACK LAYER! (Space)
+                    </button>
+                </div>
+                <div class="game-controls-row">
+                    <button id="btn-stacker-start" class="btn-game-primary" onclick="startStackerGame()">
+                        ▶ Start Tower Stacker
+                    </button>
+                    <button id="btn-stacker-pause" class="btn-game-pause" onclick="togglePauseStacker()">
+                        ⏸️ Pause
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME 10: WHACK-A-CUBIE SPEED REFLEX -->
+            <!-- ============================================== -->
+            <div id="panel-whack" class="game-panel">
+                <div class="game-header-bar">
+                    <h2 class="game-title-text">🔨 Whack-A-Cubie</h2>
+                    <div class="game-score-display">
+                        <span>SCORE: <span id="whack-score">0</span></span>
+                        <span>TIME: <span id="whack-time">30.0s</span></span>
+                        <span>STREAK: <span id="whack-streak">0</span></span>
+                        <span>RECORD: <span id="whack-best">0</span></span>
+                    </div>
+                </div>
+                <div id="whack-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #ff007f; min-height: 28px; margin-top: 4px; text-align: center;">
+                    Whack colored Cubies! Avoid Skull Bombs! Keys 1-9 or Tap!
+                </div>
+                <div class="whack-grid" id="whack-grid-box">
+                    <div class="whack-hole" id="whack-hole-0" onclick="handleWhackClick(0)">
+                        <span class="whack-key-tag">1</span>
+                        <div class="whack-cubie" id="whack-cubie-0"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-1" onclick="handleWhackClick(1)">
+                        <span class="whack-key-tag">2</span>
+                        <div class="whack-cubie" id="whack-cubie-1"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-2" onclick="handleWhackClick(2)">
+                        <span class="whack-key-tag">3</span>
+                        <div class="whack-cubie" id="whack-cubie-2"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-3" onclick="handleWhackClick(3)">
+                        <span class="whack-key-tag">4</span>
+                        <div class="whack-cubie" id="whack-cubie-3"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-4" onclick="handleWhackClick(4)">
+                        <span class="whack-key-tag">5</span>
+                        <div class="whack-cubie" id="whack-cubie-4"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-5" onclick="handleWhackClick(5)">
+                        <span class="whack-key-tag">6</span>
+                        <div class="whack-cubie" id="whack-cubie-5"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-6" onclick="handleWhackClick(6)">
+                        <span class="whack-key-tag">7</span>
+                        <div class="whack-cubie" id="whack-cubie-6"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-7" onclick="handleWhackClick(7)">
+                        <span class="whack-key-tag">8</span>
+                        <div class="whack-cubie" id="whack-cubie-7"></div>
+                    </div>
+                    <div class="whack-hole" id="whack-hole-8" onclick="handleWhackClick(8)">
+                        <span class="whack-key-tag">9</span>
+                        <div class="whack-cubie" id="whack-cubie-8"></div>
+                    </div>
+                </div>
+                <div class="game-controls-row">
+                    <button id="btn-whack-start" class="btn-game-primary" onclick="startWhackGame()">
+                        ▶ Start Whack-A-Cubie (30s)
+                    </button>
+                    <button id="btn-whack-pause" class="btn-game-pause" onclick="togglePauseWhack()">
+                        ⏸️ Pause
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME 11: FLAPPY CUBIE (SKY SCRAMBLE) -->
+            <!-- ============================================== -->
+            <div id="panel-flappy" class="game-panel">
+                <div class="game-header-bar">
+                    <h2 class="game-title-text">🪂 Flappy Cubie</h2>
+                    <div class="game-score-display">
+                        <span>SCORE: <span id="flappy-score">0</span></span>
+                        <span>PIPES: <span id="flappy-pipes">0</span></span>
+                        <span>RECORD: <span id="flappy-best">0</span></span>
+                    </div>
+                </div>
+                <div id="flappy-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #f59e0b; min-height: 28px; margin-top: 4px; text-align: center;">
+                    Flap through Scramble Pillar Towers! Tap or Space!
+                </div>
+                <div style="position: relative; display: inline-block; margin: 10px 0;">
+                    <canvas id="canvas-flappy" width="560" height="400" style="background: #020617; border: 2px solid #f59e0b; border-radius: 16px; box-shadow: 0 0 25px rgba(245, 158, 11, 0.25); touch-action: none; cursor: pointer;"></canvas>
+                </div>
+                <div class="flappy-controls-row">
+                    <button class="btn-flap-action" onclick="flapCubie()">
+                        🪂 FLAP WINGS! (Space)
+                    </button>
+                </div>
+                <div class="game-controls-row">
+                    <button id="btn-flappy-start" class="btn-game-primary" onclick="startFlappyGame()">
+                        ▶ Start Flappy Cubie
+                    </button>
+                    <button id="btn-flappy-pause" class="btn-game-pause" onclick="togglePauseFlappy()">
+                        ⏸️ Pause
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME 12: SCRAMBLE MATCH PAIRS -->
+            <!-- ============================================== -->
+            <div id="panel-pairs" class="game-panel">
+                <div class="game-header-bar">
+                    <h2 class="game-title-text">🃏 Scramble Match Pairs</h2>
+                    <div class="game-score-display">
+                        <span>MATCHES: <span id="pairs-matches">0</span>/8</span>
+                        <span>MOVES: <span id="pairs-moves">0</span></span>
+                        <span>TIME: <span id="pairs-time">00:00</span></span>
+                        <span>RECORD: <span id="pairs-best">--</span></span>
+                    </div>
+                </div>
+                <div id="pairs-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #10b981; min-height: 28px; margin-top: 4px; text-align: center;">
+                    Find all 8 matching cubing pairs as fast as you can!
+                </div>
+                <div class="pairs-grid" id="pairs-grid-box">
+                    <!-- 16 cards generated dynamically -->
+                </div>
+                <div class="game-controls-row">
+                    <button id="btn-pairs-start" class="btn-game-primary" onclick="startPairsGame()">
+                        ▶ New Match Game
+                    </button>
+                    <button id="btn-pairs-pause" class="btn-game-pause" onclick="togglePausePairs()">
+                        ⏸️ Pause
+                    </button>
+                </div>
+            </div>
+
         </div>
 
         <!-- ARCADE FOOTER -->
@@ -1113,6 +1479,125 @@
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 0.36);
+                } else if (type === 'stack') {
+                    const level = arguments[1] || 0;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320 + level * 40, now);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.17);
+                } else if (type === 'slice') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(340, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.12);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.13);
+                } else if (type === 'bonk') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(540, now);
+                    osc.frequency.exponentialRampToValueAtTime(180, now + 0.1);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'bonus') {
+                    const osc1 = ctx.createOscillator();
+                    const osc2 = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc1.type = 'sine';
+                    osc2.type = 'sine';
+                    osc1.frequency.setValueAtTime(784, now);
+                    osc2.frequency.setValueAtTime(1046.5, now + 0.08);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                    osc1.connect(gain);
+                    osc2.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc1.start(now);
+                    osc1.stop(now + 0.1);
+                    osc2.start(now + 0.08);
+                    osc2.stop(now + 0.22);
+                } else if (type === 'bomb') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.36);
+                } else if (type === 'flap') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(560, now + 0.08);
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'fanfare') {
+                    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+                        const o = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        o.type = 'triangle';
+                        o.frequency.setValueAtTime(f, now + i * 0.1);
+                        g.gain.setValueAtTime(0.24, now + i * 0.1);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.25);
+                        o.connect(g);
+                        g.connect(ctx.destination);
+                        o.start(now + i * 0.1);
+                        o.stop(now + i * 0.1 + 0.26);
+                    });
+                } else if (type === 'pair_match') {
+                    const o1 = ctx.createOscillator();
+                    const o2 = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    o1.type = 'sine';
+                    o2.type = 'triangle';
+                    o1.frequency.setValueAtTime(587.33, now);
+                    o2.frequency.setValueAtTime(880.00, now + 0.08);
+                    g.gain.setValueAtTime(0.24, now);
+                    g.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    o1.connect(g);
+                    o2.connect(g);
+                    g.connect(ctx.destination);
+                    o1.start(now);
+                    o1.stop(now + 0.12);
+                    o2.start(now + 0.08);
+                    o2.stop(now + 0.26);
+                } else if (type === 'pair_miss') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(190, now);
+                    osc.frequency.setValueAtTime(140, now + 0.1);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.21);
                 }
             } catch(e) {}
         }
@@ -1126,7 +1611,7 @@
         }
 
         // ==========================================
-        // 2. TAB SWITCHING (ALL 8 GAMES)
+        // 2. TAB SWITCHING (ALL 12 GAMES)
         // ==========================================
         function switchGame(gameId) {
             document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
@@ -1147,6 +1632,10 @@
             if (gameId !== 'simon' && simonActive && !simonPaused) togglePauseSimon();
             if (gameId !== 'reflex' && reflexActive && !reflexPaused) togglePauseReflex();
             if (gameId !== 'blitz' && blitzActive && !blitzPaused) togglePauseBlitz();
+            if (gameId !== 'stacker' && stackerActive && !stackerPaused) togglePauseStacker();
+            if (gameId !== 'whack' && whackActive && !whackPaused) togglePauseWhack();
+            if (gameId !== 'flappy' && flappyActive && !flappyPaused) togglePauseFlappy();
+            if (gameId !== 'pairs' && pairsActive && !pairsPaused) togglePausePairs();
         }
 
         // ==========================================
@@ -2623,9 +3112,941 @@
         }
 
         // ==========================================
-        // 11. UNIVERSAL KEYBOARD PAUSE SHORTCUT ('P' & 'Escape')
+        // 11. GAME 9: CUBE TOWER STACKER
+        // ==========================================
+        const stackerCanvas = document.getElementById('canvas-stacker');
+        const stCtx = stackerCanvas ? stackerCanvas.getContext('2d') : null;
+        let stackerActive = false;
+        let stackerPaused = false;
+        let stackerFloor = 0; // 0 (bottom) to 9 (top)
+        let stackerGrid = []; // 10 rows x 7 cols
+        let stackerCurWidth = 3;
+        let stackerCurPos = 2.0;
+        let stackerDir = 1;
+        let stackerSpeed = 0.085;
+        let stackerAnimId = null;
+        let stackerBest = parseInt(localStorage.getItem('cube_stacker_best') || '0', 10);
+        document.getElementById('stacker-best').textContent = stackerBest;
+
+        const stackerColors = [
+            '#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4',
+            '#3b82f6', '#a855f7', '#ec4899', '#ff007f', '#fde047'
+        ];
+
+        function initStackerGrid() {
+            stackerGrid = [];
+            for (let r = 0; r < 10; r++) {
+                stackerGrid.push(new Array(7).fill(null));
+            }
+        }
+
+        function startStackerGame() {
+            getAudioContext();
+            initStackerGrid();
+            stackerActive = true;
+            stackerPaused = false;
+            stackerFloor = 0;
+            stackerCurWidth = 3;
+            stackerCurPos = 0;
+            stackerDir = 1;
+            stackerSpeed = 0.09;
+            document.getElementById('stacker-level').textContent = '1';
+            document.getElementById('stacker-blocks').textContent = stackerCurWidth;
+            document.getElementById('stacker-status').textContent = '🧱 STACK! Press Space or Click Button to drop!';
+            document.getElementById('btn-stacker-start').textContent = '🔄 Restart Stacker';
+
+            const pauseBtn = document.getElementById('btn-stacker-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+            if (stackerAnimId) cancelAnimationFrame(stackerAnimId);
+            stackerLoop();
+        }
+
+        function togglePauseStacker() {
+            if (!stackerActive) return;
+            stackerPaused = !stackerPaused;
+            const btn = document.getElementById('btn-stacker-pause');
+            if (stackerPaused) {
+                playSfx('pause');
+                if (stackerAnimId) cancelAnimationFrame(stackerAnimId);
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                if (stCtx) {
+                    stCtx.fillStyle = 'rgba(2, 6, 23, 0.8)';
+                    stCtx.fillRect(0, 0, stackerCanvas.width, stackerCanvas.height);
+                    stCtx.font = '22px "DynaPuff", cursive';
+                    stCtx.fillStyle = '#FAED27';
+                    stCtx.textAlign = 'center';
+                    stCtx.fillText('⏸️ TOWER PAUSED', stackerCanvas.width / 2, stackerCanvas.height / 2 - 10);
+                    stCtx.font = '14px "Outfit", sans-serif';
+                    stCtx.fillStyle = '#cbd5e1';
+                    stCtx.fillText('Click Resume or press P to continue', stackerCanvas.width / 2, stackerCanvas.height / 2 + 20);
+                }
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                stackerAnimId = requestAnimationFrame(stackerLoop);
+            }
+        }
+
+        function stackLayer() {
+            if (!stackerActive) {
+                startStackerGame();
+                return;
+            }
+            if (stackerPaused) return;
+
+            const placeCol = Math.round(stackerCurPos);
+            const rowIdx = 9 - stackerFloor; // 9 is bottom row, 0 is top row
+            const color = stackerColors[stackerFloor % stackerColors.length];
+
+            if (stackerFloor === 0) {
+                // First floor always succeeds
+                for (let c = 0; c < stackerCurWidth; c++) {
+                    const col = placeCol + c;
+                    if (col >= 0 && col < 7) {
+                        stackerGrid[rowIdx][col] = color;
+                    }
+                }
+                playSfx('stack', stackerFloor);
+                stackerFloor++;
+                document.getElementById('stacker-level').textContent = stackerFloor + 1;
+                stackerCurPos = 0;
+                stackerDir = 1;
+                stackerSpeed = 0.09 + stackerFloor * 0.016;
+            } else {
+                // Check overlap with the floor below (rowIdx + 1)
+                const prevRow = stackerGrid[rowIdx + 1];
+                let supported = 0;
+                let sliced = 0;
+
+                for (let c = 0; c < stackerCurWidth; c++) {
+                    const col = placeCol + c;
+                    if (col >= 0 && col < 7 && prevRow[col] !== null) {
+                        stackerGrid[rowIdx][col] = color;
+                        supported++;
+                    } else {
+                        sliced++;
+                    }
+                }
+
+                if (supported === 0) {
+                    gameOverStacker('The blocks misaligned and the tower collapsed!');
+                    return;
+                }
+
+                if (sliced > 0) {
+                    playSfx('slice');
+                } else {
+                    playSfx('stack', stackerFloor);
+                }
+
+                stackerCurWidth = supported;
+                if (stackerFloor === 4 && stackerCurWidth > 2) stackerCurWidth = 2;
+                if (stackerFloor === 7 && stackerCurWidth > 1) stackerCurWidth = 1;
+
+                document.getElementById('stacker-blocks').textContent = stackerCurWidth;
+                stackerFloor++;
+
+                if (stackerFloor >= 10) {
+                    // Win God Cube Tower!
+                    stackerActive = false;
+                    playSfx('fanfare');
+                    document.getElementById('stacker-status').innerHTML = '🏆 <strong>GOD CUBE TOWER COMPLETED!</strong> You are a Stacking Master!';
+                    document.getElementById('btn-stacker-start').textContent = '▶ Play Again';
+                    if (10 > stackerBest) {
+                        stackerBest = 10;
+                        localStorage.setItem('cube_stacker_best', '10');
+                        document.getElementById('stacker-best').textContent = '10';
+                    }
+                    drawStacker();
+                    return;
+                }
+
+                document.getElementById('stacker-level').textContent = stackerFloor + 1;
+                if (stackerFloor > stackerBest) {
+                    stackerBest = stackerFloor;
+                    localStorage.setItem('cube_stacker_best', stackerBest);
+                    document.getElementById('stacker-best').textContent = stackerBest;
+                }
+
+                stackerCurPos = 0;
+                stackerDir = 1;
+                stackerSpeed = 0.09 + stackerFloor * 0.018;
+            }
+        }
+
+        function gameOverStacker(reason) {
+            stackerActive = false;
+            stackerPaused = false;
+            playSfx('crash');
+            document.getElementById('stacker-status').innerHTML = '💥 ' + reason;
+            document.getElementById('btn-stacker-start').textContent = '▶ Try Again';
+            const pauseBtn = document.getElementById('btn-stacker-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+            drawStacker();
+        }
+
+        function drawStacker() {
+            if (!stCtx) return;
+            const w = stackerCanvas.width;
+            const h = stackerCanvas.height;
+            const colW = w / 7;
+            const rowH = h / 10;
+
+            stCtx.fillStyle = '#020617';
+            stCtx.fillRect(0, 0, w, h);
+
+            // Draw grid lines
+            stCtx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+            stCtx.lineWidth = 1;
+            for (let c = 0; c <= 7; c++) {
+                stCtx.beginPath();
+                stCtx.moveTo(c * colW, 0);
+                stCtx.lineTo(c * colW, h);
+                stCtx.stroke();
+            }
+            for (let r = 0; r <= 10; r++) {
+                stCtx.beginPath();
+                stCtx.moveTo(0, r * rowH);
+                stCtx.lineTo(w, r * rowH);
+                stCtx.stroke();
+            }
+
+            // Draw placed blocks
+            for (let r = 0; r < 10; r++) {
+                for (let c = 0; c < 7; c++) {
+                    const clr = stackerGrid[r] ? stackerGrid[r][c] : null;
+                    if (clr) {
+                        stCtx.fillStyle = clr;
+                        stCtx.fillRect(c * colW + 2, r * rowH + 2, colW - 4, rowH - 4);
+                        stCtx.strokeStyle = '#ffffff';
+                        stCtx.lineWidth = 1.5;
+                        stCtx.strokeRect(c * colW + 2, r * rowH + 2, colW - 4, rowH - 4);
+                    }
+                }
+            }
+
+            // Draw active moving block
+            if (stackerActive && !stackerPaused && stackerFloor < 10) {
+                const rowIdx = 9 - stackerFloor;
+                const clr = stackerColors[stackerFloor % stackerColors.length];
+                stCtx.fillStyle = clr;
+                stCtx.shadowColor = clr;
+                stCtx.shadowBlur = 12;
+                stCtx.fillRect(stackerCurPos * colW + 2, rowIdx * rowH + 2, stackerCurWidth * colW - 4, rowH - 4);
+                stCtx.shadowBlur = 0;
+                stCtx.strokeStyle = '#ffffff';
+                stCtx.lineWidth = 2;
+                stCtx.strokeRect(stackerCurPos * colW + 2, rowIdx * rowH + 2, stackerCurWidth * colW - 4, rowH - 4);
+            }
+        }
+
+        function stackerLoop() {
+            if (!stackerActive || stackerPaused) return;
+
+            stackerCurPos += stackerDir * stackerSpeed;
+            if (stackerCurPos <= 0) {
+                stackerCurPos = 0;
+                stackerDir = 1;
+            } else if (stackerCurPos + stackerCurWidth >= 7) {
+                stackerCurPos = 7 - stackerCurWidth;
+                stackerDir = -1;
+            }
+
+            drawStacker();
+            stackerAnimId = requestAnimationFrame(stackerLoop);
+        }
+
+        if (stackerCanvas) {
+            stackerCanvas.addEventListener('click', () => {
+                stackLayer();
+            });
+        }
+
+        // ==========================================
+        // 12. GAME 10: WHACK-A-CUBIE SPEED REFLEX
+        // ==========================================
+        let whackScore = 0;
+        let whackTimeLeft = 30.0;
+        let whackStreak = 0;
+        let whackActive = false;
+        let whackPaused = false;
+        let whackBest = parseInt(localStorage.getItem('cube_whack_best') || '0', 10);
+        document.getElementById('whack-best').textContent = whackBest;
+
+        let whackTimer = null;
+        let whackSpawnInterval = null;
+        let whackStartTime = 0;
+        let whackRemainingDuration = 30000;
+        const whackHoleStates = new Array(9).fill(null).map(() => ({ up: false, type: 'normal', color: '#3b82f6', timeout: null }));
+
+        function startWhackGame() {
+            getAudioContext();
+            whackScore = 0;
+            whackStreak = 0;
+            whackTimeLeft = 30.0;
+            whackActive = true;
+            whackPaused = false;
+            whackRemainingDuration = 30000;
+            document.getElementById('whack-score').textContent = '0';
+            document.getElementById('whack-streak').textContent = '0';
+            document.getElementById('whack-time').textContent = '30.0s';
+            document.getElementById('whack-status').textContent = '⚡ GO! Whack cubies as fast as you can!';
+            document.getElementById('btn-whack-start').textContent = '🔄 Restart Whack';
+
+            const pauseBtn = document.getElementById('btn-whack-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+
+            // Reset holes
+            for (let i = 0; i < 9; i++) {
+                resetWhackHole(i);
+            }
+
+            whackStartTime = performance.now();
+            if (whackTimer) clearInterval(whackTimer);
+            if (whackSpawnInterval) clearInterval(whackSpawnInterval);
+
+            whackTimer = setInterval(() => {
+                if (whackPaused) return;
+                const elapsed = performance.now() - whackStartTime;
+                const left = Math.max(0, (whackRemainingDuration - elapsed) / 1000);
+                document.getElementById('whack-time').textContent = left.toFixed(1) + 's';
+
+                if (left <= 0) {
+                    endWhackGame();
+                }
+            }, 100);
+
+            whackSpawnInterval = setInterval(() => {
+                if (whackPaused || !whackActive) return;
+                spawnRandomCubie();
+            }, 600);
+        }
+
+        function togglePauseWhack() {
+            if (!whackActive) return;
+            whackPaused = !whackPaused;
+            const btn = document.getElementById('btn-whack-pause');
+            if (whackPaused) {
+                playSfx('pause');
+                const elapsed = performance.now() - whackStartTime;
+                whackRemainingDuration = Math.max(0, whackRemainingDuration - elapsed);
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                document.getElementById('whack-status').innerHTML = '<span style="color: #FAED27;">⏸️ WHACK-A-CUBIE PAUSED</span>';
+                // Hide all holes temporarily
+                for (let i = 0; i < 9; i++) {
+                    const holeEl = document.getElementById('whack-hole-' + i);
+                    if (holeEl) holeEl.classList.remove('up');
+                }
+            } else {
+                playSfx('resume');
+                whackStartTime = performance.now();
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                document.getElementById('whack-status').textContent = '⚡ KEEP WHACKING!';
+            }
+        }
+
+        function spawnRandomCubie() {
+            const available = [];
+            for (let i = 0; i < 9; i++) {
+                if (!whackHoleStates[i].up) available.push(i);
+            }
+            if (available.length === 0) return;
+
+            const idx = available[Math.floor(Math.random() * available.length)];
+            const rand = Math.random();
+            let type = 'normal';
+            let label = '(•‿•)';
+            let color = ['#3b82f6', '#22c55e', '#ef4444', '#f97316', '#eab308'][Math.floor(Math.random() * 5)];
+
+            if (rand < 0.16) {
+                type = 'bomb';
+                label = '(×_×) 💣';
+                color = '#dc2626';
+            } else if (rand < 0.35) {
+                type = 'gold';
+                label = '(⌐■_■) ⭐';
+                color = '#fde047';
+            }
+
+            const holeEl = document.getElementById('whack-hole-' + idx);
+            const cubieEl = document.getElementById('whack-cubie-' + idx);
+            if (!holeEl || !cubieEl) return;
+
+            whackHoleStates[idx] = {
+                up: true,
+                type: type,
+                color: color,
+                timeout: null
+            };
+
+            cubieEl.textContent = label;
+            cubieEl.style.background = color;
+            cubieEl.style.color = type === 'gold' ? '#000' : '#fff';
+            holeEl.classList.remove('whacked');
+            holeEl.classList.add('up');
+
+            const upDuration = type === 'gold' ? 850 : (type === 'bomb' ? 1400 : 1100);
+            whackHoleStates[idx].timeout = setTimeout(() => {
+                resetWhackHole(idx);
+            }, upDuration);
+        }
+
+        function resetWhackHole(idx) {
+            const holeEl = document.getElementById('whack-hole-' + idx);
+            if (holeEl) {
+                holeEl.classList.remove('up');
+                holeEl.classList.remove('whacked');
+            }
+            if (whackHoleStates[idx].timeout) {
+                clearTimeout(whackHoleStates[idx].timeout);
+            }
+            whackHoleStates[idx] = { up: false, type: 'normal', color: '#3b82f6', timeout: null };
+        }
+
+        function handleWhackClick(idx) {
+            if (!whackActive || whackPaused) return;
+            const state = whackHoleStates[idx];
+            if (!state || !state.up) return;
+
+            const holeEl = document.getElementById('whack-hole-' + idx);
+            if (holeEl && holeEl.classList.contains('whacked')) return;
+
+            if (holeEl) holeEl.classList.add('whacked');
+
+            if (state.type === 'normal') {
+                whackScore += 10 + whackStreak * 2;
+                whackStreak++;
+                playSfx('bonk');
+            } else if (state.type === 'gold') {
+                whackScore += 50 + whackStreak * 5;
+                whackStreak += 2;
+                playSfx('bonus');
+            } else if (state.type === 'bomb') {
+                whackScore = Math.max(0, whackScore - 30);
+                whackStreak = 0;
+                playSfx('bomb');
+            }
+
+            document.getElementById('whack-score').textContent = whackScore;
+            document.getElementById('whack-streak').textContent = whackStreak;
+
+            if (whackScore > whackBest) {
+                whackBest = whackScore;
+                localStorage.setItem('cube_whack_best', whackBest);
+                document.getElementById('whack-best').textContent = whackBest;
+            }
+
+            setTimeout(() => {
+                resetWhackHole(idx);
+            }, 160);
+        }
+
+        function endWhackGame() {
+            whackActive = false;
+            whackPaused = false;
+            clearInterval(whackTimer);
+            clearInterval(whackSpawnInterval);
+            for (let i = 0; i < 9; i++) resetWhackHole(i);
+            playSfx('fanfare');
+            document.getElementById('whack-status').innerHTML = `🏁 <strong>TIME UP!</strong> Final Score: <strong>${whackScore}</strong>!`;
+            document.getElementById('btn-whack-start').textContent = '▶ Play Again';
+            const pauseBtn = document.getElementById('btn-whack-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+        }
+
+        // ==========================================
+        // 13. GAME 11: FLAPPY CUBIE (SKY SCRAMBLE)
+        // ==========================================
+        const flappyCanvas = document.getElementById('canvas-flappy');
+        const fCtx = flappyCanvas ? flappyCanvas.getContext('2d') : null;
+        let flappyActive = false;
+        let flappyPaused = false;
+        let flappyScore = 0;
+        let flappyPipes = 0;
+        let flappyBest = parseInt(localStorage.getItem('cube_flappy_best') || '0', 10);
+        document.getElementById('flappy-best').textContent = flappyBest;
+
+        let flappyY = 180;
+        let flappyVy = 0;
+        const flappyGravity = 0.38;
+        const flappyJump = -6.8;
+        let flappyObstacles = [];
+        let flappyAnimId = null;
+        let flappyFrame = 0;
+
+        function startFlappyGame() {
+            getAudioContext();
+            flappyActive = true;
+            flappyPaused = false;
+            flappyScore = 0;
+            flappyPipes = 0;
+            flappyY = 180;
+            flappyVy = 0;
+            flappyObstacles = [];
+            flappyFrame = 0;
+            document.getElementById('flappy-score').textContent = '0';
+            document.getElementById('flappy-pipes').textContent = '0';
+            document.getElementById('flappy-status').textContent = '🪂 Flap through the Scramble Pillars!';
+            document.getElementById('btn-flappy-start').textContent = '🔄 Restart Flappy Cubie';
+
+            const pauseBtn = document.getElementById('btn-flappy-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+            if (flappyAnimId) cancelAnimationFrame(flappyAnimId);
+            flappyLoop();
+        }
+
+        function togglePauseFlappy() {
+            if (!flappyActive) return;
+            flappyPaused = !flappyPaused;
+            const btn = document.getElementById('btn-flappy-pause');
+            if (flappyPaused) {
+                playSfx('pause');
+                if (flappyAnimId) cancelAnimationFrame(flappyAnimId);
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                if (fCtx) {
+                    fCtx.fillStyle = 'rgba(2, 6, 23, 0.8)';
+                    fCtx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+                    fCtx.font = '24px "DynaPuff", cursive';
+                    fCtx.fillStyle = '#FAED27';
+                    fCtx.textAlign = 'center';
+                    fCtx.fillText('⏸️ FLAPPY CUBIE PAUSED', flappyCanvas.width / 2, flappyCanvas.height / 2 - 10);
+                    fCtx.font = '14px "Outfit", sans-serif';
+                    fCtx.fillStyle = '#cbd5e1';
+                    fCtx.fillText('Click Resume or press P to continue', flappyCanvas.width / 2, flappyCanvas.height / 2 + 20);
+                }
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                flappyAnimId = requestAnimationFrame(flappyLoop);
+            }
+        }
+
+        function flapCubie() {
+            if (!flappyActive) {
+                startFlappyGame();
+                return;
+            }
+            if (flappyPaused) return;
+            flappyVy = flappyJump;
+            playSfx('flap');
+        }
+
+        function flappyLoop() {
+            if (!flappyActive || flappyPaused) return;
+            flappyFrame++;
+
+            // Physics
+            flappyVy += flappyGravity;
+            flappyY += flappyVy;
+
+            // Spawn obstacles
+            if (flappyFrame % 110 === 0) {
+                const gap = 130;
+                const topH = Math.floor(Math.random() * (flappyCanvas.height - gap - 90)) + 40;
+                flappyObstacles.push({
+                    x: flappyCanvas.width,
+                    topH: topH,
+                    bottomY: topH + gap,
+                    bottomH: flappyCanvas.height - (topH + gap),
+                    width: 58,
+                    passed: false
+                });
+            }
+
+            // Update obstacles
+            for (let i = flappyObstacles.length - 1; i >= 0; i--) {
+                const p = flappyObstacles[i];
+                p.x -= 2.6;
+
+                // Pass score
+                if (!p.passed && p.x + p.width < 90) {
+                    p.passed = true;
+                    flappyPipes++;
+                    flappyScore += 10;
+                    playSfx('score');
+                    document.getElementById('flappy-score').textContent = flappyScore;
+                    document.getElementById('flappy-pipes').textContent = flappyPipes;
+                    if (flappyScore > flappyBest) {
+                        flappyBest = flappyScore;
+                        localStorage.setItem('cube_flappy_best', flappyBest);
+                        document.getElementById('flappy-best').textContent = flappyBest;
+                    }
+                }
+
+                if (p.x + p.width < -10) {
+                    flappyObstacles.splice(i, 1);
+                }
+            }
+
+            // Collision check
+            const cubieSize = 28;
+            const cubieX = 90;
+
+            // Ground/ceiling
+            if (flappyY <= 0 || flappyY + cubieSize >= flappyCanvas.height - 15) {
+                gameOverFlappy();
+                return;
+            }
+
+            for (let p of flappyObstacles) {
+                if (cubieX + cubieSize > p.x && cubieX < p.x + p.width) {
+                    if (flappyY < p.topH || flappyY + cubieSize > p.bottomY) {
+                        gameOverFlappy();
+                        return;
+                    }
+                }
+            }
+
+            // Draw
+            drawFlappy();
+            flappyAnimId = requestAnimationFrame(flappyLoop);
+        }
+
+        function drawFlappy() {
+            if (!fCtx) return;
+            const w = flappyCanvas.width;
+            const h = flappyCanvas.height;
+
+            fCtx.fillStyle = '#020617';
+            fCtx.fillRect(0, 0, w, h);
+
+            // Ground strip
+            fCtx.fillStyle = '#1e293b';
+            fCtx.fillRect(0, h - 15, w, 15);
+            fCtx.fillStyle = '#22c55e';
+            fCtx.fillRect(0, h - 15, w, 3);
+
+            // Draw Rubik pillar obstacles
+            const rColors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#ffffff'];
+            flappyObstacles.forEach((p, pIdx) => {
+                // Top pillar
+                fCtx.fillStyle = '#0f172a';
+                fCtx.fillRect(p.x, 0, p.width, p.topH);
+                fCtx.strokeStyle = '#38bdf8';
+                fCtx.lineWidth = 2;
+                fCtx.strokeRect(p.x, 0, p.width, p.topH);
+
+                // Blocks inside top pillar
+                const blockSize = 24;
+                for (let y = 0; y < p.topH - 4; y += blockSize) {
+                    fCtx.fillStyle = rColors[(pIdx + Math.floor(y / blockSize)) % rColors.length];
+                    fCtx.fillRect(p.x + 4, y + 2, p.width - 8, blockSize - 4);
+                }
+
+                // Bottom pillar
+                fCtx.fillStyle = '#0f172a';
+                fCtx.fillRect(p.x, p.bottomY, p.width, p.bottomH);
+                fCtx.strokeStyle = '#38bdf8';
+                fCtx.strokeRect(p.x, p.bottomY, p.width, p.bottomH);
+
+                // Blocks inside bottom pillar
+                for (let y = p.bottomY; y < h - 15; y += blockSize) {
+                    fCtx.fillStyle = rColors[(pIdx + Math.floor(y / blockSize)) % rColors.length];
+                    fCtx.fillRect(p.x + 4, y + 2, p.width - 8, blockSize - 4);
+                }
+            });
+
+            // Draw Cubie
+            const cubieX = 90;
+            const cubieSize = 28;
+
+            fCtx.save();
+            fCtx.translate(cubieX + cubieSize / 2, flappyY + cubieSize / 2);
+            const rot = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, flappyVy * 0.08));
+            fCtx.rotate(rot);
+
+            // Wings
+            const wingY = Math.sin(flappyFrame * 0.3) * 6;
+            fCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            fCtx.beginPath();
+            fCtx.ellipse(-14, wingY, 12, 6, -0.4, 0, Math.PI * 2);
+            fCtx.fill();
+
+            // Cube body
+            fCtx.fillStyle = '#00f0ff';
+            fCtx.fillRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
+            fCtx.strokeStyle = '#ffffff';
+            fCtx.lineWidth = 2;
+            fCtx.strokeRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
+
+            // 3x3 Rubik face stickers
+            const sub = cubieSize / 3;
+            const miniColors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#ffffff', '#3b82f6'];
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    fCtx.fillStyle = miniColors[(r * 3 + c) % miniColors.length];
+                    fCtx.fillRect(-cubieSize / 2 + c * sub + 1, -cubieSize / 2 + r * sub + 1, sub - 2, sub - 2);
+                }
+            }
+
+            // Cute cartoon eye
+            fCtx.fillStyle = '#ffffff';
+            fCtx.beginPath();
+            fCtx.arc(6, -2, 5, 0, Math.PI * 2);
+            fCtx.fill();
+            fCtx.fillStyle = '#000000';
+            fCtx.beginPath();
+            fCtx.arc(8, -2, 2.5, 0, Math.PI * 2);
+            fCtx.fill();
+
+            fCtx.restore();
+        }
+
+        function gameOverFlappy() {
+            flappyActive = false;
+            flappyPaused = false;
+            playSfx('crash');
+            document.getElementById('flappy-status').innerHTML = `💥 <strong>CRASH!</strong> Score: <strong>${flappyScore}</strong> (${flappyPipes} pillars passed)`;
+            document.getElementById('btn-flappy-start').textContent = '▶ Play Again';
+            const pauseBtn = document.getElementById('btn-flappy-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+        }
+
+        if (flappyCanvas) {
+            flappyCanvas.addEventListener('click', () => {
+                flapCubie();
+            });
+        }
+
+        // ==========================================
+        // 14. GAME 12: SCRAMBLE MATCH PAIRS
+        // ==========================================
+        const pairsBox = document.getElementById('pairs-grid-box');
+        let pairsActive = false;
+        let pairsPaused = false;
+        let pairsMatches = 0;
+        let pairsMoves = 0;
+        let pairsCards = [];
+        let pairsFlipped = [];
+        let pairsLock = false;
+        let pairsTimer = null;
+        let pairsElapsed = 0;
+        let pairsBest = localStorage.getItem('cube_pairs_best') || '--';
+        document.getElementById('pairs-best').textContent = pairsBest;
+
+        const pairsDeck = [
+            { id: 1, icon: '🟥', name: 'RED', color: '#ef4444' },
+            { id: 2, icon: '🟦', name: 'BLUE', color: '#3b82f6' },
+            { id: 3, icon: '🟩', name: 'GREEN', color: '#22c55e' },
+            { id: 4, icon: '🟨', name: 'YELLOW', color: '#eab308' },
+            { id: 5, icon: '🟧', name: 'ORANGE', color: '#f97316' },
+            { id: 6, icon: '⬜', name: 'WHITE', color: '#f8fafc' },
+            { id: 7, icon: '⏱️', name: 'TIMER', color: '#06b6d4' },
+            { id: 8, icon: '🏆', name: 'TROPHY', color: '#fde047' }
+        ];
+
+        function startPairsGame() {
+            getAudioContext();
+            pairsActive = true;
+            pairsPaused = false;
+            pairsMatches = 0;
+            pairsMoves = 0;
+            pairsElapsed = 0;
+            pairsFlipped = [];
+            pairsLock = false;
+
+            document.getElementById('pairs-matches').textContent = '0';
+            document.getElementById('pairs-moves').textContent = '0';
+            document.getElementById('pairs-time').textContent = '00:00';
+            document.getElementById('pairs-status').textContent = '🃏 Click cards to find matching pairs!';
+            document.getElementById('btn-pairs-start').textContent = '🔄 Restart Match Game';
+
+            const pauseBtn = document.getElementById('btn-pairs-pause');
+            if (pauseBtn) {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = '⏸️ Pause';
+            }
+
+            // Build shuffled deck of 16 cards (8 pairs)
+            const deck = [...pairsDeck, ...pairsDeck];
+            deck.sort(() => Math.random() - 0.5);
+
+            pairsCards = deck.map((item, index) => ({
+                idx: index,
+                id: item.id,
+                icon: item.icon,
+                color: item.color,
+                matched: false
+            }));
+
+            renderPairsBoard();
+
+            if (pairsTimer) clearInterval(pairsTimer);
+            pairsTimer = setInterval(() => {
+                if (!pairsPaused && pairsActive) {
+                    pairsElapsed++;
+                    const m = Math.floor(pairsElapsed / 60).toString().padStart(2, '0');
+                    const s = (pairsElapsed % 60).toString().padStart(2, '0');
+                    document.getElementById('pairs-time').textContent = `${m}:${s}`;
+                }
+            }, 1000);
+        }
+
+        function renderPairsBoard() {
+            if (!pairsBox) return;
+            pairsBox.innerHTML = '';
+
+            pairsCards.forEach((c) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'pair-card';
+                cardEl.id = 'pair-card-' + c.idx;
+                cardEl.onclick = () => handlePairCardClick(c.idx);
+
+                const inner = document.createElement('div');
+                inner.className = 'pair-card-inner';
+
+                const front = document.createElement('div');
+                front.className = 'pair-card-face pair-card-front';
+                front.innerHTML = '🎲';
+
+                const back = document.createElement('div');
+                back.className = 'pair-card-face pair-card-back';
+                back.style.background = '#0f172a';
+                back.innerHTML = `<span style="font-size: 1.8em;">${c.icon}</span>`;
+
+                inner.appendChild(front);
+                inner.appendChild(back);
+                cardEl.appendChild(inner);
+                pairsBox.appendChild(cardEl);
+            });
+        }
+
+        function togglePausePairs() {
+            if (!pairsActive) return;
+            pairsPaused = !pairsPaused;
+            const btn = document.getElementById('btn-pairs-pause');
+            if (pairsPaused) {
+                playSfx('pause');
+                if (btn) {
+                    btn.classList.add('paused');
+                    btn.innerHTML = '▶️ Resume';
+                }
+                document.getElementById('pairs-status').innerHTML = '<span style="color: #FAED27;">⏸️ SCRAMBLE MATCH PAUSED</span>';
+                if (pairsBox) pairsBox.style.opacity = '0.15';
+            } else {
+                playSfx('resume');
+                if (btn) {
+                    btn.classList.remove('paused');
+                    btn.innerHTML = '⏸️ Pause';
+                }
+                document.getElementById('pairs-status').textContent = '🃏 Keep finding pairs!';
+                if (pairsBox) pairsBox.style.opacity = '1';
+            }
+        }
+
+        function handlePairCardClick(idx) {
+            if (!pairsActive || pairsPaused || pairsLock) return;
+            const card = pairsCards[idx];
+            if (card.matched) return;
+
+            const cardEl = document.getElementById('pair-card-' + idx);
+            if (!cardEl || cardEl.classList.contains('flipped')) return;
+
+            // Flip card
+            cardEl.classList.add('flipped');
+            playSfx('score');
+            pairsFlipped.push({ idx: idx, card: card });
+
+            if (pairsFlipped.length === 2) {
+                pairsMoves++;
+                document.getElementById('pairs-moves').textContent = pairsMoves;
+                pairsLock = true;
+
+                const c1 = pairsFlipped[0];
+                const c2 = pairsFlipped[1];
+
+                if (c1.card.id === c2.card.id) {
+                    // Match!
+                    c1.card.matched = true;
+                    c2.card.matched = true;
+                    pairsMatches++;
+                    document.getElementById('pairs-matches').textContent = pairsMatches;
+                    playSfx('pair_match');
+
+                    const el1 = document.getElementById('pair-card-' + c1.idx);
+                    const el2 = document.getElementById('pair-card-' + c2.idx);
+                    if (el1) el1.classList.add('matched');
+                    if (el2) el2.classList.add('matched');
+
+                    pairsFlipped = [];
+                    pairsLock = false;
+
+                    if (pairsMatches === 8) {
+                        // Game Won!
+                        winPairsGame();
+                    }
+                } else {
+                    // Miss
+                    playSfx('pair_miss');
+                    setTimeout(() => {
+                        const el1 = document.getElementById('pair-card-' + c1.idx);
+                        const el2 = document.getElementById('pair-card-' + c2.idx);
+                        if (el1) el1.classList.remove('flipped');
+                        if (el2) el2.classList.remove('flipped');
+                        pairsFlipped = [];
+                        pairsLock = false;
+                    }, 750);
+                }
+            }
+        }
+
+        function winPairsGame() {
+            pairsActive = false;
+            clearInterval(pairsTimer);
+            playSfx('fanfare');
+            const timeStr = document.getElementById('pairs-time').textContent;
+            document.getElementById('pairs-status').innerHTML = `🎉 <strong>SOLVED ALL PAIRS!</strong> Time: <strong>${timeStr}</strong> in <strong>${pairsMoves}</strong> moves!`;
+            document.getElementById('btn-pairs-start').textContent = '▶ Play Again';
+
+            const recordStr = `${timeStr} (${pairsMoves}m)`;
+            if (pairsBest === '--' || pairsMoves < parseInt(pairsBest.split('(')[1])) {
+                pairsBest = recordStr;
+                localStorage.setItem('cube_pairs_best', pairsBest);
+                document.getElementById('pairs-best').textContent = pairsBest;
+            }
+        }
+
+        // ==========================================
+        // 15. UNIVERSAL KEYBOARD SHORTCUTS
         // ==========================================
         window.addEventListener('keydown', (e) => {
+            // Pause / Resume Shortcut ('P' & 'Escape')
             if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
                 const activePanel = document.querySelector('.game-panel.active');
                 if (!activePanel) return;
@@ -2637,6 +4058,32 @@
                 else if (activePanel.id === 'panel-simon') togglePauseSimon();
                 else if (activePanel.id === 'panel-reflex') togglePauseReflex();
                 else if (activePanel.id === 'panel-blitz') togglePauseBlitz();
+                else if (activePanel.id === 'panel-stacker') togglePauseStacker();
+                else if (activePanel.id === 'panel-whack') togglePauseWhack();
+                else if (activePanel.id === 'panel-flappy') togglePauseFlappy();
+                else if (activePanel.id === 'panel-pairs') togglePausePairs();
+            }
+
+            // Spacebar Action for Stacker and Flappy
+            if (e.code === 'Space') {
+                const activePanel = document.querySelector('.game-panel.active');
+                if (!activePanel) return;
+                if (activePanel.id === 'panel-stacker') {
+                    e.preventDefault();
+                    stackLayer();
+                } else if (activePanel.id === 'panel-flappy') {
+                    e.preventDefault();
+                    flapCubie();
+                }
+            }
+
+            // Number Keys 1-9 for Whack-A-Cubie
+            if (['1','2','3','4','5','6','7','8','9'].includes(e.key)) {
+                const activePanel = document.querySelector('.game-panel.active');
+                if (activePanel && activePanel.id === 'panel-whack') {
+                    e.preventDefault();
+                    handleWhackClick(parseInt(e.key, 10) - 1);
+                }
             }
         });
 
@@ -2644,6 +4091,9 @@
         drawSnake();
         initBricks();
         start2048Game();
+        initStackerGrid();
+        drawStacker();
+        renderPairsBoard();
     </script>
 </body>
 </html>
