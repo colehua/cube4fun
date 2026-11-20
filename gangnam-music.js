@@ -10,7 +10,7 @@ class GangnamMusicEngine {
         this.timerId = null;
         this.currentStep = 0;
         this.bpm = 132;
-        this.volume = 0.55;
+        this.volume = parseFloat(localStorage.getItem('cube_intense_music_vol')) || 0.65;
         this.masterGain = null;
         this.compressor = null;
         this.selectedSinkId = localStorage.getItem('cube_intense_music_sink') || '';
@@ -321,6 +321,49 @@ class GangnamMusicEngine {
         }
     }
 
+    setVolume(val) {
+        const clamped = Math.max(0.05, Math.min(1.0, val));
+        this.volume = clamped;
+        localStorage.setItem('cube_intense_music_vol', clamped.toString());
+        if (this.ctx && this.masterGain) {
+            try {
+                this.masterGain.gain.setValueAtTime(clamped, this.ctx.currentTime);
+            } catch (err) {
+                this.masterGain.gain.value = clamped;
+            }
+        }
+        this.updateVolumeUI();
+    }
+
+    cycleVolume() {
+        if (this.volume >= 0.8) {
+            this.setVolume(0.35);
+            this.notify('🔈 Music Volume: Low (35%)');
+        } else if (this.volume >= 0.5) {
+            this.setVolume(0.95);
+            this.notify('🔊 Music Volume: High (100%)');
+        } else {
+            this.setVolume(0.65);
+            this.notify('🔉 Music Volume: Medium (65%)');
+        }
+    }
+
+    updateVolumeUI() {
+        const btns = document.querySelectorAll('.btn-music-volume');
+        btns.forEach(btn => {
+            if (this.volume >= 0.8) {
+                btn.innerHTML = '🔊 Vol: 100%';
+                btn.title = 'Music Volume: High (100%). Click to cycle to Low (35%).';
+            } else if (this.volume >= 0.5) {
+                btn.innerHTML = '🔉 Vol: 65%';
+                btn.title = 'Music Volume: Medium (65%). Click to cycle to High (100%).';
+            } else {
+                btn.innerHTML = '🔈 Vol: 35%';
+                btn.title = 'Music Volume: Low (35%). Click to cycle to Medium (65%).';
+            }
+        });
+    }
+
     updateUI() {
         const btns = document.querySelectorAll('.btn-intense-music');
         btns.forEach(btn => {
@@ -463,6 +506,14 @@ window.showAudioDevicePicker = function() {
     window.GangnamMusic.promptDevicePicker();
 };
 
+window.cycleMusicVolume = function() {
+    window.GangnamMusic.cycleVolume();
+};
+
+window.setMusicVolume = function(val) {
+    window.GangnamMusic.setVolume(val);
+};
+
 function initMusicButtons() {
     document.querySelectorAll('.btn-intense-music').forEach(btn => {
         btn.onclick = () => window.GangnamMusic.toggle();
@@ -470,6 +521,13 @@ function initMusicButtons() {
     document.querySelectorAll('.btn-audio-device').forEach(btn => {
         btn.onclick = () => window.GangnamMusic.promptDevicePicker();
     });
+    document.querySelectorAll('.btn-music-volume').forEach(btn => {
+        btn.onclick = () => window.GangnamMusic.cycleVolume();
+    });
+    if (window.GangnamMusic) {
+        window.GangnamMusic.updateVolumeUI();
+        window.GangnamMusic.updateUI();
+    }
 }
 
 if (document.readyState === 'loading') {

@@ -1441,6 +1441,7 @@
                 <button id="btn-copy-scramble" class="btn-action" style="background-color: var(--cyan-blob);">Copy 📋</button>
                 <button id="btn-intense-music" class="btn-action btn-intense-music" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: #ffffff; font-weight: 800; border-color: #1e272e;" title="Play Gangnam Style Intense Speedcubing Music">🔥 Intense Music 🎵</button>
                 <button id="btn-audio-device" class="btn-action btn-audio-device" style="background-color: #6c5ce7; color: #ffffff; font-size: 0.95em; border-color: #1e272e;" title="Connect or switch audio to Headphones / Earphones">🎧 Headphones: Auto</button>
+                <button id="btn-music-volume" class="btn-action btn-music-volume" style="background-color: #ff9f43; color: #ffffff; font-size: 0.95em; border-color: #1e272e;" title="Music Volume: Click to cycle Low / Medium / High">🔊 Vol: 65%</button>
                 <a href="practice-speed.html" class="btn-action" style="background-color: #2ed573; color: white; text-decoration: none;" title="Go to Practice Speed with Goals">⚡ Practice Speed 🎯</a>
                 <a href="challenges.html" class="btn-action" style="background-color: #ff4757; color: white; text-decoration: none;" title="Go to Challenges of Cubing">🏆 Challenges ♾️</a>
             </div>
@@ -1770,8 +1771,8 @@
         let spaceTimer = null;
         let holdInterval = null;
         let solves = []; // List of { time: num, scramble: str, dnf: bool, plusTwo: bool }
-        let scrambleHistories = { '3x3': [], '2x2': [], '3x3-cross': [], '3x3-f2l': [], '3x3-oh': [], '3x3-fmc': [] };
-        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1, '3x3-cross': -1, '3x3-f2l': -1, '3x3-oh': -1, '3x3-fmc': -1 };
+        let scrambleHistories = { '3x3': [], '2x2': [], '1000x1000': [], '100x100': [], '3x3-cross': [], '3x3-f2l': [], '3x3-oh': [], '3x3-fmc': [] };
+        let scrambleHistoryIndices = { '3x3': -1, '2x2': -1, '1000x1000': -1, '100x100': -1, '3x3-cross': -1, '3x3-f2l': -1, '3x3-oh': -1, '3x3-fmc': -1 };
 
         // ==========================================
         // --- CLOUD DATABASE CONFIGURATION ---
@@ -4596,6 +4597,8 @@
                 btnFmcPause.style.display = 'none';
                 btnFmcStart.style.display = 'inline-block';
             }
+            if (!scrambleHistories[type]) scrambleHistories[type] = [];
+            if (scrambleHistoryIndices[type] === undefined) scrambleHistoryIndices[type] = -1;
             if (scrambleHistories[type].length === 0) {
                 triggerNewScramble();
             } else {

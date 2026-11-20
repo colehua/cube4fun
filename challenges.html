@@ -9,7 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
+    <script src="gangnam-music.js"></script>
     <style>
+        .btn-intense-music-active {
+            animation: pulse-music 0.8s infinite alternate !important;
+            box-shadow: 0 0 16px rgba(255, 8, 68, 0.9) !important;
+        }
+        @keyframes pulse-music {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.04); filter: brightness(1.25); }
+        }
         html {
             scroll-behavior: smooth;
         }
@@ -1493,6 +1502,15 @@
 
             <!-- ACTION BUTTONS: PLUS CHALLENGE, GENERATE RANDOM SCRAMBLE & NEXT -->
             <div class="controls-button-group">
+                <button id="btn-intense-music" class="btn-cubing-action btn-intense-music" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: #ffffff; font-weight: 800;" title="Play Gangnam Style Intense Speedcubing Music">
+                    🔥 Intense Music 🎵
+                </button>
+                <button id="btn-audio-device" class="btn-cubing-action btn-audio-device" style="background-color: #6c5ce7; color: #ffffff;" title="Connect or switch audio to Headphones / Earphones">
+                    🎧 Headphones: Auto
+                </button>
+                <button id="btn-music-volume" class="btn-cubing-action btn-music-volume" style="background-color: #ff9f43; color: #ffffff;" title="Music Volume: Click to cycle Low / Medium / High">
+                    🔊 Vol: 65%
+                </button>
                 <button id="btn-plus-challenge" class="btn-cubing-action btn-plus" title="Generate an infinite new crazy challenge!">
                     ➕ Plus Challenge ♾️
                 </button>

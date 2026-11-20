@@ -2228,6 +2228,7 @@
                 const N = size;
                 ['U', 'D', 'F', 'B', 'L', 'R'].forEach(f => {
                     faces[f] = new Array(N * N).fill('grey');
+                    if (N >= 100) faces[f]._overrides = new Map();
                 });
             }
             return faces;
@@ -2721,14 +2722,10 @@
 
                         const paintPyra = (e) => {
                             e.stopPropagation();
-                            isStickerMouseDown = true;
                             paintSticker(f.key, i);
                         };
                         st.addEventListener('pointerdown', paintPyra);
-                        st.addEventListener('mousedown', paintPyra);
-                        st.addEventListener('click', paintPyra);
-                        st.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f.key, i); });
-                        st.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f.key, i); });
+                        st.addEventListener('click', (e) => e.stopPropagation());
 
                         faceDiv.appendChild(st);
                     }
@@ -2750,12 +2747,8 @@
                     cSt.style.backgroundColor = PALETTE_COLORS[curC] ? PALETTE_COLORS[curC].hex : curC;
                     cSt.dataset.face = f;
                     cSt.dataset.index = 0;
-                    const paintCenter = (e) => { e.stopPropagation(); isStickerMouseDown = true; paintSticker(f, 0); };
-                    cSt.addEventListener('pointerdown', paintCenter);
-                    cSt.addEventListener('mousedown', paintCenter);
-                    cSt.addEventListener('click', paintCenter);
-                    cSt.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, 0); });
-                    cSt.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, 0); });
+                    cSt.addEventListener('pointerdown', (e) => { e.stopPropagation(); paintSticker(f, 0); });
+                    cSt.addEventListener('click', (e) => e.stopPropagation());
                     faceDiv.appendChild(cSt);
 
                     // 4 Corners (1: TL, 2: TR, 3: BL, 4: BR)
@@ -2767,12 +2760,8 @@
                         corn.style.backgroundColor = PALETTE_COLORS[curCorn] ? PALETTE_COLORS[curCorn].hex : curCorn;
                         corn.dataset.face = f;
                         corn.dataset.index = i;
-                        const paintCorn = (e) => { e.stopPropagation(); isStickerMouseDown = true; paintSticker(f, i); };
-                        corn.addEventListener('pointerdown', paintCorn);
-                        corn.addEventListener('mousedown', paintCorn);
-                        corn.addEventListener('click', paintCorn);
-                        corn.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
-                        corn.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
+                        corn.addEventListener('pointerdown', (e) => { e.stopPropagation(); paintSticker(f, i); });
+                        corn.addEventListener('click', (e) => e.stopPropagation());
                         faceDiv.appendChild(corn);
                     }
 
@@ -2788,16 +2777,11 @@
                     faceDiv.innerHTML = createMegaminxSvgMarkup(f, colors);
                     faceDiv.querySelectorAll('.mega-polygon').forEach(poly => {
                         const idx = parseInt(poly.dataset.index, 10);
-                        const paintPoly = (e) => {
+                        poly.addEventListener('pointerdown', (e) => {
                             e.stopPropagation();
-                            isStickerMouseDown = true;
                             paintSticker(f, idx);
-                        };
-                        poly.addEventListener('pointerdown', paintPoly);
-                        poly.addEventListener('mousedown', paintPoly);
-                        poly.addEventListener('click', paintPoly);
-                        poly.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, idx); });
-                        poly.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, idx); });
+                        });
+                        poly.addEventListener('click', (e) => e.stopPropagation());
                     });
                     cubeEl.appendChild(faceDiv);
                 });
@@ -2865,10 +2849,20 @@
                             }
                         }
                         ctx.putImageData(imgData, 0, 0);
-                    }
 
-                    let isPainting = false;
-                    let lastPaintedIndex = -1;
+                        // Draw explicit user-painted squares on top so they are never lost
+                        if (solverFaces[f] && solverFaces[f]._overrides) {
+                            solverFaces[f]._overrides.forEach((cVal, sIdx) => {
+                                const sCol = sIdx % 1000;
+                                const sRow = Math.floor(sIdx / 1000);
+                                const px = Math.floor(sCol * 0.2);
+                                const py = Math.floor(sRow * 0.2);
+                                const h = PALETTE_COLORS[cVal] ? PALETTE_COLORS[cVal].hex : cVal;
+                                ctx.fillStyle = h;
+                                ctx.fillRect(Math.max(0, px - 1), Math.max(0, py - 1), 3, 3);
+                            });
+                        }
+                    }
 
                     const paintAtPoint = (clientX, clientY) => {
                         const rect = canvas.getBoundingClientRect();
@@ -2878,35 +2872,14 @@
                         const col = Math.floor(normX * N);
                         const row = Math.floor(normY * N);
                         const index = row * N + col;
-                        if (index !== lastPaintedIndex) {
-                            lastPaintedIndex = index;
-                            paintSticker(f, index);
-                        }
+                        paintSticker(f, index);
                     };
 
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
-                        isPainting = true;
-                        lastPaintedIndex = -1;
                         paintAtPoint(e.clientX, e.clientY);
                     });
-
-                    canvas.addEventListener('pointermove', (e) => {
-                        if (!isPainting) return;
-                        e.stopPropagation();
-                        paintAtPoint(e.clientX, e.clientY);
-                    });
-
-                    const handlePointerEnd = (e) => {
-                        if (!isPainting) return;
-                        isPainting = false;
-                        lastPaintedIndex = -1;
-                        e.stopPropagation();
-                    };
-
-                    canvas.addEventListener('pointerup', handlePointerEnd);
-                    canvas.addEventListener('pointercancel', handlePointerEnd);
-                    canvas.addEventListener('pointerleave', handlePointerEnd);
+                    canvas.addEventListener('click', (e) => e.stopPropagation());
 
                     cubeEl.appendChild(canvas);
                 });
@@ -2944,14 +2917,10 @@
 
                         const paintSt = (e) => {
                             e.stopPropagation();
-                            isStickerMouseDown = true;
                             paintSticker(f, i);
                         };
                         st.addEventListener('pointerdown', paintSt);
-                        st.addEventListener('mousedown', paintSt);
-                        st.addEventListener('click', paintSt);
-                        st.addEventListener('pointerenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
-                        st.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(f, i); });
+                        st.addEventListener('click', (e) => e.stopPropagation());
 
                         faceDiv.appendChild(st);
                     }
@@ -3034,14 +3003,11 @@
                         st.dataset.face = item.key;
                         st.dataset.index = i;
 
-                        st.addEventListener('mousedown', (e) => {
-                            e.preventDefault();
-                            isStickerMouseDown = true;
+                        st.addEventListener('pointerdown', (e) => {
+                            e.stopPropagation();
                             paintSticker(item.key, i);
                         });
-                        st.addEventListener('mouseenter', (e) => {
-                            if (isStickerMouseDown || e.buttons === 1) paintSticker(item.key, i);
-                        });
+                        st.addEventListener('click', (e) => e.stopPropagation());
 
                         gridBox.appendChild(st);
                     }
@@ -3087,8 +3053,8 @@
                     cSt.style.backgroundColor = PALETTE_COLORS[curC] ? PALETTE_COLORS[curC].hex : curC;
                     cSt.dataset.face = item.key;
                     cSt.dataset.index = 0;
-                    cSt.addEventListener('mousedown', (e) => { e.preventDefault(); isStickerMouseDown = true; paintSticker(item.key, 0); });
-                    cSt.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(item.key, 0); });
+                    cSt.addEventListener('pointerdown', (e) => { e.stopPropagation(); paintSticker(item.key, 0); });
+                    cSt.addEventListener('click', (e) => e.stopPropagation());
                     gridBox.appendChild(cSt);
 
                     // Corners (1: TL, 2: TR, 3: BL, 4: BR)
@@ -3100,8 +3066,8 @@
                         corn.style.backgroundColor = PALETTE_COLORS[curCorn] ? PALETTE_COLORS[curCorn].hex : curCorn;
                         corn.dataset.face = item.key;
                         corn.dataset.index = i;
-                        corn.addEventListener('mousedown', (e) => { e.preventDefault(); isStickerMouseDown = true; paintSticker(item.key, i); });
-                        corn.addEventListener('mouseenter', (e) => { if (isStickerMouseDown || e.buttons === 1) paintSticker(item.key, i); });
+                        corn.addEventListener('pointerdown', (e) => { e.stopPropagation(); paintSticker(item.key, i); });
+                        corn.addEventListener('click', (e) => e.stopPropagation());
                         gridBox.appendChild(corn);
                     }
 
@@ -3145,18 +3111,12 @@
                     const svgWrapper = document.createElement('div');
                     svgWrapper.innerHTML = createMegaminxSvgMarkup(item.key, colors);
                     svgWrapper.querySelectorAll('.mega-polygon').forEach(poly => {
-                        poly.addEventListener('mousedown', (e) => {
-                            e.preventDefault();
-                            isStickerMouseDown = true;
-                            const idx = parseInt(poly.dataset.index, 10);
+                        const idx = parseInt(poly.dataset.index, 10);
+                        poly.addEventListener('pointerdown', (e) => {
+                            e.stopPropagation();
                             paintSticker(item.key, idx);
                         });
-                        poly.addEventListener('mouseenter', (e) => {
-                            if (isStickerMouseDown || e.buttons === 1) {
-                                const idx = parseInt(poly.dataset.index, 10);
-                                paintSticker(item.key, idx);
-                            }
-                        });
+                        poly.addEventListener('click', (e) => e.stopPropagation());
                     });
                     faceEl.appendChild(svgWrapper);
                     container.appendChild(faceEl);
@@ -3250,10 +3210,20 @@
                             }
                         }
                         ctx.putImageData(imgData, 0, 0);
-                    }
 
-                    let isNetPainting = false;
-                    let lastNetPaintedIndex = -1;
+                        // Draw explicit user-painted squares on top so they are never lost
+                        if (solverFaces[item.key] && solverFaces[item.key]._overrides) {
+                            solverFaces[item.key]._overrides.forEach((cVal, sIdx) => {
+                                const sCol = sIdx % 1000;
+                                const sRow = Math.floor(sIdx / 1000);
+                                const px = Math.floor(sCol * 0.16);
+                                const py = Math.floor(sRow * 0.16);
+                                const h = PALETTE_COLORS[cVal] ? PALETTE_COLORS[cVal].hex : cVal;
+                                ctx.fillStyle = h;
+                                ctx.fillRect(Math.max(0, px - 1), Math.max(0, py - 1), 3, 3);
+                            });
+                        }
+                    }
 
                     const paintNetAtPoint = (clientX, clientY) => {
                         const rect = canvas.getBoundingClientRect();
@@ -3263,35 +3233,14 @@
                         const col = Math.floor(normX * N);
                         const row = Math.floor(normY * N);
                         const index = row * N + col;
-                        if (index !== lastNetPaintedIndex) {
-                            lastNetPaintedIndex = index;
-                            paintSticker(item.key, index);
-                        }
+                        paintSticker(item.key, index);
                     };
 
                     canvas.addEventListener('pointerdown', (e) => {
                         e.stopPropagation();
-                        isNetPainting = true;
-                        lastNetPaintedIndex = -1;
                         paintNetAtPoint(e.clientX, e.clientY);
                     });
-
-                    canvas.addEventListener('pointermove', (e) => {
-                        if (!isNetPainting) return;
-                        e.stopPropagation();
-                        paintNetAtPoint(e.clientX, e.clientY);
-                    });
-
-                    const handleNetPointerEnd = (e) => {
-                        if (!isNetPainting) return;
-                        isNetPainting = false;
-                        lastNetPaintedIndex = -1;
-                        e.stopPropagation();
-                    };
-
-                    canvas.addEventListener('pointerup', handleNetPointerEnd);
-                    canvas.addEventListener('pointercancel', handleNetPointerEnd);
-                    canvas.addEventListener('pointerleave', handleNetPointerEnd);
+                    canvas.addEventListener('click', (e) => e.stopPropagation());
 
                     faceEl.appendChild(canvas);
                     container.appendChild(faceEl);
@@ -3356,17 +3305,11 @@
                         st.dataset.face = item.key;
                         st.dataset.index = i;
 
-                        st.addEventListener('mousedown', (e) => {
-                            e.preventDefault();
-                            isStickerMouseDown = true;
+                        st.addEventListener('pointerdown', (e) => {
+                            e.stopPropagation();
                             paintSticker(item.key, i);
                         });
-
-                        st.addEventListener('mouseenter', (e) => {
-                            if (isStickerMouseDown || e.buttons === 1) {
-                                paintSticker(item.key, i);
-                            }
-                        });
+                        st.addEventListener('click', (e) => e.stopPropagation());
 
                         grid.appendChild(st);
                     }
@@ -3395,6 +3338,11 @@
 
             if (solverSize === 100 || solverSize === 1000) {
                 const N = solverSize;
+                if (!solverFaces[faceKey]._overrides) {
+                    solverFaces[faceKey]._overrides = new Map();
+                }
+                solverFaces[faceKey]._overrides.set(index, solverColor);
+
                 const c3d = document.querySelector(`canvas.solver-3d-face.face-${faceKey}`);
                 if (c3d) {
                     const ctx = c3d.getContext('2d');
@@ -3404,10 +3352,10 @@
                     if (N === 100) {
                         ctx.fillRect(col * 2, row * 2, 2, 2);
                     } else {
-                        // 1000x1000: single square pixel on 200x200 canvas
+                        // 1000x1000: clearly visible 3x3 square on 200x200 canvas
                         const px = Math.floor(col * 0.2);
                         const py = Math.floor(row * 0.2);
-                        ctx.fillRect(px, py, 1, 1);
+                        ctx.fillRect(Math.max(0, px - 1), Math.max(0, py - 1), 3, 3);
                     }
                 }
                 const c2d = document.querySelector(`canvas.net-canvas-${faceKey}`);
@@ -3420,10 +3368,10 @@
                         const step = 160 / 100;
                         ctx.fillRect(col * step, row * step, step + 0.1, step + 0.1);
                     } else {
-                        // 1000x1000: single square pixel on 160x160 canvas
+                        // 1000x1000: clearly visible 3x3 square on 160x160 canvas
                         const px = Math.floor(col * 0.16);
                         const py = Math.floor(row * 0.16);
-                        ctx.fillRect(px, py, 1, 1);
+                        ctx.fillRect(Math.max(0, px - 1), Math.max(0, py - 1), 3, 3);
                     }
                 }
                 playSound('turn');
@@ -3465,11 +3413,6 @@
             scheduleUpdateColorBadgesAndBanner();
         }
 
-        window.addEventListener('mousedown', (e) => { if (e.button === 0) isStickerMouseDown = true; });
-        window.addEventListener('mouseup', () => { isStickerMouseDown = false; });
-        window.addEventListener('pointerdown', (e) => { if (e.isPrimary) isStickerMouseDown = true; });
-        window.addEventListener('pointerup', () => { isStickerMouseDown = false; });
-        window.addEventListener('pointercancel', () => { isStickerMouseDown = false; });
 
         function updateColorBadgesAndBanner() {
             const counts = {};
@@ -3570,6 +3513,7 @@
 
         function fillWholeFace(faceKey) {
             if (!solverFaces || !solverFaces[faceKey]) return;
+            if (solverFaces[faceKey]._overrides) solverFaces[faceKey]._overrides.clear();
             solverFaces[faceKey].fill(solverColor);
             renderSolver3DCube();
             renderSolverNet();
