@@ -398,27 +398,29 @@
             touch-action: none;
         }
 
-        /* SUPER SUPER BIG RUNNER ARENA */
+        /* SUPER SUPER BIG RUNNER ARENA - CONTROLS DOCKED SNUG TO THE PICTURE */
         .runner-arena {
             display: flex;
             flex-direction: row;
-            align-items: stretch;
+            align-items: flex-start;
             justify-content: center;
-            gap: 18px;
+            gap: 8px;
             width: 100%;
-            max-width: 1520px;
-            margin: 6px 0 16px 0;
+            max-width: 1540px;
+            margin: 4px auto 10px auto;
             box-sizing: border-box;
         }
 
         .runner-screen-wrap {
             flex: 1 1 82%;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
             max-width: 100%;
             min-width: 0;
             position: relative;
+            gap: 0;
         }
 
         canvas.runner-canvas-super {
@@ -427,26 +429,28 @@
             height: auto;
             aspect-ratio: 16 / 9;
             border: 3.5px solid #00f0ff;
-            border-radius: 22px;
+            border-bottom: 2px solid rgba(0, 240, 255, 0.4);
+            border-radius: 18px 18px 4px 4px;
             box-shadow: 0 0 45px rgba(0, 240, 255, 0.45), inset 0 0 35px rgba(0, 0, 0, 0.9);
             display: block;
             cursor: pointer;
             background: #020617;
+            margin: 0;
         }
 
-        /* SIDE DOCK: RIGHT NEXT TO THE SCREEN */
+        /* SIDE DOCK: RIGHT NEXT TO THE PICTURE */
         .runner-side-dock {
-            flex: 0 0 260px;
-            width: 260px;
+            flex: 0 0 240px;
+            width: 240px;
             display: flex;
             flex-direction: column;
             align-items: stretch;
             justify-content: flex-start;
-            gap: 12px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 2px solid rgba(0, 240, 255, 0.35);
-            border-radius: 22px;
-            padding: 18px 14px;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 2.5px solid rgba(0, 240, 255, 0.45);
+            border-radius: 18px;
+            padding: 10px 10px;
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 240, 255, 0.08);
             box-sizing: border-box;
         }
@@ -466,19 +470,19 @@
 
         .runner-dash-again-btn {
             width: 100%;
-            padding: 16px 12px;
-            border-radius: 18px;
+            padding: 12px 10px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 3px;
             text-align: center;
             cursor: pointer;
             background: linear-gradient(135deg, #00f0ff 0%, #0284c7 45%, #6366f1 100%);
-            border: 2.5px solid #ffffff;
+            border: 2px solid #ffffff;
             color: #ffffff;
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.65);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.65);
             animation: dashDockPulse 1.8s infinite ease-in-out;
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-sizing: border-box;
@@ -487,8 +491,8 @@
         }
 
         .runner-dash-again-btn:hover {
-            transform: scale(1.04);
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.95), 0 0 20px rgba(255, 0, 127, 0.6);
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.95), 0 0 16px rgba(255, 0, 127, 0.6);
             border-color: #ffd700;
         }
         .runner-dash-again-btn:active {
@@ -497,29 +501,29 @@
 
         .runner-dash-again-btn .dash-title {
             font-family: 'DynaPuff', cursive;
-            font-size: 1.25em;
+            font-size: 1.15em;
             font-weight: 900;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
 
         .runner-dash-again-btn .dash-sub {
-            font-size: 0.76em;
+            font-size: 0.72em;
             opacity: 0.92;
             font-family: monospace;
             font-weight: 700;
             color: #fde047;
             background: rgba(0, 0, 0, 0.35);
-            padding: 2px 8px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 6px;
         }
 
         .runner-side-survive {
             width: 100%;
-            padding: 12px 10px;
-            font-size: 0.95em;
+            padding: 8px 8px;
+            font-size: 0.88em;
             box-sizing: border-box;
             justify-content: center;
             text-align: center;
@@ -527,8 +531,8 @@
 
         .runner-side-pause {
             width: 100%;
-            padding: 10px 14px;
-            font-size: 1em;
+            padding: 8px 10px;
+            font-size: 0.88em;
             box-sizing: border-box;
             justify-content: center;
         }
@@ -536,13 +540,13 @@
         .side-dock-toggle {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: rgba(0, 0, 0, 0.55);
             border: 1.5px solid #eab308;
-            padding: 9px 10px;
-            border-radius: 12px;
+            padding: 6px 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.84em;
+            font-size: 0.8em;
             font-weight: 700;
             color: #ffd700;
             user-select: none;
@@ -552,23 +556,23 @@
         .side-dock-actions {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-top: 2px;
+            gap: 6px;
+            margin-top: 0;
         }
 
         .side-dock-steer-row {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             width: 100%;
         }
 
         .side-dock-btn {
             flex: 1;
             font-family: 'DynaPuff', cursive;
-            font-size: 0.92em;
+            font-size: 0.88em;
             font-weight: 700;
-            padding: 9px 6px;
-            border-radius: 12px;
+            padding: 8px 6px;
+            border-radius: 10px;
             background: #1e293b;
             border: 1.5px solid #475569;
             color: #e2e8f0;
@@ -668,40 +672,45 @@
             .runner-arena {
                 flex-direction: column;
                 align-items: center;
+                gap: 8px;
             }
             .runner-side-dock {
                 width: 100%;
-                max-width: 880px;
+                max-width: 1200px;
                 flex-direction: row;
                 flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
+                gap: 6px;
+                padding: 8px 10px;
             }
             .runner-dash-again-btn {
-                flex: 1 1 240px;
+                flex: 1 1 200px;
             }
             .runner-side-survive {
-                flex: 1 1 220px;
+                flex: 1 1 180px;
             }
             .runner-side-pause {
-                flex: 1 1 140px;
+                flex: 1 1 120px;
             }
             .side-dock-toggle {
-                flex: 1 1 200px;
+                flex: 1 1 160px;
                 justify-content: center;
             }
             .side-dock-actions {
                 width: 100%;
                 flex-direction: row;
                 flex-wrap: wrap;
+                gap: 6px;
             }
             .side-dock-steer-row {
-                flex: 1 1 200px;
+                flex: 1 1 180px;
             }
             .side-dock-btn.btn-side-jump,
             .side-dock-btn.btn-side-slide,
-            .side-dock-btn.btn-side-shoot {
-                flex: 1 1 140px;
+            .side-dock-btn.btn-side-shoot,
+            .side-dock-btn.btn-side-dash {
+                flex: 1 1 130px;
             }
         }
 
@@ -739,20 +748,22 @@
             color: #000;
         }
 
-        /* NEAT ARCADE CONSOLE CONTROLS */
+        /* NEAT ARCADE CONSOLE CONTROLS - DOCKED DIRECTLY TO THE BOTTOM BEZEL OF THE PICTURE (ZERO GAP) */
         .arcade-control-deck {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 14px;
-            margin-top: 16px;
+            gap: 8px;
+            margin-top: 0;
+            margin-bottom: 2px;
             flex-wrap: wrap;
-            background: rgba(15, 23, 42, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            padding: 10px 18px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-            max-width: 880px;
+            background: rgba(15, 23, 42, 0.94);
+            border: 3px solid #00f0ff;
+            border-top: 2px solid rgba(0, 240, 255, 0.4);
+            border-radius: 4px 4px 18px 18px;
+            padding: 8px 12px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.25);
+            max-width: 1200px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -760,15 +771,26 @@
         .control-group {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
 
         .deck-btn {
             font-family: 'DynaPuff', cursive;
-            font-size: 1.05em;
+            font-size: 0.98em;
             font-weight: 700;
-            padding: 10px 18px;
-            border-radius: 14px;
+            padding: 8px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+            border: 2px solid transparent;
+        }
             cursor: pointer;
             user-select: none;
             touch-action: manipulation;
@@ -1575,17 +1597,45 @@
                     Dash along the 3D Highway! 🦘 Jump over 1-block obstacles • 🔫 Jump on shooting monsters (+50 💰) • 🔥 Shoot normal monsters!
                 </div>
 
-                <!-- SUPER SUPER BIG RUNNER ARENA: HUGE WIDESCREEN + DASH AGAIN RIGHT NEXT TO THE SCREEN -->
+                <!-- SUPER SUPER BIG RUNNER ARENA: HUGE WIDESCREEN + CONTROLS DOCKED SNUG TO THE PICTURE -->
                 <div class="runner-arena">
-                    <!-- SUPER SUPER BIG SCREEN (1200 x 675 WIDESCREEN ARCADE) -->
+                    <!-- SCREEN WRAP: THE PICTURE + INTEGRATED DOCKED CONTROLS DIRECTLY UNDER IT -->
                     <div class="runner-screen-wrap">
                         <canvas id="canvas-runner" class="arcade-canvas runner-canvas-super" width="1200" height="675" style="cursor: pointer;" title="Cube Runner 3D Highway - Click screen or Dash Again to play!"></canvas>
+
+                        <!-- ARCADE CONTROL DECK: DOCKED DIRECTLY TO THE BOTTOM BEZEL OF THE PICTURE (ZERO GAP) -->
+                        <div class="arcade-control-deck">
+                            <div class="control-group">
+                                <button id="btn-deck-start" class="deck-btn btn-game-primary" onclick="startRunnerGame()" title="Start or Dash Again (Spacebar)">
+                                    ▶ Dash Again <span class="badge-best">best!</span>
+                                </button>
+                            </div>
+                            <div class="control-group">
+                                <button class="deck-btn btn-steer" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
+                                <button class="deck-btn btn-steer" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
+                            </div>
+                            <div class="control-group">
+                                <button id="btn-deck-dash" class="deck-btn btn-action-dash" onclick="runnerDashAction()" title="Sudden Speed Dash (Shift / E)">⚡ DASH!</button>
+                                <button class="deck-btn btn-action-jump" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">⬆️ Jump</button>
+                                <button class="deck-btn btn-action-slide" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
+                                <button class="deck-btn btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
+                            </div>
+                            <div class="control-group">
+                                <button id="btn-deck-survive" class="deck-btn btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
+                                    🛡️ SURVIVE (100 💰)
+                                </button>
+                                <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.88em; font-weight: 700; color: #ffd700; background: rgba(0, 0, 0, 0.55); padding: 7px 12px; border-radius: 10px; border: 1.5px solid #eab308; user-select: none;" title="Auto-Survive: When you hit an obstacle or monster, automatically spend 100 coins to survive with an invulnerable shield!">
+                                    <input type="checkbox" id="chk-auto-survive-deck" onchange="syncAutoSurvive(this)" style="width: 16px; height: 16px; accent-color: #f59e0b; cursor: pointer;">
+                                    🛡️ Auto-Survive
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- SIDE DOCK: DASH AGAIN RIGHT NEXT TO THE SCREEN -->
+                    <!-- SIDE DOCK: CONTROLS SNUG RIGHT NEXT TO THE PICTURE -->
                     <aside class="runner-side-dock">
                         <div class="side-dock-title">
-                            ⚡ DASH CONTROLS
+                            ⚡ DASH & CONTROLS
                         </div>
 
                         <!-- THE DASH AGAIN THING RIGHT NEXT TO THE SCREEN -->
@@ -1594,52 +1644,36 @@
                             <span class="dash-sub">[Spacebar]</span>
                         </button>
 
+                        <!-- SUDDEN SPEED DASH BUTTON RIGHT NEXT TO THE PICTURE -->
+                        <button id="btn-side-dash" class="side-dock-btn btn-side-dash" onclick="runnerDashAction()" title="⚡ Sudden Speed Dash! [Shift / E]">⚡ DASH! (Go Fast!)</button>
+
+                        <!-- QUICK MOVEMENT & ACTION CONTROLS ALONGSIDE THE SCREEN -->
+                        <div class="side-dock-steer-row">
+                            <button class="side-dock-btn" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
+                            <button class="side-dock-btn" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
+                        </div>
+                        <div class="side-dock-steer-row">
+                            <button class="side-dock-btn btn-side-jump" onclick="runnerJumpAction()" title="Jump / Dodge (W / ⬆️)">⬆️ Jump</button>
+                            <button class="side-dock-btn btn-side-slide" onclick="runnerSlideAction()" title="Slide / Stomp (S / ⬇️)">⬇️ Slide</button>
+                        </div>
+                        <button class="side-dock-btn btn-side-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT MONSTER</button>
+
+                        <!-- SURVIVE & PAUSE & AUTO-SURVIVE -->
                         <button id="btn-runner-survive" class="btn-game-survive runner-side-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
                             🛡️ SURVIVE (100 💰)
                             <span style="font-size:0.75em; opacity:0.9;">[S / R]</span>
                         </button>
 
-                        <button id="btn-runner-pause" class="btn-game-pause runner-side-pause" onclick="togglePauseRunner()" title="Pause / Resume (P / Esc)">
-                            ⏸️ Pause
-                        </button>
-
-                        <!-- AUTO-SURVIVE TOGGLE -->
-                        <label class="side-dock-toggle" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
-                            <input type="checkbox" id="chk-auto-survive" style="width: 17px; height: 17px; accent-color: #f59e0b; cursor: pointer;">
-                            <span>🛡️ Auto-Survive (100 💰)</span>
-                        </label>
-
-                        <!-- QUICK ACTIONS DOCKED RIGHT NEXT TO SCREEN -->
-                        <div class="side-dock-actions">
-                            <button id="btn-side-dash" class="side-dock-btn btn-side-dash" onclick="runnerDashAction()" title="⚡ Sudden Speed Dash! [Shift / E]">⚡ DASH! (Go Fast!)</button>
-                            <div class="side-dock-steer-row">
-                                <button class="side-dock-btn" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
-                                <button class="side-dock-btn" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
-                            </div>
-                            <button class="side-dock-btn btn-side-jump" onclick="runnerJumpAction()" title="Jump / Dodge (W / ⬆️)">⬆️ Jump / Dodge</button>
-                            <button class="side-dock-btn btn-side-slide" onclick="runnerSlideAction()" title="Slide / Stomp (S / ⬇️)">⬇️ Slide / Stomp</button>
-                            <button class="side-dock-btn btn-side-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT MONSTER</button>
+                        <div class="side-dock-steer-row">
+                            <button id="btn-runner-pause" class="btn-game-pause runner-side-pause" onclick="togglePauseRunner()" title="Pause / Resume (P / Esc)">
+                                ⏸️ Pause
+                            </button>
+                            <label class="side-dock-toggle" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
+                                <input type="checkbox" id="chk-auto-survive" onchange="syncAutoSurvive(this)" style="width: 16px; height: 16px; accent-color: #f59e0b; cursor: pointer;">
+                                <span>🛡️ Auto</span>
+                            </label>
                         </div>
                     </aside>
-                </div>
-
-                <div class="arcade-control-deck">
-                    <div class="control-group">
-                        <button class="deck-btn btn-steer" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
-                        <button class="deck-btn btn-steer" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
-                    </div>
-                    <div class="control-group">
-                        <button id="btn-deck-dash" class="deck-btn btn-action-dash" onclick="runnerDashAction()" title="Sudden Speed Dash (Shift / E)">⚡ DASH!</button>
-                        <button class="deck-btn btn-action-jump" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">⬆️ Jump</button>
-                        <button class="deck-btn btn-action-slide" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
-                        <button class="deck-btn btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
-                    </div>
-                    <div class="control-group" style="margin-left: 6px;">
-                        <label style="display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-size: 0.9em; font-weight: 700; color: #ffd700; background: rgba(0, 0, 0, 0.55); padding: 8px 14px; border-radius: 12px; border: 1.5px solid #eab308; user-select: none;" title="Auto-Survive: When you hit an obstacle or monster, automatically spend 100 coins to survive with an invulnerable shield!">
-                            <input type="checkbox" id="chk-auto-survive" style="width: 17px; height: 17px; accent-color: #f59e0b; cursor: pointer;">
-                            🛡️ Auto-Survive (100 💰)
-                        </label>
-                    </div>
                 </div>
                 <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 900px; line-height: 1.5;">
                     🦘 <strong>Jump Rules</strong>: You can <strong>jump over anything 1 block tall</strong> (hurdles, 1-block cubes, and 25 HP imps)! • 🔫 <strong>You can ONLY jump on shooting monsters</strong> (crush them for <strong>+50 💰</strong>; jump in the air to dodge bullets)! • 👾 <strong>Normal monsters cannot be jumped on</strong> — blast them with 🔥 <strong>SHOOT</strong>! • ⚡ <strong>Shift / E</strong> Dash (Go Fast!) • <strong>A / D</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive (100 💰)
@@ -2444,6 +2478,20 @@
             alpha: Math.random() * 0.7 + 0.3
         }));
 
+        function syncAutoSurvive(source) {
+            const val = !!source.checked;
+            const c1 = document.getElementById('chk-auto-survive');
+            const c2 = document.getElementById('chk-auto-survive-deck');
+            if (c1) c1.checked = val;
+            if (c2) c2.checked = val;
+        }
+
+        function isRunnerAutoSurviveEnabled() {
+            const c1 = document.getElementById('chk-auto-survive');
+            const c2 = document.getElementById('chk-auto-survive-deck');
+            return !!((c1 && c1.checked) || (c2 && c2.checked));
+        }
+
         function startRunnerGame() {
             getAudioContext();
             runnerActive = true;
@@ -2477,12 +2525,19 @@
             document.getElementById('runner-coins').textContent = runnerCoins;
             document.getElementById('runner-speed').textContent = '0.5';
             const startBtn = document.getElementById('btn-runner-start');
+            const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
                 startBtn.innerHTML = '<span class="dash-title">🔄 Restart Dash <span class="badge-best">best!</span></span><span class="dash-sub">[Spacebar]</span>';
                 startBtn.classList.remove('dash-again-highlight');
             }
+            if (deckStartBtn) {
+                deckStartBtn.innerHTML = '🔄 Restart Dash <span class="badge-best">best!</span>';
+                deckStartBtn.classList.remove('dash-again-highlight');
+            }
             const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
+            const deckSurviveBtn = document.getElementById('btn-deck-survive');
             if (surviveBtn) surviveBtn.style.display = 'none';
+            if (deckSurviveBtn) deckSurviveBtn.style.display = 'none';
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
@@ -2967,7 +3022,7 @@
                             playSfx('explosion');
                             runnerMonsterBullets.splice(bi, 1);
                             continue;
-                        } else if (document.getElementById('chk-auto-survive') && document.getElementById('chk-auto-survive').checked && runnerCoins >= 100) {
+                        } else if (isRunnerAutoSurviveEnabled() && runnerCoins >= 100) {
                             runnerCoins -= 100;
                             localStorage.setItem('cube_arcade_coins', runnerCoins);
                             document.getElementById('runner-coins').textContent = runnerCoins;
@@ -3136,7 +3191,7 @@
                                 spawnMonsterExplosion(expX, expY - 20);
                                 runnerObstacles.splice(i, 1);
                                 continue;
-                            } else if (document.getElementById('chk-auto-survive') && document.getElementById('chk-auto-survive').checked && runnerCoins >= 100) {
+                            } else if (isRunnerAutoSurviveEnabled() && runnerCoins >= 100) {
                                 runnerCoins -= 100;
                                 localStorage.setItem('cube_arcade_coins', runnerCoins);
                                 document.getElementById('runner-coins').textContent = runnerCoins;
@@ -3178,7 +3233,7 @@
                             }
                             runnerObstacles.splice(i, 1);
                             continue;
-                        } else if (document.getElementById('chk-auto-survive') && document.getElementById('chk-auto-survive').checked && runnerCoins >= 100) {
+                        } else if (isRunnerAutoSurviveEnabled() && runnerCoins >= 100) {
                             // AUTO-SURVIVE: Automatically spends 100 coins to absorb fatal hit!
                             runnerCoins -= 100;
                             localStorage.setItem('cube_arcade_coins', runnerCoins);
@@ -4051,8 +4106,9 @@
                 document.getElementById('runner-best').textContent = runnerBest;
             }
 
-            // Survive button control on top bar
+            // Survive button control on side dock and docked deck
             const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
+            const deckSurviveBtn = document.getElementById('btn-deck-survive');
             if (surviveBtn) {
                 surviveBtn.style.display = 'inline-flex';
                 if (runnerCoins >= 100) {
@@ -4063,6 +4119,18 @@
                     surviveBtn.classList.add('disabled');
                     surviveBtn.innerHTML = `🛡️ Need 100 💰 to Survive (${runnerCoins}/100)`;
                     surviveBtn.title = `Need ${100 - runnerCoins} more coins to survive`;
+                }
+            }
+            if (deckSurviveBtn) {
+                deckSurviveBtn.style.display = 'inline-flex';
+                if (runnerCoins >= 100) {
+                    deckSurviveBtn.classList.remove('disabled');
+                    deckSurviveBtn.innerHTML = `🛡️ SURVIVE (100 💰) [S]`;
+                    deckSurviveBtn.title = `Survive immediately for 100 coins! You have ${runnerCoins} 💰`;
+                } else {
+                    deckSurviveBtn.classList.add('disabled');
+                    deckSurviveBtn.innerHTML = `🛡️ Need 100 💰 (${runnerCoins}/100)`;
+                    deckSurviveBtn.title = `Need ${100 - runnerCoins} more coins to survive`;
                 }
             }
 
@@ -4157,9 +4225,14 @@
             }
 
             const startBtn = document.getElementById('btn-runner-start');
+            const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
                 startBtn.innerHTML = '<span class="dash-title">▶ Dash Again <span class="badge-best">best!</span></span><span class="dash-sub">[Spacebar]</span>';
                 startBtn.classList.add('dash-again-highlight');
+            }
+            if (deckStartBtn) {
+                deckStartBtn.innerHTML = '▶ Dash Again <span class="badge-best">best!</span>';
+                deckStartBtn.classList.add('dash-again-highlight');
             }
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
@@ -4218,14 +4291,21 @@
             // Clear hazards within z < 320 to give immediate breathing room
             runnerObstacles = runnerObstacles.filter(ob => ob.z > 320);
 
-            // Hide survive button
+            // Hide survive buttons
             const surviveBtn = document.getElementById('btn-runner-survive') || document.getElementById('btn-runner-revive');
+            const deckSurviveBtn = document.getElementById('btn-deck-survive');
             if (surviveBtn) surviveBtn.style.display = 'none';
+            if (deckSurviveBtn) deckSurviveBtn.style.display = 'none';
 
             const startBtn = document.getElementById('btn-runner-start');
+            const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
                 startBtn.innerHTML = '<span class="dash-title">🔄 Restart Dash <span class="badge-best">best!</span></span><span class="dash-sub">[Spacebar]</span>';
                 startBtn.classList.remove('dash-again-highlight');
+            }
+            if (deckStartBtn) {
+                deckStartBtn.innerHTML = '🔄 Restart Dash <span class="badge-best">best!</span>';
+                deckStartBtn.classList.remove('dash-again-highlight');
             }
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
