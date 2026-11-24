@@ -83,11 +83,13 @@
         }
 
         .arcade-container {
-            max-width: 1780px;
+            max-width: 98vw;
+            width: 100%;
             margin: 0 auto;
-            padding: 12px 10px 50px 10px;
+            padding: 8px 6px 40px 6px;
             position: relative;
             z-index: 2;
+            box-sizing: border-box;
         }
 
         /* ARCADE TOP NAVIGATION */
@@ -275,7 +277,7 @@
             background: var(--card-bg);
             border: 2px solid rgba(0, 240, 255, 0.45);
             border-radius: 20px;
-            padding: 16px 12px;
+            padding: 10px 8px;
             box-shadow: 0 0 45px rgba(0, 240, 255, 0.18), inset 0 0 25px rgba(0, 0, 0, 0.7);
             position: relative;
             min-height: 580px;
@@ -437,8 +439,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            max-width: 1720px;
-            margin: 4px auto 8px auto;
+            max-width: 98vw;
+            margin: 2px auto 6px auto;
             box-sizing: border-box;
             position: relative;
         }
@@ -449,35 +451,35 @@
             align-items: stretch;
             justify-content: center;
             width: 100%;
-            max-width: 1720px;
+            max-width: 98vw;
             box-sizing: border-box;
             filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
             border-radius: 40px;
-            margin: 4px auto 12px auto;
+            margin: 2px auto 8px auto;
         }
 
         .nintendo-switch-console.console-wide {
-            max-width: 980px;
+            max-width: min(1180px, 98vw);
         }
 
         .nintendo-switch-console.console-medium {
-            max-width: 860px;
+            max-width: min(1060px, 98vw);
         }
 
         .nintendo-switch-console.console-compact {
-            max-width: 780px;
+            max-width: min(920px, 98vw);
         }
 
         /* JOY-CON BASE STYLES */
         .joycon {
-            width: 96px;
-            min-width: 88px;
-            max-width: 106px;
+            width: 82px;
+            min-width: 76px;
+            max-width: 88px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 6px;
+            padding: 10px 4px;
             box-sizing: border-box;
             position: relative;
             user-select: none;
@@ -600,8 +602,8 @@
             margin: 4px 0;
         }
         .switch-stick-outer {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: #080c16;
             border: 2px solid #1e293b;
@@ -611,8 +613,8 @@
             justify-content: center;
         }
         .switch-stick-cap {
-            width: 38px;
-            height: 38px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background: radial-gradient(circle, #334155 35%, #0f172a 90%);
             border: 1.5px solid #475569;
@@ -652,7 +654,7 @@
             justify-content: center;
         }
         .dpad-mid-row {
-            gap: 22px;
+            gap: 12px;
         }
         .dpad-btn-round {
             width: 30px;
@@ -694,7 +696,7 @@
             justify-content: center;
         }
         .abxy-mid-row {
-            gap: 22px;
+            gap: 12px;
         }
         .abxy-btn {
             width: 32px;
@@ -1912,14 +1914,11 @@
                                     <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
                                 </button>
                             </div>
-                            <div class="switch-stick-assembly" title="Left Thumbstick - Steer Left / Right">
+                            <div class="switch-stick-assembly" title="Left Thumbstick: Steer LEFT (A / ⬅️)">
                                 <div class="switch-stick-outer">
-                                    <div class="switch-stick-cap">
-                                        <div style="display: flex; width: 100%; justify-content: space-around;">
-                                            <span onclick="event.stopPropagation(); moveRunnerLane(-1)" title="Steer Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
-                                            <span onclick="event.stopPropagation(); moveRunnerLane(1)" title="Steer Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
-                                        </div>
-                                        <span class="stick-label">STEER</span>
+                                    <div class="switch-stick-cap" onclick="moveRunnerLane(-1)">
+                                        <span style="font-size: 14px; color: #38bdf8; font-weight: 900;">◄</span>
+                                        <span class="stick-label" style="color: #38bdf8;">LEFT</span>
                                     </div>
                                 </div>
                             </div>
@@ -1928,8 +1927,8 @@
                                     <button class="dpad-btn-round" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">▲</button>
                                 </div>
                                 <div class="dpad-row dpad-mid-row">
-                                    <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">◄</button>
-                                    <button class="dpad-btn-round" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">►</button>
+                                    <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer LEFT (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
+                                    <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer LEFT (A / ⬅️)">◄</button>
                                 </div>
                                 <div class="dpad-row">
                                     <button class="dpad-btn-round" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">▼</button>
@@ -1963,32 +1962,32 @@
                             <div class="switch-abxy-cluster">
                                 <div class="abxy-row">
                                     <button class="abxy-btn btn-x" onclick="runnerJumpAction()" title="X Button: Jump / Dodge (W / ⬆️)">
-                                        <span class="btn-letter">X</span>
+                                        <span class="btn-letter">▲</span>
                                         <span class="btn-sub">JUMP</span>
                                     </button>
                                 </div>
                                 <div class="abxy-row abxy-mid-row">
                                     <button class="abxy-btn btn-y" onclick="runnerShootAction()" title="Y Button: Shoot Monster (Space / F)">
-                                        <span class="btn-letter">Y</span>
+                                        <span class="btn-letter">🔥</span>
                                         <span class="btn-sub">SHOOT</span>
                                     </button>
-                                    <button id="btn-deck-dash" class="abxy-btn btn-a btn-action-dash" onclick="runnerDashAction()" title="A Button: ⚡ Sudden Speed Dash (Shift / E)">
-                                        <span class="btn-letter">A</span>
-                                        <span class="btn-sub">DASH</span>
+                                    <button id="btn-runner-right" class="abxy-btn btn-a" onclick="moveRunnerLane(1)" title="A Button: Steer RIGHT (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                        <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
+                                        <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
                                     </button>
                                 </div>
                                 <div class="abxy-row">
                                     <button class="abxy-btn btn-b" onclick="runnerSlideAction()" title="B Button: Slide / Stomp (S / ⬇️)">
-                                        <span class="btn-letter">B</span>
+                                        <span class="btn-letter">▼</span>
                                         <span class="btn-sub">SLIDE</span>
                                     </button>
                                 </div>
                             </div>
-                            <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Rapid Dash (Shift / E)">
+                            <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Steer RIGHT (D / ➡️)">
                                 <div class="switch-stick-outer">
-                                    <div class="switch-stick-cap" onclick="runnerDashAction()">
-                                        <span style="font-size: 13px; color: #ffd700;">⚡</span>
-                                        <span class="stick-label" style="color: #ffd700;">DASH</span>
+                                    <div class="switch-stick-cap" onclick="moveRunnerLane(1)">
+                                        <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
+                                        <span class="stick-label" style="color: #ff6957;">RIGHT</span>
                                     </div>
                                 </div>
                             </div>
@@ -2007,7 +2006,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 8px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 950px; line-height: 1.5;">
-                    🎮 <strong>Nintendo Switch Controls</strong>: <strong>Left Joy-Con (Blue)</strong>: [-] Pause • Thumbstick & D-Pad (◄ / ► Steer, ▲ Jump, ▼ Slide) • ⚡ Square Dash | <strong>Right Joy-Con (Red)</strong>: [+] Dash Again • ABXY (X Jump, Y Shoot, A Dash, B Slide) • Thumbstick Dash • 🛡️ Home Survive (100 💰) | <strong>Game Rules</strong>: Jump over anything 1 block tall • Jump on shooting monsters (+50 💰) • Shoot normal monsters • Collect gold coins (+1 💰, 2X in Dash)!
+                    🎮 <strong>Nintendo Switch Handheld Controls</strong>: <strong>Left Joy-Con (Blue)</strong>: [-] Pause • ◄ LEFT Steer (Thumbstick & Button) • ▲ Jump • ▼ Slide • ⚡ Square Dash | <strong>Right Joy-Con (Red)</strong>: [+] Dash Again • RIGHT ► Steer (Thumbstick & A Button) • ▲ Jump (X) • 🔥 Shoot (Y) • ▼ Slide (B) • 🛡️ Home Survive (100 💰) | <strong>Rules</strong>: Jump 1-block hurdles • Jump on gun monsters (+50 💰) • Shoot monsters • Grab gold coins!
                 </div>
             </div>
 
@@ -2033,14 +2032,11 @@
                                 <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
                             </button>
                         </div>
-                        <div class="switch-stick-assembly" title="Left Thumbstick - Steer Snake">
+                        <div class="switch-stick-assembly" title="Left Thumbstick: Turn LEFT (A / ⬅️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap">
-                                    <div style="display: flex; width: 100%; justify-content: space-around;">
-                                        <span onclick="event.stopPropagation(); setSnakeDir('LEFT')" title="Turn Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
-                                        <span onclick="event.stopPropagation(); setSnakeDir('RIGHT')" title="Turn Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
-                                    </div>
-                                    <span class="stick-label">SNAKE</span>
+                                <div class="switch-stick-cap" onclick="setSnakeDir('LEFT')">
+                                    <span style="font-size: 14px; color: #38bdf8; font-weight: 900;">◄</span>
+                                    <span class="stick-label" style="color: #38bdf8;">LEFT</span>
                                 </div>
                             </div>
                         </div>
@@ -2049,8 +2045,8 @@
                                 <button class="dpad-btn-round" onclick="setSnakeDir('UP')" title="Up (W / ⬆️)">▲</button>
                             </div>
                             <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="setSnakeDir('LEFT')" title="Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
                                 <button class="dpad-btn-round" onclick="setSnakeDir('LEFT')" title="Left (A / ⬅️)">◄</button>
-                                <button class="dpad-btn-round" onclick="setSnakeDir('RIGHT')" title="Right (D / ➡️)">►</button>
                             </div>
                             <div class="dpad-row">
                                 <button class="dpad-btn-round" onclick="setSnakeDir('DOWN')" title="Down (S / ⬇️)">▼</button>
@@ -2081,32 +2077,32 @@
                         <div class="switch-abxy-cluster">
                             <div class="abxy-row">
                                 <button class="abxy-btn btn-x" onclick="setSnakeDir('UP')" title="X: Up">
-                                    <span class="btn-letter">X</span>
+                                    <span class="btn-letter">▲</span>
                                     <span class="btn-sub">UP</span>
                                 </button>
                             </div>
                             <div class="abxy-row abxy-mid-row">
-                                <button class="abxy-btn btn-y" onclick="setSnakeDir('LEFT')" title="Y: Left">
-                                    <span class="btn-letter">Y</span>
-                                    <span class="btn-sub">LEFT</span>
-                                </button>
-                                <button class="abxy-btn btn-a" onclick="setSnakeDir('RIGHT')" title="A: Right">
-                                    <span class="btn-letter">A</span>
+                                <button class="abxy-btn btn-y" onclick="setSnakeDir('RIGHT')" title="Y: Right">
+                                    <span class="btn-letter">►</span>
                                     <span class="btn-sub">RIGHT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="setSnakeDir('RIGHT')" title="A: Turn RIGHT (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                    <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
+                                    <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
                                 </button>
                             </div>
                             <div class="abxy-row">
                                 <button class="abxy-btn btn-b" onclick="setSnakeDir('DOWN')" title="B: Down">
-                                    <span class="btn-letter">B</span>
+                                    <span class="btn-letter">▼</span>
                                     <span class="btn-sub">DOWN</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Turn RIGHT (D / ➡️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="startSnakeGame()">
-                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
-                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                <div class="switch-stick-cap" onclick="setSnakeDir('RIGHT')">
+                                    <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
+                                    <span class="stick-label" style="color: #ff6957;">RIGHT</span>
                                 </div>
                             </div>
                         </div>
@@ -2145,14 +2141,11 @@
                                 <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
                             </button>
                         </div>
-                        <div class="switch-stick-assembly" title="Left Thumbstick - Steer Paddle">
+                        <div class="switch-stick-assembly" title="Left Thumbstick: Paddle LEFT (A / ⬅️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap">
-                                    <div style="display: flex; width: 100%; justify-content: space-around;">
-                                        <span onclick="event.stopPropagation(); moveBreakerPaddle(-35)" title="Paddle Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
-                                        <span onclick="event.stopPropagation(); moveBreakerPaddle(35)" title="Paddle Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
-                                    </div>
-                                    <span class="stick-label">PADDLE</span>
+                                <div class="switch-stick-cap" onclick="moveBreakerPaddle(-30)">
+                                    <span style="font-size: 14px; color: #38bdf8; font-weight: 900;">◄</span>
+                                    <span class="stick-label" style="color: #38bdf8;">LEFT</span>
                                 </div>
                             </div>
                         </div>
@@ -2161,11 +2154,11 @@
                                 <button class="dpad-btn-round" onclick="moveBreakerPaddle(-45)" title="Fast Left">▲</button>
                             </div>
                             <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-30)" title="Paddle Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
                                 <button class="dpad-btn-round" onclick="moveBreakerPaddle(-30)" title="Paddle Left (A / ⬅️)">◄</button>
-                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)">►</button>
                             </div>
                             <div class="dpad-row">
-                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(45)" title="Fast Right">▼</button>
+                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-20)" title="Nudge Left">▼</button>
                             </div>
                         </div>
                         <div class="joycon-bottom-controls">
@@ -2192,33 +2185,33 @@
                         </div>
                         <div class="switch-abxy-cluster">
                             <div class="abxy-row">
-                                <button class="abxy-btn btn-x" onclick="moveBreakerPaddle(30)" title="X: Paddle Right">
-                                    <span class="btn-letter">X</span>
-                                    <span class="btn-sub">RIGHT</span>
+                                <button class="abxy-btn btn-x" onclick="moveBreakerPaddle(45)" title="Fast Right">
+                                    <span class="btn-letter">▲</span>
+                                    <span class="btn-sub">FAST</span>
                                 </button>
                             </div>
                             <div class="abxy-row abxy-mid-row">
-                                <button class="abxy-btn btn-y" onclick="moveBreakerPaddle(-30)" title="Y: Paddle Left">
-                                    <span class="btn-letter">Y</span>
-                                    <span class="btn-sub">LEFT</span>
-                                </button>
-                                <button class="abxy-btn btn-a" onclick="moveBreakerPaddle(30)" title="A: Paddle Right">
-                                    <span class="btn-letter">A</span>
+                                <button class="abxy-btn btn-y" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)">
+                                    <span class="btn-letter">►</span>
                                     <span class="btn-sub">RIGHT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                    <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
+                                    <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
                                 </button>
                             </div>
                             <div class="abxy-row">
-                                <button class="abxy-btn btn-b" onclick="moveBreakerPaddle(-30)" title="B: Paddle Left">
-                                    <span class="btn-letter">B</span>
-                                    <span class="btn-sub">LEFT</span>
+                                <button class="abxy-btn btn-b" onclick="moveBreakerPaddle(20)" title="Nudge Right">
+                                    <span class="btn-letter">▼</span>
+                                    <span class="btn-sub">NUDGE</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Paddle RIGHT (D / ➡️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="startBreakerGame()">
-                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
-                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                <div class="switch-stick-cap" onclick="moveBreakerPaddle(30)">
+                                    <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
+                                    <span class="stick-label" style="color: #ff6957;">RIGHT</span>
                                 </div>
                             </div>
                         </div>
@@ -2257,27 +2250,24 @@
                                 <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
                             </button>
                         </div>
-                        <div class="switch-stick-assembly" title="Left Thumbstick - Steer Spaceship">
+                        <div class="switch-stick-assembly" title="Left Thumbstick: Ship LEFT (A / ⬅️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap">
-                                    <div style="display: flex; width: 100%; justify-content: space-around;">
-                                        <span onclick="event.stopPropagation(); moveSpaceShip(-25)" title="Ship Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
-                                        <span onclick="event.stopPropagation(); moveSpaceShip(25)" title="Ship Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
-                                    </div>
-                                    <span class="stick-label">STEER</span>
+                                <div class="switch-stick-cap" onclick="moveSpaceShip(-25)">
+                                    <span style="font-size: 14px; color: #38bdf8; font-weight: 900;">◄</span>
+                                    <span class="stick-label" style="color: #38bdf8;">LEFT</span>
                                 </div>
                             </div>
                         </div>
                         <div class="switch-dpad-cluster">
                             <div class="dpad-row">
-                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">▲</button>
+                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">🔥</button>
                             </div>
                             <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="moveSpaceShip(-25)" title="Ship Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
                                 <button class="dpad-btn-round" onclick="moveSpaceShip(-25)" title="Ship Left (A / ⬅️)">◄</button>
-                                <button class="dpad-btn-round" onclick="moveSpaceShip(25)" title="Ship Right (D / ➡️)">►</button>
                             </div>
                             <div class="dpad-row">
-                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">▼</button>
+                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">🔥</button>
                             </div>
                         </div>
                         <div class="joycon-bottom-controls">
@@ -2304,33 +2294,33 @@
                         </div>
                         <div class="switch-abxy-cluster">
                             <div class="abxy-row">
-                                <button class="abxy-btn btn-x" onclick="shootSpaceLaser()" title="X: Fire Laser">
-                                    <span class="btn-letter">X</span>
+                                <button class="abxy-btn btn-x" onclick="shootSpaceLaser()" title="X: Fire Laser (Space)">
+                                    <span class="btn-letter">🔥</span>
                                     <span class="btn-sub">FIRE</span>
                                 </button>
                             </div>
                             <div class="abxy-row abxy-mid-row">
-                                <button class="abxy-btn btn-y" onclick="moveSpaceShip(-25)" title="Y: Ship Left">
-                                    <span class="btn-letter">Y</span>
-                                    <span class="btn-sub">LEFT</span>
+                                <button class="abxy-btn btn-y" onclick="shootSpaceLaser()" title="Y: Fire Laser (Space)">
+                                    <span class="btn-letter">🔥</span>
+                                    <span class="btn-sub">FIRE</span>
                                 </button>
-                                <button class="abxy-btn btn-a" onclick="moveSpaceShip(25)" title="A: Ship Right">
-                                    <span class="btn-letter">A</span>
-                                    <span class="btn-sub">RIGHT</span>
+                                <button class="abxy-btn btn-a" onclick="moveSpaceShip(25)" title="A: Ship Right (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                    <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
+                                    <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
                                 </button>
                             </div>
                             <div class="abxy-row">
-                                <button class="abxy-btn btn-b" onclick="shootSpaceLaser()" title="B: Fire Laser">
-                                    <span class="btn-letter">B</span>
+                                <button class="abxy-btn btn-b" onclick="shootSpaceLaser()" title="B: Fire Laser (Space)">
+                                    <span class="btn-letter">🔥</span>
                                     <span class="btn-sub">FIRE</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Fire Blast">
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Ship RIGHT (D / ➡️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="shootSpaceLaser()">
-                                    <span style="font-size: 13px; color: #ff007f;">🔥</span>
-                                    <span class="stick-label" style="color: #ff007f;">FIRE</span>
+                                <div class="switch-stick-cap" onclick="moveSpaceShip(25)">
+                                    <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
+                                    <span class="stick-label" style="color: #ff6957;">RIGHT</span>
                                 </div>
                             </div>
                         </div>
@@ -3905,7 +3895,6 @@
 
         function updateDashButtons() {
             const sideBtn = document.getElementById('btn-side-dash');
-            const deckBtn = document.getElementById('btn-deck-dash');
             if (sideBtn) {
                 if (runnerDashTimer > 0) {
                     sideBtn.classList.add('dashing');
@@ -3919,21 +3908,6 @@
                 } else {
                     sideBtn.classList.remove('dashing', 'cooling-down');
                     sideBtn.innerHTML = '⚡ DASH';
-                }
-            }
-            if (deckBtn) {
-                if (runnerDashTimer > 0) {
-                    deckBtn.classList.add('dashing');
-                    deckBtn.classList.remove('cooling-down');
-                    deckBtn.innerHTML = '<span class="btn-letter">A</span><span class="btn-sub" style="color:#00f0ff;">FAST</span>';
-                } else if (runnerDashCooldown > 0) {
-                    deckBtn.classList.remove('dashing');
-                    deckBtn.classList.add('cooling-down');
-                    const sec = (runnerDashCooldown / 60).toFixed(1);
-                    deckBtn.innerHTML = `<span class="btn-letter">A</span><span class="btn-sub">${sec}s</span>`;
-                } else {
-                    deckBtn.classList.remove('dashing', 'cooling-down');
-                    deckBtn.innerHTML = '<span class="btn-letter">A</span><span class="btn-sub">DASH</span>';
                 }
             }
         }
@@ -4815,26 +4789,30 @@
             rCtx.closePath();
             rCtx.fill();
 
-            // Road borders (neon cyan glowing curbs)
-            rCtx.strokeStyle = '#00f0ff';
-            rCtx.lineWidth = 3;
-            rCtx.shadowColor = '#00f0ff';
-            rCtx.shadowBlur = 10;
+            // Road borders (neon cyan glowing curbs - zero-lag layered strokes)
+            rCtx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+            rCtx.lineWidth = 6;
             rCtx.beginPath();
             rCtx.moveTo(centerX - horizonW / 2, horizonY);
             rCtx.lineTo(centerX - bottomW / 2, bottomY);
             rCtx.moveTo(centerX + horizonW / 2, horizonY);
             rCtx.lineTo(centerX + bottomW / 2, bottomY);
             rCtx.stroke();
-            rCtx.shadowBlur = 0;
+
+            rCtx.strokeStyle = '#00f0ff';
+            rCtx.lineWidth = 2.5;
+            rCtx.beginPath();
+            rCtx.moveTo(centerX - horizonW / 2, horizonY);
+            rCtx.lineTo(centerX - bottomW / 2, bottomY);
+            rCtx.moveTo(centerX + horizonW / 2, horizonY);
+            rCtx.lineTo(centerX + bottomW / 2, bottomY);
+            rCtx.stroke();
 
             // Hyper Dash Supersonic Warp Speed Lines
             if (runnerDashTimer > 0) {
                 rCtx.save();
-                rCtx.strokeStyle = 'rgba(0, 240, 255, 0.75)';
-                rCtx.lineWidth = 3;
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 14;
+                rCtx.strokeStyle = 'rgba(0, 240, 255, 0.85)';
+                rCtx.lineWidth = 2.5;
                 for (let wl = 0; wl < 18; wl++) {
                     const wx = (centerX - bottomW * 0.45) + ((runnerFrame * 29 + wl * 67) % (bottomW * 0.9));
                     const wy = horizonY + 20 + ((runnerFrame * 37 + wl * 47) % (bottomY - horizonY - 40));
@@ -4847,21 +4825,51 @@
                 rCtx.restore();
             }
 
-            // Lane dividers (between lanes 0-1 and 1-2)
-            const divOffset1 = -1/6;
-            const divOffset2 = 1/6;
-            rCtx.strokeStyle = 'rgba(254, 224, 71, 0.45)';
-            rCtx.lineWidth = 2.5;
-            rCtx.setLineDash([18, 18]);
-            rCtx.lineDashOffset = -runnerRoadZ;
+            // Lane dividers (Little dot lines separating Left, Middle, Right lanes)
+            const div1HorizonX = centerX - horizonW / 6;
+            const div1BottomX = centerX - bottomW / 6;
+            const div2HorizonX = centerX + horizonW / 6;
+            const div2BottomX = centerX + bottomW / 6;
 
+            rCtx.save();
+            // Golden yellow glowing dot lines
+            rCtx.strokeStyle = '#fde047';
+            rCtx.lineWidth = 3.5;
+            rCtx.setLineDash([7, 10]);
+            rCtx.lineDashOffset = -runnerRoadZ;
             rCtx.beginPath();
-            rCtx.moveTo(centerX + divOffset1 * horizonW * 2, horizonY);
-            rCtx.lineTo(centerX + divOffset1 * bottomW * 2, bottomY);
-            rCtx.moveTo(centerX + divOffset2 * horizonW * 2, horizonY);
-            rCtx.lineTo(centerX + divOffset2 * bottomW * 2, bottomY);
+            rCtx.moveTo(div1HorizonX, horizonY);
+            rCtx.lineTo(div1BottomX, bottomY);
+            rCtx.moveTo(div2HorizonX, horizonY);
+            rCtx.lineTo(div2BottomX, bottomY);
             rCtx.stroke();
-            rCtx.setLineDash([]);
+
+            // Crisp white high-visibility core dots
+            rCtx.strokeStyle = '#ffffff';
+            rCtx.lineWidth = 1.8;
+            rCtx.setLineDash([4, 13]);
+            rCtx.lineDashOffset = -runnerRoadZ;
+            rCtx.beginPath();
+            rCtx.moveTo(div1HorizonX, horizonY);
+            rCtx.lineTo(div1BottomX, bottomY);
+            rCtx.moveTo(div2HorizonX, horizonY);
+            rCtx.lineTo(div2BottomX, bottomY);
+            rCtx.stroke();
+            rCtx.restore();
+
+            // Crystal clear lane indicators at road base (◄ LEFT, ▲ MIDDLE, RIGHT ►)
+            rCtx.save();
+            rCtx.font = 'bold 12px "DynaPuff", cursive';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            const laneLabelY = bottomY - 14;
+            rCtx.fillStyle = 'rgba(0, 240, 255, 0.65)';
+            rCtx.fillText('◄ LEFT', centerX - bottomW / 3, laneLabelY);
+            rCtx.fillStyle = 'rgba(253, 224, 71, 0.75)';
+            rCtx.fillText('▲ MIDDLE', centerX, laneLabelY);
+            rCtx.fillStyle = 'rgba(0, 240, 255, 0.65)';
+            rCtx.fillText('RIGHT ►', centerX + bottomW / 3, laneLabelY);
+            rCtx.restore();
 
             // Draw Laser Projectiles
             runnerLasers.forEach(laser => {
@@ -4874,8 +4882,6 @@
 
                 rCtx.save();
                 rCtx.fillStyle = '#00f0ff';
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 16;
                 // Dual glowing laser bolts
                 rCtx.fillRect(lx - 9 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
                 rCtx.fillRect(lx + 4 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
@@ -4897,10 +4903,8 @@
                 rCtx.save();
                 rCtx.translate(bx, by - 12 * scale);
 
-                // Fiery plasma energy bullet
+                // Fiery plasma energy bullet (zero-lag high contrast rendering)
                 rCtx.fillStyle = '#ff0055';
-                rCtx.shadowColor = '#ff0055';
-                rCtx.shadowBlur = 18 * scale;
                 rCtx.strokeStyle = '#fde047';
                 rCtx.lineWidth = 2.5 * scale;
 
@@ -4945,10 +4949,6 @@
                     const coinR = 19 * scale;
                     const coinW = Math.max(3 * scale, Math.abs(spin) * coinR);
                     const coinH = coinR;
-
-                    // Golden aura glow
-                    rCtx.shadowColor = '#fbbf24';
-                    rCtx.shadowBlur = 16 * scale;
 
                     // 3D coin edge thickness (perspective extrude)
                     const edgeOffset = (spin < 0 ? -1 : 1) * 3.5 * scale * (1 - Math.abs(spin));
@@ -5006,10 +5006,6 @@
                     // ENTIRE BAG OF COINS (10 COINS)
                     const bobY = Math.sin(runnerFrame * 0.2) * 5 * scale;
                     rCtx.translate(0, bobY);
-
-                    // Golden glowing aura
-                    rCtx.shadowColor = '#f59e0b';
-                    rCtx.shadowBlur = 22 * scale;
 
                     // Bag body (rich golden brown sack)
                     const bagW = 38 * scale;
@@ -5115,9 +5111,6 @@
                         strokeColor = '#ffd700';
                     }
 
-                    rCtx.shadowColor = auraColor;
-                    rCtx.shadowBlur = (maxHp === 100 ? 24 : (maxHp === 50 ? 18 : 12)) * scale;
-
                     // Spiky crystal body
                     rCtx.fillStyle = bodyColor;
                     rCtx.strokeStyle = strokeColor;
@@ -5171,7 +5164,6 @@
                     const barH = Math.max(5, 7 * scale);
                     const barY = -mH * (maxHp === 100 ? 1.35 : 1.18);
 
-                    rCtx.shadowBlur = 0;
                     rCtx.fillStyle = 'rgba(15, 23, 42, 0.9)';
                     rCtx.strokeStyle = '#ffffff';
                     rCtx.lineWidth = 1.5;
@@ -5219,10 +5211,6 @@
                         mechBase = '#ffffff';
                         mechTrim = '#ffd700';
                     }
-
-                    // Amber/Gold menace aura
-                    rCtx.shadowColor = mechAura;
-                    rCtx.shadowBlur = 20 * scale;
 
                     // Cyber Armored Chassis (Titanium Crimson with Gold Trim)
                     rCtx.fillStyle = mechBase;
@@ -5277,8 +5265,6 @@
                     // Muzzle Flash Effect when shooting!
                     if (ob.muzzleFlash > 0) {
                         rCtx.fillStyle = '#fde047';
-                        rCtx.shadowColor = '#ff0055';
-                        rCtx.shadowBlur = 18 * scale;
                         // Left flash
                         rCtx.beginPath();
                         rCtx.arc(-mW * 0.63, 0.06 * mH, 10 * scale, 0, Math.PI * 2);
@@ -5290,8 +5276,6 @@
                     }
 
                     // Menacing Glowing Cyber Visor
-                    rCtx.shadowBlur = 14 * scale;
-                    rCtx.shadowColor = '#00f0ff';
                     rCtx.fillStyle = '#00f0ff';
                     rCtx.fillRect(-mW * 0.26, -mH * 0.78, mW * 0.52, mH * 0.12);
 
@@ -5308,7 +5292,6 @@
                     const barH = Math.max(5, 7 * scale);
                     const barY = -mH * 1.25;
 
-                    rCtx.shadowBlur = 0;
                     rCtx.fillStyle = 'rgba(15, 23, 42, 0.9)';
                     rCtx.strokeStyle = '#ffd700';
                     rCtx.lineWidth = 1.5;
@@ -5334,8 +5317,6 @@
                     const wBox = 44 * scale;
                     const hBox = 26 * scale;
                     rCtx.fillStyle = '#ef4444';
-                    rCtx.shadowColor = '#ef4444';
-                    rCtx.shadowBlur = 10;
                     rCtx.fillRect(-wBox / 2, -hBox, wBox, hBox);
                     rCtx.strokeStyle = '#ffffff';
                     rCtx.lineWidth = 2;
@@ -5357,8 +5338,6 @@
                     const hBar = 16 * scale;
                     const elevate = 48 * scale;
                     rCtx.fillStyle = '#ff007f';
-                    rCtx.shadowColor = '#ff007f';
-                    rCtx.shadowBlur = 16;
                     rCtx.fillRect(-wBar / 2, -elevate, wBar, hBar);
                     rCtx.strokeStyle = '#ffffff';
                     rCtx.lineWidth = 1.5;
@@ -5411,12 +5390,10 @@
                 rCtx.restore();
             });
 
-            // Draw Particle Explosions
+            // Draw Particle Explosions (zero-lag high performance)
             runnerExplosions.forEach(parts => {
                 parts.forEach(p => {
                     rCtx.fillStyle = p.color;
-                    rCtx.shadowColor = p.color;
-                    rCtx.shadowBlur = 8;
                     rCtx.fillRect(p.x, p.y, p.size, p.size);
                 });
             });
@@ -5443,8 +5420,6 @@
                 const sW = Math.round(68 * (w / 880));
                 const sH = Math.round(14 * (h / 520));
                 rCtx.fillStyle = '#00f0ff';
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 18;
                 rCtx.fillRect(-sW / 2, -sH, sW, sH);
                 rCtx.strokeStyle = '#ffffff';
                 rCtx.lineWidth = 2;
@@ -5462,10 +5437,7 @@
                 rCtx.fillRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
                 rCtx.strokeStyle = '#00f0ff';
                 rCtx.lineWidth = 2.5;
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 12;
                 rCtx.strokeRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
-                rCtx.shadowBlur = 0;
 
                 // 3x3 Rubik Stickers
                 const sub = (cubeSize - 6) / 3;
@@ -5482,8 +5454,6 @@
             if (runnerIsDiveStomping) {
                 rCtx.save();
                 rCtx.fillStyle = '#00f0ff';
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 18;
                 for (let tp = 0; tp < 4; tp++) {
                     rCtx.fillRect(-12 + Math.random() * 24, -48 - 12 - Math.random() * 22, 4, 12);
                 }
@@ -5495,8 +5465,6 @@
                 rCtx.save();
                 const cubeSize = Math.round(52 * (w / 880));
                 rCtx.fillStyle = '#00f0ff';
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 24;
                 for (let tp = 0; tp < 6; tp++) {
                     const tw = (cubeSize * 0.7) * (1 - tp / 6);
                     rCtx.fillRect(-tw / 2, tp * 12 + 6, tw, 8);
@@ -5511,8 +5479,6 @@
                 rCtx.save();
                 rCtx.strokeStyle = (runnerFrame % 6 < 3) ? '#00f0ff' : '#ff007f';
                 rCtx.lineWidth = 3;
-                rCtx.shadowColor = '#00f0ff';
-                rCtx.shadowBlur = 18;
                 rCtx.fillStyle = 'rgba(0, 240, 255, 0.16)';
                 rCtx.beginPath();
                 rCtx.arc(0, runnerIsSliding ? -6 : -21, shieldR, 0, Math.PI * 2);
@@ -5528,8 +5494,6 @@
                 rCtx.save();
                 rCtx.font = 'bold 18px "DynaPuff", cursive';
                 rCtx.fillStyle = ft.color;
-                rCtx.shadowColor = ft.color;
-                rCtx.shadowBlur = 12;
                 rCtx.textAlign = 'center';
                 rCtx.globalAlpha = Math.max(0, ft.life / 50);
                 rCtx.fillText(ft.text, ft.x, ft.y);
@@ -5601,8 +5565,6 @@
                     rCtx.fillStyle = grad;
                     rCtx.strokeStyle = '#ffd700';
                     rCtx.lineWidth = 3;
-                    rCtx.shadowColor = 'rgba(245, 158, 11, 0.8)';
-                    rCtx.shadowBlur = 18;
                     if (rCtx.roundRect) {
                         rCtx.beginPath();
                         rCtx.roundRect(sBtnX, sBtnY, sBtnW, sBtnH, 14);
@@ -5613,7 +5575,6 @@
                         rCtx.strokeRect(sBtnX, sBtnY, sBtnW, sBtnH);
                     }
 
-                    rCtx.shadowBlur = 0;
                     rCtx.font = 'bold 20px "DynaPuff", cursive';
                     rCtx.fillStyle = '#ffffff';
                     rCtx.textAlign = 'center';
@@ -5934,10 +5895,10 @@
 
             // Draw Food (glowing cubie)
             sCtx.fillStyle = '#ff007f';
-            sCtx.shadowColor = '#ff007f';
-            sCtx.shadowBlur = 12;
             sCtx.fillRect(snakeFood.x * grid + 2, snakeFood.y * grid + 2, grid - 4, grid - 4);
-            sCtx.shadowBlur = 0;
+            sCtx.strokeStyle = '#ffffff';
+            sCtx.lineWidth = 1.5;
+            sCtx.strokeRect(snakeFood.x * grid + 2, snakeFood.y * grid + 2, grid - 4, grid - 4);
 
             // Draw Snake (Rubik's cube colorful segments)
             const cubeStickers = ['#00f0ff', '#ffffff', '#22c55e', '#FAED27', '#ff6600', '#3b82f6'];
@@ -6143,20 +6104,20 @@
 
             // Draw Paddle
             bCtx.fillStyle = '#00f0ff';
-            bCtx.shadowColor = '#00f0ff';
-            bCtx.shadowBlur = 10;
             bCtx.fillRect(paddleX, bCanvas.height - paddleHeight - 8, paddleWidth, paddleHeight);
-            bCtx.shadowBlur = 0;
+            bCtx.strokeStyle = '#ffffff';
+            bCtx.lineWidth = 1.5;
+            bCtx.strokeRect(paddleX, bCanvas.height - paddleHeight - 8, paddleWidth, paddleHeight);
 
             // Draw Ball
             bCtx.beginPath();
             bCtx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
             bCtx.fillStyle = '#FAED27';
-            bCtx.shadowColor = '#FAED27';
-            bCtx.shadowBlur = 12;
             bCtx.fill();
+            bCtx.strokeStyle = '#ffffff';
+            bCtx.lineWidth = 1.5;
+            bCtx.stroke();
             bCtx.closePath();
-            bCtx.shadowBlur = 0;
 
             // Ball Physics
             if (ballX + ballDx > bCanvas.width - ballRadius || ballX + ballDx < ballRadius) {
@@ -6341,10 +6302,9 @@
                 const laser = spaceLasers[i];
                 laser.y -= 7.5;
                 spCtx.fillStyle = '#00f0ff';
-                spCtx.shadowColor = '#00f0ff';
-                spCtx.shadowBlur = 8;
                 spCtx.fillRect(laser.x - 2.5, laser.y, 5, 12);
-                spCtx.shadowBlur = 0;
+                spCtx.fillStyle = '#ffffff';
+                spCtx.fillRect(laser.x - 1, laser.y + 2, 2, 8);
                 if (laser.y < -20) spaceLasers.splice(i, 1);
             }
 
@@ -7363,10 +7323,7 @@
                 const rowIdx = 9 - stackerFloor;
                 const clr = stackerColors[stackerFloor % stackerColors.length];
                 stCtx.fillStyle = clr;
-                stCtx.shadowColor = clr;
-                stCtx.shadowBlur = 12;
                 stCtx.fillRect(stackerCurPos * colW + 2, rowIdx * rowH + 2, stackerCurWidth * colW - 4, rowH - 4);
-                stCtx.shadowBlur = 0;
                 stCtx.strokeStyle = '#ffffff';
                 stCtx.lineWidth = 2;
                 stCtx.strokeRect(stackerCurPos * colW + 2, rowIdx * rowH + 2, stackerCurWidth * colW - 4, rowH - 4);
@@ -7890,13 +7847,10 @@
 
             // Cube body
             fCtx.fillStyle = '#00f0ff';
-            fCtx.shadowColor = '#00f0ff';
-            fCtx.shadowBlur = 16;
             fCtx.fillRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
             fCtx.strokeStyle = '#ffffff';
             fCtx.lineWidth = 2.5;
             fCtx.strokeRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
-            fCtx.shadowBlur = 0;
 
             // 3x3 Rubik face stickers
             const sub = cubieSize / 3;
@@ -8000,8 +7954,6 @@
                     fCtx.fillStyle = grad;
                     fCtx.strokeStyle = '#ffd700';
                     fCtx.lineWidth = 3;
-                    fCtx.shadowColor = 'rgba(245, 158, 11, 0.8)';
-                    fCtx.shadowBlur = 18;
                     if (fCtx.roundRect) {
                         fCtx.beginPath();
                         fCtx.roundRect(sBtnX, sBtnY, sBtnW, sBtnH, 14);
@@ -8012,7 +7964,6 @@
                         fCtx.strokeRect(sBtnX, sBtnY, sBtnW, sBtnH);
                     }
 
-                    fCtx.shadowBlur = 0;
                     fCtx.font = 'bold 18px "DynaPuff", cursive';
                     fCtx.fillStyle = '#ffffff';
                     fCtx.textAlign = 'center';
