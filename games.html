@@ -1788,6 +1788,304 @@
             100% { transform: rotateY(180deg) scale(1.0); }
         }
 
+        /* ============================================================== */
+        /* NINTENDO SWITCH CONSOLE THEMES                                 */
+        /* ============================================================== */
+        .nintendo-switch-console.theme-oled .joycon-left,
+        .nintendo-switch-console.theme-oled .joycon-right {
+            background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%) !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 3px 3px 8px rgba(255, 255, 255, 0.8), inset -3px -3px 8px rgba(0, 0, 0, 0.25) !important;
+        }
+        .nintendo-switch-console.theme-oled .joycon-left { border-right-color: #94a3b8 !important; }
+        .nintendo-switch-console.theme-oled .joycon-right { border-left-color: #94a3b8 !important; }
+        .nintendo-switch-console.theme-oled .joycon-shoulder { background: #0f172a; border-color: #64748b; color: #f8fafc; }
+
+        .nintendo-switch-console.theme-zelda .joycon-left {
+            background: linear-gradient(180deg, #15803d 0%, #14532d 100%) !important;
+            border-color: #4ade80 !important;
+            border-right-color: #052e16 !important;
+            box-shadow: -8px 0 25px rgba(34, 197, 94, 0.35), inset 3px 3px 8px rgba(255, 255, 255, 0.3) !important;
+        }
+        .nintendo-switch-console.theme-zelda .joycon-right {
+            background: linear-gradient(180deg, #eab308 0%, #a16207 100%) !important;
+            border-color: #fde047 !important;
+            border-left-color: #713f12 !important;
+            box-shadow: 8px 0 25px rgba(234, 179, 8, 0.4), inset -3px 3px 8px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .nintendo-switch-console.theme-synthwave .joycon-left {
+            background: linear-gradient(180deg, #ff007f 0%, #be185d 100%) !important;
+            border-color: #f472b6 !important;
+            border-right-color: #831843 !important;
+            box-shadow: -8px 0 25px rgba(255, 0, 127, 0.4), inset 3px 3px 8px rgba(255, 255, 255, 0.35) !important;
+        }
+        .nintendo-switch-console.theme-synthwave .joycon-right {
+            background: linear-gradient(180deg, #00f0ff 0%, #0284c7 100%) !important;
+            border-color: #38bdf8 !important;
+            border-left-color: #075985 !important;
+            box-shadow: 8px 0 25px rgba(0, 240, 255, 0.4), inset -3px 3px 8px rgba(255, 255, 255, 0.35) !important;
+        }
+
+        .nintendo-switch-console.theme-gold .joycon-left,
+        .nintendo-switch-console.theme-gold .joycon-right {
+            background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%) !important;
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 28px rgba(245, 158, 11, 0.5), inset 3px 3px 8px rgba(255, 255, 255, 0.5) !important;
+        }
+
+        /* ============================================================== */
+        /* UPGRADE SHOP MODAL & UI                                        */
+        /* ============================================================== */
+        .upgrade-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 7, 18, 0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.2s ease;
+        }
+        .upgrade-modal-backdrop.open {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .upgrade-modal {
+            background: #090e1c;
+            border: 2px solid #ffd700;
+            border-radius: 28px;
+            box-shadow: 0 0 60px rgba(245, 158, 11, 0.35), inset 0 0 40px rgba(0, 0, 0, 0.9);
+            width: 100%;
+            max-width: 900px;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 24px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .upgrade-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 14px;
+        }
+
+        .upgrade-modal-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            color: #ffd700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
+        }
+
+        .upgrade-modal-close {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1.5px solid #475569;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .upgrade-modal-close:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #f87171;
+            transform: rotate(90deg);
+        }
+
+        .shop-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .shop-tab-btn {
+            background: #111827;
+            color: #94a3b8;
+            border: 1.5px solid #334155;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .shop-tab-btn.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: #ffffff;
+            border-color: #ffd700;
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+        }
+
+        .upgrade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .upgrade-card {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1.5px solid #334155;
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .upgrade-card:hover {
+            border-color: #ffd700;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.15);
+        }
+        .upgrade-card.equipped {
+            border-color: #22c55e;
+            box-shadow: 0 0 16px rgba(34, 197, 94, 0.35);
+        }
+
+        .upgrade-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .upgrade-card-icon {
+            font-size: 2em;
+            line-height: 1;
+        }
+        .upgrade-card-level {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.82em;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: #1e293b;
+            color: #ffd700;
+            border: 1px solid #ffd700;
+        }
+        .upgrade-card-level.maxed {
+            background: #22c55e;
+            color: #022c22;
+            border-color: #86efac;
+        }
+
+        .upgrade-card-name {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.1em;
+            color: #f8fafc;
+            margin: 0;
+        }
+        .upgrade-card-desc {
+            font-size: 0.82em;
+            color: #94a3b8;
+            margin: 0;
+            line-height: 1.4;
+            min-height: 34px;
+        }
+
+        .upgrade-pips {
+            display: flex;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        .upgrade-pip {
+            flex: 1;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        .upgrade-pip.filled {
+            background: linear-gradient(90deg, #f59e0b, #ffd700);
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+        }
+
+        .btn-upgrade-buy {
+            background: linear-gradient(135deg, #f59e0b 0%, #e11d48 100%);
+            color: #ffffff;
+            border: 1.5px solid #ffd700;
+            padding: 9px 16px;
+            border-radius: 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.88em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: auto;
+        }
+        .btn-upgrade-buy:hover:not(:disabled) {
+            transform: scale(1.03);
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.7);
+        }
+        .btn-upgrade-buy:disabled {
+            background: #1e293b;
+            border-color: #475569;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-upgrade-buy.btn-equipped {
+            background: #15803d;
+            border-color: #4ade80;
+            color: #ffffff;
+        }
+
+        /* FLOATING TOAST NOTIFICATION */
+        .arcade-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            border: 2px solid #ffd700;
+            border-radius: 16px;
+            padding: 12px 20px;
+            color: #ffffff;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.4);
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideToast 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes slideToast {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         /* FOOTER */
         .arcade-footer {
             text-align: center;
@@ -1805,10 +2103,21 @@
 
         <!-- TOP BAR -->
         <nav class="arcade-nav">
-            <div class="arcade-badge">
-                🚀 SECRET GAME MODE ACTIVATED • AGENT COLE'S CUBE ARCADE 🕹️
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div class="arcade-badge">
+                    🚀 SECRET GAME MODE ACTIVATED • AGENT COLE'S CUBE ARCADE 🕹️
+                </div>
+                <div class="arcade-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde047; border-color: #ffd700; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); animation: none;" title="Your Universal Arcade Coin Bank">
+                    💰 <span id="global-coin-count">0</span> COINS
+                </div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(30, 41, 59, 0.9); border: 1.5px solid #38bdf8; padding: 4px 14px; border-radius: 999px; font-size: 0.88em; color: #f8fafc; font-family: 'DynaPuff', cursive;" title="Play games & collect coins to level up your rank!">
+                    ⭐ <span id="player-rank-display">Rank 1: Cubie Novice</span> • <span id="player-xp-display" style="color: #38bdf8;">0 XP</span>
+                </div>
             </div>
             <div class="nav-actions">
+                <button id="btn-open-shop" class="btn-arcade-nav" onclick="openUpgradeShop()" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); color: #ffffff; border: 2px solid #ffd700; box-shadow: 0 0 18px rgba(245, 158, 11, 0.6); font-family: 'DynaPuff', cursive; cursor: pointer;" title="Open Upgrade Shop: Upgrade powers, get cube skins, and customize your Nintendo Switch!">
+                    🛒 UPGRADES & SKINS ⚡
+                </button>
                 <a href="index.html" class="btn-arcade-nav btn-return-site">
                     🚪 Return to Main Website
                 </a>
@@ -1823,7 +2132,7 @@
             <h1 class="arcade-title">🎮 Secret Game Mode 🚀</h1>
             <p class="arcade-subtitle">You found the secret rocket portal! 12 retro speedcubing games loaded and ready to play!</p>
             <div class="pause-key-hint">
-                💡 Tip: Press <span class="key-badge">P</span> or <span class="key-badge">Esc</span> anytime to quickly Pause or Resume any game!
+                💡 Tip: Press <span class="key-badge">P</span> or <span class="key-badge">Esc</span> to Pause • Press <span class="key-badge">U</span> to open the Upgrade Shop!
             </div>
         </header>
 
@@ -1837,6 +2146,12 @@
             </button>
             <button id="btn-toggle-sfx" class="btn-sound-toggle" onclick="toggleArcadeSfx()">
                 🔊 Sound FX: ON
+            </button>
+            <button id="btn-switch-theme" class="btn-sound-toggle" onclick="cycleSwitchTheme()" title="Switch Joy-Con Console Theme">
+                🎨 Switch Skin: <span id="current-theme-label" style="color: #00f0ff; font-weight: 800;">Classic Neon</span>
+            </button>
+            <button id="btn-open-shop-strip" class="btn-sound-toggle" onclick="openUpgradeShop()" style="background: #854d0e; border-color: #ffd700; color: #fde047;" title="Open Upgrade Shop">
+                🛒 Armory Shop
             </button>
         </div>
 
@@ -3313,6 +3628,45 @@
 
     </div>
 
+    <!-- UPGRADE SHOP MODAL (ARMORY & SKINS) -->
+    <div id="upgrade-shop-modal" class="upgrade-modal-backdrop" onclick="if(event.target === this) closeUpgradeShop()">
+        <div class="upgrade-modal">
+            <div class="upgrade-modal-header">
+                <h2 class="upgrade-modal-title">
+                    <span>🛒</span> ARCADE ARMORY & UPGRADE SHOP
+                </h2>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #ffd700; background: rgba(245, 158, 11, 0.2); border: 1.5px solid #ffd700; padding: 6px 16px; border-radius: 999px;">
+                        💰 <span id="shop-coin-balance">0</span> COINS
+                    </div>
+                    <button class="upgrade-modal-close" onclick="closeUpgradeShop()" title="Close Shop (Esc)">✖</button>
+                </div>
+            </div>
+
+            <!-- SHOP CATEGORY TABS -->
+            <div class="shop-tabs">
+                <button id="shop-tab-upgrades" class="shop-tab-btn active" onclick="switchShopTab('upgrades')">⚡ Power-Up Upgrades</button>
+                <button id="shop-tab-cubeskins" class="shop-tab-btn" onclick="switchShopTab('cubeskins')">🎨 Cube Skins</button>
+                <button id="shop-tab-switchthemes" class="shop-tab-btn" onclick="switchShopTab('switchthemes')">🎮 Nintendo Switch Themes</button>
+            </div>
+
+            <!-- TAB 1: POWER-UP UPGRADES -->
+            <div id="shop-panel-upgrades" class="upgrade-grid"></div>
+
+            <!-- TAB 2: CUBE SKINS -->
+            <div id="shop-panel-cubeskins" class="upgrade-grid" style="display: none;"></div>
+
+            <!-- TAB 3: SWITCH CONSOLE THEMES -->
+            <div id="shop-panel-switchthemes" class="upgrade-grid" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- FLOATING TOAST -->
+    <div id="arcade-toast" class="arcade-toast">
+        <span id="toast-icon">⚡</span>
+        <span id="toast-text">Upgrade Purchased!</span>
+    </div>
+
     <!-- ARCADE SYNTHESIS & GAME ENGINE SCRIPT -->
     <script>
         // ==========================================
@@ -3351,6 +3705,31 @@
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 0.13);
+                } else if (type === 'coin') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(987.77, now);
+                    osc.frequency.setValueAtTime(1318.51, now + 0.08);
+                    gain.gain.setValueAtTime(0.24, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.29);
+                } else if (type === 'upgrade' || type === 'levelup') {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+                        gain.gain.setValueAtTime(0.24, now + idx * 0.07);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.22);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.07);
+                        osc.stop(now + idx * 0.07 + 0.23);
+                    });
                 } else if (type === 'score' || type === 'brick') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -3672,6 +4051,424 @@
         }
 
         // ==========================================
+        // 2.5 UNIVERSAL ARCADE ECONOMY & ARMORY UPGRADES
+        // ==========================================
+        const UPGRADE_CONFIG = {
+            dash: {
+                name: 'Hyper Dash Boost',
+                icon: '⚡',
+                max: 5,
+                prices: [50, 120, 250, 500, 1000],
+                desc: level => level === 0 ? '+30% Dash duration & -15% cooldown' : (level === 5 ? 'MAX LEVEL: Super warp hyper speed!' : `Lv ${level+1}: +${30 + level*15}% Dash duration & -${15 + level*8}% cooldown`)
+            },
+            magnet: {
+                name: 'Super Coin Magnet',
+                icon: '🧲',
+                max: 5,
+                prices: [60, 140, 300, 600, 1200],
+                desc: level => level === 0 ? 'Vacuums coins from nearby lanes!' : (level === 5 ? 'MAX LEVEL: Screen-wide coin vacuum!' : `Lv ${level+1}: Magnet range +${(level+1)*35}%`)
+            },
+            blaster: {
+                name: 'Blaster Cannon',
+                icon: '🔫',
+                max: 5,
+                prices: [75, 180, 400, 800, 1500],
+                desc: level => [
+                    'Level 1: Faster rapid-fire dual lasers!',
+                    'Level 2: Triple spread laser (fires across all 3 lanes)!',
+                    'Level 3: Heavy plasma bolts (double damage: 50 HP)!',
+                    'Level 4: Piercing Hyper Beam (pierces through enemies)!',
+                    'Level 5: Screen-clearing Nova BFG Cannon!',
+                    'MAX LEVEL: Ultimate Nova Cannon!'
+                ][level] || 'MAX LEVEL: Ultimate Nova Cannon!'
+            },
+            shield: {
+                name: 'Energy Forcefield',
+                icon: '🛡️',
+                max: 5,
+                prices: [50, 120, 250, 500, 1000],
+                desc: level => level === 0 ? 'Start every game with a free energy shield!' : (level === 5 ? 'MAX LEVEL: Ultra long starting shield!' : `Lv ${level+1}: Starting shield duration +${(level+1)*2}s`)
+            },
+            multiplier: {
+                name: 'Wealth Multiplier',
+                icon: '💰',
+                max: 5,
+                prices: [100, 250, 600, 1200, 2500],
+                desc: level => level === 0 ? '2X coin values across all games!' : (level === 5 ? 'MAX LEVEL: 6X Coins across all games!' : `Lv ${level+1}: ${level+2}X Coin value across all games!`)
+            },
+            doubleJump: {
+                name: 'Rocket Double Jump',
+                icon: '🦘',
+                max: 1,
+                prices: [200],
+                desc: level => level === 0 ? 'Jump twice in mid-air to rocket over tall barriers!' : 'EQUIPPED: Mid-air rocket jump unlocked!'
+            }
+        };
+
+        const CUBE_SKINS = {
+            default: { name: 'Neon Cyan', price: 0, icon: '🟦', desc: 'Classic Neon Cyan speedcube' },
+            gold: { name: 'Golden Sovereign', price: 250, icon: '👑', desc: 'Solid 24K gold with shimmering star glints' },
+            rainbow: { name: 'Rainbow Prism', price: 400, icon: '🌈', desc: 'Dynamic RGB color-cycling prism cube' },
+            matrix: { name: 'Cyber Matrix', price: 350, icon: '🟢', desc: 'Hacker dark obsidian with glowing green code' },
+            void: { name: 'Void Crimson', price: 500, icon: '🔥', desc: 'Deep cosmic obsidian with flaming crimson aura' }
+        };
+
+        const SWITCH_THEMES = {
+            neon: { name: 'Classic Neon', price: 0, icon: '🔵🔴', desc: 'Neon Blue & Neon Red Joy-Cons' },
+            oled: { name: 'OLED Arctic White', price: 200, icon: '⚪⚪', desc: 'Crisp Arctic White Joy-Cons' },
+            zelda: { name: 'Zelda Hyrule Gold', price: 300, icon: '🟢🟡', desc: 'Emerald Green & Hyrule Gold Joy-Cons' },
+            synthwave: { name: 'Synthwave Cyberpunk', price: 400, icon: '💗🟣', desc: 'Hot Pink & Cyber Cyan Joy-Cons' },
+            gold: { name: 'Solid Gold Switch', price: 600, icon: '👑✨', desc: 'Pure 24K Shimmering Gold Joy-Cons' }
+        };
+
+        function getArcadeCoins() {
+            return parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
+        }
+
+        function setArcadeCoins(val) {
+            const coins = Math.max(0, val);
+            localStorage.setItem('cube_arcade_coins', coins);
+            const g = document.getElementById('global-coin-count');
+            if (g) g.textContent = coins;
+            const s = document.getElementById('shop-coin-balance');
+            if (s) s.textContent = coins;
+            const r = document.getElementById('runner-coins');
+            if (r) r.textContent = coins;
+            if (typeof runnerCoins !== 'undefined') runnerCoins = coins;
+        }
+
+        function addArcadeCoins(amount, label = '') {
+            const upg = getArcadeUpgrades();
+            const mult = 1 + (upg.multiplier || 0);
+            const earned = Math.max(1, Math.round(amount * mult));
+            setArcadeCoins(getArcadeCoins() + earned);
+            addArcadeXP(earned);
+            playSfx('coin');
+            showFloatingCoinToast(earned, label);
+            return earned;
+        }
+
+        function spendArcadeCoins(amount) {
+            const current = getArcadeCoins();
+            if (current < amount) return false;
+            setArcadeCoins(current - amount);
+            return true;
+        }
+
+        function getArcadeXP() {
+            return parseInt(localStorage.getItem('cube_arcade_xp') || '0', 10);
+        }
+
+        function getArcadeRank(xp) {
+            if (xp >= 5000) return { rank: 7, title: 'Grandmaster Legend', next: 99999 };
+            if (xp >= 2000) return { rank: 6, title: 'Speed Demon', next: 5000 };
+            if (xp >= 1000) return { rank: 5, title: 'Combo Master', next: 2000 };
+            if (xp >= 600)  return { rank: 4, title: 'Galaxy Pilot', next: 1000 };
+            if (xp >= 300)  return { rank: 3, title: 'Brick Smasher', next: 600 };
+            if (xp >= 100)  return { rank: 2, title: 'Road Runner', next: 300 };
+            return { rank: 1, title: 'Cubie Novice', next: 100 };
+        }
+
+        function addArcadeXP(amount) {
+            const prevXP = getArcadeXP();
+            const prevRank = getArcadeRank(prevXP);
+            const newXP = prevXP + amount;
+            localStorage.setItem('cube_arcade_xp', newXP);
+            const newRank = getArcadeRank(newXP);
+
+            const rEl = document.getElementById('player-rank-display');
+            if (rEl) rEl.textContent = `Rank ${newRank.rank}: ${newRank.title}`;
+            const xEl = document.getElementById('player-xp-display');
+            if (xEl) xEl.textContent = `${newXP} XP`;
+
+            if (newRank.rank > prevRank.rank) {
+                playSfx('fanfare');
+                showToast(`🎉 LEVEL UP! You reached Rank ${newRank.rank}: ${newRank.title}!`, '⭐');
+            }
+        }
+
+        function getArcadeUpgrades() {
+            try {
+                const raw = localStorage.getItem('cube_arcade_upgrades');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (!parsed.unlockedCubeSkins) parsed.unlockedCubeSkins = ['default'];
+                    if (!parsed.unlockedSwitchSkins) parsed.unlockedSwitchSkins = ['neon'];
+                    return parsed;
+                }
+            } catch(e) {}
+            return {
+                dash: 0,
+                magnet: 0,
+                blaster: 0,
+                shield: 0,
+                multiplier: 0,
+                doubleJump: 0,
+                cubeSkin: 'default',
+                switchSkin: 'neon',
+                unlockedCubeSkins: ['default'],
+                unlockedSwitchSkins: ['neon']
+            };
+        }
+
+        function saveArcadeUpgrades(u) {
+            localStorage.setItem('cube_arcade_upgrades', JSON.stringify(u));
+            applyActiveCustomizations();
+            renderUpgradeShop();
+        }
+
+        function applyActiveCustomizations() {
+            const u = getArcadeUpgrades();
+            const consoles = document.querySelectorAll('.nintendo-switch-console');
+            const themeClasses = ['theme-oled', 'theme-zelda', 'theme-synthwave', 'theme-gold'];
+            consoles.forEach(c => {
+                themeClasses.forEach(tc => c.classList.remove(tc));
+                if (u.switchSkin && u.switchSkin !== 'neon') {
+                    c.classList.add(`theme-${u.switchSkin}`);
+                }
+            });
+
+            const lbl = document.getElementById('current-theme-label');
+            if (lbl && SWITCH_THEMES[u.switchSkin]) {
+                lbl.textContent = SWITCH_THEMES[u.switchSkin].name;
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(text, icon = '⚡') {
+            const t = document.getElementById('arcade-toast');
+            if (!t) return;
+            const iEl = document.getElementById('toast-icon');
+            const tEl = document.getElementById('toast-text');
+            if (iEl) iEl.textContent = icon;
+            if (tEl) tEl.textContent = text;
+            t.style.display = 'flex';
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                t.style.display = 'none';
+            }, 3200);
+        }
+
+        function showFloatingCoinToast(amount, label) {
+            const text = label ? `+${amount} 💰 (${label})` : `+${amount} 💰`;
+            showToast(text, '🪙');
+        }
+
+        let activeShopTab = 'upgrades';
+        function switchShopTab(tab) {
+            activeShopTab = tab;
+            ['upgrades', 'cubeskins', 'switchthemes'].forEach(t => {
+                const btn = document.getElementById(`shop-tab-${t}`);
+                if (btn) btn.classList.toggle('active', t === tab);
+                const panel = document.getElementById(`shop-panel-${t}`);
+                if (panel) panel.style.display = (t === tab) ? 'grid' : 'none';
+            });
+            renderUpgradeShop();
+        }
+
+        function openUpgradeShop() {
+            getAudioContext();
+            playSfx('pause');
+            const modal = document.getElementById('upgrade-shop-modal');
+            if (modal) modal.classList.add('open');
+            renderUpgradeShop();
+        }
+
+        function closeUpgradeShop() {
+            playSfx('resume');
+            const modal = document.getElementById('upgrade-shop-modal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function renderUpgradeShop() {
+            const u = getArcadeUpgrades();
+            const coins = getArcadeCoins();
+            const bal = document.getElementById('shop-coin-balance');
+            if (bal) bal.textContent = coins;
+
+            // 1. Upgrades Panel
+            const upgPanel = document.getElementById('shop-panel-upgrades');
+            if (upgPanel) {
+                upgPanel.innerHTML = Object.keys(UPGRADE_CONFIG).map(key => {
+                    const cfg = UPGRADE_CONFIG[key];
+                    const lvl = u[key] || 0;
+                    const maxed = lvl >= cfg.max;
+                    const price = maxed ? 0 : cfg.prices[lvl];
+                    const canAfford = !maxed && coins >= price;
+                    const desc = cfg.desc(lvl);
+
+                    let pipsHtml = '';
+                    if (cfg.max > 1) {
+                        pipsHtml = '<div class="upgrade-pips">' + 
+                            Array.from({ length: cfg.max }).map((_, i) => 
+                                `<div class="upgrade-pip ${i < lvl ? 'filled' : ''}"></div>`
+                            ).join('') + '</div>';
+                    }
+
+                    return `
+                        <div class="upgrade-card ${maxed ? 'equipped' : ''}">
+                            <div class="upgrade-card-top">
+                                <span class="upgrade-card-icon">${cfg.icon}</span>
+                                <span class="upgrade-card-level ${maxed ? 'maxed' : ''}">${maxed ? 'MAXED' : `Lv ${lvl}/${cfg.max}`}</span>
+                            </div>
+                            <h3 class="upgrade-card-name">${cfg.name}</h3>
+                            <p class="upgrade-card-desc">${desc}</p>
+                            ${pipsHtml}
+                            <button class="btn-upgrade-buy" ${maxed || !canAfford ? 'disabled' : ''} onclick="buyUpgrade('${key}')">
+                                ${maxed ? '⭐ MAX LEVEL' : `⚡ UPGRADE (${price} 💰)`}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 2. Cube Skins Panel
+            const skinsPanel = document.getElementById('shop-panel-cubeskins');
+            if (skinsPanel) {
+                skinsPanel.innerHTML = Object.keys(CUBE_SKINS).map(key => {
+                    const skin = CUBE_SKINS[key];
+                    const unlocked = (u.unlockedCubeSkins || ['default']).includes(key);
+                    const isEquipped = u.cubeSkin === key;
+                    const canAfford = !unlocked && coins >= skin.price;
+
+                    return `
+                        <div class="upgrade-card ${isEquipped ? 'equipped' : ''}">
+                            <div class="upgrade-card-top">
+                                <span class="upgrade-card-icon">${skin.icon}</span>
+                                <span class="upgrade-card-level ${isEquipped ? 'maxed' : ''}">${isEquipped ? 'EQUIPPED' : (unlocked ? 'UNLOCKED' : `${skin.price} 💰`)}</span>
+                            </div>
+                            <h3 class="upgrade-card-name">${skin.name}</h3>
+                            <p class="upgrade-card-desc">${skin.desc}</p>
+                            <button class="btn-upgrade-buy ${isEquipped ? 'btn-equipped' : ''}" ${isEquipped || (!unlocked && !canAfford) ? 'disabled' : ''} onclick="buyOrEquipCubeSkin('${key}')">
+                                ${isEquipped ? '✓ EQUIPPED' : (unlocked ? '✨ EQUIP SKIN' : `👑 UNLOCK (${skin.price} 💰)`)}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 3. Switch Console Themes Panel
+            const themesPanel = document.getElementById('shop-panel-switchthemes');
+            if (themesPanel) {
+                themesPanel.innerHTML = Object.keys(SWITCH_THEMES).map(key => {
+                    const theme = SWITCH_THEMES[key];
+                    const unlocked = (u.unlockedSwitchSkins || ['neon']).includes(key);
+                    const isEquipped = u.switchSkin === key;
+                    const canAfford = !unlocked && coins >= theme.price;
+
+                    return `
+                        <div class="upgrade-card ${isEquipped ? 'equipped' : ''}">
+                            <div class="upgrade-card-top">
+                                <span class="upgrade-card-icon">${theme.icon}</span>
+                                <span class="upgrade-card-level ${isEquipped ? 'maxed' : ''}">${isEquipped ? 'EQUIPPED' : (unlocked ? 'UNLOCKED' : `${theme.price} 💰`)}</span>
+                            </div>
+                            <h3 class="upgrade-card-name">${theme.name}</h3>
+                            <p class="upgrade-card-desc">${theme.desc}</p>
+                            <button class="btn-upgrade-buy ${isEquipped ? 'btn-equipped' : ''}" ${isEquipped || (!unlocked && !canAfford) ? 'disabled' : ''} onclick="buyOrEquipSwitchTheme('${key}')">
+                                ${isEquipped ? '✓ EQUIPPED' : (unlocked ? '🎮 EQUIP THEME' : `✨ UNLOCK (${theme.price} 💰)`)}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function buyUpgrade(key) {
+            const u = getArcadeUpgrades();
+            const cfg = UPGRADE_CONFIG[key];
+            if (!cfg) return;
+            const lvl = u[key] || 0;
+            if (lvl >= cfg.max) return;
+            const price = cfg.prices[lvl];
+            if (!spendArcadeCoins(price)) {
+                alert(`⚠️ Not enough coins! You need ${price} 💰.`);
+                return;
+            }
+            u[key] = lvl + 1;
+            saveArcadeUpgrades(u);
+            playSfx('upgrade');
+            showToast(`⭐ ${cfg.name} Upgraded to Level ${u[key]}!`, cfg.icon);
+        }
+
+        function buyOrEquipCubeSkin(key) {
+            const u = getArcadeUpgrades();
+            const skin = CUBE_SKINS[key];
+            if (!skin) return;
+            if (!u.unlockedCubeSkins) u.unlockedCubeSkins = ['default'];
+
+            if (u.unlockedCubeSkins.includes(key)) {
+                u.cubeSkin = key;
+                saveArcadeUpgrades(u);
+                playSfx('bonus');
+                showToast(`🎨 Equipped ${skin.name} Cube Skin!`, skin.icon);
+            } else {
+                if (!spendArcadeCoins(skin.price)) {
+                    alert(`⚠️ Not enough coins! You need ${skin.price} 💰.`);
+                    return;
+                }
+                u.unlockedCubeSkins.push(key);
+                u.cubeSkin = key;
+                saveArcadeUpgrades(u);
+                playSfx('upgrade');
+                showToast(`🎉 Unlocked & Equipped ${skin.name} Skin!`, '👑');
+            }
+        }
+
+        function buyOrEquipSwitchTheme(key) {
+            const u = getArcadeUpgrades();
+            const theme = SWITCH_THEMES[key];
+            if (!theme) return;
+            if (!u.unlockedSwitchSkins) u.unlockedSwitchSkins = ['neon'];
+
+            if (u.unlockedSwitchSkins.includes(key)) {
+                u.switchSkin = key;
+                saveArcadeUpgrades(u);
+                playSfx('bonus');
+                showToast(`🎮 Equipped ${theme.name} Switch Theme!`, '🎨');
+            } else {
+                if (!spendArcadeCoins(theme.price)) {
+                    alert(`⚠️ Not enough coins! You need ${theme.price} 💰.`);
+                    return;
+                }
+                u.unlockedSwitchSkins.push(key);
+                u.switchSkin = key;
+                saveArcadeUpgrades(u);
+                playSfx('upgrade');
+                showToast(`🎉 Unlocked & Equipped ${theme.name}!`, '✨');
+            }
+        }
+
+        function cycleSwitchTheme() {
+            const u = getArcadeUpgrades();
+            const unlocked = u.unlockedSwitchSkins || ['neon'];
+            const curIdx = unlocked.indexOf(u.switchSkin);
+            const nextIdx = (curIdx + 1) % unlocked.length;
+            u.switchSkin = unlocked[nextIdx];
+            saveArcadeUpgrades(u);
+            playSfx('score');
+            showToast(`🎨 Switched Theme: ${SWITCH_THEMES[u.switchSkin].name}`, '🎮');
+        }
+
+        function toggleTheaterMode() {
+            document.body.classList.toggle('theater-mode');
+            const isTheater = document.body.classList.contains('theater-mode');
+            showToast(isTheater ? '🪟 Theater Mode ON' : '🪟 Theater Mode OFF', '🎮');
+            playSfx('jump');
+        }
+
+        // Initialize active customizations and balances immediately
+        window.addEventListener('DOMContentLoaded', () => {
+            setArcadeCoins(getArcadeCoins());
+            addArcadeXP(0);
+            applyActiveCustomizations();
+        });
+        setTimeout(() => {
+            setArcadeCoins(getArcadeCoins());
+            addArcadeXP(0);
+            applyActiveCustomizations();
+        }, 100);
+
+        // ==========================================
         // 3. GAME 1: CUBE RUNNER 3D (3-LANE HIGHWAY DASH)
         // ==========================================
         const runnerCanvas = document.getElementById('canvas-runner');
@@ -3707,6 +4504,12 @@
         let runnerMonsterBullets = [];
         let runnerDashTimer = 0;
         let runnerDashCooldown = 0;
+        let runnerHasDoubleJumped = false;
+        let screenShake = 0;
+
+        function triggerScreenShake(amount = 8) {
+            screenShake = Math.max(screenShake, amount);
+        }
 
         // Background stars (scaled for 1200x675 super big screen)
         const runnerStars = Array.from({ length: 95 }, () => ({
@@ -3732,17 +4535,19 @@
 
         function startRunnerGame() {
             getAudioContext();
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             runnerActive = true;
             runnerPaused = false;
             runnerDistance = 0;
-            runnerCoins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
-            runnerInvulnerable = 0;
+            runnerCoins = getArcadeCoins();
+            runnerInvulnerable = (upg.shield && upg.shield > 0) ? (120 + upg.shield * 60) : 0;
             runnerSpeed = 0.5; // Resets strictly back to slow upon start/retry
             runnerTargetLane = 1;
             runnerCurrentLaneX = 1.0;
             runnerJumpY = 0;
             runnerJumpVy = 0;
             runnerIsJumping = false;
+            runnerHasDoubleJumped = false;
             runnerIsSliding = false;
             runnerSlideTimer = 0;
             runnerShootCooldown = 0;
@@ -3828,10 +4633,27 @@
 
         function runnerJumpAction() {
             if (!runnerActive || runnerPaused) return;
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             if (!runnerIsJumping && !runnerIsSliding) {
                 runnerIsJumping = true;
+                runnerHasDoubleJumped = false;
                 runnerJumpVy = 13.5;
                 playSfx('jump');
+            } else if (runnerIsJumping && upg.doubleJump > 0 && !runnerHasDoubleJumped && runnerJumpY > 8) {
+                // Rocket Double Jump in mid-air!
+                runnerHasDoubleJumped = true;
+                runnerJumpVy = 13.0;
+                runnerIsDiveStomping = false;
+                playSfx('turbo');
+                triggerScreenShake(4);
+                spawnCoinSparkles(runnerCanvas.width / 2, runnerCanvas.height * 0.72, 8);
+                runnerFloatingTexts.push({
+                    text: '🦘 ROCKET DOUBLE JUMP! 🚀',
+                    x: runnerCanvas.width / 2,
+                    y: runnerCanvas.height * 0.42,
+                    color: '#38bdf8',
+                    life: 38
+                });
             }
         }
 
@@ -3859,14 +4681,47 @@
         function runnerShootAction() {
             if (!runnerActive || runnerPaused) return;
             if (runnerShootCooldown > 0) return;
-            runnerShootCooldown = 12; // cooldown frames
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
+            const blasterLvl = upg.blaster || 0;
+            runnerShootCooldown = Math.max(5, 12 - blasterLvl * 1.5);
             playSfx('laser');
 
-            // Fire laser projectile in player's current lane
-            runnerLasers.push({
-                lane: runnerTargetLane,
-                z: 80
-            });
+            const damage = blasterLvl >= 3 ? 50 : 25;
+            const pierce = blasterLvl >= 4;
+            const isNova = blasterLvl >= 5;
+
+            if (blasterLvl >= 2) {
+                // Triple spread laser across all 3 lanes!
+                for (let l = 0; l < 3; l++) {
+                    runnerLasers.push({
+                        lane: l,
+                        z: 80,
+                        damage: damage,
+                        pierce: pierce,
+                        isNova: isNova,
+                        hitList: []
+                    });
+                }
+                if (isNova) {
+                    triggerScreenShake(7);
+                    runnerFloatingTexts.push({
+                        text: '💥 NOVA BFG BLAST! ⚡',
+                        x: runnerCanvas.width / 2,
+                        y: runnerCanvas.height * 0.38,
+                        color: '#f43f5e',
+                        life: 25
+                    });
+                }
+            } else {
+                runnerLasers.push({
+                    lane: runnerTargetLane,
+                    z: 80,
+                    damage: damage,
+                    pierce: pierce,
+                    isNova: isNova,
+                    hitList: []
+                });
+            }
         }
 
         function runnerDashAction() {
@@ -3876,14 +4731,18 @@
             }
             if (runnerDashCooldown > 0 || runnerDashTimer > 0) return;
 
-            // Activate Sudden Speed Dash!
-            runnerDashTimer = 95; // ~1.6s of hyper speed
-            runnerDashCooldown = 200; // ~3.3s cooldown
-            runnerInvulnerable = Math.max(runnerInvulnerable, 105); // Shielded during dash
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
+            const dashLvl = upg.dash || 0;
+
+            // Activate Sudden Speed Dash with upgrades!
+            runnerDashTimer = 95 + dashLvl * 28;
+            runnerDashCooldown = Math.max(75, 200 - dashLvl * 24);
+            runnerInvulnerable = Math.max(runnerInvulnerable, runnerDashTimer + 15);
+            triggerScreenShake(7);
             playSfx('turbo');
 
             runnerFloatingTexts.push({
-                text: '⚡ SUPER DASH! 🚀💨',
+                text: dashLvl > 0 ? `⚡ HYPER DASH LV ${dashLvl+1}! 🚀💨` : '⚡ SUPER DASH! 🚀💨',
                 x: runnerCanvas.width / 2,
                 y: runnerCanvas.height * 0.42,
                 color: '#fde047',
@@ -3989,6 +4848,7 @@
                     runnerJumpY = 0;
                     runnerIsJumping = false;
                     runnerIsDiveStomping = false;
+                    runnerHasDoubleJumped = false;
                 }
             }
 
@@ -4004,19 +4864,24 @@
             for (let li = runnerLasers.length - 1; li >= 0; li--) {
                 const laser = runnerLasers[li];
                 laser.z += 28 * Math.max(0.85, runnerSpeed);
+                const dmg = laser.damage || 25;
+                if (!laser.hitList) laser.hitList = [];
 
                 // Check collision with monsters (Gun Monsters & Scramble Monsters)
                 let laserHit = false;
                 for (let oi = 0; oi < runnerObstacles.length; oi++) {
                     const ob = runnerObstacles[oi];
+                    if (laser.hitList.includes(ob)) continue;
+
                     if (ob.type === 'gun_monster' && !ob.killed) {
                         if (Math.abs(laser.lane - ob.lane) < 0.65 && (Math.abs(laser.z - ob.z) < 75 || (laser.z >= ob.z - 25 && laser.z - 35 <= ob.z + 45))) {
-                            laserHit = true;
+                            if (!laser.pierce) laserHit = true;
+                            laser.hitList.push(ob);
                             if (ob.hp === undefined) ob.hp = 100;
                             if (ob.maxHp === undefined) ob.maxHp = 100;
                             
-                            // Each shot deals 25 damage: 100 HP needs 4 shots
-                            ob.hp -= 25;
+                            ob.hp -= dmg;
+                            triggerScreenShake(laser.isNova ? 10 : 5);
 
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                             const horizonY = Math.round(runnerCanvas.height * 0.25);
@@ -4033,11 +4898,10 @@
                                 setTimeout(() => playSfx('coins'), 140);
                                 setTimeout(() => playSfx('coins'), 280);
                                 spawnMonsterExplosion(expX, expY - 20, 26);
+                                triggerScreenShake(12);
 
-                                runnerCoins += 50;
-                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                addArcadeCoins(50, 'Gun Mech Defeated!');
                                 runnerDistance += 200;
-                                document.getElementById('runner-coins').textContent = runnerCoins;
                                 document.getElementById('runner-score').textContent = runnerDistance;
 
                                 runnerFloatingTexts.push({
@@ -4053,29 +4917,27 @@
                                 // Hurt Gun Mech
                                 ob.hitFlash = 10;
                                 playSfx('slice');
-                                const shotsLeft = Math.ceil(ob.hp / 25);
+                                const shotsLeft = Math.ceil(ob.hp / dmg);
                                 runnerFloatingTexts.push({
-                                    text: `-25 HP! 🛡️ [${ob.hp}/100 HP • ${shotsLeft} ${shotsLeft === 1 ? 'SHOT' : 'SHOTS'} LEFT]`,
+                                    text: `-${dmg} HP! 🛡️ [${ob.hp}/100 HP • ${shotsLeft} ${shotsLeft === 1 ? 'HIT' : 'HITS'} LEFT]`,
                                     x: expX,
                                     y: expY - 45,
                                     color: '#38bdf8',
                                     life: 45
                                 });
                                 spawnMonsterExplosion(expX, expY - 20, 8);
-                                break;
+                                if (!laser.pierce) break;
                             }
                         }
                     } else if (ob.type === 'monster' && !ob.killed) {
                         if (Math.abs(laser.lane - ob.lane) < 0.65 && (Math.abs(laser.z - ob.z) < 75 || (laser.z >= ob.z - 25 && laser.z - 35 <= ob.z + 45))) {
-                            laserHit = true;
+                            if (!laser.pierce) laserHit = true;
+                            laser.hitList.push(ob);
                             if (ob.hp === undefined) ob.hp = 25;
                             if (ob.maxHp === undefined) ob.maxHp = 25;
 
-                            // USER RULE: Each shot takes 25 health!
-                            // 100 health needs 4 shots to defeat
-                            // 50 health needs 2 shots to defeat
-                            // 25 health needs 1 shot to defeat
-                            ob.hp -= 25;
+                            ob.hp -= dmg;
+                            triggerScreenShake(laser.isNova ? 10 : 5);
 
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                             const horizonY = Math.round(runnerCanvas.height * 0.25);
@@ -4091,11 +4953,8 @@
                                 playSfx('explosion');
                                 setTimeout(() => playSfx('coins'), 140);
                                 spawnMonsterExplosion(expX, expY - 20, ob.maxHp === 100 ? 26 : 18);
+                                triggerScreenShake(ob.maxHp === 100 ? 12 : 8);
 
-                                // Reward bags of coins:
-                                // 25 HP: +10 coins (1 full bag of coins)
-                                // 50 HP: +20 coins (2 full bags of coins)
-                                // 100 HP: +50 coins (Mega Bounty sack)
                                 let rewardCoins = 10;
                                 let rewardLabel = '+10 💰 BAG OF COINS! [25 HP DEFEATED]';
                                 if (ob.maxHp === 100) {
@@ -4106,10 +4965,8 @@
                                     rewardLabel = '🔥 +20 💰 DOUBLE COIN BAGS! [50 HP DEFEATED]';
                                 }
 
-                                runnerCoins += rewardCoins;
-                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                addArcadeCoins(rewardCoins, 'Monster Defeated!');
                                 runnerDistance += ob.maxHp * 2;
-                                document.getElementById('runner-coins').textContent = runnerCoins;
                                 document.getElementById('runner-score').textContent = runnerDistance;
 
                                 runnerFloatingTexts.push({
@@ -4126,16 +4983,16 @@
                                 // Monster took damage but still alive!
                                 ob.hitFlash = 10;
                                 playSfx('slice');
-                                const shotsLeft = Math.ceil(ob.hp / 25);
+                                const shotsLeft = Math.ceil(ob.hp / dmg);
                                 runnerFloatingTexts.push({
-                                    text: `-25 HP! 💥 [${ob.hp}/${ob.maxHp} HP • ${shotsLeft} ${shotsLeft === 1 ? 'SHOT' : 'SHOTS'} LEFT]`,
+                                    text: `-${dmg} HP! 💥 [${ob.hp}/${ob.maxHp} HP • ${shotsLeft} ${shotsLeft === 1 ? 'HIT' : 'HITS'} LEFT]`,
                                     x: expX,
                                     y: expY - 45,
                                     color: '#ff4444',
                                     life: 45
                                 });
                                 spawnMonsterExplosion(expX, expY - 20, 8);
-                                break;
+                                if (!laser.pierce) break;
                             }
                         }
                     }
@@ -4332,14 +5189,14 @@
                         } else if (runnerDashTimer > 0 || runnerInvulnerable > 0) {
                             // Dash / Shield absorbs bullets
                             playSfx('explosion');
+                            triggerScreenShake(4);
                             runnerMonsterBullets.splice(bi, 1);
                             continue;
-                        } else if (isRunnerAutoSurviveEnabled() && runnerCoins >= 100) {
-                            runnerCoins -= 100;
-                            localStorage.setItem('cube_arcade_coins', runnerCoins);
-                            document.getElementById('runner-coins').textContent = runnerCoins;
+                        } else if (isRunnerAutoSurviveEnabled() && getArcadeCoins() >= 100) {
+                            spendArcadeCoins(100);
                             runnerInvulnerable = 150;
                             playSfx('revive');
+                            triggerScreenShake(8);
                             runnerFloatingTexts.push({
                                 text: '🛡️ AUTO-SURVIVE! -100 💰',
                                 x: runnerCanvas.width / 2,
@@ -4358,6 +5215,21 @@
 
                 if (b.z < 0) {
                     runnerMonsterBullets.splice(bi, 1);
+                }
+            }
+
+            // Super Coin Magnet: Vacuums coins toward player's lane
+            const currentUpg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
+            if (currentUpg.magnet > 0) {
+                const magnetDist = 200 + currentUpg.magnet * 120;
+                for (let oi = 0; oi < runnerObstacles.length; oi++) {
+                    const mob = runnerObstacles[oi];
+                    if ((mob.type === 'coin' || mob.type === 'coin_bag') && mob.z < magnetDist && mob.z > 20) {
+                        mob.lane += (runnerTargetLane - mob.lane) * (0.12 + currentUpg.magnet * 0.04);
+                        if (mob.elevated && runnerJumpY <= 5) {
+                            mob.elevated = false;
+                        }
+                    }
                 }
             }
 
@@ -4398,12 +5270,9 @@
                             }
 
                             // Collect Shiny Gold Coin!
-                            const coinVal = (ob.value || 1) * (runnerDashTimer > 0 ? 2 : 1);
-                            runnerCoins += coinVal;
-                            localStorage.setItem('cube_arcade_coins', runnerCoins);
+                            const baseVal = (ob.value || 1) * (runnerDashTimer > 0 ? 2 : 1);
+                            const coinVal = addArcadeCoins(baseVal, runnerDashTimer > 0 ? 'Dash 2X Coin' : '');
                             runnerDistance += 20;
-                            playSfx('coin');
-                            document.getElementById('runner-coins').textContent = runnerCoins;
                             document.getElementById('runner-score').textContent = runnerDistance;
 
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
@@ -4427,11 +5296,9 @@
                             continue;
                         } else if (ob.type === 'coin_bag') {
                             // Collect entire Bag of Coins (+10 coins!)
-                            runnerCoins += 10;
-                            localStorage.setItem('cube_arcade_coins', runnerCoins);
+                            const bagVal = addArcadeCoins(10, 'Coin Bag');
                             runnerDistance += 100;
                             playSfx('coins');
-                            document.getElementById('runner-coins').textContent = runnerCoins;
                             document.getElementById('runner-score').textContent = runnerDistance;
 
                             // Calculate floating notification position
@@ -4443,7 +5310,7 @@
                             const roadW = horizonW + t * (bottomW - horizonW);
                             const notifX = runnerCanvas.width / 2 + (runnerCurrentLaneX - 1) * (roadW / 3);
                             runnerFloatingTexts.push({
-                                text: '+10 💰 BAG OF COINS!',
+                                text: `+${bagVal} 💰 BAG OF COINS!`,
                                 x: notifX,
                                 y: notifY - 30,
                                 color: '#fde047',
@@ -4456,11 +5323,10 @@
                         } else if (runnerDashTimer > 0) {
                             // SUDDEN HYPER DASH RAMS AND OBLITERATES OBSTACLES!
                             playSfx('explosion');
+                            triggerScreenShake(8);
                             if (ob.type === 'monster' || ob.type === 'gun_monster') {
                                 const bounty = ob.type === 'gun_monster' ? 50 : (ob.maxHp === 100 ? 30 : (ob.maxHp === 50 ? 20 : 10));
-                                runnerCoins += bounty;
-                                localStorage.setItem('cube_arcade_coins', runnerCoins);
-                                document.getElementById('runner-coins').textContent = runnerCoins;
+                                addArcadeCoins(bounty, 'Dash Ram!');
                                 runnerDistance += 120;
                                 document.getElementById('runner-score').textContent = runnerDistance;
                             }
@@ -4488,6 +5354,7 @@
                                 // SUCCESSFUL JUMP-STOMP CRUSH MOVE!
                                 ob.killed = true;
                                 playSfx('explosion');
+                                triggerScreenShake(12);
                                 setTimeout(() => playSfx('coins'), 120);
                                 setTimeout(() => playSfx('coins'), 240);
 
@@ -4511,10 +5378,8 @@
                                 runnerIsDiveStomping = false;
 
                                 // REWARD 50 COINS!
-                                runnerCoins += 50;
-                                localStorage.setItem('cube_arcade_coins', runnerCoins);
+                                addArcadeCoins(50, 'Crush Stomp!');
                                 runnerDistance += 200;
-                                document.getElementById('runner-coins').textContent = runnerCoins;
                                 document.getElementById('runner-score').textContent = runnerDistance;
 
                                 runnerFloatingTexts.push({
@@ -4529,6 +5394,7 @@
                                 continue;
                             } else if (runnerInvulnerable > 0) {
                                 playSfx('explosion');
+                                triggerScreenShake(6);
                                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                                 const horizonY = Math.round(runnerCanvas.height * 0.25);
                                 const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
@@ -4539,12 +5405,11 @@
                                 spawnMonsterExplosion(expX, expY - 20);
                                 runnerObstacles.splice(i, 1);
                                 continue;
-                            } else if (isRunnerAutoSurviveEnabled() && runnerCoins >= 100) {
-                                runnerCoins -= 100;
-                                localStorage.setItem('cube_arcade_coins', runnerCoins);
-                                document.getElementById('runner-coins').textContent = runnerCoins;
+                            } else if (isRunnerAutoSurviveEnabled() && getArcadeCoins() >= 100) {
+                                spendArcadeCoins(100);
                                 runnerInvulnerable = 150;
                                 playSfx('revive');
+                                triggerScreenShake(8);
                                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                                 const horizonY = Math.round(runnerCanvas.height * 0.25);
                                 const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
@@ -4570,6 +5435,7 @@
                             // Energy Forcefield Shield absorbs collision & zaps hazard!
                             if (ob.type === 'monster') {
                                 playSfx('explosion');
+                                triggerScreenShake(6);
                                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                                 const horizonY = Math.round(runnerCanvas.height * 0.25);
                                 const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
@@ -4581,13 +5447,12 @@
                             }
                             runnerObstacles.splice(i, 1);
                             continue;
-                        } else if (isRunnerAutoSurviveEnabled() && runnerCoins >= 100) {
+                        } else if (isRunnerAutoSurviveEnabled() && getArcadeCoins() >= 100) {
                             // AUTO-SURVIVE: Automatically spends 100 coins to absorb fatal hit!
-                            runnerCoins -= 100;
-                            localStorage.setItem('cube_arcade_coins', runnerCoins);
-                            document.getElementById('runner-coins').textContent = runnerCoins;
+                            spendArcadeCoins(100);
                             runnerInvulnerable = 150; // ~2.5s shield
                             playSfx('revive');
+                            triggerScreenShake(8);
                             if (ob.type === 'monster') {
                                 playSfx('explosion');
                                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
@@ -4733,6 +5598,17 @@
             const centerX = w / 2;
             const horizonY = Math.round(h * 0.25);
             const bottomY = h;
+
+            // Apply Dynamic Screen Shake Juice
+            let shakeX = 0, shakeY = 0;
+            if (screenShake > 0) {
+                shakeX = (Math.random() - 0.5) * screenShake * 2;
+                shakeY = (Math.random() - 0.5) * screenShake * 2;
+                screenShake *= 0.84;
+                if (screenShake < 0.3) screenShake = 0;
+            }
+            rCtx.save();
+            rCtx.translate(shakeX, shakeY);
 
             // Background cyber sky
             const skyGrad = rCtx.createLinearGradient(0, 0, 0, horizonY);
@@ -4881,13 +5757,40 @@
                 const scale = 0.35 + t * 0.8;
 
                 rCtx.save();
-                rCtx.fillStyle = '#00f0ff';
-                // Dual glowing laser bolts
-                rCtx.fillRect(lx - 9 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
-                rCtx.fillRect(lx + 4 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
-                rCtx.fillStyle = '#ffffff';
-                rCtx.fillRect(lx - 8 * scale, ly - 20 * scale, 3 * scale, 16 * scale);
-                rCtx.fillRect(lx + 5 * scale, ly - 20 * scale, 3 * scale, 16 * scale);
+                if (laser.isNova) {
+                    // Massive Nova BFG Plasma Sphere
+                    const rad = 24 * scale;
+                    const nGrad = rCtx.createRadialGradient(lx, ly - 20 * scale, 2, lx, ly - 20 * scale, rad);
+                    nGrad.addColorStop(0, '#ffffff');
+                    nGrad.addColorStop(0.4, '#ff007f');
+                    nGrad.addColorStop(1, 'rgba(0, 240, 255, 0)');
+                    rCtx.fillStyle = nGrad;
+                    rCtx.beginPath();
+                    rCtx.arc(lx, ly - 20 * scale, rad, 0, Math.PI * 2);
+                    rCtx.fill();
+                } else if (laser.pierce) {
+                    // Piercing Hyper Beam
+                    rCtx.fillStyle = '#00f0ff';
+                    rCtx.fillRect(lx - 12 * scale, ly - 36 * scale, 24 * scale, 34 * scale);
+                    rCtx.fillStyle = '#ffffff';
+                    rCtx.fillRect(lx - 5 * scale, ly - 32 * scale, 10 * scale, 28 * scale);
+                } else if (laser.damage && laser.damage >= 50) {
+                    // Heavy Plasma Bolt
+                    rCtx.fillStyle = '#a855f7';
+                    rCtx.fillRect(lx - 10 * scale, ly - 28 * scale, 7 * scale, 26 * scale);
+                    rCtx.fillRect(lx + 3 * scale, ly - 28 * scale, 7 * scale, 26 * scale);
+                    rCtx.fillStyle = '#ffffff';
+                    rCtx.fillRect(lx - 8 * scale, ly - 24 * scale, 3 * scale, 18 * scale);
+                    rCtx.fillRect(lx + 5 * scale, ly - 24 * scale, 3 * scale, 18 * scale);
+                } else {
+                    // Dual glowing laser bolts
+                    rCtx.fillStyle = '#00f0ff';
+                    rCtx.fillRect(lx - 9 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
+                    rCtx.fillRect(lx + 4 * scale, ly - 24 * scale, 5 * scale, 22 * scale);
+                    rCtx.fillStyle = '#ffffff';
+                    rCtx.fillRect(lx - 8 * scale, ly - 20 * scale, 3 * scale, 16 * scale);
+                    rCtx.fillRect(lx + 5 * scale, ly - 20 * scale, 3 * scale, 16 * scale);
+                }
                 rCtx.restore();
             });
 
@@ -5405,6 +6308,7 @@
             const playerLaneW = playerRoadW / 3;
             const playerX = centerX + (runnerCurrentLaneX - 1) * playerLaneW;
             const playerY = playerBaseY - runnerJumpY * (h / 520);
+            const activeSkin = (typeof getArcadeUpgrades === 'function') ? (getArcadeUpgrades().cubeSkin || 'default') : 'default';
 
             rCtx.save();
             rCtx.translate(playerX, playerY);
@@ -5419,34 +6323,66 @@
                 // Sliding flat spinning cubie
                 const sW = Math.round(68 * (w / 880));
                 const sH = Math.round(14 * (h / 520));
-                rCtx.fillStyle = '#00f0ff';
+                let slideColor = '#00f0ff';
+                let slideBorder = '#ffffff';
+                if (activeSkin === 'gold') { slideColor = '#ffd700'; slideBorder = '#fef08a'; }
+                else if (activeSkin === 'rainbow') { slideColor = `hsl(${(runnerFrame * 5) % 360}, 100%, 60%)`; slideBorder = '#ffffff'; }
+                else if (activeSkin === 'matrix') { slideColor = '#22c55e'; slideBorder = '#86efac'; }
+                else if (activeSkin === 'void') { slideColor = '#e11d48'; slideBorder = '#f43f5e'; }
+
+                rCtx.fillStyle = slideColor;
                 rCtx.fillRect(-sW / 2, -sH, sW, sH);
-                rCtx.strokeStyle = '#ffffff';
+                rCtx.strokeStyle = slideBorder;
                 rCtx.lineWidth = 2;
                 rCtx.strokeRect(-sW / 2, -sH, sW, sH);
 
                 // Slide spark trail
-                rCtx.fillStyle = '#fde047';
+                rCtx.fillStyle = (activeSkin === 'matrix') ? '#22c55e' : ((activeSkin === 'void') ? '#f43f5e' : '#fde047');
                 for (let s = 0; s < 5; s++) {
                     rCtx.fillRect(-sW / 2 - Math.random() * 22, -Math.random() * 8, 4, 4);
                 }
             } else {
-                // Normal 3D Isometric Rubik's Cube
+                // 3D Isometric Rubik's Cube with Custom Skin!
                 const cubeSize = Math.round(52 * (w / 880));
-                rCtx.fillStyle = '#020617';
+                let baseColor = '#020617';
+                let borderColor = '#00f0ff';
+                if (activeSkin === 'gold') { baseColor = '#78350f'; borderColor = '#ffd700'; }
+                else if (activeSkin === 'rainbow') { baseColor = '#0f172a'; borderColor = '#ffffff'; }
+                else if (activeSkin === 'matrix') { baseColor = '#022c22'; borderColor = '#22c55e'; }
+                else if (activeSkin === 'void') { baseColor = '#18041d'; borderColor = '#f43f5e'; }
+
+                rCtx.fillStyle = baseColor;
                 rCtx.fillRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
-                rCtx.strokeStyle = '#00f0ff';
+                rCtx.strokeStyle = borderColor;
                 rCtx.lineWidth = 2.5;
                 rCtx.strokeRect(-cubeSize / 2, -cubeSize, cubeSize, cubeSize);
 
                 // 3x3 Rubik Stickers
                 const sub = (cubeSize - 6) / 3;
-                const stickers = ['#ef4444', '#ffffff', '#3b82f6', '#22c55e', '#FAED27', '#f97316', '#ff007f', '#00f0ff', '#ffffff'];
+                const classicStickers = ['#ef4444', '#ffffff', '#3b82f6', '#22c55e', '#FAED27', '#f97316', '#ff007f', '#00f0ff', '#ffffff'];
+                const goldStickers = ['#ffd700', '#fbbf24', '#fef08a', '#f59e0b', '#fffbeb', '#d97706', '#fde047', '#fbbf24', '#ffd700'];
+                const matrixStickers = ['#15803d', '#22c55e', '#16a34a', '#4ade80', '#14532d', '#86efac', '#22c55e', '#15803d', '#4ade80'];
+                const voidStickers = ['#9f1239', '#e11d48', '#881337', '#f43f5e', '#4c0519', '#fb7185', '#be123c', '#fda4af', '#f43f5e'];
+
                 for (let r = 0; r < 3; r++) {
                     for (let c = 0; c < 3; c++) {
-                        rCtx.fillStyle = stickers[(r * 3 + c) % stickers.length];
+                        const cellIdx = r * 3 + c;
+                        let stColor = classicStickers[cellIdx];
+                        if (activeSkin === 'gold') stColor = goldStickers[cellIdx];
+                        else if (activeSkin === 'rainbow') stColor = `hsl(${(runnerFrame * 4 + cellIdx * 40) % 360}, 100%, 60%)`;
+                        else if (activeSkin === 'matrix') stColor = matrixStickers[cellIdx];
+                        else if (activeSkin === 'void') stColor = voidStickers[cellIdx];
+
+                        rCtx.fillStyle = stColor;
                         rCtx.fillRect(-cubeSize / 2 + 3 + c * sub, -cubeSize + 3 + r * sub, sub - 1.5, sub - 1.5);
                     }
+                }
+
+                // Shimmer glint for Golden Sovereign skin
+                if (activeSkin === 'gold' && runnerFrame % 24 < 12) {
+                    rCtx.fillStyle = '#ffffff';
+                    rCtx.fillRect(-cubeSize / 2 + 7, -cubeSize + 7, 5, 5);
+                    rCtx.fillRect(cubeSize / 2 - 12, -cubeSize + 14, 4, 4);
                 }
             }
 
@@ -5499,6 +6435,8 @@
                 rCtx.fillText(ft.text, ft.x, ft.y);
                 rCtx.restore();
             });
+
+            rCtx.restore(); // Restore screen shake transform
         }
 
         function gameOverRunner(reason) {
@@ -5792,7 +6730,8 @@
             const maxY = Math.floor(snakeCanvas.height / grid);
             snakeFood = {
                 x: Math.floor(Math.random() * maxX),
-                y: Math.floor(Math.random() * maxY)
+                y: Math.floor(Math.random() * maxY),
+                isGolden: Math.random() < 0.35
             };
         }
 
@@ -5875,6 +6814,8 @@
             // Food check
             if (head.x === snakeFood.x && head.y === snakeFood.y) {
                 playSfx('score');
+                const isGold = snakeFood.isGolden;
+                addArcadeCoins(isGold ? 10 : 2, isGold ? 'Golden Apple!' : 'Snake Food');
                 spawnFood();
                 const len = snake.length;
                 document.getElementById('snake-score').textContent = len;
@@ -5893,12 +6834,23 @@
         function drawSnake() {
             sCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
 
-            // Draw Food (glowing cubie)
-            sCtx.fillStyle = '#ff007f';
-            sCtx.fillRect(snakeFood.x * grid + 2, snakeFood.y * grid + 2, grid - 4, grid - 4);
-            sCtx.strokeStyle = '#ffffff';
-            sCtx.lineWidth = 1.5;
-            sCtx.strokeRect(snakeFood.x * grid + 2, snakeFood.y * grid + 2, grid - 4, grid - 4);
+            // Draw Food (glowing cubie or golden apple!)
+            if (snakeFood.isGolden) {
+                sCtx.fillStyle = '#ffd700';
+                sCtx.fillRect(snakeFood.x * grid + 1.5, snakeFood.y * grid + 1.5, grid - 3, grid - 3);
+                sCtx.strokeStyle = '#fffbeb';
+                sCtx.lineWidth = 2;
+                sCtx.strokeRect(snakeFood.x * grid + 1.5, snakeFood.y * grid + 1.5, grid - 3, grid - 3);
+                // Sparkle
+                sCtx.fillStyle = '#ffffff';
+                sCtx.fillRect(snakeFood.x * grid + 4, snakeFood.y * grid + 4, 3, 3);
+            } else {
+                sCtx.fillStyle = '#ff007f';
+                sCtx.fillRect(snakeFood.x * grid + 2, snakeFood.y * grid + 2, grid - 4, grid - 4);
+                sCtx.strokeStyle = '#ffffff';
+                sCtx.lineWidth = 1.5;
+                sCtx.strokeRect(snakeFood.x * grid + 2, snakeFood.y * grid + 2, grid - 4, grid - 4);
+            }
 
             // Draw Snake (Rubik's cube colorful segments)
             const cubeStickers = ['#00f0ff', '#ffffff', '#22c55e', '#FAED27', '#ff6600', '#3b82f6'];
@@ -6083,6 +7035,7 @@
                             ballDy = -ballDy;
                             b.status = 0;
                             breakerScore += 20;
+                            addArcadeCoins(2, 'Brick Smashed');
                             document.getElementById('breaker-score').textContent = breakerScore;
                             if (breakerScore > breakerBest) {
                                 breakerBest = breakerScore;
@@ -6098,6 +7051,7 @@
             // Win check
             if (bricksRemaining === 0) {
                 playSfx('score');
+                addArcadeCoins(50, 'Board Cleared!');
                 initBricks();
                 resetBreakerBall();
             }
@@ -6336,6 +7290,7 @@
                         }
                         playSfx('score');
                         spaceScore += 10;
+                        addArcadeCoins(3, 'Alien Cubie');
                         document.getElementById('space-score').textContent = spaceScore;
                         if (spaceScore > spaceBest) {
                             spaceBest = spaceScore;
@@ -6536,7 +7491,11 @@
                         score2048 += arr[i];
                         arr[i + 1] = 0;
                         playSfx('merge');
+                        if (arr[i] >= 64) {
+                            addArcadeCoins(Math.max(1, Math.round(arr[i] / 32)), `${arr[i]} Cube!`);
+                        }
                         if (arr[i] === 2048) {
+                            addArcadeCoins(200, '2048 God Cube!');
                             document.getElementById('2048-status').innerHTML = '🏆 YOU WON! 1000x1000 GOD CUBE MERGED! ✨';
                         }
                     }
@@ -6692,6 +7651,7 @@
                     simonAcceptingInput = false;
                     document.getElementById('simon-status').textContent = '✨ NICE JOB! Next round incoming...';
                     playSfx('score');
+                    addArcadeCoins(simonSequence.length * 2, 'Memory Match!');
                     setTimeout(nextSimonRound, 900);
                 }
             } else {
@@ -6875,6 +7835,7 @@
             if (index === activeReflexTarget) {
                 reflexHits++;
                 playSfx('score');
+                addArcadeCoins(1, 'Target Hit');
                 document.getElementById('reflex-hits').textContent = reflexHits;
                 if (cell) {
                     cell.classList.remove('hit-success');
@@ -6897,6 +7858,7 @@
             reflexPaused = false;
             clearInterval(reflexTimer);
             document.querySelectorAll('.reflex-cell').forEach(c => c.classList.remove('active-target'));
+            addArcadeCoins(Math.max(5, Math.round(reflexHits * 1.5)), 'Reflex Test Complete!');
             
             const finalTps = parseFloat((reflexHits / 30.0).toFixed(2));
             let isNewBest = false;
@@ -7065,6 +8027,7 @@
                 playSfx('score');
                 blitzScore += Math.floor(100 * blitzTimeRemaining) + 50;
                 blitzStreak++;
+                addArcadeCoins(2 + Math.floor(blitzStreak / 3), 'Notation Blitz');
                 document.getElementById('blitz-score').textContent = blitzScore;
                 document.getElementById('blitz-streak').textContent = blitzStreak;
                 if (blitzScore > blitzBest) {
@@ -7225,8 +8188,10 @@
 
                 if (sliced > 0) {
                     playSfx('slice');
+                    addArcadeCoins(2, 'Floor Stacked');
                 } else {
                     playSfx('stack', stackerFloor);
+                    addArcadeCoins(5, 'Perfect Stack!');
                 }
 
                 stackerCurWidth = supported;
@@ -7240,6 +8205,7 @@
                     // Win God Cube Tower!
                     stackerActive = false;
                     playSfx('fanfare');
+                    addArcadeCoins(100, 'God Cube Tower!');
                     document.getElementById('stacker-status').innerHTML = '🏆 <strong>GOD CUBE TOWER COMPLETED!</strong> You are a Stacking Master!';
                     document.getElementById('btn-stacker-start').textContent = '▶ Play Again';
                     if (10 > stackerBest) {
@@ -7516,10 +8482,12 @@
                 whackScore += 10 + whackStreak * 2;
                 whackStreak++;
                 playSfx('bonk');
+                addArcadeCoins(1, 'Whacked Cubie');
             } else if (state.type === 'gold') {
                 whackScore += 50 + whackStreak * 5;
                 whackStreak += 2;
                 playSfx('bonus');
+                addArcadeCoins(8, 'Golden Cubie!');
             } else if (state.type === 'bomb') {
                 whackScore = Math.max(0, whackScore - 30);
                 whackStreak = 0;
@@ -7684,6 +8652,7 @@
                     flappyPipes++;
                     flappyScore += 10;
                     playSfx('score');
+                    addArcadeCoins(2, 'Flappy Pillar!');
                     document.getElementById('flappy-score').textContent = flappyScore;
                     document.getElementById('flappy-pipes').textContent = flappyPipes;
                     if (flappyScore > flappyBest) {
@@ -8220,6 +9189,7 @@
                     pairsMatches++;
                     document.getElementById('pairs-matches').textContent = pairsMatches;
                     playSfx('pair_match');
+                    addArcadeCoins(5, 'Pair Matched');
 
                     const el1 = document.getElementById('pair-card-' + c1.idx);
                     const el2 = document.getElementById('pair-card-' + c2.idx);
@@ -8252,6 +9222,7 @@
             pairsActive = false;
             clearInterval(pairsTimer);
             playSfx('fanfare');
+            addArcadeCoins(40, 'All Pairs Matched!');
             const timeStr = document.getElementById('pairs-time').textContent;
             document.getElementById('pairs-status').innerHTML = `🎉 <strong>SOLVED ALL PAIRS!</strong> Time: <strong>${timeStr}</strong> in <strong>${pairsMoves}</strong> moves!`;
             document.getElementById('btn-pairs-start').textContent = '▶ Play Again';

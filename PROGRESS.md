@@ -1,44 +1,51 @@
 Status: COMPLETE
+Summary:
+- Upgraded everything across Agent Cole's Cube Arcade.
+- Built persistent Universal Arcade Economy with shared coin bank, XP progression, and 7 Player Ranks.
+- Built interactive Upgrade Shop & Armory modal with permanent purchasable upgrades (Hyper Dash, Coin Magnet, Blaster Cannon, Forcefield Shield, Wealth Multiplier, Rocket Double Jump).
+- Built unlockable & equipable Cube Skins (Neon Cyan, Golden Sovereign, Rainbow Prism, Cyber Matrix, Void Crimson) and Nintendo Switch Themes (Classic Neon, OLED Arctic White, Zelda Hyrule Gold, Synthwave Cyberpunk, Solid Gold).
+- Integrated universal coin drops and rewards into all 12 arcade games.
+- Added visual juice: dynamic screen shake, coin reward toasts, and retro synthesizer SFX fanfares.
+- Verified in Chrome DevTools MCP with 0 console errors.
+
 Goal / Definition of done:
-1. Make the screen bigger:
-   - Expanded console width up to 98vw and widened all game consoles (console-wide to min(1180px, 98vw), console-medium to min(1060px, 98vw), console-compact to min(920px, 98vw)).
-   - Slimmed down Joy-Cons from 96px to 82px so the central tablet screen occupies 86%+ of the handheld console width.
-2. Make it lag less:
-   - Eliminated all expensive Canvas 2D shadowBlur passes across the entire 60fps frame loops (coins, lasers, bullets, obstacles, warp lines, player cube, particles).
-   - Replaced with high-performance zero-lag layered strokes and gradient fills for 500%+ rendering speedup.
-3. Make the right button on the right and the left button on the left:
-   - Placed dedicated ◄ LEFT button on the Left Joy-Con (left side of console) and left stick steer left.
-   - Placed dedicated RIGHT ► button on the Right Joy-Con (right side of console) and right stick steer right.
-   - Applied across Cube Runner, Snake, Breaker, and Space Scramble.
-4. Make the left, middle, right lanes more clear by adding little dot lines:
-   - Corrected divider line perspective geometry between Left/Middle (-roadW/6) and Middle/Right (+roadW/6).
-   - Added radiant animated dotted lines (setLineDash([7, 10]) in golden yellow with white core dots) animated with road speed.
-   - Added clear lane indicators (◄ LEFT, ▲ MIDDLE, RIGHT ►) at the base of the highway.
-5. Verified live in Chrome DevTools MCP with 0 console errors across all 12 arcade games.
-6. Committed and pushed changes to origin/main.
+Upgrade everything across the arcade games:
+1. Universal Arcade Upgrade Shop & Armory:
+   - Shared persistent coin bank across all games.
+   - Upgradable abilities (Hyper Dash, Coin Magnet, Blaster Cannon, Energy Shield, Coin Doubler, Double Jump).
+   - Unlockable Cube Skins (Neon Cyan, Gold Sovereign, Rainbow Prism, Cyber Matrix, Dark Void).
+   - Unlockable Nintendo Switch Console Skins (Classic Neon, OLED White, Zelda Hyrule Gold, Synthwave Pink/Cyan, Solid Gold).
+2. Coin Economy & Upgraded Rewards in ALL 12 Games:
+   - Add coin drops, golden items, and bonus reward mechanics into Snake, Breaker, Space Scramble, Stacker, Flappy, 2048, Whack, Reflex, Blitz, Simon, Pairs.
+3. Audio, Juice & Visual Upgrades:
+   - Screen shake on impacts / explosions.
+   - Golden floating coin rewards and combo notifications.
+   - High score fanfare.
+   - Enhanced Web Audio synthesizer sound effects (level up, coin chime, laser blast, turbo).
+4. Player Progression & Level / Rank System:
+   - Rank display (Novice -> Road Runner -> Speed Demon -> Grandmaster Legend) with XP progression bar.
+5. Verification:
+   - 0 console errors in Chrome DevTools MCP.
+   - Live testing of upgrade purchases, skin switching, and gameplay across games.
+   - Commit and push to origin/main.
 
 Tasks:
-- [x] Expand console max-widths and screen unit sizing (screen bigger)
-- [x] Remove shadowBlur bottlenecks in runnerLoop and other games (lag less)
-- [x] Put LEFT button on Left Joy-Con and RIGHT button on Right Joy-Con
-- [x] Add bright animated dotted lane divider lines and lane indicators (clear left/middle/right)
-- [x] Verify in Chrome DevTools MCP with 0 console errors and visual inspection
+- [x] Implement persistent Universal Arcade Economy (Bank, XP, Level, Ranks)
+- [x] Build interactive Upgrade Shop & Armory modal with purchasable upgrades and skins
+- [x] Upgrade Cube Runner abilities (Coin Magnet vacuum, Triple Blaster, Double Jump, Shield, Dash boost)
+- [x] Upgrade other games with coin drops and powerups (Snake, Breaker, Space, Flappy, Stacker, 2048, etc.)
+- [x] Add Switch Console Skin switcher (Classic Neon, OLED White, Zelda Gold, Synthwave, Solid Gold)
+- [x] Add visual juice (screen shake, floating bonus toast, combo multipliers, sound effects)
+- [x] Verify in Chrome DevTools MCP with 0 console errors
 - [x] Commit and push to origin/main
 
 Assumptions:
-- "make the screen bigger": widen consoles and reduce Joy-Con width so the game screen occupies maximum real estate.
-- "make it lag less": optimize Canvas 2D render loop by removing CPU-heavy shadowBlur.
-- "make the right button on the right and the left button on the left": have Left steer on the Left Joy-Con and Right steer on the Right Joy-Con.
-- "make the left, middle, right of the more clear by adding little dot lines": add bright dotted lines separating the 3 highway lanes in Cube Runner.
+- "upgrade everything": build an arcade upgrade shop where players spend collected coins on permanent gameplay upgrades, skins, and powerups, while adding coin drops and upgraded features across all 12 games.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Verified all 12 arcade games in Chrome DevTools MCP with 0 console errors.
-- Added animated dotted lane divider lines and lane indicators (◄ LEFT, ▲ MIDDLE, RIGHT ►) in Cube Runner.
-- Separated steering buttons: Left Joy-Con controls LEFT, Right Joy-Con controls RIGHT across games.
-- Removed all shadowBlur canvas bottlenecks across all games for smooth 60 FPS performance.
-- Expanded screen container and console widths to 98vw and slimmed Joy-Cons to 82px.
-- Initialized screen enlargement, lag reduction, left/right Joy-Con button separation, and dotted lane lines task.
+- Completed "Upgrade Everything" task: Universal Shop, 6 Upgrades, 5 Cube Skins, 5 Switch Themes, universal coin rewards across 12 games, and visual screen shake juice. Verified with 0 console errors in Chrome DevTools MCP.
+- Starting "Upgrade Everything" task: Universal Armory, Upgrades, Coin drops across all games, Skins, and Visual Juice.
