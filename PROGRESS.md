@@ -1,39 +1,45 @@
 Status: COMPLETE
 Goal / Definition of done:
-1. Make coins in the game:
-   - Spawn real 3D spinning gold coins along the highway lanes in streams (3-5 coins), elevated jumping arcs, and diagonal zigzags.
-   - Support rare golden Coin Bags (+10 💰).
-   - Implement coin collision collection (+1 💰 on ground, elevated jump collection, 2X during hyper dash, audio chime, sparkle particles, floating popups).
-2. Make the buttons smaller:
-   - All buttons reduced to 20px height with 0.72em font size and 2px 7px padding.
-   - Top bar reduced to 26px height; bottom deck reduced to 28px height.
-3. Make the game bigger:
-   - Container max-width expanded to 1780px, card padding reduced to 16px 12px.
-   - Runner arena, canvas container, and canvas expanded to max-width 1720px (display area 1211px x 681px).
-4. Verify live in Chrome DevTools MCP (0 console errors, coin spawning and collection confirmed, button heights 20px confirmed, canvas expansion confirmed).
-5. Push changes to origin/main.
+1. Move Cube Runner 3D controls to the sides and style the cabinet like an authentic handheld Nintendo Switch console.
+2. Left Joy-Con (Neon Blue #00c3e3):
+   - Minus [-] button for Pause / Resume.
+   - Interactive Left Analog Stick (Steer Left / Right).
+   - Discrete 4-button directional D-Pad (▲ Jump, ◄ Left, ► Right, ▼ Slide).
+   - Square Capture button (⚡ DASH Sudden Speed).
+   - Top ZL / L bumper accents.
+3. Central Switch Screen Unit:
+   - 100% unobstructed, crystal-clear 16:9 widescreen canvas.
+   - Sleek console bezel framing with top sensor and bottom speaker slits.
+4. Right Joy-Con (Neon Red #ff3c28):
+   - Plus [+] button for Start / Dash Again (with 'best!' badge).
+   - ABXY diamond cluster (X: Jump, Y: Shoot, A: Dash, B: Slide).
+   - Right Analog Stick (clickable ⚡ DASH).
+   - Circular Home button (🛡️ 100 💰 Survive) and Auto-Survive toggle.
+   - Top ZR / R bumper accents.
+5. Zero controls above, below, or inside the canvas.
+6. Verify live in Chrome DevTools MCP with 0 console errors, interactive button verification, and layout screenshot.
+7. Push changes to origin/main.
 
 Next step: Done.
 
 Tasks:
-- [x] Implement 3D spinning gold coin renderer with gradient, 3D rim, and star emblem
-- [x] Add coin spawner in runnerLoop with streams, elevated jump arcs, and coin bags
-- [x] Implement coin collision collection with coin chime audio and golden star sparkles
-- [x] Add 2X coin multiplier during hyper dash
-- [x] Shrink control buttons to 20px height and slim down top/bottom bars to 26px/28px
-- [x] Expand game stage card, container, and canvas max-width to 1720px/1780px
-- [x] Verify in Chrome DevTools MCP with 0 console errors
+- [x] Implement Nintendo Switch handheld console flex container with left and right Joy-Cons
+- [x] Build Left Joy-Con in Neon Blue with [-] Minus, Analog Stick, D-Pad, and Square ⚡ DASH
+- [x] Build Right Joy-Con in Neon Red with [+] Plus, ABXY action diamond, Right Stick, and Home 🛡️ Survive
+- [x] Remove top and bottom control bars so screen picture is 100% clean and unobstructed
+- [x] Adapt JS button handlers and text updates for Switch Joy-Con layout
+- [x] Add responsive scaling for tablet and mobile viewports
+- [x] Verify layout and controls with Chrome DevTools MCP (0 console errors, interactive tests passed)
 - [x] Commit and push changes to origin/main
 
 Assumptions:
-- "make coins in the game" refers to collecting shiny gold coins on the highway while running in Cube Runner 3D.
-- "make the buttons smaller and the game bigger" refers to reducing button heights/padding and expanding the game screen picture.
+- "for the game make the contrals on the side and make it like a nintendo switch" means framing Cube Runner 3D inside a handheld Nintendo Switch console layout with Neon Blue Joy-Con on the left, 16:9 canvas tablet in the center, and Neon Red Joy-Con on the right.
 
 Blockers (what I need to do): None.
 
 Found, not done: None.
 
 Log (newest first, one line each):
-- Verified 3D spinning coins, elevated jump collection, 20px button sizes, and expanded canvas in Chrome DevTools MCP.
-- Added coin spawning patterns, coin audio, sparkle particles, smaller 20px buttons, and 1720px widescreen arena.
-- Initialized coin mechanics, button shrinking, and game picture expansion task.
+- Verified Nintendo Switch side-controls layout in Chrome DevTools MCP with 0 console errors and visual screenshot.
+- Replaced top and bottom arcade bars with authentic Left Joy-Con (Neon Blue) and Right Joy-Con (Neon Red) side controls.
+- Initialized Nintendo Switch console transformation task for Cube Runner 3D.

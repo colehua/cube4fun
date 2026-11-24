@@ -429,77 +429,431 @@
             touch-action: none;
         }
 
-        /* SUPER SUPER BIG RUNNER ARENA - ENORMOUS SCREEN + COMPACT ZERO-DISTANCE CONTROLS */
+        /* ============================================================== */
+        /* NINTENDO SWITCH CONSOLE LAYOUT (CONTROLS ON THE SIDES)        */
+        /* ============================================================== */
         .runner-arena {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 0;
-            width: 100%;
-            max-width: 1720px;
-            margin: 2px auto 6px auto;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        .runner-screen-wrap {
-            width: 100%;
-            max-width: 1720px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-            gap: 0;
-            box-sizing: border-box;
-        }
-
-        /* SLEEK TOP ARCADE BAR - DOCKED IMMEDIATELY ABOVE SCREEN PICTURE (OUTSIDE CANVAS) */
-        .runner-top-bar {
-            width: 100%;
-            max-width: 1720px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 6px;
-            background: rgba(15, 23, 42, 0.95);
-            border: 2px solid #00f0ff;
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            padding: 2px 8px;
-            box-shadow: 0 -2px 10px rgba(0, 240, 255, 0.2);
-            box-sizing: border-box;
-            height: 26px;
-            z-index: 5;
-        }
-
-        .runner-top-left,
-        .runner-top-right {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* RUNNER CANVAS CONTAINER - 100% CLEAN VIEWPORT (NOTHING INSIDE CANVAS) */
-        .runner-canvas-container {
-            position: relative;
-            width: 100%;
-            max-width: 1720px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 0;
+            width: 100%;
+            max-width: 1720px;
+            margin: 4px auto 8px auto;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .nintendo-switch-console {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: center;
+            width: 100%;
+            max-width: 1720px;
+            box-sizing: border-box;
+            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
+            border-radius: 40px;
+        }
+
+        /* JOY-CON BASE STYLES */
+        .joycon {
+            width: 96px;
+            min-width: 88px;
+            max-width: 106px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 6px;
+            box-sizing: border-box;
+            position: relative;
+            user-select: none;
+            z-index: 2;
+        }
+
+        /* LEFT JOY-CON (NEON BLUE) */
+        .joycon-left {
+            background: linear-gradient(180deg, #00c3e3 0%, #0092b0 100%);
+            border: 3px solid #38e1ff;
+            border-right: 2px solid #005a6e;
+            border-radius: 40px 0 0 40px;
+            box-shadow: -8px 0 25px rgba(0, 195, 227, 0.35), inset 3px 3px 8px rgba(255, 255, 255, 0.35), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* RIGHT JOY-CON (NEON RED) */
+        .joycon-right {
+            background: linear-gradient(180deg, #ff3c28 0%, #d82b18 100%);
+            border: 3px solid #ff6957;
+            border-left: 2px solid #8f170b;
+            border-radius: 0 40px 40px 0;
+            box-shadow: 8px 0 25px rgba(255, 60, 40, 0.35), inset -3px 3px 8px rgba(255, 255, 255, 0.35), inset 3px -3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* TOP SHOULDER BUMPERS */
+        .joycon-shoulder {
+            position: absolute;
+            top: -9px;
+            width: 62px;
+            height: 10px;
+            border-radius: 6px 6px 0 0;
+            background: #182030;
+            border: 1.5px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            font-size: 0.58em;
+            color: #94a3b8;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            pointer-events: none;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        .joycon-shoulder-left { left: 14px; }
+        .joycon-shoulder-right { right: 14px; }
+
+        .joycon-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 28px;
+        }
+
+        /* SWITCH MINUS [-] PILL BUTTON */
+        .btn-switch-minus,
+        #btn-runner-pause {
+            background: #182030;
+            border: 1.5px solid #0f172a;
+            color: #cbd5e1;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 0.72em;
+            font-weight: 800;
+            font-family: 'DynaPuff', cursive;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.12s ease;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .btn-switch-minus:active,
+        #btn-runner-pause:active {
+            transform: scale(0.92);
+        }
+        .btn-switch-minus.paused,
+        #btn-runner-pause.paused {
+            background: #f59e0b !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.8) !important;
+        }
+
+        /* SWITCH PLUS [+] BUTTON */
+        .joycon-plus-btn,
+        #btn-runner-start {
+            background: #182030;
+            border: 1.5px solid #ffffff;
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 0.72em;
+            font-weight: 800;
+            font-family: 'DynaPuff', cursive;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.15s ease;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .joycon-plus-btn:active,
+        #btn-runner-start:active {
+            transform: scale(0.92);
+        }
+
+        /* SWITCH THUMBSTICK ASSEMBLY */
+        .switch-stick-assembly {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
+        }
+        .switch-stick-outer {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #080c16;
+            border: 2px solid #1e293b;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 3px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .switch-stick-cap {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #334155 35%, #0f172a 90%);
+            border: 1.5px solid #475569;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.12s ease;
+        }
+        .switch-stick-cap:active {
+            transform: scale(0.94);
+        }
+        .stick-label {
+            font-size: 8px;
+            font-weight: 800;
+            font-family: 'DynaPuff', cursive;
+            color: #94a3b8;
+            line-height: 1;
+        }
+
+        /* D-PAD CLUSTER (LEFT JOY-CON) */
+        .switch-dpad-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            margin: 4px 0;
+        }
+        .dpad-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dpad-mid-row {
+            gap: 22px;
+        }
+        .dpad-btn-round {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #182030;
+            border: 1.5px solid #00f0ff;
+            color: #00f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            user-select: none;
+            touch-action: manipulation;
+            font-size: 12px;
+            font-weight: 900;
+            transition: all 0.12s ease;
+            padding: 0;
+        }
+        .dpad-btn-round:active {
+            transform: scale(0.92);
+            background: #00f0ff;
+            color: #000;
+        }
+
+        /* ABXY CLUSTER (RIGHT JOY-CON) */
+        .switch-abxy-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            margin: 4px 0;
+        }
+        .abxy-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .abxy-mid-row {
+            gap: 22px;
+        }
+        .abxy-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #182030;
+            border: 1.5px solid #334155;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.12s ease;
+            padding: 0;
+        }
+        .abxy-btn:active {
+            transform: scale(0.92);
+        }
+        .abxy-btn .btn-letter {
+            font-size: 11px;
+            font-weight: 900;
+            font-family: 'DynaPuff', cursive;
+            line-height: 1;
+        }
+        .abxy-btn .btn-sub {
+            font-size: 6.5px;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.3px;
+            line-height: 1;
+            opacity: 0.9;
+        }
+        .abxy-btn.btn-x { border-color: #818cf8; color: #a5b4fc; }
+        .abxy-btn.btn-y { border-color: #f43f5e; color: #fda4af; }
+        .abxy-btn.btn-b { border-color: #a78bfa; color: #c4b5fd; }
+        .abxy-btn.btn-a { border-color: #ffd700; color: #fde047; }
+
+        /* SQUARE CAPTURE / SPEED BUTTON */
+        .switch-square-btn {
+            background: #182030;
+            border: 1.5px solid #ffd700;
+            color: #ffd700;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 0.72em;
+            font-weight: 800;
+            font-family: 'DynaPuff', cursive;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.12s ease;
+        }
+        .switch-square-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* CIRCULAR HOME / SURVIVE BUTTON */
+        .switch-home-btn,
+        #btn-runner-survive {
+            background: linear-gradient(135deg, #f59e0b 0%, #e11d48 100%);
+            border: 2px solid #ffd700;
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 0.70em;
+            font-weight: 800;
+            font-family: 'DynaPuff', cursive;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.12s ease;
+        }
+
+        .switch-auto-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            font-size: 0.68em;
+            font-weight: 700;
+            color: #ffd700;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid #eab308;
+            user-select: none;
+            margin-top: 3px;
+        }
+
+        .joycon-bottom-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 32px;
+            gap: 3px;
+        }
+
+        .plus-symbol {
+            font-size: 13px;
+            font-weight: 900;
+            line-height: 1;
+            margin-right: 2px;
+        }
+
+        #btn-deck-survive,
+        #btn-deck-start,
+        #chk-auto-survive-deck {
+            display: none !important;
+        }
+
+        /* CENTER SWITCH CONSOLE SCREEN UNIT (TABLET BODY) */
+        .switch-screen-unit {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #080b12;
+            border: 3.5px solid #1e293b;
+            border-radius: 4px;
+            box-sizing: border-box;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.45), inset 0 0 35px rgba(0, 0, 0, 0.9);
-            border: 3px solid #00f0ff;
+            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.95), 0 0 25px rgba(0, 240, 255, 0.15);
+            position: relative;
+        }
+
+        .switch-screen-unit::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #1e293b;
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.8);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .runner-canvas-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: #020617;
+            border: none;
             box-sizing: border-box;
         }
 
         canvas.runner-canvas-super {
             width: 100%;
-            max-width: 1720px;
+            max-width: 100%;
             height: auto;
             aspect-ratio: 16 / 9;
             display: block;
@@ -561,11 +915,44 @@
                 width: 100%;
                 max-width: 100%;
             }
-            .runner-canvas-container,
-            canvas.runner-canvas-super,
-            .runner-top-bar,
-            .arcade-control-deck.runner-slim-deck {
+            .nintendo-switch-console {
                 max-width: 100%;
+            }
+            .runner-canvas-container,
+            canvas.runner-canvas-super {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .joycon {
+                width: 72px;
+                min-width: 65px;
+                max-width: 80px;
+                padding: 8px 3px;
+                border-radius: 24px 0 0 24px;
+            }
+            .joycon-right {
+                border-radius: 0 24px 24px 0;
+            }
+            .switch-stick-outer {
+                width: 40px;
+                height: 40px;
+            }
+            .switch-stick-cap {
+                width: 32px;
+                height: 32px;
+            }
+            .dpad-btn-round, .abxy-btn {
+                width: 26px;
+                height: 26px;
+            }
+            .dpad-mid-row, .abxy-mid-row {
+                gap: 12px;
+            }
+            .btn-switch-minus, .joycon-plus-btn, .switch-square-btn, .switch-home-btn {
+                font-size: 0.62em;
+                padding: 2px 5px;
             }
         }
 
@@ -1483,64 +1870,115 @@
                     Dash along the 3D Highway! 🪙 Collect shiny gold coins! • 🦘 Jump over 1-block obstacles • 🔫 Jump on shooting monsters (+50 💰) • 🔥 Shoot normal monsters!
                 </div>
 
-                <!-- SUPER SUPER BIG RUNNER ARENA: FULL WIDESCREEN PICTURE + OUTSIDE ARCADE CONTROLS (ZERO OVERLAY) -->
+                <!-- NINTENDO SWITCH HANDHELD CONSOLE (SIDE CONTROLS, 100% UNOBSTRUCTED SCREEN) -->
                 <div class="runner-arena">
-                    <div class="runner-screen-wrap">
-                        <!-- TOP ARCADE BEZEL BAR: OUTSIDE THE SCREEN PICTURE (CANNOT BLOCK GAME) -->
-                        <div class="runner-top-bar">
-                            <div class="runner-top-left">
-                                <button id="btn-runner-start" class="deck-btn-slim btn-game-primary" onclick="startRunnerGame()" title="Start or Dash Again (Spacebar)">
-                                    <span class="dash-title">▶ Dash Again <span class="badge-best">best!</span></span>
-                                    <span class="dash-sub" style="font-size: 0.72em; opacity: 0.85; margin-left: 4px;">[Space]</span>
-                                </button>
-                                <button id="btn-side-dash" class="deck-btn-slim btn-action-dash btn-side-dash" onclick="runnerDashAction()" title="⚡ Sudden Speed Dash! [Shift / E]">⚡ DASH!</button>
+                    <div class="nintendo-switch-console">
+                        <!-- LEFT JOY-CON (NEON BLUE) -->
+                        <div class="joycon joycon-left">
+                            <div class="joycon-shoulder joycon-shoulder-left">
+                                <span>ZL</span><span>L</span>
                             </div>
-                            <div class="runner-top-right">
-                                <button id="btn-runner-survive" class="deck-btn-slim btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
-                                    🛡️ SURVIVE (100 💰)
+                            <div class="joycon-top-row">
+                                <button id="btn-runner-pause" class="btn-switch-minus" onclick="togglePauseRunner()" title="[-] Minus Button: Pause / Resume (P / Esc)">
+                                    <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
                                 </button>
-                                <button id="btn-runner-pause" class="deck-btn-slim btn-game-pause" onclick="togglePauseRunner()" title="Pause / Resume (P / Esc)">
-                                    ⏸️ Pause
+                            </div>
+                            <div class="switch-stick-assembly" title="Left Thumbstick - Steer Left / Right">
+                                <div class="switch-stick-outer">
+                                    <div class="switch-stick-cap">
+                                        <div style="display: flex; width: 100%; justify-content: space-around;">
+                                            <span onclick="event.stopPropagation(); moveRunnerLane(-1)" title="Steer Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
+                                            <span onclick="event.stopPropagation(); moveRunnerLane(1)" title="Steer Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
+                                        </div>
+                                        <span class="stick-label">STEER</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="switch-dpad-cluster">
+                                <div class="dpad-row">
+                                    <button class="dpad-btn-round" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">▲</button>
+                                </div>
+                                <div class="dpad-row dpad-mid-row">
+                                    <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">◄</button>
+                                    <button class="dpad-btn-round" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">►</button>
+                                </div>
+                                <div class="dpad-row">
+                                    <button class="dpad-btn-round" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">▼</button>
+                                </div>
+                            </div>
+                            <div class="joycon-bottom-controls">
+                                <button id="btn-side-dash" class="switch-square-btn btn-side-dash btn-action-dash" onclick="runnerDashAction()" title="Square Capture Button: ⚡ Sudden Speed Dash! [Shift / E]">
+                                    ⚡ DASH
                                 </button>
-                                <label class="deck-auto-slim" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
-                                    <input type="checkbox" id="chk-auto-survive" onchange="syncAutoSurvive(this)" style="width: 14px; height: 14px; accent-color: #f59e0b; cursor: pointer;">
-                                    <span>🛡️ Auto-Survive</span>
+                            </div>
+                        </div>
+
+                        <!-- CENTER SWITCH SCREEN UNIT -->
+                        <div class="switch-screen-unit">
+                            <div class="runner-canvas-container">
+                                <canvas id="canvas-runner" class="arcade-canvas runner-canvas-super" width="1200" height="675" style="cursor: pointer;" title="Cube Runner 3D Highway - Use Joy-Con side controls or keyboard!"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT JOY-CON (NEON RED) -->
+                        <div class="joycon joycon-right">
+                            <div class="joycon-shoulder joycon-shoulder-right">
+                                <span>R</span><span>ZR</span>
+                            </div>
+                            <div class="joycon-top-row">
+                                <button id="btn-runner-start" class="joycon-plus-btn" onclick="startRunnerGame()" title="[+] Plus Button: Start / Dash Again (Spacebar)">
+                                    <span class="plus-symbol">+</span> Dash <span class="badge-best">best!</span>
+                                </button>
+                                <button id="btn-deck-start" style="display: none;" onclick="startRunnerGame()"></button>
+                            </div>
+                            <div class="switch-abxy-cluster">
+                                <div class="abxy-row">
+                                    <button class="abxy-btn btn-x" onclick="runnerJumpAction()" title="X Button: Jump / Dodge (W / ⬆️)">
+                                        <span class="btn-letter">X</span>
+                                        <span class="btn-sub">JUMP</span>
+                                    </button>
+                                </div>
+                                <div class="abxy-row abxy-mid-row">
+                                    <button class="abxy-btn btn-y" onclick="runnerShootAction()" title="Y Button: Shoot Monster (Space / F)">
+                                        <span class="btn-letter">Y</span>
+                                        <span class="btn-sub">SHOOT</span>
+                                    </button>
+                                    <button id="btn-deck-dash" class="abxy-btn btn-a btn-action-dash" onclick="runnerDashAction()" title="A Button: ⚡ Sudden Speed Dash (Shift / E)">
+                                        <span class="btn-letter">A</span>
+                                        <span class="btn-sub">DASH</span>
+                                    </button>
+                                </div>
+                                <div class="abxy-row">
+                                    <button class="abxy-btn btn-b" onclick="runnerSlideAction()" title="B Button: Slide / Stomp (S / ⬇️)">
+                                        <span class="btn-letter">B</span>
+                                        <span class="btn-sub">SLIDE</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Rapid Dash (Shift / E)">
+                                <div class="switch-stick-outer">
+                                    <div class="switch-stick-cap" onclick="runnerDashAction()">
+                                        <span style="font-size: 13px; color: #ffd700;">⚡</span>
+                                        <span class="stick-label" style="color: #ffd700;">DASH</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="joycon-bottom-controls">
+                                <button id="btn-runner-survive" class="switch-home-btn btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Circular Home Button: Survive with 100 Coins (Press S or R)">
+                                    🛡️ 100 💰
+                                </button>
+                                <button id="btn-deck-survive" style="display: none;" onclick="surviveRunnerWithCoins()"></button>
+                                <label class="switch-auto-toggle" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
+                                    <input type="checkbox" id="chk-auto-survive" onchange="syncAutoSurvive(this)" style="width: 12px; height: 12px; accent-color: #f59e0b; cursor: pointer;">
+                                    <span>🛡️ Auto</span>
                                 </label>
+                                <input type="checkbox" id="chk-auto-survive-deck" style="display: none;" onchange="syncAutoSurvive(this)">
                             </div>
-                        </div>
-
-                        <!-- THE PICTURE CONTAINER: 100% CLEAN AND UNOBSTRUCTED (ZERO CONTROLS INSIDE) -->
-                        <div class="runner-canvas-container">
-                            <canvas id="canvas-runner" class="arcade-canvas runner-canvas-super" width="1200" height="675" style="cursor: pointer;" title="Cube Runner 3D Highway - Tap / Click left or right to steer, or use arcade buttons below!"></canvas>
-                        </div>
-
-                        <!-- BOTTOM ARCADE CONTROL DECK: OUTSIDE THE SCREEN PICTURE (CANNOT BLOCK GAME) -->
-                        <div class="arcade-control-deck runner-slim-deck">
-                            <button id="btn-deck-start" class="deck-btn-slim btn-game-primary" onclick="startRunnerGame()" title="Start or Dash Again (Spacebar)">
-                                ▶ Dash Again <span class="badge-best">best!</span>
-                            </button>
-                            <div class="deck-group-slim">
-                                <button class="deck-btn-slim btn-steer" onclick="moveRunnerLane(-1)" title="Steer Left (A / ⬅️)">⬅️ Left</button>
-                                <button class="deck-btn-slim btn-steer" onclick="moveRunnerLane(1)" title="Steer Right (D / ➡️)">Right ➡️</button>
-                            </div>
-                            <button id="btn-deck-dash" class="deck-btn-slim btn-action-dash" onclick="runnerDashAction()" title="Sudden Speed Dash (Shift / E)">⚡ DASH! (Go Fast!)</button>
-                            <div class="deck-group-slim">
-                                <button class="deck-btn-slim btn-action-jump" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">⬆️ Jump</button>
-                                <button class="deck-btn-slim btn-action-slide" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">⬇️ Slide</button>
-                                <button class="deck-btn-slim btn-action-shoot" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥 SHOOT!</button>
-                            </div>
-                            <button id="btn-deck-survive" class="deck-btn-slim btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
-                                🛡️ SURVIVE (100 💰)
-                            </button>
-                            <label class="deck-auto-slim" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
-                                <input type="checkbox" id="chk-auto-survive-deck" onchange="syncAutoSurvive(this)" style="width: 14px; height: 14px; accent-color: #f59e0b; cursor: pointer;">
-                                <span>🛡️ Auto-Survive</span>
-                            </label>
                         </div>
                     </div>
                 </div>
                 <div style="margin-top: 8px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 950px; line-height: 1.5;">
-                    🪙 <strong>Collect Coins</strong>: Grab spinning gold coins (+1 💰, 2X during Dash) & coin bags (+10 💰)! • 🦘 <strong>Jump Rules</strong>: You can <strong>jump over anything 1 block tall</strong> (hurdles, 1-block cubes, and 25 HP imps)! • 🔫 <strong>You can ONLY jump on shooting monsters</strong> (crush them for <strong>+50 💰</strong>; jump in the air to dodge bullets)! • 👾 <strong>Normal monsters cannot be jumped on</strong> — blast them with 🔥 <strong>SHOOT</strong>! • ⚡ <strong>Shift / E</strong> Dash (Go Fast!) • <strong>A / D</strong> Steer • <strong>W / ⬆️</strong> Jump • <strong>S / ⬇️</strong> Slide / Dive-Stomp • <strong>Space / F</strong> Shoot • <strong>S / R</strong> Survive (100 💰)
+                    🎮 <strong>Nintendo Switch Controls</strong>: <strong>Left Joy-Con (Blue)</strong>: [-] Pause • Thumbstick & D-Pad (◄ / ► Steer, ▲ Jump, ▼ Slide) • ⚡ Square Dash | <strong>Right Joy-Con (Red)</strong>: [+] Dash Again • ABXY (X Jump, Y Shoot, A Dash, B Slide) • Thumbstick Dash • 🛡️ Home Survive (100 💰) | <strong>Game Rules</strong>: Jump over anything 1 block tall • Jump on shooting monsters (+50 💰) • Shoot normal monsters • Collect gold coins (+1 💰, 2X in Dash)!
                 </div>
             </div>
 
@@ -2404,7 +2842,7 @@
             const startBtn = document.getElementById('btn-runner-start');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
-                startBtn.innerHTML = '<span class="dash-title">🔄 Restart Dash <span class="badge-best">best!</span></span><span class="dash-sub">[Spacebar]</span>';
+                startBtn.innerHTML = '<span class="plus-symbol">+</span> Dash <span class="badge-best">best!</span>';
                 startBtn.classList.remove('dash-again-highlight');
             }
             if (deckStartBtn) {
@@ -2418,7 +2856,7 @@
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
-                pauseBtn.innerHTML = '⏸️ Pause';
+                pauseBtn.innerHTML = '<span style="font-weight:900; font-size:13px; line-height:1;">−</span> ⏸️';
             }
             if (runnerAnimId) cancelAnimationFrame(runnerAnimId);
             runnerLoop();
@@ -2433,7 +2871,7 @@
                 if (runnerAnimId) cancelAnimationFrame(runnerAnimId);
                 if (btn) {
                     btn.classList.add('paused');
-                    btn.innerHTML = '▶️ Resume';
+                    btn.innerHTML = '<span style="font-weight:900; font-size:13px; line-height:1;">−</span> ▶️';
                 }
                 if (rCtx) {
                     rCtx.fillStyle = 'rgba(2, 6, 23, 0.85)';
@@ -2444,13 +2882,13 @@
                     rCtx.fillText('⏸️ HIGHWAY DASH PAUSED', runnerCanvas.width / 2, runnerCanvas.height / 2 - 10);
                     rCtx.font = '15px "Outfit", sans-serif';
                     rCtx.fillStyle = '#cbd5e1';
-                    rCtx.fillText('Click Resume or press P to continue playing', runnerCanvas.width / 2, runnerCanvas.height / 2 + 25);
+                    rCtx.fillText('Press [-] on Left Joy-Con (or P / Esc) to resume!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 25);
                 }
             } else {
                 playSfx('resume');
                 if (btn) {
                     btn.classList.remove('paused');
-                    btn.innerHTML = '⏸️ Pause';
+                    btn.innerHTML = '<span style="font-weight:900; font-size:13px; line-height:1;">−</span> ⏸️';
                 }
                 runnerAnimId = requestAnimationFrame(runnerLoop);
             }
@@ -2535,22 +2973,36 @@
         function updateDashButtons() {
             const sideBtn = document.getElementById('btn-side-dash');
             const deckBtn = document.getElementById('btn-deck-dash');
-            [sideBtn, deckBtn].forEach(btn => {
-                if (!btn) return;
+            if (sideBtn) {
                 if (runnerDashTimer > 0) {
-                    btn.classList.add('dashing');
-                    btn.classList.remove('cooling-down');
-                    btn.innerHTML = '⚡ DASHING! 🚀';
+                    sideBtn.classList.add('dashing');
+                    sideBtn.classList.remove('cooling-down');
+                    sideBtn.innerHTML = '⚡ SPEED!';
                 } else if (runnerDashCooldown > 0) {
-                    btn.classList.remove('dashing');
-                    btn.classList.add('cooling-down');
+                    sideBtn.classList.remove('dashing');
+                    sideBtn.classList.add('cooling-down');
                     const sec = (runnerDashCooldown / 60).toFixed(1);
-                    btn.innerHTML = `⚡ Dash: ${sec}s`;
+                    sideBtn.innerHTML = `⚡ ${sec}s`;
                 } else {
-                    btn.classList.remove('dashing', 'cooling-down');
-                    btn.innerHTML = '⚡ DASH! (Go Fast!)';
+                    sideBtn.classList.remove('dashing', 'cooling-down');
+                    sideBtn.innerHTML = '⚡ DASH';
                 }
-            });
+            }
+            if (deckBtn) {
+                if (runnerDashTimer > 0) {
+                    deckBtn.classList.add('dashing');
+                    deckBtn.classList.remove('cooling-down');
+                    deckBtn.innerHTML = '<span class="btn-letter">A</span><span class="btn-sub" style="color:#00f0ff;">FAST</span>';
+                } else if (runnerDashCooldown > 0) {
+                    deckBtn.classList.remove('dashing');
+                    deckBtn.classList.add('cooling-down');
+                    const sec = (runnerDashCooldown / 60).toFixed(1);
+                    deckBtn.innerHTML = `<span class="btn-letter">A</span><span class="btn-sub">${sec}s</span>`;
+                } else {
+                    deckBtn.classList.remove('dashing', 'cooling-down');
+                    deckBtn.innerHTML = '<span class="btn-letter">A</span><span class="btn-sub">DASH</span>';
+                }
+            }
         }
 
         function spawnMonsterExplosion(x, y, count = 18) {
@@ -4170,25 +4622,16 @@
                 surviveBtn.style.display = 'inline-flex';
                 if (runnerCoins >= 100) {
                     surviveBtn.classList.remove('disabled');
-                    surviveBtn.innerHTML = `🛡️ SURVIVE WITH 100 COINS (100 💰) <span style="font-size:0.85em; opacity:0.9;">[Press S]</span>`;
-                    surviveBtn.title = `Survive immediately for 100 coins! You have ${runnerCoins} 💰`;
+                    surviveBtn.innerHTML = `🛡️ 100 💰`;
+                    surviveBtn.title = `Survive immediately for 100 coins! You have ${runnerCoins} 💰 (Press S or R)`;
                 } else {
                     surviveBtn.classList.add('disabled');
-                    surviveBtn.innerHTML = `🛡️ Need 100 💰 to Survive (${runnerCoins}/100)`;
+                    surviveBtn.innerHTML = `🛡️ ${runnerCoins}/100`;
                     surviveBtn.title = `Need ${100 - runnerCoins} more coins to survive`;
                 }
             }
             if (deckSurviveBtn) {
-                deckSurviveBtn.style.display = 'inline-flex';
-                if (runnerCoins >= 100) {
-                    deckSurviveBtn.classList.remove('disabled');
-                    deckSurviveBtn.innerHTML = `🛡️ SURVIVE (100 💰) [S]`;
-                    deckSurviveBtn.title = `Survive immediately for 100 coins! You have ${runnerCoins} 💰`;
-                } else {
-                    deckSurviveBtn.classList.add('disabled');
-                    deckSurviveBtn.innerHTML = `🛡️ Need 100 💰 (${runnerCoins}/100)`;
-                    deckSurviveBtn.title = `Need ${100 - runnerCoins} more coins to survive`;
-                }
+                deckSurviveBtn.style.display = 'none';
             }
 
             if (rCtx) {
@@ -4278,13 +4721,13 @@
                 rCtx.font = 'bold 15px "DynaPuff", cursive';
                 rCtx.fillStyle = '#00f0ff';
                 rCtx.textAlign = 'center';
-                rCtx.fillText('👉 Click "▶ Dash Again" right next to the screen (or Space) to start over!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 120);
+                rCtx.fillText('👉 Press [+] on Right Joy-Con (or Spacebar) to Dash Again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 120);
             }
 
             const startBtn = document.getElementById('btn-runner-start');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
-                startBtn.innerHTML = '<span class="dash-title">▶ Dash Again <span class="badge-best">best!</span></span><span class="dash-sub">[Spacebar]</span>';
+                startBtn.innerHTML = '<span class="plus-symbol">+</span> Dash <span class="badge-best">best!</span>';
                 startBtn.classList.add('dash-again-highlight');
             }
             if (deckStartBtn) {
@@ -4294,7 +4737,7 @@
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
-                pauseBtn.innerHTML = '⏸️ Pause';
+                pauseBtn.innerHTML = '<span style="font-weight:900; font-size:13px; line-height:1;">−</span> ⏸️';
             }
         }
 
@@ -4380,7 +4823,7 @@
             const startBtn = document.getElementById('btn-runner-start');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
-                startBtn.innerHTML = '<span class="dash-title">🔄 Restart Dash <span class="badge-best">best!</span></span><span class="dash-sub">[Spacebar]</span>';
+                startBtn.innerHTML = '<span class="plus-symbol">+</span> Dash <span class="badge-best">best!</span>';
                 startBtn.classList.remove('dash-again-highlight');
             }
             if (deckStartBtn) {
@@ -4390,7 +4833,7 @@
             const pauseBtn = document.getElementById('btn-runner-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
-                pauseBtn.innerHTML = '⏸️ Pause';
+                pauseBtn.innerHTML = '<span style="font-weight:900; font-size:13px; line-height:1;">−</span> ⏸️';
             }
 
             // Play survival audio fanfare
