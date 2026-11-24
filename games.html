@@ -453,6 +453,19 @@
             box-sizing: border-box;
             filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.75));
             border-radius: 40px;
+            margin: 4px auto 12px auto;
+        }
+
+        .nintendo-switch-console.console-wide {
+            max-width: 980px;
+        }
+
+        .nintendo-switch-console.console-medium {
+            max-width: 860px;
+        }
+
+        .nintendo-switch-console.console-compact {
+            max-width: 780px;
         }
 
         /* JOY-CON BASE STYLES */
@@ -823,6 +836,22 @@
             overflow: hidden;
             box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.95), 0 0 25px rgba(0, 240, 255, 0.15);
             position: relative;
+        }
+
+        .switch-screen-unit.screen-flush {
+            padding: 0;
+        }
+
+        .switch-screen-unit.screen-padded {
+            padding: 12px;
+        }
+
+        .switch-screen-unit canvas.arcade-canvas,
+        .switch-screen-unit #canvas-flappy {
+            border: none;
+            border-radius: 2px;
+            box-shadow: none;
+            max-height: none;
         }
 
         .switch-screen-unit::before {
@@ -1993,25 +2022,103 @@
                         <span class="record-pill">🏆 RECORD: <span id="snake-best">3</span></span>
                     </div>
                 </div>
-                <canvas id="canvas-snake" class="arcade-canvas" width="560" height="400"></canvas>
-                <div class="mobile-controls">
-                    <button class="dpad-btn" onclick="setSnakeDir('UP')">⬆️</button>
-                    <div style="display: flex; gap: 30px; width: 100%; justify-content: center;">
-                        <button class="dpad-btn" onclick="setSnakeDir('LEFT')">⬅️</button>
-                        <button class="dpad-btn" onclick="setSnakeDir('RIGHT')">➡️</button>
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-snake-pause" class="btn-switch-minus" onclick="togglePauseSnake()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick - Steer Snake">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <div style="display: flex; width: 100%; justify-content: space-around;">
+                                        <span onclick="event.stopPropagation(); setSnakeDir('LEFT')" title="Turn Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
+                                        <span onclick="event.stopPropagation(); setSnakeDir('RIGHT')" title="Turn Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
+                                    </div>
+                                    <span class="stick-label">SNAKE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="setSnakeDir('UP')" title="Up (W / ⬆️)">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="setSnakeDir('LEFT')" title="Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" onclick="setSnakeDir('RIGHT')" title="Right (D / ➡️)">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="setSnakeDir('DOWN')" title="Down (S / ⬇️)">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startSnakeGame()" title="Square: Restart Snake">
+                                🐍 RESET
+                            </button>
+                        </div>
                     </div>
-                    <button class="dpad-btn" onclick="setSnakeDir('DOWN')">⬇️</button>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-flush">
+                        <canvas id="canvas-snake" class="arcade-canvas" width="560" height="400" title="Rubik's Snake Highway"></canvas>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-snake-start" class="joycon-plus-btn" onclick="startSnakeGame()" title="[+] Plus: Start / Restart">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="setSnakeDir('UP')" title="X: Up">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">UP</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="setSnakeDir('LEFT')" title="Y: Left">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">LEFT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="setSnakeDir('RIGHT')" title="A: Right">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">RIGHT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="setSnakeDir('DOWN')" title="B: Down">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">DOWN</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="startSnakeGame()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Snake Mode">
+                                🐍 CUBE
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-top: 14px; text-align: center; color: #94a3b8; font-size: 0.95em;">
-                    Use <strong>Arrow Keys</strong> or <strong>WASD</strong> to navigate. Eat scrambled cubies to grow your cube snake!
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-snake-start" class="btn-game-primary" onclick="startSnakeGame()">
-                        ▶ Start Cube Snake
-                    </button>
-                    <button id="btn-snake-pause" class="btn-game-pause" onclick="togglePauseSnake()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad (▲ Up, ◄ Left, ► Right, ▼ Down) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (X Up, Y Left, A Right, B Down) • Keyboard: <strong>Arrow Keys</strong> or <strong>WASD</strong>
                 </div>
             </div>
 
@@ -2027,21 +2134,103 @@
                         <span>BEST: <span id="breaker-best">0</span></span>
                     </div>
                 </div>
-                <canvas id="canvas-breaker" class="arcade-canvas" width="640" height="420"></canvas>
-                <div class="mobile-controls">
-                    <button class="dpad-btn" onclick="moveBreakerPaddle(-30)" style="width: 100px;">⬅️ LEFT</button>
-                    <button class="dpad-btn" onclick="moveBreakerPaddle(30)" style="width: 100px;">RIGHT ➡️</button>
+                <div class="nintendo-switch-console console-wide">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-breaker-pause" class="btn-switch-minus" onclick="togglePauseBreaker()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick - Steer Paddle">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <div style="display: flex; width: 100%; justify-content: space-around;">
+                                        <span onclick="event.stopPropagation(); moveBreakerPaddle(-35)" title="Paddle Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
+                                        <span onclick="event.stopPropagation(); moveBreakerPaddle(35)" title="Paddle Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
+                                    </div>
+                                    <span class="stick-label">PADDLE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-45)" title="Fast Left">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-30)" title="Paddle Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(45)" title="Fast Right">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startBreakerGame()" title="Square: Restart Breaker">
+                                🧱 RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-flush">
+                        <canvas id="canvas-breaker" class="arcade-canvas" width="640" height="420" title="Cube Brick Breaker Arena"></canvas>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-breaker-start" class="joycon-plus-btn" onclick="startBreakerGame()" title="[+] Plus: Start / Restart">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="moveBreakerPaddle(30)" title="X: Paddle Right">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">RIGHT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="moveBreakerPaddle(-30)" title="Y: Paddle Left">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">LEFT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="moveBreakerPaddle(30)" title="A: Paddle Right">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">RIGHT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="moveBreakerPaddle(-30)" title="B: Paddle Left">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">LEFT</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="startBreakerGame()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Breaker Mode">
+                                🧱 CUBE
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-top: 14px; text-align: center; color: #94a3b8; font-size: 0.95em;">
-                    Move with <strong>Mouse</strong>, <strong>Touch</strong>, or <strong>Arrow Keys / A-D</strong>. Break all the Rubik's stickers!
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-breaker-start" class="btn-game-primary" onclick="startBreakerGame()">
-                        ▶ Start Brick Breaker
-                    </button>
-                    <button id="btn-breaker-pause" class="btn-game-pause" onclick="togglePauseBreaker()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad (◄ Left, ► Right) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (Y/B Left, X/A Right) • Keyboard: <strong>Arrow Keys</strong>, <strong>A / D</strong>, or <strong>Mouse</strong>
                 </div>
             </div>
 
@@ -2057,22 +2246,103 @@
                         <span class="record-pill">🏆 BEST: <span id="space-best">0</span></span>
                     </div>
                 </div>
-                <canvas id="canvas-space" class="arcade-canvas" width="640" height="440"></canvas>
-                <div class="mobile-controls">
-                    <button class="dpad-btn" onclick="moveSpaceShip(-25)">⬅️</button>
-                    <button class="dpad-btn" onclick="shootSpaceLaser()" style="width: 90px; background: #ff007f;">🔥 FIRE</button>
-                    <button class="dpad-btn" onclick="moveSpaceShip(25)">➡️</button>
+                <div class="nintendo-switch-console console-wide">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-space-pause" class="btn-switch-minus" onclick="togglePauseSpace()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick - Steer Spaceship">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <div style="display: flex; width: 100%; justify-content: space-around;">
+                                        <span onclick="event.stopPropagation(); moveSpaceShip(-25)" title="Ship Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
+                                        <span onclick="event.stopPropagation(); moveSpaceShip(25)" title="Ship Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
+                                    </div>
+                                    <span class="stick-label">STEER</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="moveSpaceShip(-25)" title="Ship Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" onclick="moveSpaceShip(25)" title="Ship Right (D / ➡️)">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startSpaceGame()" title="Square: Restart Defender">
+                                🚀 RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-flush">
+                        <canvas id="canvas-space" class="arcade-canvas" width="640" height="440" title="Space Scramble Arena"></canvas>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-space-start" class="joycon-plus-btn" onclick="startSpaceGame()" title="[+] Plus: Start / Restart">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="shootSpaceLaser()" title="X: Fire Laser">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">FIRE</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="moveSpaceShip(-25)" title="Y: Ship Left">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">LEFT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="moveSpaceShip(25)" title="A: Ship Right">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">RIGHT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="shootSpaceLaser()" title="B: Fire Laser">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">FIRE</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Fire Blast">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="shootSpaceLaser()">
+                                    <span style="font-size: 13px; color: #ff007f;">🔥</span>
+                                    <span class="stick-label" style="color: #ff007f;">FIRE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Defender Mode">
+                                🚀 SPACE
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-top: 14px; text-align: center; color: #94a3b8; font-size: 0.95em;">
-                    Move with <strong>Arrow Keys / Mouse / Touch</strong>. Press <strong>Spacebar</strong> or tap to shoot laser blasts!
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-space-start" class="btn-game-primary" onclick="startSpaceGame()">
-                        ▶ Start Space Scramble
-                    </button>
-                    <button id="btn-space-pause" class="btn-game-pause" onclick="togglePauseSpace()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad (◄ Left, ► Right) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (X/B Fire, Y Left, A Right) • Right Stick Fire • Keyboard: <strong>A / D</strong>, <strong>Arrow Keys</strong>, <strong>Spacebar</strong>
                 </div>
             </div>
 
@@ -2087,30 +2357,108 @@
                         <span>BEST: <span id="2048-best">0</span></span>
                     </div>
                 </div>
-                <div id="2048-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #00f0ff; min-height: 28px; margin-top: 4px; text-align: center;">
-                    Merge matching cubes to reach the 1000x1000 God Cube!
-                </div>
-                <div class="grid-2048" id="grid-2048-box">
-                    <!-- 16 Tiles generated dynamically -->
-                </div>
-                <div class="mobile-controls">
-                    <button class="dpad-btn" onclick="handle2048Move('UP')">⬆️</button>
-                    <div style="display: flex; gap: 30px; width: 100%; justify-content: center;">
-                        <button class="dpad-btn" onclick="handle2048Move('LEFT')">⬅️</button>
-                        <button class="dpad-btn" onclick="handle2048Move('RIGHT')">➡️</button>
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-2048-pause" class="btn-switch-minus" onclick="togglePause2048()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick - Slide Cubes">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <div style="display: flex; width: 100%; justify-content: space-around;">
+                                        <span onclick="event.stopPropagation(); handle2048Move('LEFT')" title="Slide Left" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">◄</span>
+                                        <span onclick="event.stopPropagation(); handle2048Move('RIGHT')" title="Slide Right" style="font-size: 11px; color: #38bdf8; cursor: pointer; user-select: none;">►</span>
+                                    </div>
+                                    <span class="stick-label">SLIDE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="handle2048Move('UP')" title="Slide Up (W / ⬆️)">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="handle2048Move('LEFT')" title="Slide Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" onclick="handle2048Move('RIGHT')" title="Slide Right (D / ➡️)">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="handle2048Move('DOWN')" title="Slide Down (S / ⬇️)">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="start2048Game()" title="Square: New Game">
+                                🎲 RESET
+                            </button>
+                        </div>
                     </div>
-                    <button class="dpad-btn" onclick="handle2048Move('DOWN')">⬇️</button>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div id="2048-status" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #00f0ff; min-height: 26px; margin: 2px 0 6px 0; text-align: center;">
+                            Merge matching cubes to reach the 1000x1000 God Cube!
+                        </div>
+                        <div class="grid-2048" id="grid-2048-box">
+                            <!-- 16 Tiles generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-2048-start" class="joycon-plus-btn" onclick="start2048Game()" title="[+] Plus: New 2048 Game">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="handle2048Move('UP')" title="X: Slide Up">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">UP</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="handle2048Move('LEFT')" title="Y: Slide Left">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">LEFT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="handle2048Move('RIGHT')" title="A: Slide Right">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">RIGHT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="handle2048Move('DOWN')" title="B: Slide Down">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">DOWN</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="start2048Game()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: 2048 Mode">
+                                🎲 2048
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.95em;">
-                    Use <strong>Arrow Keys</strong>, <strong>WASD</strong>, or <strong>Touch Swipe</strong> to slide and merge cubes!
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-2048-start" class="btn-game-primary" onclick="start2048Game()">
-                        ▶ New 2048 Game
-                    </button>
-                    <button id="btn-2048-pause" class="btn-game-pause" onclick="togglePause2048()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad (▲ Up, ◄ Left, ► Right, ▼ Down) | <strong>Right Joy-Con</strong>: [+] New Game • ABXY (X Up, Y Left, A Right, B Down) • Keyboard: <strong>Arrow Keys</strong>, <strong>WASD</strong>, or <strong>Touch Swipe</strong>
                 </div>
             </div>
 
@@ -2125,24 +2473,110 @@
                         <span>BEST: <span id="simon-best">0</span></span>
                     </div>
                 </div>
-                <div id="simon-status" style="font-family: 'DynaPuff', cursive; font-size: 1.2em; color: #38bdf8; min-height: 32px; margin-top: 8px; text-align: center;">
-                    Press Start to memorize the pattern!
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-simon-pause" class="btn-switch-minus" onclick="togglePauseSimon()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <span style="font-size: 12px; color: #38bdf8;">🧩</span>
+                                    <span class="stick-label">CUBE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" style="background: #ffffff; color: #000;" onclick="handleSimonInput(0)" title="White (U)">U</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" style="background: #f97316; color: #000;" onclick="handleSimonInput(5)" title="Orange (L)">L</button>
+                                <button class="dpad-btn-round" style="background: #ef4444; color: #fff;" onclick="handleSimonInput(4)" title="Red (R)">R</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" style="background: #FAED27; color: #000;" onclick="handleSimonInput(1)" title="Yellow (D)">D</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startSimonGame()" title="Square: Restart Memory">
+                                🧩 RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div id="simon-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #38bdf8; min-height: 28px; margin: 2px 0 6px 0; text-align: center;">
+                            Press Start to memorize the pattern!
+                        </div>
+                        <div class="simon-grid">
+                            <button class="simon-cube-btn" style="background: #ffffff; color: #000;" onclick="handleSimonInput(0)" id="simon-btn-0">WHITE<br>U</button>
+                            <button class="simon-cube-btn" style="background: #FAED27; color: #000;" onclick="handleSimonInput(1)" id="simon-btn-1">YELLOW<br>D</button>
+                            <button class="simon-cube-btn" style="background: #22c55e; color: #000;" onclick="handleSimonInput(2)" id="simon-btn-2">GREEN<br>F</button>
+                            <button class="simon-cube-btn" style="background: #3b82f6; color: #fff;" onclick="handleSimonInput(3)" id="simon-btn-3">BLUE<br>B</button>
+                            <button class="simon-cube-btn" style="background: #ef4444; color: #fff;" onclick="handleSimonInput(4)" id="simon-btn-4">RED<br>R</button>
+                            <button class="simon-cube-btn" style="background: #f97316; color: #000;" onclick="handleSimonInput(5)" id="simon-btn-5">ORANGE<br>L</button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-simon-start" class="joycon-plus-btn" onclick="startSimonGame()" title="[+] Plus: Start Memory Game">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" style="background: #3b82f6;" onclick="handleSimonInput(3)" title="Blue (B)">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">BLUE</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" style="background: #22c55e;" onclick="handleSimonInput(2)" title="Green (F)">
+                                    <span class="btn-letter">F</span>
+                                    <span class="btn-sub">GRN</span>
+                                </button>
+                                <button class="abxy-btn btn-a" style="background: #ef4444;" onclick="handleSimonInput(4)" title="Red (R)">
+                                    <span class="btn-letter">R</span>
+                                    <span class="btn-sub">RED</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" style="background: #FAED27; color: #000;" onclick="handleSimonInput(1)" title="Yellow (D)">
+                                    <span class="btn-letter" style="color: #000;">D</span>
+                                    <span class="btn-sub" style="color: #000;">YEL</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="startSimonGame()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Simon Memory">
+                                🧠 SIMON
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="simon-grid">
-                    <button class="simon-cube-btn" style="background: #ffffff; color: #000;" onclick="handleSimonInput(0)" id="simon-btn-0">WHITE<br>U</button>
-                    <button class="simon-cube-btn" style="background: #FAED27; color: #000;" onclick="handleSimonInput(1)" id="simon-btn-1">YELLOW<br>D</button>
-                    <button class="simon-cube-btn" style="background: #22c55e; color: #000;" onclick="handleSimonInput(2)" id="simon-btn-2">GREEN<br>F</button>
-                    <button class="simon-cube-btn" style="background: #3b82f6; color: #fff;" onclick="handleSimonInput(3)" id="simon-btn-3">BLUE<br>B</button>
-                    <button class="simon-cube-btn" style="background: #ef4444; color: #fff;" onclick="handleSimonInput(4)" id="simon-btn-4">RED<br>R</button>
-                    <button class="simon-cube-btn" style="background: #f97316; color: #000;" onclick="handleSimonInput(5)" id="simon-btn-5">ORANGE<br>L</button>
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-simon-start" class="btn-game-primary" onclick="startSimonGame()">
-                        ▶ Start Memory Challenge
-                    </button>
-                    <button id="btn-simon-pause" class="btn-game-pause" onclick="togglePauseSimon()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • D-Pad (U, L, R, D colors) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (B Blue, F Green, R Red, D Yellow) • Keyboard: <strong>U, D, F, B, R, L</strong> or click colors!
                 </div>
             </div>
 
@@ -2159,22 +2593,105 @@
                         <span class="record-pill">🏆 BEST: <span id="reflex-best">0.00</span> TPS</span>
                     </div>
                 </div>
-                <div id="reflex-status" style="font-family: 'DynaPuff', cursive; font-size: 1.15em; color: #ff007f; min-height: 28px; margin-top: 6px; text-align: center;">
-                    Tap glowing magenta targets as fast as possible in 30 seconds!
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-reflex-pause" class="btn-switch-minus" onclick="togglePauseReflex()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <span style="font-size: 12px; color: #ff007f;">🎯</span>
+                                    <span class="stick-label">AIM</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="simulateReflexKey('u')" title="Tap U">U</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="simulateReflexKey('l')" title="Tap L">L</button>
+                                <button class="dpad-btn-round" onclick="simulateReflexKey('r')" title="Tap R">R</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="simulateReflexKey('d')" title="Tap D">D</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startReflexGame()" title="Square: Restart Reflex">
+                                🎯 RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div id="reflex-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #ff007f; min-height: 28px; margin: 2px 0 6px 0; text-align: center;">
+                            Tap glowing magenta targets as fast as possible in 30 seconds!
+                        </div>
+                        <div class="reflex-grid" id="reflex-grid-box">
+                            <!-- 16 Cells generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-reflex-start" class="joycon-plus-btn" onclick="startReflexGame()" title="[+] Plus: Start Reflex Test">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="simulateReflexKey('f')" title="Tap F">
+                                    <span class="btn-letter">F</span>
+                                    <span class="btn-sub">TAP</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="simulateReflexKey('b')" title="Tap B">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">TAP</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="simulateReflexKey('m')" title="Tap M">
+                                    <span class="btn-letter">M</span>
+                                    <span class="btn-sub">TAP</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="simulateReflexKey('r')" title="Tap R">
+                                    <span class="btn-letter">R</span>
+                                    <span class="btn-sub">TAP</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="startReflexGame()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Reflex Mode">
+                                ⚡ TPS
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="reflex-grid" id="reflex-grid-box">
-                    <!-- 16 Cells generated dynamically -->
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-reflex-start" class="btn-game-primary" onclick="startReflexGame()">
-                        ▶ Start Reflex Challenge (30s)
-                    </button>
-                    <button id="btn-reflex-pause" class="btn-game-pause" onclick="togglePauseReflex()">
-                        ⏸️ Pause
-                    </button>
-                </div>
-                <div style="margin-top: 10px; text-align: center; color: #94a3b8; font-size: 0.9em; max-width: 620px; line-height: 1.5;">
-                    ⚡ <strong>Controls</strong>: Tap or click glowing magenta targets as fast as you can! • Keyboard: <strong>U, R, F, L, D, B, M</strong> • <strong>Spacebar</strong> to Start/Restart.
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • D-Pad (U, L, R, D) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (F, B, M, R) • Keyboard: <strong>U, R, F, L, D, B, M</strong> or tap glowing targets!
                 </div>
             </div>
 
@@ -2190,28 +2707,114 @@
                         <span>RECORD: <span id="blitz-best">0</span></span>
                     </div>
                 </div>
-                <div class="blitz-card">
-                    <div style="font-size: 0.9em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px;">
-                        Solve the Scramble Move:
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-blitz-pause" class="btn-switch-minus" onclick="togglePauseBlitz()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <span style="font-size: 12px; color: #FAED27;">⚡</span>
+                                    <span class="stick-label">BLITZ</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="submitBlitzAnswer(0)" title="Choose Option A">A</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="submitBlitzAnswer(1)" title="Choose Option B">B</button>
+                                <button class="dpad-btn-round" onclick="submitBlitzAnswer(2)" title="Choose Option C">C</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="submitBlitzAnswer(3)" title="Choose Option D">D</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startBlitzGame()" title="Square: Restart Blitz">
+                                ⚡ RESET
+                            </button>
+                        </div>
                     </div>
-                    <div id="blitz-display" class="blitz-move-display">READY?</div>
-                    <div class="blitz-timer-bar">
-                        <div id="blitz-timer-fill" class="blitz-timer-fill"></div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div class="blitz-card" style="margin: 0; box-shadow: none; border: none; background: transparent;">
+                            <div style="font-size: 0.9em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px;">
+                                Solve the Scramble Move:
+                            </div>
+                            <div id="blitz-display" class="blitz-move-display">READY?</div>
+                            <div class="blitz-timer-bar">
+                                <div id="blitz-timer-fill" class="blitz-timer-fill"></div>
+                            </div>
+                            <div class="blitz-options" id="blitz-options-box">
+                                <button class="blitz-opt-btn" onclick="submitBlitzAnswer(0)">A</button>
+                                <button class="blitz-opt-btn" onclick="submitBlitzAnswer(1)">B</button>
+                                <button class="blitz-opt-btn" onclick="submitBlitzAnswer(2)">C</button>
+                                <button class="blitz-opt-btn" onclick="submitBlitzAnswer(3)">D</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="blitz-options" id="blitz-options-box">
-                        <button class="blitz-opt-btn" onclick="submitBlitzAnswer(0)">A</button>
-                        <button class="blitz-opt-btn" onclick="submitBlitzAnswer(1)">B</button>
-                        <button class="blitz-opt-btn" onclick="submitBlitzAnswer(2)">C</button>
-                        <button class="blitz-opt-btn" onclick="submitBlitzAnswer(3)">D</button>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-blitz-start" class="joycon-plus-btn" onclick="startBlitzGame()" title="[+] Plus: Start Notation Blitz">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="submitBlitzAnswer(0)" title="X: Choose Option A">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">OPT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="submitBlitzAnswer(1)" title="Y: Choose Option B">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">OPT</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="submitBlitzAnswer(2)" title="A: Choose Option C">
+                                    <span class="btn-letter">C</span>
+                                    <span class="btn-sub">OPT</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="submitBlitzAnswer(3)" title="B: Choose Option D">
+                                    <span class="btn-letter">D</span>
+                                    <span class="btn-sub">OPT</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="startBlitzGame()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Blitz Mode">
+                                ⚡ BLITZ
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="game-controls-row">
-                    <button id="btn-blitz-start" class="btn-game-primary" onclick="startBlitzGame()">
-                        ▶ Start Notation Blitz
-                    </button>
-                    <button id="btn-blitz-pause" class="btn-game-pause" onclick="togglePauseBlitz()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • D-Pad (A, B, C, D choices) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (A, B, C, D choices) • Keyboard: <strong>1, 2, 3, 4</strong> or click cards!
                 </div>
             </div>
 
@@ -2227,22 +2830,108 @@
                         <span>RECORD: <span id="stacker-best">0</span></span>
                     </div>
                 </div>
-                <div id="stacker-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #00f0ff; min-height: 28px; margin-top: 4px; text-align: center;">
-                    Press SPACE or Click STACK to build the God Cube Tower!
+                <div class="nintendo-switch-console console-compact">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-stacker-pause" class="btn-switch-minus" onclick="togglePauseStacker()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick - Stack Layer">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="stackLayer()">
+                                    <span style="font-size: 12px; color: #38bdf8;">🧱</span>
+                                    <span class="stick-label">STACK</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="stackLayer()" title="Stack Layer">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="stackLayer()" title="Stack Layer">◄</button>
+                                <button class="dpad-btn-round" onclick="stackLayer()" title="Stack Layer">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="stackLayer()" title="Stack Layer">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startStackerGame()" title="Square: Restart Stacker">
+                                🏗️ RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div id="stacker-status" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #00f0ff; min-height: 26px; margin: 2px 0 6px 0; text-align: center;">
+                            Press SPACE or Joy-Con buttons to build the God Cube Tower!
+                        </div>
+                        <div class="stacker-container" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                            <canvas id="canvas-stacker" width="380" height="460" style="background: #020617; border: 2px solid #38bdf8; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); touch-action: none; cursor: pointer;"></canvas>
+                            <button id="btn-stack-trigger" class="btn-stack-action" onclick="stackLayer()" style="margin: 0;">
+                                🧱 STACK LAYER! (Space)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-stacker-start" class="joycon-plus-btn" onclick="startStackerGame()" title="[+] Plus: Start / Restart">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="stackLayer()" title="X: Stack Layer">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">STACK</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="stackLayer()" title="Y: Stack Layer">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">STACK</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="stackLayer()" title="A: Stack Layer">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">STACK</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="stackLayer()" title="B: Stack Layer">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">STACK</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Stack Layer">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="stackLayer()">
+                                    <span style="font-size: 13px; color: #ffd700;">🧱</span>
+                                    <span class="stick-label" style="color: #ffd700;">STACK</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Stacker Mode">
+                                🏗️ TOWER
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stacker-container">
-                    <canvas id="canvas-stacker" width="380" height="460" style="background: #020617; border: 2px solid #38bdf8; border-radius: 16px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); touch-action: none; cursor: pointer;"></canvas>
-                    <button id="btn-stack-trigger" class="btn-stack-action" onclick="stackLayer()">
-                        🧱 STACK LAYER! (Space)
-                    </button>
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-stacker-start" class="btn-game-primary" onclick="startStackerGame()">
-                        ▶ Start Tower Stacker
-                    </button>
-                    <button id="btn-stacker-pause" class="btn-game-pause" onclick="togglePauseStacker()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad Stack | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY & Right Stick Stack • Keyboard: <strong>Spacebar</strong> or tap canvas!
                 </div>
             </div>
 
@@ -2259,54 +2948,140 @@
                         <span class="record-pill">🏆 RECORD: <span id="whack-best">0</span></span>
                     </div>
                 </div>
-                <div id="whack-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #ff007f; min-height: 28px; margin-top: 4px; text-align: center;">
-                    Whack colored Cubies! Avoid Skull Bombs! Keys 1-9 or Tap!
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-whack-pause" class="btn-switch-minus" onclick="togglePauseWhack()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <span style="font-size: 12px; color: #ff007f;">🔨</span>
+                                    <span class="stick-label">WHACK</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="handleWhackClick(0)" title="Whack Hole 1">1</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="handleWhackClick(1)" title="Whack Hole 2">2</button>
+                                <button class="dpad-btn-round" onclick="handleWhackClick(2)" title="Whack Hole 3">3</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="handleWhackClick(3)" title="Whack Hole 4">4</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startWhackGame()" title="Square: Restart Whack">
+                                🔨 RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div id="whack-status" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #ff007f; min-height: 26px; margin: 2px 0 6px 0; text-align: center;">
+                            Whack colored Cubies! Avoid Skull Bombs! Keys 1-9 or Tap!
+                        </div>
+                        <div class="whack-grid" id="whack-grid-box">
+                            <div class="whack-hole" id="whack-hole-0" onclick="handleWhackClick(0)">
+                                <span class="whack-key-tag">1</span>
+                                <div class="whack-cubie" id="whack-cubie-0"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-1" onclick="handleWhackClick(1)">
+                                <span class="whack-key-tag">2</span>
+                                <div class="whack-cubie" id="whack-cubie-1"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-2" onclick="handleWhackClick(2)">
+                                <span class="whack-key-tag">3</span>
+                                <div class="whack-cubie" id="whack-cubie-2"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-3" onclick="handleWhackClick(3)">
+                                <span class="whack-key-tag">4</span>
+                                <div class="whack-cubie" id="whack-cubie-3"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-4" onclick="handleWhackClick(4)">
+                                <span class="whack-key-tag">5</span>
+                                <div class="whack-cubie" id="whack-cubie-4"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-5" onclick="handleWhackClick(5)">
+                                <span class="whack-key-tag">6</span>
+                                <div class="whack-cubie" id="whack-cubie-5"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-6" onclick="handleWhackClick(6)">
+                                <span class="whack-key-tag">7</span>
+                                <div class="whack-cubie" id="whack-cubie-6"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-7" onclick="handleWhackClick(7)">
+                                <span class="whack-key-tag">8</span>
+                                <div class="whack-cubie" id="whack-cubie-7"></div>
+                            </div>
+                            <div class="whack-hole" id="whack-hole-8" onclick="handleWhackClick(8)">
+                                <span class="whack-key-tag">9</span>
+                                <div class="whack-cubie" id="whack-cubie-8"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-whack-start" class="joycon-plus-btn" onclick="startWhackGame()" title="[+] Plus: Start Whack-A-Cubie">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="handleWhackClick(4)" title="X: Whack Hole 5">
+                                    <span class="btn-letter">5</span>
+                                    <span class="btn-sub">HOLE</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="handleWhackClick(5)" title="Y: Whack Hole 6">
+                                    <span class="btn-letter">6</span>
+                                    <span class="btn-sub">HOLE</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="handleWhackClick(6)" title="A: Whack Hole 7">
+                                    <span class="btn-letter">7</span>
+                                    <span class="btn-sub">HOLE</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="handleWhackClick(7)" title="B: Whack Hole 8">
+                                    <span class="btn-letter">8</span>
+                                    <span class="btn-sub">HOLE</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Hole 9">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="handleWhackClick(8)">
+                                    <span style="font-size: 13px; color: #ffd700;">9</span>
+                                    <span class="stick-label" style="color: #ffd700;">HOLE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Whack Mode">
+                                🔨 CUBIE
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="whack-grid" id="whack-grid-box">
-                    <div class="whack-hole" id="whack-hole-0" onclick="handleWhackClick(0)">
-                        <span class="whack-key-tag">1</span>
-                        <div class="whack-cubie" id="whack-cubie-0"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-1" onclick="handleWhackClick(1)">
-                        <span class="whack-key-tag">2</span>
-                        <div class="whack-cubie" id="whack-cubie-1"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-2" onclick="handleWhackClick(2)">
-                        <span class="whack-key-tag">3</span>
-                        <div class="whack-cubie" id="whack-cubie-2"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-3" onclick="handleWhackClick(3)">
-                        <span class="whack-key-tag">4</span>
-                        <div class="whack-cubie" id="whack-cubie-3"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-4" onclick="handleWhackClick(4)">
-                        <span class="whack-key-tag">5</span>
-                        <div class="whack-cubie" id="whack-cubie-4"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-5" onclick="handleWhackClick(5)">
-                        <span class="whack-key-tag">6</span>
-                        <div class="whack-cubie" id="whack-cubie-5"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-6" onclick="handleWhackClick(6)">
-                        <span class="whack-key-tag">7</span>
-                        <div class="whack-cubie" id="whack-cubie-6"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-7" onclick="handleWhackClick(7)">
-                        <span class="whack-key-tag">8</span>
-                        <div class="whack-cubie" id="whack-cubie-7"></div>
-                    </div>
-                    <div class="whack-hole" id="whack-hole-8" onclick="handleWhackClick(8)">
-                        <span class="whack-key-tag">9</span>
-                        <div class="whack-cubie" id="whack-cubie-8"></div>
-                    </div>
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-whack-start" class="btn-game-primary" onclick="startWhackGame()">
-                        ▶ Start Whack-A-Cubie (30s)
-                    </button>
-                    <button id="btn-whack-pause" class="btn-game-pause" onclick="togglePauseWhack()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • D-Pad (Holes 1, 2, 3, 4) | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY (Holes 5, 6, 7, 8) • Right Stick (Hole 9) • Keyboard: <strong>1 to 9</strong> or click holes!
                 </div>
             </div>
 
@@ -2323,32 +3098,104 @@
                     </div>
                 </div>
 
-                <!-- TOP CONTROL BAR: RIGHT ON TOP OF THE GAME -->
-                <div class="game-controls-row flappy-top-bar">
-                    <button id="btn-flappy-start" class="btn-game-primary" onclick="startFlappyGame()" title="Start or Play Again (Spacebar)">
-                        ▶ Start Flappy Cubie
-                    </button>
-                    <button id="btn-flappy-survive" class="btn-game-survive" onclick="surviveFlappyWithCoins()" style="display: none;" title="Survive with 100 Coins (Press S or R)">
-                        🛡️ SURVIVE WITH 100 COINS (100 💰)
-                    </button>
-                    <button id="btn-flappy-pause" class="btn-game-pause" onclick="togglePauseFlappy()">
-                        ⏸️ Pause
-                    </button>
-                </div>
-
                 <div id="flappy-status" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #f59e0b; min-height: 24px; margin: 2px 0 8px 0; text-align: center;">
-                    Flap through Scramble Pillar Towers! Tap screen or press Space!
+                    Flap through Scramble Pillar Towers! Tap Joy-Con buttons or press Space!
                 </div>
 
-                <!-- RESPONSIVE FLAPPY CANVAS CONTAINER -->
-                <div class="flappy-canvas-wrap">
-                    <canvas id="canvas-flappy" class="arcade-canvas" width="640" height="420" title="Click or tap to flap wings!"></canvas>
-                </div>
+                <div class="nintendo-switch-console console-wide">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-flappy-pause" class="btn-switch-minus" onclick="togglePauseFlappy()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick - Flap Wings">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="flapCubie()">
+                                    <span style="font-size: 12px; color: #38bdf8;">🪂</span>
+                                    <span class="stick-label">FLAP</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="flapCubie()" title="Flap Wings (W / ⬆️)">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="flapCubie()" title="Flap Wings (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" onclick="flapCubie()" title="Flap Wings (D / ➡️)">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="flapCubie()" title="Flap Wings (S / ⬇️)">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="flapCubie()" title="Square: Flap Wings">
+                                🪂 FLAP
+                            </button>
+                        </div>
+                    </div>
 
-                <div class="flappy-controls-row">
-                    <button class="btn-flap-action" onclick="flapCubie()" title="Flap Wings (Spacebar or Click)">
-                        🪂 FLAP WINGS! <span style="font-size:0.85em; opacity:0.9;">(Space / Tap)</span>
-                    </button>
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-flush">
+                        <canvas id="canvas-flappy" class="arcade-canvas" width="640" height="420" title="Click or tap to flap wings!"></canvas>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-flappy-start" class="joycon-plus-btn" onclick="startFlappyGame()" title="[+] Plus: Start / Restart">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="flapCubie()" title="X: Flap Wings">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">FLAP</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="flapCubie()" title="Y: Flap Wings">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">FLAP</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="flapCubie()" title="A: Flap Wings">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">FLAP</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="flapCubie()" title="B: Flap Wings">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">FLAP</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick - Flap Wings">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="flapCubie()">
+                                    <span style="font-size: 13px; color: #ffd700;">🪂</span>
+                                    <span class="stick-label" style="color: #ffd700;">FLAP</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button id="btn-flappy-survive" class="switch-home-btn btn-game-survive" onclick="surviveFlappyWithCoins()" style="display: none;" title="Circular Home Button: Survive with 100 Coins (Press S or R)">
+                                🛡️ 100 💰
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad Flap | <strong>Right Joy-Con</strong>: [+] Start / Restart • ABXY & Right Stick Flap • 🛡️ Home Survive (100 💰) • Keyboard: <strong>Spacebar</strong> or tap canvas!
                 </div>
             </div>
 
@@ -2365,19 +3212,105 @@
                         <span class="record-pill">🏆 RECORD: <span id="pairs-best">--</span></span>
                     </div>
                 </div>
-                <div id="pairs-status" style="font-family: 'DynaPuff', cursive; font-size: 1.1em; color: #10b981; min-height: 28px; margin-top: 4px; text-align: center;">
-                    Find all 8 matching cubing pairs as fast as you can!
+                <div class="nintendo-switch-console console-medium">
+                    <!-- LEFT JOY-CON (NEON BLUE) -->
+                    <div class="joycon joycon-left">
+                        <div class="joycon-shoulder joycon-shoulder-left">
+                            <span>ZL</span><span>L</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-pairs-pause" class="btn-switch-minus" onclick="togglePausePairs()" title="[-] Minus: Pause / Resume">
+                                <span style="font-weight: 900; font-size: 13px; line-height: 1;">−</span> ⏸️
+                            </button>
+                        </div>
+                        <div class="switch-stick-assembly" title="Left Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap">
+                                    <span style="font-size: 12px; color: #10b981;">🃏</span>
+                                    <span class="stick-label">CARDS</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="switch-dpad-cluster">
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="startPairsGame()" title="New Game">▲</button>
+                            </div>
+                            <div class="dpad-row dpad-mid-row">
+                                <button class="dpad-btn-round" onclick="startPairsGame()" title="New Game">◄</button>
+                                <button class="dpad-btn-round" onclick="startPairsGame()" title="New Game">►</button>
+                            </div>
+                            <div class="dpad-row">
+                                <button class="dpad-btn-round" onclick="startPairsGame()" title="New Game">▼</button>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <button class="switch-square-btn" onclick="startPairsGame()" title="Square: New Game">
+                                🃏 RESET
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CENTER SCREEN UNIT -->
+                    <div class="switch-screen-unit screen-padded">
+                        <div id="pairs-status" style="font-family: 'DynaPuff', cursive; font-size: 1.05em; color: #10b981; min-height: 26px; margin: 2px 0 6px 0; text-align: center;">
+                            Find all 8 matching cubing pairs as fast as you can!
+                        </div>
+                        <div class="pairs-grid" id="pairs-grid-box">
+                            <!-- 16 cards generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- RIGHT JOY-CON (NEON RED) -->
+                    <div class="joycon joycon-right">
+                        <div class="joycon-shoulder joycon-shoulder-right">
+                            <span>R</span><span>ZR</span>
+                        </div>
+                        <div class="joycon-top-row">
+                            <button id="btn-pairs-start" class="joycon-plus-btn" onclick="startPairsGame()" title="[+] Plus: New Match Game">
+                                <span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>
+                            </button>
+                        </div>
+                        <div class="switch-abxy-cluster">
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-x" onclick="startPairsGame()" title="X: Match Game">
+                                    <span class="btn-letter">X</span>
+                                    <span class="btn-sub">MATCH</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row abxy-mid-row">
+                                <button class="abxy-btn btn-y" onclick="startPairsGame()" title="Y: Match Game">
+                                    <span class="btn-letter">Y</span>
+                                    <span class="btn-sub">MATCH</span>
+                                </button>
+                                <button class="abxy-btn btn-a" onclick="startPairsGame()" title="A: Match Game">
+                                    <span class="btn-letter">A</span>
+                                    <span class="btn-sub">MATCH</span>
+                                </button>
+                            </div>
+                            <div class="abxy-row">
+                                <button class="abxy-btn btn-b" onclick="startPairsGame()" title="B: Match Game">
+                                    <span class="btn-letter">B</span>
+                                    <span class="btn-sub">MATCH</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="switch-stick-assembly right-stick" title="Right Thumbstick">
+                            <div class="switch-stick-outer">
+                                <div class="switch-stick-cap" onclick="startPairsGame()">
+                                    <span style="font-size: 13px; color: #ffd700;">🔄</span>
+                                    <span class="stick-label" style="color: #ffd700;">RETRY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="joycon-bottom-controls">
+                            <div class="switch-home-btn" title="Home: Pairs Match">
+                                🎴 PAIRS
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="pairs-grid" id="pairs-grid-box">
-                    <!-- 16 cards generated dynamically -->
-                </div>
-                <div class="game-controls-row">
-                    <button id="btn-pairs-start" class="btn-game-primary" onclick="startPairsGame()">
-                        ▶ New Match Game
-                    </button>
-                    <button id="btn-pairs-pause" class="btn-game-pause" onclick="togglePausePairs()">
-                        ⏸️ Pause
-                    </button>
+                <div style="margin-top: 6px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 850px; line-height: 1.5;">
+                    🎮 <strong>Nintendo Switch Side Controls</strong>: <strong>Left Joy-Con</strong>: [-] Pause • Thumbstick & D-Pad | <strong>Right Joy-Con</strong>: [+] New Game • ABXY & Right Stick • Click or tap cards to flip and match!
                 </div>
             </div>
 
@@ -5948,6 +6881,10 @@
             }
         }
 
+        function simulateReflexKey(key) {
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true }));
+        }
+
         function handleReflexClick(index) {
             const now = performance.now();
             if (now - lastReflexInputTime < 35) return; // Debounce rapid multi-events
@@ -6694,10 +7631,14 @@
             flappyVy = 0;
             flappyObstacles = [];
             flappyFrame = 0;
-            document.getElementById('flappy-score').textContent = '0';
-            document.getElementById('flappy-pipes').textContent = '0';
-            document.getElementById('flappy-status').textContent = '🪂 Flap through the Scramble Pillars!';
-            document.getElementById('btn-flappy-start').textContent = '🔄 Restart Flappy Cubie';
+            const scoreEl = document.getElementById('flappy-score');
+            if (scoreEl) scoreEl.textContent = '0';
+            const pipesEl = document.getElementById('flappy-pipes');
+            if (pipesEl) pipesEl.textContent = '0';
+            const statusEl = document.getElementById('flappy-status');
+            if (statusEl) statusEl.textContent = '🪂 Flap through the Scramble Pillars!';
+            const startBtn = document.getElementById('btn-flappy-start');
+            if (startBtn) startBtn.innerHTML = '<span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>';
 
             const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
             if (surviveBtn) surviveBtn.style.display = 'none';
@@ -7007,18 +7948,22 @@
                 surviveBtn.style.display = 'inline-flex';
                 if (coins >= 100) {
                     surviveBtn.classList.remove('disabled');
-                    surviveBtn.innerHTML = `🛡️ SURVIVE WITH 100 COINS (100 💰) <span style="font-size:0.85em; opacity:0.9;">[Press S]</span>`;
-                    surviveBtn.title = `Survive with 100 coins! Current wallet: ${coins} 💰`;
+                    surviveBtn.innerHTML = `🛡️ 100 💰`;
+                    surviveBtn.title = `Survive immediately for 100 coins! You have ${coins} 💰 (Press S or R)`;
                 } else {
                     surviveBtn.classList.add('disabled');
-                    surviveBtn.innerHTML = `🛡️ Need 100 💰 to Survive (${coins}/100)`;
+                    surviveBtn.innerHTML = `🛡️ ${coins}/100`;
                     surviveBtn.title = `Need ${100 - coins} more coins to survive`;
                 }
             }
 
-            document.getElementById('flappy-status').innerHTML = `💥 <strong>CRASH!</strong> Score: <strong>${flappyScore}</strong> (${flappyPipes} pillars passed)` +
-                (coins >= 100 ? ` • <span style="color:#38bdf8;">Press <strong>[S]</strong> or click Survive (100 💰)!</span>` : ` • <span style="color:#fb7185;">Need ${100 - coins} more 💰 to survive</span>`);
-            document.getElementById('btn-flappy-start').textContent = '▶ Play Again';
+            const statusEl = document.getElementById('flappy-status');
+            if (statusEl) {
+                statusEl.innerHTML = `💥 <strong>CRASH!</strong> Score: <strong>${flappyScore}</strong> (${flappyPipes} pillars passed)` +
+                    (coins >= 100 ? ` • <span style="color:#38bdf8;">Press <strong>[S]</strong> or click Survive (100 💰)!</span>` : ` • <span style="color:#fb7185;">Need ${100 - coins} more 💰 to survive</span>`);
+            }
+            const startBtn = document.getElementById('btn-flappy-start');
+            if (startBtn) startBtn.innerHTML = '<span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>';
             const pauseBtn = document.getElementById('btn-flappy-pause');
             if (pauseBtn) {
                 pauseBtn.classList.remove('paused');
@@ -7137,8 +8082,10 @@
             const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
             if (surviveBtn) surviveBtn.style.display = 'none';
 
-            document.getElementById('flappy-status').innerHTML = `🛡️ <strong>SURVIVED!</strong> 100 💰 used. Keep flapping!`;
-            document.getElementById('btn-flappy-start').textContent = '🔄 Restart Flappy Cubie';
+            const statusEl = document.getElementById('flappy-status');
+            if (statusEl) statusEl.innerHTML = `🛡️ <strong>SURVIVED!</strong> 100 💰 used. Keep flapping!`;
+            const startBtn = document.getElementById('btn-flappy-start');
+            if (startBtn) startBtn.innerHTML = '<span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>';
 
             playSfx('revive');
             if (flappyAnimId) cancelAnimationFrame(flappyAnimId);
@@ -7469,7 +8416,7 @@
         start2048Game();
         initStackerGrid();
         drawStacker();
-        renderPairsBoard();
+        startPairsGame();
         renderFlappyIdle();
 
         // ==========================================
