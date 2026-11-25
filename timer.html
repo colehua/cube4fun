@@ -3990,63 +3990,41 @@
         }
 
         async function fetchWcaRecordsFromProfile() {
-            const WCA_PROFILE_URL = 'https://www.worldcubeassociation.org/persons/2026HUAC01';
-            const proxies = [
-                (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-                (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-            ];
+            const WCA_API_URL = 'https://www.worldcubeassociation.org/api/v0/persons/2026HUAC01';
+            try {
+                const response = await fetch(WCA_API_URL);
+                if (!response.ok) return null;
+                const data = await response.json();
+                const pr = data && data.personal_records;
+                if (!pr) return null;
 
-            for (let proxy of proxies) {
-                try {
-                    const response = await fetch(proxy(WCA_PROFILE_URL));
-                    if (!response.ok) continue;
-                    let html = await response.text();
-                    if (!html || html.trim() === "") continue;
+                const toSec = (entry) => (entry && typeof entry.best === 'number' && entry.best > 0) ? (entry.best / 100) : null;
+                const records = {};
 
-                    if (html.trim().startsWith('{')) {
-                        try {
-                            const parsed = JSON.parse(html);
-                            if (parsed.contents) html = parsed.contents;
-                        } catch (e) {}
-                    }
-                    
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    
-                    const rows = doc.querySelectorAll('.personal-records table tbody tr');
-                    if (rows.length === 0) continue;
-                    
-                    const records = {};
-                    rows.forEach(row => {
-                        const eventCell = row.querySelector('.event');
-                        if (!eventCell) return;
-                        const eventId = eventCell.getAttribute('data-event');
-                        
-                        const singleCell = row.querySelector('.single a');
-                        const averageCell = row.querySelector('.average a');
-                        
-                        const single = singleCell ? parseFloat(singleCell.textContent.trim()) : null;
-                        const average = averageCell ? parseFloat(averageCell.textContent.trim()) : null;
-                        
-                        if (eventId === '333') {
-                            records['3x3'] = { single, average };
-                        } else if (eventId === '222') {
-                            records['2x2'] = { single, average };
-                        } else if (eventId === '333oh') {
-                            records['3x3-oh'] = { single, average };
-                        } else if (eventId === '333fm') {
-                            records['3x3-fmc'] = { single, average };
-                        }
-                    });
-                    
-                    if (Object.keys(records).length > 0) {
-                        return records;
-                    }
-                } catch (e) {
-                    console.warn("WCA profile fetch proxy failed:", e);
+                if (pr['333']) {
+                    records['3x3'] = { single: toSec(pr['333'].single), average: toSec(pr['333'].average) };
                 }
+                if (pr['222']) {
+                    records['2x2'] = { single: toSec(pr['222'].single), average: toSec(pr['222'].average) };
+                }
+                if (pr['333oh']) {
+                    records['3x3-oh'] = { single: toSec(pr['333oh'].single), average: toSec(pr['333oh'].average) };
+                }
+                if (pr['333fm']) {
+                    records['3x3-fmc'] = {
+                        single: (pr['333fm'].single && pr['333fm'].single.best > 0) ? pr['333fm'].single.best : null,
+                        average: toSec(pr['333fm'].average)
+                    };
+                }
+                if (pr['555']) {
+                    records['5x5'] = { single: toSec(pr['555'].single), average: toSec(pr['555'].average) };
+                }
+
+                return Object.keys(records).length > 0 ? records : null;
+            } catch (e) {
+                console.warn("WCA API fetch warning:", e);
+                return null;
             }
-            return null;
         }
 
         async function loadColeRecords() {

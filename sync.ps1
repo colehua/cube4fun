@@ -62,6 +62,13 @@ switch ($Action) {
         } else {
             Write-Host "⚠️ Git Author: Not configured" -ForegroundColor Yellow
         }
+        git ls-remote --exit-code origin HEAD *> $null
+        if ($LASTEXITCODE -eq 0) {
+            $remoteUrl = git remote get-url origin
+            Write-Host "✅ Git Remote: Connected to $remoteUrl" -ForegroundColor Green
+        } else {
+            Write-Host "⚠️ Git Remote: Could not reach origin" -ForegroundColor Yellow
+        }
         if (Get-Command gh -ErrorAction SilentlyContinue) {
             $ghVer = (gh --version | Select-Object -First 1)
             Write-Host "✅ GitHub CLI: $ghVer" -ForegroundColor Green

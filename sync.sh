@@ -67,10 +67,22 @@ case "$ACTION" in
       echo "⚠️ Git Author: Not configured"
     fi
 
+    if git ls-remote --exit-code origin HEAD >/dev/null 2>&1; then
+      echo "✅ Git Remote: Connected to $(git remote get-url origin)"
+    else
+      echo "⚠️ Git Remote: Could not reach origin"
+    fi
+
     if command -v gh >/dev/null 2>&1; then
       echo "✅ GitHub CLI: $(gh --version | head -n 1)"
     else
       echo "⚠️ GitHub CLI: Not installed"
+    fi
+
+    if command -v git-lfs >/dev/null 2>&1; then
+      echo "✅ Git LFS: $(git-lfs version | head -n 1)"
+    else
+      echo "⚠️ Git LFS: Not installed"
     fi
 
     if command -v python3 >/dev/null 2>&1; then
@@ -103,7 +115,7 @@ case "$ACTION" in
     ;;
 
   *)
-    echo "Usage: ./sync.sh [pull | push \"commit message\" | sync \"commit message\" | status | check | serve [port] | open]"
+    echo "Usage: ./sync.sh [pull | push "commit message" | sync "commit message" | status | check | serve [port] | open]"
     exit 1
     ;;
 esac

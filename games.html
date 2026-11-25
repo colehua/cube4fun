@@ -1813,6 +1813,7 @@
             border-left-color: #713f12 !important;
             box-shadow: 8px 0 25px rgba(234, 179, 8, 0.4), inset -3px 3px 8px rgba(255, 255, 255, 0.3) !important;
         }
+        .nintendo-switch-console.theme-zelda .joycon-shoulder { background: #14532d; border-color: #fde047; color: #fef08a; }
 
         .nintendo-switch-console.theme-synthwave .joycon-left {
             background: linear-gradient(180deg, #ff007f 0%, #be185d 100%) !important;
@@ -1826,12 +1827,91 @@
             border-left-color: #075985 !important;
             box-shadow: 8px 0 25px rgba(0, 240, 255, 0.4), inset -3px 3px 8px rgba(255, 255, 255, 0.35) !important;
         }
+        .nintendo-switch-console.theme-synthwave .joycon-shoulder { background: #3b0764; border-color: #f472b6; color: #38bdf8; }
 
         .nintendo-switch-console.theme-gold .joycon-left,
         .nintendo-switch-console.theme-gold .joycon-right {
             background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%) !important;
             border-color: #ffd700 !important;
             box-shadow: 0 0 28px rgba(245, 158, 11, 0.5), inset 3px 3px 8px rgba(255, 255, 255, 0.5) !important;
+        }
+        .nintendo-switch-console.theme-gold .joycon-shoulder { background: #78350f; border-color: #ffd700; color: #fef08a; }
+
+        .loadout-pill-strip {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 2px auto 6px auto;
+            font-size: 0.78em;
+            font-family: 'Outfit', sans-serif;
+            color: #cbd5e1;
+        }
+        .loadout-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+        .loadout-chip.active-buff {
+            border-color: rgba(250, 204, 21, 0.65);
+            background: rgba(113, 63, 18, 0.35);
+            color: #fde047;
+        }
+
+        .shop-xp-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1.5px solid rgba(56, 189, 248, 0.4);
+            border-radius: 14px;
+            padding: 10px 14px;
+        }
+        .shop-xp-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.88em;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .shop-xp-track {
+            width: 100%;
+            height: 9px;
+            background: #1e293b;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .shop-xp-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00f0ff 0%, #a855f7 50%, #ffd700 100%);
+            border-radius: 999px;
+            transition: width 0.35s ease;
+        }
+
+        .arcade-confetti-piece {
+            position: fixed;
+            top: -14px;
+            width: 10px;
+            height: 10px;
+            z-index: 10002;
+            pointer-events: none;
+            border-radius: 2px;
+            animation: confettiFall 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
         }
 
         /* ============================================================== */
@@ -2028,8 +2108,9 @@
         }
 
         .btn-upgrade-buy {
-            background: linear-gradient(135deg, #f59e0b 0%, #e11d48 100%);
+            background: linear-gradient(135deg, #d97706 0%, #dc2626 100%);
             color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
             border: 1.5px solid #ffd700;
             padding: 9px 16px;
             border-radius: 12px;
@@ -2115,7 +2196,7 @@
                 </div>
             </div>
             <div class="nav-actions">
-                <button id="btn-open-shop" class="btn-arcade-nav" onclick="openUpgradeShop()" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); color: #ffffff; border: 2px solid #ffd700; box-shadow: 0 0 18px rgba(245, 158, 11, 0.6); font-family: 'DynaPuff', cursive; cursor: pointer;" title="Open Upgrade Shop: Upgrade powers, get cube skins, and customize your Nintendo Switch!">
+                <button id="btn-open-shop" class="btn-arcade-nav" onclick="openUpgradeShop()" style="background: linear-gradient(135deg, #d97706 0%, #dc2626 100%); color: #ffffff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75); border: 2px solid #ffd700; box-shadow: 0 0 18px rgba(245, 158, 11, 0.6); font-family: 'DynaPuff', cursive; cursor: pointer;" title="Open Upgrade Shop: Upgrade powers, get cube skins, and customize your Nintendo Switch!">
                     🛒 UPGRADES & SKINS ⚡
                 </button>
                 <a href="index.html" class="btn-arcade-nav btn-return-site">
@@ -2215,6 +2296,7 @@
                 <div id="runner-status" style="font-family: 'DynaPuff', cursive; font-size: 0.88em; color: #00f0ff; min-height: 18px; margin: 2px 0 4px 0; text-align: center;">
                     Dash along the 3D Highway! 🪙 Collect shiny gold coins! • 🦘 Jump over 1-block obstacles • 🔫 Jump on shooting monsters (+50 💰) • 🔥 Shoot normal monsters!
                 </div>
+                <div id="runner-loadout-pill" class="loadout-pill-strip" title="Active Upgrades & Skin Equipped (Press U or click Upgrades to customize)"></div>
 
                 <!-- NINTENDO SWITCH HANDHELD CONSOLE (SIDE CONTROLS, 100% UNOBSTRUCTED SCREEN) -->
                 <div class="runner-arena">
@@ -2243,7 +2325,7 @@
                                 </div>
                                 <div class="dpad-row dpad-mid-row">
                                     <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer LEFT (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
-                                    <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer LEFT (A / ⬅️)">◄</button>
+                                    <button class="dpad-btn-round" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥</button>
                                 </div>
                                 <div class="dpad-row">
                                     <button class="dpad-btn-round" onclick="runnerSlideAction()" title="Slide (S / ⬇️)">▼</button>
@@ -2361,7 +2443,7 @@
                             </div>
                             <div class="dpad-row dpad-mid-row">
                                 <button class="dpad-btn-round" onclick="setSnakeDir('LEFT')" title="Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
-                                <button class="dpad-btn-round" onclick="setSnakeDir('LEFT')" title="Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" onclick="if(snakeActive && !snakePaused) snakeTick()" title="Turbo Step Forward">⚡</button>
                             </div>
                             <div class="dpad-row">
                                 <button class="dpad-btn-round" onclick="setSnakeDir('DOWN')" title="Down (S / ⬇️)">▼</button>
@@ -2458,7 +2540,7 @@
                         </div>
                         <div class="switch-stick-assembly" title="Left Thumbstick: Paddle LEFT (A / ⬅️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="moveBreakerPaddle(-30)">
+                                <div class="switch-stick-cap" data-hold-breaker="-14" onclick="moveBreakerPaddle(-30)">
                                     <span style="font-size: 14px; color: #38bdf8; font-weight: 900;">◄</span>
                                     <span class="stick-label" style="color: #38bdf8;">LEFT</span>
                                 </div>
@@ -2466,14 +2548,14 @@
                         </div>
                         <div class="switch-dpad-cluster">
                             <div class="dpad-row">
-                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-45)" title="Fast Left">▲</button>
+                                <button class="dpad-btn-round" data-hold-breaker="-20" onclick="moveBreakerPaddle(-45)" title="Fast Left">▲</button>
                             </div>
                             <div class="dpad-row dpad-mid-row">
-                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-30)" title="Paddle Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
-                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-30)" title="Paddle Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" data-hold-breaker="-14" onclick="moveBreakerPaddle(-30)" title="Paddle Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
+                                <button class="dpad-btn-round" data-hold-breaker="-22" onclick="moveBreakerPaddle(-55)" title="Turbo Left">⚡</button>
                             </div>
                             <div class="dpad-row">
-                                <button class="dpad-btn-round" onclick="moveBreakerPaddle(-20)" title="Nudge Left">▼</button>
+                                <button class="dpad-btn-round" data-hold-breaker="-10" onclick="moveBreakerPaddle(-20)" title="Nudge Left">▼</button>
                             </div>
                         </div>
                         <div class="joycon-bottom-controls">
@@ -2500,23 +2582,23 @@
                         </div>
                         <div class="switch-abxy-cluster">
                             <div class="abxy-row">
-                                <button class="abxy-btn btn-x" onclick="moveBreakerPaddle(45)" title="Fast Right">
+                                <button class="abxy-btn btn-x" data-hold-breaker="20" onclick="moveBreakerPaddle(45)" title="Fast Right">
                                     <span class="btn-letter">▲</span>
                                     <span class="btn-sub">FAST</span>
                                 </button>
                             </div>
                             <div class="abxy-row abxy-mid-row">
-                                <button class="abxy-btn btn-y" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)">
+                                <button class="abxy-btn btn-y" data-hold-breaker="14" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)">
                                     <span class="btn-letter">►</span>
                                     <span class="btn-sub">RIGHT</span>
                                 </button>
-                                <button class="abxy-btn btn-a" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                <button class="abxy-btn btn-a" data-hold-breaker="14" onclick="moveBreakerPaddle(30)" title="Paddle Right (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
                                     <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
                                     <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
                                 </button>
                             </div>
                             <div class="abxy-row">
-                                <button class="abxy-btn btn-b" onclick="moveBreakerPaddle(20)" title="Nudge Right">
+                                <button class="abxy-btn btn-b" data-hold-breaker="10" onclick="moveBreakerPaddle(20)" title="Nudge Right">
                                     <span class="btn-letter">▼</span>
                                     <span class="btn-sub">NUDGE</span>
                                 </button>
@@ -2524,7 +2606,7 @@
                         </div>
                         <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Paddle RIGHT (D / ➡️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="moveBreakerPaddle(30)">
+                                <div class="switch-stick-cap" data-hold-breaker="14" onclick="moveBreakerPaddle(30)">
                                     <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
                                     <span class="stick-label" style="color: #ff6957;">RIGHT</span>
                                 </div>
@@ -2567,7 +2649,7 @@
                         </div>
                         <div class="switch-stick-assembly" title="Left Thumbstick: Ship LEFT (A / ⬅️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="moveSpaceShip(-25)">
+                                <div class="switch-stick-cap" data-hold-space="-14" onclick="moveSpaceShip(-25)">
                                     <span style="font-size: 14px; color: #38bdf8; font-weight: 900;">◄</span>
                                     <span class="stick-label" style="color: #38bdf8;">LEFT</span>
                                 </div>
@@ -2578,8 +2660,8 @@
                                 <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">🔥</button>
                             </div>
                             <div class="dpad-row dpad-mid-row">
-                                <button class="dpad-btn-round" onclick="moveSpaceShip(-25)" title="Ship Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
-                                <button class="dpad-btn-round" onclick="moveSpaceShip(-25)" title="Ship Left (A / ⬅️)">◄</button>
+                                <button class="dpad-btn-round" data-hold-space="-14" onclick="moveSpaceShip(-25)" title="Ship Left (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
+                                <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">🔥</button>
                             </div>
                             <div class="dpad-row">
                                 <button class="dpad-btn-round" onclick="shootSpaceLaser()" title="Fire Laser (Space)">🔥</button>
@@ -2619,7 +2701,7 @@
                                     <span class="btn-letter">🔥</span>
                                     <span class="btn-sub">FIRE</span>
                                 </button>
-                                <button class="abxy-btn btn-a" onclick="moveSpaceShip(25)" title="A: Ship Right (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                <button class="abxy-btn btn-a" data-hold-space="14" onclick="moveSpaceShip(25)" title="A: Ship Right (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
                                     <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
                                     <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
                                 </button>
@@ -2633,7 +2715,7 @@
                         </div>
                         <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Ship RIGHT (D / ➡️)">
                             <div class="switch-stick-outer">
-                                <div class="switch-stick-cap" onclick="moveSpaceShip(25)">
+                                <div class="switch-stick-cap" data-hold-space="14" onclick="moveSpaceShip(25)">
                                     <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
                                     <span class="stick-label" style="color: #ff6957;">RIGHT</span>
                                 </div>
@@ -3643,6 +3725,16 @@
                 </div>
             </div>
 
+            <div class="shop-xp-box">
+                <div class="shop-xp-top">
+                    <span id="shop-xp-rank-label">⭐ Rank 1: Cubie Novice</span>
+                    <span id="shop-xp-next-label" style="color: #38bdf8;">0 / 100 XP</span>
+                </div>
+                <div class="shop-xp-track">
+                    <div id="shop-xp-bar-fill" class="shop-xp-fill"></div>
+                </div>
+            </div>
+
             <!-- SHOP CATEGORY TABS -->
             <div class="shop-tabs">
                 <button id="shop-tab-upgrades" class="shop-tab-btn active" onclick="switchShopTab('upgrades')">⚡ Power-Up Upgrades</button>
@@ -3873,19 +3965,6 @@
                     osc1.stop(now + 0.1);
                     osc2.start(now + 0.08);
                     osc2.stop(now + 0.22);
-                } else if (type === 'coin') {
-                    // Single Gold Coin Chime: bright, crisp B5 -> E6
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(987.77, now);
-                    osc.frequency.setValueAtTime(1318.51, now + 0.05);
-                    gain.gain.setValueAtTime(0.22, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.19);
                 } else if (type === 'coins') {
                     // Bag of Coins Reward Fanfare: 3 bright rapid bell chimes
                     [987.77, 1318.51, 1567.98].forEach((f, i) => {
@@ -4020,6 +4099,22 @@
         // ==========================================
         // 2. TAB SWITCHING (ALL 12 GAMES)
         // ==========================================
+        // Pause all active unpaused games (except optional excludeId)
+        function pauseAllActiveGames(excludeId = null) {
+            if (excludeId !== 'runner' && typeof runnerActive !== 'undefined' && runnerActive && !runnerPaused) togglePauseRunner();
+            if (excludeId !== 'snake' && typeof snakeActive !== 'undefined' && snakeActive && !snakePaused) togglePauseSnake();
+            if (excludeId !== 'breaker' && typeof breakerActive !== 'undefined' && breakerActive && !breakerPaused) togglePauseBreaker();
+            if (excludeId !== 'space' && typeof spaceActive !== 'undefined' && spaceActive && !spacePaused) togglePauseSpace();
+            if (excludeId !== '2048' && typeof game2048Active !== 'undefined' && game2048Active && !game2048Paused) togglePause2048();
+            if (excludeId !== 'simon' && typeof simonActive !== 'undefined' && simonActive && !simonPaused) togglePauseSimon();
+            if (excludeId !== 'reflex' && typeof reflexActive !== 'undefined' && reflexActive && !reflexPaused) togglePauseReflex();
+            if (excludeId !== 'blitz' && typeof blitzActive !== 'undefined' && blitzActive && !blitzPaused) togglePauseBlitz();
+            if (excludeId !== 'stacker' && typeof stackerActive !== 'undefined' && stackerActive && !stackerPaused) togglePauseStacker();
+            if (excludeId !== 'whack' && typeof whackActive !== 'undefined' && whackActive && !whackPaused) togglePauseWhack();
+            if (excludeId !== 'flappy' && typeof flappyActive !== 'undefined' && flappyActive && !flappyPaused) togglePauseFlappy();
+            if (excludeId !== 'pairs' && typeof pairsActive !== 'undefined' && pairsActive && !pairsPaused) togglePausePairs();
+        }
+
         function switchGame(gameId) {
             document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
@@ -4030,24 +4125,18 @@
             const targetPanel = document.getElementById('panel-' + gameId);
             if (targetPanel) {
                 targetPanel.classList.add('active');
-                if (gameId === 'flappy' && !flappyActive && typeof renderFlappyIdle === 'function') {
+                if (gameId === 'runner' && typeof runnerActive !== 'undefined' && !runnerActive && typeof renderRunnerIdle === 'function') {
+                    renderRunnerIdle();
+                } else if (gameId === 'breaker' && typeof breakerActive !== 'undefined' && !breakerActive && typeof renderBreakerIdle === 'function') {
+                    renderBreakerIdle();
+                } else if (gameId === 'space' && typeof spaceActive !== 'undefined' && !spaceActive && typeof renderSpaceIdle === 'function') {
+                    renderSpaceIdle();
+                } else if (gameId === 'flappy' && typeof flappyActive !== 'undefined' && !flappyActive && typeof renderFlappyIdle === 'function') {
                     renderFlappyIdle();
                 }
             }
 
-            // Pause other running games when switching tabs to avoid background collisions
-            if (gameId !== 'runner' && runnerActive && !runnerPaused) togglePauseRunner();
-            if (gameId !== 'snake' && snakeActive && !snakePaused) togglePauseSnake();
-            if (gameId !== 'breaker' && breakerActive && !breakerPaused) togglePauseBreaker();
-            if (gameId !== 'space' && spaceActive && !spacePaused) togglePauseSpace();
-            if (gameId !== '2048' && game2048Active && !game2048Paused) togglePause2048();
-            if (gameId !== 'simon' && simonActive && !simonPaused) togglePauseSimon();
-            if (gameId !== 'reflex' && reflexActive && !reflexPaused) togglePauseReflex();
-            if (gameId !== 'blitz' && blitzActive && !blitzPaused) togglePauseBlitz();
-            if (gameId !== 'stacker' && stackerActive && !stackerPaused) togglePauseStacker();
-            if (gameId !== 'whack' && whackActive && !whackPaused) togglePauseWhack();
-            if (gameId !== 'flappy' && flappyActive && !flappyPaused) togglePauseFlappy();
-            if (gameId !== 'pairs' && pairsActive && !pairsPaused) togglePausePairs();
+            pauseAllActiveGames(gameId);
         }
 
         // ==========================================
@@ -4074,13 +4163,13 @@
                 max: 5,
                 prices: [75, 180, 400, 800, 1500],
                 desc: level => [
-                    'Level 1: Faster rapid-fire dual lasers!',
-                    'Level 2: Triple spread laser (fires across all 3 lanes)!',
+                    'Level 1: Rapid-fire dual lasers (faster fire rate)!',
+                    'Level 2: Triple spread laser across all 3 lanes!',
                     'Level 3: Heavy plasma bolts (double damage: 50 HP)!',
-                    'Level 4: Piercing Hyper Beam (pierces through enemies)!',
-                    'Level 5: Screen-clearing Nova BFG Cannon!',
-                    'MAX LEVEL: Ultimate Nova Cannon!'
-                ][level] || 'MAX LEVEL: Ultimate Nova Cannon!'
+                    'Level 4: Piercing Hyper Beam (cuts through enemies)!',
+                    'Level 5: Screen-clearing Nova BFG (100 HP + vaporizes bullets)!',
+                    'MAX LEVEL: Ultimate Nova BFG Cannon!'
+                ][level] || 'MAX LEVEL: Ultimate Nova BFG Cannon!'
             },
             shield: {
                 name: 'Energy Forcefield',
@@ -4122,11 +4211,14 @@
         };
 
         function getArcadeCoins() {
-            return parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
+            const raw = localStorage.getItem('cube_arcade_coins');
+            if (raw === null) return 100;
+            const parsed = parseInt(raw, 10);
+            return Number.isFinite(parsed) ? Math.max(0, parsed) : 100;
         }
 
         function setArcadeCoins(val) {
-            const coins = Math.max(0, val);
+            const coins = Math.max(0, Math.floor(Number.isFinite(val) ? val : 0));
             localStorage.setItem('cube_arcade_coins', coins);
             const g = document.getElementById('global-coin-count');
             if (g) g.textContent = coins;
@@ -4137,14 +4229,21 @@
             if (typeof runnerCoins !== 'undefined') runnerCoins = coins;
         }
 
-        function addArcadeCoins(amount, label = '') {
+        let lastCoinChimeAt = 0;
+        function addArcadeCoins(amount, label = '', opts = {}) {
             const upg = getArcadeUpgrades();
             const mult = 1 + (upg.multiplier || 0);
             const earned = Math.max(1, Math.round(amount * mult));
             setArcadeCoins(getArcadeCoins() + earned);
             addArcadeXP(earned);
-            playSfx('coin');
-            showFloatingCoinToast(earned, label);
+            const now = performance.now();
+            if (!opts.silentSfx && now - lastCoinChimeAt > 90) {
+                playSfx('coin');
+                lastCoinChimeAt = now;
+            }
+            if (!opts.silentToast) {
+                showFloatingCoinToast(earned, label);
+            }
             return earned;
         }
 
@@ -4156,17 +4255,55 @@
         }
 
         function getArcadeXP() {
-            return parseInt(localStorage.getItem('cube_arcade_xp') || '0', 10);
+            const raw = localStorage.getItem('cube_arcade_xp');
+            const parsed = parseInt(raw || '0', 10);
+            return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
         }
 
         function getArcadeRank(xp) {
-            if (xp >= 5000) return { rank: 7, title: 'Grandmaster Legend', next: 99999 };
-            if (xp >= 2000) return { rank: 6, title: 'Speed Demon', next: 5000 };
-            if (xp >= 1000) return { rank: 5, title: 'Combo Master', next: 2000 };
-            if (xp >= 600)  return { rank: 4, title: 'Galaxy Pilot', next: 1000 };
-            if (xp >= 300)  return { rank: 3, title: 'Brick Smasher', next: 600 };
-            if (xp >= 100)  return { rank: 2, title: 'Road Runner', next: 300 };
-            return { rank: 1, title: 'Cubie Novice', next: 100 };
+            if (xp >= 5000) return { rank: 7, title: 'Grandmaster Legend', min: 5000, next: 5000 };
+            if (xp >= 2000) return { rank: 6, title: 'Speed Demon', min: 2000, next: 5000 };
+            if (xp >= 1000) return { rank: 5, title: 'Combo Master', min: 1000, next: 2000 };
+            if (xp >= 600)  return { rank: 4, title: 'Galaxy Pilot', min: 600, next: 1000 };
+            if (xp >= 300)  return { rank: 3, title: 'Brick Smasher', min: 300, next: 600 };
+            if (xp >= 100)  return { rank: 2, title: 'Road Runner', min: 100, next: 300 };
+            return { rank: 1, title: 'Cubie Novice', min: 0, next: 100 };
+        }
+
+        function triggerConfetti(count = 26) {
+            const colors = ['#00f0ff', '#ff007f', '#ffd700', '#22c55e', '#a855f7', '#ffffff'];
+            for (let i = 0; i < count; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'arcade-confetti-piece';
+                piece.style.left = (Math.random() * 98) + 'vw';
+                piece.style.background = colors[i % colors.length];
+                piece.style.animationDuration = (1.3 + Math.random() * 0.9) + 's';
+                piece.style.animationDelay = (Math.random() * 0.25) + 's';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 2500);
+            }
+        }
+
+        function updateXPDisplays(xp) {
+            const rankInfo = getArcadeRank(xp);
+            const rEl = document.getElementById('player-rank-display');
+            if (rEl) rEl.textContent = `Rank ${rankInfo.rank}: ${rankInfo.title}`;
+            const xEl = document.getElementById('player-xp-display');
+            if (xEl) xEl.textContent = `${xp} XP`;
+
+            const shopRankEl = document.getElementById('shop-xp-rank-label');
+            const shopNextEl = document.getElementById('shop-xp-next-label');
+            const shopFillEl = document.getElementById('shop-xp-bar-fill');
+            if (shopRankEl) shopRankEl.textContent = `⭐ Rank ${rankInfo.rank}: ${rankInfo.title}`;
+            if (rankInfo.rank >= 7) {
+                if (shopNextEl) shopNextEl.textContent = `${xp} XP • MAX RANK 🏆`;
+                if (shopFillEl) shopFillEl.style.width = '100%';
+            } else {
+                const span = Math.max(1, rankInfo.next - rankInfo.min);
+                const pct = Math.max(0, Math.min(100, ((xp - rankInfo.min) / span) * 100));
+                if (shopNextEl) shopNextEl.textContent = `${xp} / ${rankInfo.next} XP (${Math.round(pct)}%)`;
+                if (shopFillEl) shopFillEl.style.width = pct.toFixed(1) + '%';
+            }
         }
 
         function addArcadeXP(amount) {
@@ -4175,14 +4312,11 @@
             const newXP = prevXP + amount;
             localStorage.setItem('cube_arcade_xp', newXP);
             const newRank = getArcadeRank(newXP);
-
-            const rEl = document.getElementById('player-rank-display');
-            if (rEl) rEl.textContent = `Rank ${newRank.rank}: ${newRank.title}`;
-            const xEl = document.getElementById('player-xp-display');
-            if (xEl) xEl.textContent = `${newXP} XP`;
+            updateXPDisplays(newXP);
 
             if (newRank.rank > prevRank.rank) {
                 playSfx('fanfare');
+                triggerConfetti(32);
                 showToast(`🎉 LEVEL UP! You reached Rank ${newRank.rank}: ${newRank.title}!`, '⭐');
             }
         }
@@ -4217,6 +4351,24 @@
             renderUpgradeShop();
         }
 
+        function renderRunnerLoadout(u) {
+            const strip = document.getElementById('runner-loadout-pill');
+            if (!strip) return;
+            const skin = CUBE_SKINS[u.cubeSkin] || CUBE_SKINS.default;
+            const chips = [
+                `<span class="loadout-chip active-buff">${skin.icon} Skin: ${skin.name}</span>`,
+                `<span class="loadout-chip ${u.blaster > 0 ? 'active-buff' : ''}">🔫 Blaster Lv ${u.blaster || 0}</span>`,
+                `<span class="loadout-chip ${u.magnet > 0 ? 'active-buff' : ''}">🧲 Magnet Lv ${u.magnet || 0}</span>`,
+                `<span class="loadout-chip ${u.shield > 0 ? 'active-buff' : ''}">🛡️ Shield Lv ${u.shield || 0}</span>`,
+                `<span class="loadout-chip ${u.dash > 0 ? 'active-buff' : ''}">⚡ Dash Lv ${u.dash || 0}</span>`,
+                `<span class="loadout-chip ${u.multiplier > 0 ? 'active-buff' : ''}">💰 ${1 + (u.multiplier || 0)}X Coins</span>`
+            ];
+            if (u.doubleJump > 0) {
+                chips.push(`<span class="loadout-chip active-buff">🦘 Double Jump</span>`);
+            }
+            strip.innerHTML = chips.join('');
+        }
+
         function applyActiveCustomizations() {
             const u = getArcadeUpgrades();
             const consoles = document.querySelectorAll('.nintendo-switch-console');
@@ -4231,6 +4383,16 @@
             const lbl = document.getElementById('current-theme-label');
             if (lbl && SWITCH_THEMES[u.switchSkin]) {
                 lbl.textContent = SWITCH_THEMES[u.switchSkin].name;
+            }
+            renderRunnerLoadout(u);
+            if (typeof runnerActive !== 'undefined' && !runnerActive && typeof renderRunnerIdle === 'function') {
+                renderRunnerIdle();
+            }
+            if (typeof spaceActive !== 'undefined' && !spaceActive && typeof renderSpaceIdle === 'function') {
+                renderSpaceIdle();
+            }
+            if (typeof flappyActive !== 'undefined' && !flappyActive && typeof renderFlappyIdle === 'function') {
+                renderFlappyIdle();
             }
         }
 
@@ -4268,6 +4430,7 @@
 
         function openUpgradeShop() {
             getAudioContext();
+            pauseAllActiveGames(null);
             playSfx('pause');
             const modal = document.getElementById('upgrade-shop-modal');
             if (modal) modal.classList.add('open');
@@ -4285,6 +4448,7 @@
             const coins = getArcadeCoins();
             const bal = document.getElementById('shop-coin-balance');
             if (bal) bal.textContent = coins;
+            updateXPDisplays(getArcadeXP());
 
             // 1. Upgrades Panel
             const upgPanel = document.getElementById('shop-panel-upgrades');
@@ -4476,7 +4640,7 @@
         let runnerActive = false;
         let runnerPaused = false;
         let runnerDistance = 0;
-        let runnerCoins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
+        let runnerCoins = getArcadeCoins();
         let runnerInvulnerable = 0;
         let runnerSpeed = 0.5; // Starts very slow for relaxed reaction time
         let runnerBest = parseInt(localStorage.getItem('cube_runner_best') || '0', 10);
@@ -4540,7 +4704,7 @@
             runnerPaused = false;
             runnerDistance = 0;
             runnerCoins = getArcadeCoins();
-            runnerInvulnerable = (upg.shield && upg.shield > 0) ? (120 + upg.shield * 60) : 0;
+            runnerInvulnerable = (upg.shield && upg.shield > 0) ? ((upg.shield + 1) * 120) : 0;
             runnerSpeed = 0.5; // Resets strictly back to slow upon start/retry
             runnerTargetLane = 1;
             runnerCurrentLaneX = 1.0;
@@ -4683,10 +4847,10 @@
             if (runnerShootCooldown > 0) return;
             const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             const blasterLvl = upg.blaster || 0;
-            runnerShootCooldown = Math.max(5, 12 - blasterLvl * 1.5);
+            runnerShootCooldown = [14, 8, 7, 6, 5, 4][blasterLvl] || 4;
             playSfx('laser');
 
-            const damage = blasterLvl >= 3 ? 50 : 25;
+            const damage = blasterLvl >= 5 ? 100 : (blasterLvl >= 3 ? 50 : 25);
             const pierce = blasterLvl >= 4;
             const isNova = blasterLvl >= 5;
 
@@ -4867,9 +5031,19 @@
                 const dmg = laser.damage || 25;
                 if (!laser.hitList) laser.hitList = [];
 
+                // Level 5 Nova BFG vaporizes incoming monster plasma bullets in range
+                if (laser.isNova) {
+                    for (let bi = runnerMonsterBullets.length - 1; bi >= 0; bi--) {
+                        const mb = runnerMonsterBullets[bi];
+                        if (Math.abs(laser.lane - mb.lane) < 0.75 && Math.abs(laser.z - mb.z) < 90) {
+                            runnerMonsterBullets.splice(bi, 1);
+                        }
+                    }
+                }
+
                 // Check collision with monsters (Gun Monsters & Scramble Monsters)
                 let laserHit = false;
-                for (let oi = 0; oi < runnerObstacles.length; oi++) {
+                for (let oi = runnerObstacles.length - 1; oi >= 0; oi--) {
                     const ob = runnerObstacles[oi];
                     if (laser.hitList.includes(ob)) continue;
 
@@ -5963,7 +6137,9 @@
                     const hp = ob.hp !== undefined ? ob.hp : 25;
                     const maxHp = ob.maxHp !== undefined ? ob.maxHp : 25;
                     const hpRatio = Math.max(0, hp / maxHp);
-                    const shotsLeft = Math.max(1, Math.ceil(hp / 25));
+                    const bLvl = (typeof getArcadeUpgrades === 'function') ? (getArcadeUpgrades().blaster || 0) : 0;
+                    const bDmg = bLvl >= 5 ? 100 : (bLvl >= 3 ? 50 : 25);
+                    const shotsLeft = Math.max(1, Math.ceil(hp / bDmg));
 
                     // Scale multiplier based on maxHp:
                     // 100 HP is large boss (1.35x)
@@ -6097,7 +6273,9 @@
                     const hp = ob.hp !== undefined ? ob.hp : 100;
                     const maxHp = ob.maxHp !== undefined ? ob.maxHp : 100;
                     const hpRatio = Math.max(0, hp / maxHp);
-                    const shotsLeft = Math.max(1, Math.ceil(hp / 25));
+                    const bLvl = (typeof getArcadeUpgrades === 'function') ? (getArcadeUpgrades().blaster || 0) : 0;
+                    const bDmg = bLvl >= 5 ? 100 : (bLvl >= 3 ? 50 : 25);
+                    const shotsLeft = Math.max(1, Math.ceil(hp / bDmg));
 
                     const hoverY = Math.sin(runnerFrame * 0.28 + ob.lane) * 7 * scale;
                     rCtx.translate(0, hoverY);
@@ -6211,10 +6389,11 @@
                     rCtx.textAlign = 'center';
                     rCtx.textBaseline = 'bottom';
                     const textY = barY - 4 * scale - 2;
+                    const mechTag = `🔫 ${hp} HP (${shotsLeft} ${shotsLeft === 1 ? 'Shot' : 'Shots'} or 🦘 Jump-Stomp)`;
                     rCtx.fillStyle = '#000000';
-                    rCtx.fillText(`🔫 ${hp} HP (4 Shots or 🦘 Jump-Stomp)`, 1, textY + 1);
+                    rCtx.fillText(mechTag, 1, textY + 1);
                     rCtx.fillStyle = '#ffd700';
-                    rCtx.fillText(`🔫 ${hp} HP (4 Shots or 🦘 Jump-Stomp)`, 0, textY);
+                    rCtx.fillText(mechTag, 0, textY);
                 } else if (ob.type === 'hurdle') {
                     // Low scramble block (1 block tall - Jump over!)
                     const wBox = 44 * scale;
@@ -6408,6 +6587,19 @@
                 rCtx.restore();
             }
 
+            // Super Coin Magnet pulse aura when equipped
+            const curUpgDraw = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
+            if (curUpgDraw.magnet > 0) {
+                rCtx.save();
+                rCtx.strokeStyle = `rgba(250, 204, 21, ${0.22 + Math.abs(Math.sin(runnerFrame * 0.12)) * 0.28})`;
+                rCtx.lineWidth = 2;
+                rCtx.setLineDash([6, 6]);
+                rCtx.beginPath();
+                rCtx.arc(0, runnerIsSliding ? -6 : -21, 38 + Math.sin(runnerFrame * 0.2) * 3, 0, Math.PI * 2);
+                rCtx.stroke();
+                rCtx.restore();
+            }
+
             // Draw Invulnerability Energy Forcefield Shield
             if (runnerInvulnerable > 0) {
                 const shieldPulse = Math.sin(runnerFrame * 0.25) * 4;
@@ -6439,15 +6631,61 @@
             rCtx.restore(); // Restore screen shake transform
         }
 
+        function renderRunnerIdle() {
+            if (!rCtx || !runnerCanvas) return;
+            const prevObs = runnerObstacles;
+            const prevLasers = runnerLasers;
+            const prevBullets = runnerMonsterBullets;
+            const prevExps = runnerExplosions;
+            const prevTexts = runnerFloatingTexts;
+            runnerObstacles = [
+                { lane: 0, type: 'coin', z: 540, spinOffset: 0 },
+                { lane: 2, type: 'coin', z: 540, spinOffset: 1 },
+                { lane: 1, type: 'coin_bag', z: 760, spinOffset: 0 }
+            ];
+            runnerLasers = [];
+            runnerMonsterBullets = [];
+            runnerExplosions = [];
+            runnerFloatingTexts = [];
+            draw3DHighway();
+            runnerObstacles = prevObs;
+            runnerLasers = prevLasers;
+            runnerMonsterBullets = prevBullets;
+            runnerExplosions = prevExps;
+            runnerFloatingTexts = prevTexts;
+
+            const w = runnerCanvas.width;
+            const h = runnerCanvas.height;
+            rCtx.save();
+            rCtx.fillStyle = 'rgba(2, 6, 23, 0.56)';
+            rCtx.fillRect(w * 0.14, h * 0.34, w * 0.72, h * 0.25);
+            rCtx.strokeStyle = '#00f0ff';
+            rCtx.lineWidth = 3;
+            rCtx.strokeRect(w * 0.14, h * 0.34, w * 0.72, h * 0.25);
+
+            rCtx.font = 'bold 34px "DynaPuff", cursive';
+            rCtx.fillStyle = '#fde047';
+            rCtx.textAlign = 'center';
+            rCtx.fillText('🏎️ CUBE RUNNER 3D HIGHWAY', w / 2, h * 0.44);
+
+            rCtx.font = 'bold 20px "Outfit", sans-serif';
+            rCtx.fillStyle = '#00f0ff';
+            rCtx.fillText('▶ TAP SCREEN OR PRESS [+] DASH ON RIGHT JOY-CON TO PLAY!', w / 2, h * 0.52);
+            rCtx.restore();
+        }
+
         function gameOverRunner(reason) {
             runnerActive = false;
             runnerPaused = false;
             playSfx('crash');
+            const currentCoins = getArcadeCoins();
+            runnerCoins = currentCoins;
 
             if (runnerDistance > runnerBest) {
                 runnerBest = runnerDistance;
                 localStorage.setItem('cube_runner_best', runnerBest);
                 document.getElementById('runner-best').textContent = runnerBest;
+                if (typeof triggerConfetti === 'function') triggerConfetti(28);
             }
 
             // Survive button control on side dock and docked deck
@@ -6455,14 +6693,14 @@
             const deckSurviveBtn = document.getElementById('btn-deck-survive');
             if (surviveBtn) {
                 surviveBtn.style.display = 'inline-flex';
-                if (runnerCoins >= 100) {
+                if (currentCoins >= 100) {
                     surviveBtn.classList.remove('disabled');
                     surviveBtn.innerHTML = `🛡️ 100 💰`;
-                    surviveBtn.title = `Survive immediately for 100 coins! You have ${runnerCoins} 💰 (Press S or R)`;
+                    surviveBtn.title = `Survive immediately for 100 coins! You have ${currentCoins} 💰 (Press S or R)`;
                 } else {
                     surviveBtn.classList.add('disabled');
-                    surviveBtn.innerHTML = `🛡️ ${runnerCoins}/100`;
-                    surviveBtn.title = `Need ${100 - runnerCoins} more coins to survive`;
+                    surviveBtn.innerHTML = `🛡️ ${currentCoins}/100`;
+                    surviveBtn.title = `Need ${100 - currentCoins} more coins to survive`;
                 }
             }
             if (deckSurviveBtn) {
@@ -6484,7 +6722,7 @@
 
                 rCtx.font = '15px "Outfit", sans-serif';
                 rCtx.fillStyle = '#cbd5e1';
-                rCtx.fillText(`Distance: ${runnerDistance}m  |  Coins: ${runnerCoins} 💰  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 - 20);
+                rCtx.fillText(`Distance: ${runnerDistance}m  |  Coins: ${currentCoins} 💰  |  Record: ${runnerBest}m`, runnerCanvas.width / 2, runnerCanvas.height / 2 - 20);
 
                 // DRAW INTERACTIVE SURVIVE BUTTON ON CANVAS
                 const sBtnW = Math.min(440, runnerCanvas.width - 40);
@@ -6494,7 +6732,7 @@
                 runnerSurviveBtnRect = { x: sBtnX, y: sBtnY, w: sBtnW, h: sBtnH };
 
                 rCtx.save();
-                if (runnerCoins >= 100) {
+                if (currentCoins >= 100) {
                     // Golden glowing survival button
                     const grad = rCtx.createLinearGradient(sBtnX, sBtnY, sBtnX + sBtnW, sBtnY + sBtnH);
                     grad.addColorStop(0, '#f59e0b');
@@ -6541,12 +6779,12 @@
                     rCtx.fillStyle = '#94a3b8';
                     rCtx.textAlign = 'center';
                     rCtx.textBaseline = 'middle';
-                    rCtx.fillText(`🛡️ Need 100 💰 to Survive (${runnerCoins}/100 💰)`, runnerCanvas.width / 2, sBtnY + sBtnH / 2);
+                    rCtx.fillText(`🛡️ Need 100 💰 to Survive (${currentCoins}/100 💰)`, runnerCanvas.width / 2, sBtnY + sBtnH / 2);
 
                     rCtx.textBaseline = 'alphabetic';
                     rCtx.font = '13px "Outfit", sans-serif';
                     rCtx.fillStyle = '#fb7185';
-                    rCtx.fillText(`Blast more Scramble Monsters (+10 💰 each) to earn ${100 - runnerCoins} more coins!`, runnerCanvas.width / 2, sBtnY + sBtnH + 24);
+                    rCtx.fillText(`Blast more Scramble Monsters (+10 💰 each) to earn ${100 - currentCoins} more coins!`, runnerCanvas.width / 2, sBtnY + sBtnH + 24);
                 }
                 rCtx.restore();
 
@@ -6618,17 +6856,16 @@
 
         function surviveRunnerWithCoins() {
             if (runnerActive) return;
-            if (runnerCoins < 100) {
+            const coins = getArcadeCoins();
+            if (coins < 100) {
                 playSfx('bonk');
-                const needed = 100 - runnerCoins;
-                alert(`⚠️ You need 100 coins to survive!\nYou currently have ${runnerCoins} 💰.\nDestroy ${Math.ceil(needed / 10)} more Scramble Monsters with lasers (+10 💰 each) to earn enough coins!`);
+                const needed = 100 - coins;
+                alert(`⚠️ You need 100 coins to survive!\nYou currently have ${coins} 💰.\nDestroy ${Math.ceil(needed / 10)} more Scramble Monsters with lasers (+10 💰 each) to earn enough coins!`);
                 return;
             }
 
-            // Deduct 100 coins
-            runnerCoins -= 100;
-            localStorage.setItem('cube_arcade_coins', runnerCoins);
-            document.getElementById('runner-coins').textContent = runnerCoins;
+            // Deduct 100 coins cleanly across all HUD counters & shop
+            spendArcadeCoins(100);
 
             // Reset death state and activate temporary invulnerability shield
             runnerActive = true;
@@ -6919,8 +7156,9 @@
         const brickH = 18;
         const brickPadding = 8;
         const brickOffsetTop = 40;
-        const brickOffsetLeft = 20;
+        const brickOffsetLeft = 60; // Perfectly centered on 640px canvas
         let bricks = [];
+        let breakerDrops = [];
         let breakerAnimId = null;
 
         function initBricks() {
@@ -6934,14 +7172,69 @@
             }
         }
 
+        function renderBreakerIdle() {
+            if (!bCtx || !bCanvas) return;
+            initBricks();
+            bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
+            for (let c = 0; c < brickCols; c++) {
+                for (let r = 0; r < brickRows; r++) {
+                    const b = bricks[c][r];
+                    const bx = c * (brickW + brickPadding) + brickOffsetLeft;
+                    const by = r * (brickH + brickPadding) + brickOffsetTop;
+                    bCtx.fillStyle = b.color;
+                    bCtx.fillRect(bx, by, brickW, brickH);
+                    bCtx.strokeStyle = '#020617';
+                    bCtx.lineWidth = 1.5;
+                    bCtx.strokeRect(bx, by, brickW, brickH);
+                }
+            }
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
+            const previewPaddleW = 90 + (upg.dash || 0) * 10;
+            const previewPaddleX = (bCanvas.width - previewPaddleW) / 2;
+            bCtx.fillStyle = '#00f0ff';
+            bCtx.fillRect(previewPaddleX, bCanvas.height - paddleHeight - 8, previewPaddleW, paddleHeight);
+            bCtx.strokeStyle = '#ffffff';
+            bCtx.lineWidth = 1.5;
+            bCtx.strokeRect(previewPaddleX, bCanvas.height - paddleHeight - 8, previewPaddleW, paddleHeight);
+
+            bCtx.beginPath();
+            bCtx.arc(bCanvas.width / 2, bCanvas.height - 40, ballRadius, 0, Math.PI * 2);
+            bCtx.fillStyle = '#FAED27';
+            bCtx.fill();
+            bCtx.stroke();
+
+            bCtx.fillStyle = 'rgba(2, 6, 23, 0.58)';
+            bCtx.fillRect(70, 200, bCanvas.width - 140, 95);
+            bCtx.strokeStyle = '#00f0ff';
+            bCtx.lineWidth = 2;
+            bCtx.strokeRect(70, 200, bCanvas.width - 140, 95);
+            bCtx.font = 'bold 24px "DynaPuff", cursive';
+            bCtx.fillStyle = '#fde047';
+            bCtx.textAlign = 'center';
+            bCtx.fillText('🧱 CUBE BRICK BREAKER', bCanvas.width / 2, 238);
+            bCtx.font = 'bold 15px "Outfit", sans-serif';
+            bCtx.fillStyle = '#38bdf8';
+            bCtx.fillText('▶ TAP SCREEN OR PRESS [+] PLAY! Catch falling 💰 coins!', bCanvas.width / 2, 272);
+        }
+
+        function updateBreakerLivesDisplay() {
+            const el = document.getElementById('breaker-lives');
+            if (!el) return;
+            el.textContent = breakerLives <= 0 ? '💀' : '❤️'.repeat(breakerLives);
+        }
+
         function startBreakerGame() {
             getAudioContext();
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             breakerActive = true;
             breakerPaused = false;
             breakerScore = 0;
-            breakerLives = 3;
+            paddleWidth = 90 + (upg.dash || 0) * 10;
+            const bonusLives = upg.shield >= 4 ? 2 : (upg.shield >= 1 ? 1 : 0);
+            breakerLives = 3 + bonusLives;
+            breakerDrops = [];
             document.getElementById('breaker-score').textContent = '0';
-            document.getElementById('breaker-lives').textContent = '❤️❤️❤️';
+            updateBreakerLivesDisplay();
             document.getElementById('btn-breaker-start').textContent = '🔄 Restart Breaker';
             const pauseBtn = document.getElementById('btn-breaker-pause');
             if (pauseBtn) {
@@ -6996,10 +7289,17 @@
             paddleX = Math.max(0, Math.min(bCanvas.width - paddleWidth, paddleX + delta));
         }
 
-        bCanvas.addEventListener('mousemove', (e) => {
+        const handleBreakerAim = (e) => {
+            if (!breakerActive || breakerPaused) return;
             const rect = bCanvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
+            const scaleX = bCanvas.width / Math.max(1, rect.width);
+            const mouseX = (e.clientX - rect.left) * scaleX;
             paddleX = Math.max(0, Math.min(bCanvas.width - paddleWidth, mouseX - paddleWidth / 2));
+        };
+        bCanvas.addEventListener('mousemove', handleBreakerAim);
+        bCanvas.addEventListener('pointermove', handleBreakerAim);
+        bCanvas.addEventListener('click', () => {
+            if (!breakerActive) startBreakerGame();
         });
 
         window.addEventListener('keydown', (e) => {
@@ -7011,6 +7311,7 @@
         function breakerLoop() {
             if (!breakerActive || breakerPaused) return;
             bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
 
             // Draw Bricks
             let bricksRemaining = 0;
@@ -7035,7 +7336,10 @@
                             ballDy = -ballDy;
                             b.status = 0;
                             breakerScore += 20;
-                            addArcadeCoins(2, 'Brick Smashed');
+                            addArcadeCoins(2, 'Brick Smashed', { silentSfx: true });
+                            if (Math.random() < 0.35) {
+                                breakerDrops.push({ x: brickX + brickW / 2, y: brickY + brickH / 2, vy: 2.3 });
+                            }
                             document.getElementById('breaker-score').textContent = breakerScore;
                             if (breakerScore > breakerBest) {
                                 breakerBest = breakerScore;
@@ -7048,10 +7352,44 @@
                 }
             }
 
+            // Falling Coins from Bricks (pulled by Super Coin Magnet!)
+            const magnetLvl = upg.magnet || 0;
+            for (let di = breakerDrops.length - 1; di >= 0; di--) {
+                const d = breakerDrops[di];
+                d.y += d.vy;
+                if (magnetLvl > 0 && d.y > bCanvas.height * 0.45) {
+                    const paddleCenter = paddleX + paddleWidth / 2;
+                    d.x += (paddleCenter - d.x) * (0.04 + magnetLvl * 0.025);
+                }
+
+                bCtx.save();
+                bCtx.fillStyle = '#ffd700';
+                bCtx.strokeStyle = '#ffffff';
+                bCtx.lineWidth = 1.5;
+                bCtx.beginPath();
+                bCtx.arc(d.x, d.y, 9, 0, Math.PI * 2);
+                bCtx.fill();
+                bCtx.stroke();
+                bCtx.fillStyle = '#78350f';
+                bCtx.font = 'bold 10px sans-serif';
+                bCtx.textAlign = 'center';
+                bCtx.textBaseline = 'middle';
+                bCtx.fillText('$', d.x, d.y + 0.5);
+                bCtx.restore();
+
+                if (d.y + 9 >= bCanvas.height - paddleHeight - 8 && d.x >= paddleX - 6 && d.x <= paddleX + paddleWidth + 6) {
+                    addArcadeCoins(3, 'Caught Brick Coin!');
+                    breakerDrops.splice(di, 1);
+                } else if (d.y > bCanvas.height + 15) {
+                    breakerDrops.splice(di, 1);
+                }
+            }
+
             // Win check
             if (bricksRemaining === 0) {
-                playSfx('score');
-                addArcadeCoins(50, 'Board Cleared!');
+                playSfx('coins');
+                triggerConfetti(26);
+                addArcadeCoins(50, 'Board Cleared!', { silentSfx: true });
                 initBricks();
                 resetBreakerBall();
             }
@@ -7089,8 +7427,7 @@
                 } else if (ballY + ballDy > bCanvas.height - ballRadius) {
                     breakerLives--;
                     playSfx('crash');
-                    const hearts = ['💀', '❤️', '❤️❤️', '❤️❤️❤️'];
-                    document.getElementById('breaker-lives').textContent = hearts[Math.max(0, breakerLives)];
+                    updateBreakerLivesDisplay();
                     if (breakerLives <= 0) {
                         gameOverBreaker();
                         return;
@@ -7142,18 +7479,79 @@
         const playerShipY = spCanvas.height - 35;
         let spaceLasers = [];
         let rogueCubies = [];
+        let spaceDrops = [];
         let spaceParticles = [];
         let spaceAnimId = null;
         let spaceFrame = 0;
 
+        function getSpaceSkinColors() {
+            const skin = (typeof getArcadeUpgrades === 'function') ? (getArcadeUpgrades().cubeSkin || 'default') : 'default';
+            if (skin === 'gold') return { body: '#ffd700', wing: '#f59e0b', cannon: '#fef08a' };
+            if (skin === 'rainbow') return { body: `hsl(${(spaceFrame * 5) % 360}, 95%, 55%)`, wing: '#ff007f', cannon: '#ffffff' };
+            if (skin === 'matrix') return { body: '#22c55e', wing: '#15803d', cannon: '#86efac' };
+            if (skin === 'void') return { body: '#e11d48', wing: '#4c0519', cannon: '#fda4af' };
+            return { body: '#00f0ff', wing: '#ff007f', cannon: '#FAED27' };
+        }
+
+        function updateSpaceShieldDisplay() {
+            const el = document.getElementById('space-shields');
+            if (!el) return;
+            el.textContent = spaceShields <= 0 ? '💥' : '🛡️'.repeat(spaceShields);
+        }
+
+        function renderSpaceIdle() {
+            if (!spCtx || !spCanvas) return;
+            spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+            spCtx.fillStyle = '#020617';
+            spCtx.fillRect(0, 0, spCanvas.width, spCanvas.height);
+            spCtx.fillStyle = '#ffffff';
+            for (let i = 0; i < 24; i++) {
+                spCtx.fillRect((i * 73) % spCanvas.width, (i * 41) % spCanvas.height, 2, 2);
+            }
+            const previewColors = ['#00f0ff', '#ff007f', '#22c55e', '#FAED27', '#f97316'];
+            previewColors.forEach((col, idx) => {
+                const ex = 110 + idx * 105;
+                spCtx.fillStyle = col;
+                spCtx.fillRect(ex - 12, 72, 24, 24);
+                spCtx.strokeStyle = '#ffffff';
+                spCtx.strokeRect(ex - 12, 72, 24, 24);
+            });
+            const sc = getSpaceSkinColors();
+            spCtx.save();
+            spCtx.translate(spCanvas.width / 2, playerShipY);
+            spCtx.fillStyle = sc.wing;
+            spCtx.fillRect(-18, 6, 36, 6);
+            spCtx.fillStyle = sc.body;
+            spCtx.fillRect(-12, -12, 24, 24);
+            spCtx.strokeStyle = '#ffffff';
+            spCtx.strokeRect(-12, -12, 24, 24);
+            spCtx.fillStyle = sc.cannon;
+            spCtx.fillRect(-3, -18, 6, 8);
+            spCtx.restore();
+
+            spCtx.fillStyle = 'rgba(2, 6, 23, 0.62)';
+            spCtx.fillRect(65, 175, spCanvas.width - 130, 100);
+            spCtx.strokeStyle = '#00f0ff';
+            spCtx.lineWidth = 2;
+            spCtx.strokeRect(65, 175, spCanvas.width - 130, 100);
+            spCtx.font = 'bold 24px "DynaPuff", cursive';
+            spCtx.fillStyle = '#fde047';
+            spCtx.textAlign = 'center';
+            spCtx.fillText('🚀 SPACE SCRAMBLE DEFENDER', spCanvas.width / 2, 214);
+            spCtx.font = 'bold 15px "Outfit", sans-serif';
+            spCtx.fillStyle = '#38bdf8';
+            spCtx.fillText('▶ TAP SCREEN OR PRESS [+] PLAY! Blaster & Shield upgrades active!', spCanvas.width / 2, 248);
+        }
+
         function startSpaceGame() {
             getAudioContext();
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             spaceActive = true;
             spacePaused = false;
             spaceScore = 0;
-            spaceShields = 3;
+            spaceShields = 3 + Math.ceil((upg.shield || 0) / 2);
             document.getElementById('space-score').textContent = '0';
-            document.getElementById('space-shields').textContent = '🛡️🛡️🛡️';
+            updateSpaceShieldDisplay();
             document.getElementById('btn-space-start').textContent = '🔄 Restart Space Scramble';
             const pauseBtn = document.getElementById('btn-space-pause');
             if (pauseBtn) {
@@ -7163,6 +7561,7 @@
             playerShipX = spCanvas.width / 2;
             spaceLasers = [];
             rogueCubies = [];
+            spaceDrops = [];
             spaceParticles = [];
             if (spaceAnimId) cancelAnimationFrame(spaceAnimId);
             spaceLoop();
@@ -7204,18 +7603,37 @@
 
         function shootSpaceLaser() {
             if (!spaceActive || spacePaused) return;
-            spaceLasers.push({ x: playerShipX, y: playerShipY - 14 });
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
+            const blasterLvl = upg.blaster || 0;
+            if (blasterLvl >= 2) {
+                spaceLasers.push({ x: playerShipX - 16, y: playerShipY - 12, vx: -1.1 });
+                spaceLasers.push({ x: playerShipX, y: playerShipY - 16, vx: 0 });
+                spaceLasers.push({ x: playerShipX + 16, y: playerShipY - 12, vx: 1.1 });
+            } else if (blasterLvl >= 1) {
+                spaceLasers.push({ x: playerShipX - 10, y: playerShipY - 14, vx: 0 });
+                spaceLasers.push({ x: playerShipX + 10, y: playerShipY - 14, vx: 0 });
+            } else {
+                spaceLasers.push({ x: playerShipX, y: playerShipY - 14, vx: 0 });
+            }
             playSfx('laser');
         }
 
-        spCanvas.addEventListener('mousemove', (e) => {
+        const handleSpaceAim = (e) => {
+            if (!spaceActive || spacePaused) return;
             const rect = spCanvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
+            const scaleX = spCanvas.width / Math.max(1, rect.width);
+            const mouseX = (e.clientX - rect.left) * scaleX;
             playerShipX = Math.max(20, Math.min(spCanvas.width - 20, mouseX));
-        });
+        };
+        spCanvas.addEventListener('mousemove', handleSpaceAim);
+        spCanvas.addEventListener('pointermove', handleSpaceAim);
 
         spCanvas.addEventListener('pointerdown', (e) => {
             e.preventDefault();
+            if (!spaceActive) {
+                startSpaceGame();
+                return;
+            }
             shootSpaceLaser();
         });
 
@@ -7230,6 +7648,7 @@
             if (!spaceActive || spacePaused) return;
             spaceFrame++;
             spCtx.clearRect(0, 0, spCanvas.width, spCanvas.height);
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
 
             // Starfield
             spCtx.fillStyle = '#ffffff';
@@ -7254,12 +7673,13 @@
             // Update & Draw Lasers
             for (let i = spaceLasers.length - 1; i >= 0; i--) {
                 const laser = spaceLasers[i];
+                laser.x += (laser.vx || 0);
                 laser.y -= 7.5;
-                spCtx.fillStyle = '#00f0ff';
+                spCtx.fillStyle = (upg.blaster >= 3) ? '#a855f7' : '#00f0ff';
                 spCtx.fillRect(laser.x - 2.5, laser.y, 5, 12);
                 spCtx.fillStyle = '#ffffff';
                 spCtx.fillRect(laser.x - 1, laser.y + 2, 2, 8);
-                if (laser.y < -20) spaceLasers.splice(i, 1);
+                if (laser.y < -20 || laser.x < -20 || laser.x > spCanvas.width + 20) spaceLasers.splice(i, 1);
             }
 
             // Update & Draw Enemies
@@ -7274,6 +7694,7 @@
                 spCtx.strokeRect(enemy.x - enemy.size/2, enemy.y - enemy.size/2, enemy.size, enemy.size);
 
                 // Laser hit check
+                let destroyed = false;
                 for (let j = spaceLasers.length - 1; j >= 0; j--) {
                     const l = spaceLasers[j];
                     if (l.x > enemy.x - enemy.size/2 && l.x < enemy.x + enemy.size/2 &&
@@ -7290,7 +7711,10 @@
                         }
                         playSfx('score');
                         spaceScore += 10;
-                        addArcadeCoins(3, 'Alien Cubie');
+                        addArcadeCoins(3, 'Alien Cubie', { silentSfx: true });
+                        if (Math.random() < 0.30) {
+                            spaceDrops.push({ x: enemy.x, y: enemy.y, vy: 2.2 });
+                        }
                         document.getElementById('space-score').textContent = spaceScore;
                         if (spaceScore > spaceBest) {
                             spaceBest = spaceScore;
@@ -7299,24 +7723,52 @@
                         }
                         rogueCubies.splice(i, 1);
                         spaceLasers.splice(j, 1);
+                        destroyed = true;
                         break;
                     }
                 }
+                if (destroyed) continue;
 
                 // Player collision check
                 if (Math.abs(enemy.x - playerShipX) < 24 && Math.abs(enemy.y - playerShipY) < 24) {
                     spaceShields--;
                     playSfx('crash');
-                    const shields = ['💥', '🛡️', '🛡️🛡️', '🛡️🛡️🛡️'];
-                    document.getElementById('space-shields').textContent = shields[Math.max(0, spaceShields)];
+                    updateSpaceShieldDisplay();
                     rogueCubies.splice(i, 1);
                     if (spaceShields <= 0) {
                         gameOverSpace();
                         return;
                     }
+                    continue;
                 }
 
                 if (enemy.y > spCanvas.height + 30) rogueCubies.splice(i, 1);
+            }
+
+            // Falling Alien Space Gems (pulled toward ship by Coin Magnet)
+            const magnetLvl = upg.magnet || 0;
+            for (let di = spaceDrops.length - 1; di >= 0; di--) {
+                const gem = spaceDrops[di];
+                gem.y += gem.vy;
+                if (magnetLvl > 0 && gem.y > spCanvas.height * 0.4) {
+                    gem.x += (playerShipX - gem.x) * (0.04 + magnetLvl * 0.025);
+                }
+                spCtx.save();
+                spCtx.translate(gem.x, gem.y);
+                spCtx.rotate(Math.PI / 4);
+                spCtx.fillStyle = '#fde047';
+                spCtx.fillRect(-7, -7, 14, 14);
+                spCtx.strokeStyle = '#ffffff';
+                spCtx.lineWidth = 1.5;
+                spCtx.strokeRect(-7, -7, 14, 14);
+                spCtx.restore();
+
+                if (Math.abs(gem.x - playerShipX) < 26 && Math.abs(gem.y - playerShipY) < 26) {
+                    addArcadeCoins(3, 'Alien Gem!');
+                    spaceDrops.splice(di, 1);
+                } else if (gem.y > spCanvas.height + 20) {
+                    spaceDrops.splice(di, 1);
+                }
             }
 
             // Draw particles
@@ -7330,19 +7782,20 @@
                 if (pt.life <= 0) spaceParticles.splice(i, 1);
             }
 
-            // Draw Player Ship (Space Cubie)
+            // Draw Player Ship (Space Cubie with Equipped Skin!)
+            const shipColors = getSpaceSkinColors();
             spCtx.save();
             spCtx.translate(playerShipX, playerShipY);
             // Wing thrusters
-            spCtx.fillStyle = '#ff007f';
+            spCtx.fillStyle = shipColors.wing;
             spCtx.fillRect(-18, 6, 36, 6);
             // Cockpit cube
-            spCtx.fillStyle = '#00f0ff';
+            spCtx.fillStyle = shipColors.body;
             spCtx.fillRect(-12, -12, 24, 24);
             spCtx.strokeStyle = '#ffffff';
             spCtx.strokeRect(-12, -12, 24, 24);
             // Cannon
-            spCtx.fillStyle = '#FAED27';
+            spCtx.fillStyle = shipColors.cannon;
             spCtx.fillRect(-3, -18, 6, 8);
             spCtx.restore();
 
@@ -8544,9 +8997,55 @@
         let flappyAnimId = null;
         let flappyFrame = 0;
         let flappySurviveBtnRect = null;
+        let flappyShieldCharges = 0;
+        let flappyInvulnTimer = 0;
+
+        function drawFlappyCubieSprite(ctx, size, skin) {
+            let bodyColor = '#00f0ff';
+            let borderColor = '#ffffff';
+            let stickers = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#ffffff', '#3b82f6'];
+            if (skin === 'gold') {
+                bodyColor = '#ffd700'; borderColor = '#fef08a';
+                stickers = ['#ffd700', '#fbbf24', '#fef08a', '#f59e0b', '#fffbeb', '#d97706'];
+            } else if (skin === 'matrix') {
+                bodyColor = '#052e16'; borderColor = '#22c55e';
+                stickers = ['#15803d', '#22c55e', '#16a34a', '#4ade80', '#14532d', '#86efac'];
+            } else if (skin === 'void') {
+                bodyColor = '#18041d'; borderColor = '#f43f5e';
+                stickers = ['#9f1239', '#e11d48', '#881337', '#f43f5e', '#4c0519', '#fda4af'];
+            }
+
+            ctx.fillStyle = bodyColor;
+            ctx.fillRect(-size / 2, -size / 2, size, size);
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = size > 30 ? 2.5 : 2;
+            ctx.strokeRect(-size / 2, -size / 2, size, size);
+
+            const sub = size / 3;
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    const idx = r * 3 + c;
+                    ctx.fillStyle = skin === 'rainbow'
+                        ? `hsl(${(flappyFrame * 5 + idx * 40) % 360}, 100%, 58%)`
+                        : stickers[idx % stickers.length];
+                    ctx.fillRect(-size / 2 + c * sub + 1, -size / 2 + r * sub + 1, sub - 2, sub - 2);
+                }
+            }
+
+            // Cute cartoon eye
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(size * 0.22, -size * 0.08, size * 0.18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(size * 0.28, -size * 0.08, size * 0.09, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
         function startFlappyGame() {
             getAudioContext();
+            const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             flappyActive = true;
             flappyPaused = false;
             flappySurviveBtnRect = null;
@@ -8556,12 +9055,14 @@
             flappyVy = 0;
             flappyObstacles = [];
             flappyFrame = 0;
+            flappyShieldCharges = upg.shield >= 4 ? 2 : (upg.shield >= 1 ? 1 : 0);
+            flappyInvulnTimer = 0;
             const scoreEl = document.getElementById('flappy-score');
             if (scoreEl) scoreEl.textContent = '0';
             const pipesEl = document.getElementById('flappy-pipes');
             if (pipesEl) pipesEl.textContent = '0';
             const statusEl = document.getElementById('flappy-status');
-            if (statusEl) statusEl.textContent = '🪂 Flap through the Scramble Pillars!';
+            if (statusEl) statusEl.textContent = flappyShieldCharges > 0 ? `🛡️ ${flappyShieldCharges} Bubble Shield active! Flap through the Scramble Pillars!` : '🪂 Flap through the Scramble Pillars!';
             const startBtn = document.getElementById('btn-flappy-start');
             if (startBtn) startBtn.innerHTML = '<span class="plus-symbol">+</span> Play <span class="badge-best">best!</span>';
 
@@ -8670,18 +9171,39 @@
             // Collision check
             const cubieSize = 28;
             const cubieX = 90;
+            if (flappyInvulnTimer > 0) flappyInvulnTimer--;
 
             // Ground/ceiling
             if (flappyY <= 0 || flappyY + cubieSize >= flappyCanvas.height - 15) {
-                gameOverFlappy();
-                return;
+                if (flappyShieldCharges > 0 && flappyInvulnTimer <= 0) {
+                    flappyShieldCharges--;
+                    flappyInvulnTimer = 50;
+                    flappyY = flappyCanvas.height / 2;
+                    flappyVy = -5;
+                    playSfx('revive');
+                    showToast(`🛡️ Flappy Shield Blocked Crash! (${flappyShieldCharges} left)`, '🛡️');
+                } else {
+                    gameOverFlappy();
+                    return;
+                }
             }
 
-            for (let p of flappyObstacles) {
-                if (cubieX + cubieSize > p.x && cubieX < p.x + p.width) {
-                    if (flappyY < p.topH || flappyY + cubieSize > p.bottomY) {
-                        gameOverFlappy();
-                        return;
+            if (flappyInvulnTimer <= 0) {
+                for (let p of flappyObstacles) {
+                    if (cubieX + cubieSize > p.x && cubieX < p.x + p.width) {
+                        if (flappyY < p.topH || flappyY + cubieSize > p.bottomY) {
+                            if (flappyShieldCharges > 0) {
+                                flappyShieldCharges--;
+                                flappyInvulnTimer = 55;
+                                flappyVy = -5.5;
+                                playSfx('revive');
+                                showToast(`🛡️ Flappy Shield Smashed Pillar! (${flappyShieldCharges} left)`, '🛡️');
+                                break;
+                            } else {
+                                gameOverFlappy();
+                                return;
+                            }
+                        }
                     }
                 }
             }
@@ -8751,32 +9273,18 @@
             fCtx.ellipse(-14, wingY, 12, 6, -0.4, 0, Math.PI * 2);
             fCtx.fill();
 
-            // Cube body
-            fCtx.fillStyle = '#00f0ff';
-            fCtx.fillRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
-            fCtx.strokeStyle = '#ffffff';
-            fCtx.lineWidth = 2;
-            fCtx.strokeRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
+            const activeFlappySkin = (typeof getArcadeUpgrades === 'function') ? (getArcadeUpgrades().cubeSkin || 'default') : 'default';
+            drawFlappyCubieSprite(fCtx, cubieSize, activeFlappySkin);
 
-            // 3x3 Rubik face stickers
-            const sub = cubieSize / 3;
-            const miniColors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#ffffff', '#3b82f6'];
-            for (let r = 0; r < 3; r++) {
-                for (let c = 0; c < 3; c++) {
-                    fCtx.fillStyle = miniColors[(r * 3 + c) % miniColors.length];
-                    fCtx.fillRect(-cubieSize / 2 + c * sub + 1, -cubieSize / 2 + r * sub + 1, sub - 2, sub - 2);
-                }
+            if (flappyShieldCharges > 0 || flappyInvulnTimer > 0) {
+                fCtx.strokeStyle = (flappyInvulnTimer > 0 && flappyFrame % 4 < 2) ? '#fde047' : '#00f0ff';
+                fCtx.lineWidth = 2.5;
+                fCtx.fillStyle = 'rgba(0, 240, 255, 0.16)';
+                fCtx.beginPath();
+                fCtx.arc(0, 0, cubieSize * 0.85, 0, Math.PI * 2);
+                fCtx.fill();
+                fCtx.stroke();
             }
-
-            // Cute cartoon eye
-            fCtx.fillStyle = '#ffffff';
-            fCtx.beginPath();
-            fCtx.arc(6, -2, 5, 0, Math.PI * 2);
-            fCtx.fill();
-            fCtx.fillStyle = '#000000';
-            fCtx.beginPath();
-            fCtx.arc(8, -2, 2.5, 0, Math.PI * 2);
-            fCtx.fill();
 
             fCtx.restore();
         }
@@ -8814,32 +9322,8 @@
             fCtx.ellipse(-18, 0, 16, 8, -0.3, 0, Math.PI * 2);
             fCtx.fill();
 
-            // Cube body
-            fCtx.fillStyle = '#00f0ff';
-            fCtx.fillRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
-            fCtx.strokeStyle = '#ffffff';
-            fCtx.lineWidth = 2.5;
-            fCtx.strokeRect(-cubieSize / 2, -cubieSize / 2, cubieSize, cubieSize);
-
-            // 3x3 Rubik face stickers
-            const sub = cubieSize / 3;
-            const miniColors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#ffffff', '#3b82f6'];
-            for (let r = 0; r < 3; r++) {
-                for (let c = 0; c < 3; c++) {
-                    fCtx.fillStyle = miniColors[(r * 3 + c) % miniColors.length];
-                    fCtx.fillRect(-cubieSize / 2 + c * sub + 1.5, -cubieSize / 2 + r * sub + 1.5, sub - 3, sub - 3);
-                }
-            }
-
-            // Cartoon eye
-            fCtx.fillStyle = '#ffffff';
-            fCtx.beginPath();
-            fCtx.arc(8, -4, 7, 0, Math.PI * 2);
-            fCtx.fill();
-            fCtx.fillStyle = '#000000';
-            fCtx.beginPath();
-            fCtx.arc(10, -4, 3.5, 0, Math.PI * 2);
-            fCtx.fill();
+            const activeIdleSkin = (typeof getArcadeUpgrades === 'function') ? (getArcadeUpgrades().cubeSkin || 'default') : 'default';
+            drawFlappyCubieSprite(fCtx, cubieSize, activeIdleSkin);
 
             fCtx.restore();
 
@@ -8863,9 +9347,10 @@
                 flappyBest = flappyScore;
                 localStorage.setItem('cube_flappy_best', flappyBest);
                 document.getElementById('flappy-best').textContent = flappyBest;
+                if (typeof triggerConfetti === 'function') triggerConfetti(28);
             }
 
-            const coins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
+            const coins = getArcadeCoins();
             const surviveBtn = document.getElementById('btn-flappy-survive') || document.getElementById('btn-flappy-revive');
             if (surviveBtn) {
                 surviveBtn.style.display = 'inline-flex';
@@ -8979,17 +9464,13 @@
 
         function surviveFlappyWithCoins() {
             if (flappyActive) return;
-            let coins = parseInt(localStorage.getItem('cube_arcade_coins') || '100', 10);
+            const coins = getArcadeCoins();
             if (coins < 100) {
                 playSfx('bonk');
-                alert(`⚠️ You need 100 coins to survive!\nYou currently have ${coins} 💰.\nEarn coins in Cube Runner by blasting monsters with lasers (+10 💰 each)!`);
+                alert(`⚠️ You need 100 coins to survive!\nYou currently have ${coins} 💰.\nEarn coins across any arcade game to earn enough coins!`);
                 return;
             }
-            coins -= 100;
-            localStorage.setItem('cube_arcade_coins', coins);
-            runnerCoins = coins;
-            const cEl = document.getElementById('runner-coins');
-            if (cEl) cEl.textContent = coins;
+            spendArcadeCoins(100);
 
             flappyActive = true;
             flappyPaused = false;
@@ -9222,7 +9703,8 @@
             pairsActive = false;
             clearInterval(pairsTimer);
             playSfx('fanfare');
-            addArcadeCoins(40, 'All Pairs Matched!');
+            triggerConfetti(28);
+            addArcadeCoins(40, 'All Pairs Matched!', { silentSfx: true });
             const timeStr = document.getElementById('pairs-time').textContent;
             document.getElementById('pairs-status').innerHTML = `🎉 <strong>SOLVED ALL PAIRS!</strong> Time: <strong>${timeStr}</strong> in <strong>${pairsMoves}</strong> moves!`;
             document.getElementById('btn-pairs-start').textContent = '▶ Play Again';
@@ -9235,12 +9717,60 @@
             }
         }
 
+        // Hold-to-glide steering helper for Brick Breaker & Space Scramble Switch buttons
+        function initHoldSteering() {
+            let activeHoldInterval = null;
+            const stopHold = () => {
+                if (activeHoldInterval) {
+                    clearInterval(activeHoldInterval);
+                    activeHoldInterval = null;
+                }
+            };
+            document.querySelectorAll('[data-hold-breaker], [data-hold-space]').forEach(el => {
+                el.addEventListener('pointerdown', () => {
+                    stopHold();
+                    const brkDelta = parseFloat(el.getAttribute('data-hold-breaker'));
+                    const spDelta = parseFloat(el.getAttribute('data-hold-space'));
+                    activeHoldInterval = setInterval(() => {
+                        if (!Number.isNaN(brkDelta) && breakerActive && !breakerPaused) moveBreakerPaddle(brkDelta);
+                        if (!Number.isNaN(spDelta) && spaceActive && !spacePaused) moveSpaceShip(spDelta);
+                    }, 45);
+                });
+                el.addEventListener('pointerup', stopHold);
+                el.addEventListener('pointerleave', stopHold);
+                el.addEventListener('pointercancel', stopHold);
+            });
+            window.addEventListener('blur', stopHold);
+        }
+
         // ==========================================
         // 15. UNIVERSAL KEYBOARD SHORTCUTS
         // ==========================================
         window.addEventListener('keydown', (e) => {
+            const shopModal = document.getElementById('upgrade-shop-modal');
+            const shopOpen = shopModal && shopModal.classList.contains('open');
+
+            // Close Upgrade Shop on Esc or U when modal is open
+            if (shopOpen) {
+                if (e.key === 'Escape' || e.key === 'u' || e.key === 'U') {
+                    e.preventDefault();
+                    closeUpgradeShop();
+                }
+                return;
+            }
+
             const activePanel = document.querySelector('.game-panel.active');
             if (!activePanel) return;
+
+            // Open Upgrade Shop Shortcut ('U') unless actively typing notation inside unpaused Reflex
+            if (e.key === 'u' || e.key === 'U') {
+                const inActiveReflex = (activePanel.id === 'panel-reflex' && reflexActive && !reflexPaused);
+                if (!inActiveReflex) {
+                    e.preventDefault();
+                    openUpgradeShop();
+                    return;
+                }
+            }
 
             // Pause / Resume Shortcut ('P' & 'Escape')
             if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
@@ -9295,9 +9825,13 @@
                 }
             }
 
-            // Spacebar Action for Reflex, Stacker, and Flappy
+            // Spacebar Action for Runner Start, Reflex, Stacker, and Flappy
             if (e.code === 'Space') {
-                if (activePanel.id === 'panel-reflex') {
+                if (activePanel.id === 'panel-runner' && !runnerActive) {
+                    e.preventDefault();
+                    startRunnerGame();
+                    return;
+                } else if (activePanel.id === 'panel-reflex') {
                     e.preventDefault();
                     startReflexGame();
                     return;
@@ -9332,14 +9866,17 @@
             }
         });
 
-        // Initialize First Game Render
+        // Initialize First Game Renders & Hold Steering
+        renderRunnerIdle();
         drawSnake();
-        initBricks();
+        renderBreakerIdle();
+        renderSpaceIdle();
         start2048Game();
         initStackerGrid();
         drawStacker();
         startPairsGame();
         renderFlappyIdle();
+        initHoldSteering();
 
         // ==========================================
         // 16. PREVENT DOUBLE-CLICK & DOUBLE-TAP ZOOM

@@ -1,51 +1,32 @@
-Status: COMPLETE
-Summary:
-- Upgraded everything across Agent Cole's Cube Arcade.
-- Built persistent Universal Arcade Economy with shared coin bank, XP progression, and 7 Player Ranks.
-- Built interactive Upgrade Shop & Armory modal with permanent purchasable upgrades (Hyper Dash, Coin Magnet, Blaster Cannon, Forcefield Shield, Wealth Multiplier, Rocket Double Jump).
-- Built unlockable & equipable Cube Skins (Neon Cyan, Golden Sovereign, Rainbow Prism, Cyber Matrix, Void Crimson) and Nintendo Switch Themes (Classic Neon, OLED Arctic White, Zelda Hyrule Gold, Synthwave Cyberpunk, Solid Gold).
-- Integrated universal coin drops and rewards into all 12 arcade games.
-- Added visual juice: dynamic screen shake, coin reward toasts, and retro synthesizer SFX fanfares.
-- Verified in Chrome DevTools MCP with 0 console errors.
+# Summary
+- What changed: Fixed WCA API 403 error in `timer.html`, protected `sync.sh` line endings for Google Cloud Shell in `.gitattributes`, upgraded `sync.sh` & `sync.ps1` remote checks, and fixed bugs + expanded upgrades across `games.html` (Shop shortcuts `U`/`Esc`, auto-pause on shop open, unified coin bank on survives, idle canvases on Runner/Breaker/Space, scaled pointer aiming, centered Breaker bricks, cross-game Shield/Blaster/Magnet/Skin support, XP rank progress bar, and confetti celebrations).
+- How verified: Verified syntax on all JS/HTML files, ran `.\sync.ps1 check`, tested live pages in Chrome DevTools MCP over local HTTP (`timer.html`, `games.html`) with 0 console errors, and tested all gameplay upgrades & keyboard shortcuts directly.
+- What to review: `.gitattributes`, `sync.sh`, `sync.ps1`, `timer.html`, `games.html`, `PROGRESS.md`.
+- Blockers: None.
 
+Status: COMPLETE
 Goal / Definition of done:
-Upgrade everything across the arcade games:
-1. Universal Arcade Upgrade Shop & Armory:
-   - Shared persistent coin bank across all games.
-   - Upgradable abilities (Hyper Dash, Coin Magnet, Blaster Cannon, Energy Shield, Coin Doubler, Double Jump).
-   - Unlockable Cube Skins (Neon Cyan, Gold Sovereign, Rainbow Prism, Cyber Matrix, Dark Void).
-   - Unlockable Nintendo Switch Console Skins (Classic Neon, OLED White, Zelda Hyrule Gold, Synthwave Pink/Cyan, Solid Gold).
-2. Coin Economy & Upgraded Rewards in ALL 12 Games:
-   - Add coin drops, golden items, and bonus reward mechanics into Snake, Breaker, Space Scramble, Stacker, Flappy, 2048, Whack, Reflex, Blitz, Simon, Pairs.
-3. Audio, Juice & Visual Upgrades:
-   - Screen shake on impacts / explosions.
-   - Golden floating coin rewards and combo notifications.
-   - High score fanfare.
-   - Enhanced Web Audio synthesizer sound effects (level up, coin chime, laser blast, turbo).
-4. Player Progression & Level / Rank System:
-   - Rank display (Novice -> Road Runner -> Speed Demon -> Grandmaster Legend) with XP progression bar.
-5. Verification:
-   - 0 console errors in Chrome DevTools MCP.
-   - Live testing of upgrade purchases, skin switching, and gameplay across games.
-   - Commit and push to origin/main.
+1. Ensure everything across the site works cleanly and upgrade key mechanics & UX across the arcade.
+2. Guarantee seamless cross-device GitHub sync between Windows PC and Google Cloud Console (`/home/huazicheng/repos/cube4fun`).
+3. Commit and push all changes cleanly to `origin/main`.
+
+Next step: Ready for prompts from either this Windows PC or Google Cloud Console.
 
 Tasks:
-- [x] Implement persistent Universal Arcade Economy (Bank, XP, Level, Ranks)
-- [x] Build interactive Upgrade Shop & Armory modal with purchasable upgrades and skins
-- [x] Upgrade Cube Runner abilities (Coin Magnet vacuum, Triple Blaster, Double Jump, Shield, Dash boost)
-- [x] Upgrade other games with coin drops and powerups (Snake, Breaker, Space, Flappy, Stacker, 2048, etc.)
-- [x] Add Switch Console Skin switcher (Classic Neon, OLED White, Zelda Gold, Synthwave, Solid Gold)
-- [x] Add visual juice (screen shake, floating bonus toast, combo multipliers, sound effects)
-- [x] Verify in Chrome DevTools MCP with 0 console errors
-- [x] Commit and push to origin/main
+- [x] Pre-sync (`git pull origin main`) and full 18-page site audit
+- [x] Harden `.gitattributes` LF rules and upgrade `sync.sh` & `sync.ps1` remote/LFS checks
+- [x] Fix `timer.html` WCA API (replace 403 `corsproxy.io` with official WCA v0 JSON API)
+- [x] Fix `games.html` bugs & upgrade Shop, Cube Runner, Space Scramble, Brick Breaker, Flappy Cubie
+- [x] Verify all touched pages and gameplay in Chrome DevTools MCP (0 console errors)
+- [x] Update `PROGRESS.md`, commit, and push to `origin/main`
 
 Assumptions:
-- "upgrade everything": build an arcade upgrade shop where players spend collected coins on permanent gameplay upgrades, skins, and powerups, while adding coin drops and upgraded features across all 12 games.
+- Google Cloud Console works from `/home/huazicheng/repos/cube4fun` synced via `github.com/colehua/cube4fun` (`main`), `./sync.sh`, `AGENT.md`/`CLAUDE.md`/`GEMINI.md`, and `PROGRESS.md`.
+- Direct WCA v0 JSON API (`https://www.worldcubeassociation.org/api/v0/persons/2026HUAC01`) permanently replaces broken third-party HTML proxies.
 
 Blockers (what I need to do): None.
-
 Found, not done: None.
 
 Log (newest first, one line each):
-- Completed "Upgrade Everything" task: Universal Shop, 6 Upgrades, 5 Cube Skins, 5 Switch Themes, universal coin rewards across 12 games, and visual screen shake juice. Verified with 0 console errors in Chrome DevTools MCP.
-- Starting "Upgrade Everything" task: Universal Armory, Upgrades, Coin drops across all games, Skins, and Visual Juice.
+- 2026-11-25: Hardened Google Cloud Console sync rules (`.gitattributes`, `sync.sh`, `sync.ps1`), fixed `timer.html` WCA API 403 error, upgraded `games.html` cross-game abilities & shop UX, verified 0 console errors, and pushed to `origin/main`.
+- 2026-11-24: Completed initial "Upgrade Everything" implementation in `games.html` (commit `9399500`).
