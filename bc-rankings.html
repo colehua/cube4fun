@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Official British Columbia provincial speedcubing rankings and ranking change history for Cole Hua (WCA ID: 2026HUAC01) tracked from Speedcubing Canada.">
+    <title>Cole Hua BC Rankings 🍁 | Learn Cube 4 Fun</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <script src="theme.js"></script>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #e2eafc 100%);
+            --surface-card: #ffffff;
+            --surface-soft: #f8fafc;
+            --surface-sticky-row: #f1f5f9;
+            --ink-main: #1e272e;
+            --ink-muted: #475569;
+            --border-ink: #1e272e;
+            --border-subtle: #cbd5e1;
+            --accent-blue: #0066FF;
+            --accent-cyan: #00E5FF;
+            --accent-yellow: #FAED27;
+            --accent-red: #dc2626;
+            --accent-green: #059669;
+            --focus-ring: #0066FF;
+            --shadow-hard: 0px 6px 0px #1e272e;
+            --shadow-card: 0 10px 26px rgba(15, 23, 42, 0.08);
+            --scrollbar-track: #e2e8f0;
+            --scrollbar-thumb: #64748b;
+        }
+
+        html.dark-mode,
+        body.dark-mode {
+            color-scheme: dark;
+            --bg-gradient: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            --surface-card: #0f172a;
+            --surface-soft: #1e293b;
+            --surface-sticky-row: #1e293b;
+            --ink-main: #f8fafc;
+            --ink-muted: #cbd5e1;
+            --border-ink: #334155;
+            --border-subtle: #334155;
+            --focus-ring: #00E5FF;
+            --shadow-hard: 0px 6px 0px #020617;
+            --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.65);
+            --scrollbar-track: #0f172a;
+            --scrollbar-thumb: #94a3b8;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--ink-main);
+            min-block-size: 100dvb;
+            line-height: 1.5;
+        }
+
+        .visually-hidden:where(:not(:focus-within, :active)) {
+            position: absolute !important;
+            clip-path: inset(50%) !important;
+            overflow: hidden !important;
+            inline-size: 1px !important;
+            block-size: 1px !important;
+            margin: -1px !important;
+            padding: 0 !important;
+            border: 0 !important;
+            white-space: nowrap !important;
+        }
+
+        .skip-link:focus-visible {
+            position: fixed;
+            inset-block-start: 12px;
+            inset-inline-start: 12px;
+            z-index: 9999;
+            background: var(--accent-yellow);
+            color: #1e272e;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 3px solid #1e272e;
+            font-family: 'DynaPuff', cursive;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        :where(a:any-link, button, [tabindex="0"]):focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 3px;
+        }
+
+        .page-bg-decor {
+            position: absolute;
+            inset-block-start: 0;
+            inset-inline: 0;
+            block-size: 320px;
+            overflow: clip;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .blob-top {
+            position: absolute;
+            inset-block-start: -130px;
+            inset-inline-start: -10%;
+            inline-size: 120%;
+            block-size: 280px;
+            background: linear-gradient(90deg, #ff4757 0%, #FAED27 50%, #00E5FF 100%);
+            border-radius: 50%;
+            opacity: 0.85;
+            filter: blur(14px);
+        }
+
+        .page-shell {
+            max-inline-size: 1120px;
+            margin-inline: auto;
+            padding-block: 24px 60px;
+            padding-inline: 20px;
+            position: relative;
+        }
+
+        /* Navigation matching site pattern */
+        .cs-site-nav {
+            display: flex;
+            flex-wrap: wrap;
+            flex-wrap: balance;
+            align-items: safe center;
+            justify-content: center;
+            gap: 10px;
+            margin-block-end: 26px;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-block-size: 44px;
+            background-color: var(--accent-yellow);
+            color: #1e272e;
+            padding: 8px 15px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.96em;
+            font-weight: 700;
+            border: 3px solid var(--border-ink);
+            box-shadow: 0px 4px 0px var(--border-ink);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 0px var(--border-ink);
+        }
+
+        .nav-button:active {
+            transform: translateY(2px);
+            box-shadow: 0px 2px 0px var(--border-ink);
+        }
+
+        .nav-button.is-current {
+            background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
+            color: #ffffff;
+        }
+
+        html.dark-mode .nav-button:not(.is-current):not(.theme-toggle-btn),
+        body.dark-mode .nav-button:not(.is-current):not(.theme-toggle-btn) {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+
+        /* Page Hero */
+        .hero-card {
+            background: var(--surface-card);
+            border: 4px solid var(--border-ink);
+            border-radius: 26px;
+            padding: 26px 28px;
+            box-shadow: var(--shadow-hard), var(--shadow-card);
+            margin-block-end: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: safe center;
+            gap: 20px;
+        }
+
+        .hero-copy {
+            flex: 1 1 320px;
+            min-inline-size: 0;
+        }
+
+        h1.main-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: clamp(1.8rem, 4vw, 2.7rem);
+            margin: 0 0 8px 0;
+            color: var(--ink-main);
+            line-height: 1.15;
+        }
+
+        .hero-subtitle {
+            margin: 0 0 14px 0;
+            color: var(--ink-muted);
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .meta-pills {
+            display: flex;
+            flex-wrap: wrap;
+            flex-wrap: balance;
+            gap: 10px;
+            align-items: safe center;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            background: var(--surface-soft);
+            border: 2px solid var(--border-subtle);
+            color: var(--ink-main);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: safe center;
+        }
+
+        .action-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-block-size: 44px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            border: 3px solid var(--border-ink);
+            box-shadow: 0px 4px 0px var(--border-ink);
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-weight: 700;
+            font-size: 0.96rem;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .action-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 0px var(--border-ink);
+        }
+
+        .action-pill.sc-link {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: #ffffff;
+        }
+
+        .action-pill.wca-link {
+            background: linear-gradient(135deg, #0066FF 0%, #1d4ed8 100%);
+            color: #ffffff;
+        }
+
+        /* Section Titles & Containers */
+        .section-heading-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            margin-block: 28px 14px;
+        }
+
+        h2.section-title {
+            font-family: 'DynaPuff', cursive;
+            font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+            margin: 0;
+            color: var(--ink-main);
+        }
+
+        .section-note {
+            margin: 0;
+            font-size: 0.94rem;
+            color: var(--ink-muted);
+            font-weight: 600;
+        }
+
+        /* Summary Cards with Subgrid */
+        .rankings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            grid-auto-rows: auto;
+            gap: 18px;
+            margin-block-end: 30px;
+        }
+
+        .event-rank-card {
+            grid-row: span 3;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            grid-template-rows: subgrid;
+            row-gap: 12px;
+            background: var(--surface-card);
+            border: 3.5px solid var(--border-ink);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--shadow-hard), var(--shadow-card);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .event-title {
+            margin: 0;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.2rem;
+            color: var(--ink-main);
+        }
+
+        .event-badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            background: var(--accent-yellow);
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            white-space: nowrap;
+        }
+
+        .rank-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .metric-box {
+            background: var(--surface-soft);
+            border: 2px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-inline-size: 0;
+        }
+
+        .metric-kind {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--ink-muted);
+            font-weight: 800;
+        }
+
+        .metric-rank {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            line-height: 1.15;
+        }
+
+        html.dark-mode .metric-rank,
+        body.dark-mode .metric-rank {
+            color: #38bdf8;
+        }
+
+        .metric-time {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--ink-main);
+        }
+
+        .card-footer-meta {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--ink-muted);
+            border-block-start: 2px dashed var(--border-subtle);
+            padding-block-start: 10px;
+        }
+
+        /* Filter controls for Change Log */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            flex-wrap: balance;
+            gap: 8px;
+            margin-block-end: 14px;
+        }
+
+        .filter-btn {
+            min-block-size: 40px;
+            padding: 7px 14px;
+            border-radius: 12px;
+            border: 2.5px solid var(--border-ink);
+            background: var(--surface-card);
+            color: var(--ink-main);
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.12s ease, background-color 0.15s ease;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .filter-btn[aria-pressed="true"] {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--border-ink);
+        }
+
+        /* Responsive Tables (Container Queries + Sticky Headers + Scrollbars) */
+        .panel-card {
+            container-type: inline-size;
+            background: var(--surface-card);
+            border: 3.5px solid var(--border-ink);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--shadow-hard), var(--shadow-card);
+            margin-block-end: 26px;
+        }
+
+        .table-wrapper {
+            overflow: auto;
+            max-inline-size: 100%;
+            max-block-size: min(520px, 75dvb);
+            scrollbar-gutter: stable;
+            overscroll-behavior: contain;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+            border-radius: 14px;
+            border: 2px solid var(--border-subtle);
+        }
+
+        @supports not (scrollbar-color: auto) {
+            .table-wrapper::-webkit-scrollbar {
+                inline-size: 10px;
+                block-size: 10px;
+            }
+            .table-wrapper::-webkit-scrollbar-thumb {
+                background: var(--scrollbar-thumb);
+                border-radius: 8px;
+            }
+            .table-wrapper::-webkit-scrollbar-track {
+                background: var(--scrollbar-track);
+            }
+        }
+
+        table.rank-table {
+            inline-size: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: start;
+            font-size: 0.96rem;
+        }
+
+        table.rank-table thead {
+            position: sticky;
+            inset-block-start: 0;
+            z-index: 2;
+        }
+
+        table.rank-table thead th {
+            background: #1e272e;
+            color: #f8fafc;
+            font-family: 'DynaPuff', cursive;
+            font-weight: 700;
+            padding: 12px 14px;
+            border-block-end: 2px solid var(--border-ink);
+            white-space: nowrap;
+        }
+
+        table.rank-table tbody th,
+        table.rank-table tbody td {
+            padding: 12px 14px;
+            border-block-end: 1px solid var(--border-subtle);
+            vertical-align: middle;
+        }
+
+        table.rank-table tbody th {
+            position: sticky;
+            inset-inline-start: 0;
+            z-index: 1;
+            background: var(--surface-card);
+            color: var(--ink-main);
+            font-weight: 800;
+            text-align: start;
+        }
+
+        table.rank-table tbody tr:last-child th,
+        table.rank-table tbody tr:last-child td {
+            border-block-end: 0;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .chip-baseline {
+            background: #e0f2fe;
+            color: #075985;
+            border: 1.5px solid #0284c7;
+        }
+
+        .chip-up {
+            background: #dcfce7;
+            color: #166534;
+            border: 1.5px solid #16a34a;
+        }
+
+        .chip-down {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1.5px solid #dc2626;
+        }
+
+        .chip-same {
+            background: var(--surface-soft);
+            color: var(--ink-muted);
+            border: 1.5px solid var(--border-subtle);
+        }
+
+        html.dark-mode .chip-baseline,
+        body.dark-mode .chip-baseline {
+            background: #0c4a6e;
+            color: #e0f2fe;
+            border-color: #38bdf8;
+        }
+
+        html.dark-mode .chip-up,
+        body.dark-mode .chip-up {
+            background: #14532d;
+            color: #dcfce7;
+            border-color: #4ade80;
+        }
+
+        html.dark-mode .chip-down,
+        body.dark-mode .chip-down {
+            background: #7f1d1d;
+            color: #fee2e2;
+            border-color: #f87171;
+        }
+
+        /* Responsive stacked card layout on narrow containers */
+        @container (inline-size < 620px) {
+            .table-wrapper {
+                border: 0;
+                max-block-size: none;
+                overflow: visible;
+                scrollbar-gutter: auto;
+            }
+
+            table.rank-table,
+            table.rank-table thead,
+            table.rank-table tbody,
+            table.rank-table tr,
+            table.rank-table th,
+            table.rank-table td {
+                display: block;
+            }
+
+            table.rank-table thead {
+                display: none;
+            }
+
+            table.rank-table tbody tr {
+                margin-block-end: 14px;
+                border: 2.5px solid var(--border-ink);
+                border-radius: 16px;
+                overflow: clip;
+                background: var(--surface-card);
+            }
+
+            table.rank-table tbody tr:last-child {
+                margin-block-end: 0;
+            }
+
+            table.rank-table tbody th {
+                position: sticky;
+                inset-block-start: 0;
+                z-index: 2;
+                background: var(--surface-sticky-row);
+                border-block-end: 2px solid var(--border-subtle);
+            }
+
+            table.rank-table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+                text-align: end;
+            }
+
+            table.rank-table tbody td::before {
+                font-weight: 800;
+                color: var(--ink-muted);
+                text-align: start;
+                flex-shrink: 0;
+            }
+
+            #changelog-table tbody td:last-child {
+                display: block;
+                text-align: start;
+                line-height: 1.55;
+            }
+
+            #changelog-table tbody td:last-child::before {
+                display: block;
+                margin-block-end: 4px;
+            }
+
+            #standings-table td:nth-child(2)::before { content: var(--col-2, "Single Rank") ": "; }
+            #standings-table td:nth-child(3)::before { content: var(--col-3, "Single Time") ": "; }
+            #standings-table td:nth-child(4)::before { content: var(--col-4, "Average Rank") ": "; }
+            #standings-table td:nth-child(5)::before { content: var(--col-5, "Average Time") ": "; }
+            #standings-table td:nth-child(6)::before { content: var(--col-6, "BC Pool") ": "; }
+
+            #changelog-table td:nth-child(2)::before { content: var(--col-2, "Event") ": "; }
+            #changelog-table td:nth-child(3)::before { content: var(--col-3, "Update") ": "; }
+            #changelog-table td:nth-child(4)::before { content: var(--col-4, "Details") ": "; }
+        }
+
+        .sync-info-box {
+            background: var(--surface-soft);
+            border: 2.5px dashed var(--border-subtle);
+            border-radius: 18px;
+            padding: 16px 20px;
+            color: var(--ink-muted);
+            font-size: 0.95rem;
+        }
+
+        .sync-info-box strong {
+            color: var(--ink-main);
+        }
+
+        /* Global Site Footer matching timer.html & index.html */
+        .site-footer {
+            background: #1e272e;
+            color: #f1f5f9;
+            border-top: 5px solid #00E5FF;
+            margin-top: 50px;
+            padding: 45px 20px 25px 20px;
+            font-family: 'Outfit', sans-serif;
+            position: relative;
+            z-index: 10;
+        }
+        .footer-container {
+            max-inline-size: 1050px;
+            margin-inline: auto;
+            display: grid;
+            grid-template-columns: 1.8fr 1.1fr 1.2fr 1.2fr;
+            gap: 30px;
+            margin-block-end: 35px;
+        }
+        @media (max-width: 900px) {
+            .footer-container { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .footer-container { grid-template-columns: 1fr; }
+        }
+        .footer-logo {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.6em;
+            color: #FAED27;
+            margin-block-end: 12px;
+        }
+        .footer-desc {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-block-end: 16px;
+        }
+        .footer-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .footer-badge {
+            text-decoration: none;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 12px;
+            color: white;
+            transition: transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .footer-badge:hover { transform: translateY(-2px); }
+        .footer-badge.wca { background: #0066FF; }
+        .footer-badge.china { background: #029347; }
+        .footer-badge.yt { background: #FF0000; }
+        .footer-col h2,
+        body.dark-mode .site-footer .footer-col h2 {
+            font-family: 'DynaPuff', cursive;
+            color: #00E5FF !important;
+            font-size: 1.15em;
+            margin-block: 0 15px;
+            border-block-end: 2px dashed #475569;
+            padding-block-end: 6px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .footer-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: color 0.15s, padding-inline-start 0.15s;
+            display: inline-block;
+        }
+        .footer-links a:hover {
+            color: #FAED27;
+            padding-inline-start: 4px;
+        }
+        .footer-col.info-col p {
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-block-start: 0;
+        }
+        .btn-scroll-top {
+            background: #FAED27;
+            color: #1e272e;
+            border: 2px solid #1e272e;
+            border-radius: 12px;
+            padding: 8px 16px;
+            min-block-size: 44px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #000;
+            transition: all 0.15s;
+            margin-block-start: 10px;
+            font-weight: bold;
+        }
+        .btn-scroll-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #000;
+            background: #00E5FF;
+        }
+        .footer-bottom {
+            border-block-start: 1px solid #334155;
+            padding-block-start: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-heading" class="skip-link visually-hidden">Skip to main content</a>
+    <div class="page-bg-decor" aria-hidden="true">
+        <div class="blob-top"></div>
+    </div>
+
+    <div class="page-shell">
+        <header>
+            <nav class="cs-site-nav" aria-label="Primary">
+                <a href="index.html" class="nav-button">🏠 Home</a>
+                <a href="timer.html" class="nav-button">⏱️ Timer</a>
+                <a href="practice-speed.html" class="nav-button">⚡ Practice Speed</a>
+                <a href="challenges.html" class="nav-button">🏆 Challenges ♾️</a>
+                <a href="bc-rankings.html" class="nav-button is-current" aria-current="page">🍁 BC Rankings</a>
+                <a href="news.html" class="nav-button">📰 News</a>
+                <a href="blog.html" class="nav-button">✍️ Blog</a>
+                <a href="tutorial-3x3.html" class="nav-button">🧊 3x3 Tutorial</a>
+                <a href="algorithms.html" class="nav-button">🧩 Algorithms</a>
+                <button id="theme-toggle" type="button" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙">
+                    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+                    <span class="theme-toggle-text">Dark Mode</span>
+                </button>
+            </nav>
+        </header>
+
+        <main id="main-content">
+            <section class="hero-card" aria-labelledby="main-heading">
+                <div class="hero-copy">
+                    <h1 id="main-heading" tabindex="-1" class="main-title">Cole Hua — BC Rankings 🍁</h1>
+                    <p class="hero-subtitle">
+                        Official British Columbia provincial speedcubing rankings and timestamped rank change log for <strong>Cole Hua</strong> (WCA ID: <strong>2026HUAC01</strong>).
+                    </p>
+                    <div class="meta-pills">
+                        <span class="meta-pill">📍 Province: British Columbia (BC)</span>
+                        <span class="meta-pill">🕒 Last Rank Change: <time datetime="2026-11-25T17:06:00-07:00">2026-11-25 17:06 MST (-07:00)</time></span>
+                        <span class="meta-pill">🏆 Ranked Events: 4</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="https://www.speedcubingcanada.org/en/rankings" target="_blank" rel="noopener noreferrer" class="action-pill sc-link">🍁 Speedcubing Canada</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="action-pill wca-link">⚡ WCA Profile</a>
+                </div>
+            </section>
+
+            <div class="section-heading-row">
+                <h2 id="current-cards-heading" class="section-title">📊 Current BC Provincial Standings</h2>
+                <p class="section-note">Single &amp; Average ranks in British Columbia (Top 100 per category on Speedcubing Canada)</p>
+            </div>
+
+            <section class="rankings-grid" aria-labelledby="current-cards-heading">
+                <article class="event-rank-card">
+                    <div class="card-header">
+                        <h3 class="event-title">🧊 3x3x3 Cube</h3>
+                        <span class="event-badge">Main Event</span>
+                    </div>
+                    <div class="rank-metrics">
+                        <div class="metric-box">
+                            <span class="metric-kind">Single Rank</span>
+                            <span class="metric-rank">#80</span>
+                            <span class="metric-time">12.60s</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-kind">Average Rank</span>
+                            <span class="metric-rank">#72</span>
+                            <span class="metric-time">14.43s</span>
+                        </div>
+                    </div>
+                    <div class="card-footer-meta">BC Pool: Top 100 Single • Top 100 Average</div>
+                </article>
+
+                <article class="event-rank-card">
+                    <div class="card-header">
+                        <h3 class="event-title">🟦 2x2x2 Cube</h3>
+                        <span class="event-badge">Sprint</span>
+                    </div>
+                    <div class="rank-metrics">
+                        <div class="metric-box">
+                            <span class="metric-kind">Single Rank</span>
+                            <span class="metric-rank">#64</span>
+                            <span class="metric-time">2.96s</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-kind">Average Rank</span>
+                            <span class="metric-rank">#79</span>
+                            <span class="metric-time">5.64s</span>
+                        </div>
+                    </div>
+                    <div class="card-footer-meta">BC Pool: Top 100 Single • Top 100 Average</div>
+                </article>
+
+                <article class="event-rank-card">
+                    <div class="card-header">
+                        <h3 class="event-title">🖐️ 3x3x3 One-Handed</h3>
+                        <span class="event-badge">Best Rank</span>
+                    </div>
+                    <div class="rank-metrics">
+                        <div class="metric-box">
+                            <span class="metric-kind">Single Rank</span>
+                            <span class="metric-rank">#52</span>
+                            <span class="metric-time">24.03s</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-kind">Average Rank</span>
+                            <span class="metric-rank">#53</span>
+                            <span class="metric-time">30.41s</span>
+                        </div>
+                    </div>
+                    <div class="card-footer-meta">BC Pool: 92 Single • 85 Average</div>
+                </article>
+
+                <article class="event-rank-card">
+                    <div class="card-header">
+                        <h3 class="event-title">🧱 5x5x5 Cube</h3>
+                        <span class="event-badge">Big Cube</span>
+                    </div>
+                    <div class="rank-metrics">
+                        <div class="metric-box">
+                            <span class="metric-kind">Single Rank</span>
+                            <span class="metric-rank">#73</span>
+                            <span class="metric-time">3:40.13</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-kind">Average Rank</span>
+                            <span class="metric-rank">—</span>
+                            <span class="metric-time">Not ranked</span>
+                        </div>
+                    </div>
+                    <div class="card-footer-meta">BC Pool: 80 Single • Average unranked</div>
+                </article>
+            </section>
+
+            <div class="section-heading-row">
+                <h2 id="standings-heading" class="section-title">📋 Detailed Event Breakdown</h2>
+                <p class="section-note">All 4 BC-ranked events (no BC ranking yet in remaining 14 WCA / Speedcubing Canada events)</p>
+            </div>
+
+            <div class="panel-card">
+                <div tabindex="0" role="region" aria-labelledby="standings-heading" class="table-wrapper">
+                    <table id="standings-table" class="rank-table" style="--col-2: 'Single Rank'; --col-3: 'Single Time'; --col-4: 'Average Rank'; --col-5: 'Average Time'; --col-6: 'BC Pool Size';">
+                        <caption class="visually-hidden">Current British Columbia rankings for Cole Hua across ranked WCA events</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Event</th>
+                                <th scope="col">Single Rank</th>
+                                <th scope="col">Single Time</th>
+                                <th scope="col">Average Rank</th>
+                                <th scope="col">Average Time</th>
+                                <th scope="col">BC Pool Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">3x3x3 Cube</th>
+                                <td><strong>#80</strong></td>
+                                <td>12.60</td>
+                                <td><strong>#72</strong></td>
+                                <td>14.43</td>
+                                <td>100 / 100</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2x2x2 Cube</th>
+                                <td><strong>#64</strong></td>
+                                <td>2.96</td>
+                                <td><strong>#79</strong></td>
+                                <td>5.64</td>
+                                <td>100 / 100</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3x3x3 One-Handed</th>
+                                <td><strong>#52</strong></td>
+                                <td>24.03</td>
+                                <td><strong>#53</strong></td>
+                                <td>30.41</td>
+                                <td>92 / 85</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5x5x5 Cube</th>
+                                <td><strong>#73</strong></td>
+                                <td>3:40.13</td>
+                                <td>—</td>
+                                <td>Not ranked</td>
+                                <td>80 / —</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-heading-row">
+                <h2 id="changelog-heading" class="section-title">📜 BC Ranking Change History</h2>
+                <p class="section-note">New entries are added only when a ranking or official result changes during a refresh</p>
+            </div>
+
+            <div class="panel-card">
+                <div class="filter-bar" role="group" aria-label="Filter history by event">
+                    <button type="button" class="filter-btn" data-event-filter="all" aria-pressed="true">All Updates</button>
+                    <button type="button" class="filter-btn" data-event-filter="333" aria-pressed="false">3x3x3</button>
+                    <button type="button" class="filter-btn" data-event-filter="222" aria-pressed="false">2x2x2</button>
+                    <button type="button" class="filter-btn" data-event-filter="333oh" aria-pressed="false">3x3x3 OH</button>
+                    <button type="button" class="filter-btn" data-event-filter="555" aria-pressed="false">5x5x5</button>
+                </div>
+
+                <div tabindex="0" role="region" aria-labelledby="changelog-heading" class="table-wrapper">
+                    <table id="changelog-table" class="rank-table" style="--col-2: 'Event'; --col-3: 'Status'; --col-4: 'Recorded Rankings &amp; Times';">
+                        <caption class="visually-hidden">Timestamped log of Cole Hua British Columbia ranking changes</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Date &amp; Time</th>
+                                <th scope="col">Event</th>
+                                <th scope="col">Update</th>
+                                <th scope="col">Recorded Rankings &amp; Times</th>
+                            </tr>
+                        </thead>
+                        <tbody id="changelog-tbody">
+                            <tr data-events="all,333,222,333oh,555">
+                                <th scope="row"><time datetime="2026-11-25T17:06:00-07:00">2026-11-25 17:06 MST (-07:00)</time></th>
+                                <td>All Ranked BC Events</td>
+                                <td><span class="status-chip chip-baseline">📌 Baseline Recorded</span></td>
+                                <td>
+                                    <strong>3x3:</strong> #80 Single (12.60) / #72 Avg (14.43) ·
+                                    <strong>2x2:</strong> #64 Single (2.96) / #79 Avg (5.64) ·
+                                    <strong>OH:</strong> #52 Single (24.03) / #53 Avg (30.41) ·
+                                    <strong>5x5:</strong> #73 Single (3:40.13)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <aside class="sync-info-box" aria-label="Tracking Policy">
+                <strong>🔄 Refresh Tracking Rule:</strong> On every scheduled or requested site refresh, Speedcubing Canada BC provincial rankings are checked for <strong>Cole Hua (2026HUAC01)</strong>. When one or more ranks or results change, a new timestamped row is prepended above and the current cards update. When rankings stay identical, this page remains untouched.
+            </aside>
+        </main>
+    </div>
+
+    <!-- Machine-readable baseline snapshot for automated diff checks on future refreshes -->
+    <script type="application/json" id="bc-rankings-snapshot">
+    {
+      "person": {
+        "name": "Cole Hua",
+        "wca_id": "2026HUAC01",
+        "region": "bc",
+        "region_label": "British Columbia"
+      },
+      "source_url": "https://www.speedcubingcanada.org/en/rankings",
+      "api_pattern": "https://www.speedcubingcanada.org/api/province_rankings/{event}/bc/{type}",
+      "last_checked": "2026-11-25T17:06:00-07:00",
+      "last_changed": "2026-11-25T17:06:00-07:00",
+      "rankings": {
+        "333": {
+          "label": "3x3x3 Cube",
+          "single": { "rank": 80, "out_of": 100, "time": "12.60" },
+          "average": { "rank": 72, "out_of": 100, "time": "14.43" }
+        },
+        "222": {
+          "label": "2x2x2 Cube",
+          "single": { "rank": 64, "out_of": 100, "time": "2.96" },
+          "average": { "rank": 79, "out_of": 100, "time": "5.64" }
+        },
+        "333oh": {
+          "label": "3x3x3 One-Handed",
+          "single": { "rank": 52, "out_of": 92, "time": "24.03" },
+          "average": { "rank": 53, "out_of": 85, "time": "30.41" }
+        },
+        "555": {
+          "label": "5x5x5 Cube",
+          "single": { "rank": 73, "out_of": 80, "time": "3:40.13" },
+          "average": null
+        }
+      },
+      "history": [
+        {
+          "recorded_at": "2026-11-25T17:06:00-07:00",
+          "display_time": "2026-11-25 17:06 MST (-07:00)",
+          "event": "All Ranked BC Events",
+          "change_type": "Baseline Recorded",
+          "summary": "Initial BC provincial snapshot recorded across 18 WCA & Speedcubing Canada events."
+        }
+      ]
+    }
+    </script>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const filterButtons = document.querySelectorAll('.filter-btn[data-event-filter]');
+            const historyRows = document.querySelectorAll('#changelog-tbody tr');
+
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const selected = btn.getAttribute('data-event-filter');
+                    filterButtons.forEach(other => {
+                        other.setAttribute('aria-pressed', String(other === btn));
+                    });
+                    historyRows.forEach(row => {
+                        const rowEvents = (row.getAttribute('data-events') || 'all').split(',');
+                        const show = selected === 'all' || rowEvents.includes(selected);
+                        row.hidden = !show;
+                    });
+                });
+            });
+        })();
+    </script>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-logo">Learn Cube 4 Fun 🧊</div>
+                <p class="footer-desc">
+                    Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
+                </p>
+                <div class="footer-badges">
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
+                </div>
+            </div>
+            <div class="footer-col links-col">
+                <h2>🧭 Explore Tools</h2>
+                <ul class="footer-links">
+                    <li><a href="index.html">🏠 Home</a></li>
+                    <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
+                    <li><a href="practice-speed.html">⚡ Practice Speed Mode</a></li>
+                    <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
+                    <li><a href="news.html">📰 Cubing News &amp; Updates</a></li>
+                    <li><a href="blog.html">✍️ Cole's Blog</a></li>
+                    <li><a href="play.html">🎮 3D Virtual Cube</a></li>
+                </ul>
+            </div>
+            <div class="footer-col links-col">
+                <h2>📖 Tutorials &amp; Guides</h2>
+                <ul class="footer-links">
+                    <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
+                    <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
+                    <li><a href="algorithms.html">🧩 Algorithms Guide</a></li>
+                    <li><a href="trainer.html">🧠 Case Recognition Trainer</a></li>
+                    <li><a href="guide.html">📖 Finger Tricks &amp; Guide</a></li>
+                    <li><a href="notation.html">📖 Notation Guide</a></li>
+                </ul>
+            </div>
+            <div class="footer-col info-col">
+                <h2>📍 In-Person Classes</h2>
+                <p><strong>Wesbrook Community Centre</strong><br>
+                Wednesdays 7:00 PM – 8:00 PM<br>
+                UBC Campus, Vancouver BC</p>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! <a href="games.html" class="secret-rocket-btn" title="🚀 Secret Rocket: Enter Game Mode!" aria-label="Enter Game Mode">🚀</a></p>
+        </div>
+    </footer>
+</body>
+</html>
