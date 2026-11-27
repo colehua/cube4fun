@@ -822,6 +822,37 @@
             gap: 3px;
         }
 
+        /* CUBE RUNNER: ALIGN LEFT & RIGHT CONTROLS ON THE EXACT SAME ROW/HEIGHT */
+        #panel-runner .joycon {
+            display: grid;
+            grid-template-rows: 56px minmax(52px, 1fr) minmax(104px, 1fr) 62px;
+            justify-items: center;
+            align-items: center;
+        }
+        #panel-runner .switch-stick-assembly,
+        #panel-runner .switch-dpad-cluster,
+        #panel-runner .switch-abxy-cluster {
+            margin: 0;
+        }
+        #panel-runner .dpad-btn-round {
+            width: 32px;
+            height: 32px;
+            flex-direction: column;
+        }
+        #panel-runner #btn-runner-left .btn-letter {
+            font-size: 11px;
+            font-weight: 900;
+            font-family: 'DynaPuff', cursive;
+            line-height: 1;
+        }
+        #panel-runner #btn-runner-left .btn-sub {
+            font-size: 6.5px;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.3px;
+            line-height: 1;
+        }
+
         .plus-symbol {
             font-size: 13px;
             font-weight: 900;
@@ -987,6 +1018,13 @@
                 height: 32px;
             }
             .dpad-btn-round, .abxy-btn {
+                width: 26px;
+                height: 26px;
+            }
+            #panel-runner .joycon {
+                grid-template-rows: 46px minmax(46px, 1fr) minmax(88px, 1fr) 54px;
+            }
+            #panel-runner .dpad-btn-round {
                 width: 26px;
                 height: 26px;
             }
@@ -2338,7 +2376,10 @@
                                     <button class="dpad-btn-round" onclick="runnerJumpAction()" title="Jump (W / ⬆️)">▲</button>
                                 </div>
                                 <div class="dpad-row dpad-mid-row">
-                                    <button class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer LEFT (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; font-weight: 900; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);">◄</button>
+                                    <button id="btn-runner-left" class="dpad-btn-round" onclick="moveRunnerLane(-1)" title="Steer LEFT (A / ⬅️)" style="background: #0284c7; color: #ffffff; border-color: #38bdf8; box-shadow: 0 0 10px rgba(0, 240, 255, 0.7);">
+                                        <span class="btn-letter" style="color: #ffffff; font-size: 13px;">◄</span>
+                                        <span class="btn-sub" style="color: #ffffff; opacity: 1; font-weight: 800;">LEFT</span>
+                                    </button>
                                     <button class="dpad-btn-round" onclick="runnerShootAction()" title="Shoot Monster (Space / F)">🔥</button>
                                 </div>
                                 <div class="dpad-row">
@@ -2370,6 +2411,14 @@
                                 </button>
                                 <button id="btn-deck-start" style="display: none;" onclick="startRunnerGame()"></button>
                             </div>
+                            <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Steer RIGHT (D / ➡️)">
+                                <div class="switch-stick-outer">
+                                    <div class="switch-stick-cap" onclick="moveRunnerLane(1)">
+                                        <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
+                                        <span class="stick-label" style="color: #ff6957;">RIGHT</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="switch-abxy-cluster">
                                 <div class="abxy-row">
                                     <button class="abxy-btn btn-x" onclick="runnerJumpAction()" title="X Button: Jump / Dodge (W / ⬆️)">
@@ -2392,14 +2441,6 @@
                                         <span class="btn-letter">▼</span>
                                         <span class="btn-sub">SLIDE</span>
                                     </button>
-                                </div>
-                            </div>
-                            <div class="switch-stick-assembly right-stick" title="Right Thumbstick: Steer RIGHT (D / ➡️)">
-                                <div class="switch-stick-outer">
-                                    <div class="switch-stick-cap" onclick="moveRunnerLane(1)">
-                                        <span style="font-size: 14px; color: #ff6957; font-weight: 900;">►</span>
-                                        <span class="stick-label" style="color: #ff6957;">RIGHT</span>
-                                    </div>
                                 </div>
                             </div>
                             <div class="joycon-bottom-controls">

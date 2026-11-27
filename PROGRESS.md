@@ -1,35 +1,34 @@
 # Summary
-- What changed: Fixed the duplicate "Dark Mode" button on `index.html`. Separated `#install-app-btn` from `.theme-toggle-btn` onto its own `.install-app-btn` class in `index.html`, added `[hidden] { display: none !important; }` plus matching light/dark/reduced-motion pill styles for `.install-app-btn` in `theme.css`. Checked live Cole Hua BC rankings across all 18 Speedcubing Canada events (`bc-rankings.html` left untouched after 0 diffs).
-- How verified: Verified every HTML page in the repo has at most one `#theme-toggle`/`.theme-toggle-btn` element; verified `#install-app-btn` stays hidden via `[hidden]` and untouched by `theme.js` during light/dark toggling via a Node VM simulation; checked JS/HTML/CSS syntax (`node --check theme.js`, `index.html` inline script parsing, Python `html.parser`, balanced braces in `theme.css`); checked all 36 live Speedcubing Canada BC ranking endpoints (0 diffs vs. `bc-rankings.html`).
-- What to review: `index.html` (`#install-app-btn`), `theme.css` (`[hidden]` and `.install-app-btn` styles).
+- What changed: Aligned Cube Runner's Left and Right controls onto the exact same horizontal rows and heights in `games.html` (`#panel-runner`). Reordered the Right Joy-Con so the `► RIGHT` thumbstick sits above the ABXY cluster (matching the Left Joy-Con's `◄ LEFT` thumbstick above the D-Pad), added a fixed 4-row CSS Grid on `#panel-runner .joycon` (desktop & mobile) so top/bottom control height changes never shift steering rows, and matched `#btn-runner-left` (`32px`/`26px` with `◄ LEFT`) to `#btn-runner-right` (`► RIGHT`).
+- How verified: Verified `#panel-runner` Left and Right Joy-Con child ordering (`top -> stick -> cluster -> bottom`) and IDs (`#btn-runner-left` / `#btn-runner-right`) via automated Node script; verified inline JS parses cleanly, CSS braces are balanced, and `games.html` parses cleanly with Python `html.parser`. BC rankings previously checked today (2026-11-27): no changes (`bc-rankings.html` untouched).
+- What to review: `games.html` (`#panel-runner` Joy-Con CSS grid rules and Left/Right Joy-Con markup).
 - Blockers: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Identify root cause of duplicate "Dark Mode" buttons on `index.html`.
-2. Restore single "Dark Mode" toggle button by isolating `#install-app-btn` from `.theme-toggle-btn` and honoring `[hidden]`.
-3. Run recurring Cole Hua BC rankings check against Speedcubing Canada (leave `bc-rankings.html` untouched if unchanged).
-4. Verify HTML/CSS/JS and push changes to `origin/main`.
+1. Place Cube Runner's Left and Right steering buttons (`#btn-runner-left` / `#btn-runner-right`) and thumbsticks (`◄ LEFT` / `► RIGHT`) on the exact same vertical height/row across desktop and mobile.
+2. Prevent dynamic top/bottom Joy-Con controls (`[+] Dash`, `🛡️ 100 💰`) from offsetting left/right alignment.
+3. Verify `games.html` syntax and symmetry, update `PROGRESS.md`, and push to `origin/main`.
 
 Next step: Ready for future prompts.
 
 Tasks:
-- [x] Pre-sync (`git pull origin main`) and read `PROGRESS.md` / `GEMINI.md`
-- [x] Check live Cole Hua BC rankings across all 18 events (36 endpoints) — 0 changes, left `bc-rankings.html` untouched
-- [x] Diagnose duplicate Dark Mode button (`#install-app-btn` reusing `.theme-toggle-btn` + `.theme-toggle-btn { display: inline-flex }` overriding `[hidden]`)
-- [x] Update `#install-app-btn` class to `.install-app-btn` in `index.html` and add `[hidden]` + `.install-app-btn` styles in `theme.css`
-- [x] Verify single dark-mode toggle invariant across all HTML files, DOM simulation of `theme.js`, and HTML/CSS/JS syntax checks
+- [x] Pre-sync (`git pull origin main`) and inspect Cube Runner Joy-Con layout in `games.html`
+- [x] Align Right Joy-Con child order (`stick` above `abxy`) with Left Joy-Con (`stick` above `dpad`) in `#panel-runner`
+- [x] Add synchronized 4-row CSS Grid for `#panel-runner .joycon` (desktop & mobile) and match `#btn-runner-left` size/label to `#btn-runner-right`
+- [x] Verify HTML/CSS/JS syntax and Joy-Con row symmetry
 - [x] Update `PROGRESS.md`, commit, and push to `origin/main`
 
 Assumptions:
-- Keep `#install-app-btn` functional for browsers that support PWA install (`beforeinstallprompt` / `navigator.install`), hidden by default via `[hidden]`, with its own `.install-app-btn` class so it never duplicates or mimics the Dark Mode button.
-- Stashed obsolete local 1-line `timer.html` edit from before commit `9863657` (already superseded on `origin/main`).
+- Scoped the symmetric Joy-Con layout specifically to `#panel-runner` (Cube Runner) as requested, leaving the other 11 arcade games unchanged.
+- Placing thumbsticks in row 2 and D-Pad/ABXY in row 3 keeps both `◄ LEFT`/`► RIGHT` thumbsticks and `#btn-runner-left`/`#btn-runner-right` buttons aligned at identical pixel heights.
 
 Blockers (what I need to do): None.
 Found, not done:
 - Unrelated to this task: 14 sub-pages have leftover `<text y='.9em' font-size='90'>...</text></svg>">` markup trailing `<link rel="manifest" href="manifest.webmanifest">` from commit `4c1a4c0`. Left untouched to keep this fix minimal and focused.
 
 Log (newest first, one line each):
+- 2026-11-27: BC rankings checked: no changes; aligned Cube Runner Left and Right buttons and thumbsticks onto identical rows/heights in `games.html` (`#panel-runner`), verified and pushed to `origin/main`.
 - 2026-11-27: BC rankings checked: no changes; fixed duplicate Dark Mode button on `index.html` by moving `#install-app-btn` to `.install-app-btn` and enforcing `[hidden] { display: none !important; }` in `theme.css`, verified and pushed to `origin/main`.
 - 2026-11-26: BC rankings checked: no changes; completed full-site review and upgrade across 21 existing files + 7 new PWA/SEO/404 assets, eliminated all 48 legacy-scan findings, fixed audio/XSS/markdown/overflow/contrast bugs, verified 100 A11y/BP/SEO in Lighthouse, pushed to `origin/main`.
 - 2026-11-25: Created `bc-rankings.html`, linked across `index.html`/`timer.html`/`news.html`, added recurring BC ranking refresh task to `AGENT.md`/`CLAUDE.md`/`GEMINI.md`, verified desktop/mobile & live API parity, pushed to `origin/main`.
