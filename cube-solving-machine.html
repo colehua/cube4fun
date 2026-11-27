@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Interactive Cube Solving Machine by Cole Hua — paint your 2x2 to 6x6 Rubik's Cube, Pyraminx, or Skewb (or scan with camera) and get a verified step-by-step 3D solution.">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/cube-solving-machine.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🤖 Cube Solving Machine • Learn Cube 4 Fun">
+    <meta property="og:description" content="Interactive Cube Solving Machine by Cole Hua — paint your 2x2 to 6x6 Rubik's Cube, Pyraminx, or Skewb (or scan with camera) and get a verified step-by-step 3D solution.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/cube-solving-machine.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>🤖 Cube Solving Machine • Learn Cube 4 Fun</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🤖</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Fredoka:wght@300..700&family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -1893,6 +1903,7 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <div class="container">
         
@@ -1918,6 +1929,7 @@
             </div>
         </header>
 
+        <main id="main-content">
         <!-- HERO HEADER -->
         <div class="solver-header">
             <div style="font-size: 3.4em; margin-bottom: 4px; animation: pulse 1.8s infinite alternate; display: inline-block;">🤖⚡🧩</div>
@@ -2128,6 +2140,8 @@
                 </div>
             </div>
         </section>
+
+        </main>
 
         <!-- FOOTER RETURN BUTTONS -->
         <footer class="solver-footer">
@@ -2737,7 +2751,7 @@
         function renderSolver3DCube() {
             const cubeEl = document.getElementById('solver-3d-cube');
             if (!cubeEl) return;
-            cubeEl.innerHTML = "";
+            cubeEl.replaceChildren();
 
             if (solverSize === 'pyraminx') {
                 const faceKeys = [
@@ -3003,7 +3017,7 @@
         function renderSolverNet() {
             const container = document.getElementById('cube-net-container');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             if (solverSize === 'pyraminx') {
                 container.style.gridTemplateColumns = 'repeat(3, auto)';
@@ -3530,7 +3544,7 @@
 
             const badgeContainer = document.getElementById('color-count-badges');
             if (badgeContainer) {
-                badgeContainer.innerHTML = "";
+                badgeContainer.replaceChildren();
                 activeColors.forEach(c => {
                     const badge = document.createElement('div');
                     const isOk = counts[c] === expected;
@@ -4413,7 +4427,7 @@
         function renderScannerFaceTabs() {
             const container = document.getElementById('scanner-face-tabs');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             const list = getFaceListForScanner();
             list.forEach(item => {
@@ -4437,7 +4451,7 @@
         function renderScannerFacesSummary() {
             const container = document.getElementById('scanner-faces-summary');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
             const list = getFaceListForScanner();
             list.forEach(item => {
                 const badge = document.createElement('div');
@@ -4483,7 +4497,7 @@
         function renderScannerReticleGrid() {
             const gridEl = document.getElementById('scanner-grid-overlay');
             if (!gridEl) return;
-            gridEl.innerHTML = "";
+            gridEl.replaceChildren();
 
             if (solverSize === 'pyraminx') {
                 gridEl.style.display = 'block';
@@ -4590,7 +4604,7 @@
         function renderScannerPaletteStrip() {
             const strip = document.getElementById('scanner-palette-strip');
             if (!strip) return;
-            strip.innerHTML = "";
+            strip.replaceChildren();
 
             let colors = [];
             if (solverSize === 'pyraminx') {
@@ -4619,7 +4633,7 @@
         function renderScannerReviewGrid() {
             const container = document.getElementById('scanner-detected-grid-container');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             if (solverSize === 'pyraminx') {
                 container.style.display = 'grid';
@@ -4806,7 +4820,7 @@
         function renderScanner3DGuideCube() {
             const cubeEl = document.getElementById('scanner-mini-3d-cube');
             if (!cubeEl) return;
-            cubeEl.innerHTML = "";
+            cubeEl.replaceChildren();
 
             if (solverSize === 'pyraminx') {
                 cubeEl.className = 'scanner-mini-3d-cube mini-pyraminx';
@@ -5226,7 +5240,7 @@
                             </button>
                             <label class="btn-scanner-action btn-upload" title="Take a photo with camera app or choose image file">
                                 📁 Upload Picture
-                                <input type="file" id="scanner-file-input" accept="image/*" capture="environment" style="display: none;" onchange="handleImageFileUpload(event)">
+                                <input type="file" id="scanner-file-input" name="scanner_file" aria-label="Upload cube face photo" accept="image/*" capture="environment" style="display: none;" onchange="handleImageFileUpload(event)">
                             </label>
                             <button class="btn-scanner-action btn-flip" id="btn-flip-camera" onclick="flipCameraFacing()" title="Switch Front/Back Camera">
                                 🔄 Flip Camera

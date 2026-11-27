@@ -3,18 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Learn how to solve a Rubik's Cube with Cole Hua. Access step-by-step speedcubing tutorials, view Cole Hua's WCA Profile, subscribe to his YouTube, and join our weekly classes at Wesbrook Community Centre.">
     <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, Cole Hua WorldCubeAssociation, Cole Hua WCA Profile, Cole Hua Cubing China, Cole Hua cubing.com, Learn Cube 4 Fun, Rubik's Cube tutorial, speedcubing, Wesbrook Community Centre">
+    <link rel="canonical" href="https://colehua.github.io/cube4fun/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Learn Cube 4 Fun — Cole Hua WCA Profile, Tutorials & Speedcubing Tools">
+    <meta property="og:description" content="Free, kid-friendly Rubik's Cube tutorials, WCA timer, 2-4 player Battle Timer, Cube Solving Machine, BC Rankings, and Arcade by Cole Hua (WCA 2026HUAC01).">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Learn Cube 4 Fun - Cole Hua WCA Profile & Tutorials</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-    <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
+    <!-- Google Firebase Firestore (Always Free / Never Expires) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db-config.js"></script>
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Learn Cube 4 Fun",
+      "url": "https://colehua.github.io/cube4fun/",
+      "author": {
+        "@type": "Person",
+        "name": "Cole Hua",
+        "sameAs": [
+          "https://www.worldcubeassociation.org/persons/2026HUAC01",
+          "https://www.youtube.com/@ColeHua",
+          "https://cubing.com/results/person/2026HUAC01?lang=zh_cn"
+        ]
+      }
+    }
+    </script>
     <style>
         html {
             scroll-behavior: smooth;
@@ -637,19 +664,25 @@
 </head>
 <body>
 
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Secret Light Blue Small Portal Button (Top Left Corner) -->
     <a href="secret.html" id="secret-portal-button" onclick="activateSecretPortal(event)" class="secret-red-dot secret-blue-dot" aria-label="Secret Button" title="🔵 Secret Home Page"></a>
 
-    <div class="blob-top"></div>
-    <div class="blob-bottom"></div>
+    <div class="blob-top" aria-hidden="true"></div>
+    <div class="blob-bottom" aria-hidden="true"></div>
 
-    <div class="container">
+    <main id="main-content" class="container">
         
         <!-- TOP UTILITY BAR (LANGUAGE PICKER & THEME TOGGLE) -->
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 12px; position: relative; z-index: 10; flex-wrap: wrap;">
+            <button id="install-app-btn" type="button" class="theme-toggle-btn" hidden aria-label="Install Cube4Fun App">
+                <span aria-hidden="true">📲</span> Install App
+            </button>
+            <span id="install-app-status" class="visually-hidden" role="status" aria-live="polite"></span>
             <!-- Dark Mode Toggle Button -->
-            <button id="theme-toggle" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙">
-                <span class="theme-toggle-icon">🌙</span>
+            <button id="theme-toggle" type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙">
+                <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
                 <span class="theme-toggle-text">Dark Mode</span>
             </button>
             <div class="language-picker" title="Change Website Language">
@@ -673,7 +706,7 @@
         
         <!-- SOCIAL & PROFILE BANNERS -->
         <div style="text-align: center; margin: 20px auto; max-width: 900px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; box-sizing: border-box;">
-            <a href="https://www.youtube.com/@ColeHua" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #FF0000; color: white; padding: 12px 20px; border-radius: 30px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.25em; border: 4px dashed white; box-shadow: 0px 6px 0px #CC0000, 0px 6px 12px rgba(0,0,0,0.15); transition: all 0.2s ease; position: relative; top: 0; flex: 1 1 240px; max-width: 280px; box-sizing: border-box;" onmouseover="this.style.top='3px'; this.style.boxShadow='0px 3px 0px #CC0000, 0px 3px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 6px 0px #CC0000, 0px 6px 12px rgba(0,0,0,0.15)';">
+            <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #FF0000; color: white; padding: 12px 20px; border-radius: 30px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.25em; border: 4px dashed white; box-shadow: 0px 6px 0px #CC0000, 0px 6px 12px rgba(0,0,0,0.15); transition: all 0.2s ease; position: relative; top: 0; flex: 1 1 240px; max-width: 280px; box-sizing: border-box;" onmouseover="this.style.top='3px'; this.style.boxShadow='0px 3px 0px #CC0000, 0px 3px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 6px 0px #CC0000, 0px 6px 12px rgba(0,0,0,0.15)';">
                 <span style="display: inline-flex; align-items: center; animation: wiggle 2s infinite;">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="white" style="display: block;">
                         <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.507 9.388.507 9.388.507s7.518 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -681,7 +714,7 @@
                 </span> 
                 <span>Cole's <strong>YouTube</strong> 🚀</span>
             </a>
-            <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #0051BA; color: white; padding: 12px 20px; border-radius: 30px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.25em; border: 4px dashed white; box-shadow: 0px 6px 0px #003399, 0px 6px 12px rgba(0,0,0,0.15); transition: all 0.2s ease; position: relative; top: 0; flex: 1 1 240px; max-width: 280px; box-sizing: border-box;" onmouseover="this.style.top='3px'; this.style.boxShadow='0px 3px 0px #003399, 0px 3px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 6px 0px #003399, 0px 6px 12px rgba(0,0,0,0.15)';">
+            <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #0051BA; color: white; padding: 12px 20px; border-radius: 30px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.25em; border: 4px dashed white; box-shadow: 0px 6px 0px #003399, 0px 6px 12px rgba(0,0,0,0.15); transition: all 0.2s ease; position: relative; top: 0; flex: 1 1 240px; max-width: 280px; box-sizing: border-box;" onmouseover="this.style.top='3px'; this.style.boxShadow='0px 3px 0px #003399, 0px 3px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 6px 0px #003399, 0px 6px 12px rgba(0,0,0,0.15)';">
                 <span style="display: inline-flex; align-items: center; animation: wiggle 2s infinite;">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
                         <circle cx="12" cy="12" r="10" />
@@ -695,7 +728,7 @@
                 </span> 
                 <span>Cole's <strong>WCA Profile</strong> ⚡</span>
             </a>
-            <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #029347; color: white; padding: 12px 20px; border-radius: 30px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.25em; border: 4px dashed white; box-shadow: 0px 6px 0px #016630, 0px 6px 12px rgba(0,0,0,0.15); transition: all 0.2s ease; position: relative; top: 0; flex: 1 1 240px; max-width: 280px; box-sizing: border-box;" onmouseover="this.style.top='3px'; this.style.boxShadow='0px 3px 0px #016630, 0px 3px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 6px 0px #016630, 0px 6px 12px rgba(0,0,0,0.15)';">
+            <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background-color: #029347; color: white; padding: 12px 20px; border-radius: 30px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.25em; border: 4px dashed white; box-shadow: 0px 6px 0px #016630, 0px 6px 12px rgba(0,0,0,0.15); transition: all 0.2s ease; position: relative; top: 0; flex: 1 1 240px; max-width: 280px; box-sizing: border-box;" onmouseover="this.style.top='3px'; this.style.boxShadow='0px 3px 0px #016630, 0px 3px 8px rgba(0,0,0,0.15)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 6px 0px #016630, 0px 6px 12px rgba(0,0,0,0.15)';">
                 <span style="font-size: 1.3em; animation: wiggle 2s infinite; display: inline-block; line-height: 1;">🇨🇳</span> 
                 <span>Cole's <strong>Cubing China</strong> 📊</span>
             </a>
@@ -952,7 +985,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <span id="p2-avatar" style="font-size: 1.3em;">🤖</span>
-                                <select id="p2-preset-select" onchange="duelSelectPreset(2, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #6d28d9; border: 2px solid #c4b5fd; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
+                                <select id="p2-preset-select" name="p2_opponent" aria-label="Choose Player 2 or Bot opponent" onchange="duelSelectPreset(2, this.value)" style="font-family: 'DynaPuff', cursive; font-size: 0.95em; font-weight: 700; color: #6d28d9; border: 2px solid #c4b5fd; border-radius: 10px; padding: 4px 8px; background: white; cursor: pointer; max-width: 170px;">
                                     <option value="bot" selected>🤖 Bot</option>
                                     <option value="Player 2">Player 2 👤</option>
                                 </select>
@@ -1659,6 +1692,15 @@
                 hintContainer.innerHTML = html;
             }
             
+            function duelEscapeHtml(str) {
+                return String(str == null ? '' : str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
             function duelUpdateMainTitle() {
                 const title = document.getElementById('duel-main-title');
                 if (!title) return;
@@ -1667,31 +1709,35 @@
                 const p3 = duelState.players[3];
                 const p4 = duelState.players[4];
                 const p2Color = duelBot.enabled ? '#8b5cf6' : '#FF3838';
+                const n1 = duelEscapeHtml(p1.name);
+                const n2 = duelEscapeHtml(p2.name);
+                const n3 = duelEscapeHtml(p3.name);
+                const n4 = duelEscapeHtml(p4.name);
             
                 if (duelState.playerCount === 2) {
                     title.innerHTML = `
-                        <span id="duel-h2-p1" style="color: #0066FF;">${p1.name}</span>
+                        <span id="duel-h2-p1" style="color: #0066FF;">${n1}</span>
                         <span style="background: #1e272e; color: #FAED27; font-size: 0.75em; padding: 4px 14px; border-radius: 14px; border: 2px solid #FAED27; transform: rotate(-3deg); box-shadow: 0 4px 0 rgba(0,0,0,0.2);">VS</span>
-                        <span id="duel-h2-p2" style="color: ${p2Color};">${p2.name}</span>
+                        <span id="duel-h2-p2" style="color: ${p2Color};">${n2}</span>
                     `;
                 } else if (duelState.playerCount === 3) {
                     title.innerHTML = `
-                        <span style="color: #0066FF;">${p1.name}</span>
+                        <span style="color: #0066FF;">${n1}</span>
                         <span style="color: #94a3b8; font-size: 0.65em;">VS</span>
-                        <span style="color: ${p2Color};">${p2.name}</span>
+                        <span style="color: ${p2Color};">${n2}</span>
                         <span style="color: #94a3b8; font-size: 0.65em;">VS</span>
-                        <span style="color: #10b981;">${p3.name}</span>
+                        <span style="color: #10b981;">${n3}</span>
                         <span style="background: #1e272e; color: #FAED27; font-size: 0.65em; padding: 3px 12px; border-radius: 12px; border: 2px solid #FAED27;">3-WAY BATTLE</span>
                     `;
                 } else {
                     title.innerHTML = `
-                        <span style="color: #0066FF;">${p1.name}</span>
+                        <span style="color: #0066FF;">${n1}</span>
                         <span style="color: #94a3b8; font-size: 0.65em;">VS</span>
-                        <span style="color: ${p2Color};">${p2.name}</span>
+                        <span style="color: ${p2Color};">${n2}</span>
                         <span style="color: #94a3b8; font-size: 0.65em;">VS</span>
-                        <span style="color: #10b981;">${p3.name}</span>
+                        <span style="color: #10b981;">${n3}</span>
                         <span style="color: #94a3b8; font-size: 0.65em;">VS</span>
-                        <span style="color: #f59e0b;">${p4.name}</span>
+                        <span style="color: #f59e0b;">${n4}</span>
                         <span style="background: #1e272e; color: #FAED27; font-size: 0.65em; padding: 3px 12px; border-radius: 12px; border: 2px solid #FAED27;">4-PLAYER ARENA</span>
                     `;
                 }
@@ -1764,7 +1810,7 @@
                 // Hide any previous podium
                 const podiumEl = document.getElementById('duel-multi-podium');
                 if (podiumEl) {
-                    podiumEl.innerHTML = '';
+                    podiumEl.replaceChildren();
                     podiumEl.style.display = 'none';
                 }
             
@@ -1862,7 +1908,7 @@
                 }
                 const podiumEl = document.getElementById('duel-multi-podium');
                 if (podiumEl) {
-                    podiumEl.innerHTML = '';
+                    podiumEl.replaceChildren();
                     podiumEl.style.display = 'none';
                 }
             
@@ -2313,7 +2359,7 @@
                             if (duelBot.enabled) duelSetBotSpeech('tie');
                         } else {
                             const diff = (ranked[1].adjTime === Infinity) ? '' : ` (+${(ranked[1].adjTime - winner.adjTime).toFixed(2)}s faster)`;
-                            if (res2P) res2P.innerHTML = `🏆 <strong>${winner.name} WINS!</strong><br>${duelFormatTime(winner.adjTime)} vs ${duelFormatTime(ranked[1].adjTime)}${diff}`;
+                            if (res2P) res2P.innerHTML = `🏆 <strong>${duelEscapeHtml(winner.name)} WINS!</strong><br>${duelFormatTime(winner.adjTime)} vs ${duelFormatTime(ranked[1].adjTime)}${diff}`;
                             duelAddHistoryRound(winner.name, ranked);
                             duelLaunchRibbons(winner.num);
                             if (duelBot.enabled) {
@@ -2326,7 +2372,7 @@
                         }
                     } else {
                         const diff2 = ranked[1].adjTime === Infinity ? '' : ` (+${(ranked[1].adjTime - winner.adjTime).toFixed(2)}s faster)`;
-                        const winText = `🏆 <strong>${winner.name} WINS ROUND ${duelState.round}!</strong> (${duelFormatTime(winner.adjTime)}${diff2}) 🎉`;
+                        const winText = `🏆 <strong>${duelEscapeHtml(winner.name)} WINS ROUND ${duelState.round}!</strong> (${duelFormatTime(winner.adjTime)}${diff2}) 🎉`;
                         if (resMulti) resMulti.innerHTML = winText;
                         duelLaunchRibbons(winner.num);
             
@@ -2340,7 +2386,7 @@
                             podiumHtml += `
                                 <div style="background: ${isWin ? '#fef3c7' : '#f8fafc'}; border: 1.5px solid ${isWin ? '#f59e0b' : '#cbd5e1'}; border-radius: 12px; padding: 6px 14px; text-align: center; min-width: 110px;">
                                     <div style="font-weight: 800; font-size: 0.85em; color: ${colors[idx]};">${medal}</div>
-                                    <div style="font-weight: 700; color: ${pColor}; font-size: 0.95em;">${r.name}</div>
+                                    <div style="font-weight: 700; color: ${pColor}; font-size: 0.95em;">${duelEscapeHtml(r.name)}</div>
                                     <div style="font-family: 'Consolas', monospace; font-size: 0.9em; font-weight: 800; color: #1e272e;">${r.adjTime === Infinity ? 'DNF' : duelFormatTime(r.adjTime)}</div>
                                 </div>
                             `;
@@ -2765,7 +2811,7 @@
                 }
                 const podiumEl = document.getElementById('duel-multi-podium');
                 if (podiumEl) {
-                    podiumEl.innerHTML = '';
+                    podiumEl.replaceChildren();
                     podiumEl.style.display = 'none';
                 }
                 duelGenerateScramble();
@@ -2805,7 +2851,7 @@
             
                 const podiumEl = document.getElementById('duel-multi-podium');
                 if (podiumEl) {
-                    podiumEl.innerHTML = '';
+                    podiumEl.replaceChildren();
                     podiumEl.style.display = 'none';
                 }
             
@@ -2935,7 +2981,7 @@
         <div class="content-grid">
             
             <div class="text-section">
-                <p>My practice 3x3 record is 9.00 seconds, and in official WCA competition I hold an official 12.60s single and 14.43s average (check out the official <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" style="color: #0066FF; text-decoration: underline;">Cole Hua WCA Profile</a> on World Cube Association or his <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" style="color: #029347; text-decoration: underline;">Cubing China Profile</a>!) and I'm here to teach people the LBL method for Rubik's cube. My mom will also help teach you guys to solve a cube.</p>
+                <p>My practice 3x3 record is 9.00 seconds, and in official WCA competition I hold an official 12.60s single and 14.43s average (check out the official <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" style="color: #0066FF; text-decoration: underline;">Cole Hua WCA Profile</a> on World Cube Association or his <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" style="color: #029347; text-decoration: underline;">Cubing China Profile</a>!) and I'm here to teach people the LBL method for Rubik's cube. My mom will also help teach you guys to solve a cube.</p>
                 
                 <h2 class="black-bubbly" style="margin-top: 30px;">Info</h2>
                 <ul class="info-list">
@@ -2990,14 +3036,14 @@
                 🔍 Zoom & Drag Flyer
             </button>
             <p style="font-size: 1.15em; color: #666; margin-top: 0; margin-bottom: 20px;">(Or click directly on the flyer image below to zoom and pan!)</p>
-            <img src="./poster.jpg" alt="Learn Cube 4 Fun Poster" class="poster-img" style="cursor: zoom-in; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)';" onmouseout="this.style.transform='scale(1)';">
+            <img src="./poster.jpg" alt="Learn Cube 4 Fun Poster" class="poster-img" width="1024" height="575" loading="lazy" decoding="async" style="width: 100%; height: auto; aspect-ratio: 1024 / 575; cursor: zoom-in; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)';" onmouseout="this.style.transform='scale(1)';">
         </div>
 
         <!-- SPONSOR SECTION -->
         <div class="text-section" style="margin-top: 40px; text-align: center;">
             <h2 class="black-bubbly" style="font-size: 1.8em;">Project funded by:</h2>
-            <a href="https://inspired.ubc.ca/communitygrants/" target="_blank" style="text-decoration: none; color: inherit; display: block;">
-                <img src="./sponsor_logo.png" alt="UBC Inspiring Community Grant Logo" style="max-width: 100%; height: auto; border-radius: 10px; margin: 15px 0; border: 2px solid transparent; transition: border 0.3s;" onmouseover="this.style.border='2px dashed #0066FF'" onmouseout="this.style.border='2px solid transparent'">
+            <a href="https://inspired.ubc.ca/communitygrants/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">
+                <img src="./sponsor_logo.png" alt="UBC Inspiring Community Grant Logo" width="2560" height="655" loading="lazy" decoding="async" style="width: 100%; max-width: 100%; height: auto; aspect-ratio: 2560 / 655; border-radius: 10px; margin: 15px 0; border: 2px solid transparent; transition: border 0.3s;" onmouseover="this.style.border='2px dashed #0066FF'" onmouseout="this.style.border='2px solid transparent'">
                 <p style="font-size: 1.2em; font-weight: normal; margin-top: 10px;">We gratefully acknowledge <span style="color: #0066FF; text-decoration: underline;">UBC Inspiring Community Grant</span> for their financial support of our project.</p>
             </a>
         </div>
@@ -3039,31 +3085,34 @@
 
             <!-- Admin Access Link -->
             <div style="text-align: center; margin-top: 25px;">
-                <button id="admin-toggle-btn" style="background: none; border: none; color: #0066FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; font-weight: bold; cursor: pointer; text-decoration: underline; outline: none;">
+                <button id="admin-toggle-btn" type="button" style="background: none; border: none; color: #0066FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; font-weight: bold; cursor: pointer; text-decoration: underline;">
                     🔑 Admin Login
                 </button>
             </div>
         </div>
 
-    </div>
+    </main>
 
     <!-- Admin Login Modal -->
-    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
-        <div style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
-            <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
-            <h3 class="black-bubbly" style="font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h3>
+    <div id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
+        <div class="modal-content" style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
+            <button id="admin-modal-close" type="button" aria-label="Close Admin Login" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
+            <h3 id="admin-modal-title" class="black-bubbly" style="font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h3>
             <p style="font-size: 1.1em; color: #666; margin: 0; text-align: center; font-weight: normal; font-family: 'Comic Neue', sans-serif;">Log in to delete or manage comments on the page.</p>
-            <form id="admin-login-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
+            <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-email" style="font-size: 1.1em; color: #1a1a1a;">Email Address:</label>
-                    <input type="email" id="admin-email" autocomplete="off" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <input type="email" id="admin-email" name="username" autocomplete="username" spellcheck="false" enterkeyhint="next" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-password" style="font-size: 1.1em; color: #1a1a1a;">Password:</label>
-                    <input type="password" id="admin-password" autocomplete="off" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <div class="pw-input-wrap">
+                        <input type="password" id="admin-password" name="password" autocomplete="current-password" enterkeyhint="done" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                        <button type="button" class="pw-toggle-btn" aria-label="Show password" aria-pressed="false" onclick="const i=document.getElementById('admin-password');const s=i.type==='password';i.type=s?'text':'password';this.setAttribute('aria-pressed',String(s));this.setAttribute('aria-label',s?'Hide password':'Show password');this.textContent=s?'🙈':'👁️';">👁️</button>
+                    </div>
                 </div>
-                <button type="submit" class="cube-button" style="background-color: #FAED27; color: #1a1a1a; margin-top: 15px; padding: 10px 15px; font-size: 1.25em; border-radius: 12px; width: 100%; cursor: pointer; outline: none;">
-                    🔓 Log In
+                <button type="submit" class="cube-button" style="background-color: #FAED27; color: #1a1a1a; margin-top: 15px; padding: 10px 15px; font-size: 1.25em; border-radius: 12px; width: 100%; cursor: pointer;">
+                    🔓 Sign In
                 </button>
             </form>
         </div>
@@ -3550,7 +3599,7 @@
 
                 renderAdminCommentTools(loggedIn);
 
-                commentsContainer.innerHTML = '';
+                commentsContainer.replaceChildren();
 
                 if (comments.length === 0) {
                     commentsContainer.innerHTML = '<p style="text-align: center; color: #777; font-style: italic; font-weight: normal; font-size: 1.2em; margin: 20px 0;">No comments yet. Be the first to say something! 💬</p>';
@@ -3562,15 +3611,16 @@
                 const replies = comments.filter(c => c.parent_id);
 
                 // Sort parent comments by date (newest first)
-                const sortedParents = [...parentComments].sort((a, b) => new Date(b.date) - new Date(a.date));
+                const sortedParents = parentComments.toSorted((a, b) => new Date(b.date) - new Date(a.date));
 
                 if (sortedParents.length === 0) {
                     commentsContainer.innerHTML = '<p style="text-align: center; color: #777; font-style: italic; font-weight: normal; font-size: 1.2em; margin: 20px 0;">No comments yet. Be the first to say something! 💬</p>';
                     return;
                 }
 
-                sortedParents.forEach(comment => {
+                sortedParents.forEach((comment, idx) => {
                     const commentId = comment.id;
+                    const safeDomId = String(commentId).replace(/[^a-zA-Z0-9_-]/g, '') || ('c' + idx);
                     const parentWrapper = document.createElement('div');
                     parentWrapper.style.display = 'flex';
                     parentWrapper.style.flexDirection = 'column';
@@ -3578,6 +3628,7 @@
                     parentWrapper.style.width = '100%';
 
                     const card = document.createElement('div');
+                    card.className = 'comment-card';
                     card.style.background = '#fafafa';
                     card.style.border = '3px solid #eee';
                     card.style.borderRadius = '15px';
@@ -3628,6 +3679,7 @@
                     // Inline Reply Form (hidden by default)
                     const formDiv = document.createElement('div');
                     formDiv.id = `reply-form-container-${commentId}`;
+                    formDiv.className = 'comment-reply-form';
                     formDiv.style.display = 'none';
                     formDiv.style.marginLeft = '50px';
                     formDiv.style.padding = '15px';
@@ -3639,16 +3691,16 @@
                     formDiv.innerHTML = `
                         <form class="reply-form" data-parent-id="${commentId}" style="display: flex; flex-direction: column; gap: 10px;">
                             <div style="display: flex; flex-direction: column; gap: 3px;">
-                                <label style="font-weight: bold; color: #1a1a1a; font-size: 1em;">Your Name:</label>
-                                <input type="text" class="reply-name-input" required placeholder="Name" autocomplete="off" style="padding: 8px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif; font-size: 1.1em; outline: none;">
+                                <label for="reply-name-${safeDomId}" style="font-weight: bold; color: #1a1a1a; font-size: 1em;">Your Name:</label>
+                                <input type="text" id="reply-name-${safeDomId}" name="reply_name" class="reply-name-input" required placeholder="Name" autocomplete="name" style="padding: 8px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif; font-size: 1.1em;">
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 3px;">
-                                <label style="font-weight: bold; color: #1a1a1a; font-size: 1em;">Reply:</label>
-                                <textarea class="reply-text-input" required placeholder="Type reply here..." style="padding: 8px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif; font-size: 1.1em; height: 60px; resize: vertical; outline: none;"></textarea>
+                                <label for="reply-text-${safeDomId}" style="font-weight: bold; color: #1a1a1a; font-size: 1em;">Reply:</label>
+                                <textarea id="reply-text-${safeDomId}" name="reply_text" class="reply-text-input" required placeholder="Type reply here..." style="padding: 8px; border-radius: 8px; border: 2px solid #333; font-family: 'Comic Neue', sans-serif; font-size: 1.1em; height: 60px; resize: vertical;"></textarea>
                             </div>
                             <div style="display: flex; gap: 10px; margin-top: 5px;">
-                                <button type="submit" style="background-color: #2ecc71; color: white; border: 2px solid #333; border-radius: 10px; padding: 6px 12px; font-family: 'DynaPuff', cursive; font-size: 1.1em; cursor: pointer; box-shadow: 2px 2px 0px #333; transition: transform 0.1s; outline: none;">Post Reply 🚀</button>
-                                <button type="button" class="reply-cancel-btn" data-id="${commentId}" style="background-color: #aaa; color: white; border: 2px solid #333; border-radius: 10px; padding: 6px 12px; font-family: 'DynaPuff', cursive; font-size: 1.1em; cursor: pointer; box-shadow: 2px 2px 0px #333; transition: transform 0.1s; outline: none;">Cancel</button>
+                                <button type="submit" style="background-color: #047857; color: white; border: 2px solid #333; border-radius: 10px; padding: 6px 12px; font-family: 'DynaPuff', cursive; font-size: 1.1em; cursor: pointer; box-shadow: 2px 2px 0px #333; transition: transform 0.1s;">Post Reply 🚀</button>
+                                <button type="button" class="reply-cancel-btn" data-id="${commentId}" style="background-color: #475569; color: white; border: 2px solid #333; border-radius: 10px; padding: 6px 12px; font-family: 'DynaPuff', cursive; font-size: 1.1em; cursor: pointer; box-shadow: 2px 2px 0px #333; transition: transform 0.1s;">Cancel</button>
                             </div>
                         </form>
                     `;
@@ -3676,6 +3728,7 @@
                         repliesListContainer.style.display = 'flex';
                         parentReplies.forEach(reply => {
                             const replyCard = document.createElement('div');
+                            replyCard.className = 'comment-reply-card';
                             replyCard.style.background = '#ffffff';
                             replyCard.style.border = '2px solid #ddd';
                             replyCard.style.borderRadius = '12px';
@@ -3913,20 +3966,20 @@
     </script>
 
     <!-- POSTER INTERACTIVE ZOOM MODAL -->
-    <div id="poster-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center; overflow: hidden; user-select: none; touch-action: none;">
+    <div id="poster-modal" role="dialog" aria-modal="true" aria-label="Zoomed Learn Cube 4 Fun Poster" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center; overflow: hidden; user-select: none; touch-action: none;">
         <!-- Close Button (Top Right) -->
-        <button id="modal-close" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: 2px solid white; color: white; font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); z-index: 10002; transition: all 0.2s; outline: none;" onmouseover="this.style.background='red'; this.style.transform='scale(1.15)';" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1)';">✕</button>
+        <button id="modal-close" type="button" aria-label="Close poster zoom modal" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: 2px solid white; color: white; font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); z-index: 10002; transition: all 0.2s;" onmouseover="this.style.background='red'; this.style.transform='scale(1.15)';" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='scale(1)';">✕</button>
         
         <!-- Zoom & Pan Container -->
-        <div id="modal-zoom-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: grab; outline: none;">
-            <img id="modal-poster-img" src="./poster.jpg" style="max-width: 90%; max-height: 90%; object-fit: contain; transform-origin: center; transition: transform 0.1s ease-out; border-radius: 12px; border: 4px solid #fff; box-shadow: 0 15px 40px rgba(0,0,0,0.6);" draggable="false">
+        <div id="modal-zoom-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: grab;">
+            <img id="modal-poster-img" src="./poster.jpg" alt="Learn Cube 4 Fun enlarged event poster" width="1024" height="575" decoding="async" style="max-width: 90%; max-height: 90%; object-fit: contain; transform-origin: center; transition: transform 0.1s ease-out; border-radius: 12px; border: 4px solid #fff; box-shadow: 0 15px 40px rgba(0,0,0,0.6);" draggable="false">
         </div>
         
         <!-- Control Bar (Bottom Center) -->
         <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; background: rgba(255,255,255,0.15); padding: 10px 25px; border-radius: 35px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.25); box-shadow: 0 8px 32px rgba(0,0,0,0.4); z-index: 10001; align-items: center;">
-            <button id="btn-zoom-in" style="background: white; border: 3px solid #333; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">➕</button>
-            <button id="btn-zoom-out" style="background: white; border: 3px solid #333; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">➖</button>
-            <button id="btn-zoom-reset" style="background: white; border: 3px solid #333; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">🔄</button>
+            <button id="btn-zoom-in" type="button" aria-label="Zoom in" style="background: white; border: 3px solid #333; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">➕</button>
+            <button id="btn-zoom-out" type="button" aria-label="Zoom out" style="background: white; border: 3px solid #333; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">➖</button>
+            <button id="btn-zoom-reset" type="button" aria-label="Reset zoom" style="background: white; border: 3px solid #333; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);" onmouseover="this.style.transform='scale(1.15)';" onmouseout="this.style.transform='scale(1)';">🔄</button>
             <span style="color: white; font-family: 'DynaPuff', cursive; font-size: 1.1em; margin-left: 5px; text-shadow: 1px 1px 2px black;">Zoom & Drag!</span>
         </div>
     </div>
@@ -4117,10 +4170,21 @@
         }
         updateHomeSolvesCount();
 
-        // --- LANGUAGE SWITCHER LOGIC ---
+        // --- LANGUAGE SWITCHER LOGIC (ON-DEMAND GOOGLE TRANSLATE LOADER) ---
+        let googleTranslateScriptRequested = false;
+
+        function loadGoogleTranslateOnDemand() {
+            if (googleTranslateScriptRequested) return;
+            googleTranslateScriptRequested = true;
+            const s = document.createElement('script');
+            s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            s.async = true;
+            document.body.appendChild(s);
+        }
+
         window.changeLanguage = function(lang) {
             if (!lang) return;
-            localStorage.setItem('cube4fun_lang', lang);
+            try { localStorage.setItem('cube4fun_lang', lang); } catch (e) {}
 
             const select = document.getElementById('cube-lang-select');
             if (select && select.value !== lang) {
@@ -4151,34 +4215,90 @@
             if (googleCombo) {
                 googleCombo.value = lang;
                 googleCombo.dispatchEvent(new Event('change'));
+            } else if (lang !== 'en') {
+                loadGoogleTranslateOnDemand();
             } else {
                 window.location.reload();
             }
         };
 
         function initLanguage() {
-            const savedLang = localStorage.getItem('cube4fun_lang') || 'en';
+            let savedLang = 'en';
+            try { savedLang = localStorage.getItem('cube4fun_lang') || 'en'; } catch (e) {}
             const select = document.getElementById('cube-lang-select');
             if (select) {
                 select.value = savedLang;
             }
+            const cookieMatch = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
             if (savedLang !== 'en') {
-                const cookieMatch = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
                 const expectedCookie = `/en/${savedLang}`;
                 if (!cookieMatch || cookieMatch[1] !== expectedCookie) {
                     document.cookie = "googtrans=" + expectedCookie + "; path=/;";
                 }
+                loadGoogleTranslateOnDemand();
+            } else if (cookieMatch && cookieMatch[1] && cookieMatch[1] !== '/en/en') {
+                loadGoogleTranslateOnDemand();
             }
+        }
+
+        // --- PROGRESSIVE WEB APP INSTALL (Web Install API + beforeinstallprompt fallback) ---
+        function initAppInstall() {
+            const installButton = document.getElementById('install-app-btn');
+            const installStatus = document.getElementById('install-app-status');
+            if (!installButton || !installStatus) return;
+
+            const supportsWebInstall = typeof Navigator !== 'undefined' && typeof Navigator.prototype.install === 'function';
+            let deferredInstallPrompt;
+
+            if (supportsWebInstall) {
+                installButton.hidden = false;
+            }
+
+            window.addEventListener('beforeinstallprompt', (event) => {
+                event.preventDefault();
+                deferredInstallPrompt = event;
+                if (!supportsWebInstall) {
+                    installButton.hidden = false;
+                }
+            });
+
+            installButton.addEventListener('click', async () => {
+                if (installButton.getAttribute('aria-disabled') === 'true') return;
+                installButton.setAttribute('aria-disabled', 'true');
+                try {
+                    if (supportsWebInstall) {
+                        await navigator.install();
+                        installStatus.textContent = 'Cube4Fun was installed or opened.';
+                        installButton.hidden = true;
+                    } else if (deferredInstallPrompt) {
+                        const promptEvent = deferredInstallPrompt;
+                        deferredInstallPrompt = undefined;
+                        await promptEvent.prompt();
+                        const { outcome } = await promptEvent.userChoice;
+                        installStatus.textContent = outcome === 'accepted' ? 'Cube4Fun was installed.' : 'Installation canceled.';
+                        if (!deferredInstallPrompt) installButton.hidden = true;
+                    }
+                } catch (error) {
+                    if (error && error.name === 'AbortError') {
+                        installStatus.textContent = 'Installation was canceled or could not complete.';
+                    } else {
+                        installStatus.textContent = 'Installation could not start.';
+                    }
+                } finally {
+                    installButton.removeAttribute('aria-disabled');
+                }
+            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             initLanguage();
+            initAppInstall();
         });
     </script>
 
-    <!-- Google Translate Element (Hidden) -->
+    <!-- Google Translate Element (Lazy-loaded on demand only when non-English is chosen) -->
     <div id="google_translate_element" style="display: none;"></div>
-    <script type="text/javascript">
+    <script>
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
@@ -4187,7 +4307,6 @@
             }, 'google_translate_element');
         }
     </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- GLOBAL SITE FOOTER -->
     <footer class="site-footer">
@@ -4198,18 +4317,19 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="practice-speed.html">⚡ Practice Speed Mode</a></li>
                     <li><a href="#one-vs-one-section">⚔️ Battle Timer</a></li>
+                    <li><a href="cube-solving-machine.html">🤖 Cube Solving Machine</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
                     <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
@@ -4218,7 +4338,7 @@
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -4229,11 +4349,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">

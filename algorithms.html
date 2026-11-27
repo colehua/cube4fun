@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Algorithms for different speedcubing methods: CFOP, ZB, Roux, and ZZ. Complete PLL, F2L, OLL, ZBLL, and ZBLS case list with copyable moves.">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/algorithms.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Algorithms for Different Methods 🧩 - Learn Cube 4 Fun">
+    <meta property="og:description" content="Algorithms for different speedcubing methods: CFOP, ZB, Roux, and ZZ. Complete PLL, F2L, OLL, ZBLL, and ZBLS case list with copyable moves.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/algorithms.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Algorithms for Different Methods 🧩 - Learn Cube 4 Fun</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -832,9 +842,10 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="blob-top"></div>
     
-    <div class="container">
+    <main id="main-content" class="container">
         <!-- NAVIGATION -->
         <div class="nav-buttons">
             <a href="index.html" class="nav-button">🏠 Home</a>
@@ -860,7 +871,8 @@
 
         <!-- SEARCH -->
         <div class="search-container">
-            <input type="text" id="alg-search" class="search-input" placeholder="🔍 Search case or algorithm (e.g. T Perm, F2L 1, ZBLL)...">
+            <label for="alg-search" class="visually-hidden">Search algorithms</label>
+            <input type="text" id="alg-search" name="alg_search" aria-label="Search algorithms" class="search-input" placeholder="🔍 Search case or algorithm (e.g. T Perm, F2L 1, ZBLL)...">
         </div>
 
         <!-- METHOD TABS -->
@@ -1059,12 +1071,12 @@
                 </div>
                 
                 <div class="flow-step">
-                    <h4>Winter Variation (WV)</h4>
+                    <h3>Winter Variation (WV)</h3>
                     <p>WV solves the orientation of all last layer corners while inserting the final F2L corner-edge pair, provided the F2L edge is already oriented and placed.</p>
                     <div class="alg-grid" id="grid-wv"></div>
                 </div>
                 <div class="flow-step">
-                    <h4>Valk Last Slot (VLS)</h4>
+                    <h3>Valk Last Slot (VLS)</h3>
                     <p>VLS is a massive set of algorithms (432 cases) that solves all corners orientation while inserting the final corner-edge pair in any state.</p>
                     <div class="alg-grid" id="grid-vls"></div>
                 </div>
@@ -1094,16 +1106,16 @@
                 </div>
                 
                 <p style="font-weight: bold; font-size: 1.2em; color: #555; line-height: 1.5;">
-                    BLD algorithms do not swap random pieces. Instead, they swap exactly two pieces at a time (cycles) using a dedicated **Buffer** and **Target** location to cycle pieces sequentially into their correct spots.
+                    BLD algorithms do not swap random pieces. Instead, they swap exactly two pieces at a time (cycles) using a dedicated <strong>Buffer</strong> and <strong>Target</strong> location to cycle pieces sequentially into their correct spots.
                 </p>
 
                 <div class="flow-step">
-                    <h4>Old Pochmann Corners Buffer</h4>
+                    <h3>Old Pochmann Corners Buffer</h3>
                     <p>The standard corner buffer is UBL. Targets are solved one-by-one by setting up the target piece to RDF, swapping it using the Y Perm (or T Perm), and doing the reverse setup.</p>
                 </div>
                 
                 <div class="flow-step">
-                    <h4>M2 Edges Buffer</h4>
+                    <h3>M2 Edges Buffer</h3>
                     <p>The standard edge buffer is DF. Edges are cycled one-by-one using the M2 double turn targeting the UB slot, with special setup algorithms for different targets.</p>
                 </div>
 
@@ -1125,12 +1137,12 @@
                 </p>
 
                 <div class="flow-step">
-                    <h4>NISS (Normal-Inverse Shuffle State)</h4>
+                    <h3>NISS (Normal-Inverse Shuffle State)</h3>
                     <p>Switching scramble direction. You apply your partial solution to the inverse of the scramble to find easier block insertions from the back side!</p>
                 </div>
 
                 <div class="flow-step">
-                    <h4>Commutators & Insertions</h4>
+                    <h3>Commutators & Insertions</h3>
                     <p>Commutators solve 3 pieces without affecting any other part of the cube. We insert them into the skeleton at the point where they cancel the most moves.</p>
                 </div>
 
@@ -1152,7 +1164,7 @@
                 <div class="alg-grid" id="grid-ell"></div>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="toast">Copied to clipboard! 📋</div>
@@ -1188,7 +1200,7 @@
 
                     <div class="speed-slider-container">
                         <label>Speed Selector</label>
-                        <input type="range" min="300" max="2000" step="100" value="1000" oninput="changeModalSpeed(this.value)">
+                        <input type="range" id="modal-speed-slider" name="modal_speed" aria-label="Algorithm animation speed" min="300" max="2000" step="100" value="1000" oninput="changeModalSpeed(this.value)">
                     </div>
                 </div>
             </div>
@@ -5290,7 +5302,7 @@
         function populateGrid(gridId, data) {
             const grid = document.getElementById(gridId);
             if (!grid) return;
-            grid.innerHTML = "";
+            grid.replaceChildren();
             
             data.forEach(item => {
                 const card = document.createElement('div');
@@ -5454,7 +5466,7 @@
         function renderModal3dCubeDOM() {
             const cubeEl = document.getElementById('modal-cube-3d');
             if (!cubeEl) return;
-            cubeEl.innerHTML = "";
+            cubeEl.replaceChildren();
 
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
             faces.forEach(fName => {
@@ -5490,7 +5502,7 @@
         function updateModalMovesDisplay() {
             const container = document.getElementById('modal-moves-list');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             if (modalMoves.length === 0) {
                 container.textContent = "No moves";
@@ -5789,24 +5801,25 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
                     <li><a href="play.html">🎮 3D Virtual Cube</a></li>
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -5817,11 +5830,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">

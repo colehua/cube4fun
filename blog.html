@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Cole's Speedcubing Blog - Learn Cube 4 Fun. Read Cole's latest updates, cubing tips, and news.">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/blog.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cole's Blog ✍️ - Learn Cube 4 Fun">
+    <meta property="og:description" content="Cole's Speedcubing Blog - Learn Cube 4 Fun. Read Cole's latest updates, cubing tips, and news.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/blog.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Cole's Blog ✍️ - Learn Cube 4 Fun</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db-config.js"></script>
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -512,9 +522,10 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="blob-top"></div>
 
-    <div class="container">
+    <main id="main-content" class="container">
         <!-- NAVIGATION -->
         <div class="nav-buttons">
             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -552,60 +563,65 @@
                 Loading blog posts... ⏳
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Admin Login Modal -->
-    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
-        <div style="background: white; border: 4px solid #333; padding: 30px; border-radius: 25px; width: 100%; max-width: 400px; margin: auto; box-sizing: border-box; position: relative; box-shadow: 0px 10px 30px rgba(0,0,0,0.25);">
-            <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
-            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h3>
+    <div id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
+        <div class="modal-content" style="background: white; border: 4px solid #333; padding: 30px; border-radius: 25px; width: 100%; max-width: 400px; margin: auto; box-sizing: border-box; position: relative; box-shadow: 0px 10px 30px rgba(0,0,0,0.25);">
+            <button id="admin-modal-close" type="button" aria-label="Close Admin Login" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
+            <h2 id="admin-modal-title" style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; letter-spacing: 1px;">🔑 Admin Login</h2>
             <p style="text-align: center; margin-top: 5px; margin-bottom: 20px; font-size: 1.05em; color: #666; font-weight: bold;">Only Cole can publish blog posts!</p>
-            <form id="admin-login-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
+            <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-email" style="font-size: 1.1em; color: #1a1a1a;">Email Address:</label>
-                    <input type="email" id="admin-email" autocomplete="off" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <input type="email" id="admin-email" name="username" autocomplete="username" spellcheck="false" enterkeyhint="next" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-password" style="font-size: 1.1em; color: #1a1a1a;">Password:</label>
-                    <input type="password" id="admin-password" autocomplete="off" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <div class="pw-input-wrap">
+                        <input type="password" id="admin-password" name="password" autocomplete="current-password" enterkeyhint="done" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                        <button type="button" class="pw-toggle-btn" aria-label="Show password" aria-pressed="false" onclick="const i=document.getElementById('admin-password');const s=i.type==='password';i.type=s?'text':'password';this.setAttribute('aria-pressed',String(s));this.setAttribute('aria-label',s?'Hide password':'Show password');this.textContent=s?'🙈':'👁️';">👁️</button>
+                    </div>
                 </div>
-                <button type="submit" style="font-family: 'DynaPuff', cursive; font-size: 1.25em; padding: 12px; border: 3px solid #333; border-radius: 15px; background-color: var(--yellow-blob); cursor: pointer; box-shadow: 0px 4px 0px #333; margin-top: 10px; outline: none; transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='0px 2px 0px #333';" onmouseup="this.style.transform='none'; this.style.boxShadow='0px 4px 0px #333';">Unlock Admin 🔓</button>
+                <button type="submit" style="font-family: 'DynaPuff', cursive; font-size: 1.25em; padding: 12px; border: 3px solid #333; border-radius: 15px; background-color: var(--yellow-blob); cursor: pointer; box-shadow: 0px 4px 0px #333; margin-top: 10px; transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.boxShadow='0px 2px 0px #333';" onmouseup="this.style.transform='none'; this.style.boxShadow='0px 4px 0px #333';">Sign In 🔓</button>
             </form>
         </div>
     </div>
 
     <!-- COMPOSER MODAL -->
-    <div id="composer-modal" class="composer-overlay">
+    <div id="composer-modal" class="composer-overlay" role="dialog" aria-modal="true" aria-labelledby="composer-title-label">
         <div class="composer-card">
-            <button id="composer-close-btn" class="composer-close">✕</button>
-            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin-top: 0; margin-bottom: 20px; color: #9b59b6;" id="composer-title-label">✍️ Write a Blog Post</h3>
+            <button id="composer-close-btn" type="button" aria-label="Close post composer" class="composer-close">✕</button>
+            <h2 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin-top: 0; margin-bottom: 20px; color: #9b59b6;" id="composer-title-label">✍️ Write a Blog Post</h2>
             
-            <input type="text" id="composer-title" class="composer-title-input" placeholder="Post Title (e.g. My new 3x3 record!)">
+            <label for="composer-title" class="visually-hidden">Blog Post Title</label>
+            <input type="text" id="composer-title" name="post_title" class="composer-title-input" placeholder="Post Title (e.g. My new 3x3 record!)">
             
             <!-- Emoji insertion bar -->
             <div class="emoji-bar">
-                <button class="emoji-btn" onclick="insertEmoji('🧊')">🧊</button>
-                <button class="emoji-btn" onclick="insertEmoji('⏱️')">⏱️</button>
-                <button class="emoji-btn" onclick="insertEmoji('🏆')">🏆</button>
-                <button class="emoji-btn" onclick="insertEmoji('🎉')">🎉</button>
-                <button class="emoji-btn" onclick="insertEmoji('🔥')">🔥</button>
-                <button class="emoji-btn" onclick="insertEmoji('🚀')">🚀</button>
-                <button class="emoji-btn" onclick="insertEmoji('🧠')">🧠</button>
-                <button class="emoji-btn" onclick="insertEmoji('👀')">👀</button>
-                <button class="emoji-btn" onclick="insertEmoji('🇨🇳')">🇨🇳</button>
-                <button class="emoji-btn" onclick="insertEmoji('👏')">👏</button>
+                <button type="button" class="emoji-btn" aria-label="Insert cube emoji" onclick="insertEmoji('🧊')">🧊</button>
+                <button type="button" class="emoji-btn" aria-label="Insert timer emoji" onclick="insertEmoji('⏱️')">⏱️</button>
+                <button type="button" class="emoji-btn" aria-label="Insert trophy emoji" onclick="insertEmoji('🏆')">🏆</button>
+                <button type="button" class="emoji-btn" aria-label="Insert party emoji" onclick="insertEmoji('🎉')">🎉</button>
+                <button type="button" class="emoji-btn" aria-label="Insert fire emoji" onclick="insertEmoji('🔥')">🔥</button>
+                <button type="button" class="emoji-btn" aria-label="Insert rocket emoji" onclick="insertEmoji('🚀')">🚀</button>
+                <button type="button" class="emoji-btn" aria-label="Insert brain emoji" onclick="insertEmoji('🧠')">🧠</button>
+                <button type="button" class="emoji-btn" aria-label="Insert eyes emoji" onclick="insertEmoji('👀')">👀</button>
+                <button type="button" class="emoji-btn" aria-label="Insert flag emoji" onclick="insertEmoji('🇨🇳')">🇨🇳</button>
+                <button type="button" class="emoji-btn" aria-label="Insert clap emoji" onclick="insertEmoji('👏')">👏</button>
             </div>
 
             <!-- Image upload bar -->
             <div class="img-uploader-container">
-                <label class="btn-upload-trigger">
+                <label for="composer-file" class="btn-upload-trigger">
                     📷 Insert Photo
-                    <input type="file" id="composer-file" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                    <input type="file" id="composer-file" name="post_image" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
                 </label>
                 <span style="font-size: 0.9em; color: #888; font-weight: bold;">Upload a photo directly from your device!</span>
             </div>
 
-            <textarea id="composer-content" class="composer-textarea" placeholder="Write your post here... You can insert photos or emojis. Use HTML tags like <b>bold</b> if you like!"></textarea>
+            <label for="composer-content" class="visually-hidden">Blog Post Content</label>
+            <textarea id="composer-content" name="post_content" class="composer-textarea" placeholder="Write your post here... You can insert photos or emojis. Use HTML tags like <b>bold</b> if you like!"></textarea>
             
             <div class="preview-header">Live Preview 👀</div>
             <div id="composer-preview" class="preview-box post-body"></div>
@@ -881,7 +897,7 @@
 
         // Render blog posts list
         function renderPosts() {
-            blogListContainer.innerHTML = "";
+            blogListContainer.replaceChildren();
             if (blogPosts.length === 0) {
                 blogListContainer.innerHTML = `<div style="text-align: center; font-size: 1.2em; font-weight: bold; color: #888; margin-top: 35px;">No blog posts yet!</div>`;
                 return;
@@ -961,7 +977,7 @@
             composerTitleLabel.textContent = "✍️ Write a Blog Post";
             composerTitle.value = "";
             composerContent.value = "";
-            composerPreview.innerHTML = "";
+            composerPreview.replaceChildren();
             composerModal.style.display = 'flex';
         });
 
@@ -1144,24 +1160,25 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
                     <li><a href="play.html">🎮 3D Virtual Cube</a></li>
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -1172,11 +1189,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">

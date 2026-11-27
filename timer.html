@@ -3,19 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Speedcubing Timer - Playful Rubik's cube timer for 3x3 and 2x2 cubes. Solve scrambles, track your statistics, and beat Cole's WCA record!">
+    <link rel="canonical" href="https://colehua.github.io/cube4fun/timer.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Speedcubing Timer — Learn Cube 4 Fun">
+    <meta property="og:description" content="WCA-style speedcubing timer with scrambles, Ao5/Ao12 trend graph, 3D scramble video player, and Cole Hua's official records.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/timer.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Speedcubing Timer ⏱️ - Learn Cube 4 Fun</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-    <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <!-- Google Firebase Firestore (Always Free / Never Expires) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db-config.js"></script>
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
     <script src="gangnam-music.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <style>
         /* Intense Music Pulsing state */
         .btn-intense-music-active {
@@ -1555,13 +1564,15 @@
 </head>
 <body>
 
-    <div class="blob-top"></div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="blob-top" aria-hidden="true"></div>
 
     <div class="container">
         
-        <div class="cs-site-nav">
+        <nav class="cs-site-nav" aria-label="Primary">
             <a href="index.html" class="nav-button">🏠 Home</a>
             <a href="practice-speed.html" class="nav-button">⚡ Practice Speed</a>
+            <a href="cube-solving-machine.html" class="nav-button">🤖 Cube Solver</a>
             <a href="challenges.html" class="nav-button">🏆 Challenges ♾️</a>
             <a href="bc-rankings.html" class="nav-button">🍁 BC Rankings</a>
             <a href="news.html" class="nav-button">📰 News</a>
@@ -1573,10 +1584,10 @@
             <a href="play.html" class="nav-button">🎮 3D Play</a>
             <a href="guide.html" class="nav-button">📖 Finger Tricks</a>
             <a href="notation.html" class="nav-button">📖 Notation</a>
-            <button id="theme-toggle" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="cursor: pointer;">
-                <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark Mode</span>
+            <button id="theme-toggle" type="button" class="nav-button theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode" title="Switch to Dark Mode 🌙" style="cursor: pointer;">
+                <span class="theme-toggle-icon" aria-hidden="true">🌙</span> <span class="theme-toggle-text">Dark Mode</span>
             </button>
-        </div>
+        </nav>
         
         <h1 class="main-title">Speedcubing Timer ⏱️</h1>
 
@@ -1584,7 +1595,7 @@
         <div class="cs-top-bar">
             <!-- Row 1: Primary Scramble Toolbar -->
             <div class="timer-toolbar-row">
-                <select id="scramble-type-select" class="select-style">
+                <select id="scramble-type-select" name="scramble_type" aria-label="Select puzzle event" class="select-style">
                     <option value="3x3">3x3x3 Rubik's Cube</option>
                     <option value="2x2">2x2x2 Rubik's Cube</option>
                     <option value="1000x1000">1000x1000x1000 (very laggy) Cube 🌌</option>
@@ -1635,12 +1646,12 @@
                 <p id="scramble-inverse-text" style="font-size: 1.2em; color: #ff7675; font-weight: bold; margin: 0; text-align: center; display: none;"></p>
                 <p id="scramble-beginner-text" style="font-size: 1.05em; color: #cbd5e1; font-weight: bold; margin: 0; text-align: center; font-style: italic;"></p>
                 <div style="display: flex; gap: 15px; align-items: center; margin-top: 4px;">
-                    <label style="font-weight: bold; font-size: 0.92em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: #e2e8f0;">
-                        <input type="checkbox" id="chk-beginner-mode" style="transform: scale(1.15); cursor: pointer;" checked>
+                    <label for="chk-beginner-mode" style="font-weight: bold; font-size: 0.92em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: #e2e8f0;">
+                        <input type="checkbox" id="chk-beginner-mode" name="beginner_mode" style="transform: scale(1.15); cursor: pointer;" checked>
                         Translate Scramble 🗣️
                     </label>
-                    <span style="color: #64748b;">|</span>
-                    <a href="notation.html" target="_blank" style="font-size: 0.92em; color: #00E5FF; font-weight: bold; text-decoration: underline;">Notation Guide 📖</a>
+                    <span style="color: #64748b;" aria-hidden="true">|</span>
+                    <a href="notation.html" target="_blank" rel="noopener noreferrer" style="font-size: 0.92em; color: #00E5FF; font-weight: bold; text-decoration: underline;">Notation Guide 📖</a>
                 </div>
             </div>
         </div>
@@ -1653,7 +1664,7 @@
                 <!-- Summary Stats Card -->
                 <div class="card-section">
                     <div style="margin-bottom: 8px;">
-                        <h3 class="cs-card-title" style="margin-bottom: 0;">Session Stats 📊</h3>
+                        <h2 class="cs-card-title" style="margin-bottom: 0;">Session Stats 📊</h2>
                     </div>
                     <div class="cs-quick-stats-grid">
                         <div class="cs-stat-cell">
@@ -1686,7 +1697,7 @@
                 <!-- AO5 & AO12 TREND GRAPH (EXACTLY AS REQUESTED ON THE LEFT SIDE) -->
                 <div class="card-section cs-graph-card">
                     <div class="cs-graph-header">
-                        <h3 class="cs-card-title" style="margin-bottom: 0;">Ao5 & Ao12 Graph 📈</h3>
+                        <h2 class="cs-card-title" style="margin-bottom: 0;">Ao5 & Ao12 Graph 📈</h2>
                         <div class="cs-graph-legend">
                             <span class="legend-badge"><span class="legend-dot" style="background: #00E5FF;"></span> Ao5</span>
                             <span class="legend-badge"><span class="legend-dot" style="background: #FFA502;"></span> Ao12</span>
@@ -1705,16 +1716,16 @@
                 <!-- SOLVE HISTORY TABLE -->
                 <div class="card-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 class="cs-card-title" style="margin-bottom: 0;">Solve History 📋</h3>
-                        <button id="btn-clear-session" class="btn-action" style="background-color: #ff7675; color: white; padding: 4px 10px; font-size: 0.82em; border-radius: 10px; box-shadow: 0 3px 0 #1e272e;" title="Clear all solves in this session">Clear 🗑️</button>
+                        <h2 class="cs-card-title" style="margin-bottom: 0;">Solve History 📋</h2>
+                        <button id="btn-clear-session" type="button" class="btn-action" style="background-color: #ff7675; color: white; padding: 4px 10px; font-size: 0.82em; border-radius: 10px; box-shadow: 0 3px 0 #1e272e;" title="Clear all solves in this session">Clear 🗑️</button>
                     </div>
                     <div class="solves-container" style="max-height: 200px;">
                         <table class="solves-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 35px;">#</th>
-                                    <th>Time</th>
-                                    <th style="width: 110px;">Actions</th>
+                                    <th scope="col" style="width: 35px;">#</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col" style="width: 110px;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="solves-tbody">
@@ -1727,8 +1738,8 @@
                 <!-- COLE'S RECORDS & ASSISTANT BUDDY -->
                 <div class="card-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <h3 class="cs-card-title" style="margin-bottom: 0;">Cole's Records ⚡</h3>
-                        <button id="admin-toggle-btn" style="background: none; border: none; color: #00E5FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 0.95em; font-weight: bold; cursor: pointer; text-decoration: underline; outline: none;">
+                        <h2 class="cs-card-title" style="margin-bottom: 0;">Cole's Records ⚡</h2>
+                        <button id="admin-toggle-btn" type="button" style="background: none; border: none; color: #00E5FF; font-family: 'Comic Neue', cursive, sans-serif; font-size: 0.95em; font-weight: bold; cursor: pointer; text-decoration: underline;">
                             🔑 Admin Login
                         </button>
                     </div>
@@ -1738,11 +1749,11 @@
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <span id="stat-cole-single" style="color: #FF6B6B; font-weight: bold;">9.00 ⚡</span>
                                 <div id="edit-cole-single-container" style="display: none; align-items: center; gap: 4px;">
-                                    <input type="number" step="0.01" id="input-cole-single" style="width: 70px; font-size: 0.85em; padding: 2px 4px; border-radius: 6px; border: 2px solid #333;">
-                                    <button id="btn-save-cole-single" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 2px 6px;">Save</button>
-                                    <button id="btn-cancel-cole-single" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 2px 6px;">✕</button>
+                                    <input type="number" step="0.01" id="input-cole-single" name="cole_single" aria-label="Edit Cole's Single record" style="width: 70px; font-size: 0.85em; padding: 2px 4px; border-radius: 6px; border: 2px solid #333;">
+                                    <button id="btn-save-cole-single" type="button" class="btn-solve-action" style="background-color: #047857; color: white; padding: 2px 6px;">Save</button>
+                                    <button id="btn-cancel-cole-single" type="button" aria-label="Cancel editing single record" class="btn-solve-action" style="background-color: #b91c1c; color: white; padding: 2px 6px;">✕</button>
                                 </div>
-                                <button id="btn-edit-cole-single" style="display: none; background: none; border: none; cursor: pointer; font-size: 1em; padding: 0;" title="Edit Cole's Single">✏️</button>
+                                <button id="btn-edit-cole-single" type="button" style="display: none; background: none; border: none; cursor: pointer; font-size: 1em; padding: 0;" title="Edit Cole's Single" aria-label="Edit Cole's Single">✏️</button>
                             </div>
                         </li>
                         <li class="stats-item" style="padding: 6px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
@@ -1750,11 +1761,11 @@
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <span id="stat-cole-average" style="color: #FF6B6B; font-weight: bold;">11.50 ⚡</span>
                                 <div id="edit-cole-average-container" style="display: none; align-items: center; gap: 4px;">
-                                    <input type="number" step="0.01" id="input-cole-average" style="width: 70px; font-size: 0.85em; padding: 2px 4px; border-radius: 6px; border: 2px solid #333;">
-                                    <button id="btn-save-cole-average" class="btn-solve-action" style="background-color: #2ecc71; color: white; padding: 2px 6px;">Save</button>
-                                    <button id="btn-cancel-cole-average" class="btn-solve-action" style="background-color: #ff8585; color: white; padding: 2px 6px;">✕</button>
+                                    <input type="number" step="0.01" id="input-cole-average" name="cole_average" aria-label="Edit Cole's Average record" style="width: 70px; font-size: 0.85em; padding: 2px 4px; border-radius: 6px; border: 2px solid #333;">
+                                    <button id="btn-save-cole-average" type="button" class="btn-solve-action" style="background-color: #047857; color: white; padding: 2px 6px;">Save</button>
+                                    <button id="btn-cancel-cole-average" type="button" aria-label="Cancel editing average record" class="btn-solve-action" style="background-color: #b91c1c; color: white; padding: 2px 6px;">✕</button>
                                 </div>
-                                <button id="btn-edit-cole-average" style="display: none; background: none; border: none; cursor: pointer; font-size: 1em; padding: 0;" title="Edit Cole's Average">✏️</button>
+                                <button id="btn-edit-cole-average" type="button" style="display: none; background: none; border: none; cursor: pointer; font-size: 1em; padding: 0;" title="Edit Cole's Average" aria-label="Edit Cole's Average">✏️</button>
                             </div>
                         </li>
                         <li id="wca-single-item" class="stats-item" style="padding: 6px 0; display: flex; align-items: center; justify-content: space-between;">
@@ -1769,8 +1780,8 @@
 
                     <!-- Buddy Widget -->
                     <div class="buddy-container" style="margin-top: 12px; padding: 8px 12px;">
-                        <div class="buddy-face" style="font-size: 2em;">🤖</div>
-                        <div id="buddy-bubble-text" class="buddy-bubble" style="font-size: 0.9em; padding: 6px 10px;">
+                        <div class="buddy-face" style="font-size: 2em;" aria-hidden="true">🤖</div>
+                        <div id="buddy-bubble-text" class="buddy-bubble" role="status" aria-live="polite" style="font-size: 0.9em; padding: 6px 10px;">
                             Welcome to Cole's Timer! Can you beat my record? ⚡
                         </div>
                     </div>
@@ -1778,11 +1789,11 @@
             </aside>
 
             <!-- MIDDLE AREA: TIMER IN THE MIDDLE (AND TIME TOO) -->
-            <main class="cs-timer-center">
+            <main id="main-content" class="cs-timer-center">
                 <!-- Compact Practice Speed Alert Bar -->
                 <div class="practice-speed-banner-compact">
                     <div class="ps-banner-left">
-                        <span class="ps-banner-icon">⚡</span>
+                        <span class="ps-banner-icon" aria-hidden="true">⚡</span>
                         <span class="ps-banner-title">Practice Speed Mode:</span>
                         <span class="ps-banner-text">Target goals, visual previews & adaptive pacing!</span>
                     </div>
@@ -1805,24 +1816,24 @@
                     <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; text-align: left; width: 100%;">
                         <!-- Left: FMC timer and Submission -->
                         <div>
-                            <h3 style="font-family: 'DynaPuff', cursive; color: #00E5FF; font-size: 1.8em; margin-top: 0; margin-bottom: 10px;">FMC Solve Panel</h3>
+                            <h2 style="font-family: 'DynaPuff', cursive; color: #00E5FF; font-size: 1.8em; margin-top: 0; margin-bottom: 10px;">FMC Solve Panel</h2>
                             <div style="font-size: 2.5em; font-weight: bold; font-family: monospace; margin-bottom: 10px; text-align: center; color: #fff;" id="fmc-timer-val">60:00</div>
                             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                                <button id="btn-fmc-start" class="btn-action" style="background-color: #2ecc71; color: white;">Start ⏱️</button>
-                                <button id="btn-fmc-pause" class="btn-action" style="background-color: #ff7675; color: white; display: none;">Pause ⏸️</button>
-                                <button id="btn-fmc-reset" class="btn-action" style="background-color: #74b9ff; color: white;">Reset 🔄</button>
+                                <button id="btn-fmc-start" type="button" class="btn-action" style="background-color: #047857; color: white;">Start ⏱️</button>
+                                <button id="btn-fmc-pause" type="button" class="btn-action" style="background-color: #b91c1c; color: white; display: none;">Pause ⏸️</button>
+                                <button id="btn-fmc-reset" type="button" class="btn-action" style="background-color: #0369a1; color: white;">Reset 🔄</button>
                             </div>
 
-                            <label style="font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 5px; color: #fff;">Enter your solution:</label>
-                            <input type="text" id="input-fmc-solution" placeholder="e.g. R U R' U'" style="width: 100%; font-size: 1.2em; padding: 10px; border-radius: 10px; border: 3px solid #333; font-family: monospace; box-sizing: border-box; margin-bottom: 10px;">
+                            <label for="input-fmc-solution" style="font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 5px; color: #fff;">Enter your solution:</label>
+                            <input type="text" id="input-fmc-solution" name="fmc_solution" placeholder="e.g. R U R' U'" style="width: 100%; font-size: 1.2em; padding: 10px; border-radius: 10px; border: 3px solid #333; font-family: monospace; box-sizing: border-box; margin-bottom: 10px;">
                             <div style="font-size: 1.15em; font-weight: bold; margin-bottom: 15px; color: #00E5FF;" id="fmc-moves-count">Moves: 0 (OBTM)</div>
 
-                            <button id="btn-fmc-submit" class="btn-action" style="background-color: var(--cyan-blob); width: 100%;">Submit FMC Solve 🏆</button>
+                            <button id="btn-fmc-submit" type="button" class="btn-action" style="background-color: var(--cyan-blob); width: 100%;">Submit FMC Solve 🏆</button>
                         </div>
 
                         <!-- Right: Educational Tips -->
                         <div style="background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.15); border-radius: 15px; padding: 15px; overflow-y: auto; max-height: 350px; color: #e2e8f0;">
-                            <h4 style="font-family: 'DynaPuff', cursive; color: #00E5FF; margin-top: 0; margin-bottom: 10px; font-size: 1.3em;">💡 FMC Beginner Guide</h4>
+                            <h3 style="font-family: 'DynaPuff', cursive; color: #00E5FF; margin-top: 0; margin-bottom: 10px; font-size: 1.3em;">💡 FMC Beginner Guide</h3>
                             <p style="margin: 0 0 10px 0; font-size: 0.95em; line-height: 1.4;">
                                 FMC (Fewest Moves Challenge) is about finding the shortest solution in 1 hour.
                             </p>
@@ -1888,7 +1899,7 @@
                         <button id="btn-animator-next" class="video-btn" title="Next Move">⏭</button>
                         <button id="btn-animator-reset" class="video-btn" title="Reset to Start">🔄</button>
                         
-                        <select id="animator-speed-select" class="select-style" style="background-color: #34495e; color: white; border-color: #2c3e50; font-family: monospace; font-size: 0.95em; padding: 6px 10px; border-radius: 8px;" title="Playback Speed">
+                        <select id="animator-speed-select" name="animator_speed" aria-label="Scramble animation playback speed" class="select-style" style="background-color: #34495e; color: white; border-color: #2c3e50; font-family: monospace; font-size: 0.95em; padding: 6px 10px; border-radius: 8px;" title="Playback Speed">
                             <option value="3000">0.25x (Super Slow)</option>
                             <option value="2000">0.5x (Slow)</option>
                             <option value="1500" selected>1.0x (Clear Playback)</option>
@@ -1906,22 +1917,25 @@
         </div>
 
     <!-- Admin Login Modal -->
-    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
-        <div style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
-            <button id="admin-modal-close" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; outline: none; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
-            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; color: #FF6B6B;">🔑 Admin Login</h3>
+    <div id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10005; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 24px 16px; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
+        <div class="modal-content" style="background: white; border: 4px solid #333; border-radius: 20px; padding: 25px; max-width: 400px; width: 90%; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; position: relative;">
+            <button id="admin-modal-close" type="button" aria-label="Close Admin Login" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; font-weight: bold; font-family: sans-serif; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)';" onmouseout="this.style.transform='scale(1)';">✕</button>
+            <h2 id="admin-modal-title" style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; color: #FF6B6B;">🔑 Admin Login</h2>
             <p style="font-size: 1.1em; color: #666; margin: 0; text-align: center; font-weight: normal; font-family: 'Comic Neue', sans-serif;">Log in to edit Cole's records.</p>
-            <form id="admin-login-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
+            <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 12px; font-family: 'Comic Neue', sans-serif; font-weight: bold;">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-email" style="font-size: 1.1em; color: #1a1a1a;">Email Address:</label>
-                    <input type="email" id="admin-email" autocomplete="off" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <input type="email" id="admin-email" name="username" autocomplete="username" spellcheck="false" enterkeyhint="next" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <label for="admin-password" style="font-size: 1.1em; color: #1a1a1a;">Password:</label>
-                    <input type="password" id="admin-password" autocomplete="off" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; outline: none; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                    <div class="pw-input-wrap">
+                        <input type="password" id="admin-password" name="password" autocomplete="current-password" enterkeyhint="done" placeholder="••••••••" required style="font-family: 'Comic Neue', cursive, sans-serif; font-size: 1.1em; padding: 10px 12px; border: 2px solid #333; border-radius: 10px; box-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+                        <button type="button" class="pw-toggle-btn" aria-label="Show password" aria-pressed="false" onclick="const i=document.getElementById('admin-password');const s=i.type==='password';i.type=s?'text':'password';this.setAttribute('aria-pressed',String(s));this.setAttribute('aria-label',s?'Hide password':'Show password');this.textContent=s?'🙈':'👁️';">👁️</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn-action" style="margin-top: 15px; padding: 10px 15px; font-size: 1.25em; border-radius: 12px; width: 100%; cursor: pointer; outline: none; background-color: var(--yellow-blob); color: var(--text-dark);">
-                    🔓 Log In
+                <button type="submit" class="btn-action" style="margin-top: 15px; padding: 10px 15px; font-size: 1.25em; border-radius: 12px; width: 100%; cursor: pointer; background-color: var(--yellow-blob); color: var(--text-dark);">
+                    🔓 Sign In
                 </button>
             </form>
         </div>
@@ -2229,7 +2243,7 @@
         function drawCubeNet() {
             const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             const container = document.getElementById('cube-net-container');
-            container.innerHTML = "";
+            container.replaceChildren();
 
             if (type === '1000x1000' || type === '100x100') {
                 const N = type === '1000x1000' ? 1000 : 100;
@@ -2495,7 +2509,7 @@
         function renderAnimator3dCubeDOM() {
             const cubeEl = document.getElementById('animator-cube-3d');
             if (!cubeEl) return;
-            cubeEl.innerHTML = "";
+            cubeEl.replaceChildren();
 
             const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             if (type === '1000x1000' || type === '100x100') {
@@ -2581,7 +2595,7 @@
         function updateAnimatorMovesDisplay() {
             const container = document.getElementById('animator-moves-list');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             if (animatorMoves.length === 0) {
                 container.textContent = "No moves in scramble";
@@ -3432,17 +3446,17 @@
         }
 
         function renderSolves() {
-            solvesTbody.innerHTML = "";
+            solvesTbody.replaceChildren();
             const type = (scrambleTypeSelect && scrambleTypeSelect.value) || '3x3';
             
             if (solves.length === 0) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td colspan="3" style="color: #999; font-style: italic;">No solves yet!</td>`;
+                tr.innerHTML = `<td colspan="3" style="color: #475569; font-style: italic;">No solves yet!</td>`;
                 solvesTbody.appendChild(tr);
                 return;
             }
 
-            const reversed = [...solves].reverse();
+            const reversed = solves.toReversed();
             reversed.forEach((solve, revIdx) => {
                 const originalIndex = solves.length - 1 - revIdx;
                 const tr = document.createElement('tr');
@@ -3899,11 +3913,11 @@
             const coleSingle = coleRecordObj.single;
 
             if (isNewPB && solves.length > 1) {
-                buddyBubble.innerHTML = `🎉 OMG! That's a new Personal Best! **${formatTime(elapsed)}**! Incredible! 🏆`;
+                buddyBubble.innerHTML = `🎉 OMG! That's a new Personal Best! <strong>${formatTime(elapsed)}</strong>! Incredible! 🏆`;
                 triggerEmojiConfetti();
             } else if (elapsed < coleSingle) {
                 const recordStr = type === '3x3-fmc' ? `${coleSingle} moves` : formatTime(coleSingle);
-                buddyBubble.innerHTML = `🔥 Beat Cole! You beat Cole's ${recordStr} Single record with **${type === '3x3-fmc' ? elapsed + ' moves' : formatTime(elapsed)}**! Absolute master class! 🏆`;
+                buddyBubble.innerHTML = `🔥 Beat Cole! You beat Cole's ${recordStr} Single record with <strong>${type === '3x3-fmc' ? elapsed + ' moves' : formatTime(elapsed)}</strong>! Absolute master class! 🏆`;
                 triggerEmojiConfetti();
             } else {
                 const randomQuote = buddyQuotes[Math.floor(Math.random() * buddyQuotes.length)];
@@ -4858,17 +4872,18 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="practice-speed.html">⚡ Practice Speed Mode</a></li>
+                    <li><a href="cube-solving-machine.html">🤖 Cube Solving Machine</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
                     <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
@@ -4877,7 +4892,7 @@
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -4888,11 +4903,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">

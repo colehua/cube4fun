@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Practice Speed Timer with adaptive goals and visual scramble preview. Push your speedcubing times with dynamic goals that adapt to your speed!">
     <meta name="keywords" content="practice speed, speedcubing timer, cube goals, adaptive timer, rubiks cube speed practice, Cole Hua, learn cube 4 fun">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/practice-speed.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Practice Speed ⚡🎯 - Speedcubing Timer with Adaptive Goals">
+    <meta property="og:description" content="Practice Speed Timer with adaptive goals and visual scramble preview. Push your speedcubing times with dynamic goals that adapt to your speed!">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/practice-speed.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Practice Speed ⚡🎯 - Speedcubing Timer with Adaptive Goals</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700&family=Outfit:wght@500;700;800;900&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -1016,10 +1027,11 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <canvas id="confetti-canvas"></canvas>
     <div class="blob-top"></div>
 
-    <div class="container">
+    <main id="main-content" class="container">
         
         <!-- SITE NAVIGATION -->
         <div class="cs-site-nav">
@@ -1048,14 +1060,14 @@
         <div class="ps-toolbar-card">
             <div class="ps-toolbar-row">
                 <div class="ps-select-group">
-                    <select id="scramble-puzzle-select" class="ps-select" onchange="onPuzzleChanged()">
+                    <select id="scramble-puzzle-select" name="scramble_puzzle" aria-label="Select puzzle type" class="ps-select" onchange="onPuzzleChanged()">
                         <option value="3x3" selected>3x3x3 Rubik's Cube</option>
                         <option value="2x2">2x2x2 Rubik's Cube</option>
                         <option value="1000x1000">1000x1000x1000 (very laggy) Cube 🌌</option>
                         <option value="100x100">100x100x100 Cube 🌟</option>
                     </select>
 
-                    <select id="scramble-difficulty-select" class="ps-select" onchange="onDifficultyChanged()">
+                    <select id="scramble-difficulty-select" name="scramble_difficulty" aria-label="Select scramble difficulty" class="ps-select" onchange="onDifficultyChanged()">
                         <option value="easy">🟢 Easy (Fewer moves)</option>
                         <option value="medium">🟡 Medium</option>
                         <option value="hard" selected>🔴 Hard (WCA Standard)</option>
@@ -1174,7 +1186,7 @@
         <!-- 5. SOLVE HISTORY & GOAL OUTCOME LOG -->
         <div class="history-card">
             <div class="history-card-header">
-                <h3 class="history-title">Goal Progression Log 📊</h3>
+                <h2 class="history-title">Goal Progression Log 📊</h2>
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-action" style="padding: 4px 10px; font-size: 0.85em;" onclick="clearHistory()">Clear Solves 🗑️</button>
                 </div>
@@ -1202,7 +1214,7 @@
             </div>
         </div>
 
-    </div>
+    </main>
 
     <!-- SET GOAL MODAL -->
     <div id="modal-set-goal" class="ps-modal-overlay">
@@ -1225,7 +1237,7 @@
             </div>
 
             <div>
-                <input type="number" step="0.1" min="1" max="300" id="input-custom-goal" class="goal-input-style" value="20.0">
+                <input type="number" step="0.1" min="1" max="300" id="input-custom-goal" name="custom_goal" aria-label="Custom target time in seconds" class="goal-input-style" value="20.0">
                 <span style="font-family: 'DynaPuff', cursive; font-weight: bold; font-size: 1.2em;"> sec</span>
             </div>
 
@@ -1272,25 +1284,27 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="practice-speed.html">⚡ Practice Speed Mode</a></li>
+                    <li><a href="cube-solving-machine.html">🤖 Cube Solving Machine</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
                     <li><a href="play.html">🎮 3D Virtual Cube</a></li>
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -1301,11 +1315,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">
@@ -1506,7 +1520,7 @@
         function renderCubeNet() {
             const container = document.getElementById('cube-net-render');
             if (!container) return;
-            container.innerHTML = "";
+            container.replaceChildren();
 
             if (currentPuzzle === '1000x1000' || currentPuzzle === '100x100') {
                 const N = currentPuzzle === '1000x1000' ? 1000 : 100;
@@ -1649,7 +1663,7 @@
         function render3dMiniCube() {
             const cubeObj = document.getElementById('cube-3d-obj');
             if (!cubeObj) return;
-            cubeObj.innerHTML = "";
+            cubeObj.replaceChildren();
 
             if (currentPuzzle === '1000x1000' || currentPuzzle === '100x100') {
                 const N = currentPuzzle === '1000x1000' ? 1000 : 100;

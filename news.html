@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Cubing News & Updates - Learn Cube 4 Fun. The greatest and newest speedcubing news, WCA world records, Cole's milestones, and community sessions!">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/news.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cubing News &amp; Updates 📰 - Learn Cube 4 Fun">
+    <meta property="og:description" content="Cubing News &amp; Updates - Learn Cube 4 Fun. The greatest and newest speedcubing news, WCA world records, Cole's milestones, and community sessions!">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/news.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Cubing News & Updates 📰 - Learn Cube 4 Fun</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <!-- Google Firebase (Always Free / Never Expires) & Supabase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="db-config.js"></script>
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -1000,13 +1010,14 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <div class="blob-top"></div>
 
     <!-- TOAST NOTIFICATION -->
     <div id="news-toast">🚀 Action Complete!</div>
 
-    <div class="container">
+    <main id="main-content" class="container">
         
         <!-- TOP NAVIGATION BAR -->
         <div class="nav-buttons">
@@ -1075,7 +1086,8 @@
         <!-- CONTROLS & FILTER BAR -->
         <div class="controls-card">
             <div class="search-bar-row">
-                <input type="text" id="news-search-input" class="news-search-input" placeholder="🔍 Search news headlines, cubers, tech, records...">
+                <label for="news-search-input" class="visually-hidden">Search cubing news</label>
+            <input type="text" id="news-search-input" name="news_search" aria-label="Search cubing news" class="news-search-input" placeholder="🔍 Search news headlines, cubers, tech, records...">
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <div class="category-tabs" id="category-tabs">
@@ -1095,24 +1107,27 @@
             <!-- Articles rendered by JavaScript -->
         </div>
 
-    </div>
+    </main>
 
     <!-- ==================== ADMIN LOGIN MODAL ==================== -->
-    <div id="admin-modal" class="modal-overlay">
-        <div style="background: white; border: 4px solid #1e272e; padding: 30px; border-radius: 25px; width: 100%; max-width: 420px; margin: auto; box-sizing: border-box; position: relative; box-shadow: 0px 10px 30px rgba(0,0,0,0.3);">
-            <button id="admin-modal-close" class="modal-close-btn">✕</button>
-            <h3 style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; color: #1e272e;">🔑 Admin Login</h3>
+    <div id="admin-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+        <div class="modal-content" style="background: white; border: 4px solid #1e272e; padding: 30px; border-radius: 25px; width: 100%; max-width: 420px; margin: auto; box-sizing: border-box; position: relative; box-shadow: 0px 10px 30px rgba(0,0,0,0.3);">
+            <button id="admin-modal-close" type="button" aria-label="Close Admin Login" class="modal-close-btn">✕</button>
+            <h2 id="admin-modal-title" style="font-family: 'DynaPuff', cursive; font-size: 1.8em; margin: 0; text-align: center; color: #1e272e;">🔑 Admin Login</h2>
             <p style="text-align: center; margin-top: 6px; margin-bottom: 20px; font-size: 1.05em; color: #64748b; font-weight: 600;">Log in as Cole to publish, edit, or delete news stories!</p>
             <form id="admin-login-form">
                 <div style="margin-bottom: 15px;">
                     <label for="admin-email" style="display: block; font-family: 'DynaPuff', cursive; font-size: 0.95em; margin-bottom: 5px;">Username / Email</label>
-                    <input type="text" id="admin-email" placeholder="cole or email" required style="width: 100%; padding: 12px; border: 2.5px solid #1e272e; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1.05em; box-sizing: border-box; outline: none;">
+                    <input type="text" id="admin-email" name="username" autocomplete="username" spellcheck="false" autocapitalize="none" autocorrect="off" enterkeyhint="next" placeholder="cole or email" required style="width: 100%; padding: 12px; border: 2.5px solid #1e272e; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1.05em; box-sizing: border-box;">
                 </div>
                 <div style="margin-bottom: 22px;">
                     <label for="admin-password" style="display: block; font-family: 'DynaPuff', cursive; font-size: 0.95em; margin-bottom: 5px;">Password</label>
-                    <input type="password" id="admin-password" placeholder="••••••••" required style="width: 100%; padding: 12px; border: 2.5px solid #1e272e; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1.05em; box-sizing: border-box; outline: none;">
+                    <div class="pw-input-wrap">
+                        <input type="password" id="admin-password" name="password" autocomplete="current-password" enterkeyhint="done" placeholder="••••••••" required style="width: 100%; padding: 12px; border: 2.5px solid #1e272e; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1.05em; box-sizing: border-box;">
+                        <button type="button" class="pw-toggle-btn" aria-label="Show password" aria-pressed="false" onclick="const i=document.getElementById('admin-password');const s=i.type==='password';i.type=s?'text':'password';this.setAttribute('aria-pressed',String(s));this.setAttribute('aria-label',s?'Hide password':'Show password');this.textContent=s?'🙈':'👁️';">👁️</button>
+                    </div>
                 </div>
-                <button type="submit" style="width: 100%; background-color: var(--cyan-blob); color: #1e272e; border: 3px solid #1e272e; border-radius: 14px; padding: 12px; font-family: 'DynaPuff', cursive; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0px 5px 0px #1e272e; transition: all 0.15s; outline: none;">Unlock Admin Access 🚀</button>
+                <button type="submit" style="width: 100%; background-color: var(--cyan-blob); color: #1e272e; border: 3px solid #1e272e; border-radius: 14px; padding: 12px; font-family: 'DynaPuff', cursive; font-size: 1.2em; font-weight: bold; cursor: pointer; box-shadow: 0px 5px 0px #1e272e; transition: all 0.15s;">Sign In 🚀</button>
             </form>
             <div style="margin-top: 15px; text-align: center; font-size: 0.85em; color: #94a3b8; font-weight: 600;">
                 (Supports Cole / Admin credentials & local mode)
@@ -1164,7 +1179,7 @@
                 <div>
                     <label style="background: #e2e8f0; border: 2px solid #1e272e; padding: 6px 14px; border-radius: 10px; font-family: 'DynaPuff', cursive; cursor: pointer; font-size: 0.9em; display: inline-flex; align-items: center; gap: 5px;">
                         📷 Upload Photo from Device
-                        <input type="file" id="composer-file-input" accept="image/*" style="display: none;" onchange="handleNewsImageUpload(event)">
+                        <input type="file" id="composer-file-input" name="news_image" aria-label="Upload news image" accept="image/*" style="display: none;" onchange="handleNewsImageUpload(event)">
                     </label>
                 </div>
                 <span id="upload-status-text" style="font-size: 0.88em; color: #64748b; font-weight: 600;">Direct image upload (max 2MB)</span>
@@ -1419,19 +1434,19 @@
                     <br><br>
                     <b>1. Teodor Zajder Breaks the Sub-3 Barrier (2.76s Single):</b>
                     <br>
-                    Polish speedcuber <b>Teodor Zajder</b> (WCA ID: <a href="https://www.worldcubeassociation.org/persons/2021ZAJD03" target="_blank" style="color: #0066FF; font-weight: bold; text-decoration: underline;">2021ZAJD03</a>) stunned the global cubing community at <b>GLS Big Cubes Gdańsk 2026</b>. In Round 1, on his 4th attempt, he registered an incredible <b>2.76-second solve</b> (Round 1 solves: <code>4.99</code>, <code>5.36</code>, <code>(5.76)</code>, <code>[2.76]</code>, <code>5.34</code>).
+                    Polish speedcuber <b>Teodor Zajder</b> (WCA ID: <a href="https://www.worldcubeassociation.org/persons/2021ZAJD03" target="_blank" rel="noopener noreferrer" style="color: #0066FF; font-weight: bold; text-decoration: underline;">2021ZAJD03</a>) stunned the global cubing community at <b>GLS Big Cubes Gdańsk 2026</b>. In Round 1, on his 4th attempt, he registered an incredible <b>2.76-second solve</b> (Round 1 solves: <code>4.99</code>, <code>5.36</code>, <code>(5.76)</code>, <code>[2.76]</code>, <code>5.34</code>).
                     <br>
                     This broke the long-standing 3.13s record set by Max Park (USA) at Pride in Long Beach 2023, making Teodor the first human ever to solve a Rubik's cube officially in under 3 seconds!
                     <br><br>
                     <b>2. Yiheng Wang Sets 3.51s World Record Average:</b>
                     <br>
-                    Prodigy <b>Yiheng Wang (王艺衡)</b> (WCA ID: <a href="https://www.worldcubeassociation.org/persons/2019WANY36" target="_blank" style="color: #029347; font-weight: bold; text-decoration: underline;">2019WANY36</a>) shattered the 3x3 World Record Average with a sensational <b>3.51 seconds</b> at the <b>Hefei Cubing League 3x3 III 2026</b> (Attempts: <code>3.68</code>, <code>(4.61)</code>, <code>3.39</code>, <code>3.41</code>, <code>3.45</code>)!
+                    Prodigy <b>Yiheng Wang (王艺衡)</b> (WCA ID: <a href="https://www.worldcubeassociation.org/persons/2019WANY36" target="_blank" rel="noopener noreferrer" style="color: #029347; font-weight: bold; text-decoration: underline;">2019WANY36</a>) shattered the 3x3 World Record Average with a sensational <b>3.51 seconds</b> at the <b>Hefei Cubing League 3x3 III 2026</b> (Attempts: <code>3.68</code>, <code>(4.61)</code>, <code>3.39</code>, <code>3.41</code>, <code>3.45</code>)!
                     <br>
                     Yiheng also achieved an astonishing official <b>2.77s Single</b> at the <b>Maoming Open 2026</b> (Attempts: <code>3.87</code>, <code>(5.63)</code>, <code>[2.77]</code>, <code>4.33</code>, <code>3.99</code>).
                     <br><br>
                     <b>3. Max Park's Big Cube Dominance:</b>
                     <br>
-                    Legendary speedcuber <b>Max Park</b> (USA, WCA ID: <a href="https://www.worldcubeassociation.org/persons/2012PARK03" target="_blank" style="color: #0066FF; font-weight: bold; text-decoration: underline;">2012PARK03</a>) continues his unbroken dominance in big cubes (4x4 through 7x7) and 3x3 One-Handed (OH), holding the 3x3 OH World Record Single of <b>5.62 seconds</b>!`
+                    Legendary speedcuber <b>Max Park</b> (USA, WCA ID: <a href="https://www.worldcubeassociation.org/persons/2012PARK03" target="_blank" rel="noopener noreferrer" style="color: #0066FF; font-weight: bold; text-decoration: underline;">2012PARK03</a>) continues his unbroken dominance in big cubes (4x4 through 7x7) and 3x3 One-Handed (OH), holding the 3x3 OH World Record Single of <b>5.62 seconds</b>!`
                 },
                 {
                     id: "news-2",
@@ -1457,9 +1472,9 @@
                     <br><br>
                     🔗 View Cole's verified records:
                     <ul>
-                        <li><a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" style="color: #0066FF; font-weight: bold; text-decoration: underline;">Cole Hua on World Cube Association (WCA Profile 2026HUAC01)</a> ⚡</li>
-                        <li><a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" style="color: #029347; font-weight: bold; text-decoration: underline;">Cole Hua on Cubing China (粗饼网)</a> 🇨🇳</li>
-                        <li><a href="https://www.worldcubeassociation.org/competitions/BurnabyCubesBigSmall2026" target="_blank" style="color: #0088FF; font-weight: bold; text-decoration: underline;">Burnaby Cubes Big & Small 2026 Competition Results</a> 🍁</li>
+                        <li><a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" style="color: #0066FF; font-weight: bold; text-decoration: underline;">Cole Hua on World Cube Association (WCA Profile 2026HUAC01)</a> ⚡</li>
+                        <li><a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" style="color: #029347; font-weight: bold; text-decoration: underline;">Cole Hua on Cubing China (粗饼网)</a> 🇨🇳</li>
+                        <li><a href="https://www.worldcubeassociation.org/competitions/BurnabyCubesBigSmall2026" target="_blank" rel="noopener noreferrer" style="color: #0088FF; font-weight: bold; text-decoration: underline;">Burnaby Cubes Big & Small 2026 Competition Results</a> 🍁</li>
                     </ul>`
                 },
                 {
@@ -1843,7 +1858,7 @@
         // --- RENDER ARTICLES ---
         async function renderArticles() {
             const loggedIn = await isAdminLoggedIn();
-            newsListContainer.innerHTML = '';
+            newsListContainer.replaceChildren();
 
             // Dynamically update breaking ticker with top verified stories
             const tickerEl = document.getElementById('breaking-ticker-text');
@@ -2211,10 +2226,21 @@
             }
         });
 
-        // --- LANGUAGE SWITCHER LOGIC ---
+        // --- LANGUAGE SWITCHER LOGIC (ON-DEMAND GOOGLE TRANSLATE LOADER) ---
+        let googleTranslateScriptRequested = false;
+
+        function loadGoogleTranslateOnDemand() {
+            if (googleTranslateScriptRequested) return;
+            googleTranslateScriptRequested = true;
+            const s = document.createElement('script');
+            s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            s.async = true;
+            document.body.appendChild(s);
+        }
+
         window.changeLanguage = function(lang) {
             if (!lang) return;
-            localStorage.setItem('cube4fun_lang', lang);
+            try { localStorage.setItem('cube4fun_lang', lang); } catch (e) {}
 
             const select = document.getElementById('cube-lang-select');
             if (select && select.value !== lang) {
@@ -2245,23 +2271,29 @@
             if (googleCombo) {
                 googleCombo.value = lang;
                 googleCombo.dispatchEvent(new Event('change'));
+            } else if (lang !== 'en') {
+                loadGoogleTranslateOnDemand();
             } else {
                 window.location.reload();
             }
         };
 
         function initLanguage() {
-            const savedLang = localStorage.getItem('cube4fun_lang') || 'en';
+            let savedLang = 'en';
+            try { savedLang = localStorage.getItem('cube4fun_lang') || 'en'; } catch (e) {}
             const select = document.getElementById('cube-lang-select');
             if (select) {
                 select.value = savedLang;
             }
+            const cookieMatch = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
             if (savedLang !== 'en') {
-                const cookieMatch = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
                 const expectedCookie = `/en/${savedLang}`;
                 if (!cookieMatch || cookieMatch[1] !== expectedCookie) {
                     document.cookie = "googtrans=" + expectedCookie + "; path=/;";
                 }
+                loadGoogleTranslateOnDemand();
+            } else if (cookieMatch && cookieMatch[1] && cookieMatch[1] !== '/en/en') {
+                loadGoogleTranslateOnDemand();
             }
         }
 
@@ -2273,9 +2305,9 @@
         });
     </script>
 
-    <!-- Google Translate Element (Hidden) -->
+    <!-- Google Translate Element (Lazy-loaded on demand only when non-English is chosen) -->
     <div id="google_translate_element" style="display: none;"></div>
-    <script type="text/javascript">
+    <script>
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
@@ -2284,7 +2316,6 @@
             }, 'google_translate_element');
         }
     </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- GLOBAL SITE FOOTER -->
     <footer class="site-footer">
@@ -2295,13 +2326,13 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
@@ -2313,7 +2344,7 @@
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -2324,11 +2355,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">

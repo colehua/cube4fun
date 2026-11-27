@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Learn how to solve a 2x2 Rubik's Cube step-by-step with Cole Hua. Follow the steps, watch looping videos, and download the original PPTX.">
     <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, 2x2 Rubik's Cube tutorial, speedcubing, sexy move, PLL, OLL">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/tutorial-2x2.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="2x2 Rubik's Cube Tutorial - Cole Hua WCA">
+    <meta property="og:description" content="Learn how to solve a 2x2 Rubik's Cube step-by-step with Cole Hua. Follow the steps, watch looping videos, and download the original PPTX.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/tutorial-2x2.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>2x2 Rubik's Cube Tutorial - Cole Hua WCA</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -352,7 +363,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <main id="main-content" class="container">
         <!-- TOP NAVIGATION -->
         <div class="nav-buttons" style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
             <a href="index.html" class="nav-button" style="margin-bottom: 0;">🏠 Home</a>
@@ -380,15 +392,15 @@
                 <div id="step-tracker-fill" class="step-progress-bar-fill"></div>
             </div>
             <div class="step-pills-list">
-                <span class="step-pill" onclick="toggleTutorialStep(1)" id="step-pill-1">🧱 Step 1: First Layer White Side</span>
-                <span class="step-pill" onclick="toggleTutorialStep(2)" id="step-pill-2">🎯 Step 2: Orient Top Yellow Face</span>
-                <span class="step-pill" onclick="toggleTutorialStep(3)" id="step-pill-3">🎉 Step 3: Permute Corners & Solve!</span>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(1)" id="step-pill-1">🧱 Step 1: First Layer White Side</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(2)" id="step-pill-2">🎯 Step 2: Orient Top Yellow Face</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(3)" id="step-pill-3">🎉 Step 3: Permute Corners & Solve!</button>
             </div>
         </div>
         
         <!-- YOUTUBE BANNER -->
         <div style="text-align: center; margin: 20px auto; max-width: 800px;">
-            <a href="https://www.youtube.com/@ColeHua" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 15px; background-color: #FF0000; color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.6em; border: 4px dashed white; box-shadow: 0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; position: relative; top: 0;" onmouseover="this.style.top='4px'; this.style.boxShadow='0px 4px 0px #CC0000, 0px 4px 10px rgba(0,0,0,0.2)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2)';">
+            <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 15px; background-color: #FF0000; color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.6em; border: 4px dashed white; box-shadow: 0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; position: relative; top: 0;" onmouseover="this.style.top='4px'; this.style.boxShadow='0px 4px 0px #CC0000, 0px 4px 10px rgba(0,0,0,0.2)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2)';">
                 <span style="display: inline-flex; align-items: center; animation: wiggle 2s infinite;">
                     <svg viewBox="0 0 24 24" width="30" height="30" fill="white" style="display: block;">
                         <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.507 9.388.507 9.388.507s7.518 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -426,7 +438,7 @@
                 <div class="card">
                     <div class="text-block">If you don’t know what’s the sexy move, it’s just a really really famous algorithm on Rubik’s cubes! 💫</div>
                     <div class="media-container">
-                        <img src="./media/2x2_image2.png" alt="Sexy move diagram">
+                        <img src="./media/2x2_image2.png" alt="Sexy move diagram" width="480" height="360" loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -441,9 +453,9 @@
                 <div class="card">
                     <div class="text-block">Like in this photo, I found a white corner here so I could determine that it’s gonna be the white side (about to be the white side in the future).</div>
                     <div class="media-container">
-                        <img src="./media/2x2_image3.jpeg" alt="Finding a white corner">
+                        <img src="./media/2x2_image3.jpeg" alt="Finding a white corner" width="3300" height="2475" loading="lazy" decoding="async">
                         <div style="margin-top: 15px;">
-                            <img src="./media/2x2_image4.png" class="arrow-icon" alt="Arrow pointing to white corner">
+                            <img src="./media/2x2_image4.png" class="arrow-icon" alt="Arrow pointing to white corner" width="185" height="205" loading="lazy" decoding="async">
                         </div>
                     </div>
                 </div>
@@ -486,7 +498,7 @@
                 <div class="card">
                     <div class="text-block">Put white on top and hold the yellow side on the bottom:</div>
                     <div class="media-container">
-                        <img src="./media/2x2_image6.jpeg" alt="Hold cube with white on top">
+                        <img src="./media/2x2_image6.jpeg" alt="Hold cube with white on top" width="3300" height="2475" loading="lazy" decoding="async">
                     </div>
                 </div>
                 <div class="card">
@@ -518,14 +530,14 @@
                     <div class="text-block" style="color: var(--primary);">Case 2: No Solved Side</div>
                     <div class="text-block" style="font-size: 0.9em; font-weight: normal;">These are both case 2 pictures:</div>
                     <div class="grid-2" style="width: 100%;">
-                        <div class="media-container"><img src="./media/2x2_image9.jpeg" alt="Case 2 illustration A"></div>
-                        <div class="media-container"><img src="./media/2x2_image10.jpeg" alt="Case 2 illustration B"></div>
+                        <div class="media-container"><img src="./media/2x2_image9.jpeg" alt="Case 2 illustration A" width="3297" height="2473" loading="lazy" decoding="async"></div>
+                        <div class="media-container"><img src="./media/2x2_image10.jpeg" alt="Case 2 illustration B" width="3297" height="2473" loading="lazy" decoding="async"></div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="text-block" style="color: #2ECC71;">Case 1: One Solved Side (Headlights)</div>
                     <div class="text-block" style="font-size: 0.9em; font-weight: normal;">This is case 1:</div>
-                    <div class="media-container"><img src="./media/2x2_image11.jpeg" alt="Case 1 illustration"></div>
+                    <div class="media-container"><img src="./media/2x2_image11.jpeg" alt="Case 1 illustration" width="3297" height="2473" loading="lazy" decoding="async"></div>
                 </div>
             </div>
         </div>
@@ -579,7 +591,7 @@
                     Hope you liked my tutorial! By Cole. 🧊
                 </div>
                 <div class="media-container">
-                    <img src="./media/2x2_image16.jpeg" alt="Cole's thank you slide" style="max-width: 600px;">
+                    <img src="./media/2x2_image16.jpeg" alt="Cole's thank you slide" style="max-width: 600px;" width="1920" height="1080" loading="lazy" decoding="async">
                 </div>
             </div>
         </div>
@@ -590,7 +602,7 @@
             <a href="tutorial-3x3.html" class="nav-button" style="background-color: #FF6B6B; color: white;">🧊 Learn 3x3 Tutorial!</a>
         </div>
 
-    </div>
+    </main>
     
     <!-- GLOBAL SITE FOOTER -->
     <footer class="site-footer">
@@ -601,24 +613,25 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
                     <li><a href="play.html">🎮 3D Virtual Cube</a></li>
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -629,11 +642,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">
@@ -699,7 +712,8 @@
                     badge.style.marginTop = '8px';
                     badge.style.fontSize = '0.9em';
                     badge.style.fontWeight = 'bold';
-                    badge.style.color = '#FF6B6B';
+                    badge.className = 'slow-mo-caption';
+                    badge.style.color = '#b91c1c';
                     badge.style.backgroundColor = '#FFF0F0';
                     badge.style.border = '2px solid #FFB7B2';
                     badge.style.padding = '4px 12px';

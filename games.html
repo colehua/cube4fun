@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Agent Cole's Cube Arcade — Play 12 retro Rubik's Cube mini-games on a Nintendo Switch handheld console layout, earn coins, and unlock cube skins and upgrades.">
+    <link rel="canonical" href="https://colehua.github.io/cube4fun/games.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Secret Game Mode — Agent Cole's Cube Arcade">
+    <meta property="og:description" content="12 Rubik's Cube arcade mini-games, universal coin economy, upgrade shop, and custom cube skins.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/games.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>🚀 Secret Game Mode • Agent Cole's Cube Arcade 🕹️</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="stylesheet" href="theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700;800&family=Outfit:wght@500;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="gangnam-music.js"></script>
     <style>
@@ -2180,10 +2192,11 @@
 </head>
 <body>
 
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="arcade-container">
 
         <!-- TOP BAR -->
-        <nav class="arcade-nav">
+        <nav class="arcade-nav" aria-label="Arcade navigation">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <div class="arcade-badge">
                     🚀 SECRET GAME MODE ACTIVATED • AGENT COLE'S CUBE ARCADE 🕹️
@@ -2208,6 +2221,7 @@
             </div>
         </nav>
 
+        <main id="main-content">
         <!-- HERO TITLE -->
         <header class="arcade-header">
             <h1 class="arcade-title">🎮 Secret Game Mode 🚀</h1>
@@ -2368,9 +2382,9 @@
                                         <span class="btn-letter">🔥</span>
                                         <span class="btn-sub">SHOOT</span>
                                     </button>
-                                    <button id="btn-runner-right" class="abxy-btn btn-a" onclick="moveRunnerLane(1)" title="A Button: Steer RIGHT (D / ➡️)" style="background: #dc2626; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
+                                    <button id="btn-runner-right" class="abxy-btn btn-a" onclick="moveRunnerLane(1)" title="A Button: Steer RIGHT (D / ➡️)" style="background: #b91c1c; color: #ffffff; border-color: #f87171; box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);">
                                         <span class="btn-letter" style="color: #ffffff; font-size: 13px;">►</span>
-                                        <span class="btn-sub" style="color: #ffffff; font-weight: 800;">RIGHT</span>
+                                        <span class="btn-sub" style="color: #ffffff; opacity: 1; font-weight: 800;">RIGHT</span>
                                     </button>
                                 </div>
                                 <div class="abxy-row">
@@ -2392,12 +2406,12 @@
                                 <button id="btn-runner-survive" class="switch-home-btn btn-game-survive" onclick="surviveRunnerWithCoins()" style="display: none;" title="Circular Home Button: Survive with 100 Coins (Press S or R)">
                                     🛡️ 100 💰
                                 </button>
-                                <button id="btn-deck-survive" style="display: none;" onclick="surviveRunnerWithCoins()"></button>
-                                <label class="switch-auto-toggle" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
-                                    <input type="checkbox" id="chk-auto-survive" onchange="syncAutoSurvive(this)" style="width: 12px; height: 12px; accent-color: #f59e0b; cursor: pointer;">
+                                <button id="btn-deck-survive" style="display: none;" onclick="surviveRunnerWithCoins()" aria-label="Survive with 100 Coins"></button>
+                                <label for="chk-auto-survive" class="switch-auto-toggle" title="Auto-Survive: Automatically spend 100 coins to survive when hit!">
+                                    <input type="checkbox" id="chk-auto-survive" name="auto_survive" onchange="syncAutoSurvive(this)" style="width: 12px; height: 12px; accent-color: #f59e0b; cursor: pointer;">
                                     <span>🛡️ Auto</span>
                                 </label>
-                                <input type="checkbox" id="chk-auto-survive-deck" style="display: none;" onchange="syncAutoSurvive(this)">
+                                <input type="checkbox" id="chk-auto-survive-deck" name="auto_survive_deck" aria-label="Auto-Survive synced control" style="display: none;" onchange="syncAutoSurvive(this)">
                             </div>
                         </div>
                     </div>
@@ -3702,6 +3716,7 @@
             </div>
 
         </div>
+        </main>
 
         <!-- ARCADE FOOTER -->
         <footer class="arcade-footer">
@@ -3768,6 +3783,9 @@
         let audioCtx = null;
 
         function getAudioContext() {
+            if (!audioCtx && navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+                return null;
+            }
             if (!audioCtx) {
                 const Audio = window.AudioContext || window.webkitAudioContext;
                 if (Audio) audioCtx = new Audio();
@@ -6002,7 +6020,7 @@
             });
 
             // Sort obstacles from back (z=1000) to front (z=0)
-            const sortedObstacles = [...runnerObstacles].sort((a, b) => b.z - a.z);
+            const sortedObstacles = runnerObstacles.toSorted((a, b) => b.z - a.z);
 
             sortedObstacles.forEach(ob => {
                 const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
@@ -7912,7 +7930,7 @@
         }
 
         function render2048Board() {
-            board2048.innerHTML = '';
+            board2048.replaceChildren();
             for (let r = 0; r < 4; r++) {
                 for (let c = 0; c < 4; c++) {
                     const val = grid2048[r][c];
@@ -8142,7 +8160,7 @@
         // Initialize 16 cells with responsive touch and click handling
         const reflexNotations = ['U', 'R', 'F', 'L', 'D', 'B', 'M', 'R2', 'U\'', 'F\'', 'L\'', 'D\'', 'B\'', 'r', 'u', 'f'];
         if (reflexBox) {
-            reflexBox.innerHTML = '';
+            reflexBox.replaceChildren();
             for (let i = 0; i < 16; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'reflex-cell';
@@ -9592,7 +9610,7 @@
 
         function renderPairsBoard() {
             if (!pairsBox) return;
-            pairsBox.innerHTML = '';
+            pairsBox.replaceChildren();
 
             pairsCards.forEach((c) => {
                 const cardEl = document.createElement('div');

@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Learn Rubik's Cube scramble notation (R, L, U, D, F, B). Interactive move guide for speedcubing beginners.">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/notation.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Rubik's Cube Notation Guide - Learn Cube 4 Fun">
+    <meta property="og:description" content="Learn Rubik's Cube scramble notation (R, L, U, D, F, B). Interactive move guide for speedcubing beginners.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/notation.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Rubik's Cube Notation Guide - Learn Cube 4 Fun</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -500,7 +510,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <main id="main-content" class="container">
         
         <div class="nav-buttons">
             <a href="index.html" class="nav-button">🏠 Home</a>
@@ -783,35 +794,35 @@
                     <tr>
                         <td><span class="badge-move" style="background-color: var(--yellow-blob);">M / M'</span></td>
                         <td>Middle Slice</td>
-                        <td>Turn the middle layer between L and R. **M** goes down (with L), **M'** goes up (with R).</td>
+                        <td>Turn the middle layer between L and R. <strong>M</strong> goes down (with L), <strong>M'</strong> goes up (with R).</td>
                     </tr>
                     <tr>
                         <td><span class="badge-move" style="background-color: var(--yellow-blob);">E / E'</span></td>
                         <td>Equator Slice</td>
-                        <td>Turn the middle layer between U and D. **E** goes right (with D), **E'** goes left (with U).</td>
+                        <td>Turn the middle layer between U and D. <strong>E</strong> goes right (with D), <strong>E'</strong> goes left (with U).</td>
                     </tr>
                     <tr>
                         <td><span class="badge-move" style="background-color: var(--yellow-blob);">S / S'</span></td>
                         <td>Standing Slice</td>
-                        <td>Turn the middle layer between F and B. **S** goes clockwise (with F), **S'** goes counter-clockwise.</td>
+                        <td>Turn the middle layer between F and B. <strong>S</strong> goes clockwise (with F), <strong>S'</strong> goes counter-clockwise.</td>
                     </tr>
                     <!-- Wide Moves Section -->
                     <tr style="background-color: #f1f2f6;"><td colspan="3" style="text-align: center; font-family: 'DynaPuff', cursive; color: #0033CC; font-size: 1.15em;">Wide Moves (Two Layers together) 🍔</td></tr>
                     <tr>
                         <td><span class="badge-move" style="background-color: var(--yellow-blob);">Rw / Lw / Uw...</span></td>
                         <td>Wide Face Turns</td>
-                        <td>Turn the outer face **and** the adjacent middle slice together (2 layers at once).</td>
+                        <td>Turn the outer face <strong>and</strong> the adjacent middle slice together (2 layers at once).</td>
                     </tr>
                     <tr>
                         <td><span class="badge-move" style="background-color: var(--yellow-blob);">r / l / u...</span></td>
                         <td>Lowercase Notation</td>
-                        <td>Same as **Rw / Lw / Uw**! In modern notation, lowercase letters represent turning 2 layers.</td>
+                        <td>Same as <strong>Rw / Lw / Uw</strong>! In modern notation, lowercase letters represent turning 2 layers.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-    </div>
+    </main>
 
     <script>
         // --- SIMULATED CUBE STATE FOR PLAYGROUND ---
@@ -1055,7 +1066,7 @@
 
         function drawCubeNet() {
             const container = document.getElementById('cube-net-container');
-            container.innerHTML = "";
+            container.replaceChildren();
 
             const net = document.createElement('div');
             net.className = 'cube-net-3x3';
@@ -1109,7 +1120,7 @@
         // --- 3D CUBE VISUALIZER FUNCTIONS ---
         function init3dCube() {
             const cubeEl = document.getElementById('cube-3d');
-            cubeEl.innerHTML = "";
+            cubeEl.replaceChildren();
             
             const faces = ['U', 'D', 'F', 'B', 'L', 'R'];
             faces.forEach(fName => {
@@ -1444,24 +1455,25 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
                     <li><a href="play.html">🎮 3D Virtual Cube</a></li>
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -1472,11 +1484,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">

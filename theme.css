@@ -2,6 +2,136 @@
    🧊 LEARN CUBE 4 FUN - COMPLETE DARK & LIGHT MODE THEME SYSTEM
    ========================================================================= */
 
+/* Modern color-scheme cascade synced with <meta name="color-scheme"> */
+:root {
+    color-scheme: light dark;
+    --c4f-accent-light: #0052cc;
+    --c4f-accent-dark: #38bdf8;
+    --c4f-accent: var(--c4f-accent-light);
+    --c4f-scrollbar-track: #e2e8f0;
+    --c4f-scrollbar-thumb: #64748b;
+    --c4f-focus-ring: #0052cc;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --c4f-accent: var(--c4f-accent-dark);
+        --c4f-scrollbar-track: #0b0f19;
+        --c4f-scrollbar-thumb: #64748b;
+        --c4f-focus-ring: #38bdf8;
+    }
+}
+
+@supports (color: light-dark(white, black)) {
+    :root {
+        --c4f-accent: light-dark(var(--c4f-accent-light), var(--c4f-accent-dark));
+        --c4f-scrollbar-track: light-dark(#e2e8f0, #0b0f19);
+        --c4f-scrollbar-thumb: light-dark(#64748b, #64748b);
+        --c4f-focus-ring: light-dark(#0052cc, #38bdf8);
+    }
+}
+
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+    color-scheme: dark;
+}
+
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+    color-scheme: light;
+}
+
+html {
+    accent-color: var(--c4f-accent);
+    scrollbar-color: var(--c4f-scrollbar-thumb) var(--c4f-scrollbar-track);
+    overflow-x: clip;
+}
+
+body {
+    overflow-x: clip !important;
+    font-size-adjust: from-font;
+}
+
+h1 {
+    font-size-adjust: cap-height from-font;
+}
+
+/* Keep decorative top wave inside viewport bounds (prevents horizontal scrollbar site-wide) */
+.blob-top {
+    left: 0 !important;
+    width: 100% !important;
+    border-radius: 0 0 50% 50% !important;
+    pointer-events: none;
+}
+
+.blob-bottom {
+    pointer-events: none;
+}
+
+@supports not (scrollbar-color: auto) {
+    html::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+    html::-webkit-scrollbar-track {
+        background: var(--c4f-scrollbar-track);
+    }
+    html::-webkit-scrollbar-thumb {
+        background: var(--c4f-scrollbar-thumb);
+        border-radius: 6px;
+    }
+}
+
+/* Visually hidden utility (keeps content in the accessibility tree) */
+.visually-hidden:where(:not(:focus-within, :active)) {
+    position: absolute !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+}
+
+/* Skip to main content link */
+.skip-link {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000000;
+    background: #1e272e;
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 10px 18px;
+    border: 3px solid #FAED27;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    transform: translateY(-160%);
+    transition: transform 0.15s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid #FAED27;
+    outline-offset: 3px;
+}
+
+body.dark-mode .skip-link {
+    background: #0f172a;
+    color: #ffffff !important;
+    border-color: #38bdf8;
+}
+
+/* Accessible high-contrast keyboard focus indicators */
+:where(a:any-link, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid var(--c4f-focus-ring) !important;
+    outline-offset: 3px !important;
+}
+
 /* Smooth transitions for theme switching */
 body, 
 .text-section, 
@@ -362,8 +492,43 @@ body.dark-mode b {
     color: #ffffff !important;
 }
 
-body.dark-mode a {
+body.dark-mode a:not(.footer-badge):not(.ps-banner-btn):not(.cube-button):not(.btn-return-home):not(.btn-return-secret-home):not(.floating-home-pill):not(.btn-primary):not(.action-link):not(.nav-button):not(.skip-link):not(.c4f-qn-item) {
     color: #38bdf8;
+}
+
+/* Guarantee WCAG AA (>= 4.5:1) contrast on footer badges & callout buttons in both modes */
+.footer-badge.wca,
+body.dark-mode .footer-badge.wca {
+    background: #0052cc !important;
+    color: #ffffff !important;
+}
+
+.footer-badge.china,
+body.dark-mode .footer-badge.china {
+    background: #047857 !important;
+    color: #ffffff !important;
+}
+
+.footer-badge.yt,
+body.dark-mode .footer-badge.yt {
+    background: #b91c1c !important;
+    color: #ffffff !important;
+}
+
+.ps-banner-btn,
+body.dark-mode .ps-banner-btn {
+    background: #047857 !important;
+    color: #ffffff !important;
+}
+
+/* Footer heading consistency when semantic <h2> is used in place of <h4> */
+.footer-col h2 {
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.25em;
+    color: #FAED27;
+    margin: 0 0 14px 0;
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.25);
+    padding-bottom: 6px;
 }
 
 /* 8. Scramble & Code Displays */
@@ -462,14 +627,15 @@ body.dark-mode .site-footer {
     color: #94a3b8 !important;
 }
 
+body.dark-mode .footer-col h2,
 body.dark-mode .footer-col h4 {
-    color: #00E5FF !important;
+    color: #38bdf8 !important;
     border-bottom: 2px dashed #1e293b !important;
 }
 
 body.dark-mode .footer-desc,
 body.dark-mode .footer-col.info-col p {
-    color: #64748b !important;
+    color: #cbd5e1 !important;
 }
 
 /* 12. Catch-all for inline light elements */
@@ -923,3 +1089,537 @@ a.btn-return-secret-home:hover {
     font-weight: 700 !important;
 }
 
+
+/* ==========================================================================
+   COMPREHENSIVE DARK-MODE CONTRAST & SURFACE COVERAGE (SITE-WIDE)
+   Fixes white-on-white / dark-on-dark traps across every Cube4Fun page.
+   ========================================================================== */
+
+/* Tutorial step tracker, text blocks & slow-motion labels (tutorial-3x3 / 2x2) */
+body.dark-mode .step-tracker-card,
+body.dark-mode .text-block,
+body.dark-mode .composer-card,
+body.dark-mode .preview-box,
+body.dark-mode .modal-container,
+body.dark-mode .modal-moves-display,
+body.dark-mode .alt-algs-list,
+body.dark-mode .alt-alg-row,
+body.dark-mode .flow-step,
+body.dark-mode .mini-timer-box,
+body.dark-mode .challenge-search-bar,
+body.dark-mode .trick-card,
+body.dark-mode .trigger-box,
+body.dark-mode .cube-price-table-wrapper,
+body.dark-mode .cube-price-table,
+body.dark-mode .notation-table,
+body.dark-mode .orientation-hint,
+body.dark-mode .solves-container,
+body.dark-mode .solves-table,
+body.dark-mode .buddy-container,
+body.dark-mode .buddy-bubble,
+body.dark-mode .preview-card,
+body.dark-mode .video-sign-banner,
+body.dark-mode .timer-target-banner,
+body.dark-mode .cases-scroller,
+body.dark-mode .case-item,
+body.dark-mode .score-table,
+body.dark-mode .comment-reply-card,
+body.dark-mode .comment-reply-form,
+body.dark-mode .cs-site-nav {
+    background: #0d131f !important;
+    background-color: #0d131f !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .step-pill,
+body.dark-mode .step-progress-bar-bg,
+body.dark-mode .progress-bar-bg,
+body.dark-mode .emoji-bar,
+body.dark-mode .challenge-category-badge,
+body.dark-mode .pattern-modal-badge,
+body.dark-mode .news-tag-badge,
+body.dark-mode .ticker-badge,
+body.dark-mode .alt-alg-rank,
+body.dark-mode .badge-prime,
+body.dark-mode .comment-network-badge {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+body.dark-mode .step-pill.done,
+body.dark-mode .step-pill.completed {
+    background: #064e3b !important;
+    color: #ecfdf5 !important;
+    border-color: #10b981 !important;
+}
+
+body.dark-mode .solves-table th,
+body.dark-mode .solves-table td,
+body.dark-mode .cube-price-table th,
+body.dark-mode .cube-price-table td,
+body.dark-mode .notation-table th,
+body.dark-mode .notation-table td,
+body.dark-mode .score-table th,
+body.dark-mode .score-table td {
+    background-color: #0d131f !important;
+    color: #e2e8f0 !important;
+    border-color: #1e293b !important;
+}
+
+body.dark-mode .solves-table tbody tr:nth-child(even) td,
+body.dark-mode .cube-price-table tbody tr:nth-child(even) td,
+body.dark-mode .notation-table tbody tr:nth-child(even) td {
+    background-color: #111a2c !important;
+}
+
+/* Preserve natural aspect ratio when tutorial images specify width/height attributes alongside max-height */
+.media-container img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Slow-motion captions and high-contrast warning/note labels */
+.slow-mo-caption {
+    color: #b91c1c !important;
+}
+body.dark-mode .slow-mo-caption {
+    background: #2b1318 !important;
+    background-color: #2b1318 !important;
+    border-color: #991b1b !important;
+    color: #fecaca !important;
+}
+
+body.dark-mode .step-tracker-title {
+    color: #60a5fa !important;
+}
+
+body.dark-mode h1:not(.main-title):not(.arcade-title):not(.solver-main-title):not(.secret-title) {
+    color: #f8fafc !important;
+}
+
+/* Battle Timer & Index Dark-Mode High-Contrast Readability */
+body.dark-mode #one-vs-one-section [style*="background: #f8fafc" i],
+body.dark-mode #one-vs-one-section [style*="background: #f1f5f9" i],
+body.dark-mode #one-vs-one-section [style*="background: #e2e8f0" i],
+body.dark-mode #one-vs-one-section [style*="background: #fef3c7" i],
+body.dark-mode #one-vs-one-section [style*="background: #eff6ff" i],
+body.dark-mode #one-vs-one-section [style*="background: #faf5ff" i],
+body.dark-mode #one-vs-one-section [style*="background-color: #f8fafc" i],
+body.dark-mode [style*="background: #fafafa" i],
+body.dark-mode [style*="background: #fff9e6" i],
+body.dark-mode [style*="background: #fff0f0" i],
+body.dark-mode [style*="background: #f8fafc" i],
+body.dark-mode [style*="background: #f1f5f9" i],
+body.dark-mode [style*="background: #e2e8f0" i],
+body.dark-mode [style*="background-color: #f8fafc" i],
+body.dark-mode [style*="background-color: #fafafa" i],
+body.dark-mode [style*="background-color: #e2e8f0" i],
+body.dark-mode [style*="background-color: #fff0f0" i],
+body.dark-mode [style*="background: rgb(226, 232, 240)" i] {
+    background: #111827 !important;
+    background-color: #111827 !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+/* Brighten dark inline text colors in dark mode so WCAG AA (>= 4.5:1) always passes */
+body.dark-mode [style*="color: #1e272e" i],
+body.dark-mode [style*="color: rgb(30, 39, 46)" i],
+body.dark-mode [style*="color: #1a1a1a" i],
+body.dark-mode [style*="color: #111" i],
+body.dark-mode [style*="color: #222" i],
+body.dark-mode [style*="color: #333" i],
+body.dark-mode [style*="color: #334155" i],
+body.dark-mode [style*="color: #475569" i] {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode [style*="color: #64748b" i],
+body.dark-mode [style*="color: #666" i],
+body.dark-mode [style*="color: #555" i],
+body.dark-mode [style*="color: #777" i],
+body.dark-mode [style*="color: #999" i] {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode [style*="color: #0044cc" i],
+body.dark-mode [style*="color: #0066ff" i],
+body.dark-mode [style*="color: rgb(0, 102, 255)" i],
+body.dark-mode [style*="color: rgb(0, 68, 204)" i] {
+    color: #60a5fa !important;
+}
+
+body.dark-mode [style*="color: #8b5cf6" i],
+body.dark-mode [style*="color: rgb(139, 92, 246)" i],
+body.dark-mode [style*="color: #7c3aed" i] {
+    color: #c4b5fd !important;
+}
+
+body.dark-mode [style*="color: #ff6b6b" i],
+body.dark-mode [style*="color: #ff3838" i],
+body.dark-mode [style*="color: #dc2626" i] {
+    color: #fca5a5 !important;
+}
+
+/* Preserve dark text on intentionally bright yellow buttons in dark mode */
+body.dark-mode [style*="background-color: #faed27" i],
+body.dark-mode [style*="background: #faed27" i],
+body.dark-mode [style*="background-color: #ffd25a" i],
+body.dark-mode [style*="background: #ffd25a" i] {
+    color: #111827 !important;
+}
+
+/* Specific high-contrast pills in Battle Timer */
+#p2-side-tag,
+body.dark-mode #p2-side-tag {
+    background: #6d28d9 !important;
+    color: #ffffff !important;
+}
+
+#p1-side-tag,
+body.dark-mode #p1-side-tag {
+    background: #1d4ed8 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #duel-result-text,
+body.dark-mode #duel-multi-result-text {
+    color: #f8fafc !important;
+}
+
+body.dark-mode #p1-timer-display {
+    color: #60a5fa !important;
+}
+
+body.dark-mode #p2-timer-display {
+    color: #c4b5fd !important;
+}
+
+body.dark-mode #duel-h2-p1,
+body.dark-mode #duel-p1-sb-name {
+    color: #60a5fa !important;
+}
+
+body.dark-mode #duel-h2-p2,
+body.dark-mode #duel-p2-sb-name {
+    color: #c4b5fd !important;
+}
+
+body.dark-mode .news-body,
+body.dark-mode .post-body,
+body.dark-mode .news-meta-row,
+body.dark-mode .news-meta-row span,
+body.dark-mode .post-meta {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .news-date,
+body.dark-mode .post-date,
+body.dark-mode .comment-date {
+    color: #cbd5e1 !important;
+}
+
+.tier-mid {
+    color: #0369a1 !important;
+}
+
+body.dark-mode .news-author,
+body.dark-mode .featured-badge,
+body.dark-mode .tier-tag,
+body.dark-mode .tier-mid,
+body.dark-mode .tier-flagship,
+body.dark-mode .tier-smart,
+body.dark-mode .tier-big {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+/* ==========================================================================
+   SHOW/HIDE PASSWORD INPUT WRAPPER (ADMIN SIGN-IN FORMS)
+   ========================================================================== */
+.pw-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.pw-input-wrap input {
+    width: 100%;
+    padding-right: 48px !important;
+    box-sizing: border-box;
+}
+
+.pw-toggle-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 4px 6px !important;
+    margin: 0 !important;
+    min-width: 32px;
+    min-height: 32px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    line-height: 1;
+    color: #334155 !important;
+    border-radius: 6px;
+}
+
+body.dark-mode .pw-toggle-btn {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   NATIVE <DIALOG> QUICK-JUMP NAVIGATION PALETTE (CTRL+K / CMD+K)
+   ========================================================================== */
+dialog.c4f-quick-nav {
+    width: min(560px, calc(100vw - 32px));
+    max-height: min(82vh, 640px);
+    padding: 0;
+    border: 3px solid #1e272e;
+    border-radius: 20px;
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    font-family: 'Outfit', system-ui, sans-serif;
+}
+
+dialog.c4f-quick-nav:modal {
+    overscroll-behavior: contain;
+}
+
+dialog.c4f-quick-nav::backdrop {
+    background: rgba(2, 6, 23, 0.65);
+    backdrop-filter: blur(4px);
+    overflow: hidden;
+    overscroll-behavior: contain;
+}
+
+body.dark-mode dialog.c4f-quick-nav {
+    background: #0d131f;
+    color: #f8fafc;
+    border-color: #38bdf8;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 24px rgba(56, 189, 248, 0.25);
+}
+
+.c4f-qn-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+body.dark-mode .c4f-qn-header {
+    border-bottom-color: #1e293b;
+}
+
+.c4f-qn-title {
+    margin: 0;
+    font-family: 'DynaPuff', cursive, sans-serif;
+    font-size: 1.25rem;
+    color: #0f172a;
+}
+
+body.dark-mode .c4f-qn-title {
+    color: #f8fafc !important;
+}
+
+.c4f-qn-close {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    width: 34px;
+    height: 34px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+body.dark-mode .c4f-qn-close {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+.c4f-qn-search-wrap {
+    padding: 12px 18px 8px 18px;
+}
+
+.c4f-qn-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 2.5px solid #cbd5e1;
+    border-radius: 12px;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+body.dark-mode .c4f-qn-input {
+    background: #070b14 !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+.c4f-qn-list {
+    list-style: none;
+    margin: 0;
+    padding: 6px 12px 10px 12px;
+    max-height: 52vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.c4f-qn-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #0f172a;
+    border: 2px solid transparent;
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+body.dark-mode .c4f-qn-item {
+    color: #f8fafc;
+}
+
+.c4f-qn-item:hover,
+.c4f-qn-item.is-selected {
+    background: #eff6ff;
+    border-color: #2563eb;
+}
+
+body.dark-mode .c4f-qn-item:hover,
+body.dark-mode .c4f-qn-item.is-selected {
+    background: #1e293b;
+    border-color: #38bdf8;
+}
+
+.c4f-qn-item[aria-current="page"] .c4f-qn-name::after {
+    content: " • Current";
+    font-size: 0.8em;
+    color: #047857;
+}
+
+body.dark-mode .c4f-qn-item[aria-current="page"] .c4f-qn-name::after {
+    color: #34d399;
+}
+
+.c4f-qn-ico {
+    font-size: 1.45rem;
+    flex-shrink: 0;
+    width: 32px;
+    text-align: center;
+}
+
+.c4f-qn-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.c4f-qn-name {
+    font-weight: 800;
+    font-size: 0.98rem;
+}
+
+.c4f-qn-desc {
+    font-size: 0.84rem;
+    color: #475569;
+}
+
+body.dark-mode .c4f-qn-desc {
+    color: #cbd5e1;
+}
+
+.c4f-qn-empty {
+    text-align: center;
+    padding: 20px;
+    color: #475569;
+    font-weight: 600;
+}
+
+body.dark-mode .c4f-qn-empty {
+    color: #cbd5e1;
+}
+
+.c4f-qn-hint {
+    margin: 0;
+    padding: 10px 18px;
+    font-size: 0.8rem;
+    color: #475569;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+body.dark-mode .c4f-qn-hint {
+    background: #070b14;
+    color: #cbd5e1 !important;
+    border-top-color: #1e293b;
+}
+
+.c4f-qn-trigger {
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 999px !important;
+    padding: 6px 14px !important;
+    font-family: 'Outfit', system-ui, sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+.c4f-qn-trigger:hover {
+    background: rgba(56, 189, 248, 0.25) !important;
+    border-color: #38bdf8 !important;
+}
+
+/* ==========================================================================
+   RESPECT USER MOTION PREFERENCES (WCAG 2.3.3 / MOTION GUIDE)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    .secret-red-dot,
+    .secret-blue-dot,
+    .secret-rocket-btn:hover,
+    .rocket-blast-icon,
+    .cube-icon {
+        animation: none !important;
+    }
+
+    .theme-toggle-btn:hover,
+    .nav-buttons .theme-toggle-btn:hover,
+    .btn-return-home:hover,
+    .floating-home-pill:hover,
+    .secret-rocket-btn:hover {
+        transform: none !important;
+    }
+}

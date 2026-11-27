@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Learn how to solve a 3x3 Rubik's Cube step-by-step with Cole Hua. Follow the LBL method, watch helpful videos, and check out Cole Hua's WCA Profile.">
     <meta name="keywords" content="Cole Hua, Cole Hua WCA, Cole WCA, Cole Hua WorldCubeAssociation, Cole Hua WCA Profile, 3x3 Rubik's Cube tutorial, speedcubing, LBL method">
+        <link rel="canonical" href="https://colehua.github.io/cube4fun/tutorial-3x3.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="3x3 Rubik's Cube Tutorial - Cole Hua WCA">
+    <meta property="og:description" content="Learn how to solve a 3x3 Rubik's Cube step-by-step with Cole Hua. Follow the LBL method, watch helpful videos, and check out Cole Hua's WCA Profile.">
+    <meta property="og:url" content="https://colehua.github.io/cube4fun/tutorial-3x3.html">
+    <meta property="og:image" content="https://colehua.github.io/cube4fun/poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>3x3 Rubik's Cube Tutorial - Cole Hua WCA</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest"><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600&family=Outfit:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
     <script src="theme.js"></script>
@@ -352,7 +363,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <main id="main-content" class="container">
         <!-- TOP NAVIGATION -->
         <div class="nav-buttons" style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
             <a href="index.html" class="nav-button" style="margin-bottom: 0;">🏠 Home</a>
@@ -380,19 +392,19 @@
                 <div id="step-tracker-fill" class="step-progress-bar-fill"></div>
             </div>
             <div class="step-pills-list">
-                <span class="step-pill" onclick="toggleTutorialStep(1)" id="step-pill-1">🌼 Step 1: White Daisy</span>
-                <span class="step-pill" onclick="toggleTutorialStep(2)" id="step-pill-2">➕ Step 2: White Cross</span>
-                <span class="step-pill" onclick="toggleTutorialStep(3)" id="step-pill-3">🧱 Step 3: First Layer Corners</span>
-                <span class="step-pill" onclick="toggleTutorialStep(4)" id="step-pill-4">🚀 Step 4: Second Layer Edges</span>
-                <span class="step-pill" onclick="toggleTutorialStep(5)" id="step-pill-5">➕ Step 5: Top Yellow Cross</span>
-                <span class="step-pill" onclick="toggleTutorialStep(6)" id="step-pill-6">🎯 Step 6: Orient Yellow Face</span>
-                <span class="step-pill" onclick="toggleTutorialStep(7)" id="step-pill-7">🎉 Step 7: Complete Cube</span>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(1)" id="step-pill-1">🌼 Step 1: White Daisy</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(2)" id="step-pill-2">➕ Step 2: White Cross</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(3)" id="step-pill-3">🧱 Step 3: First Layer Corners</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(4)" id="step-pill-4">🚀 Step 4: Second Layer Edges</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(5)" id="step-pill-5">➕ Step 5: Top Yellow Cross</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(6)" id="step-pill-6">🎯 Step 6: Orient Yellow Face</button>
+                <button type="button" class="step-pill" onclick="toggleTutorialStep(7)" id="step-pill-7">🎉 Step 7: Complete Cube</button>
             </div>
         </div>
         
         <!-- YOUTUBE BANNER -->
         <div style="text-align: center; margin: 20px auto; max-width: 800px;">
-            <a href="https://www.youtube.com/@ColeHua" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 15px; background-color: #FF0000; color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.6em; border: 4px dashed white; box-shadow: 0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; position: relative; top: 0;" onmouseover="this.style.top='4px'; this.style.boxShadow='0px 4px 0px #CC0000, 0px 4px 10px rgba(0,0,0,0.2)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2)';">
+            <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 15px; background-color: #FF0000; color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-family: 'DynaPuff', cursive; font-size: 1.6em; border: 4px dashed white; box-shadow: 0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; position: relative; top: 0;" onmouseover="this.style.top='4px'; this.style.boxShadow='0px 4px 0px #CC0000, 0px 4px 10px rgba(0,0,0,0.2)';" onmouseout="this.style.top='0px'; this.style.boxShadow='0px 8px 0px #CC0000, 0px 8px 15px rgba(0,0,0,0.2)';">
                 <span style="display: inline-flex; align-items: center; animation: wiggle 2s infinite;">
                     <svg viewBox="0 0 24 24" width="30" height="30" fill="white" style="display: block;">
                         <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.507 9.388.507 9.388.507s7.518 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -415,17 +427,17 @@
     <div class="text-block center-text">With the LBL (layer by layer) method! 🧊</div>
     <div class="text-block center-text" style="font-size: 1.8em;">By Cole</div>
     <div class="text-block center-text">The first step to solving a Rubik’s cube is to make a white daisy. 🌼</div>
-    <div class="media-container"><img src="./media/image5.png" class="arrow-icon"></div>
+    <div class="media-container"><img alt="" src="./media/image5.png" class="arrow-icon" width="161" height="130" loading="lazy" decoding="async"></div>
     <div class="text-block center-text">Like this!</div>
     
     <div class="grid-2">
         <div class="card">
             <div class="text-block">If the piece is in the right spot but flipped, you could use this algorithm to fix it.</div>
-            <div class="media-container"><img src="./media/image3.jpeg"></div>
+            <div class="media-container"><img alt="3x3 cube showing a flipped white edge piece in the daisy position" src="./media/image3.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">All you have to do is try to put the white edges to the yellow centre. When finished, it should look like this:</div>
-            <div class="media-container"><img src="./media/image2.jpeg"></div>
+            <div class="media-container"><img alt="3x3 cube with four white edge pieces surrounding the yellow center to form the White Daisy" src="./media/image2.jpeg" width="1855" height="2474" loading="lazy" decoding="async"></div>
         </div>
     </div>
     <div class="media-container" style="margin-top: 10px;">
@@ -445,7 +457,7 @@
         </div>
         <div class="card">
             <div class="text-block">When you finish it should look like this:</div>
-            <div class="media-container"><img src="./media/image5.jpeg"></div>
+            <div class="media-container"><img alt="Completed White Cross on the bottom layer with aligned side center colors" src="./media/image5.jpeg" width="3300" height="2475" loading="lazy" decoding="async"></div>
         </div>
     </div>
 </div>
@@ -455,7 +467,7 @@
     <h2 class="slide-title">First Layer 🧱</h2>
     <div class="text-block">If you followed all of that correctly your cross should be accomplished. The next thing is to make the first layer.</div>
     <div class="text-block">The first thing to do is to find a white corner on the top, after we look at what colours there are on the corner instead of white. For example, if my corner had blue, red, and white on it, then I would bring the corner between the blue and red centre then hold it like this:</div>
-    <div class="media-container"><img src="./media/image9.jpeg"></div>
+    <div class="media-container"><img alt="3x3 cube with the entire white first layer and matching bottom side bars solved" src="./media/image9.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
 
     <div class="text-block center-text">Right now you have to learn two new algorithms! 🧠</div>
     <div class="grid-2">
@@ -478,15 +490,15 @@
     <div class="grid-4">
         <div class="card">
             <div class="text-block">Case 1: White piece facing top. Put the white piece on the right like this then do the 1st algorithm three times.</div>
-            <div class="media-container"><img src="./media/image10.jpeg"></div>
+            <div class="media-container"><img alt="First layer corner Case 1: white sticker facing upward on the top layer" src="./media/image10.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">Case 2: White piece facing right. Put the white piece on the right then do the 1st algorithm 1 time.</div>
-            <div class="media-container"><img src="./media/image11.png"></div>
+            <div class="media-container"><img alt="First layer corner Case 2: white sticker facing right on the top layer" src="./media/image11.png" width="2475" height="2272" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">Case 3: White piece facing left. Put the white piece on the left then do algorithm 2nd one time like this.</div>
-            <div class="media-container"><img src="./media/image12.jpeg"></div>
+            <div class="media-container"><img alt="First layer corner Case 3: white sticker facing left on the top layer" src="./media/image12.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">Case 4: If there is no corner piece on top then it must be stuck on the bottom, then you could put it on the right then do the 1st algorithm like this, then do the rest like normal.</div>
@@ -505,7 +517,7 @@
     <div class="grid-3">
         <div class="card">
             <div class="text-block">For example I found this piece, right? As you can see there is no yellow piece on it that means it’s correct.</div>
-            <div class="media-container"><img src="./media/image14.jpeg"></div>
+            <div class="media-container"><img alt="Second layer edge piece without yellow aligned above its matching center color" src="./media/image14.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">So now we see that this bottom piece is orange so I will connect the piece to its centre.</div>
@@ -555,19 +567,19 @@
     <div class="grid-4">
         <div class="card">
             <div class="text-block">First case is where the yellow side is only a dot.</div>
-            <div class="media-container"><img src="./media/image24.jpeg"></div>
+            <div class="media-container"><img alt="Yellow top face Dot Case: only the yellow center sticker is oriented upward" src="./media/image24.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">The second case is where there is an L shape on the yellow side.</div>
-            <div class="media-container"><img src="./media/image21.jpeg"></div>
+            <div class="media-container"><img alt="Yellow top face L-Shape Case: two adjacent yellow edges form an L with the center" src="./media/image21.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">The third case is where there is a line on the yellow side.</div>
-            <div class="media-container"><img src="./media/image22.jpeg"></div>
+            <div class="media-container"><img alt="Yellow top face Line Case: a horizontal bar of three yellow stickers across the top" src="./media/image22.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">The fourth case is where there is a full cross already on the yellow side and that means you already skipped this step!</div>
-            <div class="media-container"><img src="./media/image23.jpeg"></div>
+            <div class="media-container"><img alt="Yellow top face Cross Case: full yellow cross already formed on top" src="./media/image23.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
     </div>
 </div>
@@ -578,7 +590,7 @@
     <div class="grid-2">
         <div class="card">
             <div class="text-block">You are gonna learn another algorithm that is super duper simple! So for the line we are gonna hold it like this then do the algorithm.</div>
-            <div class="media-container"><img src="./media/image26.png" class="arrow-icon"></div>
+            <div class="media-container"><img alt="" src="./media/image26.png" class="arrow-icon" width="92" height="108" loading="lazy" decoding="async"></div>
             <div class="media-container"><video controls src="./media/media12.mp4#t=0.001" preload="metadata"></video></div>
         </div>
         <div class="card">
@@ -607,11 +619,11 @@
     <div class="grid-2">
         <div class="card">
             <div class="text-block">If I wanted to solve this corner I will do the first algorithm four times.</div>
-            <div class="media-container"><img src="./media/image29.jpeg"></div>
+            <div class="media-container"><img alt="Yellow corner oriented upward requiring four repetitions of the right-hand algorithm" src="./media/image29.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
             <div class="text-block">If I wanted to solve this corner I will do the first algorithm two times.</div>
-            <div class="media-container"><img src="./media/image31.jpeg"></div>
+            <div class="media-container"><img alt="Yellow corner oriented to the side requiring two repetitions of the right-hand algorithm" src="./media/image31.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
     </div>
 </div>
@@ -654,10 +666,10 @@
     <div class="grid-2">
         <div class="card">
             <div class="text-block">This is a headlight:</div>
-            <div class="media-container"><img src="./media/image36.jpeg"></div>
+            <div class="media-container"><img alt="Two matching corner stickers on the same side forming Headlights on the last layer" src="./media/image36.jpeg" width="3297" height="2473" loading="lazy" decoding="async"></div>
         </div>
         <div class="card">
-            <div class="media-container"><img src="./media/image39.png" class="arrow-icon"></div>
+            <div class="media-container"><img alt="" src="./media/image39.png" class="arrow-icon" width="41" height="68" loading="lazy" decoding="async"></div>
             <div class="text-block">When this happens you could do the first nine move solution or the second 9 move solution so you could make it into all the corners solved for the last layer!</div>
         </div>
     </div>
@@ -736,7 +748,7 @@
     <h2 class="slide-title">Thank you! 🎉</h2>
     <div class="card" style="background: #111; color: white;">
         <div class="text-block center-text" style="background: transparent; color: white;">Hope you liked my tutorial! By Cole.</div>
-        <div class="media-container"><img src="./media/image48.jpeg"></div>
+        <div class="media-container"><img alt="Fully solved 3x3 Rubik's Cube celebrating tutorial completion" src="./media/image48.jpeg" width="450" height="300" loading="lazy" decoding="async"></div>
     </div>
     <div style="text-align: center; margin-top: 25px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
         <a href="timer.html" class="nav-button" style="background-color: var(--cyan-blob);">⏱️ Practice on Speedcubing Timer</a>
@@ -745,7 +757,7 @@
     </div>
 </div>
 
-    </div>
+    </main>
     
     <!-- GLOBAL SITE FOOTER -->
     <footer class="site-footer">
@@ -756,24 +768,25 @@
                     Free, kid-friendly Rubik's cube learning platform created by Cole Hua (speedcuber, official WCA ID: <strong>2026HUAC01</strong>). Supported by UBC Inspiring Community Grant.
                 </p>
                 <div class="footer-badges">
-                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" class="footer-badge wca">⚡ WCA Profile</a>
-                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" class="footer-badge china">🇨🇳 Cubing China</a>
-                    <a href="https://www.youtube.com/@ColeHua" target="_blank" class="footer-badge yt">📺 Cole's YouTube</a>
+                    <a href="https://www.worldcubeassociation.org/persons/2026HUAC01" target="_blank" rel="noopener noreferrer" class="footer-badge wca">⚡ WCA Profile</a>
+                    <a href="https://cubing.com/results/person/2026HUAC01?lang=zh_cn" target="_blank" rel="noopener noreferrer" class="footer-badge china">🇨🇳 Cubing China</a>
+                    <a href="https://www.youtube.com/@ColeHua" target="_blank" rel="noopener noreferrer" class="footer-badge yt">📺 Cole's YouTube</a>
                 </div>
             </div>
             <div class="footer-col links-col">
-                <h4>🧭 Explore Tools</h4>
+                <h2>🧭 Explore Tools</h2>
                 <ul class="footer-links">
                     <li><a href="index.html">🏠 Home</a></li>
                     <li><a href="timer.html">⏱️ Speedcubing Timer</a></li>
                     <li><a href="challenges.html">🏆 Challenges of Cubing ♾️</a></li>
+                    <li><a href="bc-rankings.html">🍁 BC Rankings Tracker</a></li>
                     <li><a href="news.html">📰 Cubing News & Updates</a></li>
                     <li><a href="blog.html">✍️ Cole's Blog</a></li>
                     <li><a href="play.html">🎮 3D Virtual Cube</a></li>
                 </ul>
             </div>
             <div class="footer-col links-col">
-                <h4>📖 Tutorials & Guides</h4>
+                <h2>📖 Tutorials & Guides</h2>
                 <ul class="footer-links">
                     <li><a href="tutorial-3x3.html">🧊 3x3 Step-by-Step Tutorial</a></li>
                     <li><a href="tutorial-2x2.html">🧊 2x2 Step-by-Step Tutorial</a></li>
@@ -784,11 +797,11 @@
                 </ul>
             </div>
             <div class="footer-col info-col">
-                <h4>📍 In-Person Classes</h4>
+                <h2>📍 In-Person Classes</h2>
                 <p><strong>Wesbrook Community Centre</strong><br>
                 Wednesdays 7:00 PM – 8:00 PM<br>
                 UBC Campus, Vancouver BC</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-scroll-top">⬆️ Back to Top</button>
             </div>
         </div>
         <div class="footer-bottom">
@@ -854,7 +867,8 @@
                     badge.style.marginTop = '8px';
                     badge.style.fontSize = '0.9em';
                     badge.style.fontWeight = 'bold';
-                    badge.style.color = '#FF6B6B';
+                    badge.className = 'slow-mo-caption';
+                    badge.style.color = '#b91c1c';
                     badge.style.backgroundColor = '#FFF0F0';
                     badge.style.border = '2px solid #FFB7B2';
                     badge.style.padding = '4px 12px';

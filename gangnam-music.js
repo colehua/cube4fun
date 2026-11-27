@@ -15,13 +15,15 @@ class CubeMusicEngine {
         this.pendingAutoplayTrack = null;
         this._unlockBound = false;
 
-        const savedVol = localStorage.getItem('cube_music_vol');
-        if (savedVol !== null) {
-            const parsed = parseFloat(savedVol);
-            if (!isNaN(parsed) && parsed > 0.05) {
-                this.volume = Math.min(1.0, parsed);
+        try {
+            const savedVol = localStorage.getItem('cube_music_vol');
+            if (savedVol !== null) {
+                const parsed = parseFloat(savedVol);
+                if (!isNaN(parsed) && parsed > 0.05) {
+                    this.volume = Math.min(1.0, parsed);
+                }
             }
-        }
+        } catch (e) {}
 
         this.masterGain = null;
         this.compressor = null;
@@ -32,6 +34,7 @@ class CubeMusicEngine {
 
         // Frequencies (Hz)
         this.N = {
+            E1: 41.20, F1: 43.65, Fs1: 46.25,
             G1: 49.00, A1: 55.00, Bb1: 58.27, B1: 61.74, C2: 65.41, Cs2: 69.30, D2: 73.42,
             Eb2: 77.78, E2: 82.41, F2: 87.31, Fs2: 92.50, G2: 98.00, Gs2: 103.83, A2: 110.00, Bb2: 116.54,
             B2: 123.47, C3: 130.81, Cs3: 138.59, D3: 146.83, Eb3: 155.56, E3: 164.81, F3: 174.61, Fs3: 185.00,
@@ -554,10 +557,20 @@ class CubeMusicEngine {
     }
 
     start(track = 'cool') {
+        // Defer AudioContext creation until a user gesture so browsers never emit autoplay warnings
+        if (!this.ctx && navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+            this.pendingAutoplayTrack = track;
+            this.isPlaying = false;
+            this.updateUI();
+            this.setupUnlockListener();
+            return;
+        }
+
         this.initContext();
+        if (!this.ctx) return;
 
         // If context is suspended (browser autoplay policy before user gesture)
-        if (this.ctx && this.ctx.state === 'suspended') {
+        if (this.ctx.state === 'suspended') {
             this.pendingAutoplayTrack = track;
             this.isPlaying = false;
             this.updateUI();
@@ -668,11 +681,11 @@ class CubeMusicEngine {
         document.querySelectorAll('.btn-cool-music').forEach(btn => {
             if (this.isPlaying && this.activeTrack === 'cool') {
                 btn.classList.add('btn-cool-music-active');
-                btn.innerHTML = '😎 Cool Music: PLAYING 🎶 (Click to Stop)';
+                btn.textContent = '😎 Cool Music: PLAYING 🎶 (Click to Stop)';
                 btn.title = 'Cool Lo-Fi Speedcubing Music is playing! Click to stop';
             } else {
                 btn.classList.remove('btn-cool-music-active');
-                btn.innerHTML = '😎 Cool Music 🎵';
+                btn.textContent = '😎 Cool Music 🎵';
                 btn.title = 'Play Cool Speedcubing Lo-Fi Chill Music (Works automatically with headphones/earphones)';
             }
         });
@@ -681,11 +694,11 @@ class CubeMusicEngine {
         document.querySelectorAll('.btn-intense-music').forEach(btn => {
             if (this.isPlaying && this.activeTrack === 'intense') {
                 btn.classList.add('btn-intense-music-active');
-                btn.innerHTML = '🔥 Intense Music: PLAYING 🎶 (Click to Stop)';
+                btn.textContent = '🔥 Intense Music: PLAYING 🎶 (Click to Stop)';
                 btn.title = 'Gangnam Style is playing! Click to stop music';
             } else {
                 btn.classList.remove('btn-intense-music-active');
-                btn.innerHTML = '🔥 Intense Music 🎵';
+                btn.textContent = '🔥 Intense Music 🎵';
                 btn.title = 'Play Gangnam Style Intense Speedcubing Music (Works automatically with headphones/earphones)';
             }
         });

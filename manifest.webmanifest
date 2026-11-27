@@ -1,0 +1,54 @@
+{
+  "id": "/cube4fun/",
+  "name": "Learn Cube 4 Fun — Rubik's Cube Tutorials & Speedcubing Tools",
+  "short_name": "Cube4Fun",
+  "description": "Free, kid-friendly Rubik's Cube tutorials, WCA speedcubing timer, Battle Timer, Cube Solving Machine, and Arcade by Cole Hua (WCA 2026HUAC01).",
+  "start_url": "/cube4fun/index.html",
+  "scope": "/cube4fun/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0066ff",
+  "categories": ["education", "games", "utilities"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Speedcubing Timer",
+      "short_name": "Timer",
+      "url": "/cube4fun/timer.html"
+    },
+    {
+      "name": "Cube Solving Machine",
+      "short_name": "Solver",
+      "url": "/cube4fun/cube-solving-machine.html"
+    },
+    {
+      "name": "3x3 Tutorial",
+      "short_name": "3x3 Guide",
+      "url": "/cube4fun/tutorial-3x3.html"
+    },
+    {
+      "name": "Cube Arcade",
+      "short_name": "Arcade",
+      "url": "/cube4fun/games.html"
+    }
+  ]
+}

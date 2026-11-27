@@ -3095,7 +3095,7 @@
     for (let i = 0; i < 8; i++) {
       const c = corners[i];
       if (c.some(col => col === 'grey' || !col)) return false;
-      const sorted = [...c].sort().join(',');
+      const sorted = c.toSorted().join(',');
       if (!validSets.includes(sorted)) return false;
       if (seen.has(sorted)) return false;
       seen.add(sorted);

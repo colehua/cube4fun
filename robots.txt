@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://colehua.github.io/cube4fun/sitemap.xml
