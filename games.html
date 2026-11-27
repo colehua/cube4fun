@@ -4432,21 +4432,21 @@
                 name: 'Hyper Dash Boost',
                 icon: '⚡',
                 max: 5,
-                prices: [50, 120, 250, 500, 1000],
+                prices: [150, 350, 750, 1500, 3000],
                 desc: level => level === 0 ? '+30% Dash duration & boost (40s reload)' : (level === 5 ? 'MAX LEVEL: Super warp hyper speed! (40s reload)' : `Lv ${level+1}: +${30 + level*15}% Dash duration & boost (40s reload)`)
             },
             magnet: {
                 name: 'Super Coin Magnet',
                 icon: '🧲',
                 max: 5,
-                prices: [60, 140, 300, 600, 1200],
+                prices: [180, 420, 900, 1800, 3600],
                 desc: level => level === 0 ? 'Vacuums coins from nearby lanes!' : (level === 5 ? 'MAX LEVEL: Screen-wide coin vacuum!' : `Lv ${level+1}: Magnet range +${(level+1)*35}%`)
             },
             blaster: {
                 name: 'Blaster Cannon',
                 icon: '🔫',
                 max: 5,
-                prices: [75, 180, 400, 800, 1500],
+                prices: [225, 550, 1200, 2400, 4500],
                 desc: level => [
                     'Level 1: Rapid-fire dual lasers (faster fire rate)!',
                     'Level 2: Triple spread laser across all 3 lanes!',
@@ -4460,39 +4460,39 @@
                 name: 'Energy Forcefield',
                 icon: '🛡️',
                 max: 5,
-                prices: [50, 120, 250, 500, 1000],
+                prices: [150, 350, 750, 1500, 3000],
                 desc: level => level === 0 ? 'Start every game with a free energy shield!' : (level === 5 ? 'MAX LEVEL: Ultra long starting shield!' : `Lv ${level+1}: Starting shield duration +${(level+1)*2}s`)
             },
             multiplier: {
                 name: 'Wealth Multiplier',
                 icon: '💰',
                 max: 5,
-                prices: [100, 250, 600, 1200, 2500],
+                prices: [300, 750, 1800, 3600, 7500],
                 desc: level => level === 0 ? '2X coin values across all games!' : (level === 5 ? 'MAX LEVEL: 6X Coins across all games!' : `Lv ${level+1}: ${level+2}X Coin value across all games!`)
             },
             doubleJump: {
                 name: 'Rocket Double Jump',
                 icon: '🦘',
                 max: 1,
-                prices: [200],
+                prices: [600],
                 desc: level => level === 0 ? 'Jump twice in mid-air to rocket over tall barriers!' : 'EQUIPPED: Mid-air rocket jump unlocked!'
             }
         };
 
         const CUBE_SKINS = {
             default: { name: 'Neon Cyan', price: 0, icon: '🟦', desc: 'Classic Neon Cyan speedcube' },
-            gold: { name: 'Golden Sovereign', price: 250, icon: '👑', desc: 'Solid 24K gold with shimmering star glints' },
-            rainbow: { name: 'Rainbow Prism', price: 400, icon: '🌈', desc: 'Dynamic RGB color-cycling prism cube' },
-            matrix: { name: 'Cyber Matrix', price: 350, icon: '🟢', desc: 'Hacker dark obsidian with glowing green code' },
-            void: { name: 'Void Crimson', price: 500, icon: '🔥', desc: 'Deep cosmic obsidian with flaming crimson aura' }
+            gold: { name: 'Golden Sovereign', price: 750, icon: '👑', desc: 'Solid 24K gold with shimmering star glints' },
+            rainbow: { name: 'Rainbow Prism', price: 1200, icon: '🌈', desc: 'Dynamic RGB color-cycling prism cube' },
+            matrix: { name: 'Cyber Matrix', price: 1050, icon: '🟢', desc: 'Hacker dark obsidian with glowing green code' },
+            void: { name: 'Void Crimson', price: 1500, icon: '🔥', desc: 'Deep cosmic obsidian with flaming crimson aura' }
         };
 
         const SWITCH_THEMES = {
             neon: { name: 'Classic Neon', price: 0, icon: '🔵🔴', desc: 'Neon Blue & Neon Red Joy-Cons' },
-            oled: { name: 'OLED Arctic White', price: 200, icon: '⚪⚪', desc: 'Crisp Arctic White Joy-Cons' },
-            zelda: { name: 'Zelda Hyrule Gold', price: 300, icon: '🟢🟡', desc: 'Emerald Green & Hyrule Gold Joy-Cons' },
-            synthwave: { name: 'Synthwave Cyberpunk', price: 400, icon: '💗🟣', desc: 'Hot Pink & Cyber Cyan Joy-Cons' },
-            gold: { name: 'Solid Gold Switch', price: 600, icon: '👑✨', desc: 'Pure 24K Shimmering Gold Joy-Cons' }
+            oled: { name: 'OLED Arctic White', price: 600, icon: '⚪⚪', desc: 'Crisp Arctic White Joy-Cons' },
+            zelda: { name: 'Zelda Hyrule Gold', price: 900, icon: '🟢🟡', desc: 'Emerald Green & Hyrule Gold Joy-Cons' },
+            synthwave: { name: 'Synthwave Cyberpunk', price: 1200, icon: '💗🟣', desc: 'Hot Pink & Cyber Cyan Joy-Cons' },
+            gold: { name: 'Solid Gold Switch', price: 1800, icon: '👑✨', desc: 'Pure 24K Shimmering Gold Joy-Cons' }
         };
 
         function getArcadeCoins() {
