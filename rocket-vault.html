@@ -359,6 +359,16 @@
             border-color: #fed7aa;
             color: #ffffff;
         }
+        .vault-btn.pause {
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            border-color: #bae6fd;
+            color: #ffffff;
+        }
+        .vault-btn.pause.paused {
+            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+            border-color: #bbf7d0;
+            box-shadow: 0 0 18px rgba(74, 222, 128, 0.55);
+        }
         .vault-btn.pink {
             background: linear-gradient(135deg, #db2777 0%, #9333ea 100%);
             border-color: #f9a8d4;
@@ -550,6 +560,7 @@
                     <div class="btn-row">
                         <button id="btn-start-rush" type="button" class="vault-btn gold" onclick="startCubeNinja()">⚔️ Start Cube Ninja</button>
                         <button id="btn-restart-rush" type="button" class="vault-btn restart" onclick="startCubeNinja()">🔄 Restart</button>
+                        <button id="btn-pause-rush" type="button" class="vault-btn pause" onclick="togglePauseCubeNinja()" aria-pressed="false">⏸️ Pause</button>
                         <button id="btn-warp-toggle" type="button" class="vault-btn" onclick="toggleWarpDrive()">🌌 Toggle Warp Drive</button>
                         <button id="btn-confetti-vault" type="button" class="vault-btn pink" onclick="runTerminalCommand('CONFETTI')">🎉 Zero-G Burst</button>
                     </div>
@@ -747,9 +758,11 @@
         const CUBE_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#fde047', '#f97316', '#f8fafc'];
         const HYPER_MAX_SPEED = 24.0;
         const HYPER_MIN_SPEED = 1.6;
-        const LAUNCH_GRAVITY = 0.25;
+        const LAUNCH_GRAVITY = 0.095;
+        const MAX_LAUNCHED_ITEMS = 4;
 
         let ninjaActive = false;
+        let ninjaPaused = false;
         let ninjaScore = 0;
         let ninjaSlicedTotal = 0;
         let ninjaSlicesForHyper = 0;
@@ -844,29 +857,60 @@
         }
 
         function spawnFruitNinjaWave() {
+            if (launchedItems.length >= MAX_LAUNCHED_ITEMS) return;
             const w = arenaCanvas ? arenaCanvas.width : 980;
             const h = arenaCanvas ? arenaCanvas.height : 440;
-            const count = 2 + Math.floor(Math.random() * 3); // 2 to 4 items launched up!
+            const desired = Math.random() < 0.45 ? 1 : 2; // Slower, calmer 1 to 2 items per wave
+            const count = Math.min(desired, MAX_LAUNCHED_ITEMS - launchedItems.length);
+            let bombsInWave = 0;
             for (let i = 0; i < count; i++) {
-                const isBomb = Math.random() < 0.24;
-                const x = 95 + Math.random() * Math.max(80, w - 190);
-                // Aim slightly toward center so cubes arc cleanly inside the arena
-                const centerBias = (w * 0.5 - x) * (0.005 + Math.random() * 0.006);
-                const vx = centerBias + (Math.random() - 0.5) * 2.6;
-                const vy = -(11.2 + Math.random() * 3.4);
+                const isBomb = bombsInWave === 0 && Math.random() < (count === 1 ? 0.16 : 0.22);
+                if (isBomb) bombsInWave++;
+                const x = 110 + Math.random() * Math.max(80, w - 220);
+                // Gentle arc toward center so cubes rise slowly and stay easy to slice
+                const centerBias = (w * 0.5 - x) * (0.0028 + Math.random() * 0.0032);
+                const vx = centerBias + (Math.random() - 0.5) * 1.4;
+                const vy = -(7.0 + Math.random() * 1.8);
                 launchedItems.push({
                     x: x,
-                    y: h + 34 + i * 16,
+                    y: h + 34 + i * 24,
                     vx: vx,
                     vy: vy,
                     r: isBomb ? 25 : 27,
                     rot: Math.random() * Math.PI * 2,
-                    vRot: (Math.random() - 0.5) * 0.14,
+                    vRot: (Math.random() - 0.5) * 0.07,
                     kind: isBomb ? 'bomb' : 'cube',
                     color: CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)],
                     sliced: false
                 });
             }
+        }
+
+        function syncPauseButtonUI() {
+            const btn = document.getElementById('btn-pause-rush');
+            if (!btn) return;
+            const pausedNow = !!(ninjaActive && ninjaPaused);
+            btn.classList.toggle('paused', pausedNow);
+            btn.textContent = pausedNow ? '▶️ Resume' : '⏸️ Pause';
+            btn.setAttribute('aria-pressed', pausedNow ? 'true' : 'false');
+        }
+
+        function togglePauseCubeNinja() {
+            if (!ninjaActive) {
+                showVaultToast('⚔️ Press Start Cube Ninja first to pause!');
+                return;
+            }
+            ninjaPaused = !ninjaPaused;
+            if (ninjaPaused) {
+                isSlicing = false;
+                swipeSliceCount = 0;
+                playSpaceTone(420, 260, 0.14, 'sine', 0.12);
+                showVaultToast('⏸️ Cube Ninja paused!');
+            } else {
+                playSpaceTone(320, 560, 0.14, 'sine', 0.12);
+                showVaultToast('▶️ Cube Ninja resumed!');
+            }
+            syncPauseButtonUI();
         }
 
         function updateNinjaHUD() {
@@ -882,12 +926,13 @@
 
         function startCubeNinja() {
             ninjaActive = true;
+            ninjaPaused = false;
             ninjaScore = 0;
             ninjaSlicedTotal = 0;
             ninjaSlicesForHyper = 0;
             ninjaCaughtCount = 0;
             ninjaLives = 3;
-            ninjaWaveTimer = 18;
+            ninjaWaveTimer = 115;
             ninjaBombFlash = 0;
             launchedItems = [];
             slicedHalves = [];
@@ -896,6 +941,7 @@
             spawnHyperCube(0);
             spawnFruitNinjaWave();
             updateNinjaHUD();
+            syncPauseButtonUI();
             playSpaceTone(340, 920, 0.2, 'sawtooth', 0.14);
             showVaultToast('⚔️ Cube Ninja started! Slice cubes to slow down the ⚡ Hyper-Cube!');
         }
@@ -905,7 +951,9 @@
 
         function endCubeNinja(reason) {
             ninjaActive = false;
+            ninjaPaused = false;
             updateNinjaHUD();
+            syncPauseButtonUI();
             const prevBest = parseInt(localStorage.getItem(VAULT_BEST_KEY) || '0', 10);
             if (ninjaScore > prevBest) {
                 localStorage.setItem(VAULT_BEST_KEY, String(ninjaScore));
@@ -987,7 +1035,7 @@
         }
 
         function pressHyperCube() {
-            if (!hyperCube || !ninjaActive) return;
+            if (!hyperCube || !ninjaActive || ninjaPaused) return;
             ninjaCaughtCount++;
             ninjaScore += 250;
             addCoins(25);
@@ -1021,6 +1069,10 @@
                 startCubeNinja();
                 return;
             }
+            if (ninjaPaused) {
+                togglePauseCubeNinja();
+                return;
+            }
 
             // 1. Check direct press on the Hyper-Cube first!
             if (hyperCube) {
@@ -1048,7 +1100,7 @@
         }
 
         function handleArenaSwipe(clientX, clientY) {
-            if (!isSlicing || !ninjaActive) return;
+            if (!isSlicing || !ninjaActive || ninjaPaused) return;
             const { sx, sy } = getArenaCoords(clientX, clientY);
             const prev = bladePoints.length > 0 ? bladePoints[bladePoints.length - 1] : { x: sx, y: sy };
             bladePoints.push({ x: sx, y: sy, life: 12 });
@@ -1085,6 +1137,15 @@
             arenaCanvas.addEventListener('pointerup', handleArenaRelease);
             arenaCanvas.addEventListener('pointercancel', handleArenaRelease);
         }
+
+        window.addEventListener('keydown', (e) => {
+            const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape') && ninjaActive) {
+                e.preventDefault();
+                togglePauseCubeNinja();
+            }
+        });
 
         // Spawn idle demo Hyper-Cube before game starts so arena looks alive immediately
         spawnHyperCube(0);
@@ -1215,6 +1276,7 @@
             if (aCtx && arenaCanvas) {
                 const w = arenaCanvas.width;
                 const h = arenaCanvas.height;
+                const isPaused = !!(ninjaActive && ninjaPaused);
                 aCtx.clearRect(0, 0, w, h);
 
                 // Subtle space grid lines
@@ -1229,37 +1291,39 @@
 
                 // Red flash on bomb slice
                 if (ninjaBombFlash > 0) {
-                    ninjaBombFlash--;
+                    if (!isPaused) ninjaBombFlash--;
                     aCtx.fillStyle = `rgba(239, 68, 68, ${ninjaBombFlash * 0.025})`;
                     aCtx.fillRect(0, 0, w, h);
                 }
 
-                // Launch Fruit-Ninja waves while active
-                if (ninjaActive) {
+                // Launch slower, calmer Fruit-Ninja waves while active and unpaused
+                if (ninjaActive && !isPaused) {
                     ninjaWaveTimer--;
                     if (ninjaWaveTimer <= 0) {
                         spawnFruitNinjaWave();
-                        ninjaWaveTimer = 68 + Math.floor(Math.random() * 34);
+                        ninjaWaveTimer = 125 + Math.floor(Math.random() * 50);
                     }
                 }
 
                 // 1. Update & Draw Hyper-Cube (NO GRAVITY! Bounces super fast off all 4 walls!)
                 if (hyperCube) {
-                    hyperCube.trail.push({ x: hyperCube.x, y: hyperCube.y });
-                    if (hyperCube.trail.length > 10) hyperCube.trail.shift();
-
-                    hyperCube.x += hyperCube.vx;
-                    hyperCube.y += hyperCube.vy;
                     const curSpd = Math.hypot(hyperCube.vx, hyperCube.vy);
-                    hyperCube.rot += 0.04 + curSpd * 0.015;
+                    if (!isPaused) {
+                        hyperCube.trail.push({ x: hyperCube.x, y: hyperCube.y });
+                        if (hyperCube.trail.length > 10) hyperCube.trail.shift();
 
-                    let bounced = false;
-                    if (hyperCube.x < hyperCube.r) { hyperCube.x = hyperCube.r; hyperCube.vx = Math.abs(hyperCube.vx); bounced = true; }
-                    if (hyperCube.x > w - hyperCube.r) { hyperCube.x = w - hyperCube.r; hyperCube.vx = -Math.abs(hyperCube.vx); bounced = true; }
-                    if (hyperCube.y < hyperCube.r) { hyperCube.y = hyperCube.r; hyperCube.vy = Math.abs(hyperCube.vy); bounced = true; }
-                    if (hyperCube.y > h - hyperCube.r) { hyperCube.y = h - hyperCube.r; hyperCube.vy = -Math.abs(hyperCube.vy); bounced = true; }
-                    if (bounced && curSpd > 6) {
-                        spawnArenaBurst(hyperCube.x, hyperCube.y, 4, '#38bdf8');
+                        hyperCube.x += hyperCube.vx;
+                        hyperCube.y += hyperCube.vy;
+                        hyperCube.rot += 0.04 + curSpd * 0.015;
+
+                        let bounced = false;
+                        if (hyperCube.x < hyperCube.r) { hyperCube.x = hyperCube.r; hyperCube.vx = Math.abs(hyperCube.vx); bounced = true; }
+                        if (hyperCube.x > w - hyperCube.r) { hyperCube.x = w - hyperCube.r; hyperCube.vx = -Math.abs(hyperCube.vx); bounced = true; }
+                        if (hyperCube.y < hyperCube.r) { hyperCube.y = hyperCube.r; hyperCube.vy = Math.abs(hyperCube.vy); bounced = true; }
+                        if (hyperCube.y > h - hyperCube.r) { hyperCube.y = h - hyperCube.r; hyperCube.vy = -Math.abs(hyperCube.vy); bounced = true; }
+                        if (bounced && curSpd > 6) {
+                            spawnArenaBurst(hyperCube.x, hyperCube.y, 4, '#38bdf8');
+                        }
                     }
 
                     const baseMax = HYPER_MAX_SPEED + hyperCube.round * 1.4;
@@ -1284,7 +1348,7 @@
                     aCtx.strokeStyle = isCatchable ? '#4ade80' : (spdRatio <= 0.55 ? '#fde047' : '#ff007f');
                     aCtx.lineWidth = isCatchable ? 4 : 3;
                     aCtx.beginPath();
-                    aCtx.arc(0, 0, hyperCube.r + 7 + Math.sin(rushFrame * 0.25) * 3, 0, Math.PI * 2);
+                    aCtx.arc(0, 0, hyperCube.r + 7 + (isPaused ? 0 : Math.sin(rushFrame * 0.25) * 3), 0, Math.PI * 2);
                     aCtx.stroke();
 
                     aCtx.rotate(hyperCube.rot);
@@ -1308,19 +1372,21 @@
                         launchedItems.splice(i, 1);
                         continue;
                     }
-                    item.vy += LAUNCH_GRAVITY;
-                    item.x += item.vx;
-                    item.y += item.vy;
-                    item.rot += item.vRot;
+                    if (!isPaused) {
+                        item.vy += LAUNCH_GRAVITY;
+                        item.x += item.vx;
+                        item.y += item.vy;
+                        item.rot += item.vRot;
 
-                    // Keep slightly off side walls cleanly
-                    if (item.x < item.r) { item.x = item.r; item.vx = Math.abs(item.vx) * 0.8; }
-                    if (item.x > w - item.r) { item.x = w - item.r; item.vx = -Math.abs(item.vx) * 0.8; }
+                        // Keep slightly off side walls cleanly
+                        if (item.x < item.r) { item.x = item.r; item.vx = Math.abs(item.vx) * 0.8; }
+                        if (item.x > w - item.r) { item.x = w - item.r; item.vx = -Math.abs(item.vx) * 0.8; }
 
-                    // Remove once fallen back off the bottom
-                    if (item.y > h + 70 && item.vy > 0) {
-                        launchedItems.splice(i, 1);
-                        continue;
+                        // Remove once fallen back off the bottom
+                        if (item.y > h + 70 && item.vy > 0) {
+                            launchedItems.splice(i, 1);
+                            continue;
+                        }
                     }
 
                     aCtx.save();
@@ -1353,14 +1419,16 @@
                 // 3. Sliced Cube Halves tumbling apart
                 for (let hi = slicedHalves.length - 1; hi >= 0; hi--) {
                     const hf = slicedHalves[hi];
-                    hf.vy += LAUNCH_GRAVITY * 1.1;
-                    hf.x += hf.vx;
-                    hf.y += hf.vy;
-                    hf.rot += hf.vRot;
-                    hf.life--;
-                    if (hf.life <= 0) {
-                        slicedHalves.splice(hi, 1);
-                        continue;
+                    if (!isPaused) {
+                        hf.vy += LAUNCH_GRAVITY * 1.35;
+                        hf.x += hf.vx;
+                        hf.y += hf.vy;
+                        hf.rot += hf.vRot;
+                        hf.life--;
+                        if (hf.life <= 0) {
+                            slicedHalves.splice(hi, 1);
+                            continue;
+                        }
                     }
                     aCtx.save();
                     aCtx.globalAlpha = Math.min(1, hf.life / 20);
@@ -1381,9 +1449,11 @@
                 }
 
                 // 4. Glowing Fruit-Ninja Katana Blade Trail
-                for (let bi = bladePoints.length - 1; bi >= 0; bi--) {
-                    bladePoints[bi].life--;
-                    if (bladePoints[bi].life <= 0) bladePoints.splice(bi, 1);
+                if (!isPaused) {
+                    for (let bi = bladePoints.length - 1; bi >= 0; bi--) {
+                        bladePoints[bi].life--;
+                        if (bladePoints[bi].life <= 0) bladePoints.splice(bi, 1);
+                    }
                 }
                 if (bladePoints.length >= 2) {
                     aCtx.save();
@@ -1413,28 +1483,47 @@
                 // 5. Particles
                 for (let pi = particles.length - 1; pi >= 0; pi--) {
                     const p = particles[pi];
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.life--;
+                    if (!isPaused) {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.life--;
+                    }
                     aCtx.fillStyle = p.color;
                     aCtx.fillRect(p.x, p.y, p.size, p.size);
-                    if (p.life <= 0) particles.splice(pi, 1);
+                    if (!isPaused && p.life <= 0) particles.splice(pi, 1);
                 }
 
                 // 6. Floating Popups
                 for (let fi = popups.length - 1; fi >= 0; fi--) {
                     const pop = popups[fi];
-                    pop.y -= 1.4;
-                    pop.life--;
+                    if (!isPaused) {
+                        pop.y -= 1.4;
+                        pop.life--;
+                    }
                     aCtx.font = 'bold 18px "DynaPuff", cursive';
                     aCtx.textAlign = 'center';
                     aCtx.fillStyle = pop.color;
                     aCtx.fillText(pop.text, pop.x, pop.y);
-                    if (pop.life <= 0) popups.splice(fi, 1);
+                    if (!isPaused && pop.life <= 0) popups.splice(fi, 1);
                 }
 
-                // 7. Start Overlay Banner when idle
-                if (!ninjaActive) {
+                // 7. Paused or Start Overlay Banner
+                if (isPaused) {
+                    aCtx.save();
+                    aCtx.fillStyle = 'rgba(2, 6, 23, 0.72)';
+                    aCtx.fillRect(w * 0.22, h * 0.34, w * 0.56, h * 0.32);
+                    aCtx.strokeStyle = '#38bdf8';
+                    aCtx.lineWidth = 2.5;
+                    aCtx.strokeRect(w * 0.22, h * 0.34, w * 0.56, h * 0.32);
+                    aCtx.textAlign = 'center';
+                    aCtx.font = 'bold 30px "DynaPuff", cursive';
+                    aCtx.fillStyle = '#fde047';
+                    aCtx.fillText('⏸️ CUBE NINJA PAUSED', w / 2, h * 0.48);
+                    aCtx.font = 'bold 16px "Outfit", sans-serif';
+                    aCtx.fillStyle = '#4ade80';
+                    aCtx.fillText('▶ CLICK "RESUME", TAP ARENA, OR PRESS P TO CONTINUE', w / 2, h * 0.58);
+                    aCtx.restore();
+                } else if (!ninjaActive) {
                     aCtx.save();
                     aCtx.fillStyle = 'rgba(2, 6, 23, 0.68)';
                     aCtx.fillRect(w * 0.14, h * 0.34, w * 0.72, h * 0.32);
