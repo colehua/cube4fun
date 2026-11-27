@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Level 2 Secret Rocket Vault hidden beneath Agent Cole's Nintendo Switch Cube Arcade.">
+    <title>🚀 Secret Rocket Vault • Level 2 Sector — Learn Cube 4 Fun</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700;800&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #020617;
+            --panel-bg: rgba(10, 18, 38, 0.84);
+            --cyan: #38bdf8;
+            --neon-cyan: #00f0ff;
+            --neon-pink: #ff007f;
+            --gold: #fde047;
+            --emerald: #4ade80;
+            --text: #f8fafc;
+            --muted: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--bg-deep);
+            color: var(--text);
+            font-family: 'Outfit', system-ui, sans-serif;
+            overflow-x: clip;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 10000;
+            background: #0f172a;
+            color: #ffffff;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-weight: 800;
+            text-decoration: none;
+            transform: translateY(-160%);
+            transition: transform 0.15s ease;
+        }
+        .skip-link:focus,
+        .skip-link:focus-visible {
+            transform: translateY(0);
+        }
+
+        #space-bg-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: block;
+            pointer-events: none;
+        }
+
+        .vault-shell {
+            position: relative;
+            z-index: 2;
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 20px 16px 64px 16px;
+        }
+
+        /* TOP NAV */
+        .vault-nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 18px;
+            background: var(--panel-bg);
+            border: 2px solid rgba(56, 189, 248, 0.45);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 240, 255, 0.16);
+            margin-bottom: 22px;
+        }
+
+        .vault-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 0, 127, 0.18);
+            border: 1.5px solid var(--neon-pink);
+            color: #fda4af;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.86rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .vault-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vault-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #f8fafc;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1.5px solid #475569;
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .vault-link:hover {
+            transform: translateY(-2px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+        }
+        .vault-link.primary {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            border-color: #7dd3fc;
+            color: #ffffff;
+        }
+
+        /* HERO */
+        .vault-hero {
+            text-align: center;
+            padding: 24px 18px 20px 18px;
+            background: var(--panel-bg);
+            border: 2px solid rgba(0, 240, 255, 0.4);
+            border-radius: 26px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), inset 0 0 30px rgba(0, 240, 255, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .hero-rocket {
+            font-size: 3rem;
+            display: inline-block;
+            animation: floatRocket 2.6s ease-in-out infinite;
+        }
+        @keyframes floatRocket {
+            0%, 100% { transform: translateY(0) rotate(-6deg); }
+            50% { transform: translateY(-10px) rotate(6deg); }
+        }
+
+        .vault-hero h1 {
+            margin: 8px 0 8px 0;
+            font-family: 'DynaPuff', cursive;
+            font-size: clamp(1.75rem, 4vw, 2.6rem);
+            background: linear-gradient(90deg, #00f0ff, #fde047, #ff4da6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .vault-hero p {
+            margin: 0 auto 16px auto;
+            max-width: 680px;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .wallet-strip {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .stat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1.5px solid rgba(253, 224, 71, 0.55);
+            color: #fef08a;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+        .stat-chip.cyan {
+            border-color: rgba(56, 189, 248, 0.55);
+            color: #bae6fd;
+        }
+
+        /* GRID SECTIONS */
+        .vault-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .vault-card {
+            background: var(--panel-bg);
+            border: 2px solid rgba(56, 189, 248, 0.35);
+            border-radius: 22px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .vault-card.full-span {
+            grid-column: 1 / -1;
+        }
+
+        .vault-card h2 {
+            margin: 0;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.28rem;
+            color: #7dd3fc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vault-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.94rem;
+            line-height: 1.5;
+        }
+
+        /* INTERACTIVE ZERO-G ARENA */
+        .arena-hud {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .arena-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95rem;
+        }
+
+        .arena-stats span {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1.5px solid #334155;
+            border-radius: 10px;
+            padding: 5px 11px;
+            color: #e2e8f0;
+        }
+
+        .arena-canvas-wrap {
+            position: relative;
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 240, 255, 0.5);
+            background: radial-gradient(circle at 50% 35%, #0f172a 0%, #020617 85%);
+            box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.9);
+        }
+
+        #cosmic-arena-canvas {
+            width: 100%;
+            height: 360px;
+            display: block;
+            cursor: crosshair;
+            touch-action: manipulation;
+        }
+
+        .vault-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 2px solid #38bdf8;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #ffffff;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.14s ease, box-shadow 0.15s ease, filter 0.15s ease;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .vault-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.55);
+        }
+        .vault-btn:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+        .vault-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.3);
+        }
+        .vault-btn.gold {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            border-color: #fef08a;
+            color: #0f172a;
+        }
+        .vault-btn.pink {
+            background: linear-gradient(135deg, #db2777 0%, #9333ea 100%);
+            border-color: #f9a8d4;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* SECRET TERMINAL */
+        .terminal-log {
+            min-height: 112px;
+            max-height: 165px;
+            overflow-y: auto;
+            background: rgba(2, 6, 23, 0.92);
+            border: 1.5px solid #1e293b;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #4ade80;
+        }
+
+        .terminal-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1.5px solid #334155;
+            background: rgba(2, 6, 23, 0.95);
+            color: #f8fafc;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.92rem;
+            text-transform: uppercase;
+        }
+        .terminal-input:focus {
+            outline: 2px solid var(--neon-cyan);
+            border-color: var(--neon-cyan);
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .cmd-chip {
+            padding: 5px 10px;
+            border-radius: 999px;
+            border: 1px solid #475569;
+            background: rgba(15, 23, 42, 0.9);
+            color: #bae6fd;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .cmd-chip:hover {
+            border-color: var(--neon-cyan);
+            color: #ffffff;
+        }
+
+        .loot-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.88);
+            border: 1.5px solid rgba(250, 204, 21, 0.35);
+            flex-wrap: wrap;
+        }
+
+        .loot-meta strong {
+            display: block;
+            color: #fef08a;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1rem;
+        }
+        .loot-meta small {
+            color: var(--muted);
+            font-size: 0.84rem;
+        }
+
+        .blueprint-slot {
+            border-style: dashed;
+            border-color: rgba(148, 163, 184, 0.45);
+            text-align: center;
+            align-items: center;
+        }
+
+        .vault-toast {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 9999;
+            padding: 11px 16px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.96);
+            border: 2px solid var(--gold);
+            color: #ffffff;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            transform: translateY(16px);
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .vault-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        :where(a:any-link, button, input):focus-visible {
+            outline: 3px solid var(--neon-cyan);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-rocket {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to Secret Rocket Vault</a>
+    <canvas id="space-bg-canvas" aria-hidden="true"></canvas>
+
+    <div class="vault-shell">
+        <header class="vault-nav">
+            <span class="vault-badge">🚀 LEVEL 2 SECRET SECTOR</span>
+            <nav class="vault-nav-links" aria-label="Secret Vault Navigation">
+                <a href="games.html" class="vault-link primary">🎮 Back to Switch Arcade</a>
+                <a href="secret.html" class="vault-link">🕶️ Secret HQ</a>
+                <a href="index.html" class="vault-link">🏠 Home</a>
+            </nav>
+        </header>
+
+        <main id="main-content">
+            <section class="vault-hero">
+                <span class="hero-rocket" aria-hidden="true">🚀</span>
+                <h1>Secret Rocket Vault</h1>
+                <p>
+                    You found the hidden rocket under the Nintendo Switch! Welcome to Agent Cole's Level 2 Deep-Space Vault — play the secret zero-gravity meteor mini-game, claim hidden Arcade Coins for the Switch Upgrade Shop, and crack space terminal codes.
+                </p>
+                <div class="wallet-strip">
+                    <span class="stat-chip">💰 Switch Arcade Coins: <strong id="vault-coins">0</strong></span>
+                    <span class="stat-chip cyan">☄️ Cosmic High Score: <strong id="vault-best">0</strong></span>
+                    <span class="stat-chip cyan">🏎️ Cube Runner Best: <strong id="vault-runner-best">0</strong>m</span>
+                </div>
+            </section>
+
+            <div class="vault-grid">
+                <!-- SECRET 13TH MINI-GAME: ZERO-G COSMIC METEOR RUSH -->
+                <section class="vault-card full-span" aria-labelledby="arena-heading">
+                    <div class="arena-hud">
+                        <h2 id="arena-heading">☄️ Secret 13th Game: Zero-G Meteor Rush</h2>
+                        <div class="arena-stats">
+                            <span>SCORE: <strong id="rush-score">0</strong></span>
+                            <span>COMBO: <strong id="rush-combo">x1</strong></span>
+                            <span>TIME: <strong id="rush-time">20.0</strong>s</span>
+                        </div>
+                    </div>
+                    <p>
+                        Tap or click drifting <strong>Gold Rubik Meteors (+10)</strong> and <strong>Rainbow Supernovas (+25)</strong> in zero gravity. Avoid red <strong>Glitch Bombs (-15)</strong>! Every 50 points awards real <strong>💰 Arcade Coins</strong> to your Nintendo Switch shop.
+                    </p>
+                    <div class="arena-canvas-wrap">
+                        <canvas id="cosmic-arena-canvas" width="980" height="360" aria-label="Interactive Zero-G Cosmic Meteor Arena"></canvas>
+                    </div>
+                    <div class="btn-row">
+                        <button id="btn-start-rush" type="button" class="vault-btn gold" onclick="startMeteorRush()">🚀 Launch 20s Meteor Rush</button>
+                        <button id="btn-warp-toggle" type="button" class="vault-btn" onclick="toggleWarpDrive()">🌌 Toggle Warp Drive</button>
+                        <button id="btn-gravity-toggle" type="button" class="vault-btn pink" onclick="toggleMoonGravity()">🪐 Zero-G / Moon Bounce</button>
+                    </div>
+                </section>
+
+                <!-- SECRET SUPPLY DROPS (LINKED TO SWITCH ARCADE COINS) -->
+                <section class="vault-card" aria-labelledby="loot-heading">
+                    <h2 id="loot-heading">🎁 Secret Supply Drops</h2>
+                    <p>Coins claimed here sync straight into your Nintendo Switch Arcade wallet.</p>
+
+                    <div class="loot-item">
+                        <div class="loot-meta">
+                            <strong>🏆 Secret Explorer Bounty</strong>
+                            <small>One-time reward (+250 💰) for finding the rocket under the Switch.</small>
+                        </div>
+                        <button id="btn-claim-finder" type="button" class="vault-btn gold" onclick="claimFinderBounty()">Claim +250 💰</button>
+                    </div>
+
+                    <div class="loot-item">
+                        <div class="loot-meta">
+                            <strong>🛰️ Daily Cosmic Crate</strong>
+                            <small>Come back once a day for +50 💰 bonus Arcade Coins.</small>
+                        </div>
+                        <button id="btn-claim-daily" type="button" class="vault-btn" onclick="claimDailyCrate()">Open +50 💰</button>
+                    </div>
+                </section>
+
+                <!-- SECRET SPACE TERMINAL -->
+                <section class="vault-card" aria-labelledby="terminal-heading">
+                    <h2 id="terminal-heading">🛸 Secret Space Terminal</h2>
+                    <p>Type a secret code or tap a quick command to trigger vault effects.</p>
+                    <div id="terminal-log" class="terminal-log" role="log" aria-live="polite"></div>
+                    <form class="terminal-form" onsubmit="submitTerminalCode(event)">
+                        <label for="terminal-code" class="skip-link">Enter secret vault code</label>
+                        <input id="terminal-code" name="vault_code" type="text" class="terminal-input" placeholder="Try: HELP, WARP, PARTY, COLE..." autocomplete="off">
+                        <button type="submit" class="vault-btn">Run</button>
+                    </form>
+                    <div class="chip-row">
+                        <button type="button" class="cmd-chip" onclick="runTerminalCommand('WARP')">WARP</button>
+                        <button type="button" class="cmd-chip" onclick="runTerminalCommand('PARTY')">PARTY</button>
+                        <button type="button" class="cmd-chip" onclick="runTerminalCommand('GRAVITY')">GRAVITY</button>
+                        <button type="button" class="cmd-chip" onclick="runTerminalCommand('CONFETTI')">CONFETTI</button>
+                        <button type="button" class="cmd-chip" onclick="runTerminalCommand('COLE')">COLE</button>
+                    </div>
+                </section>
+
+                <!-- FUTURE SECRET EXPANSION SLOT -->
+                <section class="vault-card full-span blueprint-slot" aria-labelledby="blueprint-heading">
+                    <h2 id="blueprint-heading">🧪 Secret Blueprint Bay — Open Space for Your Next Idea</h2>
+                    <p>
+                        This hidden sector is ready to expand whenever you want to add new secret mini-games, custom Switch themes, or hidden cubing experiments.
+                    </p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="vault-toast" class="vault-toast" role="status" aria-live="polite"></div>
+
+    <script>
+        'use strict';
+
+        // ==========================================
+        // 1. SHARED SWITCH ARCADE WALLET SYNC
+        // ==========================================
+        const COINS_KEY = 'cube_arcade_coins';
+        const VAULT_BEST_KEY = 'cube_rocket_vault_best';
+        const FINDER_KEY = 'cube_vault_finder_claimed';
+        const DAILY_KEY = 'cube_vault_daily_date';
+        const COLE_CODE_KEY = 'cube_vault_cole_claimed';
+
+        function getCoins() {
+            const raw = localStorage.getItem(COINS_KEY);
+            const n = parseInt(raw || '0', 10);
+            return Number.isFinite(n) && n >= 0 ? n : 0;
+        }
+
+        function addCoins(amount) {
+            const next = getCoins() + Math.max(0, Math.floor(amount));
+            localStorage.setItem(COINS_KEY, String(next));
+            syncWalletUI();
+            return next;
+        }
+
+        function getTodayKey() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        let toastTimer = null;
+        function showVaultToast(message) {
+            const el = document.getElementById('vault-toast');
+            if (!el) return;
+            el.textContent = message;
+            el.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+        }
+
+        let audioCtx = null;
+        function playSpaceTone(freqStart, freqEnd, dur = 0.14, type = 'triangle', gainVal = 0.14) {
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return;
+                if (!audioCtx) audioCtx = new Ctx();
+                if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freqStart, now);
+                osc.frequency.exponentialRampToValueAtTime(Math.max(40, freqEnd), now + dur);
+                g.gain.setValueAtTime(gainVal, now);
+                g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+                osc.connect(g);
+                g.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + dur);
+            } catch (e) {}
+        }
+
+        function syncWalletUI() {
+            const coinsEl = document.getElementById('vault-coins');
+            const bestEl = document.getElementById('vault-best');
+            const runnerBestEl = document.getElementById('vault-runner-best');
+            if (coinsEl) coinsEl.textContent = String(getCoins());
+            if (bestEl) bestEl.textContent = String(parseInt(localStorage.getItem(VAULT_BEST_KEY) || '0', 10));
+            if (runnerBestEl) runnerBestEl.textContent = String(parseInt(localStorage.getItem('cube_runner_best') || '0', 10));
+
+            const finderBtn = document.getElementById('btn-claim-finder');
+            if (finderBtn) {
+                const claimed = localStorage.getItem(FINDER_KEY) === '1';
+                finderBtn.disabled = claimed;
+                finderBtn.textContent = claimed ? '✅ Claimed' : 'Claim +250 💰';
+            }
+
+            const dailyBtn = document.getElementById('btn-claim-daily');
+            if (dailyBtn) {
+                const claimedToday = localStorage.getItem(DAILY_KEY) === getTodayKey();
+                dailyBtn.disabled = claimedToday;
+                dailyBtn.textContent = claimedToday ? '✅ Opened Today' : 'Open +50 💰';
+            }
+        }
+
+        function claimFinderBounty() {
+            if (localStorage.getItem(FINDER_KEY) === '1') return;
+            localStorage.setItem(FINDER_KEY, '1');
+            addCoins(250);
+            playSpaceTone(440, 880, 0.22, 'sine', 0.18);
+            spawnArenaBurst(arenaCanvas.width / 2, arenaCanvas.height / 2, 30, '#fde047');
+            showVaultToast('🏆 Secret Explorer Bounty claimed: +250 💰!');
+            appendTerminalLine('> BOUNTY UNLOCKED: +250 Arcade Coins synced to Nintendo Switch!');
+        }
+
+        function claimDailyCrate() {
+            const today = getTodayKey();
+            if (localStorage.getItem(DAILY_KEY) === today) return;
+            localStorage.setItem(DAILY_KEY, today);
+            addCoins(50);
+            playSpaceTone(520, 1040, 0.2, 'triangle', 0.16);
+            spawnArenaBurst(arenaCanvas.width / 2, arenaCanvas.height / 2, 22, '#38bdf8');
+            showVaultToast('🛰️ Daily Cosmic Crate opened: +50 💰!');
+            appendTerminalLine('> DAILY CRATE: +50 Arcade Coins synced to Nintendo Switch!');
+        }
+
+        // ==========================================
+        // 2. BACKGROUND STARFIELD WARP CANVAS
+        // ==========================================
+        const bgCanvas = document.getElementById('space-bg-canvas');
+        const bgCtx = bgCanvas ? bgCanvas.getContext('2d') : null;
+        let warpDrive = false;
+        let partyMode = false;
+        let moonGravity = false;
+        const stars = Array.from({ length: 120 }, () => ({
+            x: Math.random() * 1920,
+            y: Math.random() * 1080,
+            z: Math.random() * 3 + 0.6,
+            hue: Math.floor(Math.random() * 360)
+        }));
+
+        function resizeBg() {
+            if (!bgCanvas) return;
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBg);
+        resizeBg();
+
+        // ==========================================
+        // 3. ZERO-G RUBIK SANDBOX & METEOR RUSH MINI-GAME
+        // ==========================================
+        const arenaCanvas = document.getElementById('cosmic-arena-canvas');
+        const aCtx = arenaCanvas ? arenaCanvas.getContext('2d') : null;
+
+        let rushActive = false;
+        let rushScore = 0;
+        let rushCombo = 1;
+        let rushTimeLeft = 20.0;
+        let rushLastTick = 0;
+        let rushFrame = 0;
+
+        const CUBE_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#fde047', '#f97316', '#f8fafc'];
+        let targets = [];
+        let particles = [];
+        let popups = [];
+
+        function createSpaceTarget(kind) {
+            const w = arenaCanvas ? arenaCanvas.width : 980;
+            const h = arenaCanvas ? arenaCanvas.height : 360;
+            const r = kind === 'nova' ? 24 : (kind === 'bomb' ? 22 : 28);
+            const speed = kind === 'nova' ? 3.2 : (kind === 'bomb' ? 2.1 : 1.7);
+            const angle = Math.random() * Math.PI * 2;
+            return {
+                x: r + Math.random() * Math.max(20, w - r * 2),
+                y: r + Math.random() * Math.max(20, h - r * 2),
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                r: r,
+                rot: Math.random() * Math.PI * 2,
+                vRot: (Math.random() - 0.5) * 0.08,
+                kind: kind,
+                color: CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)]
+            };
+        }
+
+        function seedSandboxTargets() {
+            targets = [];
+            for (let i = 0; i < 7; i++) targets.push(createSpaceTarget('gold'));
+            targets.push(createSpaceTarget('nova'));
+        }
+        seedSandboxTargets();
+
+        function spawnArenaBurst(x, y, count = 16, baseColor = '#00f0ff') {
+            for (let i = 0; i < count; i++) {
+                const a = Math.random() * Math.PI * 2;
+                const spd = 1.5 + Math.random() * 5;
+                particles.push({
+                    x, y,
+                    vx: Math.cos(a) * spd,
+                    vy: Math.sin(a) * spd,
+                    size: 2.5 + Math.random() * 4,
+                    color: partyMode ? `hsl(${Math.floor(Math.random() * 360)}, 100%, 62%)` : baseColor,
+                    life: 24 + Math.floor(Math.random() * 14)
+                });
+            }
+        }
+
+        function updateRushHUD() {
+            const s = document.getElementById('rush-score');
+            const c = document.getElementById('rush-combo');
+            const t = document.getElementById('rush-time');
+            if (s) s.textContent = String(rushScore);
+            if (c) c.textContent = `x${rushCombo}`;
+            if (t) t.textContent = rushTimeLeft.toFixed(1);
+        }
+
+        function startMeteorRush() {
+            rushActive = true;
+            rushScore = 0;
+            rushCombo = 1;
+            rushTimeLeft = 20.0;
+            rushLastTick = performance.now();
+            targets = [];
+            for (let i = 0; i < 6; i++) targets.push(createSpaceTarget('gold'));
+            targets.push(createSpaceTarget('nova'));
+            targets.push(createSpaceTarget('bomb'));
+            targets.push(createSpaceTarget('bomb'));
+            updateRushHUD();
+            playSpaceTone(330, 880, 0.2, 'sawtooth', 0.14);
+            showVaultToast('☄️ Meteor Rush launched! Zap Gold & Rainbow cubies!');
+        }
+
+        function finishMeteorRush() {
+            rushActive = false;
+            rushTimeLeft = 0;
+            updateRushHUD();
+            const prevBest = parseInt(localStorage.getItem(VAULT_BEST_KEY) || '0', 10);
+            if (rushScore > prevBest) {
+                localStorage.setItem(VAULT_BEST_KEY, String(rushScore));
+            }
+            const earnedCoins = Math.max(0, Math.floor(rushScore / 50));
+            if (earnedCoins > 0) {
+                addCoins(earnedCoins);
+            } else {
+                syncWalletUI();
+            }
+            playSpaceTone(520, 1040, 0.25, 'sine', 0.18);
+            showVaultToast(`🚀 Rush Complete! Score: ${rushScore} (+${earnedCoins} 💰 Arcade Coins)`);
+            appendTerminalLine(`> METEOR RUSH FINISHED: ${rushScore} pts -> +${earnedCoins} 💰 synced!`);
+            seedSandboxTargets();
+        }
+
+        function handleArenaTap(clientX, clientY) {
+            if (!arenaCanvas) return;
+            const rect = arenaCanvas.getBoundingClientRect();
+            const sx = (clientX - rect.left) * (arenaCanvas.width / rect.width);
+            const sy = (clientY - rect.top) * (arenaCanvas.height / rect.height);
+
+            let hitTarget = false;
+            for (let i = targets.length - 1; i >= 0; i--) {
+                const tg = targets[i];
+                const dx = sx - tg.x;
+                const dy = sy - tg.y;
+                if (dx * dx + dy * dy <= (tg.r + 12) * (tg.r + 12)) {
+                    hitTarget = true;
+                    if (rushActive) {
+                        if (tg.kind === 'bomb') {
+                            rushScore = Math.max(0, rushScore - 15);
+                            rushCombo = 1;
+                            playSpaceTone(180, 75, 0.2, 'sawtooth', 0.18);
+                            spawnArenaBurst(tg.x, tg.y, 20, '#ef4444');
+                            popups.push({ x: tg.x, y: tg.y, text: '-15 💥', color: '#f87171', life: 36 });
+                            targets.splice(i, 1, createSpaceTarget('bomb'));
+                        } else {
+                            const base = tg.kind === 'nova' ? 25 : 10;
+                            const pts = base * rushCombo;
+                            rushScore += pts;
+                            rushCombo = Math.min(5, rushCombo + 1);
+                            playSpaceTone(tg.kind === 'nova' ? 660 : 480, 1180, 0.14, 'triangle', 0.15);
+                            spawnArenaBurst(tg.x, tg.y, tg.kind === 'nova' ? 26 : 16, tg.kind === 'nova' ? '#f472b6' : '#fde047');
+                            popups.push({ x: tg.x, y: tg.y, text: `+${pts}`, color: tg.kind === 'nova' ? '#f472b6' : '#fde047', life: 34 });
+                            targets.splice(i, 1, createSpaceTarget(Math.random() < 0.24 ? 'nova' : 'gold'));
+                        }
+                        updateRushHUD();
+                    } else {
+                        // Zero-G Sandbox bounce + sparkle!
+                        tg.vx = (tg.x - sx) * 0.22 + (Math.random() - 0.5) * 4;
+                        tg.vy = (tg.y - sy) * 0.22 - (moonGravity ? 7 : 2);
+                        tg.vRot = (Math.random() - 0.5) * 0.25;
+                        playSpaceTone(420, 780, 0.1, 'sine', 0.12);
+                        spawnArenaBurst(tg.x, tg.y, 14, tg.color);
+                    }
+                    break;
+                }
+            }
+
+            if (!hitTarget) {
+                if (rushActive) {
+                    rushCombo = 1;
+                    updateRushHUD();
+                }
+                // Shockwave pushes nearby zero-g cubies away!
+                spawnArenaBurst(sx, sy, 10, '#38bdf8');
+                targets.forEach(tg => {
+                    const dx = tg.x - sx;
+                    const dy = tg.y - sy;
+                    const dist = Math.hypot(dx, dy) || 1;
+                    if (dist < 170) {
+                        const push = (170 - dist) / 38;
+                        tg.vx += (dx / dist) * push;
+                        tg.vy += (dy / dist) * push;
+                    }
+                });
+            }
+        }
+
+        if (arenaCanvas) {
+            arenaCanvas.addEventListener('pointerdown', (e) => {
+                handleArenaTap(e.clientX, e.clientY);
+            });
+        }
+
+        // ==========================================
+        // 4. SECRET TERMINAL & TOGGLES
+        // ==========================================
+        function appendTerminalLine(text) {
+            const log = document.getElementById('terminal-log');
+            if (!log) return;
+            const line = document.createElement('div');
+            line.textContent = text;
+            log.appendChild(line);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function toggleWarpDrive() {
+            warpDrive = !warpDrive;
+            playSpaceTone(warpDrive ? 260 : 520, warpDrive ? 960 : 220, 0.2, 'sawtooth', 0.12);
+            showVaultToast(warpDrive ? '🌌 Hyperspace Warp Drive ENGAGED!' : '🌌 Warp Drive set to cruise.');
+            appendTerminalLine(warpDrive ? '> WARP DRIVE: ENGAGED (Hyperspace active!)' : '> WARP DRIVE: Cruise speed.');
+        }
+
+        function toggleMoonGravity() {
+            moonGravity = !moonGravity;
+            playSpaceTone(380, moonGravity ? 240 : 620, 0.15, 'triangle', 0.12);
+            showVaultToast(moonGravity ? '🪐 Moon Gravity Bounce ON!' : '✨ Zero-G Float Mode ON!');
+            appendTerminalLine(moonGravity ? '> GRAVITY: Moon bounce enabled.' : '> GRAVITY: Zero-G float enabled.');
+        }
+
+        function runTerminalCommand(rawCmd) {
+            const cmd = (rawCmd || '').trim().toUpperCase();
+            if (!cmd) return;
+            appendTerminalLine(`$ ${cmd}`);
+            if (cmd === 'HELP') {
+                appendTerminalLine('> COMMANDS: WARP | PARTY | GRAVITY | CONFETTI | COLE | CLEAR');
+            } else if (cmd === 'WARP') {
+                toggleWarpDrive();
+            } else if (cmd === 'PARTY') {
+                partyMode = !partyMode;
+                playSpaceTone(520, 1040, 0.2, 'square', 0.1);
+                showVaultToast(partyMode ? '🌈 Disco Rainbow Cubies ON!' : '🌈 Disco Party OFF.');
+                appendTerminalLine(partyMode ? '> PARTY MODE: Disco cubies activated!' : '> PARTY MODE: Deactivated.');
+            } else if (cmd === 'GRAVITY') {
+                toggleMoonGravity();
+            } else if (cmd === 'CONFETTI') {
+                for (let k = 0; k < 5; k++) {
+                    spawnArenaBurst(
+                        120 + Math.random() * (arenaCanvas.width - 240),
+                        60 + Math.random() * (arenaCanvas.height - 120),
+                        24,
+                        CUBE_COLORS[k % CUBE_COLORS.length]
+                    );
+                }
+                playSpaceTone(600, 1200, 0.22, 'triangle', 0.15);
+                appendTerminalLine('> CONFETTI: Zero-G neon burst launched!');
+            } else if (cmd === 'COLE' || cmd === '2026HUAC01') {
+                if (localStorage.getItem(COLE_CODE_KEY) !== '1') {
+                    localStorage.setItem(COLE_CODE_KEY, '1');
+                    addCoins(100);
+                    showVaultToast('⚡ LEGENDARY AGENT COLE CODE! +100 💰');
+                    appendTerminalLine('> ACCESS GRANTED: Agent Cole (WCA 2026HUAC01)! +100 💰 bonus!');
+                } else {
+                    showVaultToast('⚡ Agent Cole (WCA 2026HUAC01) verified!');
+                    appendTerminalLine('> WELCOME BACK, AGENT COLE (WCA 2026HUAC01)!');
+                }
+                spawnArenaBurst(arenaCanvas.width / 2, arenaCanvas.height / 2, 34, '#fde047');
+                playSpaceTone(440, 1320, 0.26, 'sine', 0.16);
+            } else if (cmd === 'CLEAR') {
+                const log = document.getElementById('terminal-log');
+                if (log) log.replaceChildren();
+            } else {
+                appendTerminalLine(`> Unknown code "${cmd}". Type HELP for commands.`);
+            }
+        }
+
+        function submitTerminalCode(e) {
+            e.preventDefault();
+            const input = document.getElementById('terminal-code');
+            if (!input) return;
+            runTerminalCommand(input.value);
+            input.value = '';
+        }
+
+        // ==========================================
+        // 5. ANIMATION LOOP (STARFIELD + ZERO-G ARENA)
+        // ==========================================
+        function animateVault(now) {
+            rushFrame++;
+
+            // Update starfield background
+            if (bgCtx && bgCanvas) {
+                const bw = bgCanvas.width;
+                const bh = bgCanvas.height;
+                bgCtx.fillStyle = warpDrive ? 'rgba(2, 6, 23, 0.25)' : '#020617';
+                bgCtx.fillRect(0, 0, bw, bh);
+                const mult = warpDrive ? 9 : 1;
+                for (let i = 0; i < stars.length; i++) {
+                    const st = stars[i];
+                    st.y += st.z * mult;
+                    if (st.y > bh) {
+                        st.y = -4;
+                        st.x = Math.random() * bw;
+                    }
+                    bgCtx.fillStyle = (warpDrive || partyMode)
+                        ? `hsl(${(st.hue + rushFrame * 4) % 360}, 95%, 72%)`
+                        : `rgba(226, 232, 240, ${0.35 + st.z * 0.2})`;
+                    bgCtx.fillRect(st.x, st.y, st.z, warpDrive ? st.z * 7 : st.z);
+                }
+            }
+
+            // Update Meteor Rush countdown
+            if (rushActive) {
+                const dt = Math.min(0.1, Math.max(0, (now - rushLastTick) / 1000));
+                rushLastTick = now;
+                rushTimeLeft = Math.max(0, rushTimeLeft - dt);
+                updateRushHUD();
+                if (rushTimeLeft <= 0) {
+                    finishMeteorRush();
+                }
+            }
+
+            // Render Zero-G Arena
+            if (aCtx && arenaCanvas) {
+                const w = arenaCanvas.width;
+                const h = arenaCanvas.height;
+                aCtx.clearRect(0, 0, w, h);
+
+                // Subtle space grid lines
+                aCtx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+                aCtx.lineWidth = 1;
+                for (let gx = 0; gx < w; gx += 60) {
+                    aCtx.beginPath();
+                    aCtx.moveTo(gx, 0);
+                    aCtx.lineTo(gx, h);
+                    aCtx.stroke();
+                }
+
+                // Update & draw floating cubie targets
+                for (let i = 0; i < targets.length; i++) {
+                    const tg = targets[i];
+                    if (moonGravity) tg.vy += 0.22;
+                    tg.x += tg.vx;
+                    tg.y += tg.vy;
+                    tg.rot += tg.vRot;
+
+                    // Soft speed cap
+                    const spd = Math.hypot(tg.vx, tg.vy);
+                    if (spd > 8) {
+                        tg.vx = (tg.vx / spd) * 8;
+                        tg.vy = (tg.vy / spd) * 8;
+                    }
+
+                    // Bounce off walls
+                    if (tg.x < tg.r) { tg.x = tg.r; tg.vx = Math.abs(tg.vx); }
+                    if (tg.x > w - tg.r) { tg.x = w - tg.r; tg.vx = -Math.abs(tg.vx); }
+                    if (tg.y < tg.r) { tg.y = tg.r; tg.vy = Math.abs(tg.vy); }
+                    if (tg.y > h - tg.r) {
+                        tg.y = h - tg.r;
+                        tg.vy = moonGravity ? -Math.max(4.5, Math.abs(tg.vy) * 0.82) : -Math.abs(tg.vy);
+                    }
+
+                    aCtx.save();
+                    aCtx.translate(tg.x, tg.y);
+                    aCtx.rotate(tg.rot);
+                    const sz = tg.r * 1.7;
+
+                    if (tg.kind === 'bomb') {
+                        aCtx.fillStyle = '#450a0a';
+                        aCtx.strokeStyle = '#ef4444';
+                        aCtx.lineWidth = 3;
+                        aCtx.beginPath();
+                        aCtx.arc(0, 0, tg.r, 0, Math.PI * 2);
+                        aCtx.fill();
+                        aCtx.stroke();
+                        aCtx.font = 'bold 20px sans-serif';
+                        aCtx.textAlign = 'center';
+                        aCtx.textBaseline = 'middle';
+                        aCtx.fillText('💣', 0, 1);
+                    } else {
+                        // 3x3 mini Rubik cubie meteor
+                        const fillCol = (tg.kind === 'nova' || partyMode)
+                            ? `hsl(${(rushFrame * 5 + i * 50) % 360}, 95%, 60%)`
+                            : (rushActive ? '#fbbf24' : tg.color);
+                        aCtx.fillStyle = '#0f172a';
+                        aCtx.fillRect(-sz / 2, -sz / 2, sz, sz);
+                        aCtx.strokeStyle = tg.kind === 'nova' ? '#f472b6' : '#ffffff';
+                        aCtx.lineWidth = 2.5;
+                        aCtx.strokeRect(-sz / 2, -sz / 2, sz, sz);
+
+                        const cell = (sz - 8) / 3;
+                        aCtx.fillStyle = fillCol;
+                        for (let r = 0; r < 3; r++) {
+                            for (let c = 0; c < 3; c++) {
+                                aCtx.fillRect(-sz / 2 + 4 + c * cell + 1, -sz / 2 + 4 + r * cell + 1, cell - 2, cell - 2);
+                            }
+                        }
+                    }
+                    aCtx.restore();
+                }
+
+                // Particles
+                for (let pi = particles.length - 1; pi >= 0; pi--) {
+                    const p = particles[pi];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life--;
+                    aCtx.fillStyle = p.color;
+                    aCtx.fillRect(p.x, p.y, p.size, p.size);
+                    if (p.life <= 0) particles.splice(pi, 1);
+                }
+
+                // Popups
+                for (let fi = popups.length - 1; fi >= 0; fi--) {
+                    const pop = popups[fi];
+                    pop.y -= 1.4;
+                    pop.life--;
+                    aCtx.font = 'bold 18px "DynaPuff", cursive';
+                    aCtx.textAlign = 'center';
+                    aCtx.fillStyle = pop.color;
+                    aCtx.fillText(pop.text, pop.x, pop.y);
+                    if (pop.life <= 0) popups.splice(fi, 1);
+                }
+            }
+
+            requestAnimationFrame(animateVault);
+        }
+
+        // Init
+        syncWalletUI();
+        appendTerminalLine('> LEVEL 2 SECRET ROCKET VAULT INITIALIZED.');
+        appendTerminalLine('> Type HELP for hidden space codes.');
+        requestAnimationFrame(animateVault);
+    </script>
+</body>
+</html>

@@ -2344,6 +2344,18 @@
             color: #64748b;
             font-size: 0.9em;
         }
+        .switch-secret-rocket {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 1.15em;
+            margin-left: 4px;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .switch-secret-rocket:hover {
+            transform: translateY(-3px) scale(1.25) rotate(-10deg);
+            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8));
+        }
     </style>
 </head>
 <body>
@@ -3879,7 +3891,7 @@
 
         <!-- ARCADE FOOTER -->
         <footer class="arcade-footer">
-            <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! <a href="games.html" class="secret-rocket-btn" title="🚀 Secret Rocket: Re-launch Game Mode!">🚀</a></p>
+            <p>© 2026 Learn Cube 4 Fun • Keep practicing, have fun, and solve fast! <a href="rocket-vault.html" id="switch-secret-rocket-link" class="switch-secret-rocket" aria-label="Secret Rocket Vault" title="🚀 Secret Rocket: Enter Level 2 Vault!">🚀</a></p>
         </footer>
 
     </div>
