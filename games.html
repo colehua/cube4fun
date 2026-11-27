@@ -2458,7 +2458,7 @@
                     <div class="game-score-display" style="gap: 10px;">
                         <span>DISTANCE: <span id="runner-score">0</span>m</span>
                         <span class="record-pill" style="border-color: #fbbf24; background: linear-gradient(135deg, rgba(251, 191, 36, 0.22) 0%, rgba(245, 158, 11, 0.22) 100%);">💰 COINS: <span id="runner-coins">0</span></span>
-                        <span>SPEED: <span id="runner-speed">0.5</span>x</span>
+                        <span>SPEED: <span id="runner-speed">0.25</span>x</span>
                         <span class="record-pill">🏆 BEST: <span id="runner-best">0</span>m</span>
                     </div>
                 </div>
@@ -4325,7 +4325,7 @@
                 icon: '⚡',
                 max: 5,
                 prices: [50, 120, 250, 500, 1000],
-                desc: level => level === 0 ? '+30% Dash duration & -15% cooldown' : (level === 5 ? 'MAX LEVEL: Super warp hyper speed!' : `Lv ${level+1}: +${30 + level*15}% Dash duration & -${15 + level*8}% cooldown`)
+                desc: level => level === 0 ? '+30% Dash duration & boost (40s reload)' : (level === 5 ? 'MAX LEVEL: Super warp hyper speed! (40s reload)' : `Lv ${level+1}: +${30 + level*15}% Dash duration & boost (40s reload)`)
             },
             magnet: {
                 name: 'Super Coin Magnet',
@@ -4814,12 +4814,14 @@
         // ==========================================
         const runnerCanvas = document.getElementById('canvas-runner');
         const rCtx = runnerCanvas ? runnerCanvas.getContext('2d') : null;
+        const RUNNER_START_SPEED = 0.25;      // Starts super slow, then accelerates faster & faster
+        const RUNNER_DASH_COOLDOWN_MS = 40000; // 40 seconds to load Dash again
         let runnerActive = false;
         let runnerPaused = false;
         let runnerDistance = 0;
         let runnerCoins = getArcadeCoins();
         let runnerInvulnerable = 0;
-        let runnerSpeed = 0.5; // Starts very slow for relaxed reaction time
+        let runnerSpeed = RUNNER_START_SPEED;
         let runnerBest = parseInt(localStorage.getItem('cube_runner_best') || '0', 10);
         document.getElementById('runner-best').textContent = runnerBest;
         document.getElementById('runner-coins').textContent = runnerCoins;
@@ -4840,11 +4842,14 @@
         let runnerAnimId = null;
         let runnerRoadZ = 0;
         let runnerFrame = 0;
+        let runnerLastFrameTime = 0;
+        let runnerSpawnDist = 0;
+        let runnerCoinDist = 0;
         let runnerSurviveBtnRect = null;
         let runnerIsDiveStomping = false;
         let runnerMonsterBullets = [];
         let runnerDashTimer = 0;
-        let runnerDashCooldown = 0;
+        let runnerDashCooldownMs = 0;
         let runnerHasDoubleJumped = false;
         let screenShake = 0;
 
@@ -4882,7 +4887,7 @@
             runnerDistance = 0;
             runnerCoins = getArcadeCoins();
             runnerInvulnerable = (upg.shield && upg.shield > 0) ? ((upg.shield + 1) * 120) : 0;
-            runnerSpeed = 0.5; // Resets strictly back to slow upon start/retry
+            runnerSpeed = RUNNER_START_SPEED; // Resets strictly back to super slow upon start/retry
             runnerTargetLane = 1;
             runnerCurrentLaneX = 1.0;
             runnerJumpY = 0;
@@ -4899,15 +4904,18 @@
             runnerFloatingTexts = [];
             runnerRoadZ = 0;
             runnerFrame = 0;
+            runnerLastFrameTime = performance.now();
+            runnerSpawnDist = 480; // First obstacle arrives promptly while moving super slowly
+            runnerCoinDist = 200;
             runnerSurviveBtnRect = null;
             runnerIsDiveStomping = false;
             runnerDashTimer = 0;
-            runnerDashCooldown = 0;
+            runnerDashCooldownMs = 0;
             updateDashButtons();
 
             document.getElementById('runner-score').textContent = '0';
             document.getElementById('runner-coins').textContent = runnerCoins;
-            document.getElementById('runner-speed').textContent = '0.5';
+            document.getElementById('runner-speed').textContent = RUNNER_START_SPEED.toFixed(2);
             const startBtn = document.getElementById('btn-runner-start');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
@@ -4959,6 +4967,7 @@
                     btn.classList.remove('paused');
                     btn.innerHTML = '<span style="font-weight:900; font-size:13px; line-height:1;">−</span> ⏸️';
                 }
+                runnerLastFrameTime = performance.now();
                 runnerAnimId = requestAnimationFrame(runnerLoop);
             }
         }
@@ -5077,14 +5086,14 @@
                 if (!runnerActive) startRunnerGame();
                 return;
             }
-            if (runnerDashCooldown > 0 || runnerDashTimer > 0) return;
+            if (runnerDashCooldownMs > 0 || runnerDashTimer > 0) return;
 
             const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
             const dashLvl = upg.dash || 0;
 
-            // Activate Sudden Speed Dash with upgrades!
+            // Activate Sudden Speed Dash! Needs 40 seconds to reload before next use.
             runnerDashTimer = 95 + dashLvl * 28;
-            runnerDashCooldown = Math.max(75, 200 - dashLvl * 24);
+            runnerDashCooldownMs = RUNNER_DASH_COOLDOWN_MS;
             runnerInvulnerable = Math.max(runnerInvulnerable, runnerDashTimer + 15);
             triggerScreenShake(7);
             playSfx('turbo');
@@ -5106,14 +5115,24 @@
                 if (runnerDashTimer > 0) {
                     sideBtn.classList.add('dashing');
                     sideBtn.classList.remove('cooling-down');
+                    sideBtn.style.background = '';
+                    sideBtn.removeAttribute('aria-disabled');
+                    sideBtn.title = 'Hyper Dash active!';
                     sideBtn.innerHTML = '⚡ SPEED!';
-                } else if (runnerDashCooldown > 0) {
+                } else if (runnerDashCooldownMs > 0) {
                     sideBtn.classList.remove('dashing');
                     sideBtn.classList.add('cooling-down');
-                    const sec = (runnerDashCooldown / 60).toFixed(1);
-                    sideBtn.innerHTML = `⚡ ${sec}s`;
+                    const sec = Math.ceil(runnerDashCooldownMs / 1000);
+                    const pct = Math.max(0, Math.min(100, Math.round(((RUNNER_DASH_COOLDOWN_MS - runnerDashCooldownMs) / RUNNER_DASH_COOLDOWN_MS) * 100)));
+                    sideBtn.style.background = `linear-gradient(90deg, rgba(56, 189, 248, 0.45) ${pct}%, #1e293b ${pct}%)`;
+                    sideBtn.setAttribute('aria-disabled', 'true');
+                    sideBtn.title = `Dash loading: ${sec}s remaining (40s reload)`;
+                    sideBtn.innerHTML = `⏳ ${sec}s`;
                 } else {
                     sideBtn.classList.remove('dashing', 'cooling-down');
+                    sideBtn.style.background = '';
+                    sideBtn.removeAttribute('aria-disabled');
+                    sideBtn.title = 'Square Capture Button: ⚡ Sudden Speed Dash! [Shift / E] (40s reload)';
                     sideBtn.innerHTML = '⚡ DASH';
                 }
             }
@@ -5161,29 +5180,40 @@
             if (!runnerActive || runnerPaused || !rCtx) return;
             runnerFrame++;
 
-            // Sudden Speed Dash calculations
+            const nowMs = performance.now();
+            const dtMs = runnerLastFrameTime > 0 ? Math.min(100, Math.max(0, nowMs - runnerLastFrameTime)) : 16.67;
+            runnerLastFrameTime = nowMs;
+            const dtFactor = dtMs / 16.67;
+
+            // Sudden Speed Dash active timer & exact 40-second real-time reload
             if (runnerDashTimer > 0) {
                 runnerDashTimer--;
                 if (runnerDashTimer === 0) updateDashButtons();
-            }
-            if (runnerDashCooldown > 0) {
-                runnerDashCooldown--;
-                if (runnerDashCooldown % 15 === 0 || runnerDashCooldown === 0) updateDashButtons();
+            } else if (runnerDashCooldownMs > 0) {
+                const prevSec = Math.ceil(runnerDashCooldownMs / 1000);
+                runnerDashCooldownMs = Math.max(0, runnerDashCooldownMs - dtMs);
+                if (Math.ceil(runnerDashCooldownMs / 1000) !== prevSec || runnerFrame % 15 === 0 || runnerDashCooldownMs === 0) {
+                    updateDashButtons();
+                }
             }
 
             const currentBoost = runnerDashTimer > 0 ? 3.2 : 0;
             const effectiveSpeed = runnerSpeed + currentBoost;
 
-            // Distance & Continuous Speed Progression
-            // Starts very slow (0.5x), steadily accelerates faster and faster until you die!
-            runnerSpeed += 0.001;
+            // Distance & Progressive Speed Ramp:
+            // Starts super slow (0.25x), then accelerates faster and faster as you keep playing!
+            // Resets back to super slow (0.25x) whenever you die and restart.
+            runnerSpeed += (0.00055 + runnerSpeed * 0.00038) * dtFactor;
             runnerDistance += Math.max(1, Math.floor(effectiveSpeed * 2.2));
-            runnerRoadZ += effectiveSpeed * 14;
+            const roadStepZ = effectiveSpeed * 14;
+            runnerRoadZ += roadStepZ;
+            runnerSpawnDist += roadStepZ;
+            runnerCoinDist += roadStepZ;
             if (runnerShootCooldown > 0) runnerShootCooldown--;
             if (runnerInvulnerable > 0) runnerInvulnerable--;
 
             document.getElementById('runner-score').textContent = runnerDistance;
-            document.getElementById('runner-speed').textContent = effectiveSpeed.toFixed(1) + (runnerDashTimer > 0 ? ' ⚡' : '');
+            document.getElementById('runner-speed').textContent = effectiveSpeed.toFixed(2) + (runnerDashTimer > 0 ? ' ⚡' : '');
 
             // Interpolate lane position
             runnerCurrentLaneX += (runnerTargetLane - runnerCurrentLaneX) * 0.22;
@@ -5367,9 +5397,10 @@
                 }
             }
 
-            // Spawn obstacles and monsters (Tom Hero Run style: jump-only blocked barriers, slide-only tall overhead gates, jump-or-slide split bars, tall solid walls, & monsters)
-            const spawnInterval = Math.max(22, Math.floor(75 / Math.max(0.45, runnerSpeed)));
-            if (runnerFrame % spawnInterval === 0) {
+            // Spawn obstacles and monsters using smooth road-distance pacing (works cleanly from 0.25x super slow up to 5x+ turbo speed!)
+            const spawnGapZ = Math.min(820, 620 + runnerSpeed * 45);
+            if (runnerSpawnDist >= spawnGapZ) {
+                runnerSpawnDist = 0;
                 const buildObstacle = (laneIdx, obType, forcedBlocks) => {
                     let mHp = 25;
                     let blocksTall = forcedBlocks || 1;
@@ -5488,9 +5519,9 @@
                 }
             }
 
-            // Spawn Coins along the 3D highway (lines of gold coins, jumping arcs, and coin bags!)
-            const coinInterval = Math.max(16, Math.floor(40 / Math.max(0.45, runnerSpeed)));
-            if (runnerFrame % coinInterval === 0) {
+            // Spawn Coins along the 3D highway using smooth road-distance pacing
+            if (runnerCoinDist >= 420) {
+                runnerCoinDist = 0;
                 const coinLane = Math.floor(Math.random() * 3);
                 const coinRoll = Math.random();
 
@@ -5624,6 +5655,7 @@
             // Update obstacles
             for (let i = runnerObstacles.length - 1; i >= 0; i--) {
                 const ob = runnerObstacles[i];
+                const prevZ = ob.z;
                 ob.z -= effectiveSpeed * 14;
                 if (ob.hitFlash > 0) ob.hitFlash--;
 
@@ -5646,9 +5678,9 @@
                     }
                 }
 
-                // Collision check (generous window for collectibles; visual-accurate window around player z=120 for hazards)
+                // Swept collision check (prevents tunneling even at 5x+ speeds while staying accurate around player z=120)
                 const isCollectible = (ob.type === 'coin' || ob.type === 'coin_bag');
-                const inHitWindow = isCollectible ? (ob.z < 145 && ob.z > 20) : (ob.z < 138 && ob.z > 70);
+                const inHitWindow = isCollectible ? (ob.z < 145 && prevZ > 20) : (ob.z < 138 && prevZ > 70);
                 if (inHitWindow && !ob.cleared) {
                     const laneDiff = Math.abs(runnerCurrentLaneX - ob.lane);
                     const touchTolerance = (runnerDashTimer > 0) ? 0.85 : 0.62;
@@ -7178,8 +7210,9 @@
             runnerActive = true;
             runnerPaused = false;
             runnerSurviveBtnRect = null;
-            runnerSpeed = 0.6; // Gentle manageable recovery pace upon survival
-            document.getElementById('runner-speed').textContent = '0.6';
+            runnerLastFrameTime = performance.now();
+            runnerSpeed = 0.35; // Gentle manageable recovery pace upon survival
+            document.getElementById('runner-speed').textContent = '0.35';
             runnerInvulnerable = 150; // ~2.5s shield
             runnerJumpY = 0;
             runnerJumpVy = 0;

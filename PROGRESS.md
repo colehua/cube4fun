@@ -1,36 +1,38 @@
 # Summary
 - What changed:
-  - Fixed Joy-Con button overflow across the Nintendo Switch console in `games.html`: added `grid-template-columns: minmax(0, 1fr)` and `max-width: 100%` containment on `#panel-runner .joycon` (eliminating CSS Grid auto-column expansion that shifted Right Joy-Con buttons off the Switch edge), widened `.joycon` (`92px` desktop / `76px` mobile) and tightened `.dpad-mid-row`/`.abxy-mid-row` gaps (`8px` desktop / `6px` mobile) so 2-button rows (`72px` <= `77px` inner desktop; `58px` <= `63px` inner mobile) and wrapped top/bottom pill buttons stay 100% inside the Joy-Con borders across all 12 games.
-  - Added a bottom-right floating **❄️ Freeze Page** button (`#btn-freeze-switch-page`) and [`toggleSwitchPageFreeze()`](file:///home/huazicheng/repos/cube4fun/games.html) on `games.html` that freezes the Nintendo Switch page in place (locks viewport scroll/overscroll/touchmove/wheel/PageUp-Down while keeping all Switch Joy-Con buttons, canvas taps, keyboard controls, and scrollable Upgrade Shop modal working), restores exact scroll position on unfreeze, adds a frost glow cue on `.nintendo-switch-console`, and shifts `.arcade-toast` above the button so they never overlap.
-- How verified: Verified Joy-Con geometry math (`72px <= 77px` desktop, `58px <= 63px` mobile, `grid-template-columns: minmax(0, 1fr)` present), audited all 12 games' `.joycon-plus-btn` elements, executed a Node VM test of `toggleSwitchPageFreeze()` confirming freeze/unfreeze class toggles, `body.style.top` lock & scroll restore (`Y=320px`), `wheel`/`touchmove` blocking on the Switch page, allowed scrolling inside `.upgrade-modal-card`, and validated JS/CSS/Python `html.parser` syntax on `games.html`. BC rankings checked today (2026-11-27): no changes (`bc-rankings.html` untouched).
-- What to review: `games.html` (`.joycon`, `#panel-runner .joycon`, `.btn-freeze-switch-page`, `toggleSwitchPageFreeze`, `#btn-freeze-switch-page`).
+  - Set Cube Runner's Dash button (`#btn-side-dash`) reload time in `games.html` to an exact real-time **40 seconds** (`RUNNER_DASH_COOLDOWN_MS = 40000`, ticking down via `performance.now()` delta time after the dash finishes so it stays accurate across 60Hz/120Hz displays and never ticks while paused). Added a live `⏳ 40s -> 1s` countdown with a cyan loading progress bar fill on `#btn-side-dash` and updated `UPGRADE_CONFIG.dash.desc`.
+  - Tuned Cube Runner's speed curve in `games.html` to start **super slow** (`RUNNER_START_SPEED = 0.25x`) and accelerate progressively faster and faster (`(0.00055 + runnerSpeed * 0.00038) * dtFactor`: `0.25x` at 0s -> `0.68x` at 10s -> `1.23x` at 20s -> `1.92x` at 30s -> `2.78x` at 40s -> unbounded). Dying and restarting via `startRunnerGame()` resets speed strictly back to `0.25x` (and Dash ready) and repeats the ramp cleanly.
+  - Upgraded obstacle and coin spawning to smooth road-distance accumulators (`runnerSpawnDist`, `runnerCoinDist`) and swept collision checks (`ob.z < 138 && prevZ > 70`) so pacing and collision stay accurate from `0.25x` super slow through `5x+` turbo speeds.
+- How verified: Executed Node VM tests against `games.html` proving the exact progressive speed curve (`0.25x -> 0.68x -> 1.23x -> 1.92x -> 2.78x`), die-and-restart reset back to `0.25x`, and exact 40-second Dash reload (`⏳ 40s`, blocked at `39.0s` showing `⏳ 1s`, ready and fireable at `40.1s` showing `⚡ DASH` even at upgrade level 5); verified 0 stale `runnerDashCooldown` refs and clean JS + Python `html.parser` syntax. BC rankings checked today (2026-11-27): no changes (`bc-rankings.html` untouched).
+- What to review: `games.html` (`RUNNER_START_SPEED`, `RUNNER_DASH_COOLDOWN_MS`, `startRunnerGame`, `runnerDashAction`, `updateDashButtons`, `runnerLoop`).
 - Blockers: None.
 
 Status: COMPLETE
 Goal / Definition of done:
-1. Keep every Joy-Con button centered and 100% inside the Nintendo Switch on desktop and mobile while keeping Cube Runner's left/right controls on the same row.
-2. Add a bottom-right floating Freeze button (`#btn-freeze-switch-page`) that locks/freezes the Nintendo Switch page in place while playing and cleanly unfreezes on second click.
-3. Verify geometry, freeze/unfreeze runtime behavior, and syntax; update `PROGRESS.md`; push to `origin/main`.
+1. Require exactly 40 seconds of reload time before the Dash button can be used again, with clear visual countdown/loading feedback.
+2. Start Cube Runner super slow (`0.25x`), accelerate progressively faster and faster during play, and reset cleanly back to super slow (`0.25x`) on death and restart.
+3. Verify with automated timing/speed tests and syntax checks, update `PROGRESS.md`, and push to `origin/main`.
 
 Next step: Ready for future prompts.
 
 Tasks:
-- [x] Pre-sync (`git pull origin main`) and diagnose why buttons spilled off the Nintendo Switch (`#panel-runner .joycon` missing `grid-template-columns: minmax(0, 1fr)` + Joy-Con inner width smaller than button rows/pills)
-- [x] Fix Joy-Con widths, gaps, button wrapping, and CSS Grid column constraint across desktop and mobile in `games.html`
-- [x] Add bottom-right floating `❄️ Freeze Page` button (`#btn-freeze-switch-page`), frost styles, and `toggleSwitchPageFreeze()` scroll/touch lock in `games.html`
-- [x] Verify containment math, `toggleSwitchPageFreeze()` runtime behavior in Node VM, and HTML/CSS/JS syntax
+- [x] Pre-sync (`git pull origin main`) and inspect Dash cooldown and speed progression in `games.html`
+- [x] Implement exact 40-second real-time Dash reload (`RUNNER_DASH_COOLDOWN_MS = 40000`) with `⏳ Xs` countdown and loading fill bar on `#btn-side-dash`
+- [x] Implement super-slow start (`0.25x`), progressive speed acceleration, smooth distance-based spawning, swept collision checks, and strict reset to `0.25x` on restart
+- [x] Verify 40s Dash reload, speed ramp, restart cycle, and JS/HTML syntax
 - [x] Update `PROGRESS.md`, commit, and push to `origin/main`
 
 Assumptions:
-- "freezes the page of the intendo switch" locks page scrolling, bounce, and zoom in place while keeping Nintendo Switch Joy-Con buttons, canvas taps, and game controls active (matching the non-blocking freeze workflow in `cube-solving-machine.html`).
+- Using real elapsed time (`performance.now()` delta clamped to `100ms` and paused when the game is paused) keeps the 40-second Dash reload accurate regardless of monitor refresh rate (60Hz vs. 120Hz/144Hz).
+- Restarting a run (`startRunnerGame()`) starts with Dash ready and speed reset to `0.25x`, then enforces the 40-second reload after each Dash use.
 
 Blockers (what I need to do): None.
 Found, not done:
 - Unrelated to this task: 14 sub-pages have leftover `<text y='.9em' font-size='90'>...</text></svg>">` markup trailing `<link rel="manifest" href="manifest.webmanifest">` from commit `4c1a4c0`. Left untouched to keep this change minimal and focused.
 
 Log (newest first, one line each):
+- 2026-11-27: BC rankings checked: no changes; set Cube Runner Dash reload to exact 40 seconds with live countdown/progress bar and tuned speed to start super slow (`0.25x`), accelerate progressively faster, and reset to `0.25x` on restart in `games.html`, verified and pushed to `origin/main`.
 - 2026-11-27: BC rankings checked: no changes; fixed Joy-Con button overflow off the Nintendo Switch across all 12 games and added bottom-right `❄️ Freeze Page` lock button (`#btn-freeze-switch-page`) in `games.html`, verified and pushed to `origin/main`.
 - 2026-11-27: BC rankings checked: no changes; added Tom Hero Run jump/slide obstacle mechanics (`hurdle` bottom-blocked, tall `laser` overhead too-high, `both_bar` jump-or-slide, tall solid walls, 3-lane action waves, slide-cancel jump, fast-drop into slide) in `games.html`, verified across 17 assertions + 1,000 spawn waves, pushed to `origin/main`.
 - 2026-11-27: BC rankings checked: no changes; aligned Cube Runner Left and Right buttons and thumbsticks onto identical rows/heights in `games.html` (`#panel-runner`), verified and pushed to `origin/main`.
 - 2026-11-27: BC rankings checked: no changes; fixed duplicate Dark Mode button on `index.html` by moving `#install-app-btn` to `.install-app-btn` and enforcing `[hidden] { display: none !important; }` in `theme.css`, verified and pushed to `origin/main`.
-- 2026-11-26: BC rankings checked: no changes; completed full-site review and upgrade across 21 existing files + 7 new PWA/SEO/404 assets, eliminated all 48 legacy-scan findings, fixed audio/XSS/markdown/overflow/contrast bugs, verified 100 A11y/BP/SEO in Lighthouse, pushed to `origin/main`.
