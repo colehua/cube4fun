@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700;800&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <script src="arcade-accounts.js"></script>
     <style>
         :root {
             --bg-deep: #020617;
@@ -492,6 +493,170 @@
             transform: translateY(0);
         }
 
+        /* PLAYER ACCOUNTS MODAL (SHARED WITH SWITCH ARCADE) */
+        .vault-link.account-nav-btn {
+            background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+            border-color: #7dd3fc;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .vault-link.account-nav-btn.signed-in {
+            background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
+            border-color: #6ee7b7;
+        }
+        .vault-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.86);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 9500;
+        }
+        .vault-modal-backdrop.open {
+            display: flex;
+        }
+        .vault-account-modal {
+            width: 100%;
+            max-width: 620px;
+            max-height: 88vh;
+            overflow-y: auto;
+            background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 100%);
+            border: 2px solid #38bdf8;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 36px rgba(56, 189, 248, 0.28);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .vault-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1.5px solid rgba(56, 189, 248, 0.28);
+            padding-bottom: 10px;
+        }
+        .vault-modal-header h2 {
+            margin: 0;
+            font-family: 'DynaPuff', cursive;
+            font-size: 1.35rem;
+            color: #38bdf8;
+        }
+        .vault-modal-close {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1.5px solid #475569;
+            background: #1e293b;
+            color: #cbd5e1;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .vault-modal-close:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #fca5a5;
+        }
+        .vault-acct-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .vault-acct-tab {
+            background: #0f172a;
+            color: #94a3b8;
+            border: 1.5px solid #334155;
+            border-radius: 11px;
+            padding: 7px 14px;
+            font-family: 'DynaPuff', cursive;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .vault-acct-tab.active {
+            background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+            color: #ffffff;
+            border-color: #7dd3fc;
+        }
+        .vault-acct-box {
+            background: rgba(2, 6, 23, 0.72);
+            border: 1.5px solid #334155;
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .vault-acct-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .vault-acct-input {
+            flex: 1;
+            min-width: 180px;
+            background: #020617;
+            color: #ffffff;
+            border: 2px solid #38bdf8;
+            border-radius: 11px;
+            padding: 9px 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.96rem;
+        }
+        .vault-avatar-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+        .vault-avatar-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        .vault-avatar-btn.selected {
+            border-color: #fde047;
+            background: rgba(253, 224, 71, 0.2);
+        }
+        .vault-acct-msg {
+            font-size: 0.86rem;
+            font-weight: 700;
+            min-height: 18px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .vault-acct-msg.error { color: #fda4af; }
+        .vault-acct-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        .vault-acct-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 9px 12px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1.5px solid #334155;
+        }
+        .vault-acct-card.active {
+            border-color: #4ade80;
+        }
+
         :where(a:any-link, button, input):focus-visible {
             outline: 3px solid var(--neon-cyan);
             outline-offset: 2px;
@@ -512,6 +677,7 @@
         <header class="vault-nav">
             <span class="vault-badge">🚀 LEVEL 2 SECRET SECTOR</span>
             <nav class="vault-nav-links" aria-label="Secret Vault Navigation">
+                <button id="btn-vault-account" type="button" class="vault-link account-nav-btn" onclick="openVaultAccountModal()">👤 Sign In</button>
                 <a href="games.html" class="vault-link primary">🎮 Back to Switch Arcade</a>
                 <a href="secret.html" class="vault-link">🕶️ Secret HQ</a>
                 <a href="index.html" class="vault-link">🏠 Home</a>
@@ -618,6 +784,55 @@
         </main>
     </div>
 
+    <!-- PLAYER ACCOUNT SIGN-IN / SWITCHER MODAL -->
+    <div id="vault-account-modal" class="vault-modal-backdrop" onclick="if(event.target === this) closeVaultAccountModal()" role="dialog" aria-modal="true" aria-labelledby="vault-acct-heading">
+        <div class="vault-account-modal">
+            <div class="vault-modal-header">
+                <h2 id="vault-acct-heading">👤 Player Accounts</h2>
+                <button type="button" class="vault-modal-close" onclick="closeVaultAccountModal()" title="Close Accounts (Esc)">✖</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:'DynaPuff',cursive; font-size:0.9rem;">
+                <span>Currently Playing: <strong id="vault-acct-current" style="color:#4ade80;">👤 Guest</strong></span>
+                <span id="vault-acct-count" style="color:#94a3b8;">0 saved accounts</span>
+            </div>
+            <div class="vault-acct-tabs">
+                <button id="vault-tab-signin" type="button" class="vault-acct-tab active" onclick="switchVaultAccountTab('signin')">🔑 Sign In</button>
+                <button id="vault-tab-create" type="button" class="vault-acct-tab" onclick="switchVaultAccountTab('create')">✨ Make Account</button>
+            </div>
+            <div id="vault-panel-signin" style="display:flex; flex-direction:column; gap:10px;">
+                <form class="vault-acct-box" onsubmit="submitVaultSignIn(event)">
+                    <label for="vault-signin-input" style="font-family:'DynaPuff',cursive; font-size:0.92rem;">Type your account name to sign in:</label>
+                    <div class="vault-acct-row">
+                        <input id="vault-signin-input" type="text" class="vault-acct-input" maxlength="20" placeholder="Type your account name..." autocomplete="off">
+                        <button type="submit" class="vault-btn">🔑 Sign In</button>
+                    </div>
+                    <div id="vault-signin-msg" class="vault-acct-msg" role="status" aria-live="polite"></div>
+                </form>
+                <div style="font-family:'DynaPuff',cursive; font-size:0.86rem; color:#94a3b8;">Saved Accounts on This Device:</div>
+                <div id="vault-acct-list" class="vault-acct-list"></div>
+                <div id="vault-signout-row" style="display:none; justify-content:flex-end;">
+                    <button type="button" class="vault-btn" onclick="signOutVaultAccount()">🚪 Sign Out (Play as Guest)</button>
+                </div>
+            </div>
+            <div id="vault-panel-create" style="display:none; flex-direction:column; gap:10px;">
+                <form class="vault-acct-box" onsubmit="submitVaultCreate(event)">
+                    <label for="vault-create-input" style="font-family:'DynaPuff',cursive; font-size:0.92rem;">Make a new account:</label>
+                    <input id="vault-create-input" type="text" class="vault-acct-input" maxlength="20" placeholder="Choose a player name..." autocomplete="off">
+                    <div style="font-family:'DynaPuff',cursive; font-size:0.86rem; color:#cbd5e1;">Pick your avatar:</div>
+                    <div id="vault-avatar-picker" class="vault-avatar-row"></div>
+                    <label id="vault-import-guest-row" style="display:flex; align-items:center; gap:8px; font-size:0.86rem; color:#cbd5e1; cursor:pointer;">
+                        <input id="vault-import-guest" type="checkbox">
+                        <span>Keep my current Guest coins &amp; scores on this account</span>
+                    </label>
+                    <div style="display:flex; justify-content:flex-end;">
+                        <button type="submit" class="vault-btn gold">✨ Make Account</button>
+                    </div>
+                    <div id="vault-create-msg" class="vault-acct-msg" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="vault-toast" class="vault-toast" role="status" aria-live="polite"></div>
 
     <script>
@@ -641,6 +856,7 @@
         function addCoins(amount) {
             const next = getCoins() + Math.max(0, Math.floor(amount));
             localStorage.setItem(COINS_KEY, String(next));
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
             syncWalletUI();
             return next;
         }
@@ -709,6 +925,7 @@
             if (localStorage.getItem(FINDER_KEY) === '1') return;
             localStorage.setItem(FINDER_KEY, '1');
             addCoins(250);
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
             playSpaceTone(440, 880, 0.22, 'sine', 0.18);
             spawnArenaBurst(arenaCanvas.width / 2, arenaCanvas.height / 2, 30, '#fde047');
             showVaultToast('🏆 Secret Explorer Bounty claimed: +250 💰!');
@@ -720,6 +937,7 @@
             if (localStorage.getItem(DAILY_KEY) === today) return;
             localStorage.setItem(DAILY_KEY, today);
             addCoins(50);
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
             playSpaceTone(520, 1040, 0.2, 'triangle', 0.16);
             spawnArenaBurst(arenaCanvas.width / 2, arenaCanvas.height / 2, 22, '#38bdf8');
             showVaultToast('🛰️ Daily Cosmic Crate opened: +50 💰!');
@@ -962,6 +1180,7 @@
             if (earnedCoins > 0) {
                 addCoins(earnedCoins);
             } else {
+                if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
                 syncWalletUI();
             }
             playSpaceTone(240, 80, 0.35, 'sawtooth', 0.18);
@@ -1139,6 +1358,15 @@
         }
 
         window.addEventListener('keydown', (e) => {
+            const acctModal = document.getElementById('vault-account-modal');
+            const acctOpen = acctModal && acctModal.classList.contains('open');
+            if (acctOpen) {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeVaultAccountModal();
+                }
+                return;
+            }
             const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
             if (tag === 'INPUT' || tag === 'TEXTAREA') return;
             if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape') && ninjaActive) {
@@ -1146,6 +1374,224 @@
                 togglePauseCubeNinja();
             }
         });
+
+        // ==========================================
+        // 3.5 SHARED PLAYER ACCOUNT SIGN-IN / SWITCHER
+        // ==========================================
+        let vaultSelectedAvatar = (typeof CubeAccounts !== 'undefined' && CubeAccounts.AVATARS) ? CubeAccounts.AVATARS[0] : '😎';
+
+        function updateVaultAccountUI() {
+            const active = (typeof CubeAccounts !== 'undefined') ? CubeAccounts.getActiveAccount() : null;
+            const navBtn = document.getElementById('btn-vault-account');
+            const curEl = document.getElementById('vault-acct-current');
+            const signoutRow = document.getElementById('vault-signout-row');
+            const importRow = document.getElementById('vault-import-guest-row');
+            if (active) {
+                if (navBtn) { navBtn.textContent = `${active.avatar} ${active.name} • Switch`; navBtn.classList.add('signed-in'); }
+                if (curEl) curEl.textContent = `${active.avatar} ${active.name}`;
+                if (signoutRow) signoutRow.style.display = 'flex';
+                if (importRow) importRow.style.display = 'none';
+            } else {
+                if (navBtn) { navBtn.textContent = '👤 Sign In'; navBtn.classList.remove('signed-in'); }
+                if (curEl) curEl.textContent = '👤 Guest';
+                if (signoutRow) signoutRow.style.display = 'none';
+                if (importRow) importRow.style.display = 'flex';
+            }
+        }
+
+        function setVaultAcctMsg(elId, text, type, quickCreateName) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            el.className = 'vault-acct-msg' + (type ? ' ' + type : '');
+            el.replaceChildren();
+            if (!text) return;
+            const span = document.createElement('span');
+            span.textContent = text;
+            el.appendChild(span);
+            if (quickCreateName) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'cmd-chip';
+                btn.textContent = `✨ Make "${quickCreateName}"`;
+                btn.addEventListener('click', () => {
+                    switchVaultAccountTab('create');
+                    const inp = document.getElementById('vault-create-input');
+                    if (inp) { inp.value = quickCreateName; inp.focus(); }
+                });
+                el.appendChild(btn);
+            }
+        }
+
+        function renderVaultAvatarPicker() {
+            const picker = document.getElementById('vault-avatar-picker');
+            if (!picker || typeof CubeAccounts === 'undefined') return;
+            picker.replaceChildren();
+            CubeAccounts.AVATARS.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'vault-avatar-btn' + (emoji === vaultSelectedAvatar ? ' selected' : '');
+                btn.textContent = emoji;
+                btn.addEventListener('click', () => {
+                    vaultSelectedAvatar = emoji;
+                    renderVaultAvatarPicker();
+                });
+                picker.appendChild(btn);
+            });
+        }
+
+        function renderVaultAccountModal() {
+            updateVaultAccountUI();
+            renderVaultAvatarPicker();
+            const listEl = document.getElementById('vault-acct-list');
+            const countEl = document.getElementById('vault-acct-count');
+            if (!listEl || typeof CubeAccounts === 'undefined') return;
+            const accounts = CubeAccounts.listAccounts();
+            if (countEl) countEl.textContent = `${accounts.length} saved account${accounts.length === 1 ? '' : 's'}`;
+            listEl.replaceChildren();
+            if (accounts.length === 0) {
+                const empty = document.createElement('div');
+                empty.style.cssText = 'padding:12px; text-align:center; color:#94a3b8; font-size:0.86rem; border:1.5px dashed #334155; border-radius:10px;';
+                empty.textContent = 'No accounts yet! Click "✨ Make Account" above to create one.';
+                listEl.appendChild(empty);
+                return;
+            }
+            accounts.forEach(acc => {
+                const card = document.createElement('div');
+                card.className = 'vault-acct-card' + (acc.isActive ? ' active' : '');
+                const left = document.createElement('div');
+                left.style.cssText = 'display:flex; align-items:center; gap:9px;';
+                const av = document.createElement('span');
+                av.style.fontSize = '1.45rem';
+                av.textContent = acc.avatar;
+                const meta = document.createElement('div');
+                const nm = document.createElement('div');
+                nm.style.cssText = "font-family:'DynaPuff',cursive; font-size:0.95rem;";
+                nm.textContent = acc.name;
+                const sub = document.createElement('div');
+                sub.style.cssText = 'font-size:0.78rem; color:#94a3b8;';
+                sub.textContent = `💰 ${acc.coins} Coins • ⚔️ Cube Ninja ${acc.vaultBest}`;
+                meta.appendChild(nm);
+                meta.appendChild(sub);
+                left.appendChild(av);
+                left.appendChild(meta);
+
+                const right = document.createElement('div');
+                right.style.cssText = 'display:flex; align-items:center; gap:6px;';
+                if (acc.isActive) {
+                    const badge = document.createElement('span');
+                    badge.style.cssText = "background:#16a34a; color:#fff; border-radius:999px; padding:3px 9px; font-family:'DynaPuff',cursive; font-size:0.76rem;";
+                    badge.textContent = '✓ ACTIVE';
+                    right.appendChild(badge);
+                } else {
+                    const sw = document.createElement('button');
+                    sw.type = 'button';
+                    sw.className = 'cmd-chip';
+                    sw.textContent = '🔑 Sign In';
+                    sw.addEventListener('click', () => signInVaultSavedAccount(acc.name));
+                    right.appendChild(sw);
+                }
+                card.appendChild(left);
+                card.appendChild(right);
+                listEl.appendChild(card);
+            });
+        }
+
+        function switchVaultAccountTab(tab) {
+            ['signin', 'create'].forEach(t => {
+                const btn = document.getElementById(`vault-tab-${t}`);
+                if (btn) btn.classList.toggle('active', t === tab);
+                const panel = document.getElementById(`vault-panel-${t}`);
+                if (panel) panel.style.display = (t === tab) ? 'flex' : 'none';
+            });
+            setVaultAcctMsg('vault-signin-msg', '', '');
+            setVaultAcctMsg('vault-create-msg', '', '');
+            renderVaultAccountModal();
+            const inp = document.getElementById(tab === 'signin' ? 'vault-signin-input' : 'vault-create-input');
+            if (inp && typeof inp.focus === 'function') inp.focus();
+        }
+
+        function openVaultAccountModal(defaultTab) {
+            if (ninjaActive && !ninjaPaused) togglePauseCubeNinja();
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
+            const modal = document.getElementById('vault-account-modal');
+            if (modal) modal.classList.add('open');
+            switchVaultAccountTab(defaultTab || 'signin');
+        }
+
+        function closeVaultAccountModal() {
+            const modal = document.getElementById('vault-account-modal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function refreshVaultForActiveAccount() {
+            ninjaActive = false;
+            ninjaPaused = false;
+            launchedItems = [];
+            slicedHalves = [];
+            bladePoints = [];
+            syncPauseButtonUI();
+            updateNinjaHUD();
+            syncWalletUI();
+            updateVaultAccountUI();
+            renderVaultAccountModal();
+        }
+
+        function submitVaultSignIn(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (typeof CubeAccounts === 'undefined') return;
+            const inp = document.getElementById('vault-signin-input');
+            const res = CubeAccounts.signInByName(inp ? inp.value : '');
+            if (!res.ok) {
+                playSpaceTone(180, 90, 0.16, 'sawtooth', 0.12);
+                setVaultAcctMsg('vault-signin-msg', res.error, 'error', res.notFound ? res.typedName : '');
+                return;
+            }
+            if (inp) inp.value = '';
+            refreshVaultForActiveAccount();
+            playSpaceTone(440, 880, 0.2, 'sine', 0.16);
+            const label = res.account ? `${res.account.avatar} ${res.account.name}` : '👤 Guest';
+            showVaultToast(`Signed in as ${label}!`);
+            closeVaultAccountModal();
+        }
+
+        function submitVaultCreate(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (typeof CubeAccounts === 'undefined') return;
+            const inp = document.getElementById('vault-create-input');
+            const chk = document.getElementById('vault-import-guest');
+            const res = CubeAccounts.createAccount(inp ? inp.value : '', vaultSelectedAvatar, {
+                importGuest: !!(chk && chk.checked)
+            });
+            if (!res.ok) {
+                playSpaceTone(180, 90, 0.16, 'sawtooth', 0.12);
+                setVaultAcctMsg('vault-create-msg', res.error, 'error');
+                return;
+            }
+            if (inp) inp.value = '';
+            if (chk) chk.checked = false;
+            refreshVaultForActiveAccount();
+            playSpaceTone(520, 1040, 0.24, 'sine', 0.18);
+            showVaultToast(`✨ Account created! Signed in as ${res.account.avatar} ${res.account.name}!`);
+            closeVaultAccountModal();
+        }
+
+        function signInVaultSavedAccount(name) {
+            if (typeof CubeAccounts === 'undefined') return;
+            const res = CubeAccounts.signInByName(name);
+            if (!res.ok) return;
+            refreshVaultForActiveAccount();
+            playSpaceTone(440, 880, 0.2, 'sine', 0.16);
+            showVaultToast(`Switched to ${res.account.avatar} ${res.account.name}!`);
+            closeVaultAccountModal();
+        }
+
+        function signOutVaultAccount() {
+            if (typeof CubeAccounts === 'undefined') return;
+            CubeAccounts.signOutToGuest();
+            refreshVaultForActiveAccount();
+            showVaultToast('Signed out — now playing as Guest!');
+            closeVaultAccountModal();
+        }
 
         // Spawn idle demo Hyper-Cube before game starts so arena looks alive immediately
         spawnHyperCube(0);
@@ -1548,6 +1994,7 @@
 
         // Init
         syncWalletUI();
+        updateVaultAccountUI();
         appendTerminalLine('> LEVEL 2 SECRET ROCKET VAULT INITIALIZED.');
         appendTerminalLine('> Type HELP for hidden space codes.');
         requestAnimationFrame(animateVault);

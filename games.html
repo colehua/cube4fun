@@ -20,6 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@600;700;800&family=Outfit:wght@500;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="gangnam-music.js"></script>
+    <script src="arcade-accounts.js"></script>
     <style>
         :root {
             --neon-cyan: #00f0ff;
@@ -2359,6 +2360,237 @@
             color: #ffffff;
         }
 
+        /* PLAYER ACCOUNT SIGN-IN / SWITCHER MODAL */
+        .btn-account-nav {
+            background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+            border: 2px solid #7dd3fc;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+            font-family: 'DynaPuff', cursive;
+            cursor: pointer;
+        }
+        .btn-account-nav.signed-in {
+            background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
+            border-color: #6ee7b7;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+        }
+        .account-modal {
+            max-width: 680px;
+            border-color: #38bdf8;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.3);
+        }
+        .account-modal-title {
+            color: #38bdf8;
+            text-shadow: 0 0 16px rgba(56, 189, 248, 0.55);
+        }
+        .account-status-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1.5px solid #334155;
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92em;
+            color: #e2e8f0;
+        }
+        .account-status-banner .acct-current-name {
+            color: #4ade80;
+            font-weight: 800;
+        }
+        .account-form-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1.5px solid #334155;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .account-form-label {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.95em;
+            color: #e0f2fe;
+        }
+        .account-input-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .account-input {
+            flex: 1;
+            min-width: 190px;
+            background: #020617;
+            color: #ffffff;
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            outline: none;
+        }
+        .account-input:focus {
+            border-color: #fde047;
+            box-shadow: 0 0 14px rgba(253, 224, 71, 0.35);
+        }
+        .account-submit-btn {
+            background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+            color: #ffffff;
+            border: 2px solid #bae6fd;
+            border-radius: 12px;
+            padding: 10px 18px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.94em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.14s ease, box-shadow 0.15s ease;
+        }
+        .account-submit-btn.create {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #a7f3d0;
+        }
+        .account-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.55);
+        }
+        .avatar-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .avatar-choice-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            font-size: 1.4em;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .avatar-choice-btn.selected {
+            border-color: #fde047;
+            background: rgba(253, 224, 71, 0.18);
+            box-shadow: 0 0 12px rgba(253, 224, 71, 0.5);
+            transform: scale(1.08);
+        }
+        .account-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88em;
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+        .account-msg {
+            font-size: 0.88em;
+            font-weight: 700;
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .account-msg.error { color: #fda4af; }
+        .account-msg.success { color: #4ade80; }
+        .account-list-heading {
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.92em;
+            color: #94a3b8;
+            margin: 4px 0 0;
+        }
+        .account-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        .account-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(17, 24, 39, 0.95);
+            border: 1.5px solid #334155;
+            border-radius: 14px;
+            padding: 10px 14px;
+        }
+        .account-card.active {
+            border-color: #4ade80;
+            box-shadow: 0 0 14px rgba(74, 222, 128, 0.3);
+        }
+        .account-card-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .account-card-avatar {
+            font-size: 1.65em;
+            line-height: 1;
+        }
+        .account-card-name {
+            font-family: 'DynaPuff', cursive;
+            font-size: 1em;
+            color: #f8fafc;
+        }
+        .account-card-meta {
+            font-size: 0.8em;
+            color: #94a3b8;
+        }
+        .account-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .account-mini-btn {
+            background: #1e293b;
+            color: #e0f2fe;
+            border: 1.5px solid #38bdf8;
+            border-radius: 10px;
+            padding: 6px 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.82em;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .account-mini-btn:hover {
+            background: #0284c7;
+            color: #ffffff;
+        }
+        .account-mini-btn.danger {
+            border-color: #f87171;
+            color: #fca5a5;
+            padding: 6px 9px;
+        }
+        .account-mini-btn.danger:hover {
+            background: #dc2626;
+            color: #ffffff;
+        }
+        .account-active-badge {
+            background: #16a34a;
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.78em;
+            font-weight: 800;
+        }
+        .account-signout-row {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 4px;
+        }
+
         /* FLOATING TOAST NOTIFICATION */
         .arcade-toast {
             position: fixed;
@@ -2505,6 +2737,9 @@
                 </div>
             </div>
             <div class="nav-actions">
+                <button id="btn-open-account" type="button" class="btn-arcade-nav btn-account-nav" onclick="openAccountModal()" title="Sign in, make a new account, or switch players on this device">
+                    👤 Sign In
+                </button>
                 <button id="btn-open-shop" class="btn-arcade-nav" onclick="openUpgradeShop()" style="background: linear-gradient(135deg, #d97706 0%, #dc2626 100%); color: #ffffff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75); border: 2px solid #ffd700; box-shadow: 0 0 18px rgba(245, 158, 11, 0.6); font-family: 'DynaPuff', cursive; cursor: pointer;" title="Open Upgrade Shop: Upgrade powers, get cube skins, and customize your Nintendo Switch!">
                     🛒 UPGRADES & SKINS ⚡
                 </button>
@@ -2543,6 +2778,9 @@
             </button>
             <button id="btn-open-shop-strip" class="btn-sound-toggle" onclick="openUpgradeShop()" style="background: #854d0e; border-color: #ffd700; color: #fde047;" title="Open Upgrade Shop">
                 🛒 Armory Shop
+            </button>
+            <button id="btn-open-account-strip" type="button" class="btn-sound-toggle" onclick="openAccountModal()" style="background: #0c4a6e; border-color: #38bdf8; color: #e0f2fe;" title="Sign in or switch player account on this device">
+                👤 Sign In / Switch
             </button>
         </div>
 
@@ -4035,6 +4273,71 @@
         </div>
     </div>
 
+    <!-- PLAYER ACCOUNT SIGN-IN & MAKE ACCOUNT MODAL -->
+    <div id="account-modal" class="upgrade-modal-backdrop" onclick="if(event.target === this) closeAccountModal()" role="dialog" aria-modal="true" aria-labelledby="account-modal-heading">
+        <div class="upgrade-modal account-modal">
+            <div class="upgrade-modal-header" style="border-bottom-color: rgba(56, 189, 248, 0.3);">
+                <h2 id="account-modal-heading" class="upgrade-modal-title account-modal-title">
+                    <span>👤</span> PLAYER ACCOUNTS
+                </h2>
+                <button type="button" class="upgrade-modal-close" onclick="closeAccountModal()" title="Close Accounts (Esc)">✖</button>
+            </div>
+
+            <div class="account-status-banner">
+                <span>Currently Playing: <span id="account-current-label" class="acct-current-name">👤 Guest</span></span>
+                <span id="account-count-label" style="color: #94a3b8; font-size: 0.86em;">0 saved accounts on this device</span>
+            </div>
+
+            <div class="shop-tabs">
+                <button id="account-tab-signin" type="button" class="shop-tab-btn active" onclick="switchAccountTab('signin')">🔑 Sign In</button>
+                <button id="account-tab-create" type="button" class="shop-tab-btn" onclick="switchAccountTab('create')">✨ Make Account</button>
+            </div>
+
+            <!-- TAB 1: SIGN IN BY TYPING ACCOUNT NAME + SAVED ACCOUNTS LIST -->
+            <div id="account-panel-signin" style="display: flex; flex-direction: column; gap: 12px;">
+                <form id="account-signin-form" class="account-form-box" onsubmit="submitAccountSignIn(event)">
+                    <label for="account-signin-input" class="account-form-label">Type your account name to sign in:</label>
+                    <div class="account-input-row">
+                        <input id="account-signin-input" type="text" class="account-input" maxlength="20" placeholder="Type your account name (e.g. Cole)..." autocomplete="off">
+                        <button type="submit" class="account-submit-btn">🔑 Sign In</button>
+                    </div>
+                    <div id="account-signin-msg" class="account-msg" role="status" aria-live="polite"></div>
+                </form>
+
+                <div class="account-list-heading">Saved Accounts on This Device (tap to switch):</div>
+                <div id="account-saved-list" class="account-list"></div>
+
+                <div id="account-signout-row" class="account-signout-row" style="display: none;">
+                    <button id="btn-account-signout" type="button" class="account-mini-btn" onclick="signOutAccount()">🚪 Sign Out (Play as Guest)</button>
+                </div>
+            </div>
+
+            <!-- TAB 2: MAKE A NEW ACCOUNT -->
+            <div id="account-panel-create" style="display: none; flex-direction: column; gap: 12px;">
+                <form id="account-create-form" class="account-form-box" onsubmit="submitAccountCreate(event)">
+                    <label for="account-create-input" class="account-form-label">Make a new account on this device:</label>
+                    <div class="account-input-row">
+                        <input id="account-create-input" type="text" class="account-input" maxlength="20" placeholder="Type a new player name..." autocomplete="off">
+                    </div>
+
+                    <div class="account-form-label" style="font-size: 0.88em;">Pick your avatar:</div>
+                    <div id="account-avatar-picker" class="avatar-picker"></div>
+
+                    <label id="account-import-guest-row" class="account-checkbox-row">
+                        <input id="account-import-guest" type="checkbox">
+                        <span>Keep my current Guest coins &amp; high scores on this new account</span>
+                    </label>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-size: 0.8em; color: #94a3b8;">Each account saves its own coins, upgrades, skins &amp; high scores!</span>
+                        <button type="submit" class="account-submit-btn create">✨ Make Account</button>
+                    </div>
+                    <div id="account-create-msg" class="account-msg" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- FLOATING TOAST -->
     <div id="arcade-toast" class="arcade-toast">
         <span id="toast-icon">⚡</span>
@@ -4512,6 +4815,7 @@
             const r = document.getElementById('runner-coins');
             if (r) r.textContent = coins;
             if (typeof runnerCoins !== 'undefined') runnerCoins = coins;
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
         }
 
         let lastCoinChimeAt = 0;
@@ -4598,6 +4902,7 @@
             localStorage.setItem('cube_arcade_xp', newXP);
             const newRank = getArcadeRank(newXP);
             updateXPDisplays(newXP);
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
 
             if (newRank.rank > prevRank.rank) {
                 playSfx('fanfare');
@@ -4632,6 +4937,7 @@
 
         function saveArcadeUpgrades(u) {
             localStorage.setItem('cube_arcade_upgrades', JSON.stringify(u));
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
             applyActiveCustomizations();
             renderUpgradeShop();
         }
@@ -4726,6 +5032,351 @@
             playSfx('resume');
             const modal = document.getElementById('upgrade-shop-modal');
             if (modal) modal.classList.remove('open');
+        }
+
+        // ==========================================
+        // 2.6 MULTI-ACCOUNT SIGN-IN & SWITCHER UI
+        // ==========================================
+        let activeAccountTab = 'signin';
+        let selectedAccountAvatar = (typeof CubeAccounts !== 'undefined' && CubeAccounts.AVATARS) ? CubeAccounts.AVATARS[0] : '😎';
+
+        function isTypingInForm(e) {
+            const t = e && e.target;
+            const tag = (t && t.tagName) ? t.tagName.toUpperCase() : '';
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
+            const acctModal = document.getElementById('account-modal');
+            if (acctModal && acctModal.classList.contains('open')) return true;
+            return false;
+        }
+
+        function updateAccountHeaderUI() {
+            const active = (typeof CubeAccounts !== 'undefined') ? CubeAccounts.getActiveAccount() : null;
+            const navBtn = document.getElementById('btn-open-account');
+            const stripBtn = document.getElementById('btn-open-account-strip');
+            const curLbl = document.getElementById('account-current-label');
+            const signoutRow = document.getElementById('account-signout-row');
+            const importRow = document.getElementById('account-import-guest-row');
+
+            if (active) {
+                if (navBtn) {
+                    navBtn.textContent = `${active.avatar} ${active.name} • Switch`;
+                    navBtn.classList.add('signed-in');
+                }
+                if (stripBtn) stripBtn.textContent = `${active.avatar} ${active.name}`;
+                if (curLbl) curLbl.textContent = `${active.avatar} ${active.name}`;
+                if (signoutRow) signoutRow.style.display = 'flex';
+                if (importRow) importRow.style.display = 'none';
+            } else {
+                if (navBtn) {
+                    navBtn.textContent = '👤 Sign In';
+                    navBtn.classList.remove('signed-in');
+                }
+                if (stripBtn) stripBtn.textContent = '👤 Sign In / Switch';
+                if (curLbl) curLbl.textContent = '👤 Guest';
+                if (signoutRow) signoutRow.style.display = 'none';
+                if (importRow) importRow.style.display = 'flex';
+            }
+        }
+
+        function setAccountMsg(elId, text, type, quickCreateName) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            el.className = 'account-msg' + (type ? ' ' + type : '');
+            el.replaceChildren();
+            if (!text) return;
+            const span = document.createElement('span');
+            span.textContent = text;
+            el.appendChild(span);
+            if (quickCreateName) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'account-mini-btn';
+                btn.textContent = `✨ Make "${quickCreateName}"`;
+                btn.addEventListener('click', () => {
+                    switchAccountTab('create');
+                    const createInput = document.getElementById('account-create-input');
+                    if (createInput) {
+                        createInput.value = quickCreateName;
+                        createInput.focus();
+                    }
+                });
+                el.appendChild(btn);
+            }
+        }
+
+        function renderAccountAvatarPicker() {
+            const picker = document.getElementById('account-avatar-picker');
+            if (!picker || typeof CubeAccounts === 'undefined') return;
+            picker.replaceChildren();
+            CubeAccounts.AVATARS.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'avatar-choice-btn' + (emoji === selectedAccountAvatar ? ' selected' : '');
+                btn.textContent = emoji;
+                btn.setAttribute('aria-label', `Select avatar ${emoji}`);
+                btn.addEventListener('click', () => {
+                    selectedAccountAvatar = emoji;
+                    renderAccountAvatarPicker();
+                });
+                picker.appendChild(btn);
+            });
+        }
+
+        function renderAccountModal() {
+            updateAccountHeaderUI();
+            renderAccountAvatarPicker();
+            const listEl = document.getElementById('account-saved-list');
+            const countEl = document.getElementById('account-count-label');
+            if (!listEl || typeof CubeAccounts === 'undefined') return;
+
+            const accounts = CubeAccounts.listAccounts();
+            if (countEl) {
+                countEl.textContent = accounts.length === 1
+                    ? '1 saved account on this device'
+                    : `${accounts.length} saved accounts on this device`;
+            }
+
+            listEl.replaceChildren();
+            if (accounts.length === 0) {
+                const empty = document.createElement('div');
+                empty.style.cssText = 'padding: 14px; text-align: center; color: #94a3b8; font-size: 0.9em; background: rgba(15,23,42,0.7); border: 1.5px dashed #334155; border-radius: 12px;';
+                empty.textContent = 'No accounts yet! Click "✨ Make Account" above to create your first player account.';
+                listEl.appendChild(empty);
+                return;
+            }
+
+            accounts.forEach(acc => {
+                const card = document.createElement('div');
+                card.className = 'account-card' + (acc.isActive ? ' active' : '');
+
+                const info = document.createElement('div');
+                info.className = 'account-card-info';
+
+                const av = document.createElement('span');
+                av.className = 'account-card-avatar';
+                av.textContent = acc.avatar;
+
+                const textWrap = document.createElement('div');
+                const nameEl = document.createElement('div');
+                nameEl.className = 'account-card-name';
+                nameEl.textContent = acc.name;
+                const metaEl = document.createElement('div');
+                metaEl.className = 'account-card-meta';
+                metaEl.textContent = `💰 ${acc.coins} Coins • ⭐ ${acc.xp} XP • 🏆 Runner ${acc.runnerBest}m`;
+                textWrap.appendChild(nameEl);
+                textWrap.appendChild(metaEl);
+
+                info.appendChild(av);
+                info.appendChild(textWrap);
+
+                const actions = document.createElement('div');
+                actions.className = 'account-card-actions';
+
+                if (acc.isActive) {
+                    const badge = document.createElement('span');
+                    badge.className = 'account-active-badge';
+                    badge.textContent = '✓ ACTIVE';
+                    actions.appendChild(badge);
+                } else {
+                    const switchBtn = document.createElement('button');
+                    switchBtn.type = 'button';
+                    switchBtn.className = 'account-mini-btn';
+                    switchBtn.textContent = '🔑 Sign In';
+                    switchBtn.addEventListener('click', () => signInSavedAccount(acc.name));
+                    actions.appendChild(switchBtn);
+                }
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'account-mini-btn danger';
+                delBtn.title = `Delete account ${acc.name}`;
+                delBtn.textContent = '🗑️';
+                delBtn.addEventListener('click', () => deleteSavedAccount(acc.name));
+                actions.appendChild(delBtn);
+
+                card.appendChild(info);
+                card.appendChild(actions);
+                listEl.appendChild(card);
+            });
+        }
+
+        function switchAccountTab(tab) {
+            activeAccountTab = tab;
+            ['signin', 'create'].forEach(t => {
+                const btn = document.getElementById(`account-tab-${t}`);
+                if (btn) btn.classList.toggle('active', t === tab);
+                const panel = document.getElementById(`account-panel-${t}`);
+                if (panel) panel.style.display = (t === tab) ? 'flex' : 'none';
+            });
+            setAccountMsg('account-signin-msg', '', '');
+            setAccountMsg('account-create-msg', '', '');
+            renderAccountModal();
+            const focusTarget = document.getElementById(tab === 'signin' ? 'account-signin-input' : 'account-create-input');
+            if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
+        }
+
+        function openAccountModal(defaultTab) {
+            getAudioContext();
+            if (typeof pauseAllActiveGames === 'function') pauseAllActiveGames(null);
+            if (typeof CubeAccounts !== 'undefined') CubeAccounts.saveActiveProgress();
+            playSfx('pause');
+            const shopModal = document.getElementById('upgrade-shop-modal');
+            if (shopModal) shopModal.classList.remove('open');
+            const modal = document.getElementById('account-modal');
+            if (modal) modal.classList.add('open');
+            switchAccountTab(defaultTab || 'signin');
+        }
+
+        function closeAccountModal() {
+            playSfx('resume');
+            const modal = document.getElementById('account-modal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        function refreshArcadeForActiveAccount() {
+            // Stop active loops cleanly so outgoing player runs cannot carry into the new player's profile
+            if (typeof runnerActive !== 'undefined') { runnerActive = false; runnerPaused = false; }
+            if (typeof snakeActive !== 'undefined') { snakeActive = false; snakePaused = false; }
+            if (typeof breakerActive !== 'undefined') { breakerActive = false; breakerPaused = false; }
+            if (typeof spaceActive !== 'undefined') { spaceActive = false; spacePaused = false; }
+            if (typeof flappyActive !== 'undefined') { flappyActive = false; flappyPaused = false; }
+
+            // Reload every game's best score variable and HUD display from the newly active account
+            if (typeof runnerBest !== 'undefined') {
+                runnerBest = parseInt(localStorage.getItem('cube_runner_best') || '0', 10);
+                const el = document.getElementById('runner-best'); if (el) el.textContent = runnerBest;
+            }
+            if (typeof snakeBest !== 'undefined') {
+                snakeBest = parseInt(localStorage.getItem('cube_snake_best') || '3', 10);
+                const el = document.getElementById('snake-best'); if (el) el.textContent = snakeBest;
+            }
+            if (typeof breakerBest !== 'undefined') {
+                breakerBest = parseInt(localStorage.getItem('cube_breaker_best') || '0', 10);
+                const el = document.getElementById('breaker-best'); if (el) el.textContent = breakerBest;
+            }
+            if (typeof spaceBest !== 'undefined') {
+                spaceBest = parseInt(localStorage.getItem('cube_space_best') || '0', 10);
+                const el = document.getElementById('space-best'); if (el) el.textContent = spaceBest;
+            }
+            if (typeof best2048 !== 'undefined') {
+                best2048 = parseInt(localStorage.getItem('cube_2048_best') || '0', 10);
+                const el = document.getElementById('2048-best'); if (el) el.textContent = best2048;
+            }
+            if (typeof simonBest !== 'undefined') {
+                simonBest = parseInt(localStorage.getItem('cube_simon_best') || '0', 10);
+                const el = document.getElementById('simon-best'); if (el) el.textContent = simonBest;
+            }
+            if (typeof reflexBest !== 'undefined') {
+                reflexBest = parseFloat(localStorage.getItem('cube_reflex_best') || '0.00');
+                const el = document.getElementById('reflex-best'); if (el) el.textContent = reflexBest.toFixed(2);
+            }
+            if (typeof blitzBest !== 'undefined') {
+                blitzBest = parseInt(localStorage.getItem('cube_blitz_best') || '0', 10);
+                const el = document.getElementById('blitz-best'); if (el) el.textContent = blitzBest;
+            }
+            if (typeof stackerBest !== 'undefined') {
+                stackerBest = parseInt(localStorage.getItem('cube_stacker_best') || '0', 10);
+                const el = document.getElementById('stacker-best'); if (el) el.textContent = stackerBest;
+            }
+            if (typeof whackBest !== 'undefined') {
+                whackBest = parseInt(localStorage.getItem('cube_whack_best') || '0', 10);
+                const el = document.getElementById('whack-best'); if (el) el.textContent = whackBest;
+            }
+            if (typeof flappyBest !== 'undefined') {
+                flappyBest = parseInt(localStorage.getItem('cube_flappy_best') || '0', 10);
+                const el = document.getElementById('flappy-best'); if (el) el.textContent = flappyBest;
+            }
+            if (typeof pairsBest !== 'undefined') {
+                pairsBest = localStorage.getItem('cube_pairs_best') || '--';
+                const el = document.getElementById('pairs-best'); if (el) el.textContent = pairsBest;
+            }
+
+            // Refresh Coins, XP, Skins, Switch Themes, Shop, and Idle screen
+            setArcadeCoins(getArcadeCoins());
+            updateXPDisplays(getArcadeXP());
+            applyActiveCustomizations();
+            renderUpgradeShop();
+            if (typeof renderRunnerIdle === 'function') renderRunnerIdle();
+            updateAccountHeaderUI();
+            renderAccountModal();
+        }
+
+        function submitAccountSignIn(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (typeof CubeAccounts === 'undefined') return;
+            const input = document.getElementById('account-signin-input');
+            const typed = input ? input.value : '';
+            const res = CubeAccounts.signInByName(typed);
+            if (!res.ok) {
+                playSfx('bonk');
+                setAccountMsg('account-signin-msg', res.error, 'error', res.notFound ? res.typedName : '');
+                return;
+            }
+            if (input) input.value = '';
+            refreshArcadeForActiveAccount();
+            playSfx('fanfare');
+            const label = res.account ? `${res.account.avatar} ${res.account.name}` : '👤 Guest';
+            showToast(`Signed in as ${label}!`, res.account ? res.account.avatar : '👤');
+            closeAccountModal();
+        }
+
+        function submitAccountCreate(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (typeof CubeAccounts === 'undefined') return;
+            const input = document.getElementById('account-create-input');
+            const importChk = document.getElementById('account-import-guest');
+            const typed = input ? input.value : '';
+            const res = CubeAccounts.createAccount(typed, selectedAccountAvatar, {
+                importGuest: !!(importChk && importChk.checked)
+            });
+            if (!res.ok) {
+                playSfx('bonk');
+                setAccountMsg('account-create-msg', res.error, 'error');
+                return;
+            }
+            if (input) input.value = '';
+            if (importChk) importChk.checked = false;
+            refreshArcadeForActiveAccount();
+            playSfx('fanfare');
+            if (typeof triggerConfetti === 'function') triggerConfetti(24);
+            showToast(`Account created! Signed in as ${res.account.avatar} ${res.account.name}!`, '✨');
+            closeAccountModal();
+        }
+
+        function signInSavedAccount(name) {
+            if (typeof CubeAccounts === 'undefined') return;
+            const res = CubeAccounts.signInByName(name);
+            if (!res.ok) {
+                setAccountMsg('account-signin-msg', res.error, 'error');
+                return;
+            }
+            refreshArcadeForActiveAccount();
+            playSfx('fanfare');
+            showToast(`Switched to ${res.account.avatar} ${res.account.name}!`, res.account.avatar);
+            closeAccountModal();
+        }
+
+        function signOutAccount() {
+            if (typeof CubeAccounts === 'undefined') return;
+            CubeAccounts.signOutToGuest();
+            refreshArcadeForActiveAccount();
+            playSfx('pause');
+            showToast('Signed out — now playing as Guest!', '👤');
+            closeAccountModal();
+        }
+
+        function deleteSavedAccount(name) {
+            if (typeof CubeAccounts === 'undefined') return;
+            const confirmed = (typeof confirm === 'function')
+                ? confirm(`Delete account "${name}" and its saved coins/scores on this device?`)
+                : true;
+            if (!confirmed) return;
+            const res = CubeAccounts.deleteAccount(name);
+            if (res.ok) {
+                if (res.wasActive) refreshArcadeForActiveAccount();
+                else renderAccountModal();
+                showToast(`Removed account "${res.removedName}".`, '🗑️');
+            }
         }
 
         function renderUpgradeShop() {
@@ -7415,6 +8066,7 @@
         }
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInForm(e)) return;
             if (!document.getElementById('panel-snake').classList.contains('active')) return;
             if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') { e.preventDefault(); setSnakeDir('UP'); }
             if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); setSnakeDir('DOWN'); }
@@ -7763,6 +8415,7 @@
         });
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInForm(e)) return;
             if (!document.getElementById('panel-breaker').classList.contains('active')) return;
             if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') moveBreakerPaddle(-24);
             if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') moveBreakerPaddle(24);
@@ -8098,6 +8751,7 @@
         });
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInForm(e)) return;
             if (!document.getElementById('panel-space').classList.contains('active')) return;
             if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') moveSpaceShip(-20);
             if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') moveSpaceShip(20);
@@ -8454,6 +9108,7 @@
         }
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInForm(e)) return;
             if (!document.getElementById('panel-2048').classList.contains('active')) return;
             if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') { e.preventDefault(); handle2048Move('UP'); }
             if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); handle2048Move('DOWN'); }
@@ -10207,6 +10862,17 @@
         // 15. UNIVERSAL KEYBOARD SHORTCUTS
         // ==========================================
         window.addEventListener('keydown', (e) => {
+            const acctModal = document.getElementById('account-modal');
+            const acctOpen = acctModal && acctModal.classList.contains('open');
+            if (acctOpen) {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeAccountModal();
+                }
+                return;
+            }
+            if (isTypingInForm(e)) return;
+
             const shopModal = document.getElementById('upgrade-shop-modal');
             const shopOpen = shopModal && shopModal.classList.contains('open');
 
@@ -10337,6 +11003,7 @@
         startPairsGame();
         renderFlappyIdle();
         initHoldSteering();
+        updateAccountHeaderUI();
 
         // ==========================================
         // 16. PREVENT DOUBLE-CLICK & DOUBLE-TAP ZOOM
@@ -10353,11 +11020,12 @@
         // Prevent double-tap zoom on touchscreens and trackpads
         let lastTouchEndTime = 0;
         document.addEventListener('touchend', (e) => {
+            const target = e.target;
+            if (target && target.closest && target.closest('input, textarea, select, label')) return;
             const now = Date.now();
             if (now - lastTouchEndTime <= 300) {
                 e.preventDefault();
                 // Ensure button clicks still fire without zooming the viewport
-                const target = e.target;
                 if (target) {
                     const btn = target.closest('button');
                     if (btn) btn.click();
@@ -10385,8 +11053,8 @@
 
         function preventFrozenPageScroll(e) {
             if (!isSwitchPageFrozen) return;
-            // Still allow scrolling inside the Upgrade Shop modal if opened
-            if (e.target && e.target.closest && e.target.closest('.upgrade-modal-card')) return;
+            // Still allow scrolling inside the Upgrade Shop or Account modal if opened
+            if (e.target && e.target.closest && e.target.closest('.upgrade-modal, .upgrade-modal-card, .account-modal')) return;
             e.preventDefault();
         }
 
