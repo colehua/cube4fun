@@ -286,10 +286,37 @@
 
         #cosmic-arena-canvas {
             width: 100%;
-            height: 360px;
+            height: 440px;
             display: block;
             cursor: crosshair;
-            touch-action: manipulation;
+            touch-action: none;
+            user-select: none;
+        }
+        .hyper-meter-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1.5px solid rgba(56, 189, 248, 0.45);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-family: 'DynaPuff', cursive;
+            font-size: 0.88rem;
+        }
+        .hyper-meter-track {
+            flex: 1;
+            height: 12px;
+            border-radius: 999px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        .hyper-meter-fill {
+            height: 100%;
+            width: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #4ade80 0%, #fde047 50%, #ff007f 100%);
+            transition: width 0.2s ease;
         }
 
         .vault-btn {
@@ -481,36 +508,44 @@
                 <span class="hero-rocket" aria-hidden="true">🚀</span>
                 <h1>Secret Rocket Vault</h1>
                 <p>
-                    You found the hidden rocket under the Nintendo Switch! Welcome to Agent Cole's Level 2 Deep-Space Vault — play the secret zero-gravity meteor mini-game, claim hidden Arcade Coins for the Switch Upgrade Shop, and crack space terminal codes.
+                    You found the hidden rocket under the Nintendo Switch! Play <strong>Cube Ninja: Hyper-Cube Chase</strong> — slice launching cubes, dodge bombs, and slow down the bouncing Hyper-Cube until you can press it!
                 </p>
                 <div class="wallet-strip">
                     <span class="stat-chip">💰 Switch Arcade Coins: <strong id="vault-coins">0</strong></span>
-                    <span class="stat-chip cyan">☄️ Cosmic High Score: <strong id="vault-best">0</strong></span>
+                    <span class="stat-chip cyan">⚔️ Cube Ninja Best: <strong id="vault-best">0</strong></span>
                     <span class="stat-chip cyan">🏎️ Cube Runner Best: <strong id="vault-runner-best">0</strong>m</span>
                 </div>
             </section>
 
             <div class="vault-grid">
-                <!-- SECRET 13TH MINI-GAME: ZERO-G COSMIC METEOR RUSH -->
+                <!-- SECRET 13TH MINI-GAME: CUBE NINJA — HYPER-CUBE CHASE -->
                 <section class="vault-card full-span" aria-labelledby="arena-heading">
                     <div class="arena-hud">
-                        <h2 id="arena-heading">☄️ Secret 13th Game: Zero-G Meteor Rush</h2>
+                        <h2 id="arena-heading">⚔️ Secret Game: Cube Ninja — Hyper-Cube Chase</h2>
                         <div class="arena-stats">
                             <span>SCORE: <strong id="rush-score">0</strong></span>
-                            <span>COMBO: <strong id="rush-combo">x1</strong></span>
-                            <span>TIME: <strong id="rush-time">20.0</strong>s</span>
+                            <span>SLICED: <strong id="rush-sliced">0</strong></span>
+                            <span>CAUGHT: <strong id="rush-caught">0</strong></span>
+                            <span>LIVES: <strong id="rush-lives">❤️❤️❤️</strong></span>
                         </div>
                     </div>
                     <p>
-                        Tap or click drifting <strong>Gold Rubik Meteors (+10)</strong> and <strong>Rainbow Supernovas (+25)</strong> in zero gravity. Avoid red <strong>Glitch Bombs (-15)</strong>! Every 50 points awards real <strong>💰 Arcade Coins</strong> to your Nintendo Switch shop.
+                        Swipe across launching <strong>Rubik's Cubes (+10)</strong> like Fruit Ninja and avoid <strong>Bombs (💣)</strong>! Watch the blazing <strong>⚡ Hyper-Cube</strong> that never falls and bounces super fast — every cube you slice slows it down until you can <strong>PRESS IT (+250 pts &amp; +25 💰)</strong>!
                     </p>
+                    <div class="hyper-meter-wrap" aria-live="polite">
+                        <span>⚡ Hyper-Cube Speed: <strong id="hyper-speed-pct">100%</strong></span>
+                        <div class="hyper-meter-track">
+                            <div id="hyper-meter-fill" class="hyper-meter-fill"></div>
+                        </div>
+                        <span id="hyper-status-tag" style="color: #fda4af;">TOO FAST! SLICE CUBES!</span>
+                    </div>
                     <div class="arena-canvas-wrap">
-                        <canvas id="cosmic-arena-canvas" width="980" height="360" aria-label="Interactive Zero-G Cosmic Meteor Arena"></canvas>
+                        <canvas id="cosmic-arena-canvas" width="980" height="440" aria-label="Cube Ninja Fruit-Ninja-style Slicing Arena"></canvas>
                     </div>
                     <div class="btn-row">
-                        <button id="btn-start-rush" type="button" class="vault-btn gold" onclick="startMeteorRush()">🚀 Launch 20s Meteor Rush</button>
+                        <button id="btn-start-rush" type="button" class="vault-btn gold" onclick="startCubeNinja()">⚔️ Start Cube Ninja</button>
                         <button id="btn-warp-toggle" type="button" class="vault-btn" onclick="toggleWarpDrive()">🌌 Toggle Warp Drive</button>
-                        <button id="btn-gravity-toggle" type="button" class="vault-btn pink" onclick="toggleMoonGravity()">🪐 Zero-G / Moon Bounce</button>
+                        <button id="btn-confetti-vault" type="button" class="vault-btn pink" onclick="runTerminalCommand('CONFETTI')">🎉 Zero-G Burst</button>
                     </div>
                 </section>
 
@@ -698,178 +733,357 @@
         resizeBg();
 
         // ==========================================
-        // 3. ZERO-G RUBIK SANDBOX & METEOR RUSH MINI-GAME
+        // 3. CUBE NINJA — FRUIT-NINJA SLICER + HYPER-CUBE CHASE
         // ==========================================
         const arenaCanvas = document.getElementById('cosmic-arena-canvas');
         const aCtx = arenaCanvas ? arenaCanvas.getContext('2d') : null;
 
-        let rushActive = false;
-        let rushScore = 0;
-        let rushCombo = 1;
-        let rushTimeLeft = 20.0;
-        let rushLastTick = 0;
+        const CUBE_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#fde047', '#f97316', '#f8fafc'];
+        const HYPER_MAX_SPEED = 24.0;
+        const HYPER_MIN_SPEED = 1.6;
+        const LAUNCH_GRAVITY = 0.25;
+
+        let ninjaActive = false;
+        let ninjaScore = 0;
+        let ninjaSlicedTotal = 0;
+        let ninjaSlicesForHyper = 0;
+        let ninjaCaughtCount = 0;
+        let ninjaLives = 3;
+        let ninjaWaveTimer = 0;
+        let ninjaBombFlash = 0;
         let rushFrame = 0;
 
-        const CUBE_COLORS = ['#ef4444', '#3b82f6', '#22c55e', '#fde047', '#f97316', '#f8fafc'];
-        let targets = [];
+        let launchedItems = [];   // Fruit-Ninja style cubes & bombs launched up with gravity
+        let slicedHalves = [];    // Split cube halves flying apart after slicing
+        let bladePoints = [];     // Glowing ninja slice trail
+        let isSlicing = false;
+        let swipeSliceCount = 0;
         let particles = [];
         let popups = [];
 
-        function createSpaceTarget(kind) {
-            const w = arenaCanvas ? arenaCanvas.width : 980;
-            const h = arenaCanvas ? arenaCanvas.height : 360;
-            const r = kind === 'nova' ? 24 : (kind === 'bomb' ? 22 : 28);
-            const speed = kind === 'nova' ? 3.2 : (kind === 'bomb' ? 2.1 : 1.7);
-            const angle = Math.random() * Math.PI * 2;
-            return {
-                x: r + Math.random() * Math.max(20, w - r * 2),
-                y: r + Math.random() * Math.max(20, h - r * 2),
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                r: r,
-                rot: Math.random() * Math.PI * 2,
-                vRot: (Math.random() - 0.5) * 0.08,
-                kind: kind,
-                color: CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)]
-            };
+        // The Hyper-Cube: NEVER falls down, bounces super fast off all 4 walls,
+        // and slows down more and more with every cube you slice until you can press it!
+        let hyperCube = null;
+
+        function computeHyperTargetSpeed(slices, roundNum) {
+            const baseMax = HYPER_MAX_SPEED + roundNum * 1.4;
+            const slowFactor = Math.pow(0.87, Math.max(0, slices));
+            return Math.max(HYPER_MIN_SPEED, HYPER_MIN_SPEED + (baseMax - HYPER_MIN_SPEED) * slowFactor);
         }
 
-        function seedSandboxTargets() {
-            targets = [];
-            for (let i = 0; i < 7; i++) targets.push(createSpaceTarget('gold'));
-            targets.push(createSpaceTarget('nova'));
+        function spawnHyperCube(roundNum = 0) {
+            const w = arenaCanvas ? arenaCanvas.width : 980;
+            const h = arenaCanvas ? arenaCanvas.height : 440;
+            const spd = computeHyperTargetSpeed(0, roundNum);
+            const angle = (Math.PI / 6) + Math.random() * (Math.PI / 3) + (Math.random() < 0.5 ? 0 : Math.PI);
+            hyperCube = {
+                x: w * 0.5,
+                y: h * 0.36,
+                vx: Math.cos(angle) * spd,
+                vy: Math.sin(angle) * spd,
+                r: 28,
+                rot: 0,
+                round: roundNum,
+                trail: []
+            };
+            updateHyperSpeedUI();
         }
-        seedSandboxTargets();
+
+        function applyHyperCubeSlowdown() {
+            if (!hyperCube) return;
+            const targetSpd = computeHyperTargetSpeed(ninjaSlicesForHyper, hyperCube.round);
+            const curSpd = Math.hypot(hyperCube.vx, hyperCube.vy) || 1;
+            hyperCube.vx = (hyperCube.vx / curSpd) * targetSpd;
+            hyperCube.vy = (hyperCube.vy / curSpd) * targetSpd;
+            updateHyperSpeedUI();
+        }
+
+        function updateHyperSpeedUI() {
+            const pctEl = document.getElementById('hyper-speed-pct');
+            const fillEl = document.getElementById('hyper-meter-fill');
+            const tagEl = document.getElementById('hyper-status-tag');
+            if (!hyperCube) return;
+            const baseMax = HYPER_MAX_SPEED + hyperCube.round * 1.4;
+            const curSpd = Math.hypot(hyperCube.vx, hyperCube.vy);
+            const pct = Math.max(6, Math.min(100, Math.round(((curSpd - HYPER_MIN_SPEED) / (baseMax - HYPER_MIN_SPEED)) * 94 + 6)));
+            if (pctEl) pctEl.textContent = `${pct}%`;
+            if (fillEl) fillEl.style.width = `${pct}%`;
+            if (tagEl) {
+                if (pct <= 25) {
+                    tagEl.textContent = '🟢 SLOWED! PRESS IT NOW!';
+                    tagEl.style.color = '#4ade80';
+                } else if (pct <= 55) {
+                    tagEl.textContent = '🟡 SLOWING DOWN... KEEP SLICING!';
+                    tagEl.style.color = '#fde047';
+                } else {
+                    tagEl.textContent = '🔴 SUPER FAST! SLICE CUBES!';
+                    tagEl.style.color = '#fda4af';
+                }
+            }
+        }
 
         function spawnArenaBurst(x, y, count = 16, baseColor = '#00f0ff') {
             for (let i = 0; i < count; i++) {
                 const a = Math.random() * Math.PI * 2;
-                const spd = 1.5 + Math.random() * 5;
+                const spd = 1.8 + Math.random() * 5.8;
                 particles.push({
                     x, y,
                     vx: Math.cos(a) * spd,
                     vy: Math.sin(a) * spd,
-                    size: 2.5 + Math.random() * 4,
+                    size: 2.5 + Math.random() * 4.5,
                     color: partyMode ? `hsl(${Math.floor(Math.random() * 360)}, 100%, 62%)` : baseColor,
                     life: 24 + Math.floor(Math.random() * 14)
                 });
             }
         }
 
-        function updateRushHUD() {
-            const s = document.getElementById('rush-score');
-            const c = document.getElementById('rush-combo');
-            const t = document.getElementById('rush-time');
-            if (s) s.textContent = String(rushScore);
-            if (c) c.textContent = `x${rushCombo}`;
-            if (t) t.textContent = rushTimeLeft.toFixed(1);
-        }
-
-        function startMeteorRush() {
-            rushActive = true;
-            rushScore = 0;
-            rushCombo = 1;
-            rushTimeLeft = 20.0;
-            rushLastTick = performance.now();
-            targets = [];
-            for (let i = 0; i < 6; i++) targets.push(createSpaceTarget('gold'));
-            targets.push(createSpaceTarget('nova'));
-            targets.push(createSpaceTarget('bomb'));
-            targets.push(createSpaceTarget('bomb'));
-            updateRushHUD();
-            playSpaceTone(330, 880, 0.2, 'sawtooth', 0.14);
-            showVaultToast('☄️ Meteor Rush launched! Zap Gold & Rainbow cubies!');
-        }
-
-        function finishMeteorRush() {
-            rushActive = false;
-            rushTimeLeft = 0;
-            updateRushHUD();
-            const prevBest = parseInt(localStorage.getItem(VAULT_BEST_KEY) || '0', 10);
-            if (rushScore > prevBest) {
-                localStorage.setItem(VAULT_BEST_KEY, String(rushScore));
+        function spawnFruitNinjaWave() {
+            const w = arenaCanvas ? arenaCanvas.width : 980;
+            const h = arenaCanvas ? arenaCanvas.height : 440;
+            const count = 2 + Math.floor(Math.random() * 3); // 2 to 4 items launched up!
+            for (let i = 0; i < count; i++) {
+                const isBomb = Math.random() < 0.24;
+                const x = 95 + Math.random() * Math.max(80, w - 190);
+                // Aim slightly toward center so cubes arc cleanly inside the arena
+                const centerBias = (w * 0.5 - x) * (0.005 + Math.random() * 0.006);
+                const vx = centerBias + (Math.random() - 0.5) * 2.6;
+                const vy = -(11.2 + Math.random() * 3.4);
+                launchedItems.push({
+                    x: x,
+                    y: h + 34 + i * 16,
+                    vx: vx,
+                    vy: vy,
+                    r: isBomb ? 25 : 27,
+                    rot: Math.random() * Math.PI * 2,
+                    vRot: (Math.random() - 0.5) * 0.14,
+                    kind: isBomb ? 'bomb' : 'cube',
+                    color: CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)],
+                    sliced: false
+                });
             }
-            const earnedCoins = Math.max(0, Math.floor(rushScore / 50));
+        }
+
+        function updateNinjaHUD() {
+            const s = document.getElementById('rush-score');
+            const sl = document.getElementById('rush-sliced');
+            const ca = document.getElementById('rush-caught');
+            const li = document.getElementById('rush-lives');
+            if (s) s.textContent = String(ninjaScore);
+            if (sl) sl.textContent = String(ninjaSlicedTotal);
+            if (ca) ca.textContent = String(ninjaCaughtCount);
+            if (li) li.textContent = ninjaLives > 0 ? '❤️'.repeat(ninjaLives) : '💀';
+        }
+
+        function startCubeNinja() {
+            ninjaActive = true;
+            ninjaScore = 0;
+            ninjaSlicedTotal = 0;
+            ninjaSlicesForHyper = 0;
+            ninjaCaughtCount = 0;
+            ninjaLives = 3;
+            ninjaWaveTimer = 18;
+            ninjaBombFlash = 0;
+            launchedItems = [];
+            slicedHalves = [];
+            bladePoints = [];
+            popups = [];
+            spawnHyperCube(0);
+            spawnFruitNinjaWave();
+            updateNinjaHUD();
+            const startBtn = document.getElementById('btn-start-rush');
+            if (startBtn) startBtn.textContent = '🔄 Restart Cube Ninja';
+            playSpaceTone(340, 920, 0.2, 'sawtooth', 0.14);
+            showVaultToast('⚔️ Cube Ninja started! Slice cubes to slow down the ⚡ Hyper-Cube!');
+        }
+
+        // Backward-compatible alias
+        function startMeteorRush() { startCubeNinja(); }
+
+        function endCubeNinja(reason) {
+            ninjaActive = false;
+            updateNinjaHUD();
+            const prevBest = parseInt(localStorage.getItem(VAULT_BEST_KEY) || '0', 10);
+            if (ninjaScore > prevBest) {
+                localStorage.setItem(VAULT_BEST_KEY, String(ninjaScore));
+            }
+            const earnedCoins = Math.max(0, Math.floor(ninjaScore / 40));
             if (earnedCoins > 0) {
                 addCoins(earnedCoins);
             } else {
                 syncWalletUI();
             }
-            playSpaceTone(520, 1040, 0.25, 'sine', 0.18);
-            showVaultToast(`🚀 Rush Complete! Score: ${rushScore} (+${earnedCoins} 💰 Arcade Coins)`);
-            appendTerminalLine(`> METEOR RUSH FINISHED: ${rushScore} pts -> +${earnedCoins} 💰 synced!`);
-            seedSandboxTargets();
+            playSpaceTone(240, 80, 0.35, 'sawtooth', 0.18);
+            showVaultToast(`💥 ${reason} Final Score: ${ninjaScore} (+${earnedCoins} 💰)`);
+            appendTerminalLine(`> CUBE NINJA OVER: ${ninjaScore} pts (${ninjaSlicedTotal} sliced, ${ninjaCaughtCount} Hyper-Cubes pressed) -> +${earnedCoins} 💰!`);
         }
 
-        function handleArenaTap(clientX, clientY) {
-            if (!arenaCanvas) return;
-            const rect = arenaCanvas.getBoundingClientRect();
-            const sx = (clientX - rect.left) * (arenaCanvas.width / rect.width);
-            const sy = (clientY - rect.top) * (arenaCanvas.height / rect.height);
+        function segmentHitsCircle(x1, y1, x2, y2, cx, cy, r) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const lenSq = dx * dx + dy * dy;
+            let t = 0;
+            if (lenSq > 0.0001) {
+                t = Math.max(0, Math.min(1, ((cx - x1) * dx + (cy - y1) * dy) / lenSq));
+            }
+            const px = x1 + t * dx;
+            const py = y1 + t * dy;
+            const distSq = (cx - px) * (cx - px) + (cy - py) * (cy - py);
+            return distSq <= r * r;
+        }
 
-            let hitTarget = false;
-            for (let i = targets.length - 1; i >= 0; i--) {
-                const tg = targets[i];
-                const dx = sx - tg.x;
-                const dy = sy - tg.y;
-                if (dx * dx + dy * dy <= (tg.r + 12) * (tg.r + 12)) {
-                    hitTarget = true;
-                    if (rushActive) {
-                        if (tg.kind === 'bomb') {
-                            rushScore = Math.max(0, rushScore - 15);
-                            rushCombo = 1;
-                            playSpaceTone(180, 75, 0.2, 'sawtooth', 0.18);
-                            spawnArenaBurst(tg.x, tg.y, 20, '#ef4444');
-                            popups.push({ x: tg.x, y: tg.y, text: '-15 💥', color: '#f87171', life: 36 });
-                            targets.splice(i, 1, createSpaceTarget('bomb'));
-                        } else {
-                            const base = tg.kind === 'nova' ? 25 : 10;
-                            const pts = base * rushCombo;
-                            rushScore += pts;
-                            rushCombo = Math.min(5, rushCombo + 1);
-                            playSpaceTone(tg.kind === 'nova' ? 660 : 480, 1180, 0.14, 'triangle', 0.15);
-                            spawnArenaBurst(tg.x, tg.y, tg.kind === 'nova' ? 26 : 16, tg.kind === 'nova' ? '#f472b6' : '#fde047');
-                            popups.push({ x: tg.x, y: tg.y, text: `+${pts}`, color: tg.kind === 'nova' ? '#f472b6' : '#fde047', life: 34 });
-                            targets.splice(i, 1, createSpaceTarget(Math.random() < 0.24 ? 'nova' : 'gold'));
-                        }
-                        updateRushHUD();
-                    } else {
-                        // Zero-G Sandbox bounce + sparkle!
-                        tg.vx = (tg.x - sx) * 0.22 + (Math.random() - 0.5) * 4;
-                        tg.vy = (tg.y - sy) * 0.22 - (moonGravity ? 7 : 2);
-                        tg.vRot = (Math.random() - 0.5) * 0.25;
-                        playSpaceTone(420, 780, 0.1, 'sine', 0.12);
-                        spawnArenaBurst(tg.x, tg.y, 14, tg.color);
-                    }
-                    break;
+        function sliceItemAt(item, sliceAngle) {
+            item.sliced = true;
+            if (item.kind === 'bomb') {
+                // Sliced a bomb! Explodes, loses a life, and makes Hyper-Cube panic faster!
+                ninjaLives = Math.max(0, ninjaLives - 1);
+                ninjaBombFlash = 18;
+                ninjaSlicesForHyper = Math.max(0, ninjaSlicesForHyper - 4);
+                applyHyperCubeSlowdown();
+                playSpaceTone(170, 55, 0.28, 'sawtooth', 0.22);
+                spawnArenaBurst(item.x, item.y, 30, '#ef4444');
+                popups.push({ x: item.x, y: item.y, text: '💣 BOOM! -1 ❤️', color: '#f87171', life: 45 });
+                updateNinjaHUD();
+                if (ninjaLives <= 0) {
+                    endCubeNinja('Sliced 3 Bombs!');
                 }
+                return;
             }
 
-            if (!hitTarget) {
-                if (rushActive) {
-                    rushCombo = 1;
-                    updateRushHUD();
-                }
-                // Shockwave pushes nearby zero-g cubies away!
-                spawnArenaBurst(sx, sy, 10, '#38bdf8');
-                targets.forEach(tg => {
-                    const dx = tg.x - sx;
-                    const dy = tg.y - sy;
-                    const dist = Math.hypot(dx, dy) || 1;
-                    if (dist < 170) {
-                        const push = (170 - dist) / 38;
-                        tg.vx += (dx / dist) * push;
-                        tg.vy += (dy / dist) * push;
-                    }
+            // Sliced a Rubik's Cube! Split into two halves & slow down the Hyper-Cube!
+            ninjaSlicedTotal++;
+            ninjaSlicesForHyper++;
+            swipeSliceCount++;
+            const bonus = swipeSliceCount >= 3 ? 25 : (swipeSliceCount === 2 ? 15 : 10);
+            ninjaScore += bonus;
+            applyHyperCubeSlowdown();
+            playSpaceTone(520 + swipeSliceCount * 90, 1240, 0.12, 'triangle', 0.14);
+            spawnArenaBurst(item.x, item.y, 16, item.color);
+
+            // Spawn two flying sliced cube halves
+            const nx = -Math.sin(sliceAngle);
+            const ny = Math.cos(sliceAngle);
+            for (const dir of [-1, 1]) {
+                slicedHalves.push({
+                    x: item.x + nx * dir * 6,
+                    y: item.y + ny * dir * 6,
+                    vx: item.vx + nx * dir * 3.2,
+                    vy: item.vy + ny * dir * 2.2 - 1.5,
+                    rot: item.rot,
+                    vRot: dir * (0.14 + Math.random() * 0.08),
+                    r: item.r,
+                    color: item.color,
+                    side: dir,
+                    life: 42
                 });
             }
+
+            const label = swipeSliceCount >= 2 ? `+${bonus} 🔥 ${swipeSliceCount}x SLICE!` : `+${bonus} ⚔️`;
+            popups.push({ x: item.x, y: item.y - 10, text: label, color: '#fde047', life: 36 });
+            updateNinjaHUD();
         }
+
+        function pressHyperCube() {
+            if (!hyperCube || !ninjaActive) return;
+            ninjaCaughtCount++;
+            ninjaScore += 250;
+            addCoins(25);
+            const hx = hyperCube.x;
+            const hy = hyperCube.y;
+            playSpaceTone(520, 1560, 0.3, 'sine', 0.2);
+            spawnArenaBurst(hx, hy, 42, '#4ade80');
+            spawnArenaBurst(hx, hy, 28, '#fde047');
+            popups.push({ x: hx, y: hy - 14, text: '⚡ HYPER-CUBE PRESSED! +250 & +25 💰!', color: '#4ade80', life: 65 });
+            showVaultToast(`⚡ HYPER-CUBE CAUGHT (#${ninjaCaughtCount})! +250 pts & +25 💰!`);
+            appendTerminalLine(`> HYPER-CUBE #${ninjaCaughtCount} PRESSED after ${ninjaSlicesForHyper} slices! +25 💰 synced!`);
+
+            // Launch next faster Hyper-Cube round!
+            ninjaSlicesForHyper = 0;
+            spawnHyperCube(ninjaCaughtCount);
+            updateNinjaHUD();
+        }
+
+        function getArenaCoords(clientX, clientY) {
+            if (!arenaCanvas) return { sx: 0, sy: 0 };
+            const rect = arenaCanvas.getBoundingClientRect();
+            return {
+                sx: (clientX - rect.left) * (arenaCanvas.width / rect.width),
+                sy: (clientY - rect.top) * (arenaCanvas.height / rect.height)
+            };
+        }
+
+        function handleArenaPress(clientX, clientY) {
+            const { sx, sy } = getArenaCoords(clientX, clientY);
+            if (!ninjaActive) {
+                startCubeNinja();
+                return;
+            }
+
+            // 1. Check direct press on the Hyper-Cube first!
+            if (hyperCube) {
+                const dx = sx - hyperCube.x;
+                const dy = sy - hyperCube.y;
+                if (dx * dx + dy * dy <= (hyperCube.r + 14) * (hyperCube.r + 14)) {
+                    pressHyperCube();
+                    return;
+                }
+            }
+
+            // 2. Start ninja swipe blade & also allow direct tap slicing on cubes/bombs
+            isSlicing = true;
+            swipeSliceCount = 0;
+            bladePoints.push({ x: sx, y: sy, life: 12 });
+            for (let i = launchedItems.length - 1; i >= 0; i--) {
+                const item = launchedItems[i];
+                if (item.sliced) continue;
+                const dx = sx - item.x;
+                const dy = sy - item.y;
+                if (dx * dx + dy * dy <= (item.r + 10) * (item.r + 10)) {
+                    sliceItemAt(item, Math.PI / 4);
+                }
+            }
+        }
+
+        function handleArenaSwipe(clientX, clientY) {
+            if (!isSlicing || !ninjaActive) return;
+            const { sx, sy } = getArenaCoords(clientX, clientY);
+            const prev = bladePoints.length > 0 ? bladePoints[bladePoints.length - 1] : { x: sx, y: sy };
+            bladePoints.push({ x: sx, y: sy, life: 12 });
+            if (bladePoints.length > 26) bladePoints.shift();
+
+            const angle = Math.atan2(sy - prev.y, sx - prev.x);
+            for (let i = launchedItems.length - 1; i >= 0; i--) {
+                const item = launchedItems[i];
+                if (item.sliced) continue;
+                if (segmentHitsCircle(prev.x, prev.y, sx, sy, item.x, item.y, item.r + 8)) {
+                    sliceItemAt(item, angle);
+                }
+            }
+        }
+
+        function handleArenaRelease() {
+            isSlicing = false;
+            swipeSliceCount = 0;
+        }
+
+        // Backward-compatible tap helper
+        function handleArenaTap(clientX, clientY) { handleArenaPress(clientX, clientY); }
 
         if (arenaCanvas) {
             arenaCanvas.addEventListener('pointerdown', (e) => {
-                handleArenaTap(e.clientX, e.clientY);
+                if (arenaCanvas.setPointerCapture) {
+                    try { arenaCanvas.setPointerCapture(e.pointerId); } catch (err) {}
+                }
+                handleArenaPress(e.clientX, e.clientY);
             });
+            arenaCanvas.addEventListener('pointermove', (e) => {
+                handleArenaSwipe(e.clientX, e.clientY);
+            });
+            arenaCanvas.addEventListener('pointerup', handleArenaRelease);
+            arenaCanvas.addEventListener('pointercancel', handleArenaRelease);
         }
+
+        // Spawn idle demo Hyper-Cube before game starts so arena looks alive immediately
+        spawnHyperCube(0);
 
         // ==========================================
         // 4. SECRET TERMINAL & TOGGLES
@@ -952,8 +1166,23 @@
         }
 
         // ==========================================
-        // 5. ANIMATION LOOP (STARFIELD + ZERO-G ARENA)
+        // 5. ANIMATION LOOP (STARFIELD + CUBE NINJA ARENA)
         // ==========================================
+        function drawMiniRubikCube(ctx, sz, fillCol, borderCol) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(-sz / 2, -sz / 2, sz, sz);
+            ctx.strokeStyle = borderCol;
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(-sz / 2, -sz / 2, sz, sz);
+            const cell = (sz - 8) / 3;
+            ctx.fillStyle = fillCol;
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    ctx.fillRect(-sz / 2 + 4 + c * cell + 1, -sz / 2 + 4 + r * cell + 1, cell - 2, cell - 2);
+                }
+            }
+        }
+
         function animateVault(now) {
             rushFrame++;
 
@@ -978,18 +1207,7 @@
                 }
             }
 
-            // Update Meteor Rush countdown
-            if (rushActive) {
-                const dt = Math.min(0.1, Math.max(0, (now - rushLastTick) / 1000));
-                rushLastTick = now;
-                rushTimeLeft = Math.max(0, rushTimeLeft - dt);
-                updateRushHUD();
-                if (rushTimeLeft <= 0) {
-                    finishMeteorRush();
-                }
-            }
-
-            // Render Zero-G Arena
+            // Render Cube Ninja Arena
             if (aCtx && arenaCanvas) {
                 const w = arenaCanvas.width;
                 const h = arenaCanvas.height;
@@ -1005,70 +1223,190 @@
                     aCtx.stroke();
                 }
 
-                // Update & draw floating cubie targets
-                for (let i = 0; i < targets.length; i++) {
-                    const tg = targets[i];
-                    if (moonGravity) tg.vy += 0.22;
-                    tg.x += tg.vx;
-                    tg.y += tg.vy;
-                    tg.rot += tg.vRot;
+                // Red flash on bomb slice
+                if (ninjaBombFlash > 0) {
+                    ninjaBombFlash--;
+                    aCtx.fillStyle = `rgba(239, 68, 68, ${ninjaBombFlash * 0.025})`;
+                    aCtx.fillRect(0, 0, w, h);
+                }
 
-                    // Soft speed cap
-                    const spd = Math.hypot(tg.vx, tg.vy);
-                    if (spd > 8) {
-                        tg.vx = (tg.vx / spd) * 8;
-                        tg.vy = (tg.vy / spd) * 8;
+                // Launch Fruit-Ninja waves while active
+                if (ninjaActive) {
+                    ninjaWaveTimer--;
+                    if (ninjaWaveTimer <= 0) {
+                        spawnFruitNinjaWave();
+                        ninjaWaveTimer = 68 + Math.floor(Math.random() * 34);
+                    }
+                }
+
+                // 1. Update & Draw Hyper-Cube (NO GRAVITY! Bounces super fast off all 4 walls!)
+                if (hyperCube) {
+                    hyperCube.trail.push({ x: hyperCube.x, y: hyperCube.y });
+                    if (hyperCube.trail.length > 10) hyperCube.trail.shift();
+
+                    hyperCube.x += hyperCube.vx;
+                    hyperCube.y += hyperCube.vy;
+                    const curSpd = Math.hypot(hyperCube.vx, hyperCube.vy);
+                    hyperCube.rot += 0.04 + curSpd * 0.015;
+
+                    let bounced = false;
+                    if (hyperCube.x < hyperCube.r) { hyperCube.x = hyperCube.r; hyperCube.vx = Math.abs(hyperCube.vx); bounced = true; }
+                    if (hyperCube.x > w - hyperCube.r) { hyperCube.x = w - hyperCube.r; hyperCube.vx = -Math.abs(hyperCube.vx); bounced = true; }
+                    if (hyperCube.y < hyperCube.r) { hyperCube.y = hyperCube.r; hyperCube.vy = Math.abs(hyperCube.vy); bounced = true; }
+                    if (hyperCube.y > h - hyperCube.r) { hyperCube.y = h - hyperCube.r; hyperCube.vy = -Math.abs(hyperCube.vy); bounced = true; }
+                    if (bounced && curSpd > 6) {
+                        spawnArenaBurst(hyperCube.x, hyperCube.y, 4, '#38bdf8');
                     }
 
-                    // Bounce off walls
-                    if (tg.x < tg.r) { tg.x = tg.r; tg.vx = Math.abs(tg.vx); }
-                    if (tg.x > w - tg.r) { tg.x = w - tg.r; tg.vx = -Math.abs(tg.vx); }
-                    if (tg.y < tg.r) { tg.y = tg.r; tg.vy = Math.abs(tg.vy); }
-                    if (tg.y > h - tg.r) {
-                        tg.y = h - tg.r;
-                        tg.vy = moonGravity ? -Math.max(4.5, Math.abs(tg.vy) * 0.82) : -Math.abs(tg.vy);
+                    const baseMax = HYPER_MAX_SPEED + hyperCube.round * 1.4;
+                    const spdRatio = Math.max(0, Math.min(1, (curSpd - HYPER_MIN_SPEED) / (baseMax - HYPER_MIN_SPEED)));
+                    const isCatchable = spdRatio <= 0.25;
+
+                    // Neon speed afterimage trail
+                    for (let ti = 0; ti < hyperCube.trail.length; ti++) {
+                        const tp = hyperCube.trail[ti];
+                        const alpha = ((ti + 1) / hyperCube.trail.length) * (0.12 + spdRatio * 0.35);
+                        aCtx.fillStyle = isCatchable
+                            ? `rgba(74, 222, 128, ${alpha})`
+                            : `rgba(0, 240, 255, ${alpha})`;
+                        aCtx.beginPath();
+                        aCtx.arc(tp.x, tp.y, hyperCube.r * 0.65, 0, Math.PI * 2);
+                        aCtx.fill();
+                    }
+
+                    // Glowing aura ring around Hyper-Cube
+                    aCtx.save();
+                    aCtx.translate(hyperCube.x, hyperCube.y);
+                    aCtx.strokeStyle = isCatchable ? '#4ade80' : (spdRatio <= 0.55 ? '#fde047' : '#ff007f');
+                    aCtx.lineWidth = isCatchable ? 4 : 3;
+                    aCtx.beginPath();
+                    aCtx.arc(0, 0, hyperCube.r + 7 + Math.sin(rushFrame * 0.25) * 3, 0, Math.PI * 2);
+                    aCtx.stroke();
+
+                    aCtx.rotate(hyperCube.rot);
+                    const hyperFill = isCatchable
+                        ? '#4ade80'
+                        : `hsl(${(rushFrame * 8) % 360}, 100%, 60%)`;
+                    drawMiniRubikCube(aCtx, hyperCube.r * 1.75, hyperFill, '#ffffff');
+                    aCtx.restore();
+
+                    // Floating tag above Hyper-Cube
+                    aCtx.font = 'bold 12px "DynaPuff", cursive';
+                    aCtx.textAlign = 'center';
+                    aCtx.fillStyle = isCatchable ? '#4ade80' : '#fde047';
+                    aCtx.fillText(isCatchable ? '👆 PRESS ME!' : '⚡ HYPER-CUBE', hyperCube.x, hyperCube.y - hyperCube.r - 12);
+                }
+
+                // 2. Update & Draw Launching Fruit-Ninja Cubes & Bombs (WITH GRAVITY!)
+                for (let i = launchedItems.length - 1; i >= 0; i--) {
+                    const item = launchedItems[i];
+                    if (item.sliced) {
+                        launchedItems.splice(i, 1);
+                        continue;
+                    }
+                    item.vy += LAUNCH_GRAVITY;
+                    item.x += item.vx;
+                    item.y += item.vy;
+                    item.rot += item.vRot;
+
+                    // Keep slightly off side walls cleanly
+                    if (item.x < item.r) { item.x = item.r; item.vx = Math.abs(item.vx) * 0.8; }
+                    if (item.x > w - item.r) { item.x = w - item.r; item.vx = -Math.abs(item.vx) * 0.8; }
+
+                    // Remove once fallen back off the bottom
+                    if (item.y > h + 70 && item.vy > 0) {
+                        launchedItems.splice(i, 1);
+                        continue;
                     }
 
                     aCtx.save();
-                    aCtx.translate(tg.x, tg.y);
-                    aCtx.rotate(tg.rot);
-                    const sz = tg.r * 1.7;
-
-                    if (tg.kind === 'bomb') {
-                        aCtx.fillStyle = '#450a0a';
+                    aCtx.translate(item.x, item.y);
+                    aCtx.rotate(item.rot);
+                    if (item.kind === 'bomb') {
+                        aCtx.fillStyle = '#3f0a0a';
                         aCtx.strokeStyle = '#ef4444';
                         aCtx.lineWidth = 3;
                         aCtx.beginPath();
-                        aCtx.arc(0, 0, tg.r, 0, Math.PI * 2);
+                        aCtx.arc(0, 0, item.r, 0, Math.PI * 2);
                         aCtx.fill();
                         aCtx.stroke();
-                        aCtx.font = 'bold 20px sans-serif';
+                        // Burning spark fuse
+                        aCtx.fillStyle = (rushFrame % 6 < 3) ? '#fde047' : '#f97316';
+                        aCtx.beginPath();
+                        aCtx.arc(item.r * 0.55, -item.r * 0.72, 5, 0, Math.PI * 2);
+                        aCtx.fill();
+                        aCtx.font = 'bold 22px sans-serif';
                         aCtx.textAlign = 'center';
                         aCtx.textBaseline = 'middle';
-                        aCtx.fillText('💣', 0, 1);
+                        aCtx.fillText('💣', 0, 2);
                     } else {
-                        // 3x3 mini Rubik cubie meteor
-                        const fillCol = (tg.kind === 'nova' || partyMode)
-                            ? `hsl(${(rushFrame * 5 + i * 50) % 360}, 95%, 60%)`
-                            : (rushActive ? '#fbbf24' : tg.color);
-                        aCtx.fillStyle = '#0f172a';
-                        aCtx.fillRect(-sz / 2, -sz / 2, sz, sz);
-                        aCtx.strokeStyle = tg.kind === 'nova' ? '#f472b6' : '#ffffff';
-                        aCtx.lineWidth = 2.5;
-                        aCtx.strokeRect(-sz / 2, -sz / 2, sz, sz);
-
-                        const cell = (sz - 8) / 3;
-                        aCtx.fillStyle = fillCol;
-                        for (let r = 0; r < 3; r++) {
-                            for (let c = 0; c < 3; c++) {
-                                aCtx.fillRect(-sz / 2 + 4 + c * cell + 1, -sz / 2 + 4 + r * cell + 1, cell - 2, cell - 2);
-                            }
-                        }
+                        const col = partyMode ? `hsl(${(rushFrame * 6 + i * 55) % 360}, 95%, 60%)` : item.color;
+                        drawMiniRubikCube(aCtx, item.r * 1.65, col, '#ffffff');
                     }
                     aCtx.restore();
                 }
 
-                // Particles
+                // 3. Sliced Cube Halves tumbling apart
+                for (let hi = slicedHalves.length - 1; hi >= 0; hi--) {
+                    const hf = slicedHalves[hi];
+                    hf.vy += LAUNCH_GRAVITY * 1.1;
+                    hf.x += hf.vx;
+                    hf.y += hf.vy;
+                    hf.rot += hf.vRot;
+                    hf.life--;
+                    if (hf.life <= 0) {
+                        slicedHalves.splice(hi, 1);
+                        continue;
+                    }
+                    aCtx.save();
+                    aCtx.globalAlpha = Math.min(1, hf.life / 20);
+                    aCtx.translate(hf.x, hf.y);
+                    aCtx.rotate(hf.rot);
+                    const sz = hf.r * 1.65;
+                    aCtx.fillStyle = hf.color;
+                    aCtx.strokeStyle = '#ffffff';
+                    aCtx.lineWidth = 2;
+                    if (hf.side < 0) {
+                        aCtx.fillRect(-sz / 2, -sz / 2, sz, sz / 2 - 1);
+                        aCtx.strokeRect(-sz / 2, -sz / 2, sz, sz / 2 - 1);
+                    } else {
+                        aCtx.fillRect(-sz / 2, 1, sz, sz / 2 - 1);
+                        aCtx.strokeRect(-sz / 2, 1, sz, sz / 2 - 1);
+                    }
+                    aCtx.restore();
+                }
+
+                // 4. Glowing Fruit-Ninja Katana Blade Trail
+                for (let bi = bladePoints.length - 1; bi >= 0; bi--) {
+                    bladePoints[bi].life--;
+                    if (bladePoints[bi].life <= 0) bladePoints.splice(bi, 1);
+                }
+                if (bladePoints.length >= 2) {
+                    aCtx.save();
+                    aCtx.lineCap = 'round';
+                    aCtx.lineJoin = 'round';
+                    for (let bi = 1; bi < bladePoints.length; bi++) {
+                        const p0 = bladePoints[bi - 1];
+                        const p1 = bladePoints[bi];
+                        const ratio = p1.life / 12;
+                        aCtx.strokeStyle = `rgba(0, 240, 255, ${ratio * 0.9})`;
+                        aCtx.lineWidth = Math.max(2, ratio * 11);
+                        aCtx.beginPath();
+                        aCtx.moveTo(p0.x, p0.y);
+                        aCtx.lineTo(p1.x, p1.y);
+                        aCtx.stroke();
+
+                        aCtx.strokeStyle = `rgba(255, 255, 255, ${ratio})`;
+                        aCtx.lineWidth = Math.max(1, ratio * 4);
+                        aCtx.beginPath();
+                        aCtx.moveTo(p0.x, p0.y);
+                        aCtx.lineTo(p1.x, p1.y);
+                        aCtx.stroke();
+                    }
+                    aCtx.restore();
+                }
+
+                // 5. Particles
                 for (let pi = particles.length - 1; pi >= 0; pi--) {
                     const p = particles[pi];
                     p.x += p.vx;
@@ -1079,7 +1417,7 @@
                     if (p.life <= 0) particles.splice(pi, 1);
                 }
 
-                // Popups
+                // 6. Floating Popups
                 for (let fi = popups.length - 1; fi >= 0; fi--) {
                     const pop = popups[fi];
                     pop.y -= 1.4;
@@ -1089,6 +1427,26 @@
                     aCtx.fillStyle = pop.color;
                     aCtx.fillText(pop.text, pop.x, pop.y);
                     if (pop.life <= 0) popups.splice(fi, 1);
+                }
+
+                // 7. Start Overlay Banner when idle
+                if (!ninjaActive) {
+                    aCtx.save();
+                    aCtx.fillStyle = 'rgba(2, 6, 23, 0.68)';
+                    aCtx.fillRect(w * 0.14, h * 0.34, w * 0.72, h * 0.32);
+                    aCtx.strokeStyle = '#00f0ff';
+                    aCtx.lineWidth = 2.5;
+                    aCtx.strokeRect(w * 0.14, h * 0.34, w * 0.72, h * 0.32);
+                    aCtx.textAlign = 'center';
+                    aCtx.font = 'bold 28px "DynaPuff", cursive';
+                    aCtx.fillStyle = '#fde047';
+                    aCtx.fillText('⚔️ CUBE NINJA: HYPER-CUBE CHASE', w / 2, h * 0.46);
+                    aCtx.font = 'bold 16px "Outfit", sans-serif';
+                    aCtx.fillStyle = '#e0f2fe';
+                    aCtx.fillText('Swipe cubes to slow down the ⚡ Hyper-Cube • Avoid 💣 Bombs • Press it to score +250!', w / 2, h * 0.56);
+                    aCtx.fillStyle = '#4ade80';
+                    aCtx.fillText('▶ TAP ARENA OR CLICK "START CUBE NINJA" TO PLAY!', w / 2, h * 0.62);
+                    aCtx.restore();
                 }
             }
 
