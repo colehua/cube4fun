@@ -2346,7 +2346,7 @@
                 </div>
 
                 <div id="runner-status" style="font-family: 'DynaPuff', cursive; font-size: 0.88em; color: #00f0ff; min-height: 18px; margin: 2px 0 4px 0; text-align: center;">
-                    Dash along the 3D Highway! 🪙 Collect shiny gold coins! • 🦘 Jump over 1-block obstacles • 🔫 Jump on shooting monsters (+50 💰) • 🔥 Shoot normal monsters!
+                    Dash along the 3D Highway! 🦘 Jump over low blocked barriers • ⬇️ Slide under tall overhead barriers (too high to jump!) • ⬆️/⬇️ Jump or Slide split gates • 🚫 Dodge tall solid walls • 🔫 Stomp gun mechs (+50 💰)!
                 </div>
                 <div id="runner-loadout-pill" class="loadout-pill-strip" title="Active Upgrades & Skin Equipped (Press U or click Upgrades to customize)"></div>
 
@@ -2458,7 +2458,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 8px; text-align: center; color: #94a3b8; font-size: 0.88em; max-width: 950px; line-height: 1.5;">
-                    🎮 <strong>Nintendo Switch Handheld Controls</strong>: <strong>Left Joy-Con (Blue)</strong>: [-] Pause • ◄ LEFT Steer (Thumbstick & Button) • ▲ Jump • ▼ Slide • ⚡ Square Dash | <strong>Right Joy-Con (Red)</strong>: [+] Dash Again • RIGHT ► Steer (Thumbstick & A Button) • ▲ Jump (X) • 🔥 Shoot (Y) • ▼ Slide (B) • 🛡️ Home Survive (100 💰) | <strong>Rules</strong>: Jump 1-block hurdles • Jump on gun monsters (+50 💰) • Shoot monsters • Grab gold coins!
+                    🎮 <strong>Nintendo Switch Handheld Controls</strong>: <strong>Left Joy-Con (Blue)</strong>: [-] Pause • ◄ LEFT Steer (Thumbstick & Button) • ▲ Jump • ▼ Slide • ⚡ Square Dash | <strong>Right Joy-Con (Red)</strong>: [+] Dash Again • RIGHT ► Steer (Thumbstick & A Button) • ▲ Jump (X) • 🔥 Shoot (Y) • ▼ Slide (B) • 🛡️ Home Survive (100 💰) | <strong>Rules</strong>: Jump over low blocked barriers (bottom blocked!) • Slide under tall overhead gates (too high to jump!) • Jump OR Slide split bars • Switch lanes around tall walls • Stomp gun monsters (+50 💰)!
                 </div>
             </div>
 
@@ -4857,9 +4857,13 @@
         function runnerJumpAction() {
             if (!runnerActive || runnerPaused) return;
             const upg = (typeof getArcadeUpgrades === 'function') ? getArcadeUpgrades() : {};
-            if (!runnerIsJumping && !runnerIsSliding) {
+            if (!runnerIsJumping) {
+                // Allow instant slide-cancel into a jump (Tom Hero Run feel!)
+                runnerIsSliding = false;
+                runnerSlideTimer = 0;
                 runnerIsJumping = true;
                 runnerHasDoubleJumped = false;
+                runnerIsDiveStomping = false;
                 runnerJumpVy = 13.5;
                 playSfx('jump');
             } else if (runnerIsJumping && upg.doubleJump > 0 && !runnerHasDoubleJumped && runnerJumpY > 8) {
@@ -4883,21 +4887,24 @@
         function runnerSlideAction() {
             if (!runnerActive || runnerPaused) return;
             if (runnerIsJumping) {
-                // COMPLEX MOVE: Mid-air Aerial Dive-Stomp / Ground Pound onto monsters!
+                // Mid-air Fast-Drop / Aerial Dive-Stomp (lands straight into a ground slide!)
                 runnerIsDiveStomping = true;
-                runnerJumpVy = -15.5; // High speed downward rocket plunge
+                runnerJumpVy = -16.5; // High speed downward plunge
                 playSfx('slice');
                 runnerFloatingTexts.push({
-                    text: '⚡ AERIAL DIVE-STOMP!',
+                    text: '⚡ FAST-DROP SLIDE!',
                     x: runnerCanvas.width / 2,
                     y: runnerCanvas.height * 0.45,
                     color: '#00f0ff',
-                    life: 25
+                    life: 24
                 });
             } else if (!runnerIsSliding) {
                 runnerIsSliding = true;
-                runnerSlideTimer = 26;
+                runnerSlideTimer = 34;
                 playSfx('slice');
+            } else if (runnerSlideTimer < 20) {
+                // Smoothly extend slide when tapped again before finishing
+                runnerSlideTimer = 28;
             }
         }
 
@@ -5066,12 +5073,18 @@
             // Jump physics
             if (runnerIsJumping) {
                 runnerJumpY += runnerJumpVy;
-                runnerJumpVy -= (runnerIsDiveStomping ? 1.4 : 0.85);
+                runnerJumpVy -= (runnerIsDiveStomping ? 1.45 : 0.85);
                 if (runnerJumpY <= 0) {
+                    const landedFromFastDrop = runnerIsDiveStomping;
                     runnerJumpY = 0;
                     runnerIsJumping = false;
                     runnerIsDiveStomping = false;
                     runnerHasDoubleJumped = false;
+                    if (landedFromFastDrop) {
+                        // Fast-drop seamlessly transitions into a ground slide under overhead obstacles!
+                        runnerIsSliding = true;
+                        runnerSlideTimer = 34;
+                    }
                 }
             }
 
@@ -5236,100 +5249,124 @@
                 }
             }
 
-            // Spawn obstacles and monsters: scales with speed (gentle spacing when slow, fast flurry when fast)
+            // Spawn obstacles and monsters (Tom Hero Run style: jump-only blocked barriers, slide-only tall overhead gates, jump-or-slide split bars, tall solid walls, & monsters)
             const spawnInterval = Math.max(22, Math.floor(75 / Math.max(0.45, runnerSpeed)));
             if (runnerFrame % spawnInterval === 0) {
-                const lane = Math.floor(Math.random() * 3);
-                const rand = Math.random();
-                let type = 'hurdle';
-
-                // Spawn table: Armed Gun Monsters (+50 💰), normal monsters (+10 💰), hurdles, lasers, barriers
-                if (rand < 0.20) {
-                    type = 'gun_monster';
-                } else if (rand < 0.40) {
-                    type = 'monster';
-                } else if (rand < 0.60) {
-                    type = 'hurdle';
-                } else if (rand < 0.82) {
-                    type = 'laser';
-                } else {
-                    type = 'barrier';
-                }
-
-                // Obstacle height & monster health configuration
-                let mHp = 25;
-                let blocksTall = 1;
-                if (type === 'gun_monster') {
-                    mHp = 100;
-                    blocksTall = 2;
-                } else if (type === 'monster') {
-                    const hpRoll = Math.random();
-                    if (hpRoll < 0.35) {
-                        mHp = 25; // 1-block imp (1 shot to defeat)
-                        blocksTall = 1;
-                    } else if (hpRoll < 0.70) {
-                        mHp = 50; // 2-block fiend (2 shots to defeat)
+                const buildObstacle = (laneIdx, obType, forcedBlocks) => {
+                    let mHp = 25;
+                    let blocksTall = forcedBlocks || 1;
+                    let canJump = false;
+                    let canSlide = false;
+                    if (obType === 'gun_monster') {
+                        mHp = 100;
                         blocksTall = 2;
-                    } else {
-                        mHp = 100; // 3-block boss titan (4 shots to defeat)
-                        blocksTall = 3;
-                    }
-                } else if (type === 'barrier') {
-                    // 55% 1-block cube (can jump over!), 45% 2-block wall (must avoid!)
-                    blocksTall = Math.random() < 0.55 ? 1 : 2;
-                } else if (type === 'hurdle') {
-                    blocksTall = 1; // 1-block hurdle (can jump over!)
-                } else if (type === 'laser') {
-                    blocksTall = 2; // high laser (slide under!)
-                }
-
-                runnerObstacles.push({
-                    lane: lane,
-                    type: type,
-                    z: 1000,
-                    killed: false,
-                    hp: mHp,
-                    maxHp: mHp,
-                    blocksTall: blocksTall,
-                    hitFlash: 0,
-                    shootTimer: type === 'gun_monster' ? 35 + Math.floor(Math.random() * 25) : 0,
-                    muzzleFlash: 0
-                });
-
-                // Occasionally spawn in a second lane for multi-lane danger
-                if (type !== 'monster' && type !== 'gun_monster' && Math.random() < 0.30) {
-                    const secondLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
-                    const secondType = Math.random() < 0.45 ? 'gun_monster' : 'monster';
-                    let secondHp = 25;
-                    let secondBlocks = 1;
-                    if (secondType === 'gun_monster') {
-                        secondHp = 100;
-                        secondBlocks = 2;
-                    } else {
-                        const sRoll = Math.random();
-                        if (sRoll < 0.35) {
-                            secondHp = 25;
-                            secondBlocks = 1;
-                        } else if (sRoll < 0.70) {
-                            secondHp = 50;
-                            secondBlocks = 2;
+                    } else if (obType === 'monster') {
+                        const hpRoll = Math.random();
+                        if (hpRoll < 0.35) {
+                            mHp = 25; // 1-block imp (1 shot or jump over)
+                            blocksTall = 1;
+                            canJump = true;
+                        } else if (hpRoll < 0.70) {
+                            mHp = 50; // 2-block fiend (2 shots)
+                            blocksTall = 2;
                         } else {
-                            secondHp = 100;
-                            secondBlocks = 3;
+                            mHp = 100; // 3-block boss titan (4 shots)
+                            blocksTall = 3;
                         }
+                    } else if (obType === 'hurdle') {
+                        // Low solid roadblock: bottom is BLOCKED (cannot slide under), low enough to JUMP OVER!
+                        blocksTall = 1;
+                        canJump = true;
+                        canSlide = false;
+                    } else if (obType === 'laser') {
+                        // Tall overhead gantry/gate: TOO HIGH to jump over, open gap underneath to SLIDE UNDER!
+                        blocksTall = 3;
+                        canJump = false;
+                        canSlide = true;
+                    } else if (obType === 'both_bar') {
+                        // Split hurdle bar: low enough to JUMP OVER AND open underneath to SLIDE UNDER!
+                        blocksTall = 1;
+                        canJump = true;
+                        canSlide = true;
+                    } else if (obType === 'barrier') {
+                        // 45% 1-block solid cube (bottom blocked -> jump over!), 55% tall 3-block solid wall (too high & bottom blocked -> switch lane!)
+                        blocksTall = forcedBlocks || (Math.random() < 0.45 ? 1 : 3);
+                        canJump = blocksTall === 1;
+                        canSlide = false;
                     }
-                    runnerObstacles.push({
-                        lane: secondLane,
-                        type: secondType,
+                    return {
+                        lane: laneIdx,
+                        type: obType,
                         z: 1000,
                         killed: false,
-                        hp: secondHp,
-                        maxHp: secondHp,
-                        blocksTall: secondBlocks,
+                        cleared: false,
+                        hp: mHp,
+                        maxHp: mHp,
+                        blocksTall: blocksTall,
+                        canJump: canJump,
+                        canSlide: canSlide,
                         hitFlash: 0,
-                        shootTimer: secondType === 'gun_monster' ? 45 + Math.floor(Math.random() * 25) : 0,
+                        shootTimer: obType === 'gun_monster' ? 35 + Math.floor(Math.random() * 25) : 0,
                         muzzleFlash: 0
-                    });
+                    };
+                };
+
+                const waveRoll = Math.random();
+                if (waveRoll < 0.22) {
+                    // TOM HERO RUN 3-LANE ACTION WAVE (every lane is passable via Jump or Slide — never 3 unpassable walls!)
+                    const patternRoll = Math.random();
+                    if (patternRoll < 0.34) {
+                        // Full-width low blocked roadblocks -> MUST JUMP OVER!
+                        for (let l = 0; l < 3; l++) runnerObstacles.push(buildObstacle(l, 'hurdle', 1));
+                    } else if (patternRoll < 0.68) {
+                        // Full-width tall overhead highway barriers -> TOO HIGH TO JUMP, MUST SLIDE UNDER!
+                        for (let l = 0; l < 3; l++) runnerObstacles.push(buildObstacle(l, 'laser', 3));
+                    } else {
+                        // Mixed 3-lane combo: 1 Jump-only, 1 Slide-only, 1 Jump-or-Slide (shuffled across lanes)
+                        const pool = ['hurdle', 'laser', 'both_bar'];
+                        for (let k = pool.length - 1; k > 0; k--) {
+                            const j = Math.floor(Math.random() * (k + 1));
+                            [pool[k], pool[j]] = [pool[j], pool[k]];
+                        }
+                        for (let l = 0; l < 3; l++) runnerObstacles.push(buildObstacle(l, pool[l]));
+                    }
+                } else {
+                    const lane = Math.floor(Math.random() * 3);
+                    const rand = Math.random();
+                    let type = 'hurdle';
+
+                    // Balanced spawn table: monsters + all 4 Tom Hero Run obstacle types
+                    if (rand < 0.15) {
+                        type = 'gun_monster';
+                    } else if (rand < 0.30) {
+                        type = 'monster';
+                    } else if (rand < 0.52) {
+                        type = 'hurdle';
+                    } else if (rand < 0.74) {
+                        type = 'laser';
+                    } else if (rand < 0.87) {
+                        type = 'both_bar';
+                    } else {
+                        type = 'barrier';
+                    }
+
+                    runnerObstacles.push(buildObstacle(lane, type));
+
+                    // 32% chance of a 2nd lane obstacle (3rd lane stays open so tall walls are always dodgeable!)
+                    if (Math.random() < 0.32) {
+                        const secondLane = (lane + 1 + Math.floor(Math.random() * 2)) % 3;
+                        const sPick = Math.random();
+                        let secondType = 'hurdle';
+                        if (sPick < 0.22) secondType = 'hurdle';
+                        else if (sPick < 0.44) secondType = 'laser';
+                        else if (sPick < 0.62) secondType = 'both_bar';
+                        else if (sPick < 0.78) secondType = 'barrier';
+                        else if (sPick < 0.90) secondType = 'monster';
+                        else secondType = 'gun_monster';
+                        const secondOb = buildObstacle(secondLane, secondType);
+                        if (secondOb.type === 'gun_monster') secondOb.shootTimer = 45 + Math.floor(Math.random() * 25);
+                        runnerObstacles.push(secondOb);
+                    }
                 }
             }
 
@@ -5491,11 +5528,24 @@
                     }
                 }
 
-                // Collision check (when reaching player at z between 20 and 140)
-                if (ob.z < 140 && ob.z > 20) {
+                // Collision check (generous window for collectibles; visual-accurate window around player z=120 for hazards)
+                const isCollectible = (ob.type === 'coin' || ob.type === 'coin_bag');
+                const inHitWindow = isCollectible ? (ob.z < 145 && ob.z > 20) : (ob.z < 138 && ob.z > 70);
+                if (inHitWindow && !ob.cleared) {
                     const laneDiff = Math.abs(runnerCurrentLaneX - ob.lane);
                     const touchTolerance = (runnerDashTimer > 0) ? 0.85 : 0.62;
                     if (laneDiff < touchTolerance) {
+                        const getObScreenPos = () => {
+                            const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
+                            const horizonY = Math.round(runnerCanvas.height * 0.25);
+                            const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
+                            const horizonW = Math.round(runnerCanvas.width * 0.25);
+                            const bottomW = Math.round(runnerCanvas.width * 0.86);
+                            const roadW = horizonW + t * (bottomW - horizonW);
+                            const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                            return { expX, expY };
+                        };
+
                         if (ob.type === 'coin') {
                             // Elevated coin requires jumping (or hyper dash magnet)
                             if (ob.elevated && (!runnerIsJumping || runnerJumpY < 10) && runnerDashTimer <= 0) {
@@ -5534,7 +5584,6 @@
                             playSfx('coins');
                             document.getElementById('runner-score').textContent = runnerDistance;
 
-                            // Calculate floating notification position
                             const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
                             const horizonY = Math.round(runnerCanvas.height * 0.25);
                             const notifY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
@@ -5563,13 +5612,7 @@
                                 runnerDistance += 120;
                                 document.getElementById('runner-score').textContent = runnerDistance;
                             }
-                            const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                            const horizonY = Math.round(runnerCanvas.height * 0.25);
-                            const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                            const horizonW = Math.round(runnerCanvas.width * 0.25);
-                            const bottomW = Math.round(runnerCanvas.width * 0.86);
-                            const roadW = horizonW + t * (bottomW - horizonW);
-                            const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                            const { expX, expY } = getObScreenPos();
                             spawnMonsterExplosion(expX, expY - 20, 20);
 
                             runnerFloatingTexts.push({
@@ -5581,120 +5624,129 @@
                             });
                             runnerObstacles.splice(i, 1);
                             continue;
-                        } else if (ob.type === 'gun_monster') {
-                            // COMPLEX JUMP MOVE: "to kill it you have to jump on it with some complex moves"
-                            if (runnerIsJumping && runnerJumpY >= 18) {
-                                // SUCCESSFUL JUMP-STOMP CRUSH MOVE!
-                                ob.killed = true;
-                                playSfx('explosion');
-                                triggerScreenShake(12);
-                                setTimeout(() => playSfx('coins'), 120);
-                                setTimeout(() => playSfx('coins'), 240);
+                        }
 
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                        // CHECK CLEAN DODGES / STOMPS FIRST (so shields & Auto-Survive NEVER trigger on clean jumps or slides!)
+                        if (ob.type === 'gun_monster' && runnerIsJumping && runnerJumpY >= 18) {
+                            // SUCCESSFUL JUMP-STOMP CRUSH MOVE!
+                            ob.killed = true;
+                            playSfx('explosion');
+                            triggerScreenShake(12);
+                            setTimeout(() => playSfx('coins'), 120);
+                            setTimeout(() => playSfx('coins'), 240);
 
-                                spawnMonsterExplosion(expX, expY - 20);
-                                spawnMonsterExplosion(expX + 18, expY - 32);
-                                spawnMonsterExplosion(expX - 18, expY - 10);
+                            const { expX, expY } = getObScreenPos();
+                            spawnMonsterExplosion(expX, expY - 20);
+                            spawnMonsterExplosion(expX + 18, expY - 32);
+                            spawnMonsterExplosion(expX - 18, expY - 10);
 
-                                // Bounce high into the air!
-                                runnerJumpVy = 11.5;
-                                runnerJumpY = Math.max(runnerJumpY, 28);
-                                runnerIsJumping = true;
-                                const wasDive = runnerIsDiveStomping;
-                                runnerIsDiveStomping = false;
+                            // Bounce high into the air!
+                            runnerJumpVy = 11.5;
+                            runnerJumpY = Math.max(runnerJumpY, 28);
+                            runnerIsJumping = true;
+                            const wasDive = runnerIsDiveStomping;
+                            runnerIsDiveStomping = false;
 
-                                // REWARD 50 COINS!
-                                addArcadeCoins(50, 'Crush Stomp!');
-                                runnerDistance += 200;
-                                document.getElementById('runner-score').textContent = runnerDistance;
+                            addArcadeCoins(50, 'Crush Stomp!');
+                            runnerDistance += 200;
+                            document.getElementById('runner-score').textContent = runnerDistance;
 
-                                runnerFloatingTexts.push({
-                                    text: wasDive ? '💥 SUPER SLAM STOMP! +50 💰' : '💥 JUMP-STOMP CRUSH! +50 💰 MEGA BOUNTY!',
-                                    x: expX,
-                                    y: expY - 55,
-                                    color: '#ffd700',
-                                    life: 85
-                                });
+                            runnerFloatingTexts.push({
+                                text: wasDive ? '💥 SUPER SLAM STOMP! +50 💰' : '💥 JUMP-STOMP CRUSH! +50 💰 MEGA BOUNTY!',
+                                x: expX,
+                                y: expY - 55,
+                                color: '#ffd700',
+                                life: 85
+                            });
 
-                                runnerObstacles.splice(i, 1);
-                                continue;
-                            } else if (runnerInvulnerable > 0) {
+                            runnerObstacles.splice(i, 1);
+                            continue;
+                        } else if (ob.type === 'monster' && ob.maxHp === 25 && runnerIsJumping && runnerJumpY >= 20 && !runnerIsDiveStomping) {
+                            // Cleared 1-block normal imp by jumping cleanly OVER it!
+                            ob.cleared = true;
+                            runnerDistance += 10;
+                            const { expX, expY } = getObScreenPos();
+                            runnerFloatingTexts.push({
+                                text: '💨 JUMPED OVER 1-BLOCK IMP!',
+                                x: expX,
+                                y: expY - runnerJumpY - 24,
+                                color: '#00f0ff',
+                                life: 40
+                            });
+                            continue;
+                        } else if (ob.type === 'hurdle' && runnerIsJumping && runnerJumpY >= 14) {
+                            // Low solid roadblock (bottom blocked) -> cleared by jumping OVER!
+                            ob.cleared = true;
+                            runnerDistance += 10;
+                            const { expX, expY } = getObScreenPos();
+                            runnerFloatingTexts.push({
+                                text: '💨 JUMPED OVER!',
+                                x: expX,
+                                y: expY - runnerJumpY - 20,
+                                color: '#fde047',
+                                life: 36
+                            });
+                            continue;
+                        } else if (ob.type === 'laser' && runnerIsSliding && !runnerIsJumping) {
+                            // Tall overhead gate (too high to jump) -> cleared by sliding UNDER!
+                            ob.cleared = true;
+                            runnerDistance += 10;
+                            const { expX, expY } = getObScreenPos();
+                            runnerFloatingTexts.push({
+                                text: '💨 SLID UNDER!',
+                                x: expX,
+                                y: expY - 28,
+                                color: '#00f0ff',
+                                life: 36
+                            });
+                            continue;
+                        } else if (ob.type === 'both_bar' && ((runnerIsJumping && runnerJumpY >= 14) || runnerIsSliding)) {
+                            // Split hurdle bar -> cleared by EITHER jumping over OR sliding under!
+                            ob.cleared = true;
+                            runnerDistance += 10;
+                            const { expX, expY } = getObScreenPos();
+                            const jumpedIt = runnerIsJumping && runnerJumpY >= 14;
+                            runnerFloatingTexts.push({
+                                text: jumpedIt ? '💨 JUMPED OVER!' : '💨 SLID UNDER!',
+                                x: expX,
+                                y: jumpedIt ? (expY - runnerJumpY - 20) : (expY - 28),
+                                color: '#4ade80',
+                                life: 36
+                            });
+                            continue;
+                        } else if (ob.type === 'barrier' && ob.blocksTall === 1 && runnerIsJumping && runnerJumpY >= 14) {
+                            // 1-block solid Rubik cube (bottom blocked) -> cleared by jumping OVER!
+                            ob.cleared = true;
+                            runnerDistance += 10;
+                            const { expX, expY } = getObScreenPos();
+                            runnerFloatingTexts.push({
+                                text: '💨 JUMPED OVER!',
+                                x: expX,
+                                y: expY - runnerJumpY - 20,
+                                color: '#38bdf8',
+                                life: 36
+                            });
+                            continue;
+                        }
+
+                        // COLLISION OCCURRED — Check Invulnerability Shield & Auto-Survive before Game Over
+                        if (runnerInvulnerable > 0) {
+                            if (ob.type === 'monster' || ob.type === 'gun_monster') {
                                 playSfx('explosion');
                                 triggerScreenShake(6);
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-                                spawnMonsterExplosion(expX, expY - 20);
-                                runnerObstacles.splice(i, 1);
-                                continue;
-                            } else if (isRunnerAutoSurviveEnabled() && getArcadeCoins() >= 100) {
-                                spendArcadeCoins(100);
-                                runnerInvulnerable = 150;
-                                playSfx('revive');
-                                triggerScreenShake(8);
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-                                spawnMonsterExplosion(expX, expY - 20);
-                                runnerFloatingTexts.push({
-                                    text: '🛡️ AUTO-SURVIVE! -100 💰',
-                                    x: runnerCanvas.width / 2,
-                                    y: runnerCanvas.height / 2 - 30,
-                                    color: '#ffd700',
-                                    life: 75
-                                });
-                                runnerObstacles.splice(i, 1);
-                                continue;
-                            } else {
-                                gameOverRunner('Crashed into Armed Gun Monster! Jump on top of it with complex moves (⬆️ / W, or S Dive-Stomp) to crush it for +50 💰!');
-                                return;
-                            }
-                        } else if (runnerInvulnerable > 0) {
-                            // Energy Forcefield Shield absorbs collision & zaps hazard!
-                            if (ob.type === 'monster') {
-                                playSfx('explosion');
-                                triggerScreenShake(6);
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                                const { expX, expY } = getObScreenPos();
                                 spawnMonsterExplosion(expX, expY - 20);
                             }
                             runnerObstacles.splice(i, 1);
                             continue;
                         } else if (isRunnerAutoSurviveEnabled() && getArcadeCoins() >= 100) {
-                            // AUTO-SURVIVE: Automatically spends 100 coins to absorb fatal hit!
                             spendArcadeCoins(100);
                             runnerInvulnerable = 150; // ~2.5s shield
                             playSfx('revive');
                             triggerScreenShake(8);
-                            if (ob.type === 'monster') {
+                            if (ob.type === 'monster' || ob.type === 'gun_monster') {
                                 playSfx('explosion');
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
+                                const { expX, expY } = getObScreenPos();
                                 spawnMonsterExplosion(expX, expY - 20);
                             }
                             runnerFloatingTexts.push({
@@ -5706,90 +5758,47 @@
                             });
                             runnerObstacles.splice(i, 1);
                             continue;
+                        }
+
+                        // Fatal crash with clear Tom Hero Run obstacle feedback
+                        if (ob.type === 'gun_monster') {
+                            gameOverRunner('Crashed into Armed Gun Monster! Jump on top of it (⬆️ / W) or shoot it (🔥) for +50 💰!');
                         } else if (ob.type === 'monster') {
-                            // NORMAL MONSTER: CANNOT BE JUMPED ON (ONLY SHOOTING MONSTERS CAN BE JUMPED ON!)
-                            // But if it is 1 block tall (25 HP Imp), player can jump OVER it safely!
-                            if (ob.maxHp === 25 && runnerIsJumping && runnerJumpY >= 20 && !runnerIsDiveStomping) {
-                                // Cleared the 1-block monster by jumping OVER it! (Monster is NOT crushed)
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-
-                                runnerFloatingTexts.push({
-                                    text: '💨 JUMPED OVER 1-BLOCK IMP!',
-                                    x: expX,
-                                    y: expY - runnerJumpY - 24,
-                                    color: '#00f0ff',
-                                    life: 40
-                                });
-                                // Player passes over safely without dying!
-                                continue;
-                            }
-
-                            // Ground collision or attempting to jump ON a normal monster: Fatal!
                             const hpNotice = ob.maxHp ? `${ob.maxHp} HP ` : '';
-                            const heightNotice = ob.maxHp === 100 ? ' (3 blocks tall)' : (ob.maxHp === 50 ? ' (2 blocks tall)' : '');
-                            gameOverRunner(`Devoured by a ${hpNotice}Scramble Monster${heightNotice}! You can ONLY jump on shooting monsters — normal monsters must be shot with 🔥 SHOOT (Space/F)!`);
-                            return;
+                            const heightNotice = ob.maxHp === 100 ? ' (too high — 3 blocks tall)' : (ob.maxHp === 50 ? ' (2 blocks tall)' : '');
+                            gameOverRunner(`Devoured by a ${hpNotice}Scramble Monster${heightNotice}! Normal monsters must be shot with 🔥 SHOOT (Space/F)!`);
                         } else if (ob.type === 'hurdle') {
-                            // 1-BLOCK HURDLE: Can jump over!
-                            if (runnerIsJumping && runnerJumpY >= 12) {
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-
-                                runnerFloatingTexts.push({
-                                    text: '💨 JUMPED OVER 1-BLOCK HURDLE!',
-                                    x: expX,
-                                    y: expY - runnerJumpY - 20,
-                                    color: '#fde047',
-                                    life: 35
-                                });
-                                continue;
-                            }
-                            gameOverRunner('Hit a 1-block scramble hurdle! Jump over with ⬆️ or Space!');
-                            return;
-                        } else if (ob.type === 'barrier') {
-                            // BARRIER: 1-block cube (can jump over) or 2-block wall (cannot jump over)
-                            const is1Block = ob.blocksTall === 1;
-                            if (is1Block && runnerIsJumping && runnerJumpY >= 14) {
-                                const t = Math.max(0, Math.min(1, 1 - (ob.z / 1000)));
-                                const horizonY = Math.round(runnerCanvas.height * 0.25);
-                                const expY = horizonY + (t * t) * (runnerCanvas.height - horizonY);
-                                const horizonW = Math.round(runnerCanvas.width * 0.25);
-                                const bottomW = Math.round(runnerCanvas.width * 0.86);
-                                const roadW = horizonW + t * (bottomW - horizonW);
-                                const expX = runnerCanvas.width / 2 + (ob.lane - 1) * (roadW / 3);
-
-                                runnerFloatingTexts.push({
-                                    text: '💨 JUMPED OVER 1-BLOCK CUBE!',
-                                    x: expX,
-                                    y: expY - runnerJumpY - 20,
-                                    color: '#38bdf8',
-                                    life: 35
-                                });
-                                continue;
-                            }
-                            if (is1Block) {
-                                gameOverRunner('Hit a 1-block Rubik cube! Jump over with ⬆️ or Space!');
+                            if (runnerIsSliding) {
+                                gameOverRunner("Bottom is blocked! You can't slide under a low roadblock — Jump over with ⬆️ or W!");
                             } else {
-                                gameOverRunner('Crashed into a 2-block tall Rubik wall! Cannot jump over — switch lanes!');
+                                gameOverRunner('Hit a low blocked roadblock! Bottom is solid — Jump over with ⬆️ or W!');
                             }
-                            return;
                         } else if (ob.type === 'laser') {
-                            if (!runnerIsSliding) {
-                                gameOverRunner('Struck by laser barrier! Slide under with ⬇️ or S!');
-                                return;
+                            if (runnerIsJumping) {
+                                gameOverRunner('Too high to jump over! Slide under tall overhead gates with ⬇️ or S!');
+                            } else {
+                                gameOverRunner('Hit a tall overhead barrier (too high to jump)! Slide under with ⬇️ or S!');
+                            }
+                        } else if (ob.type === 'both_bar') {
+                            gameOverRunner('Hit a split gate! Jump over (⬆️ / W) or Slide under (⬇️ / S)!');
+                        } else if (ob.type === 'barrier') {
+                            if (ob.blocksTall === 1) {
+                                if (runnerIsSliding) {
+                                    gameOverRunner("Bottom is blocked! You can't slide under a solid Rubik cube — Jump over with ⬆️ or W!");
+                                } else {
+                                    gameOverRunner('Hit a 1-block solid Rubik cube! Bottom is blocked — Jump over with ⬆️ or W!');
+                                }
+                            } else {
+                                if (runnerIsJumping) {
+                                    gameOverRunner('Too high to jump over! Switch lanes (◄ / ►) around tall solid walls!');
+                                } else if (runnerIsSliding) {
+                                    gameOverRunner("Bottom is blocked! You can't slide under a tall solid wall — Switch lanes (◄ / ►)!");
+                                } else {
+                                    gameOverRunner('Crashed into a tall solid Rubik wall! Too high to jump & bottom blocked — Switch lanes (◄ / ►)!');
+                                }
                             }
                         }
+                        return;
                     }
                 }
 
@@ -6454,77 +6463,198 @@
                     rCtx.fillStyle = '#ffd700';
                     rCtx.fillText(mechTag, 0, textY);
                 } else if (ob.type === 'hurdle') {
-                    // Low scramble block (1 block tall - Jump over!)
-                    const wBox = 44 * scale;
-                    const hBox = 26 * scale;
-                    rCtx.fillStyle = '#ef4444';
-                    rCtx.fillRect(-wBox / 2, -hBox, wBox, hBox);
+                    // LOW BLOCKED ROADBLOCK: Solid grounded bottom (CANNOT slide under!), low top (JUMP OVER!)
+                    const wBox = 56 * scale;
+                    const hBox = 28 * scale;
+                    const curbH = 9 * scale;
+
+                    // Heavy dark concrete bottom curb sitting flat on road (clearly shows bottom is BLOCKED!)
+                    rCtx.fillStyle = '#1e293b';
+                    rCtx.fillRect(-wBox / 2, -curbH, wBox, curbH);
+                    rCtx.strokeStyle = '#64748b';
+                    rCtx.lineWidth = Math.max(1, 1.5 * scale);
+                    rCtx.strokeRect(-wBox / 2, -curbH, wBox, curbH);
+                    // Concrete curb rivets
+                    rCtx.fillStyle = '#94a3b8';
+                    for (let rv = -1; rv <= 1; rv++) {
+                        rCtx.fillRect(rv * wBox * 0.3 - 1.5 * scale, -curbH * 0.65, 3 * scale, 3 * scale);
+                    }
+
+                    // Upper hazard red/yellow striped barrier body
+                    const barH = hBox - curbH;
+                    rCtx.fillStyle = '#dc2626';
+                    rCtx.fillRect(-wBox / 2, -hBox, wBox, barH);
+                    // Bold yellow hazard stripe blocks
+                    rCtx.fillStyle = '#fde047';
+                    const stripes = 4;
+                    const sW = wBox / (stripes * 2);
+                    for (let si = 0; si < stripes; si++) {
+                        rCtx.fillRect(-wBox / 2 + si * 2 * sW + 1, -hBox + 1.5, sW, barH - 3);
+                    }
                     rCtx.strokeStyle = '#ffffff';
-                    rCtx.lineWidth = 2;
+                    rCtx.lineWidth = Math.max(1.2, 2 * scale);
                     rCtx.strokeRect(-wBox / 2, -hBox, wBox, hBox);
 
-                    // Mini stickers on hurdle
-                    rCtx.fillStyle = '#fde047';
-                    rCtx.fillRect(-wBox / 2 + 2, -hBox + 2, wBox / 2 - 3, hBox - 4);
-
-                    // 1-BLOCK Indicator
-                    rCtx.font = `bold ${Math.max(9, Math.round(10 * scale))}px "DynaPuff", cursive`;
+                    // Clear label above roadblock
+                    const lblSz = Math.max(9, Math.round(10.5 * scale));
+                    rCtx.font = `bold ${lblSz}px "DynaPuff", cursive`;
                     rCtx.textAlign = 'center';
                     rCtx.textBaseline = 'bottom';
+                    rCtx.fillStyle = '#000000';
+                    rCtx.fillText('🦘 JUMP!', 1, -hBox - 2);
                     rCtx.fillStyle = '#fde047';
-                    rCtx.fillText('🦘 1-BLOCK', 0, -hBox - 2);
+                    rCtx.fillText('🦘 JUMP!', 0, -hBox - 3);
                 } else if (ob.type === 'laser') {
-                    // High laser barrier (Slide under)
-                    const wBar = 56 * scale;
-                    const hBar = 16 * scale;
-                    const elevate = 48 * scale;
-                    rCtx.fillStyle = '#ff007f';
-                    rCtx.fillRect(-wBar / 2, -elevate, wBar, hBar);
-                    rCtx.strokeStyle = '#ffffff';
-                    rCtx.lineWidth = 1.5;
-                    rCtx.strokeRect(-wBar / 2, -elevate, wBar, hBar);
+                    // TALL OVERHEAD HIGHWAY BARRIER: TOO HIGH TO JUMP OVER, wide open tunnel at bottom to SLIDE UNDER!
+                    const wBar = 64 * scale;
+                    const gapH = 34 * scale;      // Open slide gap underneath
+                    const topH = 110 * scale;     // Giant tall overhead panel (too high to jump over!)
+                    const panelH = topH - gapH;
+                    const postW = 6.5 * scale;
 
-                    // Support posts
-                    rCtx.strokeStyle = '#475569';
-                    rCtx.lineWidth = 2;
-                    rCtx.beginPath();
-                    rCtx.moveTo(-wBar / 2 + 3, -elevate + hBar);
-                    rCtx.lineTo(-wBar / 2 + 3, 0);
-                    rCtx.moveTo(wBar / 2 - 3, -elevate + hBar);
-                    rCtx.lineTo(wBar / 2 - 3, 0);
-                    rCtx.stroke();
+                    // Subtle glowing cyan slide-lane guide on road inside the open underpass gap
+                    rCtx.fillStyle = 'rgba(0, 240, 255, 0.24)';
+                    rCtx.fillRect(-wBar / 2 + postW, -4 * scale, wBar - postW * 2, 4 * scale);
+
+                    // Two sturdy steel side support pillars flanking the open bottom gap
+                    rCtx.fillStyle = '#334155';
+                    rCtx.strokeStyle = '#94a3b8';
+                    rCtx.lineWidth = Math.max(1, 1.4 * scale);
+                    rCtx.fillRect(-wBar / 2, -topH, postW, topH);
+                    rCtx.strokeRect(-wBar / 2, -topH, postW, topH);
+                    rCtx.fillRect(wBar / 2 - postW, -topH, postW, topH);
+                    rCtx.strokeRect(wBar / 2 - postW, -topH, postW, topH);
+
+                    // Giant Overhead Highway Signboard / Cyber Gate Wall (fills upper height so it is unmistakably TOO HIGH!)
+                    rCtx.fillStyle = '#3b0764';
+                    rCtx.fillRect(-wBar / 2, -topH, wBar, panelH);
+
+                    // Top crimson warning hazard stripe bar
+                    const capH = 11 * scale;
+                    rCtx.fillStyle = '#ef4444';
+                    rCtx.fillRect(-wBar / 2, -topH, wBar, capH);
+                    rCtx.fillStyle = '#111827';
+                    for (let si = 0; si < 4; si++) {
+                        rCtx.fillRect(-wBar / 2 + si * (wBar / 4) + 2, -topH + 1, wBar / 8, capH - 2);
+                    }
+
+                    // Glowing neon pink laser underside rail right above the slide gap
+                    const railH = 9 * scale;
+                    rCtx.fillStyle = '#ff007f';
+                    rCtx.fillRect(-wBar / 2, -gapH - railH, wBar, railH);
+                    rCtx.fillStyle = '#fbcfe8';
+                    rCtx.fillRect(-wBar / 2 + 3, -gapH - railH + 2.5 * scale, wBar - 6, 3 * scale);
+
+                    // Crisp outer border around giant overhead signboard
+                    rCtx.strokeStyle = '#ff4da6';
+                    rCtx.lineWidth = Math.max(1.5, 2.2 * scale);
+                    rCtx.strokeRect(-wBar / 2, -topH, wBar, panelH);
+
+                    // Clear sign text directly on the tall overhead wall
+                    const bigTxt = Math.max(8, Math.round(10 * scale));
+                    rCtx.font = `bold ${bigTxt}px "DynaPuff", cursive`;
+                    rCtx.textAlign = 'center';
+                    rCtx.textBaseline = 'middle';
+                    rCtx.fillStyle = '#fca5a5';
+                    rCtx.fillText('🚫 TOO HIGH', 0, -gapH - panelH * 0.62);
+                    rCtx.fillStyle = '#00f0ff';
+                    rCtx.fillText('⬇️ SLIDE!', 0, -gapH - panelH * 0.32);
+                } else if (ob.type === 'both_bar') {
+                    // TOM HERO RUN SPLIT GATE: Open gap underneath (SLIDE!) AND low crossbar (JUMP!)
+                    const wBar = 58 * scale;
+                    const gapH = 26 * scale;   // Open bottom gap for sliding
+                    const barH = 14 * scale;   // Slim mid-height hurdle bar (low enough to jump!)
+                    const topH = gapH + barH;
+                    const legW = 5 * scale;
+
+                    // Open slide glow hint on ground
+                    rCtx.fillStyle = 'rgba(74, 222, 128, 0.22)';
+                    rCtx.fillRect(-wBar / 2 + legW, -3.5 * scale, wBar - legW * 2, 3.5 * scale);
+
+                    // Two slim side legs leaving a wide open gap at bottom
+                    rCtx.fillStyle = '#334155';
+                    rCtx.strokeStyle = '#cbd5e1';
+                    rCtx.lineWidth = Math.max(1, 1.2 * scale);
+                    rCtx.fillRect(-wBar / 2, -topH, legW, topH);
+                    rCtx.strokeRect(-wBar / 2, -topH, legW, topH);
+                    rCtx.fillRect(wBar / 2 - legW, -topH, legW, topH);
+                    rCtx.strokeRect(wBar / 2 - legW, -topH, legW, topH);
+
+                    // Emerald/Gold striped horizontal hurdle crossbar
+                    rCtx.fillStyle = '#10b981';
+                    rCtx.fillRect(-wBar / 2, -topH, wBar, barH);
+                    rCtx.fillStyle = '#fde047';
+                    for (let si = 0; si < 3; si++) {
+                        rCtx.fillRect(-wBar / 2 + (si * 2 + 0.5) * (wBar / 6), -topH + 2, wBar / 7, barH - 4);
+                    }
+                    rCtx.strokeStyle = '#ffffff';
+                    rCtx.lineWidth = Math.max(1.2, 1.8 * scale);
+                    rCtx.strokeRect(-wBar / 2, -topH, wBar, barH);
+
+                    // Clear dual-action label above gate
+                    const bothSz = Math.max(8, Math.round(9.5 * scale));
+                    rCtx.font = `bold ${bothSz}px "DynaPuff", cursive`;
+                    rCtx.textAlign = 'center';
+                    rCtx.textBaseline = 'bottom';
+                    rCtx.fillStyle = '#000000';
+                    rCtx.fillText('⬆️/⬇️ JUMP OR SLIDE', 1, -topH - 2);
+                    rCtx.fillStyle = '#4ade80';
+                    rCtx.fillText('⬆️/⬇️ JUMP OR SLIDE', 0, -topH - 3);
                 } else if (ob.type === 'barrier') {
-                    // Rubik barrier: 1-block cube (can jump over!) or 2-block wall (avoid!)
+                    // SOLID RUBIK BARRIER: 1-block cube (bottom blocked -> Jump!) OR Tall 3-block solid wall (too high & bottom blocked -> Dodge!)
                     const is1Block = ob.blocksTall === 1;
-                    const wWall = 48 * scale;
-                    const hWall = (is1Block ? 28 : 56) * scale;
+                    const wWall = (is1Block ? 50 : 56) * scale;
+                    const hWall = (is1Block ? 28 : 102) * scale;
+                    const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316', '#fde047', '#ffffff'];
+
                     rCtx.fillStyle = '#0f172a';
                     rCtx.fillRect(-wWall / 2, -hWall, wWall, hWall);
                     rCtx.strokeStyle = is1Block ? '#38bdf8' : '#ef4444';
-                    rCtx.lineWidth = 2;
+                    rCtx.lineWidth = Math.max(1.5, 2.2 * scale);
                     rCtx.strokeRect(-wWall / 2, -hWall, wWall, hWall);
 
-                    const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316'];
                     if (is1Block) {
+                        // Solid bottom steel base so bottom-blocked is obvious
+                        const baseH = 7 * scale;
+                        rCtx.fillStyle = '#1e293b';
+                        rCtx.fillRect(-wWall / 2, -baseH, wWall, baseH);
                         for (let ci = 0; ci < 2; ci++) {
                             rCtx.fillStyle = colors[ci];
-                            rCtx.fillRect(-wWall / 2 + 3 + ci * (wWall / 2 - 3), -hWall + 3, wWall / 2 - 4, hWall - 6);
+                            rCtx.fillRect(-wWall / 2 + 3 + ci * (wWall / 2 - 3), -hWall + 3, wWall / 2 - 4, hWall - baseH - 5);
                         }
-                        rCtx.font = `bold ${Math.max(9, Math.round(10 * scale))}px "DynaPuff", cursive`;
+                        rCtx.font = `bold ${Math.max(9, Math.round(10.5 * scale))}px "DynaPuff", cursive`;
                         rCtx.textAlign = 'center';
                         rCtx.textBaseline = 'bottom';
+                        rCtx.fillStyle = '#000000';
+                        rCtx.fillText('🦘 JUMP!', 1, -hWall - 2);
                         rCtx.fillStyle = '#38bdf8';
-                        rCtx.fillText('🦘 1-BLOCK', 0, -hWall - 2);
+                        rCtx.fillText('🦘 JUMP!', 0, -hWall - 3);
                     } else {
-                        for (let ci = 0; ci < 4; ci++) {
-                            rCtx.fillStyle = colors[ci];
-                            rCtx.fillRect(-wWall / 2 + 3 + (ci % 2) * (wWall / 2 - 3), -hWall + 3 + Math.floor(ci / 2) * (hWall / 2 - 3), wWall / 2 - 4, hWall / 2 - 4);
+                        // Tall 3-row solid Rubik Tower (Too high to jump & solid bottom!)
+                        const baseH = 12 * scale;
+                        const rows = 3;
+                        const cols = 2;
+                        const cellW = (wWall - 8) / cols;
+                        const cellH = (hWall - baseH - 10) / rows;
+                        for (let r = 0; r < rows; r++) {
+                            for (let c = 0; c < cols; c++) {
+                                rCtx.fillStyle = colors[(r * cols + c) % colors.length];
+                                rCtx.fillRect(-wWall / 2 + 3 + c * (cellW + 2), -hWall + 3 + r * (cellH + 2), cellW, cellH);
+                            }
                         }
-                        rCtx.font = `bold ${Math.max(9, Math.round(10 * scale))}px "DynaPuff", cursive`;
+                        // Armored solid bottom foundation
+                        rCtx.fillStyle = '#1e293b';
+                        rCtx.fillRect(-wWall / 2 + 1, -baseH, wWall - 2, baseH - 1);
+                        rCtx.fillStyle = '#ef4444';
+                        rCtx.fillRect(-wWall / 2 + 1, -baseH, wWall - 2, 2.5 * scale);
+
+                        rCtx.font = `bold ${Math.max(9, Math.round(10.5 * scale))}px "DynaPuff", cursive`;
                         rCtx.textAlign = 'center';
                         rCtx.textBaseline = 'bottom';
+                        rCtx.fillStyle = '#000000';
+                        rCtx.fillText('🚫 TOO HIGH • BLOCKED', 1, -hWall - 2);
                         rCtx.fillStyle = '#ef4444';
-                        rCtx.fillText('🚫 2-BLOCKS', 0, -hWall - 2);
+                        rCtx.fillText('🚫 TOO HIGH • BLOCKED', 0, -hWall - 3);
                     }
                 }
 
