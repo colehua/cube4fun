@@ -459,21 +459,21 @@
             position: relative;
         }
 
-        /* START BUTTON ON TOP OF NINTENDO SWITCH (CUBE RUNNER) */
+        /* START & RESTART BUTTONS ON TOP OF NINTENDO SWITCH (CUBE RUNNER) */
         .switch-top-start-bar {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
             width: 100%;
             margin-bottom: 2px;
             z-index: 4;
         }
-        .switch-top-start-btn {
-            background: linear-gradient(135deg, #10b981 0%, #0284c7 100%);
-            border: 2.5px solid #e0f2fe;
-            color: #ffffff;
+        .switch-top-start-btn,
+        .switch-top-restart-btn {
             border-radius: 999px;
-            padding: 7px 26px;
+            padding: 7px 24px;
             font-size: 0.96em;
             font-weight: 800;
             font-family: 'DynaPuff', cursive;
@@ -483,19 +483,35 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            color: #ffffff;
             transition: transform 0.14s ease, box-shadow 0.2s ease, filter 0.15s ease;
             user-select: none;
             touch-action: manipulation;
+        }
+        .switch-top-start-btn {
+            background: linear-gradient(135deg, #10b981 0%, #0284c7 100%);
+            border: 2.5px solid #e0f2fe;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        .switch-top-restart-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            border: 2.5px solid #fef08a;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
         .switch-top-start-btn:hover {
             transform: translateY(-2px) scale(1.03);
             box-shadow: 0 6px 22px rgba(0, 240, 255, 0.6);
         }
-        .switch-top-start-btn:active {
+        .switch-top-restart-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 22px rgba(251, 191, 36, 0.65);
+        }
+        .switch-top-start-btn:active,
+        .switch-top-restart-btn:active {
             transform: scale(0.95);
         }
-        .switch-top-start-btn.dash-again-highlight {
+        .switch-top-start-btn.dash-again-highlight,
+        .switch-top-restart-btn.dash-again-highlight {
             background: linear-gradient(135deg, #00f0ff 0%, #ff007f 100%);
             border-color: #ffffff;
             box-shadow: 0 0 26px rgba(0, 240, 255, 0.85), 0 0 14px rgba(255, 0, 127, 0.7);
@@ -1173,9 +1189,10 @@
             .runner-joy-btn.runner-shoot-btn .btn-sub {
                 font-size: 8.5px;
             }
-            .switch-top-start-btn {
-                padding: 5px 20px;
-                font-size: 0.86em;
+            .switch-top-start-btn,
+            .switch-top-restart-btn {
+                padding: 5px 18px;
+                font-size: 0.85em;
             }
             .dpad-mid-row, .abxy-mid-row {
                 gap: 6px;
@@ -2594,8 +2611,11 @@
                 <!-- NINTENDO SWITCH HANDHELD CONSOLE (START ON TOP + SIDE JOY-CON CONTROLS, 100% UNOBSTRUCTED SCREEN) -->
                 <div class="runner-arena">
                     <div class="switch-top-start-bar">
-                        <button id="btn-runner-start" type="button" class="switch-top-start-btn" onclick="startRunnerGame()" title="Start / Restart Cube Runner (Spacebar)">
+                        <button id="btn-runner-start" type="button" class="switch-top-start-btn" onclick="startRunnerGame()" title="Start Cube Runner (Spacebar)">
                             <span class="plus-symbol">▶</span> START
+                        </button>
+                        <button id="btn-runner-restart" type="button" class="switch-top-restart-btn" onclick="startRunnerGame()" title="Restart Cube Runner from super slow 0.25x">
+                            🔄 RESTART
                         </button>
                         <button id="btn-deck-start" type="button" style="display: none;" onclick="startRunnerGame()"></button>
                     </div>
@@ -5005,10 +5025,14 @@
             document.getElementById('runner-coins').textContent = runnerCoins;
             document.getElementById('runner-speed').textContent = RUNNER_START_SPEED.toFixed(2);
             const startBtn = document.getElementById('btn-runner-start');
+            const restartBtn = document.getElementById('btn-runner-restart');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
                 startBtn.innerHTML = '<span class="plus-symbol">▶</span> START';
                 startBtn.classList.remove('dash-again-highlight');
+            }
+            if (restartBtn) {
+                restartBtn.classList.remove('dash-again-highlight');
             }
             if (deckStartBtn) {
                 deckStartBtn.innerHTML = '▶ START';
@@ -7218,14 +7242,18 @@
                 rCtx.font = 'bold 15px "DynaPuff", cursive';
                 rCtx.fillStyle = '#00f0ff';
                 rCtx.textAlign = 'center';
-                rCtx.fillText('👉 Press START on top of Switch (or Spacebar) to play again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 120);
+                rCtx.fillText('👉 Press START or RESTART on top of Switch (or Spacebar) to play again!', runnerCanvas.width / 2, runnerCanvas.height / 2 + 120);
             }
 
             const startBtn = document.getElementById('btn-runner-start');
+            const restartBtn = document.getElementById('btn-runner-restart');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
                 startBtn.innerHTML = '<span class="plus-symbol">▶</span> START';
                 startBtn.classList.add('dash-again-highlight');
+            }
+            if (restartBtn) {
+                restartBtn.classList.add('dash-again-highlight');
             }
             if (deckStartBtn) {
                 deckStartBtn.innerHTML = '▶ START';
@@ -7318,10 +7346,14 @@
             if (deckSurviveBtn) deckSurviveBtn.style.display = 'none';
 
             const startBtn = document.getElementById('btn-runner-start');
+            const restartBtn = document.getElementById('btn-runner-restart');
             const deckStartBtn = document.getElementById('btn-deck-start');
             if (startBtn) {
                 startBtn.innerHTML = '<span class="plus-symbol">▶</span> START';
                 startBtn.classList.remove('dash-again-highlight');
+            }
+            if (restartBtn) {
+                restartBtn.classList.remove('dash-again-highlight');
             }
             if (deckStartBtn) {
                 deckStartBtn.innerHTML = '▶ START';
