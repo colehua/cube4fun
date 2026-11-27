@@ -80,6 +80,11 @@ h1 {
     }
 }
 
+/* Respect native HTML hidden attribute even when utility/button classes set display */
+[hidden] {
+    display: none !important;
+}
+
 /* Visually hidden utility (keeps content in the accessibility tree) */
 .visually-hidden:where(:not(:focus-within, :active)) {
     position: absolute !important;
@@ -142,6 +147,7 @@ body,
 .schedule-box, 
 .language-picker, 
 .theme-toggle-btn,
+.install-app-btn,
 .floating-theme-toggle,
 .modal-content,
 .comment-card,
@@ -161,9 +167,10 @@ textarea {
 }
 
 /* -------------------------------------------------------------
-   THEME TOGGLE BUTTON STYLES
+   THEME TOGGLE & UTILITY PILL BUTTON STYLES
    ------------------------------------------------------------- */
-.theme-toggle-btn {
+.theme-toggle-btn,
+.install-app-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -184,12 +191,14 @@ textarea {
     line-height: 1.2;
 }
 
-.theme-toggle-btn:hover {
+.theme-toggle-btn:hover,
+.install-app-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0px 6px 0px #1e272e;
 }
 
-.theme-toggle-btn:active {
+.theme-toggle-btn:active,
+.install-app-btn:active {
     transform: translateY(2px);
     box-shadow: 0px 2px 0px #1e272e;
 }
@@ -281,8 +290,9 @@ body.dark-mode .blob-bottom {
     opacity: 0.15 !important;
 }
 
-/* 2. Theme Toggle Buttons */
+/* 2. Theme Toggle & Utility Pill Buttons */
 body.dark-mode .theme-toggle-btn,
+body.dark-mode .install-app-btn,
 body.dark-mode .floating-theme-toggle {
     background: #0f172a !important;
     color: #f8fafc !important;
@@ -291,12 +301,14 @@ body.dark-mode .floating-theme-toggle {
 }
 
 body.dark-mode .theme-toggle-btn:hover,
+body.dark-mode .install-app-btn:hover,
 body.dark-mode .floating-theme-toggle:hover {
     border-color: #FAED27 !important;
     box-shadow: 0px 6px 0px #020617, 0 0 16px rgba(250, 237, 39, 0.3) !important;
 }
 
 body.dark-mode .theme-toggle-btn:active,
+body.dark-mode .install-app-btn:active,
 body.dark-mode .floating-theme-toggle:active {
     box-shadow: 0px 2px 0px #020617 !important;
 }
@@ -342,7 +354,7 @@ body.dark-mode .tab-btn,
 body.dark-mode .filter-btn,
 body.dark-mode .reset-btn,
 body.dark-mode .alg-btn-copy,
-body.dark-mode button:not(#theme-toggle):not(.floating-theme-toggle):not(.admin-login-link):not(.secret-red-dot):not(#secret-portal-button):not(#secret-red-dot-btn):not(.swatch-btn):not(.btn-camera-scanner-top):not(.btn-scanner-action) {
+body.dark-mode button:not(#theme-toggle):not(.install-app-btn):not(.floating-theme-toggle):not(.admin-login-link):not(.secret-red-dot):not(#secret-portal-button):not(#secret-red-dot-btn):not(.swatch-btn):not(.btn-camera-scanner-top):not(.btn-scanner-action) {
     background: #111827 !important;
     background-color: #111827 !important;
     color: #f8fafc !important;
@@ -1616,6 +1628,7 @@ body.dark-mode .c4f-qn-hint {
     }
 
     .theme-toggle-btn:hover,
+    .install-app-btn:hover,
     .nav-buttons .theme-toggle-btn:hover,
     .btn-return-home:hover,
     .floating-home-pill:hover,
